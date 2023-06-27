@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Sans:wght@100;200;300;400;500;600;800;900&display=swap');
+
+$theme-font: 'Noto Sans', 'Noto Sans TC', sans-serif;
+
+.ff-noto-sans {
+    font-family: $theme-font;
+}
+
+.fz-sm {
+    font-size: 14px;
+}
+
+.fz-md {
+    font-size: 16px;
+}
+
+.fz-lg {
+    font-size: 18px;
+}
+
+.fz-xl {
+    font-size: 20px;
+}
+
+.fz-xxxl {
+    font-size: 24px;
+}
+
+.fz-super-large {
+    font-size: 44px;
+}
+
+.fw-200 {
+    font-weight: 200;
+}
+
+.fw-300 {
+    font-weight: 300;
+}
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+
+.nowrap-hidden {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.break-word {
+    word-break: break-all;
+}
+
+.lh-6 {
+    line-height: 0.6em;
+}

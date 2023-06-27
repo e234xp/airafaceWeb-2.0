@@ -1,0 +1,725 @@
+<template>
+  <div class="investigation">
+    <CCol sm="12">
+      <div class="h1">{{ disp_header }}</div>
+      <div style="height: 30px"></div>
+    </CCol>
+
+    <CCard>
+      <CCardBody>
+        <CRow>
+          <CCol sm="2" class="h5">{{ disp_selectDatetimeRange }}</CCol>
+          <CCol sm="4">
+            <date-picker style="width: 100%" :lang="this.$globalDatePickerLanguage" v-model="value_searchDatetimeRange"
+              type="datetime" range :placeholder="disp_selectDatetimeRange" @change="datePickerDatachange()">
+            </date-picker>
+          </CCol>
+          <CCol sm="2" class="h5">{{ disp_resultType }}</CCol>
+          <CCol sm="4">
+            <CSelect size="lg" :value.sync="value_searchTypes" :options="value_displayResultTypeList"
+              @change="selectTypeChange($event)" />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="2" class="h5">{{ disp_groups }}</CCol>
+          <CCol sm="4">
+            <multiselect v-model="value_searchGroups" placeholder="" :options="value_displayPersonGroupList"
+              :multiple="true" :taggable="true" :hideSelected="true" :select-label="disp_select"
+              :selected-label="disp_selected" :deselect-label="disp_deselect" :show-no-options="false" />
+          </CCol>
+          <CCol sm="2" class="h5">{{ disp_keyword }}</CCol>
+          <CCol sm="4">
+            <CInput size="lg" v-model="value_keyword" style="width: 100%" />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="2" class="h5">{{ disp_temperature }}</CCol>
+          <CCol sm="4" class="form-inline">
+            <div class="form-check" style="padding-right: 40px">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="All"
+                v-model="value_Temperature" />
+              <label class="form-check-label h5" for="flexRadioDefault1">{{
+                disp_temperature_ALL
+                }}</label>
+            </div>
+            <div class="form-check" style="padding-right: 40px">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Normal"
+                v-model="value_Temperature" />
+              <label class="form-check-label h5" for="flexRadioDefault2">{{
+                disp_temperature_Normal
+                }}</label>
+            </div>
+            <div class="form-check" style="padding-right: 40px">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
+                value="OverTemperature" v-model="value_Temperature" />
+              <label class="form-check-label h5" for="flexRadioDefault3">{{
+                disp_temperature_OverTemperature
+                }}</label>
+            </div>
+          </CCol>
+          <CCol sm="6" class="d-flex flex-wrap">
+            <CDropdown :togglerText="toggleText()" class="btn btn-primary dropdown-export mr-3 p-0 mb-3 dropdown-theme"
+              size="lg" :disabled="!flag_enableSearchButton">
+              <CDropdownItem @click="exportExcel(true)">{{ disp_exportExcel }} ({{ disp_withPhoto }})</CDropdownItem>
+              <CDropdownItem @click="exportExcel(false)">{{ disp_exportExcel }} ({{ disp_withoutPhoto }})
+              </CDropdownItem>
+            </CDropdown>
+            <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" @click="clickOnSearch()"
+              :disabled="!flag_enableSearchButton">
+              {{ disp_search }}
+            </CButton>
+
+            <span v-if="exportNo >= 1" class="h5" style="
+                float: right;
+                height: 90%;
+                display: flex;
+                align-items: flex-end;
+                margin-right: 20px;
+              ">{{ exportNo }} / {{ excelExecutionAmounts }}</span>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
+
+    <CCard>
+      <CCardBody>
+        <div>
+          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
+            @checkbox-change="selectChangeEvent">
+            <vxe-table-column field="dateTime" :title="disp_dateTime" width="14%" align="center">
+            </vxe-table-column>
+            <vxe-table-column field="id" :title="disp_id" width="10%" align="center">
+            </vxe-table-column>
+            <vxe-table-column field="name" :title="disp_name" align="center" width="10%"></vxe-table-column>
+            <vxe-table-column field="card_number" :title="disp_cardnumber" align="center" width="8%">
+            </vxe-table-column>
+            <vxe-table-column field="groups" :title="disp_group_list" width="14%" align="center">
+            </vxe-table-column>
+            <vxe-table-column field="temperature" :title="disp_temperature" width="9%" align="center">
+            </vxe-table-column>
+            <vxe-table-column field="clockMode" :title="disp_verify_mode" width="8%" align="center">
+            </vxe-table-column>
+            <vxe-table-column field="score" :title="disp_verify_score" width="10%" align="center">
+            </vxe-table-column>
+            <vxe-table-column min-width="10%" field="showimage" :title="disp_face_image" type="html">
+            </vxe-table-column>
+
+            <!-- <vxe-table-column :title="disp_face_image" min-width="10%">
+              <template #default="{ row }">
+                <img :id="row.face_image_id.f + row.face_image_id.uuid" />
+              </template>
+            </vxe-table-column> -->
+          </vxe-table>
+        </div>
+
+        <vxe-pager :layouts="[
+            'PrevJump',
+            'PrevPage',
+            'Number',
+            'NextPage',
+            'NextJump',
+            'FullJump',
+            'Total',
+          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult" @page-change="handlePageChange">
+        </vxe-pager>
+      </CCardBody>
+    </CCard>
+  </div>
+</template>
+
+<script>
+  import i18n from "@/i18n";
+  import TableObserver from "@/utils/TableObserver.vue";
+  import Multiselect from "vue-multiselect";
+  import "@/airacss/vue-multiselect.css";
+  import CTableWrapper from "./ReportTable.vue";
+
+  import FileSaver from "file-saver";
+  import Excel from "exceljs/dist/exceljs.min.js";
+
+  import JsZip from "jszip";
+
+  Date.prototype.yyyymmdd_HHMMSS = function () {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+    var HH = this.getHours();
+    var MM = this.getMinutes();
+    var SS = this.getSeconds();
+
+    return [
+      this.getFullYear() + "-",
+      (mm > 9 ? "" : "0") + mm + "-",
+      (dd > 9 ? "" : "0") + dd + " ",
+      (HH > 9 ? "" : "0") + HH + ":",
+      (MM > 9 ? "" : "0") + MM + ":",
+      (SS > 9 ? "" : "0") + SS,
+    ].join("");
+  };
+
+  Date.prototype.yyyymmdd = function () {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [this.getFullYear(), (mm > 9 ? "" : "0") + mm, (dd > 9 ? "" : "0") + dd].join(
+      ""
+    );
+  };
+
+  const defaultlState = () => {
+    return {
+      obj_loading: null,
+
+      param_cardStyle: "height: 35rem;",
+      param_activeColor: "#6baee3",
+      param_passiveColor: "#919bae",
+      param_lineThickness: 3,
+      param_activeThickness: 3,
+      param_passiveThickness: 3,
+
+      flag_enableSearchButton: false,
+      flag_downloadingExecl: false,
+
+      excelExecutionAmounts: 0,
+      excelCounter: 0,
+      exportNo: 0,
+
+      value_displayResultTypeList: [
+        { value: "Person", label: i18n.formatter.format("Person") },
+        { value: "Visitor", label: i18n.formatter.format("Visitor") },
+        { value: "Stranger", label: i18n.formatter.format("Stranger") },
+      ],
+
+      value_displayPersonGroupList: [],
+
+      disp_select: i18n.formatter.format("Select"), //
+      disp_selected: i18n.formatter.format("Selected"), //
+      disp_deselect: i18n.formatter.format("Deselect"), //
+
+      disp_header: i18n.formatter.format("Investigation"),
+      disp_selectDatetimeRange: i18n.formatter.format("DateTime"),
+      disp_keyword: i18n.formatter.format("Keyword"),
+      disp_groups: i18n.formatter.format("Group"),
+      disp_resultType: i18n.formatter.format("ResultType"),
+      disp_temperature: i18n.formatter.format("OverTemperature"),
+
+      disp_temperature_ALL: i18n.formatter.format("All"),
+      disp_temperature_Normal: i18n.formatter.format("Normal"),
+      disp_temperature_OverTemperature: i18n.formatter.format("OverTemperature"),
+
+      disp_search: i18n.formatter.format("Search"),
+      disp_exportExcel: i18n.formatter.format("ExportExcel"),
+      disp_withPhoto: i18n.formatter.format("WithPhoto"),
+      disp_withoutPhoto: i18n.formatter.format("WithoutPhoto"),
+
+      disp_dateTime: i18n.formatter.format("Time"),
+      disp_id: i18n.formatter.format("PersonId"),
+      disp_name: i18n.formatter.format("PersonName"),
+      disp_cardnumber: i18n.formatter.format("CardNumber"),
+      disp_group_list: i18n.formatter.format("GroupName"),
+      disp_temperature: i18n.formatter.format("Temperature"),
+      disp_verify_mode: i18n.formatter.format("ClockModePass"),
+      disp_verify_score: i18n.formatter.format("Score"),
+      disp_face_image: i18n.formatter.format("CapturedPhoto"),
+
+      value_searchingFilter: "",
+      value_searchDatetimeRange: [],
+      value_keyword: "",
+      value_searchGroups: [],
+      value_searchTypes: "Person",
+      value_Temperature: "All",
+
+      value_allTableItems: [],
+      value_dataTotalLength: 0,
+      value_dataItemsToShow: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+    };
+  };
+  export default {
+    name: "Investigation",
+    components: { CTableWrapper, multiselect: Multiselect },
+    data() {
+      return Object.assign({}, defaultlState(), this.formData);
+    },
+    // watch: {
+    //   value_searchingFilter: function (value) {
+    //     this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems, this.value_searchingFilter);
+    //   }
+    // },
+    mixins: [TableObserver],
+    created() {
+      const self = this;
+      let endTime = new Date();
+      endTime.setHours(23, 59, 59, 999);
+      let endTimeTimestamp = endTime.getTime();
+      let startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
+
+      self.value_searchDatetimeRange[0] = new Date(startTimeTimestamp);
+      self.value_searchDatetimeRange[1] = endTime;
+      self.flag_enableSearchButton = true;
+      self.clickOnSearch();
+    },
+
+    async mounted() {
+      const self = this;
+
+      let personGroups = await self.$globalGetGroupList();
+      if (personGroups.group_list) {
+        personGroups.group_list.forEach((item) => {
+          // self.value_displayGroupList.push({ value: item.uuid, label: item.name });
+          self.value_displayPersonGroupList.push(item.name);
+        });
+      }
+
+      this.observeTableSize();
+    },
+    methods: {
+      toggleText() {
+        return i18n.formatter.format("ExportExcel");
+      },
+      headerCellStyle(row, column, rowIndex, columnIndex) {
+        return "fontSize: 18px";
+      },
+      cellStyle(row, column, rowIndex, columnIndex) {
+        return "fontSize:18px;";
+      },
+      datePickerDatachange() {
+        const self = this;
+        self.flag_enableSearchButton = true;
+      },
+      selectAllEvent({ checked, records }) {
+        // console.log(checked ? '所有勾选事件' : '所有取消事件', records)
+      },
+      selectChangeEvent({ checked, records }) {
+        // console.log(checked ? '勾选事件' : '取消事件', records)
+      },
+
+      selectTypeChange(event) {
+        if (this.value_searchTypes != "Person") {
+          this.value_searchGroups = [];
+        }
+      },
+
+      clickOnSearch() {
+        // var d = new Date()
+        // var timezoneOffset = d.getTimezoneOffset();
+        // let startTime = this.value_searchDatetimeRange[0].getTime() + timezoneOffset;
+        // let endTime = this.value_searchDatetimeRange[1].getTime() + timezoneOffset;
+        let startTime = this.value_searchDatetimeRange[0].getTime();
+        let endTime = this.value_searchDatetimeRange[1].getTime();
+
+        let data = {
+          start_time: startTime,
+          end_time: endTime,
+          slice_shift: 0,
+          slice_length: 10000,
+          with_image: false,
+          uuid_list: [],
+        };
+
+        console.log(data);
+
+        switch (this.value_searchTypes) {
+          case "Person":
+            this.queryPersonResult(data);
+            break;
+          case "Visitor":
+            this.queryVisitorResult(data);
+            break;
+          case "Stranger":
+            this.queryStrangerResult(data);
+            break;
+        }
+      },
+      queryPersonResult(_data) {
+        const self = this;
+        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        self.$globalGetPersonResult(_data, function (error, data) {
+          if (self.obj_loading) self.obj_loading.hide();
+
+          if (!error) {
+            self.value_allTableItems = data.result.data;
+            self.value_dataTotalLength = data.result.total_length;
+            self.value_allTableItems.sort(function (a, b) {
+              if (a.timestamp < b.timestamp) return 1;
+              if (a.timestamp > b.timestamp) return -1;
+              return 0;
+            });
+            self.value_allTableItems.forEach((item) => {
+              try {
+                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
+                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
+                item["groups"] = eval(item.group_list).join(", ");
+
+                switch (item.verify_mode) {
+                  case 1:
+                    item["clockMode"] = i18n.formatter.format("ClockModeCard");
+                    break;
+                  case 2:
+                    item["clockMode"] = i18n.formatter.format("ClockModePass");
+                    break;
+                  case 3:
+                    item["clockMode"] = i18n.formatter.format("ClockModeClockIn");
+                    break;
+                  case 4:
+                    item["clockMode"] = i18n.formatter.format("ClockModeClockOut");
+                    break;
+                  default:
+                    item["clockMode"] = i18n.formatter.format("None");
+                    break;
+                }
+
+                var showimageId = item.face_image_id
+                  ? item.face_image_id.f + item.face_image_id.uuid
+                  : "";
+                item[
+                  "showimage"
+                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
+              } catch (ex) {
+                console.log(ex);
+              }
+            });
+            self.value_dataItemsToShow = self.generateFilteredData(
+              self.value_allTableItems
+            );
+            self.value_tablePage.currentPage = 1;
+            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
+
+            if (cb) cb();
+          }
+        });
+      },
+      queryVisitorResult(_data) {
+        const self = this;
+        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        self.$globalGetVisitorResult(_data, function (error, data) {
+          if (self.obj_loading) self.obj_loading.hide();
+
+          if (!error) {
+            self.value_allTableItems = data.result.data;
+            self.value_dataTotalLength = data.result.total_length;
+            self.value_allTableItems.sort(function (a, b) {
+              if (a.timestamp < b.timestamp) return 1;
+              if (a.timestamp > b.timestamp) return -1;
+              return 0;
+            });
+            self.value_allTableItems.forEach((item) => {
+              try {
+                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
+                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
+                item["groups"] = "";
+                var showimageId = item.face_image_id
+                  ? item.face_image_id.f + item.face_image_id.uuid
+                  : "";
+                item[
+                  "showimage"
+                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
+              } catch (ex) {
+                console.log(ex);
+              }
+            });
+            self.value_dataItemsToShow = self.generateFilteredData(
+              self.value_allTableItems
+            );
+            self.value_tablePage.currentPage = 1;
+            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
+            if (cb) cb();
+          }
+        });
+      },
+      queryStrangerResult(_data) {
+        const self = this;
+        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        self.$globalGetStrangerResult(_data, function (error, data) {
+          if (self.obj_loading) self.obj_loading.hide();
+
+          if (!error) {
+            self.value_allTableItems = data.result.data;
+            self.value_dataTotalLength = data.result.total_length;
+            self.value_allTableItems.sort(function (a, b) {
+              if (a.timestamp < b.timestamp) return 1;
+              if (a.timestamp > b.timestamp) return -1;
+              return 0;
+            });
+            self.value_allTableItems.forEach((item) => {
+              try {
+                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
+                item["id"] = "";
+                item["name"] = "";
+                item["score"] = "";
+                item["groups"] = "";
+                var showimageId = item.face_image_id
+                  ? item.face_image_id.f + item.face_image_id.uuid
+                  : "";
+                item[
+                  "showimage"
+                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
+              } catch (ex) {
+                console.log(ex);
+              }
+            });
+            self.value_dataItemsToShow = self.generateFilteredData(
+              self.value_allTableItems
+            );
+            self.value_tablePage.currentPage = 1;
+            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
+            if (cb) cb();
+          }
+        });
+      },
+
+      handlePageChange({ currentPage, pageSize }) {
+        const self = this;
+        this.value_tablePage.currentPage = currentPage;
+        this.value_tablePage.pageSize = pageSize;
+        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
+        this.resizeOneTable();
+      },
+
+      generateFilteredData(sourceData) {
+        const self = this;
+        const filteredItems = sourceData.filter((item) => {
+          if (self.value_keyword) {
+            if (
+              item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1 ||
+              item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1 ||
+              item.groups.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+            ) {
+            } else return false;
+          }
+
+          if (self.value_searchGroups.length >= 1) {
+            let pass = false;
+
+            for (let i = 0; i < self.value_searchGroups.length; i++) {
+              const g = self.value_searchGroups[i];
+
+              let pos = eval(item.group_list).indexOf(self.value_searchGroups[i]);
+
+              if (pos >= 0) {
+                pass = true;
+                break;
+              }
+            }
+
+            if (!pass) return false;
+          }
+
+          switch (self.value_Temperature) {
+            case "All":
+              return true;
+              break;
+            case "Normal":
+              return !item.high_temperature;
+              break;
+            case "OverTemperature":
+              return item.high_temperature;
+              break;
+          }
+          return true;
+        });
+        //self.value_tablePage.totalResult = self.value_dataTotalLength; //filteredItems.length;
+        self.value_tablePage.totalResult = filteredItems.length;
+        const sliceList = filteredItems.slice(
+          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+          self.value_tablePage.currentPage * self.value_tablePage.pageSize
+        );
+        sliceList.forEach(async (slicei) => {
+          try {
+            var showimageId = slicei.face_image_id
+              ? slicei.face_image_id.f + slicei.face_image_id.uuid
+              : "";
+            if (showimageId.length > 0) {
+              var dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
+              var ele = document.getElementById(showimageId);
+              if (dataImage.error == null && dataImage.data) {
+                if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
+              } else {
+                if (ele)
+                  ele.src = `data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==`;
+              }
+            }
+          } catch (e) { }
+        });
+        return Object.assign([], sliceList);
+      },
+
+      sleep(milliseconds) {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+      },
+
+      async exportExcel(withPhoto) {
+        let salf = this;
+
+        salf.flag_downloadingExecl = true;
+        var snapshotFolder = null;
+
+        var zip = new JsZip();
+
+        if (withPhoto) snapshotFolder = zip.folder("snapshot");
+
+        var workbook = new Excel.Workbook();
+        var worksheet = null;
+
+        salf.exportNo = 0;
+        salf.excelExecutionAmounts = salf.value_allTableItems.length;
+        salf.excelCounter = 0;
+
+        worksheet = workbook.addWorksheet("Investigation-Report");
+
+        worksheet.columns = [
+          { header: "No", key: "No", width: 10 },
+          { header: salf.disp_dateTime, key: "dateTime", width: 10 },
+          { header: salf.disp_id, key: "id", width: 10 },
+          { header: salf.disp_name, key: "name", width: 10 },
+          { header: salf.disp_cardnumber, key: "card_number", width: 10 },
+          { header: salf.disp_group_list, key: "groups", width: 10 },
+          { header: salf.disp_temperature, key: "temperature", width: 10 },
+          { header: salf.disp_verify_mode, key: "clockMode", width: 10 },
+          { header: salf.disp_verify_score, key: "score", width: 10 },
+          { header: salf.disp_face_image, key: "showimage", width: 15 },
+        ];
+
+        for (let idx = 0; idx < salf.value_allTableItems.length; idx++) {
+          salf.exportNo++;
+          salf.excelCounter++;
+
+          worksheet.addRow({
+            No: salf.exportNo,
+            dateTime: salf.value_allTableItems[idx].dateTime,
+            id: salf.value_allTableItems[idx].id,
+            name: salf.value_allTableItems[idx].name,
+            card_number: salf.value_allTableItems[idx].card_number,
+            groups: salf.value_allTableItems[idx].groups,
+            temperature: salf.value_allTableItems[idx].temperature,
+            clockMode: salf.value_allTableItems[idx].clockMode,
+            score: salf.value_allTableItems[idx].score,
+          });
+
+          if (withPhoto) {
+            await salf.sleep(10);
+            var faceImageRet = await salf.$globalFetchVerifyPhoto(
+              salf.value_allTableItems[idx].face_image_id
+            );
+            if (!faceImageRet.error) {
+              var photoId = workbook.addImage({
+                base64: faceImageRet.data.face_image,
+                extension: "jpeg",
+              });
+              worksheet.addImage(
+                photoId,
+                "J" + worksheet.rowCount + ":J" + worksheet.rowCount
+              );
+              worksheet.lastRow.height = 60;
+
+              let fileName = salf.value_allTableItems[idx].dateTime
+                .replace("-", "_")
+                .replace(" ", "_")
+                .replace(":", "_");
+              snapshotFolder.file(
+                salf.exportNo + "_" + salf.value_allTableItems[idx].dateTime + ".jpeg",
+                salf.value_allTableItems[idx].face_image,
+                { base64: true }
+              );
+            }
+          }
+
+          if (salf.exportNo % 10000 == 0) {
+            var n = salf.exportNo / 10000;
+
+            var filename = "";
+            if (n >= 2)
+              var filename = `investigation_Report_${new Date().yyyymmdd()}_${n}.xlsx`;
+            else var filename = `investigation_Report_${new Date().yyyymmdd()}.xlsx`;
+
+            await workbook.xlsx.writeBuffer().then((data) => {
+              var blob = new Blob([data], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              });
+              zip.file(filename, blob);
+            });
+
+            workbook = new Excel.Workbook();
+            worksheet = workbook.addWorksheet("Investigation-Report");
+
+            worksheet.columns = [
+              { header: "No", key: "No", width: 10 },
+              { header: salf.disp_dateTime, key: "dateTime", width: 10 },
+              { header: salf.disp_id, key: "id", width: 10 },
+              { header: salf.disp_name, key: "name", width: 10 },
+              { header: salf.disp_cardnumber, key: "card_number", width: 10 },
+              { header: salf.disp_group_list, key: "groups", width: 10 },
+              { header: salf.disp_temperature, key: "temperature", width: 10 },
+              { header: salf.disp_verify_mode, key: "clockMode", width: 10 },
+              { header: salf.disp_verify_score, key: "score", width: 10 },
+              { header: salf.disp_face_image, key: "showimage", width: 15 },
+            ];
+          }
+        }
+
+        if (workbook != null) {
+          workbook.xlsx.writeBuffer().then((data) => {
+            var n = Math.floor(salf.exportNo / 10000) + 1;
+
+            var filename = "";
+            if (n >= 2)
+              filename = `investigation_Report_${new Date().yyyymmdd()}_${n}.xlsx`;
+            else filename = `investigation_Report_${new Date().yyyymmdd()}.xlsx`;
+
+            var blob = new Blob([data], {
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+
+            zip.file(filename, blob);
+
+            zip.generateAsync({ type: "blob" }).then(function (content) {
+              FileSaver.saveAs(
+                content,
+                `investigation_Report_${new Date().yyyymmdd()}.zip`
+              );
+            });
+          });
+        }
+
+        salf.flag_downloadingExecl = false;
+      },
+    },
+  };
+</script>
+
+<style>
+  .mx-input {
+    padding: 0.5rem 1rem;
+    font-size: 1.09375rem;
+    height: calc(1.5em + 1rem + 2px);
+    border: 0px;
+    text-overflow: ellipsis;
+  }
+
+  .mx-input-wrapper {
+    border: 1px solid #d8dbe0;
+    display: flex;
+    align-items: center;
+    position: static !important;
+  }
+
+  .mx-icon-calendar {
+    position: static !important;
+    margin: 1px 3px 1px 1px;
+    transform: translateY(0%) !important;
+  }
+
+  .form-inline .form-control {
+    width: 100% !important;
+  }
+
+  .investigation td,
+  .investigation th {
+    font-size: 15px !important;
+  }
+</style>

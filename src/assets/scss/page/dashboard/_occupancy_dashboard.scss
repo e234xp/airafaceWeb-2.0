@@ -1,0 +1,500 @@
+.c-header-reset {
+  display: none;
+}
+
+.c-main-reset {
+  padding-top: 0px !important;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-fluid-reset {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-footer-reset {
+  display: none;
+}
+
+.dashboard {
+  // padding: 32px 24px 18px 24px;
+  // padding: 32px 24px 18px 24px;
+  padding: 1% 1.25% 1% 1.25%;
+  font-family: "Noto Sans", sans-serif;
+  background: $dashboard-dark-gray;
+  position: relative;
+}
+
+.dashboard-occupancy-logo {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+}
+
+.dashboard-attendance-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.attendance-return-arrow {
+  width: 24px;
+  height: 22px;
+  margin-right: 24px;
+}
+
+#chart-canvas {
+  width: 80% !important;
+  height: 100% !important;
+}
+
+.attendance-chart-canvas-wrap {
+  width: 1293px;
+}
+
+.doughnut-chart-canvas-wrap {
+  width: 95px;
+  height: 95px;
+}
+
+.detail-doughnut-chart-wrap {
+  height: 120px;
+  width: 120px;
+}
+
+#doughnut-chart-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.current-date-time {
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard .current-date {
+  margin-right: 15px;
+}
+
+.dashboard-divider {
+  margin-bottom: 1.28%; // <-- 24px / 1872px
+}
+
+.statistics-box {
+  // width: 100%;
+  // height: 238px;
+}
+
+.summary-box {
+  width: 302px;
+  height: 238px;
+  background: $dashboard-deep-gray;
+  padding: 0.9%;
+  font-size: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.summary-box-title {
+  margin-bottom: 1.6%;
+  display: inline-block;
+  line-height: 0.75em;
+  margin-bottom: 24px;
+}
+
+.summary-present-title,
+.summary-absent-title {
+  font-size: 24px;
+  display: inline-block;
+  line-height: 0.75em;
+}
+
+.summary-present-title {
+  color: $dashboard-present;
+}
+
+.summary-absent-title {
+  margin-top: 24px;
+  color: $dashboard-absent;
+}
+
+.summary-number {
+  font-size: 44px;
+  display: inline-block;
+  line-height: 0.75em;
+}
+
+.summary-number-unit {
+  margin-left: 8px;
+  font-size: 16px;
+}
+
+.attendance-top-box {
+  width: 100%;
+  height: 240px;
+  margin-bottom: 25px;
+  display: flex;
+}
+
+.attendance-header-tag {
+  width: 118px;
+  height: 41px;
+  visibility: hidden;
+  background: #80713E;
+  border-radius: 4px;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 200;
+  color: white;
+}
+
+.attendance-statistics-box {
+  width: 504px;
+  height: 240px;
+  border-right: 1px solid #565758;
+  margin-bottom: 22px;
+  padding-right: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.attendance-detail-statistics-box {
+  width: 504px;
+  height: 240px;
+  border-right: 1px solid #565758;
+  margin-bottom: 22px;
+  padding-left: 40px;
+  padding-right: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.attendance-title {
+  color: white;
+  font-weight: 200;
+  font-size: 32px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.attendance-statistics-data-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #565758;
+
+}
+
+.attendance-header-present {
+  font-weight: 400;
+  font-size: 80px;
+  color: $attendance-present-blue;
+  font-family: 'Noto Sans', sans-serif;
+  margin-right: 8px;
+  line-height: 0.7em;
+}
+
+.attendance-header-total {
+  font-weight: 500;
+  font-size: 44px;
+  font-family: 'Noto Sans', sans-serif;
+  color: $attendance-total-gray;
+  line-height: 0.7em;
+
+}
+
+.attendance-detail-header-present {
+  font-weight: 400;
+  font-size: 100px;
+  color: white;
+  font-family: 'Noto Sans', sans-serif;
+  margin-right: 8px;
+  line-height: 0.7em;
+}
+
+.attendance-detail-header-total {
+  font-weight: 500;
+  font-size: 44px;
+  font-family: 'Noto Sans', sans-serif;
+  color: $attendance-total-gray;
+  line-height: 0.7em;
+}
+
+.attendance-sort-icon {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.attendance-dropdown-arrow {
+  margin-left: 20px;
+  width: 12px;
+  height: 6px;
+}
+
+.attendace-group-card-name {
+  color: white;
+  font-family: "Noto Sans", sans-serif;
+  text-overflow: ellipsis;
+  font-size: 22px;
+  line-height: 0.75em;
+  text-align: left;
+}
+
+.person-list-container {
+  margin-bottom: 1.28%; // <-- 24px / 1872px
+}
+
+.grid-6x4,
+.grid-6x5,
+.grid-4x2,
+.grid-4x3,
+.grid-12x4,
+.grid-12x5 .grid-9x2,
+.grid-9x3 {
+  display: grid !important;
+  gap: 0.7%;
+}
+
+.grid-6x4,
+.grid-6x5 {
+  grid-template-columns: 16% 16% 16% 16% 16% 16%;
+}
+
+.grid-4x2,
+.grid-4x3 {
+  grid-template-columns: 24.5% 24.5% 24.5% 24.5%;
+}
+
+
+.person-card-6x4,
+.person-card-6x5 {
+  width: 302px;
+  height: 152px;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+
+
+.person-card-4x2,
+.person-card-4x3 {
+  width: calc(1.5 * 302px);
+  height: calc(1.5 * 152px);
+  border-radius: calc(1.5 * 4px);
+  padding: calc(1.5 * 12px);
+  margin-bottom: calc(12px);
+}
+
+.normal-person-card {
+  background: $dashboard-primary-gray;
+}
+
+.abnormal-person-card {
+  border: 4px solid $dashboard-danger;
+  background: $dashboard-danger-bg;
+}
+
+.absent-person-card {
+  background: $dashboard-gray-disabled;
+}
+
+.absent-person-name {
+  color: $dashboard-white-disabled;
+}
+
+.absent-person-image {
+  opacity: 0.2;
+}
+
+.person-image {
+  background: $dashboard-mid-gray;
+  width: 128px;
+  height: 128px;
+  border-radius: 2px;
+  object-fit: contain;
+}
+
+.absent-person-name,
+.person-name {
+  display: inline-block;
+  line-height: 1em;
+  margin-top: 10%;
+  margin-bottom: 18.8%;
+  height: 43px;
+}
+
+.person-info-box {
+  width: 134px;
+  height: 100%;
+}
+
+.temperature-info {
+  margin-bottom: 4%;
+}
+
+.person-temperature {
+  display: inline-block;
+  margin-right: 4px;
+  line-height: 22px;
+}
+
+.abnormal-temperature {
+  color: $dashboard-danger-light;
+}
+
+.temperature-unit {
+  line-height: 14px;
+}
+
+.display-6x4:not(:nth-child(6n)) {
+  // margin-right: 9px;
+}
+
+
+.group-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+
+}
+
+.group-card-present-number {
+  color: #6FA4CD;
+  font-size: 60px;
+  margin-right: 8px;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500;
+  line-height: 0.7em;
+}
+
+.group-card-total-number {
+  font-family: 'Noto Sans', sans-serif;
+
+  color: $attendance-total-gray;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 0.7em;
+
+}
+
+.group-card-6x4,
+.group-card-6x5 {
+  width: 302px;
+  height: 152px;
+  background: $dashboard-primary-gray;
+  padding: 16px;
+  margin-bottom: 9px;
+}
+
+.dashboard .pager {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pager-left-arrow,
+.pager-right-arrow {
+  width: 11px;
+  height: 22px;
+}
+
+.pager-left-arrow {
+  margin-right: 40px;
+}
+
+.pager-right-arrow {
+  margin-left: 40px;
+}
+
+.pager-progressbar-box {
+  position: relative;
+  width: 296px;
+  height: 12px;
+  margin-right: 12px;
+  margin-left: 12px;
+}
+
+.pager-progressbar-track {
+  width: 296px;
+  height: 12px;
+  border-radius: 12px;
+  background: $dashboard-progressbar-track;
+}
+
+.pager-progressbar-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  background: white;
+}
+
+.pager-right-dots,
+.pager-left-dots {
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  background: $dashboard-progressbar-track;
+}
+
+.pager-right-dots:not(:last-child),
+.pager-left-dots:not(:last-child) {
+  margin-right: 12px;
+}
+
+.footer-box {
+  position: relative;
+  display: flex;
+  height: 22px;
+  padding-bottom: 32px;
+}
+
+.footer-box-wrap {
+  width: 97.5%; // 1872px /1920px 
+  position: absolute;
+  bottom: 1.04%; // 20px /1920px 
+
+}
+
+.footer-detail-box {
+  position: absolute;
+  bottom: 0.96%; // 18px /1872px 
+  right: 0;
+  display: flex;
+  color: white;
+  display: flex;
+  align-items: end;
+
+}
+
+.footer-detail-text {
+  font-size: 14px;
+  font-weight: 200;
+  margin-right: 9px;
+  line-height: 0.6em;
+}
+
+.footer-logo {
+  width: 54px;
+  height: 24px;
+  object-fit: contain;
+}

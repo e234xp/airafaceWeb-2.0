@@ -1,0 +1,60 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+@import "custom";
+
+
+// base
+@import "base/base";
+
+// helpers
+@import "helper/spacing";
+@import "helper/sizing";
+@import "helper/flex";
+@import "helper/text";
+@import "helper/ratio";
+@import "helper/background";
+@import "helper/border";
+
+// content
+@import "content/img";
+@import "content/table";
+
+// layout
+@import "layout/container";
+
+// forms
+@import "forms/select";
+
+
+// components
+@import "component/button";
+@import "component/dropdown";
+@import "component/input";
+@import "component/pagination";
+@import "component/step_progress";
+@import "component/scheduler";
+@import "component/date_picker";
+@import "component/backdrop";
+@import "component/switch";
+
+//  page >> dashboard
+@import "page/dashboard/occupancy_dashboard";
+@import "page/dashboard/welcome_dashboard";
+
+.card-header:not(.content-center)>.c-icon:first-child {
+  margin-right: 0.1rem;
+  margin-top: 0.1rem;
+  vertical-align: top;
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 1.2rem;
+}
+
+.input-group-text {
+  padding: 0px !important;
+}

@@ -1,0 +1,10 @@
+$select-secondary-height: 40px;
+
+.select-secondary {
+    border: 1px $border-gray solid;
+    border-radius: 3px;
+    color: $theme-black;
+    height: $select-secondary-height;
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -1,0 +1,20 @@
+.ratio-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ratio-wrap {
+    position: relative;
+    width:100vw;
+    height: 100vh;
+    // height: clamp(0px, 100vw * var(--r), 100vh);
+    // width: clamp(0px, 100vh * var(--r), 100vw);
+}
+
+.ratio-wrap-16x9 {
+    --r: calc(16 / 9);
+}

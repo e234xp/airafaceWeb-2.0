@@ -1,0 +1,12 @@
+ 
+.input-no-spin input::-webkit-outer-spin-button,
+.input-no-spin input::-webkit-inner-spin-button {
+  /* Chrome, Safari, Edge, Opera */
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.input-no-spin input[type=number] {
+  -moz-appearance: textfield;
+}

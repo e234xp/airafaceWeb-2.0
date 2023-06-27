@@ -1,0 +1,37 @@
+.DS_Store
+/node_modules
+/_node_modules
+package-lock.json
+/dist
+/coverage
+
+/tests/e2e/reports/
+selenium-debug.log
+chromedriver.log
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+dist.zip
+src/views/dashboards/._CapacityMode.vue
+src/views/dashboards/._OccupancyMode.vue
+src/views/dashboards/._WelcomeMode.vue
+src/views/widgets/._Widgets.vue
+src/views/widgets/._WidgetsBrand.vue
+src/views/widgets/._WidgetsDropdown.vue
+dist.zip
+node_modules.zip

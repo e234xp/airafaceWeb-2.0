@@ -1,0 +1,23 @@
+.scheduler-date {
+    padding: 0px;
+}
+
+.scheduler-table {
+    max-width: 480px !important;
+    
+}
+
+@media screen and (max-width: 1070px) {
+    .scheduler-date {
+        letter-spacing: -2.5px;
+    }
+    .scheduler-table {
+        max-width: 290px !important;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .scheduler-date {
+        letter-spacing: -1.5px;
+    }
+}
