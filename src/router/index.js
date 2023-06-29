@@ -82,6 +82,16 @@ const CreateAccount = () => import('@/views/systemsettings/CreateAccount')
 const SystemLog = () => import('@/views/systemsettings/SystemLog')
 const IndicationSettings = () => import('@/views/systemsettings/IndicationSettings')
 
+///////////////////////////////////////////
+/////////// device ///////////
+const Cameras = () => import('@/views/videodevice/Cameras')
+const Tablets = () => import('@/views/videodevice/Tablets')
+const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
+
+const IOboxs = () => import('@/views/outputdevice/IOboxs')
+const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
+const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups')
+
 Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push
@@ -393,7 +403,58 @@ function configRoutes() {
               component: SystemLog
             }
           ]
-        }
+        },
+        //新項目路由
+        {
+          path: 'videodevice',
+          redirect: '/videodevice/Cameras',
+          name: 'VideoDevice',
+          component: {
+            render(c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'cameras',
+              name: 'Cameras',
+              component: Cameras
+            },
+            {
+              path: 'tablets',
+              name: 'Tablets',
+              component: Tablets
+            },
+            {
+              path: 'deviceGroups',
+              name: 'DeviceGroups',
+              component: DeviceGroups
+            },
+          ]
+        },
+        {
+          path: 'outputdevice',
+          redirect: '/outputdevice/IOboxs',
+          name: 'OutputDevice',
+          component: {
+            render(c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'ioboxs',
+              name: 'IOboxs',
+              component: IOboxs
+            },
+            {
+              path: 'wiegandconverters',
+              name: 'WiegandConverters',
+              component: WiegandConverters
+            },
+            {
+              path: 'outputDeviceGroups',
+              name: 'OutputDeviceGroups',
+              component: OutputDeviceGroups
+            },
+          ]
+        },
       ]
     }
   ]

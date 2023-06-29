@@ -231,6 +231,52 @@ let nav = [
           },
         ],
       },
+      {
+        _name: "CSidebarNavDropdown",
+        name: i18n.formatter.format("VideoDevice"),
+        to: "/videodevice",
+        permission: ["Admin", "PowerUser"],
+        items: [
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("Cameras"),
+            to: "/videodevice/cameras",
+          },
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("Tablets"),
+            to: "/videodevice/tablets",
+          },
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("DeviceGroup"),
+            to: "/videodevice/deviceGroups",
+          },
+        ],
+      },
+      {
+        _name: "CSidebarNavDropdown",
+        name: i18n.formatter.format("OutputDevice"),
+        to: "/outputdevice",
+        permission: ["Admin", "PowerUser"],
+        items: [
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("IOboxs"),
+            to: "/outputdevice/ioboxs",
+          },
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("Wiegandboxs"),
+            to: "/outputdevice/wiegandconverters",
+          },
+          {
+            permission: ["Admin", "PowerUser"],
+            name: i18n.formatter.format("OutputDeviceGroup"),
+            to: "/outputdevice/outputDeviceGroups",
+          },
+        ],
+      },
     ],
   },
 ];

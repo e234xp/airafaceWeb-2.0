@@ -483,5 +483,26 @@
   "SummaryView": "摘要",
   "SummaryBy": "摘要依據",
   "IdleTime": "空閒時間",
-  "PartialName": "部分姓名"
+  "PartialName": "部分姓名",
+  "VideoDevice": "影像設備",
+  "Cameras": "Cameras",
+  "Tablets": "Tablets",
+  "DeviceGroup": "影像設備群組",
+  "OutputDevice": "輸出設備",
+  "IOboxs": "I/O boxs",
+  "Wiegandboxs": "Wiegand Converters",
+  "OutputDeviceGroup": "輸出設備群組",
+  "VideoDeviceCameras": "Cameras",
+  "VideoDeviceTablets": "Tablets",
+  "OutputDeviceRelays": "中繼器",
+  "DeviceName": "設備名稱",
+  "DeviceStatus": "狀態",
+  "EnableIn": "In",
+  "EnableOut": "Out",
+  "DevicesGroupTitle": "Devices",
+  "VideoDevicesGroup": "群組",
+  "VideoDevices": "影音設備數量",
+  "OutputDevices": "輸出設備數量",
+  "Rules": "規則"
+  
 }
