@@ -40,6 +40,14 @@
         </CRow>
       </CCol>
     </div>
+    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+      @click="$router.push('TabletsBasic')">
+      假按鈕
+    </CButton>
+    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+      @click="$router.push('TabletsAccessSettings')">
+      TabletsAccessSettings
+    </CButton>
 
     <!-- 下方資料 -->
     <CCard>

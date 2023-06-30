@@ -87,10 +87,15 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 const Cameras = () => import('@/views/videodevice/Cameras')
 const Tablets = () => import('@/views/videodevice/Tablets')
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
+const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
+const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic')
+const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings')
 
 const IOboxs = () => import('@/views/outputdevice/IOboxs')
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
 const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups')
+const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
+const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
 
 Vue.use(VueRouter)
 
@@ -428,6 +433,21 @@ function configRoutes() {
               name: 'DeviceGroups',
               component: DeviceGroups
             },
+            {
+              path: 'camerasBasic',
+              name: 'CamerasBasic',
+              component: CamerasBasic
+            },
+            {
+              path: 'tabletsBasic',
+              name: 'TabletsBasic',
+              component: TabletsBasic
+            },
+            {
+              path: 'tabletsAccessSettings',
+              name: 'TabletsAccessSettings',
+              component: TabletsAccessSettings
+            },
           ]
         },
         {
@@ -452,6 +472,16 @@ function configRoutes() {
               path: 'outputDeviceGroups',
               name: 'OutputDeviceGroups',
               component: OutputDeviceGroups
+            },
+            {
+              path: 'iOboxesBasic',
+              name: 'IOboxesBasic',
+              component: IOboxesBasic
+            },
+            {
+              path: 'wiegandBasic',
+              name: 'WiegandBasic',
+              component: WiegandBasic
             },
           ]
         },

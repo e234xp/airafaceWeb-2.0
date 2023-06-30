@@ -2,104 +2,110 @@
 
 <template>
   <div id="wrapper">
-     <!-- 標題 -->
-     <div>
-       <CCol sm="12">
-         <td class="h1">{{ disp_header }}</td>
-       </CCol>
-       <div style="height: 35px"></div>
-     </div>
-     <!-- 搜尋欄跟按鈕 -->
-     <div>
-       <CCol sm="12">
-         <CRow>
-             <div>
-               <CButton size="lg" class="btn btn-primary mr-3 mb-3" >
-                 {{ disp_add }}
-               </CButton>
-             </div>
-             <div>
-               <CButton
-                 class="btn btn-danger mb-3"
-                 size="lg"
-                 @click="clickOnMultipleDelete()"
-               >
-                 {{ disp_delete }}
-               </CButton>
-             </div>
-             <div style="margin-left: auto">
-               <CInput
-                 v-model.lazy="value_searchingFilter"
-                 style="width: 400px"
-                 size="lg"
-                 :placeholder="disp_search"
-               >
-                 <template #prepend-content>
-                   <CIcon name="cil-search" />
-                 </template>
-               </CInput>
-             </div>
-         </CRow>
-       </CCol>
-     </div>
- 
-     <!-- 下方資料 -->
-     <CCard>
-       <CCardBody>
-         <!-- {{ value_dataItemsToShow }} -->
-         <div>
-           <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
-             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-               highlight-current-row>
- 
-             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
- 
-             <vxe-table-column field="enable" :title="disp_enable" width="auto">
-               <template #default="{ row }"> 
-                 <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-               </template>
-             </vxe-table-column>
- 
-             <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
- 
-             <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_status" width="auto" align="center">
-             </vxe-table-column>
- 
-             <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_ipAddress" width="auto" align="center">
-             </vxe-table-column>
-             
-             <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_In" width="auto" align="center">
-             </vxe-table-column>
- 
-             <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
-             </vxe-table-column>
- 
-             <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
-                 <template #default="{ row }"> 
-                   <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-                 </template>
-             </vxe-table-column> -->
-             
-           </vxe-table>
-         </div>
- 
-         <vxe-pager :layouts="[
-             'PrevJump',
-             'PrevPage',
-             'Number',
-             'NextPage',
-             'NextJump',
-             'FullJump',
-             'Total',
-           ]" 
-           :current-page="value_tablePage.currentPage" 
-           :page-size="value_tablePage.pageSize"
-           :total="value_tablePage.totalResult" 
-           @page-change="handlePageChange">
-         </vxe-pager>
-       </CCardBody>
-     </CCard>
- 
+    <!-- 標題 -->
+    <div>
+      <CCol sm="12">
+        <td class="h1">{{ disp_header }}</td>
+      </CCol>
+      <div style="height: 35px"></div>
+    </div>
+    <!-- 搜尋欄跟按鈕 -->
+    <div>
+      <CCol sm="12">
+        <CRow>
+            <div>
+              <CButton size="lg" class="btn btn-primary mr-3 mb-3" >
+                {{ disp_add }}
+              </CButton>
+            </div>
+            <div>
+              <CButton
+                class="btn btn-danger mb-3"
+                size="lg"
+                @click="clickOnMultipleDelete()"
+              >
+                {{ disp_delete }}
+              </CButton>
+            </div>
+            <div style="margin-left: auto">
+              <CInput
+                v-model.lazy="value_searchingFilter"
+                style="width: 400px"
+                size="lg"
+                :placeholder="disp_search"
+              >
+                <template #prepend-content>
+                  <CIcon name="cil-search" />
+                </template>
+              </CInput>
+            </div>
+        </CRow>
+      </CCol>
+    </div>
+    
+    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+      @click="$router.push('WiegandBasic')">
+      假按鈕
+    </CButton>
+  
+
+    <!-- 下方資料 -->
+    <CCard>
+      <CCardBody>
+        <!-- {{ value_dataItemsToShow }} -->
+        <div>
+          <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
+              highlight-current-row>
+
+            <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
+
+            <vxe-table-column field="enable" :title="disp_enable" width="auto">
+              <template #default="{ row }"> 
+                <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
+              </template>
+            </vxe-table-column>
+
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
+
+            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_status" width="auto" align="center">
+            </vxe-table-column>
+
+            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_ipAddress" width="auto" align="center">
+            </vxe-table-column>
+            
+            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_In" width="auto" align="center">
+            </vxe-table-column>
+
+            <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
+            </vxe-table-column>
+
+            <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
+                <template #default="{ row }"> 
+                  <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
+                </template>
+            </vxe-table-column> -->
+            
+          </vxe-table>
+        </div>
+
+        <vxe-pager :layouts="[
+            'PrevJump',
+            'PrevPage',
+            'Number',
+            'NextPage',
+            'NextJump',
+            'FullJump',
+            'Total',
+          ]" 
+          :current-page="value_tablePage.currentPage" 
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult" 
+          @page-change="handlePageChange">
+        </vxe-pager>
+      </CCardBody>
+    </CCard>
+
   </div>
 </template>
 
