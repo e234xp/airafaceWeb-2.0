@@ -1,6 +1,134 @@
 <template>
   <div id="wrapper">
-    
+    <!-- 標題 -->
+    <div>
+      <CCol sm="12">
+        <td class="h1">{{ disp_header }}</td>
+      </CCol>
+
+      <div style="height: 35px"></div>
+    </div>
+
+    <!-- 項目 -->
+    <CCard>
+      <CCardBody>
+          <div>
+            <h2 sm="12">{{ disp_header }}</h2>  
+          </div>
+          <!-- Basic -->
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
+              </v-select>
+            </CCol>
+          </CRow>
+
+          <div style="height: 35px"></div>
+
+          <!-- Video Source -->
+          <div>
+            <h2 sm="12">{{ disp_subtitle }}</h2>
+          </div>
+          
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Type }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
+              </v-select>
+            </CCol>
+          </CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ConnectionString }}</CRow>
+          <CRow>
+            <CCol sm="12">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <!-- ROI -->
+          <!-- <CTab>
+            <template slot="title">
+              <CIcon name="cil-crop" /> ROI
+            </template>
+            <div class="py-2"></div>
+            <CButton color="primary" @click="getImage"> 取得影像
+            </CButton>
+            &nbsp;
+            <CButton color="primary" @click="removeRegion"> {{ $t('Devices.Remove_ROI') }}
+            </CButton>
+
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <div class="form-row">
+                <div class="form-group col-md-12"
+                  style="display: flex; justify-content: center; align-items: center;">
+                  <canvas ref="sketchpad" id="canvas" width="1024" height="576"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </CTab> -->
+
+          <!-- Face Capture -->
+          <div class="mt-3">
+            <CRow sm="12">
+              <CCol sm="6">
+                標題1: Face minimum width:
+                <CInput size="lg"  class="h5"  style="width: 100%;" />
+              </CCol>
+              <CCol sm="6">
+                標題2: Face minimum height:
+                <CInput size="lg"  class="h5"  style="width: 100%;" />
+              </CCol>
+            </CRow>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="checkbox1">
+            <label class="form-check-label mt-2" for="flexCheckDefault">
+              Frontal face filter
+            </label>
+          </div>
+          <!-- <CInputCheckbox class="form-check ml-1 mb-4" v-model="isChecked" id="checkbox1" label="Frontal face filter" /> -->
+
+          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Target score(0~1):</CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Capture interval:</CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Anti-spoofing score(0~1)</CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+
+          <!-- 儲存按鈕 -->
+          <div class="d-flex ml-3 justify-content-end">
+            <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" @click="saveData()">
+              {{ disp_save }}
+            </CButton>
+          </div>
+
+      </CCardBody>
+    </CCard>
 
   </div>
 </template>
@@ -9,6 +137,11 @@
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
+
+  import VueSelect from 'vue-select';
+	
+
+
 
   export default {
     name: "CamerasBasic",
@@ -22,29 +155,51 @@
           totalResult: 0,
         },
         value_searchingFilter: "",
+        isChecked: true,
 
-        disp_header: i18n.formatter.format("VideoDeviceCameras"),
-        disp_search: i18n.formatter.format("Search"),
-        disp_add: i18n.formatter.format("Add"),
-        disp_delete: i18n.formatter.format("Delete"),
+        /*Basic title  */
+        disp_header: i18n.formatter.format("VideoDeviceBasic"),
+
+        /**content */
+        disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
+        disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+
+        /*Video Source title  */
+        disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
+
+        /**content */
+        disp_Type: i18n.formatter.format("VideoSourceType"),
+        disp_ConnectionString: i18n.formatter.format("VideoSourceConnectionString"),
+
+        /*Face Capture title  */
+        // disp_header: i18n.formatter.format("VideoDeviceBasic"),
+
+        /**content */
+        // disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
+        // disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
 
 
-        /*data table */
-        disp_enable: i18n.formatter.format("Enable"),
-        disp_deviceName: i18n.formatter.format("DeviceName"),
-        disp_status: i18n.formatter.format("DeviceStatus"),
-        disp_ipAddress: i18n.formatter.format("IpAddress"),
-        disp_In: i18n.formatter.format("EnableIn"),
-        disp_out: i18n.formatter.format("EnableOut"),
+        disp_save: i18n.formatter.format("Save"),
 
+        /**v-model */
+        value_deviceGroups: "", /**選單 */
+        value_deviceGroupsList: [1,2,3]
       };
+    },
+    components: {
+    "v-select": VueSelect,
     },
     computed: {
       ...mapState(["ellipsisMode"]),
     },
+   
     methods: {
 
     },
   }
 </script>
   
+
+<style>
+  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
+</style>
