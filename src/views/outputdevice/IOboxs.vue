@@ -53,7 +53,7 @@
         <div>
           <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row>
+              highlight-current-row  @row-click="onRowClick">
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
@@ -115,7 +115,7 @@
     name: 'IOboxs',
     data() {
       return {
-        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
+        value_dataItemsToShow: [{enable:false,name:'123',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
           currentPage: 1,
@@ -144,6 +144,11 @@
       ...mapState(["ellipsisMode"]),
     },
     methods: {
+      onRowClick({ row }) {
+    console.log('Clicked row:', row);
+    // 执行跳转或其他操作
+    this.$router.push('WiegandBasic');
+  },
       //分頁處理
       handlePageChange({ currentPage, pageSize }) {
         const self = this;
