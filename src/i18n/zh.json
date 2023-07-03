@@ -510,6 +510,14 @@
   "VideoDeviceVideoSource": "Video Source",
   "VideoSourceType": "類別",
   "VideoSourceConnectionString": "連接資訊",
+  "VideoFaceCapture": "Face Capture",
+  "VideoBasicCOlNameFaceMinimumWidth": "Face minimum width:",
+  "VideoBasicCOlNameFaceMinimumHeight": "Face minimum height:",
+  "VideoBasicCOlNameFrontalFaceFilter": "Frontal face filter:",
+  "VideoBasicCOlNameTargetScore": "Target score(0~1):",
+  "VideoBasicCOlNameCaptureInterval": "Capture interval:",
+  "VideoBasicCOlNameAntiSpoofingScore": "Anti-spoofing score(0~1):",
+
 
   "TabletsBasicName": "Basic",
   "TabletsBasicCOlNameUUID":"UUID:",
