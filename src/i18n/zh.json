@@ -546,7 +546,44 @@
   "TabletsAccessColNameAccessMessageOnTop": "上部資訊:",
   "TabletsAccessColNameAccessTextColor": "文字顏色:",
   "TabletsAccessColNameAccessBgColor": "背景顏色:",
-  "TabletsAccessColNameAccessDisplayImage": "顯示圖片:"
+  "TabletsAccessColNameAccessDisplayImage": "顯示圖片:",
+
+  "I/OBoxesBasicName": "Basic",
+  "I/OBoxesBasicCOlNameBrand":"Brand:",
+  "I/OBoxesBasicCOlNameModel":"Model:",
+  "I/OBoxesBasicCOlNameDeviceName":"Device name:",
+  "I/OBoxesBasicCOlNameDeviceGroups":"Device groups:",
+
+  "I/OBoxesBasicTitleNameConnection": "Connection",
+  "I/OBoxesBasicCOlNameIP":"IP:",
+  "I/OBoxesBasicCOlNamePort":"Port:",
+  "I/OBoxesBasicCOlNameUserName":"User name:",
+  "I/OBoxesBasicCOlNamePassword":"Password:",
+
+  "I/OBoxesBasicTitleNameDigitalOutPut1": "Digital output #1",
+  "I/OBoxesBasicCOlNameEnable": "Enable",
+  "I/OBoxesBasicCOlNameDefaultValue":"Default value:",
+  "I/OBoxesBasicCOlNameValueWhenTriggered":"Value when triggered:",
+  "I/OBoxesBasicCOlNameDurationWhenTriggered":"Duration when triggered:",
+  "I/OBoxesBasicTitleNameDigitalOutPut2": "Digital output #2",
+
+  "WiegandBasicName": "Basic",
+  "WiegandBasicCOlNameDeviceName":"Device name:",
+  "WiegandBasicCOlNameDeviceGroups":"Device groups:",
+  
+  "WiegandBasicTitleNameConnection": "Connection",
+  "WiegandBasicCOlNameIP":"IP:",
+  "WiegandBasicCOlNamePort":"Port:",
+
+  "WiegandBasicTitleNameSettings": "Settings",
+  "WiegandBasicCOlNameIndex":"IP:",
+  "WiegandBasicCOlNameSystemCode":"System code:"
+
+
+  
+
+
+  
 
 
 
