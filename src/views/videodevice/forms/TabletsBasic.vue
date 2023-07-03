@@ -42,21 +42,21 @@
             <h2 sm="12">{{ disp_faceAccessTitle }}</h2>
           </div>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_FaceDetectionThreshold }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_faceDetectionThreshold }}</CRow>
           <CRow>
             <CCol sm="12">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
             </CCol>
           </CRow>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RecognitionThreshold }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_recognitionThreshold }}</CRow>
           <CRow>
             <CCol sm="12">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
             </CCol>
           </CRow>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_AntiSpoofingThreshold }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_antiSpoofingThreshold }}</CRow>
           <CRow>
             <CCol sm="12">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
@@ -64,7 +64,7 @@
           </CRow>
 
           <!-- Card access -->
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_CardAccessTitle }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_cardAccessTitle }}</CRow>
           <CRow>
             <CCol sm="6">
               <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
@@ -128,17 +128,15 @@
         /*Face access title  */
         disp_faceAccessTitle: i18n.formatter.format("TabletsBasicTitleNameFaceAccess"),
         /**content */
-        disp_FaceDetectionThreshold: i18n.formatter.format("TabletsBasicCOlNameFaceDetectionThreshold"),
-        disp_RecognitionThreshold: i18n.formatter.format("TabletsBasicCOlNameRecognitionThreshold"),
-        disp_AntiSpoofingThreshold: i18n.formatter.format("TabletsBasicCOlNameAntiSpoofingThreshold"),
+        disp_faceDetectionThreshold: i18n.formatter.format("TabletsBasicCOlNameFaceDetectionThreshold"),
+        disp_recognitionThreshold: i18n.formatter.format("TabletsBasicCOlNameRecognitionThreshold"),
+        disp_antiSpoofingThreshold: i18n.formatter.format("TabletsBasicCOlNameAntiSpoofingThreshold"),
 
         
         /*Card access title  */
-        disp_CardAccessTitle: i18n.formatter.format("TabletsBasicTitleNameCardAccess"),
+        disp_cardAccessTitle: i18n.formatter.format("TabletsBasicTitleNameCardAccess"),
         /**content */
-        disp_EnableStrangerCard: i18n.formatter.format("TabletsBasicCOlNameEnableStrangerCard"),
-    
-
+        disp_enableStrangerCard: i18n.formatter.format("TabletsBasicCOlNameEnableStrangerCard"),
 
         disp_save: i18n.formatter.format("Save"),
 
@@ -148,7 +146,7 @@
       };
     },
     components: {
-    "v-select": VueSelect,
+      "v-select": VueSelect,
     },
     computed: {
       ...mapState(["ellipsisMode"]),
