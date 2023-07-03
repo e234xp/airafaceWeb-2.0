@@ -517,33 +517,26 @@
   "VideoBasicCOlNameTargetScore": "Target score(0~1):",
   "VideoBasicCOlNameCaptureInterval": "Capture interval:",
   "VideoBasicCOlNameAntiSpoofingScore": "Anti-spoofing score(0~1):",
-
-
   "TabletsBasicName": "Basic",
   "TabletsBasicCOlNameUUID":"UUID:",
   "TabletsBasicCOlNameDeviceName":"Device Name:",
   "TabletsBasicCOlNameDeviceGroups": "Device groups:",
-
   "TabletsBasicTitleNameFaceAccess": "Face access",
   "TabletsBasicCOlNameFaceDetectionThreshold": "Face detection threshold:",
   "TabletsBasicCOlNameRecognitionThreshold": "Recognition threshold:",
   "TabletsBasicCOlNameAntiSpoofingThreshold": "Anti spoofing threshold",
-
   "TabletsBasicTitleNameCardAccess": "Card access",
   "TabletsBasicCOlNameEnableStrangerCard": "Enable stranger card",
-
   "TabletsAccessName": "Advanced settings",
   "TabletsAccessCOlNameTwoFactor": "Two-Factor authentication(Face and card are both required)",
   "TabletsAccessTitleNameRelay": "Relay",
   "TabletsAccessCOlNameDuration": "Duration",
-
   "TabletsAccessTitleNameTemperatureMask": "Temperature & Mask",
   "TabletsAccessSubTitleName": "Temperature settings",
   "TabletsAccessColNameTemperatureUnit": "Temperature unit:",
   "TabletsAccessColNameThreshold": "Threshold:",
   "TabletsAccessColNameFaceMasks": "Face masks:",
   "TabletsAccessColNameEnforceFaceMaskCheck": "Enforce face mask check",
-
   "TabletsAccessTitleNameResultDisplay": "Result display",
   "TabletsAccessColNameShownPhoto": "Shown photo:",
   "TabletsAccessColNameDisplayDuration": "Display duration:",

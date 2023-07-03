@@ -74,6 +74,36 @@
             </label>
             <input class="form-check-input mt-1 ml-5" type="text" value="" id="cardNo">
           </div>
+          <div style="height: 35px"></div>
+
+
+          <!-- Result Display -->
+          <div>
+            <h4 sm="12">{{ disp_resultDisplayTitle }}</h4>
+          </div>
+
+          <div class="mt-3">
+            <CRow sm="12">
+              <CCol sm="6" class="h5" >
+                {{ disp_shownPhoto }}
+                <v-select  v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
+                </v-select>
+              </CCol>
+              <CCol sm="6" class="h5"  >
+                {{ disp_displayDuration }}
+                <CInput size="lg" class="mt-2" style="width: 100%;" />
+              </CCol>
+            </CRow>
+          </div>
+
+          <CRow sm="6" class="h5 ml-2 mb-3" style="text-align: right; ">{{ disp_resultPrompt }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
+              </v-select>
+            </CCol>
+          </CRow>
+
 
         
 
@@ -135,6 +165,15 @@
         disp_threshold: i18n.formatter.format("TabletsAccessColNameThreshold"),
         disp_faceMasks: i18n.formatter.format("TabletsAccessColNameFaceMasks"),
         disp_enforceFaceMaskCheck: i18n.formatter.format("TabletsAccessColNameEnforceFaceMaskCheck"),
+
+
+        /*Result display title  */
+        disp_resultDisplayTitle: i18n.formatter.format("TabletsAccessTitleNameResultDisplay"),
+        /**content */
+        disp_shownPhoto: i18n.formatter.format("TabletsAccessColNameShownPhoto"),
+        disp_displayDuration: i18n.formatter.format("TabletsAccessColNameDisplayDuration"),
+        disp_resultPrompt: i18n.formatter.format("TabletsAccessColNameResultPrompt"),
+
 
 
         disp_save: i18n.formatter.format("Save"),
