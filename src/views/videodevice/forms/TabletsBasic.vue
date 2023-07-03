@@ -12,18 +12,22 @@
     <!-- 項目 -->
     <CCard>
       <CCardBody>
-          <div>
-            <h2 sm="12">{{ disp_header }}</h2>  
-          </div>
           <!-- Basic -->
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletUUID }}</CRow>
           <CRow>
             <CCol sm="6">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
             </CCol>
           </CRow>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceName }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceGroups }}</CRow>
           <CRow>
             <CCol sm="6">
               <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
@@ -33,12 +37,34 @@
 
           <div style="height: 35px"></div>
 
-          <!-- Video Source -->
+          <!-- Face access -->
           <div>
-            <h2 sm="12">{{ disp_subtitle }}</h2>
+            <h2 sm="12">{{ disp_faceAccessTitle }}</h2>
           </div>
-          
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Type }}</CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_FaceDetectionThreshold }}</CRow>
+          <CRow>
+            <CCol sm="12">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RecognitionThreshold }}</CRow>
+          <CRow>
+            <CCol sm="12">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_AntiSpoofingThreshold }}</CRow>
+          <CRow>
+            <CCol sm="12">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <!-- Card access -->
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_CardAccessTitle }}</CRow>
           <CRow>
             <CCol sm="6">
               <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
@@ -46,79 +72,13 @@
             </CCol>
           </CRow>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ConnectionString }}</CRow>
-          <CRow>
-            <CCol sm="12">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <!-- ROI -->
-          <!-- <CTab>
-            <template slot="title">
-              <CIcon name="cil-crop" /> ROI
-            </template>
-            <div class="py-2"></div>
-            <CButton color="primary" @click="getImage"> 取得影像
-            </CButton>
-            &nbsp;
-            <CButton color="primary" @click="removeRegion"> {{ $t('Devices.Remove_ROI') }}
-            </CButton>
-
-            <div style="display: flex; justify-content: center; align-items: center;">
-              <div class="form-row">
-                <div class="form-group col-md-12"
-                  style="display: flex; justify-content: center; align-items: center;">
-                  <canvas ref="sketchpad" id="canvas" width="1024" height="576"></canvas>
-                </div>
-              </div>
-            </div>
-
-          </CTab> -->
-
-          <!-- Face Capture -->
-          <div class="mt-3">
-            <CRow sm="12">
-              <CCol sm="6">
-                標題1: Face minimum width:
-                <CInput size="lg"  class="h5"  style="width: 100%;" />
-              </CCol>
-              <CCol sm="6">
-                標題2: Face minimum height:
-                <CInput size="lg"  class="h5"  style="width: 100%;" />
-              </CCol>
-            </CRow>
-          </div>
-
           <div class="form-check">
             <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="checkbox1">
             <label class="form-check-label mt-2" for="flexCheckDefault">
               Frontal face filter
             </label>
+            <input class="form-check-input mt-1 ml-5" type="text" value="" id="cardNo">
           </div>
-          <!-- <CInputCheckbox class="form-check ml-1 mb-4" v-model="isChecked" id="checkbox1" label="Frontal face filter" /> -->
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Target score(0~1):</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Capture interval:</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Anti-spoofing score(0~1)</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
 
           <!-- 儲存按鈕 -->
           <div class="d-flex ml-3 justify-content-end">
@@ -158,25 +118,26 @@
         isChecked: true,
 
         /*Basic title  */
-        disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
+        disp_header: i18n.formatter.format("TabletsBasicName"),
         /**content */
-        disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+        disp_tabletUUID: i18n.formatter.format("TabletsBasicCOlNameUUID"),
+        disp_tabletDeviceName: i18n.formatter.format("TabletsBasicCOlNameDeviceName"),
+        disp_tabletDeviceGroups: i18n.formatter.format("TabletsBasicCOlNameDeviceGroups"),
 
-        /*Video Source title  */
-        disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
 
+        /*Face access title  */
+        disp_faceAccessTitle: i18n.formatter.format("TabletsBasicTitleNameFaceAccess"),
         /**content */
-        disp_Type: i18n.formatter.format("VideoSourceType"),
-        disp_ConnectionString: i18n.formatter.format("VideoSourceConnectionString"),
+        disp_FaceDetectionThreshold: i18n.formatter.format("TabletsBasicCOlNameFaceDetectionThreshold"),
+        disp_RecognitionThreshold: i18n.formatter.format("TabletsBasicCOlNameRecognitionThreshold"),
+        disp_AntiSpoofingThreshold: i18n.formatter.format("TabletsBasicCOlNameAntiSpoofingThreshold"),
 
-        /*Face Capture title  */
-        // disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
+        
+        /*Card access title  */
+        disp_CardAccessTitle: i18n.formatter.format("TabletsBasicTitleNameCardAccess"),
         /**content */
-        // disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        // disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+        disp_EnableStrangerCard: i18n.formatter.format("TabletsBasicCOlNameEnableStrangerCard"),
+    
 
 
         disp_save: i18n.formatter.format("Save"),

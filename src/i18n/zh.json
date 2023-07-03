@@ -509,6 +509,49 @@
   "BasicDeviceGroups": "設備群組:",
   "VideoDeviceVideoSource": "Video Source",
   "VideoSourceType": "類別",
-  "VideoSourceConnectionString": "連接資訊"
+  "VideoSourceConnectionString": "連接資訊",
+
+  "TabletsBasicName": "Basic",
+  "TabletsBasicCOlNameUUID":"UUID:",
+  "TabletsBasicCOlNameDeviceName":"Device Name:",
+  "TabletsBasicCOlNameDeviceGroups": "Device groups:",
+
+  "TabletsBasicTitleNameFaceAccess": "Face access",
+  "TabletsBasicCOlNameFaceDetectionThreshold": "Face detection threshold:",
+  "TabletsBasicCOlNameRecognitionThreshold": "Recognition threshold:",
+  "TabletsBasicCOlNameAntiSpoofingThreshold": "Anti spoofing threshold",
+
+  "TabletsBasicTitleNameCardAccess": "Card access",
+  "TabletsBasicCOlNameEnableStrangerCard": "Enable stranger card",
+
+  "TabletsAccessName": "Advanced settings",
+  "TabletsAccessCOlNameTwoFactor": "Two-Factor authentication(Face and card are both required)",
+  "TabletsAccessTitleNameRelay": "Relay",
+  "TabletsAccessCOlNameDuration": "Duration",
+
+  "TabletsAccessTitleNameTemperatureMask": "Temperature & Mask",
+  "TabletsAccessSubTitleName": "Temperature settings",
+  "TabletsAccessColNameTemperatureUnit": "Temperature unit:",
+  "TabletsAccessColNameThreshold": "Threshold:",
+  "TabletsAccessColNameFaceMasks": "Face masks:",
+  "TabletsAccessColNameEnforceFaceMaskCheck": "Enforce face mask check",
+
+  "TabletsAccessTitleNameResultDisplay": "Result display",
+  "TabletsAccessColNameShownPhoto": "Shown photo:",
+  "TabletsAccessColNameDisplayDuration": "Display duration:",
+  "TabletsAccessColNameResultPrompt": "Result prompt:",
+  "TabletsAccessColNameAccessPassed": "辨識成功提示:",
+  "TabletsAccessColNameAccessDenied": "辨識失敗提示:",
+  "TabletsAccessColNameAccessMessageOnTop": "上部資訊:",
+  "TabletsAccessColNameAccessTextColor": "文字顏色:",
+  "TabletsAccessColNameAccessBgColor": "背景顏色:",
+  "TabletsAccessColNameAccessDisplayImage": "顯示圖片:"
+
+
+
+
+
+
+
   
 }
