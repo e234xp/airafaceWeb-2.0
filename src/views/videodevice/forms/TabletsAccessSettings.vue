@@ -12,18 +12,8 @@
     <!-- 項目 -->
     <CCard>
       <CCardBody>
-          <div>
-            <h2 sm="12">{{ disp_header }}</h2>  
-          </div>
           <!-- Basic -->
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
+          <CRow sm="12" class="h2 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_twoFactor }}</CRow>
           <CRow>
             <CCol sm="6">
               <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
@@ -35,89 +25,57 @@
 
           <!-- Video Source -->
           <div>
-            <h2 sm="12">{{ disp_subtitle }}</h2>
+            <h2 sm="12">{{ disp_relayTitle }}</h2>
           </div>
-          
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Type }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
-            </CCol>
-          </CRow>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ConnectionString }}</CRow>
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Duration }}</CRow>
           <CRow>
             <CCol sm="12">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
             </CCol>
           </CRow>
 
-          <!-- ROI -->
-          <!-- <CTab>
-            <template slot="title">
-              <CIcon name="cil-crop" /> ROI
-            </template>
-            <div class="py-2"></div>
-            <CButton color="primary" @click="getImage"> 取得影像
-            </CButton>
-            &nbsp;
-            <CButton color="primary" @click="removeRegion"> {{ $t('Devices.Remove_ROI') }}
-            </CButton>
+          <div style="height: 35px"></div>
 
-            <div style="display: flex; justify-content: center; align-items: center;">
-              <div class="form-row">
-                <div class="form-group col-md-12"
-                  style="display: flex; justify-content: center; align-items: center;">
-                  <canvas ref="sketchpad" id="canvas" width="1024" height="576"></canvas>
-                </div>
-              </div>
-            </div>
 
-          </CTab> -->
+          <!-- Temperature Mask -->
+          <div>
+            <h2 sm="12">{{ disp_temperatureMaskTitle }}</h2>
+          </div>
 
-          <!-- Face Capture -->
-          <div class="mt-3">
-            <CRow sm="12">
-              <CCol sm="6">
-                標題1: Face minimum width:
-                <CInput size="lg"  class="h5"  style="width: 100%;" />
-              </CCol>
-              <CCol sm="6">
-                標題2: Face minimum height:
-                <CInput size="lg"  class="h5"  style="width: 100%;" />
-              </CCol>
-            </CRow>
+          <div>
+            <h4 sm="12">{{ disp_subTitleName }}</h4>
+          </div>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_temperatureUnit }}</CRow>
+          <CRow>
+            <CCol sm="6">
+              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
+              </v-select>
+            </CCol>
+          </CRow>
+          <div style="height: 15px"></div>
+
+          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_threshold }}</CRow>
+          <CRow>
+            <CCol sm="12">
+              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            </CCol>
+          </CRow>
+
+          <div>
+            <h4 sm="12">{{ disp_faceMasks }}</h4>
           </div>
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="checkbox1">
             <label class="form-check-label mt-2" for="flexCheckDefault">
-              Frontal face filter
+              {{ disp_enforceFaceMaskCheck }}
             </label>
+            <input class="form-check-input mt-1 ml-5" type="text" value="" id="cardNo">
           </div>
-          <!-- <CInputCheckbox class="form-check ml-1 mb-4" v-model="isChecked" id="checkbox1" label="Frontal face filter" /> -->
 
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Target score(0~1):</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Capture interval:</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">Anti-spoofing score(0~1)</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
+        
 
 
           <!-- 儲存按鈕 -->
@@ -158,25 +116,25 @@
         isChecked: true,
 
         /*Basic title  */
-        disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
+        disp_header: i18n.formatter.format("TabletsAccessName"),
         /**content */
-        disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+        disp_twoFactor: i18n.formatter.format("TabletsAccessCOlNameTwoFactor"),
 
-        /*Video Source title  */
-        disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
 
+        /*Relay title  */
+        disp_relayTitle: i18n.formatter.format("TabletsAccessTitleNameRelay"),
         /**content */
-        disp_Type: i18n.formatter.format("VideoSourceType"),
-        disp_ConnectionString: i18n.formatter.format("VideoSourceConnectionString"),
+        disp_Duration: i18n.formatter.format("TabletsAccessCOlNameDuration"),
 
-        /*Face Capture title  */
-        // disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
+        
+        /*Temperature & Mask title  */
+        disp_temperatureMaskTitle: i18n.formatter.format("TabletsAccessTitleNameTemperatureMask"),
         /**content */
-        // disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        // disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+        disp_subTitleName: i18n.formatter.format("TabletsAccessSubTitleName"),
+        disp_temperatureUnit: i18n.formatter.format("TabletsAccessColNameTemperatureUnit"),
+        disp_threshold: i18n.formatter.format("TabletsAccessColNameThreshold"),
+        disp_faceMasks: i18n.formatter.format("TabletsAccessColNameFaceMasks"),
+        disp_enforceFaceMaskCheck: i18n.formatter.format("TabletsAccessColNameEnforceFaceMaskCheck"),
 
 
         disp_save: i18n.formatter.format("Save"),
@@ -187,7 +145,7 @@
       };
     },
     components: {
-    "v-select": VueSelect,
+      "v-select": VueSelect,
     },
     computed: {
       ...mapState(["ellipsisMode"]),
