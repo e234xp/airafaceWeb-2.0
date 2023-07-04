@@ -23,15 +23,6 @@
             </CCol>
           </CRow>
 
-          <!-- <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
-             
-            </CCol>
-          </CRow> -->
-
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
           <CRow>
             <CCol sm="6">

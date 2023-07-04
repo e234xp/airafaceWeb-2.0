@@ -51,8 +51,8 @@
         <!-- {{ value_dataItemsToShow }} -->
         <div>
           <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row>
+            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source 
+              highlight-current-row @cell-click="cellClickEvent"> 
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
@@ -76,14 +76,14 @@
             <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
             </vxe-table-column>
 
-            <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
-                <template #default="{ row }"> 
-                  <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-                </template>
-            </vxe-table-column> -->
             
           </vxe-table>
         </div>
+        <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
+            <template #default="{ row }"> 
+              <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
+            </template>
+        </vxe-table-column> -->
 
         <vxe-pager :layouts="[
             'PrevJump',
@@ -143,6 +143,10 @@
       ...mapState(["ellipsisMode"]),
     },
     methods: {
+      cellClickEvent({row}) {
+        console.log(row)
+        this.$router.push("CamerasBasic");
+      },
       //分頁處理
       handlePageChange({ currentPage, pageSize }) {
         const self = this;
