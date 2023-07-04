@@ -484,6 +484,7 @@
   "SummaryBy": "摘要依據",
   "IdleTime": "空閒時間",
   "PartialName": "部分姓名",
+
   "VideoDevice": "影像設備",
   "Cameras": "Cameras",
   "Tablets": "Tablets",
@@ -511,12 +512,15 @@
   "VideoSourceType": "類別",
   "VideoSourceConnectionString": "連接資訊",
   "VideoFaceCapture": "Face Capture",
+  "VideoBasicCOlNameFaceMinimumSize": "Face minimum size(0:umlimited):",
+  "VideoBasicCOlNameTargetScore": "Target score(0~1):",
+  "VideoBasicCOlNameCaptureInterval": "Capture interval:",
+
   "VideoBasicCOlNameFaceMinimumWidth": "Face minimum width:",
   "VideoBasicCOlNameFaceMinimumHeight": "Face minimum height:",
   "VideoBasicCOlNameFrontalFaceFilter": "Frontal face filter:",
-  "VideoBasicCOlNameTargetScore": "Target score(0~1):",
-  "VideoBasicCOlNameCaptureInterval": "Capture interval:",
   "VideoBasicCOlNameAntiSpoofingScore": "Anti-spoofing score(0~1):",
+
   "TabletsBasicName": "Basic",
   "TabletsBasicCOlNameUUID":"UUID:",
   "TabletsBasicCOlNameDeviceName":"Device Name:",

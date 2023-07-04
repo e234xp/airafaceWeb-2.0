@@ -96,22 +96,22 @@
           <div class="mt-3">
             <CRow sm="12">
               <CCol sm="6" class="h5" >
-                {{ disp_faceMinimumWidth }}
+                {{ disp_faceMinimumSize }}
                 <CInput size="lg" class="mt-3" style="width: 100%;" />
               </CCol>
-              <CCol sm="6" class="h5"  >
+              <!-- <CCol sm="6" class="h5"  >
                 {{ disp_faceMinimumHeight }}
                 <CInput size="lg" class="mt-3" style="width: 100%;" />
-              </CCol>
+              </CCol> -->
             </CRow>
           </div>
 
-          <div class="form-check">
+          <!-- <div class="form-check">
             <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="checkbox1">
             <label class="form-check-label mt-2" for="flexCheckDefault">
               {{ disp_frontalFaceFilter }}
             </label>
-          </div>
+          </div> -->
           <!-- <CInputCheckbox class="form-check ml-1 mb-4" v-model="isChecked" id="checkbox1" label="Frontal face filter" /> -->
 
           <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
@@ -128,12 +128,12 @@
             </CCol>
           </CRow>
 
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_antiSpoofingScore }}</CRow>
+          <!-- <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_antiSpoofingScore }}</CRow>
           <CRow>
             <CCol sm="6">
               <CInput size="lg"  class="h5"  style="width: 100%;" />
             </CCol>
-          </CRow>
+          </CRow> -->
 
 
           <!-- 儲存按鈕 -->
@@ -193,13 +193,14 @@
         disp_subtitleFaceCapture: i18n.formatter.format("VideoFaceCapture"),
 
         /**content */
-        disp_faceMinimumWidth: i18n.formatter.format("VideoBasicCOlNameFaceMinimumWidth"),
-        disp_faceMinimumHeight: i18n.formatter.format("VideoBasicCOlNameFaceMinimumHeight"),
-        disp_frontalFaceFilter: i18n.formatter.format("VideoBasicCOlNameFrontalFaceFilter"),
+        // disp_faceMinimumWidth: i18n.formatter.format("VideoBasicCOlNameFaceMinimumWidth"),
+        // disp_faceMinimumHeight: i18n.formatter.format("VideoBasicCOlNameFaceMinimumHeight"),
+        disp_faceMinimumSize: i18n.formatter.format("VideoBasicCOlNameFaceMinimumSize"),
+        // disp_frontalFaceFilter: i18n.formatter.format("VideoBasicCOlNameFrontalFaceFilter"),
 
         disp_targetScore: i18n.formatter.format("VideoBasicCOlNameTargetScore"),
         disp_captureInterval: i18n.formatter.format("VideoBasicCOlNameCaptureInterval"),
-        disp_antiSpoofingScore: i18n.formatter.format("VideoBasicCOlNameAntiSpoofingScore"),
+        // disp_antiSpoofingScore: i18n.formatter.format("VideoBasicCOlNameAntiSpoofingScore"),
 
         disp_save: i18n.formatter.format("Save"),
 
