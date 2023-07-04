@@ -35,12 +35,15 @@
             <CRow sm="12">
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicDeviceName }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" />
               </CCol>
               <CCol sm="6" class="h5" >
                 {{ disp_IOBoxesBasicDeviceGroups }}
-                <v-select  v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
-                </v-select>
+                <multiselect class="mt-2"  v-model="value_deviceGroups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
+                  :taggable="true" :hideSelected="true" 
+                  :show-no-options="false"
+                >
+                </multiselect>
               </CCol>
             </CRow>
           </div>
@@ -56,11 +59,11 @@
             <CRow sm="12">
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicIP }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" />
               </CCol>
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicPort }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" />
               </CCol>
             </CRow>
           </div>
@@ -69,11 +72,11 @@
             <CRow sm="12">
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicUserName }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" />
               </CCol>
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicPassword }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" type="password"/>
               </CCol>
             </CRow>
           </div>
@@ -109,7 +112,7 @@
               </CCol>
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicDurationWhenTriggered }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-1" style="width: 100%;" />
               </CCol>
             </CRow>
           </div>
@@ -146,7 +149,7 @@
               </CCol>
               <CCol sm="6" class="h5"  >
                 {{ disp_IOBoxesBasicDurationWhenTriggered }}
-                <CInput size="xl" class="mt-2" style="width: 100%;" />
+                <CInput size="lg" class="mt-1" style="width: 100%;" />
               </CCol>
             </CRow>
           </div>
@@ -173,6 +176,8 @@
   import i18n from "@/i18n";
 
   import VueSelect from 'vue-select';
+  import Multiselect from "vue-multiselect";
+  import "@/airacss/vue-multiselect.css";
 	
 
 
@@ -232,7 +237,8 @@
       };
     },
     components: {
-    "v-select": VueSelect,
+      "v-select": VueSelect,
+      Multiselect: Multiselect
     },
     computed: {
       ...mapState(["ellipsisMode"]),

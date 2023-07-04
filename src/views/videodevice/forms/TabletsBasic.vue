@@ -30,8 +30,11 @@
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceGroups }}</CRow>
           <CRow>
             <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
+              <multiselect v-model="value_deviceGroups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
+                  :taggable="true" :hideSelected="true" 
+                  :show-no-options="false"
+                >
+              </multiselect>
             </CCol>
           </CRow>
 
@@ -99,6 +102,8 @@
   import i18n from "@/i18n";
 
   import VueSelect from 'vue-select';
+  import Multiselect from "vue-multiselect";
+  import "@/airacss/vue-multiselect.css";
 	
 
 
@@ -147,6 +152,7 @@
     },
     components: {
       "v-select": VueSelect,
+      Multiselect: Multiselect
     },
     computed: {
       ...mapState(["ellipsisMode"]),
