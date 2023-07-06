@@ -12,7 +12,7 @@
       <CCol sm="12">
         <CRow>
             <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" >
+              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="clickOnAdd()">
                 {{ disp_add }}
               </CButton>
             </div>
@@ -111,7 +111,11 @@
   import i18n from "@/i18n";
 
   export default {
-    name: "Cameras",
+    name: "CamerasManagementForm",
+    props: {
+      formData: Object,
+      onAdd: { type: Function },
+    },
     data() {
       return {
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
@@ -145,7 +149,7 @@
     methods: {
       cellClickEvent({row}) {
         console.log(row)
-        this.$router.push("CamerasBasic");
+        this.$router.push("AddCameras");
       },
       //分頁處理
       handlePageChange({ currentPage, pageSize }) {
@@ -169,7 +173,6 @@
 
         self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
 
-
         const sliceList = filteredItems.slice(
           (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
           self.value_tablePage.currentPage * self.value_tablePage.pageSize
@@ -179,8 +182,9 @@
       },
 
       clickOnAdd() {
-        console.log("ADD")
+        if (this.onAdd) this.onAdd(this.value_allTableItems);
       },
+
       clickOnMultipleDelete() {
         const self = this;
         const list = this.$refs.mainTable.getCheckboxRecords();
@@ -209,7 +213,7 @@
         return "fontSize:18px;";
       },
       detailSetting() {
-        this.$router.push("CamerasBasic");
+        this.$router.push("AddCameras");
       }
     },
   }

@@ -84,13 +84,18 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 
 ///////////////////////////////////////////
 /////////// device ///////////
-const Cameras = () => import('@/views/videodevice/Cameras')
+const CamerasManagement = () => import('@/views/videodevice/CamerasManagement')
 const Tablets = () => import('@/views/videodevice/Tablets')
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
 // const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
-const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
+// const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
 const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic')
 const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings')
+
+///////////////////////////////////////////
+/////////// device add ///////////
+const AddCameras = () => import('@/views/videodevice/AddCameras')
+
 
 const IOboxs = () => import('@/views/outputdevice/IOboxs')
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
@@ -420,9 +425,9 @@ function configRoutes() {
           },
           children: [
             {
-              path: 'cameras',
-              name: 'Cameras',
-              component: Cameras
+              path: 'camerasManagement',
+              name: 'CamerasManagement',
+              component: CamerasManagement
             },
             {
               path: 'tablets',
@@ -435,9 +440,9 @@ function configRoutes() {
               component: DeviceGroups
             },
             {
-              path: 'camerasBasic',
-              name: 'CamerasBasic',
-              component: CamerasBasic
+              path: 'addCameras',
+              name: 'AddCameras',
+              component: AddCameras
             },
             {
               path: 'tabletsBasic',

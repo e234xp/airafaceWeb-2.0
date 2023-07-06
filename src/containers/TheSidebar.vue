@@ -240,7 +240,7 @@ let nav = [
           {
             permission: ["Admin", "PowerUser"],
             name: i18n.formatter.format("Cameras"),
-            to: "/videodevice/cameras",
+            to: "/videodevice/camerasManagement",
           },
           {
             permission: ["Admin", "PowerUser"],
