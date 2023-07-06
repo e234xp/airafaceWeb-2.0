@@ -2,7 +2,7 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CamerasManagementForm :formData="$data" :onAdd="onAdd"/>
+        <CamerasManagementForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onFetchDataCallback="onFetchDataCallback"/>
       </CCol>
     </CRow>
   </div>
@@ -49,6 +49,7 @@
       ...mapState(["ellipsisMode"]),
     },
     methods: {
+      // 新增
       onAdd() {
         console.log(123)
         this.$router.push({
@@ -58,26 +59,92 @@
           }
         });
       },
-      clickOnAdd() {
-        console.log("ADD")
-      },
-      clickOnMultipleDelete() {
+      onFetchDataCallback(cb) {
         const self = this;
-        const list = this.$refs.mainTable.getCheckboxRecords();
-        if (list.length > 0) {
+        self.flag_keepingDownload = true;
+        self.downloadTableItemsAsync( /* sliceSize */ 3000, cb);
+      },
+      async downloadTableItemsAsync(sliceSize, cb) {
+        const self = this;
+        let shitf = 0;
+        let reset = true;
+        let thereIsMoreData = true;
+        while (self.flag_keepingDownload && thereIsMoreData) {
+          let ret = await self.$globalFindCameras("", shitf, sliceSize);
+          console.log(ret,"拿到的資料")
+          const data = ret.data;
+          const error = ret.error;
+          if (error == null) {
+            if (data.total_length && data.total_length > (sliceSize + shitf)) {
+              thereIsMoreData = true;
+              shitf += sliceSize;
+            }
+            else thereIsMoreData = false;
+            if (cb) cb(error, reset, thereIsMoreData, data.person_list);
+            reset = false;
+          }
+          else {
+            thereIsMoreData = false;
+            if (cb) cb(error, true, false, []);
+            self.$fire({
+              title: i18n.formatter.format("NetworkLoss"),
+              text: "",
+              type: "error",
+              timer: 3000,
+              confirmButtonColor: "#20a8d8"
+            });
+          }
+        }
+      },
+      // 刪除
+      onDelete(items, cb) {
+        const self = this;
+        if (items && Array.isArray(items)) {
+          let uuidListToDel = [];
+          items.forEach(item => {
+            uuidListToDel.push(item.uuid);
+          });
           self.$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
             confirmButtonText: i18n.formatter.format("Confirm"),
             cancelButtonText: i18n.formatter.format("Cancel"),
             confirmButtonColor: "#20a8d8",
-            cancelButtonColor: "#f86c6b",
-          })
-          .then((v) => {
-            //self.deleteItem(list);
-          })
-          .catch((e) => {
+            cancelButtonColor: "#f86c6b"
+          }).then((v) => {
+            self.removePersonAsync(uuidListToDel, cb);
+          }).catch((e) => {
             if (cb) cb(false);
           });
         }
+      },
+      async onModify(item) {
+        const self = this;
+        let photoRet = await self.$globalFetchPhoto( item.uuid );
+        item["register_image"] = photoRet.data && photoRet.data.register_image.length > 0 ? photoRet.data.register_image : "";
+        item["display_image"] = photoRet.data && photoRet.data.display_image.length > 0 ? photoRet.data.display_image : "";
+        
+        this.$router.push({
+          name: 'ModifyPerson', params: {
+            value_returnRoutePath: "PersonManagement",
+            value_returnRouteName: i18n.formatter.format("Return"),
+            item: item,
+          }
+        });
+      },
+      async removePersonAsync(uuid, cb) {
+        const self = this;
+        let ret = await self.$globalRemoveCameras(uuid);
+        const error = ret.error;
+        if (error) {
+          if (cb) cb(false);
+          self.$fire({
+            text: i18n.formatter.format("OperationFailed"),
+            type: "error",
+            timer: 3000,
+            confirmButtonColor: "#20a8d8",
+            confirmButtonText: i18n.formatter.format("OK")
+          });
+        }
+        else if (cb) cb(true);
       },
      
     },

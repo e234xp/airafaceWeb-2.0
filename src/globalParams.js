@@ -12,6 +12,7 @@ Vue.use(CoreuiVue)
 
 const TEST_MODE = true;
 const _TEST_HOST = "192.168.10.101"; //測試mini的IP 
+//const _TEST_HOST = "192.168.10.124"; //測試mini的IP 
 const _TEST_PORT = "443"; //測試mini的PORT
 const _HOST = TEST_MODE ? _TEST_HOST : window.location.hostname;
 const _PORT = TEST_MODE ? _TEST_PORT : window.location.port;
@@ -808,6 +809,56 @@ Vue.prototype.$globalSetAiraManagerSetting = function (managerSettings, cb) {
     postJson("/airafacelite/setmanagersettings", managerSettings, function (err, data) {
       if (cb) cb(err);
       resolve(err);
+    });
+  });
+};
+
+Vue.prototype.$globalRemoveCameras = function (uuid, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/removecamera", { uuid: uuid }, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+Vue.prototype.$globalCreateCameras = function (camera, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/createcamera", camera, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+// Vue.prototype.$globalManualClockin = function (submitData, cb) {
+//   return new Promise((resolve) => {
+//     postJson("/airafacelite/manualclockin", submitData, function (err, data) {
+//       if (cb) cb(err, err ? null : data.result);
+//       resolve({ error: err, data: err ? null : data.result });
+//     });
+//   });
+// };
+
+Vue.prototype.$globalModifyCameras = function (camera, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/modifycamera", camera, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
+  return new Promise((resolve) => {
+    const query = {
+      uuid: uuid,
+      slice_shift: shift,
+      slice_length: sliceSize
+    };
+    postJson("/airafacelite/findcamera", query, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
     });
   });
 };

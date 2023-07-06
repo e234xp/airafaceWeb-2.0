@@ -17,11 +17,7 @@
               </CButton>
             </div>
             <div>
-              <CButton
-                class="btn btn-danger mb-3"
-                size="lg"
-                @click="clickOnMultipleDelete()"
-              >
+              <CButton  class="btn btn-danger mb-3" size="lg" @click="clickOnMultipleDelete()">
                 {{ disp_delete }}
               </CButton>
             </div>
@@ -39,10 +35,10 @@
             </div>
         </CRow>
       </CCol>
-      <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+      <!-- <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
         @click="detailSetting()">
         假按鈕
-      </CButton>
+      </CButton> -->
     </div>
 
     <!-- 下方資料 -->
@@ -50,10 +46,10 @@
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div>
-          <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
+          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source 
-              highlight-current-row @cell-click="cellClickEvent"> 
-
+              highlight-current-row :edit-config="{ trigger: 'manual', mode: 'row' }"> 
+              <!-- @cell-click="cellClickEvent" -->
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
             <vxe-table-column field="enable" :title="disp_enable" width="auto">
@@ -62,20 +58,31 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column :show-overflow="ellipsisMode" field="deviceName" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_status" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="status" :title="disp_status" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_ipAddress" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="ipAddress" :title="disp_ipAddress" width="auto" align="center">
             </vxe-table-column>
             
-            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_In" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="in" :title="disp_In" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="out" :title="disp_out" width="auto" align="center">
             </vxe-table-column>
 
+            <vxe-table-column min-width="13%">
+              <template #default="{ row }">
+                <div class="d-flex flex-column align-items-center">
+                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
+                    }}</vxe-button>
+
+                  <!-- <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
+                    }}</vxe-button> -->
+                </div>
+              </template>
+            </vxe-table-column>
             
           </vxe-table>
         </div>
@@ -115,6 +122,9 @@
     props: {
       formData: Object,
       onAdd: { type: Function },
+      onDelete: { type: Function },
+      onModify: { type: Function },
+      onFetchDataCallback: { type: Function },
     },
     data() {
       return {
@@ -131,6 +141,7 @@
         disp_search: i18n.formatter.format("Search"),
         disp_add: i18n.formatter.format("Add"),
         disp_delete: i18n.formatter.format("Delete"),
+        disp_modify: i18n.formatter.format("Modify"),
 
 
         /*data table */
@@ -146,6 +157,18 @@
     computed: {
       ...mapState(["ellipsisMode"]),
     },
+    async mounted() {
+      const self = this;
+
+      // let ret = await self.$globalGetGroupList();
+      // if (!ret.error) {
+      //   ret.group_list.forEach((g) => {
+      //     self.value_personGroupList.push(g.name);
+      //   });
+      // }
+
+      self.refreshTableItems();
+    },
     methods: {
       cellClickEvent({row}) {
         console.log(row)
@@ -158,6 +181,44 @@
         this.value_tablePage.pageSize = pageSize;
         this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
         this.resizeOneTable();
+      },
+      updated() {
+        const self = this;
+        self.value_dataItemsToShow.forEach((item) => {
+          if (new_modifyButton)
+            new_modifyButton.addEventListener("click", function () {
+              self.clickOnModify(item);
+            });
+        });
+      },
+      refreshTableItems(cb) {
+        const self = this;
+        if (self.onFetchDataCallback) {
+          self.onFetchDataCallback(function (error, reset, more, tableItems) {
+            if (!error) {
+              console.log(234,"成功")
+              if (reset) {
+                self.value_allTableItems = [];
+                self.value_dataItemsToShow = [];
+              }
+              if (tableItems) {
+                self.value_allTableItems = self.value_allTableItems.concat(tableItems);
+                self.generateFilteredData(
+                  self.value_allTableItems,
+                  self.value_searchingFilter
+                );
+                self.observeTableSize();
+              }
+              if (!more && cb) cb();
+            } else if (cb) {
+              cb()
+              console.log(234,"失敗") 
+            } ;
+          });
+        } else if (cb) {
+          cb()
+          console.log(234,"失敗") 
+        };
       },
 
       // 表格資料處理及搜尋
@@ -180,28 +241,39 @@
         console.log(sliceList,"sliceListABCS")
         return Object.assign([], sliceList);
       },
-
+      // 新增
       clickOnAdd() {
         if (this.onAdd) this.onAdd(this.value_allTableItems);
       },
-
-      clickOnMultipleDelete() {
+      deleteItem(listToDel) {
         const self = this;
-        const list = this.$refs.mainTable.getCheckboxRecords();
-        if (list.length > 0) {
-          self.$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
-            confirmButtonText: i18n.formatter.format("Confirm"),
-            cancelButtonText: i18n.formatter.format("Cancel"),
-            confirmButtonColor: "#20a8d8",
-            cancelButtonColor: "#f86c6b",
-          })
-          .then((v) => {
-            //self.deleteItem(list);
-          })
-          .catch((e) => {
-            if (cb) cb(false);
+        if (self.onDelete) {
+          self.onDelete(listToDel, function (success) {
+            if (success) {
+              listToDel.forEach((deletedItem) => {
+                self.value_allTableItems = self.value_allTableItems.filter(function (item) {
+                  return item.uuid !== deletedItem.uuid;
+                });
+              });
+              self.generateFilteredData(
+                self.value_allTableItems,
+                self.value_searchingFilter
+              );
+            }
           });
         }
+      },
+      clickOnSingleDelete(item) {
+        //console.log( "clickOnSingleDelete", item.uuid )
+        const list = [item];
+        if (list.length > 0) this.deleteItem([item]);
+      },
+      clickOnMultipleDelete() {
+        const list = this.$refs.mainTable.getCheckboxRecords();
+        if (list.length > 0) this.deleteItem(list);
+      },
+      clickOnModify(item) {
+        if (this.onModify) this.onModify(item);
       },
       activeStatusChange(item) {
         console.log("ABC")
@@ -212,9 +284,6 @@
       cellStyle(row, column, rowIndex, columnIndex) {
         return "fontSize:18px;";
       },
-      detailSetting() {
-        this.$router.push("AddCameras");
-      }
     },
   }
 </script>
