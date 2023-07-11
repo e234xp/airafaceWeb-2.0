@@ -58,12 +58,12 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="deviceName" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
 
             <vxe-table-column :show-overflow="ellipsisMode" field="status" :title="disp_status" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="ipAddress" :title="disp_ipAddress" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" width="auto" align="center">
             </vxe-table-column>
             
             <vxe-table-column :show-overflow="ellipsisMode" field="in" :title="disp_In" width="auto" align="center">
@@ -159,14 +159,6 @@
     },
     async mounted() {
       const self = this;
-
-      // let ret = await self.$globalGetGroupList();
-      // if (!ret.error) {
-      //   ret.group_list.forEach((g) => {
-      //     self.value_personGroupList.push(g.name);
-      //   });
-      // }
-
       self.refreshTableItems();
     },
     methods: {
@@ -193,44 +185,42 @@
       },
       refreshTableItems(cb) {
         const self = this;
-        if (self.onFetchDataCallback) {
-          self.onFetchDataCallback(function (error, reset, more, tableItems) {
+        if(self.onFetchDataCallback) {
+        self.onFetchDataCallback(function (error, reset, more, tableItems) {
+            console.log("Form",error, reset, more, tableItems)
+            console.log("FormDT", tableItems)
             if (!error) {
-              console.log(234,"成功")
               if (reset) {
                 self.value_allTableItems = [];
                 self.value_dataItemsToShow = [];
               }
               if (tableItems) {
                 self.value_allTableItems = self.value_allTableItems.concat(tableItems);
-                self.generateFilteredData(
+                self.value_dataItemsToShow = self.generateFilteredData(
                   self.value_allTableItems,
                   self.value_searchingFilter
                 );
-                self.observeTableSize();
+                console.log(self.value_allTableItems,"value_allTableItems")
+                console.log(self.value_dataItemsToShow,"value_dataItemsToShow")
               }
               if (!more && cb) cb();
-            } else if (cb) {
-              cb()
-              console.log(234,"失敗") 
-            } ;
+            } else if (cb) cb();
           });
-        } else if (cb) {
-          cb()
-          console.log(234,"失敗") 
-        };
+        } else if (cb) cb();
       },
 
       // 表格資料處理及搜尋
       generateFilteredData(sourceData, filter) {
         const self = this;
-
+        console.log("Search",sourceData)
+        //先不管搜尋 因為不知道哪些欄位要可查
+        let filteredItems = sourceData
         //關鍵字搜尋  item.name裡面看有沒有找到filter
-        const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
-                return (
-                  item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-                );
-              });
+        // const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
+        //         return (
+        //           item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+        //         );
+        //       });
 
         self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
 

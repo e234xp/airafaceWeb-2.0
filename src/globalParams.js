@@ -12,7 +12,7 @@ Vue.use(CoreuiVue)
 
 const TEST_MODE = true;
 const _TEST_HOST = "192.168.10.101"; //測試mini的IP 
-//const _TEST_HOST = "192.168.10.124"; //測試mini的IP 
+const _124_HOST = "192.168.10.124"; //測試mini的IP 
 const _TEST_PORT = "443"; //測試mini的PORT
 const _HOST = TEST_MODE ? _TEST_HOST : window.location.hostname;
 const _PORT = TEST_MODE ? _TEST_PORT : window.location.port;
@@ -120,6 +120,48 @@ function postJson(cgi, jsondata, cb) {
   })).catch(error => {
     if (cb) cb(error ? error : "error", null);
   });
+}
+
+function postJson2(cgi, jsondata, cb) {
+  var token = getTokenString();
+  if (token.length == 0
+    && cgi != "/airafacelite/generatetoken"
+    && cgi != "/airafacelite/maintaintoken"
+    && cgi != "/system/downloadsyslog"
+    && cgi != "/system/systeminfo") {
+    if (cb) cb("error", null);
+    return;
+  }
+
+  const requestOptions = {
+    method: "POST",
+    cache: 'no-cache',
+    headers: {
+      "Content-Type": "application/json",
+      "token": token
+    },
+    body: JSON.stringify(jsondata)
+  };
+  const FETCH_TIMEOUT = 30000;
+  timeout(FETCH_TIMEOUT, fetch(apiServer() + cgi, requestOptions).then(response => {
+    if (response.status != 200) {
+      throw new Error("Bad response from server");
+    }
+    return response.json();
+  }).then(data => {
+    if (cb) cb(null, data);
+  }).catch(err => {
+    if (cb) cb(err ? err : "error", null);
+  })).catch(error => {
+    if (cb) cb(error ? error : "error", null);
+  });
+}
+
+function apiServer() {
+  if (global.usingHttps) {
+    return "https://" + _124_HOST + ":" + _PORT;
+  }
+  return "http://" + _124_HOST + ":" + _PORT;
 }
 
 function login(accountInfo, cb) {
@@ -813,9 +855,11 @@ Vue.prototype.$globalSetAiraManagerSetting = function (managerSettings, cb) {
   });
 };
 
+
+// camera start
 Vue.prototype.$globalRemoveCameras = function (uuid, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/removecamera", { uuid: uuid }, function (err, data) {
+    postJson2("/airafacelite/removecamera", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -824,7 +868,7 @@ Vue.prototype.$globalRemoveCameras = function (uuid, cb) {
 
 Vue.prototype.$globalCreateCameras = function (camera, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/createcamera", camera, function (err, data) {
+    postJson2("/airafacelite/createcamera", camera, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -842,7 +886,7 @@ Vue.prototype.$globalCreateCameras = function (camera, cb) {
 
 Vue.prototype.$globalModifyCameras = function (camera, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/modifycamera", camera, function (err, data) {
+    postJson2("/airafacelite/modifycamera", camera, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -851,12 +895,16 @@ Vue.prototype.$globalModifyCameras = function (camera, cb) {
 
 Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
-    const query = {
+    console.log(uuid,"ID")
+    console.log(shift,"shift")
+    console.log(sliceSize,"sliceSize")
+    console.log(cb,"cb")
+    const query = { 
       uuid: uuid,
       slice_shift: shift,
       slice_length: sliceSize
     };
-    postJson("/airafacelite/findcamera", query, function (err, data) {
+    postJson2("/airafacelite/findcamera", query, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });

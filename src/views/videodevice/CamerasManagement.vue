@@ -62,39 +62,63 @@
       onFetchDataCallback(cb) {
         const self = this;
         self.flag_keepingDownload = true;
-        self.downloadTableItemsAsync( /* sliceSize */ 3000, cb);
+        self.downloadTableItemsAsync(0,3000, cb);
       },
-      async downloadTableItemsAsync(sliceSize, cb) {
+
+      async downloadTableItemsAsync(shitf,sliceSize, cb) {
         const self = this;
-        let shitf = 0;
-        let reset = true;
-        let thereIsMoreData = true;
-        while (self.flag_keepingDownload && thereIsMoreData) {
-          let ret = await self.$globalFindCameras("", shitf, sliceSize);
-          console.log(ret,"拿到的資料")
-          const data = ret.data;
-          const error = ret.error;
-          if (error == null) {
-            if (data.total_length && data.total_length > (sliceSize + shitf)) {
-              thereIsMoreData = true;
-              shitf += sliceSize;
-            }
-            else thereIsMoreData = false;
-            if (cb) cb(error, reset, thereIsMoreData, data.person_list);
-            reset = false;
-          }
-          else {
-            thereIsMoreData = false;
-            if (cb) cb(error, true, false, []);
-            self.$fire({
-              title: i18n.formatter.format("NetworkLoss"),
-              text: "",
-              type: "error",
-              timer: 3000,
-              confirmButtonColor: "#20a8d8"
-            });
-          }
+        let ret = await self.$globalFindCameras("", shitf, sliceSize, cb);
+        console.log(ret,"拿到的資料")
+        const list = ret.data.camera_list;
+        console.log(list,"拿到的資料list")
+        const error = ret.error;
+        if( error == null ) {
+          if( cb ) cb( null, true, false, list );
         }
+        else {
+          if( cb ) cb( error, true, false, [] );
+          self.$fire({
+            title: i18n.formatter.format("NetworkLoss"),
+            text: "",
+            type: "error",
+            timer: 3000,
+            confirmButtonColor: "#20a8d8"
+          });
+        }
+      
+        // const self = this;
+        // let shitf = 0;
+        // let reset = true;
+        // let thereIsMoreData = true;
+        // while (self.flag_keepingDownload && thereIsMoreData) {
+        //   let res = await self.$globalFindCameras("", shitf, sliceSize, cb);
+        //   console.log(res,"拿到的資料")
+        //   const data = res.data;
+        //   const error = res.error;
+        //   console.log(data,"拿到的資料1")
+
+        //   if (error == null) {
+        //     if (data.total_length && data.total_length > (sliceSize + shitf)) {
+        //       thereIsMoreData = true;
+        //       shitf += sliceSize;
+        //     }
+        //     else thereIsMoreData = false;
+        //     if (cb) cb(error, reset, thereIsMoreData, data.person_list);
+        //     reset = false;
+        //   }
+        //   else {
+        //     thereIsMoreData = false;
+        //     if (cb) cb(error, true, false, []);
+        //     self.$fire({
+        //       title: i18n.formatter.format("NetworkLoss"),
+        //       text: "",
+        //       type: "error",
+        //       timer: 3000,
+        //       confirmButtonColor: "#20a8d8"
+        //     });
+        //   }
+        // }
+       
       },
       // 刪除
       onDelete(items, cb) {

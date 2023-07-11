@@ -13,10 +13,12 @@
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Type }}</CRow>
           <CRow>
             <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
+              <!-- <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
+              </v-select> -->
+              <CSelect size="lg" value="1" v-model="value_deviceGroups" :options="value_deviceGroupsList" />
             </CCol>
           </CRow>
+
 
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ConnectionString }}</CRow>
           <CRow>
