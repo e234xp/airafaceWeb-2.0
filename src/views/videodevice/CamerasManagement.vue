@@ -17,6 +17,7 @@
 
   export default {
     name: "Cameras",
+    mixins: [TableObserver],
     components: { CamerasManagementForm },
     data() {
       return {
@@ -54,7 +55,7 @@
         console.log(123)
         this.$router.push({
           name: 'AddCameras', params: {
-            value_returnRoutePath: "Cameras",
+            value_returnRoutePath: "CamerasManagement",
             value_returnRouteName: i18n.formatter.format("Return")
           }
         });
