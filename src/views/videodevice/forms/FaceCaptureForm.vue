@@ -1,39 +1,35 @@
 <template>
   <div id="wrapper">
     <!-- 標題 -->
-   
+    <div>
+      <h2 sm="12">{{ disp_subtitleFaceCapture }}</h2>
+    </div>
 
     <!-- 項目 -->
-   
+    <!-- Face Capture -->
+    <div class="mt-3">
+      <CRow sm="12">
+        <CCol sm="6" class="h5" >
+          {{ disp_faceMinimumSize }}
+          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="formData.faceMinimumSize"/>
+        </CCol>
+      </CRow>
+      
+      <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.targetScore"/>
+        </CCol>
+      </CRow>
 
-          <!-- Face Capture -->
-          <div>
-            <h2 sm="12">{{ disp_subtitleFaceCapture }}</h2>
-          </div>
-          <div class="mt-3">
-            <CRow sm="12">
-              <CCol sm="6" class="h5" >
-                {{ disp_faceMinimumSize }}
-                <CInput size="lg" class="mt-3" style="width: 100%;" />
-              </CCol>
-            </CRow>
-          </div>
+      <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.captureInterval"/>
+        </CCol>
+      </CRow>
 
-       
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
-
-          <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
-            </CCol>
-          </CRow>
+    </div>
 
   </div>
 </template>
@@ -94,8 +90,12 @@
         disp_save: i18n.formatter.format("Save"),
 
         /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
+        formData: {
+          faceMinimumSize: "",
+          targetScore: "", 
+          captureInterval: 1
+        }
+        
       };
     },
     components: {
