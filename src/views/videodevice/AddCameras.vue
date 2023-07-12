@@ -46,21 +46,23 @@
     methods: {
       onFinish( data, cb ) {
         const self = this;
+        console.log("參數確認",data)
+        
         const dataForAdd = {
-          name: data.value_deviceName,
-          divice_groups: data.value_deviceGroups,
-          stream_type: data.value_deviceType,
+          name: data.name,
+          divice_groups: data.divice_groups,
+          stream_type: data.stream_type,
 
-          ip_address: ip,
-          port: port,
-          user: user,
-          pass: password,
-          connection_info: filePath,
+          ip_address: data.ip_address,
+          port: data.port,
+          user: data.user,
+          pass: data.pass,
+          connection_info: data.connection_info,
           
-          connectionString: data.value_deviceConnectionString,
+          //connectionString: data.connectionString,
 
-          capture_interval: data.value_deviceCaptureInterval,
-          target_score: data.value_deviceTargetScore,
+          capture_interval: data.capture_interval,
+          target_score: data.target_score,
           roi: [
               {
                   "x1": 0,
@@ -69,9 +71,9 @@
                   "y2": 0
               }
           ],
-          face_min_length: data.value_deviceFaceMinimumSize,
+          face_min_length: data.face_min_length,
         };
-        self.$globalCreatePerson( dataForAdd, ( error, result ) => {
+        self.$globalCreateCameras( dataForAdd, ( error, result ) => {
           if( cb ) cb( error == null, result );
         });
       }
