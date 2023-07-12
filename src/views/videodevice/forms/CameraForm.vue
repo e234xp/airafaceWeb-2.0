@@ -32,7 +32,7 @@
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
           <CRow>
             <CCol sm="6">
-              <CInput size="lg"  class="h5"/>
+              <CInput size="lg"  class="h5" v-model="deviceName"/>
             </CCol>
           </CRow>
 
@@ -50,7 +50,7 @@
           <div style="height: 35px"></div>
 
           <!-- Video Source -->
-          <VideoSourceForm/>
+          <VideoSourceForm ref="videoForm"/>
 
         </CCardBody>
       </CCard>
@@ -58,14 +58,13 @@
       <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
           <!-- ROI -->
-          <VideoSourceForm/>
+          <!-- <VideoSourceForm/> -->
         </CCardBody>
       </CCard>
 
       <CCard :class="showOnStep(2)" :style="param_cardStyle">
         <CCardBody>
-          <!-- ROI -->
-          <FaceCaptureForm/>
+          <FaceCaptureForm ref="faceCaptureForm"/>
         </CCardBody>
       </CCard>
     </CCol>
@@ -73,23 +72,19 @@
       <!-- 按鈕的Col -->
       <CCol sm="12">
         <div class="row justify-content-center mb-4">
-          <div v-if="flag_currentSetp == 0">
+          <div v-if="flag_currentSetp == 0 && formData.value_returnRoutePath.length > 0">
             <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
-              >{{ value_returnRouteName }}
+              >{{ formData.value_returnRouteName }}
             </CButton>
           </div>
-          <div v-if="flag_currentSetp == 1">
+          <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2">
             <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
               >{{ disp_previous }}
             </CButton>
           </div>
           <div style="width: 20px"></div>
           <div>
-            <CButton
-              class="btn btn-primary fz-lg btn-w-normal"
-              @click="clickOnNext"
-            
-              >{{ nextButtonName() }}
+            <CButton class="btn btn-primary mb-3" size="lg" @click="clickN">{{ nextButtonName() }}
             </CButton>
           </div>
         </div>
@@ -119,13 +114,27 @@
 
   export default {
     name: "CamerasBasic",
+    props: {
+      value_returnRoutePath: {type: String, default: "",},
+      value_returnRouteName: {type: String, default: "",},
+      formData: Object,
+      onFinish: { type: Function },
+    },
+    created() {
+      console.log("CD",this.value_returnRoutePath)
+      console.log("CD",this.value_returnRouteName)
+      console.log("CD",this.formData.value_returnRoutePath)
+
+    },
     data() {
       return {
         param_cardStyle: "height: 35rem;",
+        videoFormData:"",
+        faceCaptureFormData: "",
 
         obj_loading: null,
-        value_returnRoutePath: "",
-        value_returnRouteName: "",
+        // value_returnRoutePath: value_returnRoutePath,
+        // value_returnRouteName: value_returnRouteName,
 
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
@@ -148,7 +157,7 @@
         /**Step 1 2 3 */
         disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
         disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
-        disp_complete: i18n.formatter.format("Complete"),
+       
 
         /**btn */
         disp_complete: i18n.formatter.format("Complete"),
@@ -188,21 +197,25 @@
         disp_save: i18n.formatter.format("Save"),
 
         /**api */
-        value_deviceName: "",
-        value_deviceGroups: "",
+        deviceName: "",
+        value_deviceGroups: [], /**選單 */
+
         value_deviceType: "",
         value_deviceConnectionString: "",
-        value_deviceFaceMinimumSize: "",
-        value_deviceTargetScore: "",
-        value_deviceCaptureInterval: "",
-        
-        
+        value_deviceFaceMinimumSize: 0,
+        value_deviceTargetScore: 0,
+        value_deviceCaptureInterval: 0,
+
 
         /**v-model */
-        value_deviceGroups: "", /**選單 */
         value_deviceGroupsList: [1,2,3]
       };
     },
+    mounted() {
+      console.log("test", this.videoFormData = this.$refs.videoForm.formData)// 通过实例访问VideoForm组件的数据)
+      console.log("faceCaptureFormData", this.faceCaptureFormData = this.$refs.faceCaptureForm.formData)
+    },
+   
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
@@ -222,15 +235,17 @@
       },
       clickOnPrev() {
         const self = this;
-        console.log(self.value_returnRoutePath,"路徑2")
+        console.log(self.formData.value_returnRoutePath,"路徑2")
 
         if (self.flag_currentSetp == 0) {
-          if (self.value_returnRoutePath.length > 0) {
-            self.$router.push({ name: self.value_returnRoutePath });
+          if (self.formData.value_returnRoutePath.length > 0) {
+            self.$router.push({ name: self.formData.value_returnRoutePath });
           } 
         } else if (self.flag_currentSetp > 0) self.flag_currentSetp--;
+        console.log("當前步驟",self.flag_currentSetp)
       },
       handleParameter() {
+        const self = this;
         let connectionString = self.value_deviceConnectionString;
 
         let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
@@ -245,26 +260,30 @@
 
         let ipAddress = ipInfo[0].split(":") // ['192.168.10.171', '554']
         const ip = ipAddress[0];  // 192.168.10.171
-        const port = ipAddress[1] // 554
+        const port = Number(ipAddress[1]) // 554
+        console.log("PORT",port)
+        const filePath = "/" + ipInfo[1] + "/" + ipInfo[2] // 組路徑 /media/video1
+        console.log("拿過來的videodata", this.videoFormData = this.$refs.videoForm.formData)
+        console.log("faceCaptureFormData", this.faceCaptureFormData = this.$refs.faceCaptureForm.formData)
 
-        const filePath = "/" + ipInfo[0] + "/" + ipInfo[1] // 組路徑 /media/video1
-
+        
 
         let data = {
-          name: self.value_deviceName,
+          name: self.deviceName,
           divice_groups: self.value_deviceGroups,
+
           stream_type: self.value_deviceType,
-
-          ip_address: ip,
-          port: port,
-          user: user,
-          pass: password,
-          connection_info: filePath,
+          ip_address: this.videoFormData.IpAddress,
+          port: Number(this.videoFormData.Port),
+          user: this.videoFormData.Username,
+          pass: this.videoFormData.Password,
+          connection_info: this.videoFormData.Parameters,
           
-          connectionString: self.value_deviceConnectionString,
+          //connectionString: self.value_deviceConnectionString,
+         
 
-          capture_interval: self.value_deviceCaptureInterval,
-          target_score: self.value_deviceTargetScore,
+          capture_interval: Number(this.faceCaptureFormData.captureInterval),
+          target_score: Number(this.faceCaptureFormData.targetScore),
           roi: [
               {
                   "x1": 0,
@@ -273,9 +292,41 @@
                   "y2": 0
               }
           ],
-          face_min_length: self.value_deviceFaceMinimumSize,
+          face_min_length: Number(this.faceCaptureFormData.faceMinimumSize),
         };
         return data
+      },
+      clickN() {
+        const self = this;
+        if (self.flag_currentSetp == 0) {
+          self.flag_currentSetp = 1;
+        } else if (self.flag_currentSetp == 1) {
+          self.flag_currentSetp = 2;
+        } else if (self.flag_currentSetp == 2) {
+          if (self.onFinish) {
+            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+
+            const parameter = self.handleParameter(); // 拿參數
+            console.log("參數",parameter)
+
+            self.onFinish(parameter, function (success, result) {
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message == "ok") {
+                self.flag_currentSetp = 3;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format("Failed"),
+                  type: "error",
+                  timer: 3000,
+                  confirmButtonColor: "#20a8d8",
+                });
+              }
+            });
+          } else self.flag_currentSetp = 0;
+        } else {
+          // self.$router.push({ name: self.value_returnRoutePath })
+          self.flag_currentSetp = 0;
+        }
       },
       clickOnNext() {
         const self = this;
@@ -302,7 +353,7 @@
               function (success, result) {
                 if (self.obj_loading) self.obj_loading.hide();
                 if (result && result.message == "ok") {
-                  self.flag_currentSetp = 2;
+                  self.flag_currentSetp = 3;
                 } else {
                   //self.$alert( self.disp_registerFailed + " : " + ( result && result.message ? result.message : "network loss") );
                   self.$fire({
@@ -314,10 +365,10 @@
                 }
               }
             );
-          }
+          } 
           else {
             if (self.obj_loading) self.obj_loading.hide();
-            self.flag_currentSetp = 2;
+            self.flag_currentSetp = 0;
           }
          
         }
@@ -329,6 +380,8 @@
           case 1:
             return this.disp_next;
           case 2:
+            return this.disp_next;
+          case 3:
             return this.disp_complete;
           default:
             return this.disp_next;
