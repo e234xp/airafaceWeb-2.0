@@ -21,6 +21,7 @@
                 {{ disp_delete }}
               </CButton>
             </div>
+            <h1>{{ value_searchingFilter }}</h1>
             <div style="margin-left: auto">
               <CInput
                 v-model.lazy="value_searchingFilter"
@@ -72,14 +73,14 @@
             <vxe-table-column :show-overflow="ellipsisMode" field="out" :title="disp_out" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column min-width="13%">
+            <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
                   <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
                     }}</vxe-button>
 
-                  <!-- <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
-                    }}</vxe-button> -->
+                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
+                    }}</vxe-button>
                 </div>
               </template>
             </vxe-table-column>
@@ -119,6 +120,7 @@
 
   export default {
     name: "CamerasManagementForm",
+    mixins: [TableObserver],
     props: {
       formData: Object,
       onAdd: { type: Function },
@@ -136,6 +138,8 @@
           totalResult: 0,
         },
         value_searchingFilter: "",
+
+        new_modifyButton: null,
 
         disp_header: i18n.formatter.format("VideoDeviceCameras"),
         disp_search: i18n.formatter.format("Search"),
@@ -157,6 +161,16 @@
     computed: {
       ...mapState(["ellipsisMode"]),
     },
+    watch: {
+      value_searchingFilter: function (value) {
+        const self = this;
+        self.value_tablePage.currentPage = 1;
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+          this.value_searchingFilter
+        );
+      },
+    },
     async mounted() {
       const self = this;
       self.refreshTableItems();
@@ -171,7 +185,7 @@
         const self = this;
         this.value_tablePage.currentPage = currentPage;
         this.value_tablePage.pageSize = pageSize;
-        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
+        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems,this.value_searchingFilter);
         this.resizeOneTable();
       },
       updated() {
@@ -187,8 +201,8 @@
         const self = this;
         if(self.onFetchDataCallback) {
         self.onFetchDataCallback(function (error, reset, more, tableItems) {
-            console.log("Form",error, reset, more, tableItems)
-            console.log("FormDT", tableItems)
+            // console.log("Form",error, reset, more, tableItems)
+            // console.log("FormDT", tableItems)
             if (!error) {
               if (reset) {
                 self.value_allTableItems = [];
@@ -200,8 +214,8 @@
                   self.value_allTableItems,
                   self.value_searchingFilter
                 );
-                console.log(self.value_allTableItems,"value_allTableItems")
-                console.log(self.value_dataItemsToShow,"value_dataItemsToShow")
+                // console.log(self.value_allTableItems,"value_allTableItems")
+                // console.log(self.value_dataItemsToShow,"value_dataItemsToShow")
               }
               if (!more && cb) cb();
             } else if (cb) cb();
@@ -213,22 +227,25 @@
       generateFilteredData(sourceData, filter) {
         const self = this;
         console.log("Search",sourceData)
+        console.log("filter",filter)
         //先不管搜尋 因為不知道哪些欄位要可查
-        let filteredItems = sourceData
-        //關鍵字搜尋  item.name裡面看有沒有找到filter
-        // const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
-        //         return (
-        //           item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-        //         );
-        //       });
-
+        //let filteredItems = sourceData
+        //關鍵字搜尋  item.name裡面看有沒有找到filter ip_address
+        const filteredItems = filter.length == 0 ? sourceData : sourceData.filter((item) => {
+                return (
+                  item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                  item.ip_address.toLowerCase().indexOf(filter.toLowerCase()) > -1
+                );
+              });
+        console.log("刪除結果長度",filteredItems.length)
+        console.log("刪除結果",filteredItems)
         self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
 
         const sliceList = filteredItems.slice(
           (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
           self.value_tablePage.currentPage * self.value_tablePage.pageSize
         );
-        console.log(sliceList,"sliceListABCS")
+        //console.log(sliceList,"sliceListABCS")
         return Object.assign([], sliceList);
       },
       // 新增
@@ -256,11 +273,27 @@
       clickOnSingleDelete(item) {
         //console.log( "clickOnSingleDelete", item.uuid )
         const list = [item];
+        //console.log( "list", list )
         if (list.length > 0) this.deleteItem([item]);
       },
       clickOnMultipleDelete() {
+        const self = this;
         const list = this.$refs.mainTable.getCheckboxRecords();
-        if (list.length > 0) this.deleteItem(list);
+        if (list.length > 0) {
+          self
+            .$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
+              confirmButtonText: i18n.formatter.format("Confirm"),
+              cancelButtonText: i18n.formatter.format("Cancel"),
+              confirmButtonColor: "#20a8d8",
+              cancelButtonColor: "#f86c6b",
+            })
+            .then((v) => {
+              self.deleteItem(list);
+            })
+            .catch((e) => {
+              if (cb) cb(false);
+            });
+        }
       },
       clickOnModify(item) {
         if (this.onModify) this.onModify(item);
