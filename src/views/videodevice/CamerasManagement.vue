@@ -2,7 +2,7 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CamerasManagementForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onFetchDataCallback="onFetchDataCallback"/>
+        <CamerasManagementForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
       </CCol>
     </CRow>
   </div>
@@ -69,12 +69,14 @@
       async downloadTableItemsAsync(shitf,sliceSize, cb) {
         const self = this;
         let ret = await self.$globalFindCameras("", shitf, sliceSize, cb);
-        console.log(ret,"拿到的資料")
+        //console.log(ret,"拿到的資料")
         const list = ret.data.camera_list;
-        console.log(list,"拿到的資料list")
+        //console.log(list,"拿到的資料list")
         const error = ret.error;
         if( error == null ) {
           if( cb ) cb( null, true, false, list );
+          //console.log(null, true, false, list,"QQQ")
+
         }
         else {
           if( cb ) cb( error, true, false, [] );
@@ -86,40 +88,6 @@
             confirmButtonColor: "#20a8d8"
           });
         }
-      
-        // const self = this;
-        // let shitf = 0;
-        // let reset = true;
-        // let thereIsMoreData = true;
-        // while (self.flag_keepingDownload && thereIsMoreData) {
-        //   let res = await self.$globalFindCameras("", shitf, sliceSize, cb);
-        //   console.log(res,"拿到的資料")
-        //   const data = res.data;
-        //   const error = res.error;
-        //   console.log(data,"拿到的資料1")
-
-        //   if (error == null) {
-        //     if (data.total_length && data.total_length > (sliceSize + shitf)) {
-        //       thereIsMoreData = true;
-        //       shitf += sliceSize;
-        //     }
-        //     else thereIsMoreData = false;
-        //     if (cb) cb(error, reset, thereIsMoreData, data.person_list);
-        //     reset = false;
-        //   }
-        //   else {
-        //     thereIsMoreData = false;
-        //     if (cb) cb(error, true, false, []);
-        //     self.$fire({
-        //       title: i18n.formatter.format("NetworkLoss"),
-        //       text: "",
-        //       type: "error",
-        //       timer: 3000,
-        //       confirmButtonColor: "#20a8d8"
-        //     });
-        //   }
-        // }
-       
       },
       // 刪除
       onDelete(items, cb) {
@@ -135,27 +103,23 @@
             confirmButtonColor: "#20a8d8",
             cancelButtonColor: "#f86c6b"
           }).then((v) => {
-            self.removePersonAsync(uuidListToDel, cb);
+            self.RemoveCameraAsync(uuidListToDel, cb);
           }).catch((e) => {
             if (cb) cb(false);
           });
         }
       },
+      //修改
       async onModify(item) {
-        const self = this;
-        let photoRet = await self.$globalFetchPhoto( item.uuid );
-        item["register_image"] = photoRet.data && photoRet.data.register_image.length > 0 ? photoRet.data.register_image : "";
-        item["display_image"] = photoRet.data && photoRet.data.display_image.length > 0 ? photoRet.data.display_image : "";
-        
         this.$router.push({
-          name: 'ModifyPerson', params: {
-            value_returnRoutePath: "PersonManagement",
+          name: 'ModifyCameras', params: {
+            value_returnRoutePath: "CamerasManagement",
             value_returnRouteName: i18n.formatter.format("Return"),
             item: item,
           }
         });
       },
-      async removePersonAsync(uuid, cb) {
+      async RemoveCameraAsync(uuid, cb) {
         const self = this;
         let ret = await self.$globalRemoveCameras(uuid);
         const error = ret.error;

@@ -95,6 +95,7 @@ const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAcc
 ///////////////////////////////////////////
 /////////// device add ///////////
 const AddCameras = () => import('@/views/videodevice/AddCameras')
+const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
 
 
 const IOboxs = () => import('@/views/outputdevice/IOboxs')
@@ -443,6 +444,11 @@ function configRoutes() {
               path: 'addCameras',
               name: 'AddCameras',
               component: AddCameras
+            },
+            {
+              path: 'modifyCameras',
+              name: 'ModifyCameras',
+              component: ModifyCameras
             },
             {
               path: 'tabletsBasic',

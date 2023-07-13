@@ -895,10 +895,10 @@ Vue.prototype.$globalModifyCameras = function (camera, cb) {
 
 Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
-    console.log(uuid,"ID")
-    console.log(shift,"shift")
-    console.log(sliceSize,"sliceSize")
-    console.log(cb,"cb")
+    // console.log(uuid,"ID")
+    // console.log(shift,"shift")
+    // console.log(sliceSize,"sliceSize")
+    // console.log(cb,"cb")
     const query = { 
       uuid: uuid,
       slice_shift: shift,
