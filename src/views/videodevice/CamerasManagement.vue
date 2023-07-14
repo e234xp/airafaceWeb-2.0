@@ -68,13 +68,15 @@
 
       async downloadTableItemsAsync(shitf,sliceSize, cb) {
         const self = this;
+        let reset = true;
+        let thereIsMoreData = true;
         let ret = await self.$globalFindCameras("", shitf, sliceSize, cb);
         //console.log(ret,"拿到的資料")
         const list = ret.data.camera_list;
         //console.log(list,"拿到的資料list")
         const error = ret.error;
         if( error == null ) {
-          if( cb ) cb( null, true, false, list );
+          if(cb) cb( null, reset, thereIsMoreData, list );
           //console.log(null, true, false, list,"QQQ")
 
         }
