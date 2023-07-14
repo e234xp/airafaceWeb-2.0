@@ -296,6 +296,7 @@
         }
       },
       clickOnModify(item) {
+        console.log("修改",item)
         if (this.onModify) this.onModify(item);
       },
       activeStatusChange(item) {
