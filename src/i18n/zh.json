@@ -586,7 +586,8 @@
 
   "WiegandBasicTitleNameSettings": "Settings",
   "WiegandBasicCOlNameIndex":"IP:",
-  "WiegandBasicCOlNameSystemCode":"System code:"
+  "WiegandBasicCOlNameSystemCode":"System code:",
+  "ModifyCameras": "修改設備"
 
 
   

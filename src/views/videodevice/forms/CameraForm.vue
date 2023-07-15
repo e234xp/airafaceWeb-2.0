@@ -26,7 +26,7 @@
       <CCard :class="showOnStep(0)">
         <CCardBody>
           <div>
-            <h2 sm="12">{{ disp_header }}</h2>  
+            <h2 sm="12">{{ disp_headertitle }}</h2>  
           </div>
           <!-- Basic -->
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
@@ -50,7 +50,7 @@
           <div style="height: 35px"></div>
 
           <!-- Video Source -->
-          <VideoSourceForm ref="videoForm"/>
+          <VideoSourceForm ref="videoForm" />
 
         </CCardBody>
       </CCard>
@@ -64,10 +64,12 @@
 
       <CCard :class="showOnStep(2)" :style="param_cardStyle">
         <CCardBody>
-          <FaceCaptureForm ref="faceCaptureForm"/>
+          <FaceCaptureForm
+          ref="faceCaptureForm"/>
         </CCardBody>
       </CCard>
     </CCol>
+
    
       <!-- 按鈕的Col -->
       <CCol sm="12">
@@ -89,12 +91,13 @@
           </div>
         </div>
       </CCol> 
+      
 
   </div>
 </template>
   
 <script>
-  import { mapState } from "vuex";
+  import { mapState, mapGetters } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
   import StepProgress from "vue-step-progress";
@@ -108,33 +111,27 @@
   import VueSelect from 'vue-select';
   import Multiselect from "vue-multiselect";
   import "@/airacss/vue-multiselect.css";
-	
-
-
 
   export default {
     name: "CamerasBasic",
     props: {
-      value_returnRoutePath: {type: String, default: "",},
-      value_returnRouteName: {type: String, default: "",},
       formData: Object,
+      enableAdminField: Boolean,
+      modifyMode: Boolean,
+      canModify: { type: Function },
       onFinish: { type: Function },
     },
-    created() {
-      console.log("CD",this.value_returnRoutePath)
-      console.log("CD",this.value_returnRouteName)
-      console.log("CD",this.formData.value_returnRoutePath)
-
+    
+    // call api 使用 
+    computed: {
+      ...mapGetters(["getTargetScore","getFaceMinimumSize", "getCaptureInterval", "getDeviceTypes", "getIpAddress", "getPort", "getUsername", "getPassword", "getParameters"]) // 從Vuex store，取targetScore的值
     },
+
     data() {
       return {
         param_cardStyle: "height: 35rem;",
-        videoFormData:"",
-        faceCaptureFormData: "",
 
         obj_loading: null,
-        // value_returnRoutePath: value_returnRoutePath,
-        // value_returnRouteName: value_returnRouteName,
 
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
@@ -157,7 +154,7 @@
         /**Step 1 2 3 */
         disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
         disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
-       
+      
 
         /**btn */
         disp_complete: i18n.formatter.format("Complete"),
@@ -165,10 +162,9 @@
         disp_previous: i18n.formatter.format("Previous"),
         disp_next: i18n.formatter.format("Next"),
 
-
-
         /*Basic title  */
-        disp_header: i18n.formatter.format("VideoDeviceBasic"),
+        disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
+        disp_header: "",
 
         /**content */
         disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
@@ -197,25 +193,23 @@
         disp_save: i18n.formatter.format("Save"),
 
         /**api */
-        deviceName: "",
+        // deviceName: "",
         value_deviceGroups: [], /**選單 */
 
         value_deviceType: "",
         value_deviceConnectionString: "",
-        value_deviceFaceMinimumSize: 0,
-        value_deviceTargetScore: 0,
-        value_deviceCaptureInterval: 0,
+
+        
+
+        /**v-model */        
+        deviceName: this.formData.deviceName, //從上一頁拿回來的data
+        value_deviceGroups: this.formData.value_deviceGroups, //從上一頁拿回來的data
+        value_deviceGroupsList: [1,2,3], //設備群組List
 
 
-        /**v-model */
-        value_deviceGroupsList: [1,2,3]
-      };
+      }
     },
-    mounted() {
-      console.log("test", this.videoFormData = this.$refs.videoForm.formData)// 通过实例访问VideoForm组件的数据)
-      console.log("faceCaptureFormData", this.faceCaptureFormData = this.$refs.faceCaptureForm.formData)
-    },
-   
+
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
@@ -224,10 +218,6 @@
       stepprogress: StepProgress,
 
     },
-    computed: {
-      ...mapState(["ellipsisMode"]),
-    },
-   
     methods: {
       // 決定現在顯示哪一個步驟
       showOnStep(step) {
@@ -246,25 +236,25 @@
       },
       handleParameter() {
         const self = this;
-        let connectionString = self.value_deviceConnectionString;
+        // let connectionString = self.value_deviceConnectionString;
 
-        let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
-        let parts1 = testString.split("://"); //拆rtsp and admin:12345@192.168.10.171:554/media/video1
+        // let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
+        // let parts1 = testString.split("://"); //拆rtsp and admin:12345@192.168.10.171:554/media/video1
 
-        let remainingString = parts1[1].split("@"); // ['admin:12345', '192.168.10.171:554/media/video1']
-        let userInfo = remainingString[0].split(":"); //['admin', '12345']
-        const user = userInfo[0] // admin
-        const password = userInfo[1] //12345
+        // let remainingString = parts1[1].split("@"); // ['admin:12345', '192.168.10.171:554/media/video1']
+        // let userInfo = remainingString[0].split(":"); //['admin', '12345']
+        // const user = userInfo[0] // admin
+        // const password = userInfo[1] //12345
 
-        let ipInfo = remainingString[1].split("/") //  ['192.168.10.171:554', 'media', 'video1']
+        // let ipInfo = remainingString[1].split("/") //  ['192.168.10.171:554', 'media', 'video1']
 
-        let ipAddress = ipInfo[0].split(":") // ['192.168.10.171', '554']
-        const ip = ipAddress[0];  // 192.168.10.171
-        const port = Number(ipAddress[1]) // 554
-        console.log("PORT",port)
-        const filePath = "/" + ipInfo[1] + "/" + ipInfo[2] // 組路徑 /media/video1
-        console.log("拿過來的videodata", this.videoFormData = this.$refs.videoForm.formData)
-        console.log("faceCaptureFormData", this.faceCaptureFormData = this.$refs.faceCaptureForm.formData)
+        // let ipAddress = ipInfo[0].split(":") // ['192.168.10.171', '554']
+        // const ip = ipAddress[0];  // 192.168.10.171
+        // const port = Number(ipAddress[1]) // 554
+        // console.log("PORT",port)
+        // const filePath = "/" + ipInfo[1] + "/" + ipInfo[2] // 組路徑 /media/video1
+        // console.log("拿過來的videodata", this.videoFormData = this.$refs.videoForm.formData)
+        // console.log("faceCaptureFormData", this.faceCaptureFormData = this.$refs.faceCaptureForm.formData)
 
         
 
@@ -272,18 +262,18 @@
           name: self.deviceName,
           divice_groups: self.value_deviceGroups,
 
-          stream_type: self.value_deviceType,
-          ip_address: this.videoFormData.IpAddress,
-          port: Number(this.videoFormData.Port),
-          user: this.videoFormData.Username,
-          pass: this.videoFormData.Password,
-          connection_info: this.videoFormData.Parameters,
+          stream_type: this.getDeviceTypes,
+          ip_address: this.getIpAddress,
+          port: Number(this.getPort),
+          user: this.getUsername,
+          pass: this.getPassword,
+          connection_info: this.getParameters,
           
           //connectionString: self.value_deviceConnectionString,
-         
-
-          capture_interval: Number(this.faceCaptureFormData.captureInterval),
-          target_score: Number(this.faceCaptureFormData.targetScore),
+           
+          //this.captureInterval ? Number(this.captureInterval) : ""
+          capture_interval: Number(this.getCaptureInterval) ?? 0,
+          target_score: Number(this.getTargetScore) ?? 0,
           roi: [
               {
                   "x1": 0,
@@ -292,7 +282,8 @@
                   "y2": 0
               }
           ],
-          face_min_length: Number(this.faceCaptureFormData.faceMinimumSize),
+          face_min_length: Number(this.getFaceMinimumSize) ?? 0,
+          // face_min_length: Number(this.faceCaptureFormData.faceMinimumSize),
         };
         return data
       },
@@ -324,7 +315,6 @@
             });
           } else self.flag_currentSetp = 0;
         } else {
-          // self.$router.push({ name: self.value_returnRoutePath })
           self.flag_currentSetp = 0;
         }
       },

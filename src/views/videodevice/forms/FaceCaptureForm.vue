@@ -11,21 +11,21 @@
       <CRow sm="12">
         <CCol sm="6" class="h5" >
           {{ disp_faceMinimumSize }}
-          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="formData.faceMinimumSize"/>
+          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="faceMinimumSize"/>
         </CCol>
       </CRow>
       
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.targetScore"/>
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="targetScore"/>
         </CCol>
       </CRow>
 
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.captureInterval"/>
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="captureInterval" />
         </CCol>
       </CRow>
 
@@ -35,7 +35,7 @@
 </template>
   
 <script>
-  import { mapState } from "vuex";
+  import {  mapState, mapMutations  } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
 
@@ -89,12 +89,6 @@
 
         disp_save: i18n.formatter.format("Save"),
 
-        /**v-model */
-        formData: {
-          faceMinimumSize: "",
-          targetScore: "", 
-          captureInterval: 1
-        }
         
       };
     },
@@ -103,12 +97,35 @@
       multiselect: Multiselect,
     },
     computed: {
-      ...mapState(["ellipsisMode"]),
+      targetScore: {
+        get() {
+          return this.$store.state.targetScore;
+        },
+        set(value) {
+          this.$store.commit('setTargetScore', value);
+        }
+      },
+
+      captureInterval: {
+        get() {
+          return this.$store.state.captureInterval;
+        },
+        set(value) {
+          this.$store.commit('setCaptureInterval', value);
+        },
+      },
+
+      faceMinimumSize: {
+        get() {
+          return this.$store.state.faceMinimumSize;
+        },
+        set(value) {
+          this.$store.commit('setFaceMinimumSize', value);
+        },
+      },
     },
    
-    methods: {
-
-    },
+  
   }
 </script>
   

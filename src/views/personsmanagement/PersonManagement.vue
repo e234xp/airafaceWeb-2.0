@@ -58,6 +58,7 @@
             }
             else thereIsMoreData = false;
             if (cb) cb(error, reset, thereIsMoreData, data.person_list);
+            console.log("CBFUNCTION",error, reset, thereIsMoreData, data.person_list)
             reset = false;
           }
           else {

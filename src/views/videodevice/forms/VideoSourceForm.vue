@@ -15,7 +15,7 @@
             <CCol sm="6">
               <!-- <v-select v-model="value_deviceGroups" :options="value_deviceTypesList"  :filterable="true" class="font-control">
               </v-select> -->
-              <CSelect size="lg" value="1" v-model="formData.value_deviceTypes" :options="formData.value_deviceTypesList" />
+              <CSelect size="lg" value="1" v-model="deviceTypes" placeholder="請選擇" :options="value_deviceTypesList" />
             </CCol>
           </CRow>
 
@@ -23,11 +23,11 @@
             <CRow sm="12">
               <CCol sm="6" class="h5">
                 {{ disp_ipAddress }}
-                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="formData.IpAddress" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="IpAddress" />
               </CCol>
               <CCol sm="6" class="h5">
                 {{ disp_port }}
-                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="formData.Port" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Port" />
               </CCol>
             </CRow>
           </div>
@@ -36,21 +36,21 @@
             <CRow sm="12">
               <CCol sm="6" class="h5">
                 {{ disp_username }}
-                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="formData.Username"/>
+                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Username"/>
               </CCol>
               <CCol sm="6" class="h5">
                 {{ disp_password }}
-                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="formData.Password" />
+                <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Password" />
               </CCol>
             </CRow>
           </div>
-
+          
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
           <CRow>
             <CCol sm="6">
-              <!-- <v-select v-model="formData.value_deviceGroups" :options="value_deviceTypesList"  :filterable="true" class="font-control">
+              <!-- <v-select v-model="value_deviceGroups" :options="value_deviceTypesList"  :filterable="true" class="font-control">
               </v-select> -->
-              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.Parameters"/>
+              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="Parameters"/>
             </CCol>
           </CRow>
 
@@ -60,7 +60,7 @@
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
           <CRow>
             <CCol sm="12">
-              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="formData.ConnectionString" />
+              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" />
             </CCol>
           </CRow>
 
@@ -127,17 +127,11 @@
 
         disp_save: i18n.formatter.format("Save"),
 
-        formData: {
-          /**v-model */
-          value_deviceTypes: "", /**選單 */
-          value_deviceTypesList: [1,2,3],
-          IpAddress: "",
-          Port: "",
-          Username: "",
-          Password: "",
-          Parameters: "",
-          ConnectionString: "",
-        }
+        value_deviceTypesList: [4,5,6],
+
+        // 連接資訊
+        ConnectionString: ""
+        
         
       };
     },
@@ -145,13 +139,61 @@
       "v-select": VueSelect,
       multiselect: Multiselect,
     },
+    // 拿資料 寫入資料
     computed: {
-      ...mapState(["ellipsisMode"]),
+      deviceTypes: {
+        get() {
+          return this.$store.state.value_deviceTypes;
+        },
+        set(value) {
+          this.$store.commit('setDeviceTypes', value);
+        }
+      },
+      IpAddress: {
+        get() {
+          return this.$store.state.IpAddress;
+        },
+        set(value) {
+          this.$store.commit('setIpAddress', value);
+        }
+      },
+      Port: {
+        get() {
+          return this.$store.state.Port;
+        },
+        set(value) {
+          this.$store.commit('setPort', value);
+        }
+      },
+      Username: {
+        get() {
+          return this.$store.state.Username;
+        },
+        set(value) {
+          this.$store.commit('setUsername', value);
+        }
+      },
+
+      Password: {
+        get() {
+          return this.$store.state.Password;
+        },
+        set(value) {
+          this.$store.commit('setPassword', value);
+        },
+      },
+
+      Parameters: {
+        get() {
+          return this.$store.state.Parameters;
+        },
+        set(value) {
+          this.$store.commit('setParameters', value);
+        },
+      },
     },
    
-    methods: {
 
-    },
   }
 </script>
   

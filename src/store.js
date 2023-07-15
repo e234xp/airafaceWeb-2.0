@@ -12,7 +12,20 @@ const state = {
   },
   deviceName: "",
 
-  persons: []
+  persons: [],
+
+  //設備管理用
+  targetScore: 0,
+  captureInterval: 0, 
+  faceMinimumSize: 0,
+
+  //Video Source
+  value_deviceTypes: "",
+  IpAddress: "",
+  Port: "",
+  Username: "",
+  Password:"",
+  Parameters:"",
 }
 
 const mutations = {
@@ -42,6 +55,44 @@ const mutations = {
     }
     console.log("state.deviceName", state.deviceName); // stday todo
   },
+
+  //設備管理用
+  setTargetScore(state, score) {
+    state.targetScore = score; // 設定狀態的值
+  },
+  setCaptureInterval(state, value) {
+    state.captureInterval = value; 
+  },
+  setFaceMinimumSize(state, value) {
+    state.faceMinimumSize = value; 
+  },
+
+  // Video Source
+  setDeviceTypes(state, value) {
+    state.value_deviceTypes = value; 
+  },
+
+  setIpAddress(state, value) {
+    state.IpAddress = value; 
+  },
+
+  setPort(state, value) {
+    state.Port = value; 
+  },
+
+  setUsername(state, value) {
+    state.Username = value; 
+  },
+
+  setPassword(state, value) {
+    state.Password = value; 
+  },
+
+  setParameters(state, value) {
+    state.Parameters = value; 
+  },
+  
+
 }
 
 const actions = {
@@ -109,12 +160,58 @@ const actions = {
         commit('set', ['persons', persons]);
         break;
     }
-  }
+  },
+
+  //設備管理用
+  updateTargetScore({ commit }, score) {
+    commit('setTargetScore', score);
+  },
 }
+
+//設備管理用
+const getters = {
+  getTargetScore(state) {
+    return state.targetScore;
+  },
+  getFaceMinimumSize(state) {
+    return state.faceMinimumSize;
+  },
+  getCaptureInterval(state) {
+    return state.captureInterval;
+  },
+
+  // Video Source
+  getDeviceTypes(state) {
+    return state.value_deviceTypes;
+  },
+
+  getIpAddress(state) {
+    return state.IpAddress;
+  },
+
+  getPort(state) {
+    return state.Port;
+  },
+
+  getUsername(state) {
+    return state.Username;
+  },
+
+  getPassword(state) {
+    return state.Password;
+  },
+
+  getParameters(state) {
+    return state.Parameters;
+  },
+
+};
+
 
 
 export default new Vuex.Store({
   state,
   mutations,
-  actions
+  actions,
+  getters
 })
