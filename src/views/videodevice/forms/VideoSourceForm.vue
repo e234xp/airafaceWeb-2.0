@@ -56,13 +56,15 @@
 
           
 
-
+        <div v-if="showConnectionString">
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
           <CRow>
             <CCol sm="12">
-              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" />
+              <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" disabled="disabled"/>
             </CCol>
           </CRow>
+        </div>
+       
 
   </div>
 </template>
@@ -130,7 +132,7 @@
         value_deviceTypesList: [4,5,6],
 
         // 連接資訊
-        ConnectionString: ""
+        //ConnectionString: ""
         
         
       };
@@ -138,9 +140,18 @@
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
-    },
+    },                   
     // 拿資料 寫入資料
     computed: {
+      //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
+      ConnectionString() {
+        return `rtsp://${this.Username}:${this.Password}@${this.IpAddress}:${this.Port}${this.Parameters}`;
+      },
+      showConnectionString() {
+      // 判断输入框1到5是否都不为空
+        return this.IpAddress !== '' && this.Port !== '' && this.Username !== '' && this.Password !== '' && this.Parameters !== '';
+      },
+    
       deviceTypes: {
         get() {
           return this.$store.state.value_deviceTypes;

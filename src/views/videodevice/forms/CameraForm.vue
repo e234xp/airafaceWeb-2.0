@@ -44,6 +44,8 @@
                   :show-no-options="false"
                 >
               </multiselect>
+
+              {{ value_deviceGroups }}
             </CCol>
           </CRow>
 
@@ -121,7 +123,7 @@
       canModify: { type: Function },
       onFinish: { type: Function },
     },
-    
+
     // call api 使用 
     computed: {
       ...mapGetters(["getTargetScore","getFaceMinimumSize", "getCaptureInterval", "getDeviceTypes", "getIpAddress", "getPort", "getUsername", "getPassword", "getParameters"]) // 從Vuex store，取targetScore的值
