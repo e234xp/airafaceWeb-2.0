@@ -15,9 +15,9 @@ const state = {
   persons: [],
 
   //設備管理用
-  targetScore: 0,
-  captureInterval: 0, 
-  faceMinimumSize: 0,
+  targetScore: '',
+  captureInterval: '', 
+  faceMinimumSize: '',
 
   //Video Source
   value_deviceTypes: "",

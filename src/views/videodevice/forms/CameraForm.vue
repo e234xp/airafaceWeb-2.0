@@ -274,8 +274,8 @@
           //connectionString: self.value_deviceConnectionString,
            
           //this.captureInterval ? Number(this.captureInterval) : ""
-          capture_interval: Number(this.getCaptureInterval) ?? 0,
-          target_score: Number(this.getTargetScore) ?? 0,
+          capture_interval: Number(this.getCaptureInterval),
+          target_score: Number(this.getTargetScore),
           roi: [
               {
                   "x1": 0,
@@ -284,7 +284,7 @@
                   "y2": 0
               }
           ],
-          face_min_length: Number(this.getFaceMinimumSize) ?? 0,
+          face_min_length: Number(this.getFaceMinimumSize),
           // face_min_length: Number(this.faceCaptureFormData.faceMinimumSize),
         };
         return data

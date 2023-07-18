@@ -587,7 +587,10 @@
   "WiegandBasicTitleNameSettings": "Settings",
   "WiegandBasicCOlNameIndex":"IP:",
   "WiegandBasicCOlNameSystemCode":"System code:",
-  "ModifyCameras": "修改設備"
+  "ModifyCameras": "修改設備",
+
+  "limitNumber0to1": "限制輸入0~1",
+  "limitNumbers": "限制輸入數字"
 
 
   

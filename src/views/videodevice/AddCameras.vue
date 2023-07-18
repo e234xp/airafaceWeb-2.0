@@ -1,6 +1,7 @@
 <template>
   <div>
     <CRow>
+      {{ form }}
       <CCol sm="12">
         <CameraForm
         :formData="$data"
@@ -9,6 +10,14 @@
       </CCol>
     </CRow>
   </div>
+
+  <!-- <div>
+    <FirstStep 
+    v-if="step ===0"
+    v-model:
+    @next="step = 1"
+    />
+  </div> -->
 </template>
   
 <script>
@@ -32,6 +41,10 @@
       return {
         value_returnRoutePath : this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
         value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
+        // form:{
+        //   name: ...,
+        // },
+        step:0,
       };
     },
     components: {

@@ -12,9 +12,9 @@
         />
       </CCol>
       <!-- {{targetScore}} -->
-      <!-- getFaceMinimumSize: {{ getFaceMinimumSize }}
+      getFaceMinimumSize: {{ getFaceMinimumSize }}
       getTargetScore: {{ getTargetScore }}
-      getCaptureInterval: {{ getCaptureInterval }} -->
+      getCaptureInterval: {{ getCaptureInterval }}
     </CRow>
   </div>
 </template>
@@ -52,7 +52,9 @@
       console.log(this.value_cameraUuid,"ID是什麼")
       console.log(this.deviceName,"name是什麼")
       console.log(this.$route.params.item,"print item")
-
+    },
+    computed: {
+      ...mapGetters(["getTargetScore","getFaceMinimumSize", "getCaptureInterval"]) // 從Vuex store，取targetScore的值
     },
  
     // 給預設值 把那一支設備裡面的資料拿出來
