@@ -22,21 +22,20 @@
           >
         </multiselect>
 
-        <!-- {{ deviceGroups }} -->
       </CCol>
     </CRow>
 
     <div style="height: 35px"></div>
 
     <!-- Video Source -->
-    <!-- <div>
+    <div>
       <h2 sm="12">{{ disp_subtitle }}</h2>
     </div>
     
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_type }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" value="1" v-model="deviceTypes" placeholder="請選擇" :options="value_deviceTypesList" />
+        <CSelect size="lg" value="1" v-model="localStep1form.stream_type" placeholder="請選擇" :options="value_deviceTypesList" />
       </CCol>
     </CRow>
 
@@ -44,11 +43,11 @@
       <CRow sm="12">
         <CCol sm="6" class="h5">
           {{ disp_ipAddress }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="IpAddress" />
+          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" />
         </CCol>
         <CCol sm="6" class="h5">
           {{ disp_port }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Port" />
+          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.port" />
         </CCol>
       </CRow>
     </div>
@@ -57,21 +56,21 @@
       <CRow sm="12">
         <CCol sm="6" class="h5">
           {{ disp_username }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Username"/>
+          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"/>
         </CCol>
         <CCol sm="6" class="h5">
           {{ disp_password }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Password" />
+          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
         </CCol>
       </CRow>
-    </div> -->
+    </div>
     
-    <!-- <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="Parameters"/>
+        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.Parameters"/>
       </CCol>
-    </CRow> -->
+    </CRow>
 
     
 

@@ -24,19 +24,16 @@
       <CCard :class="showOnStep(0)">
         <CCardBody>
           <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/>
-          <!-- <AddCamerasStep1Form :deviceName="step1form.name" :deviceGroups="step1form.divice_groups" 
-          @update:deviceName="newValue => step1form.name = newValue" 
-          @update:deviceGroups="newValue => step1form.divice_groups = newValue"/> -->
         </CCardBody>
       </CCard>
     
       父層名稱:{{ step1form  }}
       <!-- ROI -->
-      <!-- <CCard :class="showOnStep(1)" :style="param_cardStyle">
+      <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
          
         </CCardBody>
-      </CCard> -->
+      </CCard>
 
       <!-- FaceCapture Form -->
       <!-- <CCard :class="showOnStep(2)" :style="param_cardStyle">
@@ -140,15 +137,15 @@
         // deviceName: '',
 
         step1form: {
-          name: '',
-          divice_groups: '',
+          name: "",
+          divice_groups: [],
 
-          // stream_type: getDeviceTypes,
-          // ip_address: getIpAddress,
-          // port: Number(getPort),
-          // user: getUsername,
-          // pass: getPassword,
-          // connection_info: getParameters,
+          stream_type: "",
+          ip_address: "",
+          port: null, //Number(getPort)
+          user: "",
+          pass: "",
+          connection_info: "",
           
        
           // capture_interval: Number(getCaptureInterval),
