@@ -11,7 +11,7 @@ import webSocketService from '@/webSocketService'
 Vue.use(CoreuiVue)
 
 const TEST_MODE = true;
-const _TEST_HOST = "192.168.10.124"; //測試mini的IP 
+const _TEST_HOST = "192.168.10.101"; //測試mini的IP 
 const _124_HOST = "192.168.10.124"; //測試mini的IP 
 const _TEST_PORT = "443"; //測試mini的PORT
 const _HOST = TEST_MODE ? _TEST_HOST : window.location.hostname;

@@ -1,15 +1,83 @@
 <template>
-  <div>
-    <CRow>
-      {{ form }}
-      <CCol sm="12">
-        <CameraForm
-        :formData="$data"
-        :onFinish="onFinish"
-        />
-      </CCol>
-    </CRow>
+  <div id="wrapper">
+    <div>
+      <div class="h1">{{ disp_headertitle }}</div>
+      <stepprogress
+        class="w-step-progress-4"
+        :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness"
+        :active-color="param_activeColor"
+        :passive-color="param_passiveColor"
+        :current-step="flag_currentSetp"
+        :line-thickness="param_lineThickness"
+        :steps="[disp_inputAccessControlInfo, disp_inputAccessControlInfo, disp_selectSchedule, disp_complete]"
+        icon-class="fa fa-check"
+      >
+      </stepprogress>
+
+      <div style="height: 35px"></div>
+    </div>
+
+    <!-- 項目 -->
+    <CCol sm="12">
+      <!-- Basic Form-->
+      <CCard :class="showOnStep(0)">
+        <CCardBody>
+          <BasicAndVideoSourceForm  :parentDeviceName="step1form.name"  @updateDevice="parentUpdateDevice"/>
+          <!-- <BasicAndVideoSourceForm :deviceName="step1form.name" :deviceGroups="step1form.divice_groups" 
+          @update:deviceName="newValue => step1form.name = newValue" 
+          @update:deviceGroups="newValue => step1form.divice_groups = newValue"/> -->
+        </CCardBody>
+      </CCard>
+      <input type="text" v-model="step1form.name">
+      名稱:{{ step1form.name }}
+      <!-- ROI -->
+      <!-- <CCard :class="showOnStep(1)" :style="param_cardStyle">
+        <CCardBody>
+         
+        </CCardBody>
+      </CCard> -->
+
+      <!-- FaceCapture Form -->
+      <!-- <CCard :class="showOnStep(2)" :style="param_cardStyle">
+        <CCardBody>
+          <FaceCaptureForm ref="faceCaptureForm"/>
+        </CCardBody>
+      </CCard> -->
+
+    </CCol>
+
+    <!-- 按鈕的Col -->
+    <CCol sm="12">
+      <div class="row justify-content-center mb-4">
+        <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+            >{{ value_returnRouteName }}
+          </CButton>
+        </div>
+        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2">
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+            >{{ disp_previous }}
+          </CButton>
+        </div>
+        <div style="width: 20px"></div>
+        <div>
+          <CButton class="btn btn-primary mb-3" size="lg" @click="clickN">{{ nextButtonName() }}
+          </CButton>
+        </div>
+      </div>
+    </CCol> 
+
   </div>
+  <!-- <CRow>
+    {{ form }}
+    <CCol sm="12">
+      <CameraForm
+      :formData="$data"
+      :onFinish="onFinish"
+      />
+    </CCol>
+  </CRow> -->
 
   <!-- <div>
     <FirstStep 
@@ -22,10 +90,14 @@
   
 <script>
   import { mapState } from "vuex";
-  import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
 
-  import CameraForm from './forms/CameraForm.vue'
+  import StepProgress from "vue-step-progress";
+
+  import VideoSourceForm from './forms/VideoSourceForm.vue'
+  import FaceCaptureForm from './forms/FaceCaptureForm.vue'
+  import BasicAndVideoSourceForm from './forms/BasicAndVideoSourceForm.vue'
+
 
 
   import VueSelect from 'vue-select';
@@ -39,24 +111,112 @@
     name: "AddCameras",
     data() {
       return {
+        param_cardStyle: "height: 35rem;",
+
         value_returnRoutePath : this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
         value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
+
+        /*Basic title  */
+        disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
+
+        // step setting
+        param_activeColor: "#6baee3",
+        param_passiveColor: "#919bae",
+        param_lineThickness: 3,
+        param_activeThickness: 3,
+        param_passiveThickness: 3,
+        flag_currentSetp: 0,
+
+        /**Step 1 2 3 */
+        disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
+        disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+        disp_complete: i18n.formatter.format("Complete"),
+
+        /**btn */
+        disp_complete: i18n.formatter.format("Complete"),
+        disp_previous: i18n.formatter.format("Previous"),
+        disp_next: i18n.formatter.format("Next"),
+
+        // deviceName: '',
+
+        step1form: {
+          name: '',
+          // divice_groups: value_deviceGroups,
+
+          // stream_type: getDeviceTypes,
+          // ip_address: getIpAddress,
+          // port: Number(getPort),
+          // user: getUsername,
+          // pass: getPassword,
+          // connection_info: getParameters,
+          
+       
+          // capture_interval: Number(getCaptureInterval),
+          // target_score: Number(getTargetScore),
+          // roi: [
+          //     {
+          //         "x1": 0,
+          //         "y1": 0,
+          //         "x2": 0,
+          //         "y2": 0
+          //     }
+          // ],
+          // face_min_length: Number(getFaceMinimumSize),
+          
+        },
         // form:{
         //   name: ...,
         // },
+        // fistStepForm = {},
+        // secondStepForm = {},
+
         step:0,
       };
     },
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
-      CameraForm: CameraForm
+      FaceCaptureForm: FaceCaptureForm,
+      VideoSourceForm: VideoSourceForm,
+      BasicAndVideoSourceForm: BasicAndVideoSourceForm,
+      stepprogress: StepProgress,
+      //CameraForm: CameraForm
     },
     computed: {
       ...mapState(["ellipsisMode"]),
     },
+    created() {
+      console.log("value_returnRoutePath",this.value_returnRoutePath+ "；" + this.value_returnRouteName, "value_returnRouteName")
+    },
    
     methods: {
+      parentUpdateDevice(newValue) {
+        console.log("父層資料",this.step1form.name)
+        this.step1form.name = newValue;
+      },
+      // 決定現在顯示哪一個步驟
+      showOnStep(step) {
+        return step == this.flag_currentSetp ? "d-block" : "d-none";
+      },
+      // 上一步按鈕
+      clickOnPrev() {
+        const self = this;
+        // // todo
+        // const form = {
+        //   ...this.fistStepForm,
+        //   ...this.fistStepForm,
+        // }
+        // send(form)
+        console.log(self.value_returnRoutePath,"路徑2")
+
+        if (self.flag_currentSetp == 0) {
+          if (self.value_returnRoutePath.length > 0) {
+            self.$router.push({ name: self.value_returnRoutePath });
+          } 
+        } else if (self.flag_currentSetp > 0) self.flag_currentSetp--;
+        console.log("當前步驟",self.flag_currentSetp)
+      },
+
       onFinish( data, cb ) {
         const self = this;
         console.log("參數確認",data)
@@ -89,7 +249,54 @@
         self.$globalCreateCameras( dataForAdd, ( error, result ) => {
           if( cb ) cb( error == null, result );
         });
-      }
+      },
+
+      clickN() {
+        const self = this;
+        if (self.flag_currentSetp == 0) {
+          self.flag_currentSetp = 1;
+        } else if (self.flag_currentSetp == 1) {
+          self.flag_currentSetp = 2;
+        } else if (self.flag_currentSetp == 2) {
+          if (self.onFinish) {
+            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+
+            const parameter = self.handleParameter(); // 拿參數
+            console.log("參數",parameter)
+
+            self.onFinish(parameter, function (success, result) {
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message == "ok") {
+                self.flag_currentSetp = 3;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format("Failed"),
+                  type: "error",
+                  timer: 3000,
+                  confirmButtonColor: "#20a8d8",
+                });
+              }
+            });
+          } else self.flag_currentSetp = 0;
+        } else {
+          self.flag_currentSetp = 0;
+        }
+      },
+
+      nextButtonName() {
+        switch (this.flag_currentSetp) {
+          case 0:
+            return this.disp_next;
+          case 1:
+            return this.disp_next;
+          case 2:
+            return this.disp_next;
+          case 3:
+            return this.disp_complete;
+          default:
+            return this.disp_next;
+        }
+      },
     },
   }
 </script>

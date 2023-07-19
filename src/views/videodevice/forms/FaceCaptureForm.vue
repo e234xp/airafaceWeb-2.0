@@ -76,38 +76,19 @@
         value_searchingFilter: "",
         isChecked: true,
 
-        /*Basic title  */
-        disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
-        /**content */
-        disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
-
-        /*Video Source title  */
-        disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
-
-        /**content */
-        disp_Type: i18n.formatter.format("VideoSourceType"),
-        disp_ConnectionString: i18n.formatter.format("VideoSourceConnectionString"),
+       
 
         /*Face Capture title  */
         disp_subtitleFaceCapture: i18n.formatter.format("VideoFaceCapture"),
 
         /**content */
-        // disp_faceMinimumWidth: i18n.formatter.format("VideoBasicCOlNameFaceMinimumWidth"),
-        // disp_faceMinimumHeight: i18n.formatter.format("VideoBasicCOlNameFaceMinimumHeight"),
         disp_faceMinimumSize: i18n.formatter.format("VideoBasicCOlNameFaceMinimumSize"),
-        // disp_frontalFaceFilter: i18n.formatter.format("VideoBasicCOlNameFrontalFaceFilter"),
-
         disp_targetScore: i18n.formatter.format("VideoBasicCOlNameTargetScore"),
         disp_captureInterval: i18n.formatter.format("VideoBasicCOlNameCaptureInterval"),
-        // disp_antiSpoofingScore: i18n.formatter.format("VideoBasicCOlNameAntiSpoofingScore"),
 
-        disp_save: i18n.formatter.format("Save"),
         disp_limitNumbers: i18n.formatter.format("limitNumbers"),
         disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"),
 
-        
       };
     },
     components: {
