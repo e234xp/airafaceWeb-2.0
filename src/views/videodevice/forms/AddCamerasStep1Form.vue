@@ -16,7 +16,7 @@
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
-        <multiselect placeholder="" v-model="localStep1form.device_groups" :options="value_deviceGroupsList" :multiple="true"
+        <multiselect placeholder="" v-model="localStep1form.divice_groups" :options="value_deviceGroupsList" :multiple="true"
             :taggable="true" :hideSelected="true" 
             :show-no-options="false"
           >
@@ -60,7 +60,7 @@
         </CCol>
         <CCol sm="6" class="h5">
           {{ disp_password }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
+          <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
         </CCol>
       </CRow>
     </div>
@@ -100,9 +100,9 @@
 
 
   export default {
-    name: "BasicAndVideoSourceForm",
+    name: "AddCamerasStep1Form",
     props:{
-      step1form: Object //字串型別
+      step1form: Object
     },
     data() {
       return {
@@ -157,6 +157,13 @@
         handler(newValue) {
           console.log('emit updateStep1form')
           this.$emit('updateStep1form', { ...newValue });
+        },
+        deep: true,
+      },
+      localStep3form: {
+        handler(newValue) {
+          console.log('emit updateStep3form')
+          this.$emit('updateStep3form', { ...newValue });
         },
         deep: true,
       },

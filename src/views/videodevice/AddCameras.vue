@@ -27,7 +27,7 @@
         </CCardBody>
       </CCard>
     
-      父層名稱:{{ step1form  }}
+      父層名稱-step1:{{ step1form  }}
       <!-- ROI -->
       <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
@@ -36,12 +36,12 @@
       </CCard>
 
       <!-- FaceCapture Form -->
-      <!-- <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard :class="showOnStep(2)" :style="param_cardStyle">
         <CCardBody>
-          <FaceCaptureForm ref="faceCaptureForm"/>
+          <AddCamerasStep3Form :step3form="step3form"  @updateStep3form="updateStep3form"/>
         </CCardBody>
-      </CCard> -->
-
+      </CCard>
+      父層名稱3 :{{ step3form  }}
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -94,6 +94,7 @@
   import VideoSourceForm from './forms/VideoSourceForm.vue'
   import FaceCaptureForm from './forms/FaceCaptureForm.vue'
   import AddCamerasStep1Form from './forms/AddCamerasStep1Form.vue'
+  import AddCamerasStep3Form from './forms/AddCamerasStep3Form.vue'
 
 
 
@@ -161,6 +162,23 @@
           // face_min_length: Number(getFaceMinimumSize),
           
         },
+        step2form: {
+          roi: [
+            {
+                "x1": 0,
+                "y1": 0,
+                "x2": 0,
+                "y2": 0
+            }
+          ]
+        },
+
+        step3form: {
+          capture_interval: null,
+          target_score: null,
+          face_min_length: null
+        },
+
         // form:{
         //   name: ...,
         // },
@@ -176,6 +194,7 @@
       FaceCaptureForm: FaceCaptureForm,
       VideoSourceForm: VideoSourceForm,
       AddCamerasStep1Form: AddCamerasStep1Form,
+      AddCamerasStep3Form: AddCamerasStep3Form,
       stepprogress: StepProgress,
       //CameraForm: CameraForm
     },
@@ -187,13 +206,17 @@
     },
    
     methods: {
+      // 處理資料傳遞
       updateStep1form(newValue) {
         this.step1form = { ...newValue };
       },
-      parentUpdateDevice(newValue) {
-        console.log("父層資料",this.step1form.name)
-        this.step1form.name = newValue;
+      updateStep3form(newValue) {
+        this.step1form = { ...newValue };
       },
+
+
+
+
       // 決定現在顯示哪一個步驟
       showOnStep(step) {
         return step == this.flag_currentSetp ? "d-block" : "d-none";

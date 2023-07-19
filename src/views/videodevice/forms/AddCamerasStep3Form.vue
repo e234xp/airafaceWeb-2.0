@@ -11,7 +11,7 @@
       <CRow sm="12">
         <CCol sm="6" class="h5" >
           {{ disp_faceMinimumSize }}
-          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="faceMinimumSize"
+          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="localStep3form.face_min_length"
           :invalid-feedback="disp_limitNumbers"
           valid-feedback="ok"
           :is-valid="limitNumber"
@@ -24,7 +24,7 @@
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="targetScore"
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep3form.target_score"
           :invalid-feedback="disp_limitNumber0to1"
           valid-feedback="ok"
           :is-valid="limitNumber0to1"
@@ -36,7 +36,7 @@
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="captureInterval"
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep3form.capture_interval"
           :invalid-feedback="disp_limitNumbers"
           valid-feedback="ok"
           :is-valid="limitNumber"
@@ -55,17 +55,19 @@
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
 
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
 	
 
 
 
   export default {
-    name: "CamerasBasic",
+    name: "AddCamerasStep1Form",
+    props:{
+      step3form: Object
+    },
     data() {
       return {
+        localStep3form: { ...this.step3form },
+
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
@@ -91,38 +93,16 @@
 
       };
     },
-    components: {
-      "v-select": VueSelect,
-      multiselect: Multiselect,
-    },
-    computed: {
-      targetScore: {
-        get() {
-          return this.$store.state.targetScore;
+    watch: {
+      localStep3form: {
+        handler(newValue) {
+          console.log('emit updateStep3form')
+          this.$emit('updateStep3form', { ...newValue });
         },
-        set(value) {
-          this.$store.commit('set', ['TargetScore',value]);
-        }
-      },
-
-      captureInterval: {
-        get() {
-          return this.$store.state.captureInterval;
-        },
-        set(value) {
-          this.$store.commit('setCaptureInterval', value);
-        },
-      },
-
-      faceMinimumSize: {
-        get() {
-          return this.$store.state.faceMinimumSize;
-        },
-        set(value) {
-          this.$store.commit('setFaceMinimumSize', value);
-        },
+        deep: true,
       },
     },
+  
     methods: {
      
       limitNumber0to1(val) {
@@ -143,8 +123,3 @@
   
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
