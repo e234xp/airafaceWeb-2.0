@@ -12,8 +12,7 @@
         <CInput size="lg"  class="h5"  v-model="deviceName"  @input="updateDeviceName()"/>
       </CCol>
     </CRow>
-    propsTEST:
-{{ deviceName}}
+
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
@@ -110,8 +109,6 @@
     props:{
       parentDeviceName: String //字串型別
     },
-    // props: ['deviceName', 'deviceTypes'],
-    // emits: ['update:deviceGroups','update:deviceName'],
     data() {
       return {
         deviceName:  this.parentDeviceName,

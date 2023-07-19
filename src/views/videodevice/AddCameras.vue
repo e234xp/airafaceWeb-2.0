@@ -23,14 +23,14 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <BasicAndVideoSourceForm  :parentDeviceName="step1form.name"  @updateDevice="parentUpdateDevice"/>
+          <BasicAndVideoSourceForm :parentDeviceName="step1form.name"  @updateDevice="parentUpdateDevice"/>
           <!-- <BasicAndVideoSourceForm :deviceName="step1form.name" :deviceGroups="step1form.divice_groups" 
           @update:deviceName="newValue => step1form.name = newValue" 
           @update:deviceGroups="newValue => step1form.divice_groups = newValue"/> -->
         </CCardBody>
       </CCard>
-      <input type="text" v-model="step1form.name">
-      名稱:{{ step1form.name }}
+    
+      父層名稱:{{ step1form.name }}
       <!-- ROI -->
       <!-- <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
