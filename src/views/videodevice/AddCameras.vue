@@ -135,13 +135,13 @@
         disp_previous: i18n.formatter.format("Previous"),
         disp_next: i18n.formatter.format("Next"),
 
-        // deviceName: '',
+       
 
         step1form: {
           name: "",
           divice_groups: [],
 
-          stream_type: "",
+          stream_type: "rtsp",
           ip_address: "",
           port: null, //Number(getPort)
           user: "",
@@ -179,11 +179,7 @@
           face_min_length: null
         },
 
-        // form:{
-        //   name: ...,
-        // },
-        // fistStepForm = {},
-        // secondStepForm = {},
+    
 
         step:0,
       };
@@ -211,7 +207,7 @@
         this.step1form = { ...newValue };
       },
       updateStep3form(newValue) {
-        this.step1form = { ...newValue };
+        this.step3form = { ...newValue };
       },
 
 
@@ -274,6 +270,18 @@
         });
       },
 
+      handleParameter(){
+        // todo
+        const form = {
+          ...this.step1form,
+          ...this.step2form,
+          ...this.step3form,
+        }
+        console.log("form",form)
+        return form
+       
+      },
+
       clickN() {
         const self = this;
         if (self.flag_currentSetp == 0) {
@@ -286,7 +294,7 @@
 
             const parameter = self.handleParameter(); // 拿參數
             console.log("參數",parameter)
-
+         
             self.onFinish(parameter, function (success, result) {
               if (self.obj_loading) self.obj_loading.hide();
               if (result && result.message == "ok") {

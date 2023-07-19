@@ -47,7 +47,7 @@
         </CCol>
         <CCol sm="6" class="h5">
           {{ disp_port }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.port" />
+          <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" />
         </CCol>
       </CRow>
     </div>
@@ -68,7 +68,7 @@
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.Parameters"/>
+        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.connection_info"/>
       </CCol>
     </CRow>
 

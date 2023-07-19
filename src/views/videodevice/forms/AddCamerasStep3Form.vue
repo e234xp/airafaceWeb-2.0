@@ -11,7 +11,7 @@
       <CRow sm="12">
         <CCol sm="6" class="h5" >
           {{ disp_faceMinimumSize }}
-          <CInput size="lg" class="mt-3" style="width: 100%;" v-model="localStep3form.face_min_length"
+          <CInput size="lg" class="mt-3" style="width: 100%;" v-model.number="localStep3form.face_min_length"
           :invalid-feedback="disp_limitNumbers"
           valid-feedback="ok"
           :is-valid="limitNumber"
@@ -24,7 +24,7 @@
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetScore }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep3form.target_score"
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model.number="localStep3form.target_score"
           :invalid-feedback="disp_limitNumber0to1"
           valid-feedback="ok"
           :is-valid="limitNumber0to1"
@@ -36,7 +36,7 @@
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep3form.capture_interval"
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model.number="localStep3form.capture_interval"
           :invalid-feedback="disp_limitNumbers"
           valid-feedback="ok"
           :is-valid="limitNumber"
@@ -60,7 +60,7 @@
 
 
   export default {
-    name: "AddCamerasStep1Form",
+    name: "AddCamerasStep3Form",
     props:{
       step3form: Object
     },
