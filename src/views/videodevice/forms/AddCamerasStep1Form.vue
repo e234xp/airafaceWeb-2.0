@@ -9,14 +9,14 @@
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  v-model="deviceName"  @input="updateDeviceName()"/>
+        <CInput size="lg"  class="h5"  v-model="localStep1form.name"  />
       </CCol>
     </CRow>
 
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
-        <multiselect placeholder="" :options="value_deviceGroupsList" :multiple="true"
+        <multiselect placeholder="" v-model="localStep1form.device_groups" :options="value_deviceGroupsList" :multiple="true"
             :taggable="true" :hideSelected="true" 
             :show-no-options="false"
           >
@@ -29,15 +29,13 @@
     <div style="height: 35px"></div>
 
     <!-- Video Source -->
-    <div>
+    <!-- <div>
       <h2 sm="12">{{ disp_subtitle }}</h2>
     </div>
     
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_type }}</CRow>
     <CRow>
       <CCol sm="6">
-        <!-- <v-select v-model="value_deviceGroups" :options="value_deviceTypesList"  :filterable="true" class="font-control">
-        </v-select> -->
         <CSelect size="lg" value="1" v-model="deviceTypes" placeholder="請選擇" :options="value_deviceTypesList" />
       </CCol>
     </CRow>
@@ -66,27 +64,25 @@
           <CInput size="lg" class="mt-2" style="width: 100%;" v-model="Password" />
         </CCol>
       </CRow>
-    </div>
+    </div> -->
     
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
+    <!-- <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
     <CRow>
       <CCol sm="6">
-        <!-- <v-select v-model="value_deviceGroups" :options="value_deviceTypesList"  :filterable="true" class="font-control">
-        </v-select> -->
         <CInput size="lg"  class="h5"  style="width: 100%;" v-model="Parameters"/>
       </CCol>
-    </CRow>
+    </CRow> -->
 
     
 
-  <div v-if="showConnectionString">
+  <!-- <div v-if="showConnectionString">
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
     <CRow>
       <CCol sm="12">
         <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" disabled="disabled"/>
       </CCol>
     </CRow>
-  </div>
+  </div> -->
        
 
   </div>
@@ -107,11 +103,12 @@
   export default {
     name: "BasicAndVideoSourceForm",
     props:{
-      parentDeviceName: String //字串型別
+      step1form: Object //字串型別
     },
     data() {
       return {
-        deviceName:  this.parentDeviceName,
+        localStep1form: { ...this.step1form },
+
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
@@ -155,81 +152,22 @@
       multiselect: Multiselect,
     },                   
     // 拿資料 寫入資料
-    computed: {
-      //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
-      ConnectionString() {
-        return `rtsp://${this.Username}:${this.Password}@${this.IpAddress}:${this.Port}${this.Parameters}`;
-      },
-      showConnectionString() {
-      // 判断输入框1到5是否都不为空
-        return this.IpAddress !== '' && this.Port !== '' && this.Username !== '' && this.Password !== '' && this.Parameters !== '';
-      },
-      // value: {
-      //   get() {
-      //     return this.deviceName
-      //   },
-      //   set(value) {
-      //     this.$emit('update:deviceName', value)
-      //   }
-      // },
-    
-      deviceTypes: {
-        get() {
-          return this.$store.state.value_deviceTypes;
+   
+    watch: {
+      localStep1form: {
+        handler(newValue) {
+          console.log('emit updateStep1form')
+          this.$emit('updateStep1form', { ...newValue });
         },
-        set(value) {
-          this.$store.commit('setDeviceTypes', value);
-        }
-      },
-      IpAddress: {
-        get() {
-          return this.$store.state.IpAddress;
-        },
-        set(value) {
-          this.$store.commit('setIpAddress', value);
-        }
-      },
-      Port: {
-        get() {
-          return this.$store.state.Port;
-        },
-        set(value) {
-          this.$store.commit('setPort', value);
-        }
-      },
-      Username: {
-        get() {
-          return this.$store.state.Username;
-        },
-        set(value) {
-          this.$store.commit('setUsername', value);
-        }
-      },
-
-      Password: {
-        get() {
-          return this.$store.state.Password;
-        },
-        set(value) {
-          this.$store.commit('setPassword', value);
-        },
-      },
-
-      Parameters: {
-        get() {
-          return this.$store.state.Parameters;
-        },
-        set(value) {
-          this.$store.commit('setParameters', value);
-        },
+        deep: true,
       },
     },
-    methods: {
-      updateDeviceName() {
-        console.log("子傳遞",this.deviceName)
-        this.$emit('updateDevice', this.deviceName);
-      }
-    },
+    // methods: {
+    //   updateDeviceName() {
+    //     console.log("子傳遞",this.deviceName)
+    //     this.$emit('updateDevice', this.deviceName);
+    //   }
+    // },
    
 
   }

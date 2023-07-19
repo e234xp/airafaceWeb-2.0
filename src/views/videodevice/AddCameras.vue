@@ -23,14 +23,14 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <BasicAndVideoSourceForm :parentDeviceName="step1form.name"  @updateDevice="parentUpdateDevice"/>
-          <!-- <BasicAndVideoSourceForm :deviceName="step1form.name" :deviceGroups="step1form.divice_groups" 
+          <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/>
+          <!-- <AddCamerasStep1Form :deviceName="step1form.name" :deviceGroups="step1form.divice_groups" 
           @update:deviceName="newValue => step1form.name = newValue" 
           @update:deviceGroups="newValue => step1form.divice_groups = newValue"/> -->
         </CCardBody>
       </CCard>
     
-      父層名稱:{{ step1form.name }}
+      父層名稱:{{ step1form  }}
       <!-- ROI -->
       <!-- <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
@@ -96,7 +96,7 @@
 
   import VideoSourceForm from './forms/VideoSourceForm.vue'
   import FaceCaptureForm from './forms/FaceCaptureForm.vue'
-  import BasicAndVideoSourceForm from './forms/BasicAndVideoSourceForm.vue'
+  import AddCamerasStep1Form from './forms/AddCamerasStep1Form.vue'
 
 
 
@@ -141,7 +141,7 @@
 
         step1form: {
           name: '',
-          // divice_groups: value_deviceGroups,
+          divice_groups: '',
 
           // stream_type: getDeviceTypes,
           // ip_address: getIpAddress,
@@ -178,7 +178,7 @@
       multiselect: Multiselect,
       FaceCaptureForm: FaceCaptureForm,
       VideoSourceForm: VideoSourceForm,
-      BasicAndVideoSourceForm: BasicAndVideoSourceForm,
+      AddCamerasStep1Form: AddCamerasStep1Form,
       stepprogress: StepProgress,
       //CameraForm: CameraForm
     },
@@ -190,6 +190,9 @@
     },
    
     methods: {
+      updateStep1form(newValue) {
+        this.step1form = { ...newValue };
+      },
       parentUpdateDevice(newValue) {
         console.log("父層資料",this.step1form.name)
         this.step1form.name = newValue;
