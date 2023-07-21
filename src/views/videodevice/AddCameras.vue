@@ -59,7 +59,7 @@
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickN">{{ nextButtonName() }}
+          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext">{{ nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -282,7 +282,7 @@
        
       },
 
-      clickN() {
+      clickOnNext() {
         const self = this;
         if (self.flag_currentSetp == 0) {
           self.flag_currentSetp = 1;
@@ -308,9 +308,11 @@
                 });
               }
             });
-          } else self.flag_currentSetp = 0;
+          } else {
+            self.flag_currentSetp = 3;
+          } 
         } else {
-          self.flag_currentSetp = 0;
+          self.$router.push({ name: self.value_returnRoutePath });
         }
       },
 

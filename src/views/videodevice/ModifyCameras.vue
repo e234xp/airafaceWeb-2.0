@@ -61,7 +61,7 @@
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickN">{{ nextButtonName() }}
+          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext">{{ nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -290,15 +290,15 @@
        
       },
 
-      clickN() {
+      clickOnNext() {
         const self = this;
         if (self.flag_currentSetp == 0) {
           self.flag_currentSetp = 1;
         } else if (self.flag_currentSetp == 1) {
           self.flag_currentSetp = 2;
         } else if (self.flag_currentSetp == 2) {
+          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
           if (self.onFinish) {
-            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
 
             const parameter = self.handleParameter(); // 拿參數
             console.log("參數",parameter)
@@ -316,9 +316,11 @@
                 });
               }
             });
-          } else self.flag_currentSetp = 0;
+          } else {
+            self.flag_currentSetp = 3;
+          } 
         } else {
-          self.flag_currentSetp = 0;
+          self.$router.push({ name: self.value_returnRoutePath });
         }
       },
 
