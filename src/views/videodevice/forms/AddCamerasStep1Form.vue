@@ -9,7 +9,12 @@
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  v-model="localStep1form.name"  />
+        <CInput size="lg"  class="h5"  v-model="localStep1form.name"
+        :invalid-feedback= "$t('NoEmptyNorSpaceNeigherRepeat')"
+        valid-feedback="ok"
+        :is-valid="isNotEmpty"
+        required/>
+            
       </CCol>
     </CRow>
 
@@ -38,39 +43,106 @@
         <CSelect size="lg" value="1" v-model="localStep1form.stream_type" placeholder="請選擇" :options="value_deviceTypesList" />
       </CCol>
     </CRow>
+    {{ localStep1form.stream_type }}
 
-    <div class="mt-3">
-      <CRow sm="12">
-        <CCol sm="6" class="h5">
-          {{ disp_ipAddress }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" />
-        </CCol>
-        <CCol sm="6" class="h5">
-          {{ disp_port }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" />
-        </CCol>
+    <div id="type" v-if="localStep1form.stream_type === 'rtsp'">
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_ipAddress }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" 
+            :invalid-feedback= "$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required/>
+          </CCol>
+
+          <CCol sm="6" class="h5">
+            {{ disp_port }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
+          </CCol>
+        </CRow>
+      </div>
+
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_username }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
+          </CCol>
+
+          <CCol sm="6" class="h5">
+            {{ disp_password }}
+            <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
+          </CCol>
+        </CRow>
+      </div>
+
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
+      <CRow>
+       
+        <textarea class="ml-3 mb-3 form-control" v-model="localStep1form.connection_info" rows="5"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required>
+        </textarea>
       </CRow>
+    
+    
     </div>
 
-    <div class="mt-3">
-      <CRow sm="12">
-        <CCol sm="6" class="h5">
-          {{ disp_username }}
-          <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"/>
-        </CCol>
-        <CCol sm="6" class="h5">
-          {{ disp_password }}
-          <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
+    <!-- 類型不等於rtsp時 -->
+    <div id="type" v-else>
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_ipAddress }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" />
+          </CCol>
+          <CCol sm="6" class="h5">
+            {{ disp_port }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" />
+          </CCol>
+        </CRow>
+      </div>
+
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_username }}
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"/>
+          </CCol>
+          <CCol sm="6" class="h5">
+            {{ disp_password }}
+            <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
+          </CCol>
+        </CRow>
+      </div>
+      
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.connection_info"/>
         </CCol>
       </CRow>
     </div>
     
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
-    <CRow>
-      <CCol sm="6">
-        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.connection_info"/>
-      </CCol>
-    </CRow>
 
     
 
@@ -138,18 +210,30 @@
         disp_parameters: i18n.formatter.format("VideoSourceParameters"),
         disp_connectionString: i18n.formatter.format("VideoSourceConnectionString"),
 
+        // 文字提示
+        disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"), // port 提示文字
+
+
         //設備群組 下拉選項
         value_deviceGroupsList: ["A","B","C"],
 
         //設備類型
-        value_deviceTypesList:["rtsp"]
+        value_deviceTypesList:["rtsp", "SDP"]
+
 
       };
     },
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
-    },                   
+    },
+    created() {
+      this.defaultCamerasValue(); //Cameras Name default Value
+      this.defaultPortValue();
+      this.localStep1form.user = "admin",
+      this.localStep1form.pass = "123456"
+      this.localStep1form.connection_info = "/media/video1"
+    },               
     // 拿資料 寫入資料
    
     watch: {
@@ -168,12 +252,47 @@
         deep: true,
       },
     },
-    // methods: {
-    //   updateDeviceName() {
-    //     console.log("子傳遞",this.deviceName)
-    //     this.$emit('updateDevice', this.deviceName);
-    //   }
-    // },
+    methods: {
+      setInitialName(camerasLength,cameraList) {
+        let name = `Camera-${camerasLength + 1}`;
+        
+        // Check for duplicates, if found, increment the number and check again
+        while (this.isDuplicateName(cameraList,name)) {
+          camerasLength++;
+          name = `Camera-${camerasLength + 1}`;
+        }
+        console.log("名稱",name)
+        console.log("名稱",this.localStep1form.name)
+        this.localStep1form.name = name;
+      },
+      isDuplicateName(cameraList,name) {
+        // Check if the name is already in the cameras array
+        return cameraList.some((camera) => camera.name === name);
+      },
+
+      // get Cameras total
+      async defaultCamerasValue(cb) {
+        const self = this;
+        let ret = await self.$globalFindCameras("", 0,3000, cb);
+        console.log(ret,"拿到的資料")
+        const totalLength = ret.data.total_length;
+        const cameraList = ret.data.camera_list;
+        this.setInitialName(totalLength,cameraList)
+        console.log(cameraList,"拿到的資料list")
+        
+      },
+
+      defaultPortValue() {
+        this.localStep1form.port = 554
+        console.log(this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535,"PORTTT")
+        return this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535;
+      },
+      // 判斷欄位空值
+      isNotEmpty(value) {
+        return value !== null && value !== undefined && value !== '';
+      }
+    },
+
    
 
   }
