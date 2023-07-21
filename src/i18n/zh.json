@@ -590,7 +590,8 @@
   "ModifyCameras": "修改設備",
 
   "limitNumber0to1": "限制輸入0~1",
-  "limitNumbers": "限制輸入數字"
+  "limitNumbers": "限制輸入數字",
+  "limitNumbers100up": "限制輸入數字100~1000"
 
 
   

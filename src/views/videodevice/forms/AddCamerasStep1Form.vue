@@ -45,7 +45,7 @@
     </CRow>
     {{ localStep1form.stream_type }}
 
-    <div id="type" v-if="localStep1form.stream_type === 'rtsp'">
+    <div id="type" v-if="localStep1form.stream_type !== 'rtsp'">
       <div class="mt-3">
         <CRow sm="12">
           <CCol sm="6" class="h5">
@@ -95,7 +95,6 @@
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
       <CRow>
-       
         <textarea class="ml-3 mb-3 form-control" v-model="localStep1form.connection_info" rows="5"
             :invalid-feedback="$t('NoEmptyNoSpace')"
             valid-feedback="ok"
@@ -103,6 +102,15 @@
             required>
         </textarea>
       </CRow>
+
+      <div v-if="showConnectionString">
+        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
+        <CRow>
+          <CCol sm="12">
+            <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" disabled="disabled"/>
+          </CCol>
+        </CRow>
+      </div>
     
     
     </div>
@@ -113,11 +121,21 @@
         <CRow sm="12">
           <CCol sm="6" class="h5">
             {{ disp_ipAddress }}
-            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" />
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.ip_address" 
+            :invalid-feedback= "$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required/>
           </CCol>
+
           <CCol sm="6" class="h5">
             {{ disp_port }}
-            <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" />
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model.number="localStep1form.port" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
           </CCol>
         </CRow>
       </div>
@@ -126,11 +144,22 @@
         <CRow sm="12">
           <CCol sm="6" class="h5">
             {{ disp_username }}
-            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"/>
+            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.user"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
           </CCol>
+
           <CCol sm="6" class="h5">
             {{ disp_password }}
-            <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" />
+            <CInput size="lg" type="password" class="mt-2" style="width: 100%;" v-model="localStep1form.pass" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required
+            />
           </CCol>
         </CRow>
       </div>
@@ -138,22 +167,28 @@
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_parameters }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.connection_info"/>
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model="localStep1form.connection_info" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isNotEmpty"
+            required/>
         </CCol>
       </CRow>
+
+      <div v-if="showConnectionString">
+        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
+        <CRow>
+          <CCol sm="12">
+            <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" disabled="disabled"/>
+          </CCol>
+        </CRow>
+      </div>
     </div>
     
 
     
 
-  <!-- <div v-if="showConnectionString">
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_connectionString }}</CRow>
-    <CRow>
-      <CCol sm="12">
-        <CInput size="lg"  class="h5"  style="width: 100%;" v-model="ConnectionString" disabled="disabled"/>
-      </CCol>
-    </CRow>
-  </div> -->
+ 
        
 
   </div>
@@ -233,9 +268,18 @@
       this.localStep1form.user = "admin",
       this.localStep1form.pass = "123456"
       this.localStep1form.connection_info = "/media/video1"
-    },               
+    }, 
+    computed: {
+      //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
+      ConnectionString() {
+        return `${this.localStep1form.stream_type}://${this.localStep1form.user}:${this.localStep1form.pass.replace(/./g, '*')}@${this.localStep1form.ip_address}:${this.localStep1form.port}${this.localStep1form.connection_info}`;
+      },
+      showConnectionString() {
+        // 判断輸入框是否都不為空
+        return this.localStep1form.ip_address !== '' && this.localStep1form.port !== '' && this.localStep1form.user !== '' && this.localStep1form.pass !== '' && this.localStep1form.connection_info !== '';
+      },
+    },
     // 拿資料 寫入資料
-   
     watch: {
       localStep1form: {
         handler(newValue) {
