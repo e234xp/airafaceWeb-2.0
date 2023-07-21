@@ -199,7 +199,9 @@ function maintainToken(tokenInfo, cb) {
   });
 };
 
-Vue.prototype.$t = function (str) { return i18n.formatter.format(str) };
+Vue.prototype.$t = function (str) {
+  return i18n.formatter.format(str)
+};
 
 
 Vue.prototype.$globalFindPerson = function (uuid, shift, sliceSize, cb) {

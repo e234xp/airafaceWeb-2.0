@@ -1,7 +1,8 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">{{ $t('VideoDeviceBasic') }}</div>
+      <div class="h1">{{ $t('vVideoDeviceBasic') }}</div>
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -59,8 +60,11 @@
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext">{{ nextButtonName() }}
+          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          :disabled="checkForm()"
+          >{{ nextButtonName() }}
           </CButton>
+          <!-- :disabled="!(flag_personNamePass && flag_personIdPass && flag_cardNumberPass)" -->
         </div>
       </div>
     </CCol> 
@@ -199,9 +203,17 @@
     },
     created() {
       console.log("value_returnRoutePath",this.value_returnRoutePath+ "；" + this.value_returnRouteName, "value_returnRouteName")
+      console.log(this.step1form.name==='',"命名是否空")
     },
+
    
     methods: {
+      checkForm(){
+        return this.step1form.name === '' || this.step1form.divice_groups === '' || 
+        this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
+        this.step1form.port === '' || this.step1form.user === '' || 
+        this.step1form.pass === '' || this.step1form.connection_info === ''
+      },
       // 處理資料傳遞
       updateStep1form(newValue) {
         this.step1form = { ...newValue };
@@ -210,9 +222,7 @@
         this.step3form = { ...newValue };
       },
 
-
-
-
+      
       // 決定現在顯示哪一個步驟
       showOnStep(step) {
         return step == this.flag_currentSetp ? "d-block" : "d-none";
@@ -220,14 +230,7 @@
       // 上一步按鈕
       clickOnPrev() {
         const self = this;
-        // // todo
-        // const form = {
-        //   ...this.fistStepForm,
-        //   ...this.fistStepForm,
-        // }
-        // send(form)
         console.log(self.value_returnRoutePath,"路徑2")
-
         if (self.flag_currentSetp == 0) {
           if (self.value_returnRoutePath.length > 0) {
             self.$router.push({ name: self.value_returnRoutePath });
