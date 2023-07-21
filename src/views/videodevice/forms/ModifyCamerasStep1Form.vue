@@ -12,7 +12,7 @@
         <CInput size="lg"  class="h5"  v-model="localStep1form.name"  />
       </CCol>
     </CRow>
-
+    {{ localStep1form }}
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
@@ -100,14 +100,13 @@
 
 
   export default {
-    name: "AddCamerasStep1Form",
+    name: "ModifyCamerasStep1Form",
     props:{
       step1form: Object
     },
     data() {
       return {
-        localStep1form: { ...this.step1form },
-
+        localStep1form: { ...this.step1form }, // 本地保存父组件传递的 form 数据
         value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
@@ -149,9 +148,7 @@
     components: {
       "v-select": VueSelect,
       multiselect: Multiselect,
-    },                   
-    // 拿資料 寫入資料
-   
+    },
     watch: {
       localStep1form: {
         handler(newValue) {
@@ -160,21 +157,25 @@
         },
         deep: true,
       },
-      localStep3form: {
-        handler(newValue) {
-          console.log('emit updateStep3form')
-          this.$emit('updateStep3form', { ...newValue });
-        },
-        deep: true,
-      },
-    },
-    // methods: {
-    //   updateDeviceName() {
-    //     console.log("子傳遞",this.deviceName)
-    //     this.$emit('updateDevice', this.deviceName);
-    //   }
+    }
+
+    
+    // watch: {
+    //   localStep1form: {
+    //     immediate: true,
+    //     handler(newValue) {
+    //       // 当父组件传递的 form prop 发生变化时，将其保存到本地的 localForm 中
+    //       this.localStep1form = { ...newValue };
+    //     },
+    //   },
+      
     // },
-   
+    // methods: {
+    //   updateForm() {
+    //     // 触发自定义事件将更新后的 localForm 数据传递回父组件
+    //     this.$emit("updateForm", this.localStep1form);
+    //   },
+    // },
 
   }
 </script>
