@@ -141,7 +141,7 @@
         value_deviceGroupsList: ["A","B","C"],
 
         //設備類型
-        value_deviceTypesList:["rtsp"]
+        value_deviceTypesList:["rtsp", "SDP"]
 
       };
     },
