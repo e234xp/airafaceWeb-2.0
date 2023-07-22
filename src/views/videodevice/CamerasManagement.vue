@@ -52,7 +52,6 @@
     methods: {
       // 新增
       onAdd() {
-        console.log(123)
         this.$router.push({
           name: 'AddCameras', params: {
             value_returnRoutePath: "CamerasManagement",

@@ -36,7 +36,7 @@
       <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_captureInterval }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" v-model.number="localStep3form.capture_interval" min="100" max="1000"
+          <CInput size="lg"  class="h5"  style="width: 100%;" v-model.number="localStep3form.capture_interval" pattern="[0-9]*"
           :invalid-feedback="disp_limitNumber100up"
           valid-feedback="ok"
           :is-valid="limitNumber100up"
@@ -86,7 +86,7 @@
 
         disp_limitNumbers: i18n.formatter.format("limitNumbers"),
         disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"),
-        disp_limitNumber100up: i18n.formatter.format("limitNumber100up"),
+        disp_limitNumber100up: i18n.formatter.format("limitNumbers100up"),
 
       };
     },
@@ -101,7 +101,7 @@
     },
   
     methods: {
-     
+      // 顯示提示字
       limitNumber0to1(val) {
         if (!/^[01]$/.test(val)) {
           return false;
@@ -115,14 +115,23 @@
         return true;
       },
       limitNumber100up(value) {
+        //輸入100-1000
         if (value>100 && value<1000) {
           return true;
         }
+        //檢查輸入數字
+        if (!/^[0-9]+$/.test(value)) {
+          return false;
+        }
         return false;
       },
+
+      
+
     },
 
    
+       
   
   }
 </script>

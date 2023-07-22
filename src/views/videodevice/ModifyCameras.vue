@@ -24,16 +24,12 @@
       <CCard :class="showOnStep(0)">
         <CCardBody>
           <ModifyCamerasStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
-          <!-- <ModifyCamerasStep1Form :step1form="step1form"  @updateForm="updateForm"/> -->
         </CCardBody>
       </CCard>
-    
-      父層名稱-step1:{{ step1form  }}
-      value_deviceType {{ value_deviceType}}
       <!-- ROI -->
       <CCard :class="showOnStep(1)" :style="param_cardStyle">
         <CCardBody>
-         
+
         </CCardBody>
       </CCard>
 
@@ -43,7 +39,6 @@
           <ModifyCamerasStep3Form :step3form="step3form"  @updateStep3form="updateStep3form"/>
         </CCardBody>
       </CCard>
-      父層名稱3 :{{ step3form  }}
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -61,7 +56,9 @@
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext">{{ nextButtonName() }}
+          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          :disabled="checkForm()"
+          >{{ nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -71,25 +68,16 @@
 </template>
   
 <script>
-  import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
-
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
   import ModifyCamerasStep1Form from './forms/ModifyCamerasStep1Form.vue'
   import ModifyCamerasStep3Form from './forms/ModifyCamerasStep3Form.vue'
 
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
-	
-
 
   export default {
     name: "ModifyCameras",
-    components: { 
-      "v-select": VueSelect,
-      multiselect: Multiselect,
+    components: {
       ModifyCamerasStep1Form: ModifyCamerasStep1Form,
       ModifyCamerasStep3Form: ModifyCamerasStep3Form,
       stepprogress: StepProgress, 
@@ -140,9 +128,6 @@
         parameters: this.$route.params.item && this.$route.params.item.connection_info ? this.$route.params.item.connection_info : "",
         
         // roi:[],
-        connection_info: "",
-        abc: "",
-        
         
         step1form: {},
       
@@ -155,24 +140,15 @@
         captureInterval: this.$route.params.item && this.$route.params.item.capture_interval ? this.$route.params.item.capture_interval : "",
         targetScore: this.$route.params.item && this.$route.params.item.target_score ? this.$route.params.item.target_score : "",
         faceMinimumSize: this.$route.params.item && this.$route.params.item.face_min_length ? this.$route.params.item.face_min_length : "",
-
-        // step1form: {
-        //   uuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
-        //   name: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : "",
-        //   divice_groups: this.$route.params.item && this.$route.params.item.divice_groups ? this.$route.params.item.divice_groups : "",
-        //   test: ""
-        // }
         
       };
     },
     mounted(){
-      console.log(this.value_cameraUuid,"ID是什麼")
-      console.log(this.deviceName,"name是什麼")
-      console.log(this.$route.params.item,"print item")
-      console.log(this.value_deviceType,"value_deviceType")
-    },
-    computed: {
-      // ...mapGetters(["getTargetScore","getFaceMinimumSize", "getCaptureInterval"]) // 從Vuex store，取targetScore的值
+      // console.log(this.value_cameraUuid,"ID是什麼")
+      // console.log(this.deviceName,"name是什麼")
+      // console.log(this.$route.params.item,"print item")
+      // console.log(this.value_deviceType,"value_deviceType")
+      console.log("當前步驟",self.flag_currentSetp)
     },
  
     // 給預設值 把那一支設備裡面的資料拿出來
@@ -207,18 +183,9 @@
         target_score: this.targetScore,
         face_min_length: this.faceMinimumSize
       }
-
       
     },
-    // watch: {
-    //   form: {
-    //     deep: true,
-    //     handler(newValue) {
-    //       // Emit the updated form to the child component whenever it changes
-    //       this.$emit("updateForm", newValue);
-    //     },
-    //   },
-    // },
+ 
     methods: {
       // Handle the form update from the child component if needed
       updateStep1form(updatedForm) {
@@ -292,6 +259,7 @@
 
       clickOnNext() {
         const self = this;
+        console.log("現在第幾部",self.flag_currentSetp)
         if (self.flag_currentSetp == 0) {
           self.flag_currentSetp = 1;
         } else if (self.flag_currentSetp == 1) {
@@ -339,11 +307,21 @@
         }
       },
 
+      // 是否可以按下一步
+      checkForm(){
+        if(self.flag_currentSetp === undefined) {
+          return this.step1form.name === '' || this.step1form.divice_groups === '' || 
+          this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
+          this.step1form.port === '' || this.step1form.user === '' || 
+          this.step1form.pass === '' || this.step1form.connection_info === ''
+        } else if(self.flag_currentSetp === 0) {
+          //ROI todo
+        } else if(self.flag_currentSetp === 1) {
+          // return this.step1form.capture_interval === false || this.step1form.divice_groups === '' || 
+          // this.step1form.stream_type === ''
+        }
+      },
+
     },
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>

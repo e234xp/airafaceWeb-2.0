@@ -327,8 +327,7 @@
       },
 
       defaultPortValue() {
-        this.localStep1form.port = 554
-        console.log(this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535,"PORTTT")
+        this.localStep1form.port = 554;
         return this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535;
       },
       // 判斷欄位空值
