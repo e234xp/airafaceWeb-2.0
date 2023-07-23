@@ -93,7 +93,7 @@ const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic')
 const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings')
 
 ///////////////////////////////////////////
-/////////// device add ///////////
+/////////// device add update///////////
 const AddCameras = () => import('@/views/videodevice/AddCameras')
 const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
 
@@ -101,6 +101,13 @@ const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
 const IOboxs = () => import('@/views/outputdevice/IOboxs')
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
 const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups')
+
+///////////////////////////////////////////
+/////////// output add update///////////
+const AddWiegandConverters = () => import('@/views/outputdevice/AddWiegandConverters')
+const ModifyWiegandConverters = () => import('@/views/outputdevice/ModifyWiegandConverters')
+
+
 const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
 const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
 
@@ -479,6 +486,16 @@ function configRoutes() {
               path: 'wiegandconverters',
               name: 'WiegandConverters',
               component: WiegandConverters
+            },
+            {
+              path: 'addWiegandConverters',
+              name: 'AddWiegandConverters',
+              component: AddWiegandConverters
+            },
+            {
+              path: 'modifyWiegandConverters',
+              name: 'ModifyWiegandConverters',
+              component: ModifyWiegandConverters
             },
             {
               path: 'outputDeviceGroups',
