@@ -98,14 +98,17 @@ const AddCameras = () => import('@/views/videodevice/AddCameras')
 const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
 
 
-const IOboxs = () => import('@/views/outputdevice/IOboxs')
+const IOboxsManagement = () => import('@/views/outputdevice/IOboxsManagement')
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
 const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups')
 
 ///////////////////////////////////////////
 /////////// output add update///////////
+const AddIOboxs = () => import('@/views/outputdevice/AddIOboxs')
+const ModifyIOboxs = () => import('@/views/outputdevice/ModifyIOboxs')
 const AddWiegandConverters = () => import('@/views/outputdevice/AddWiegandConverters')
 const ModifyWiegandConverters = () => import('@/views/outputdevice/ModifyWiegandConverters')
+
 
 
 const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
@@ -471,16 +474,26 @@ function configRoutes() {
         },
         {
           path: 'outputdevice',
-          redirect: '/outputdevice/IOboxs',
+          redirect: '/outputdevice/IOboxsManagement',
           name: 'OutputDevice',
           component: {
             render(c) { return c('router-view') }
           },
           children: [
             {
-              path: 'ioboxs',
-              name: 'IOboxs',
-              component: IOboxs
+              path: 'ioboxsManagement',
+              name: 'IOboxsManagement',
+              component: IOboxsManagement
+            },
+            {
+              path: 'addIOboxs',
+              name: 'AddIOboxs',
+              component: AddIOboxs
+            },
+            {
+              path: 'modifyIOboxs',
+              name: 'ModifyIOboxs',
+              component: ModifyIOboxs
             },
             {
               path: 'wiegandconverters',
