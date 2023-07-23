@@ -158,6 +158,37 @@
 
       };
     },
+    updated() {
+      const self = this;
+
+      self.value_dataItemsToShow.forEach((item) => {
+        const modifyButtonId = "actionOnModify_" + item.uuid;
+        const deleteButtonId = "actionOnDelete_" + item.uuid;
+
+        var new_deleteButton = null;
+        var new_modifyButton = null;
+        var old_deleteButton = document.getElementById(deleteButtonId);
+        var old_modifyButton = document.getElementById(modifyButtonId);
+        if (old_deleteButton && old_deleteButton.parentNode) {
+          new_deleteButton = old_deleteButton.cloneNode(true);
+          old_deleteButton.parentNode.replaceChild(new_deleteButton, old_deleteButton);
+        }
+
+        if (old_modifyButton && old_modifyButton.parentNode) {
+          new_modifyButton = old_modifyButton.cloneNode(true);
+          old_modifyButton.parentNode.replaceChild(new_modifyButton, old_modifyButton);
+        }
+
+        if (new_deleteButton)
+          new_deleteButton.addEventListener("click", function () {
+            self.clickOnSingleDelete(item);
+          });
+        if (new_modifyButton)
+          new_modifyButton.addEventListener("click", function () {
+            self.clickOnModify(item);
+          });
+      });
+    },
     computed: {
       ...mapState(["ellipsisMode"]),
     },
@@ -176,10 +207,6 @@
       self.refreshTableItems();
     },
     methods: {
-      cellClickEvent({row}) {
-        console.log(row)
-        this.$router.push("AddCameras");
-      },
       //分頁處理
       handlePageChange({ currentPage, pageSize }) {
         const self = this;
@@ -187,15 +214,6 @@
         this.value_tablePage.pageSize = pageSize;
         this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems,this.value_searchingFilter);
         this.resizeOneTable();
-      },
-      updated() {
-        const self = this;
-        self.value_dataItemsToShow.forEach((item) => {
-          if (new_modifyButton)
-            new_modifyButton.addEventListener("click", function () {
-              self.clickOnModify(item);
-            });
-        });
       },
       refreshTableItems(cb) {
         const self = this;
