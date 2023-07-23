@@ -10,7 +10,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_inputAccessControlInfo, disp_inputAccessControlInfo, disp_selectSchedule, disp_complete]"
+        :steps="[disp_inputAccessControlInfo, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -23,20 +23,7 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <!-- <ModifyCamerasStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/> -->
-        </CCardBody>
-      </CCard>
-      <!-- ROI -->
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
-        <CCardBody>
-
-        </CCardBody>
-      </CCard>
-
-      <!-- FaceCapture Form -->
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
-        <CCardBody>
-          <!-- <ModifyCamerasStep3Form :step3form="step3form"  @updateStep3form="updateStep3form"/> -->
+          <ModifyWiegandConvertersStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
         </CCardBody>
       </CCard>
     </CCol>
@@ -45,24 +32,22 @@
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
             >{{ value_returnRouteName }}
-          </CButton>
-        </div>
-        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
-            >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
-          :disabled="checkForm()"
           >{{ nextButtonName() }}
           </CButton>
+          <!-- <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          :disabled="checkForm()"
+          >{{ nextButtonName() }}
+          </CButton> -->
         </div>
       </div>
-    </CCol>
+    </CCol> 
 
   </div>
 </template>
@@ -71,15 +56,13 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  // import ModifyCamerasStep1Form from './forms/ModifyCamerasStep1Form.vue'
-  // import ModifyCamerasStep3Form from './forms/ModifyCamerasStep3Form.vue'
+  import ModifyWiegandConvertersStep1Form from './forms/ModifyWiegandConvertersStep1Form.vue'
 
 
   export default {
     name: "ModifyCameras",
     components: {
-      // ModifyCamerasStep1Form: ModifyCamerasStep1Form,
-      // ModifyCamerasStep3Form: ModifyCamerasStep3Form,
+      ModifyWiegandConvertersStep1Form: ModifyWiegandConvertersStep1Form,
       stepprogress: StepProgress, 
     },
     data() {
@@ -91,6 +74,7 @@
 
         disp_header: i18n.formatter.format("ModifyCameras"), //編輯設備
 
+  
         /*Basic title  */
         disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
 
@@ -104,13 +88,23 @@
 
         /**Step 1 2 3 */
         disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
-        disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
-        disp_complete: i18n.formatter.format("Complete"),
 
         /**btn */
         disp_complete: i18n.formatter.format("Complete"),
         disp_previous: i18n.formatter.format("Previous"),
         disp_next: i18n.formatter.format("Next"),
+
+        step1form: {
+          name: "",
+          divice_groups: [],
+
+          ip_address: "",
+          port: null, //Number(getPort)
+          user: "",
+          pass: "",
+          connection_info: ""
+          
+        },
 
         //要編輯的id
         value_cameraUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
@@ -119,38 +113,22 @@
         deviceName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : "",
         value_deviceGroups: this.$route.params.item && this.$route.params.item.divice_groups ? this.$route.params.item.divice_groups : "",
         
-        // video source
+
         value_deviceType: this.$route.params.item && this.$route.params.item.stream_type ? this.$route.params.item.stream_type : "",
         ip_address: this.$route.params.item && this.$route.params.item.ip_address ? this.$route.params.item.ip_address : "",
         port: this.$route.params.item && this.$route.params.item.port ? this.$route.params.item.port : "",
         userName: this.$route.params.item && this.$route.params.item.user ? this.$route.params.item.user : "",
         password: this.$route.params.item && this.$route.params.item.pass ? this.$route.params.item.pass : "",
         parameters: this.$route.params.item && this.$route.params.item.connection_info ? this.$route.params.item.connection_info : "",
-        
-        // roi:[],
+
         
         step1form: {},
-      
-        step2form: {},
 
-        step3form: {},
-        
-
-        // 第三步驟
-        captureInterval: this.$route.params.item && this.$route.params.item.capture_interval ? this.$route.params.item.capture_interval : "",
-        targetScore: this.$route.params.item && this.$route.params.item.target_score ? this.$route.params.item.target_score : "",
-        faceMinimumSize: this.$route.params.item && this.$route.params.item.face_min_length ? this.$route.params.item.face_min_length : "",
-        
       };
     },
     mounted(){
-      // console.log(this.value_cameraUuid,"ID是什麼")
-      // console.log(this.deviceName,"name是什麼")
-      // console.log(this.$route.params.item,"print item")
-      // console.log(this.value_deviceType,"value_deviceType")
       console.log("當前步驟",self.flag_currentSetp)
     },
- 
     // 給預設值 把那一支設備裡面的資料拿出來
     created() {
       // Give the form object initial values
@@ -165,27 +143,10 @@
         pass: this.password,
         connection_info: this.parameters
         // Add other properties as needed
-      },
-
-      this.step2form = {
-        roi: [
-          {
-              "x1": 0,
-              "y1": 0,
-              "x2": 0,
-              "y2": 0
-          }
-        ]
-      },
-
-      this.step3form = {
-        capture_interval: this.captureInterval,
-        target_score: this.targetScore,
-        face_min_length: this.faceMinimumSize
       }
-      
+
     },
- 
+
     methods: {
       // Handle the form update from the child component if needed
       updateStep1form(updatedForm) {
@@ -203,7 +164,6 @@
       clickOnPrev() {
         const self = this;
         console.log(self.value_returnRoutePath,"路徑2")
-        
 
         if (self.flag_currentSetp == 0) {
           if (self.value_returnRoutePath.length > 0) {
@@ -249,44 +209,37 @@
         // todo
         const form = {
           ...this.step1form,
-          ...this.step2form,
-          ...this.step3form,
+        
         }
         console.log("formDT",form)
         return form
-       
       },
 
       clickOnNext() {
         const self = this;
-        console.log("現在第幾部",self.flag_currentSetp)
         if (self.flag_currentSetp == 0) {
-          self.flag_currentSetp = 1;
-        } else if (self.flag_currentSetp == 1) {
-          self.flag_currentSetp = 2;
-        } else if (self.flag_currentSetp == 2) {
+          self.flag_keepingDownload = false;
           self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
           if (self.onFinish) {
-
             const parameter = self.handleParameter(); // 拿參數
-            console.log("參數",parameter)
-         
             self.onFinish(parameter, function (success, result) {
-              if (self.obj_loading) self.obj_loading.hide();
-              if (result && result.message == "ok") {
-                self.flag_currentSetp = 3;
-              } else {
-                self.$fire({
-                  text: i18n.formatter.format("Failed"),
-                  type: "error",
-                  timer: 3000,
-                  confirmButtonColor: "#20a8d8",
-                });
+                if (self.obj_loading) self.obj_loading.hide();
+                if (result && result.message == "ok") {
+                  self.flag_currentSetp = 1;
+                } else {
+                  self.$fire({
+                    text: i18n.formatter.format("Failed"),
+                    type: "error",
+                    timer: 3000,
+                    confirmButtonColor: "#20a8d8",
+                  });
+                }
               }
-            });
+            );
           } else {
-            self.flag_currentSetp = 3;
-          } 
+            if (self.obj_loading) self.obj_loading.hide();
+            self.flag_currentSetp = 1;
+          }
         } else {
           self.$router.push({ name: self.value_returnRoutePath });
         }
