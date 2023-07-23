@@ -11,7 +11,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_inputAccessControlInfo, disp_inputAccessControlInfo, disp_selectSchedule, disp_complete]"
+        :steps="[disp_inputAccessControlInfo, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -24,42 +24,24 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
+          <AddWiegandConvertersStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
           <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
         </CCardBody>
       </CCard>
-
-      <!-- ROI -->
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
-        <CCardBody>
-         
-        </CCardBody>
-      </CCard>
-
-      <!-- FaceCapture Form -->
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
-        <CCardBody>
-          <!-- <AddCamerasStep3Form :step3form="step3form"  @updateStep3form="updateStep3form"/> -->
-        </CCardBody>
-      </CCard>
     </CCol>
-    {{ step3form.capture_interval }}
+    
     <!-- 按鈕的Col -->
+    <!-- AccoutForm -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
             >{{ value_returnRouteName }}
-          </CButton>
-        </div>
-        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
-            >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
-          :disabled="checkForm()"
           >{{ nextButtonName() }}
           </CButton>
         </div>
@@ -73,8 +55,7 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  // import AddCamerasStep1Form from './forms/AddCamerasStep1Form.vue'
-  // import AddCamerasStep3Form from './forms/AddCamerasStep3Form.vue'
+  import AddWiegandConvertersStep1Form from './forms/AddWiegandConvertersStep1Form.vue'
 
   export default {
     name: "AddCameras",
@@ -98,7 +79,6 @@
 
         /**Step 1 2 3 */
         disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
-        disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
         disp_complete: i18n.formatter.format("Complete"),
 
         /**btn */
@@ -110,7 +90,7 @@
           name: "",
           divice_groups: [],
 
-          stream_type: "rtsp",
+       
           ip_address: "",
           port: null, //Number(getPort)
           user: "",
@@ -118,28 +98,12 @@
           connection_info: ""
           
         },
-        step2form: {
-          roi: [
-            {
-                "x1": 0,
-                "y1": 0,
-                "x2": 0,
-                "y2": 0
-            }
-          ]
-        },
-
-        step3form: {
-          capture_interval: null,
-          target_score: null,
-          face_min_length: null
-        },
+     
 
       };
     },
     components: {
-      // AddCamerasStep1Form: AddCamerasStep1Form,
-      // AddCamerasStep3Form: AddCamerasStep3Form,
+      AddWiegandConvertersStep1Form: AddWiegandConvertersStep1Form,
       stepprogress: StepProgress,
     },
     mounted() {
@@ -150,49 +114,45 @@
       // 是否可以按下一步
       checkForm(){
         const self = this; 
-        if(self.flag_currentSetp === undefined || self.flag_currentSetp === 0) {
-          console.log(1)
-          return this.step1form.name === '' || this.step1form.divice_groups === '' || 
-          this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
-          this.step1form.port === '' || this.step1form.user === '' || 
-          this.step1form.pass === '' || this.step1form.connection_info === ''
-        } else if(self.flag_currentSetp === 1) {
-          //ROI todo
-          console.log(2)
-          return false
-        } 
-        else if(self.flag_currentSetp === 2) {
-          console.log(3)
-          const { target_score, face_min_length, capture_interval } = this.step3form;
+        // if(self.flag_currentSetp === undefined || self.flag_currentSetp === 0) {
+        //   console.log(1)
+        //   return this.step1form.name === '' || this.step1form.divice_groups === '' || 
+        //   this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
+        //   this.step1form.port === '' || this.step1form.user === '' || 
+        //   this.step1form.pass === '' || this.step1form.connection_info === ''
+        // } else if(self.flag_currentSetp === 1) {
+        //   //ROI todo
+        //   console.log(2)
+        //   return false
+        // } 
+        // else if(self.flag_currentSetp === 2) {
+        //   console.log(3)
+        //   const { target_score, face_min_length, capture_interval } = this.step3form;
 
-          // 檢查 target_score 是否只能輸入 0 或 1
-          if (target_score !== 0 && target_score !== 1) {
-            return true;
-          }
+        //   // 檢查 target_score 是否只能輸入 0 或 1
+        //   if (target_score !== 0 && target_score !== 1) {
+        //     return true;
+        //   }
 
-          // 檢查 face_min_length 是否只能輸入數字
-          if (!/^\d+$/.test(face_min_length)) {
-            return true;
-          }
+        //   // 檢查 face_min_length 是否只能輸入數字
+        //   if (!/^\d+$/.test(face_min_length)) {
+        //     return true;
+        //   }
 
-          // 檢查 capture_interval 是否在 100 到 1000 之間 不包含小數點
-          if (!/^\d+$/.test(capture_interval) || capture_interval < 100 || capture_interval > 1000) {
-            return true;
-          }
+        //   // 檢查 capture_interval 是否在 100 到 1000 之間 不包含小數點
+        //   if (!/^\d+$/.test(capture_interval) || capture_interval < 100 || capture_interval > 1000) {
+        //     return true;
+        //   }
 
-          // 全部條件都符合才回傳 false，即不禁用按鈕
-          return false;
-        }
+        //   // 全部條件都符合才回傳 false，即不禁用按鈕
+        //   return false;
+        // }
       },
       
       // 處理資料傳遞
       updateStep1form(newValue) {
         this.step1form = { ...newValue };
       },
-      updateStep3form(newValue) {
-        this.step3form = { ...newValue };
-      },
-
       
       // 決定現在顯示哪一個步驟
       showOnStep(step) {
@@ -246,42 +206,34 @@
         // todo
         const form = {
           ...this.step1form,
-          ...this.step2form,
-          ...this.step3form,
         }
         return form
-      },
-
+      },   
       clickOnNext() {
         const self = this;
-        // console.log(self.flag_currentSetp,"現在第幾步")
         if (self.flag_currentSetp == 0) {
-          self.flag_currentSetp = 1;
-        } else if (self.flag_currentSetp == 1) {
-          self.flag_currentSetp = 2;
-        } else if (self.flag_currentSetp == 2) {
+          self.flag_keepingDownload = false;
+          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
           if (self.onFinish) {
-            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-
             const parameter = self.handleParameter(); // 拿參數
-            // console.log("參數",parameter)
-         
             self.onFinish(parameter, function (success, result) {
-              if (self.obj_loading) self.obj_loading.hide();
-              if (result && result.message == "ok") {
-                self.flag_currentSetp = 3;
-              } else {
-                self.$fire({
-                  text: i18n.formatter.format("Failed"),
-                  type: "error",
-                  timer: 3000,
-                  confirmButtonColor: "#20a8d8",
-                });
+                if (self.obj_loading) self.obj_loading.hide();
+                if (result && result.message == "ok") {
+                  self.flag_currentSetp = 1;
+                } else {
+                  self.$fire({
+                    text: i18n.formatter.format("Failed"),
+                    type: "error",
+                    timer: 3000,
+                    confirmButtonColor: "#20a8d8",
+                  });
+                }
               }
-            });
+            );
           } else {
-            self.flag_currentSetp = 3;
-          } 
+            if (self.obj_loading) self.obj_loading.hide();
+            self.flag_currentSetp = 1;
+          }
         } else {
           self.$router.push({ name: self.value_returnRoutePath });
         }
