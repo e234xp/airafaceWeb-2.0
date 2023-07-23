@@ -10,14 +10,14 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_inputAccessControlInfo, disp_complete]"
+        :steps="[disp_inputAccessControlInfo, disp_inputAccessControlInfo, disp_selectSchedule, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
 
       <div style="height: 35px"></div>
     </div>
-
+    IOboxesBasic
     <!-- 步驟 -->
     <CCol sm="12">
       <!-- Basic Form-->
@@ -88,6 +88,8 @@
 
         /**Step 1 2 3 */
         disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
+        disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+
 
         /**btn */
         disp_complete: i18n.formatter.format("Complete"),

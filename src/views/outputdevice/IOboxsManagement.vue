@@ -1,121 +1,27 @@
 <template>
- <div id="wrapper">
-    <!-- 標題 -->
-    <div>
+  <div>
+    <CRow>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <IOboxsManagementForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
       </CCol>
-      <div style="height: 35px"></div>
-    </div>
-    <!-- 搜尋欄跟按鈕 -->
-    <div>
-      <CCol sm="12">
-        <CRow>
-            <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" >
-                {{ disp_add }}
-              </CButton>
-            </div>
-            <div>
-              <CButton
-                class="btn btn-danger mb-3"
-                size="lg"
-                @click="clickOnMultipleDelete()"
-              >
-                {{ disp_delete }}
-              </CButton>
-            </div>
-            <div style="margin-left: auto">
-              <CInput
-                v-model.lazy="value_searchingFilter"
-                style="width: 400px"
-                size="lg"
-                :placeholder="disp_search"
-              >
-                <template #prepend-content>
-                  <CIcon name="cil-search" />
-                </template>
-              </CInput>
-            </div>
-        </CRow>
-      </CCol>
-    </div>
-
-    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
-      @click="$router.push('IOboxesBasic')">
-      假按鈕
-    </CButton>
-
-    <!-- 下方資料 -->
-    <CCard>
-      <CCardBody>
-        <!-- {{ value_dataItemsToShow }} -->
-        <div>
-          <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row  @row-click="onRowClick">
-
-            <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
-
-            <vxe-table-column field="enable" :title="disp_enable" width="auto">
-              <template #default="{ row }"> 
-                <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-              </template>
-            </vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center" width="auto"></vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_status" width="auto" align="center">
-            </vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_ipAddress" width="auto" align="center">
-            </vxe-table-column>
-            
-            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_In" width="auto" align="center">
-            </vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
-            </vxe-table-column>
-
-            <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
-                <template #default="{ row }"> 
-                  <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-                </template>
-            </vxe-table-column> -->
-            
-          </vxe-table>
-        </div>
-
-        <vxe-pager :layouts="[
-            'PrevJump',
-            'PrevPage',
-            'Number',
-            'NextPage',
-            'NextJump',
-            'FullJump',
-            'Total',
-          ]" 
-          :current-page="value_tablePage.currentPage" 
-          :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" 
-          @page-change="handlePageChange">
-        </vxe-pager>
-      </CCardBody>
-    </CCard>
-
+    </CRow>
   </div>
 </template>
   
 <script>
+  import IOboxsManagementForm from './forms/IOboxsManagementForm.vue'
+
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
 
   export default {
-    name: 'IOboxs',
+    name: "IOboxsManagement",
+    mixins: [TableObserver],
+    components: { IOboxsManagementForm },
     data() {
       return {
-        value_dataItemsToShow: [{enable:false,name:'123',timestamp:'',remark:'',modifier:'',remark1:''}],
+        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
           currentPage: 1,
@@ -124,7 +30,7 @@
         },
         value_searchingFilter: "",
 
-        disp_header: i18n.formatter.format("OutputDeviceRelays"),
+        disp_header: i18n.formatter.format("VideoDeviceCameras"),
         disp_search: i18n.formatter.format("Search"),
         disp_add: i18n.formatter.format("Add"),
         disp_delete: i18n.formatter.format("Delete"),
@@ -144,72 +50,94 @@
       ...mapState(["ellipsisMode"]),
     },
     methods: {
-      onRowClick({ row }) {
-    console.log('Clicked row:', row);
-    // 执行跳转或其他操作
-    this.$router.push('WiegandBasic');
-  },
-      //分頁處理
-      handlePageChange({ currentPage, pageSize }) {
-        const self = this;
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        //this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-        this.resizeOneTable();
+      // 新增
+      onAdd() {
+        this.$router.push({
+          name: 'AddIOboxs', params: {
+            value_returnRoutePath: "ioboxsManagement",
+            value_returnRouteName: i18n.formatter.format("Return")
+          }
+        });
       },
-      // 表格資料處理及搜尋
-      generateFilteredData(sourceData, filter) {
+      onFetchDataCallback(cb) {
         const self = this;
-
-        //關鍵字搜尋  item.name裡面看有沒有找到filter
-        const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
-                return (
-                  item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-                );
-              });
-
-        self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
-
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize
-        );
-        console.log(sliceList,"sliceListABCS")
-        return Object.assign([], sliceList);
+        self.flag_keepingDownload = true;
+        self.downloadTableItemsAsync(0,3000, cb);
       },
-      clickOnAdd() {
-        console.log("ADD")
-      },
-      clickOnMultipleDelete() {
+      
+      async downloadTableItemsAsync(shitf,sliceSize, cb) {
         const self = this;
-        const list = this.$refs.mainTable.getCheckboxRecords();
-        if (list.length > 0) {
+        let reset = true;
+        let thereIsMoreData = true;
+        let ret = await self.$globalFindCameras("", shitf, sliceSize, cb);
+        //console.log(ret,"拿到的資料")
+        const list = ret.data.camera_list;
+        //console.log(list,"拿到的資料list")
+        const error = ret.error;
+        if( error == null ) {
+          if(cb) cb( null, reset, thereIsMoreData, list );
+          //console.log(null, true, false, list,"QQQ")
+
+        }
+        else {
+          if( cb ) cb( error, true, false, [] );
+          self.$fire({
+            title: i18n.formatter.format("NetworkLoss"),
+            text: "",
+            type: "error",
+            timer: 3000,
+            confirmButtonColor: "#20a8d8"
+          });
+        }
+      },
+      // 刪除
+      onDelete(items, cb) {
+        const self = this;
+        if (items && Array.isArray(items)) {
+          let uuidListToDel = [];
+          items.forEach(item => {
+            uuidListToDel.push(item.uuid);
+          });
           self.$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
             confirmButtonText: i18n.formatter.format("Confirm"),
             cancelButtonText: i18n.formatter.format("Cancel"),
             confirmButtonColor: "#20a8d8",
-            cancelButtonColor: "#f86c6b",
-          })
-          .then((v) => {
-            //self.deleteItem(list);
-          })
-          .catch((e) => {
+            cancelButtonColor: "#f86c6b"
+          }).then((v) => {
+            self.RemoveCameraAsync(uuidListToDel, cb);
+          }).catch((e) => {
             if (cb) cb(false);
           });
         }
       },
-      //切換 enable 開關
-      activeStatusChange(item) {
-        console.log("ABC")
+      //修改
+      async onModify(item) {
+        this.$router.push({
+          name: 'ModifyIOboxs', params: {
+            value_returnRoutePath: "ioboxsManagement",
+            value_returnRouteName: i18n.formatter.format("Return"),
+            item: item,
+          }
+        });
       },
-      headerCellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize: 18px";
+      async RemoveCameraAsync(uuid, cb) {
+        const self = this;
+        let ret = await self.$globalRemoveCameras(uuid);
+        const error = ret.error;
+        if (error) {
+          if (cb) cb(false);
+          self.$fire({
+            text: i18n.formatter.format("OperationFailed"),
+            type: "error",
+            timer: 3000,
+            confirmButtonColor: "#20a8d8",
+            confirmButtonText: i18n.formatter.format("OK")
+          });
+        }
+        else if (cb) cb(true);
       },
-        cellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize:18px;";
-      },
+     
     },
   }
 </script>
   
-

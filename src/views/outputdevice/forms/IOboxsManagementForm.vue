@@ -12,16 +12,12 @@
       <CCol sm="12">
         <CRow>
             <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" >
+              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="clickOnAdd()">
                 {{ disp_add }}
               </CButton>
             </div>
             <div>
-              <CButton
-                class="btn btn-danger mb-3"
-                size="lg"
-                @click="clickOnMultipleDelete()"
-              >
+              <CButton  class="btn btn-danger mb-3" size="lg" @click="clickOnMultipleDelete()">
                 {{ disp_delete }}
               </CButton>
             </div>
@@ -41,10 +37,10 @@
       </CCol>
     </div>
 
-    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+    <!-- <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
       @click="$router.push('IOboxesBasic')">
       假按鈕
-    </CButton>
+    </CButton> -->
 
     <!-- 下方資料 -->
     <CCard>
@@ -53,7 +49,7 @@
         <div>
           <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row  @row-click="onRowClick">
+              highlight-current-row  :edit-config="{ trigger: 'manual', mode: 'row' }">
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
@@ -70,12 +66,20 @@
 
             <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_ipAddress" width="auto" align="center">
             </vxe-table-column>
-            
-            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_In" width="auto" align="center">
+
+            <!-- 刪除、修改按鈕 -->
+            <vxe-table-column min-width="8%">
+              <template #default="{ row }">
+                <div class="d-flex flex-column align-items-center">
+                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
+                    }}</vxe-button>
+
+                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
+                    }}</vxe-button>
+                </div>
+              </template>
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark1" :title="disp_out" width="auto" align="center">
-            </vxe-table-column>
 
             <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
                 <template #default="{ row }"> 
@@ -113,6 +117,14 @@
 
   export default {
     name: 'IOboxs',
+    mixins: [TableObserver],
+    props: {
+      formData: Object,
+      onAdd: { type: Function },
+      onDelete: { type: Function },
+      onModify: { type: Function },
+      onFetchDataCallback: { type: Function },
+    },
     data() {
       return {
         value_dataItemsToShow: [{enable:false,name:'123',timestamp:'',remark:'',modifier:'',remark1:''}],
@@ -128,6 +140,7 @@
         disp_search: i18n.formatter.format("Search"),
         disp_add: i18n.formatter.format("Add"),
         disp_delete: i18n.formatter.format("Delete"),
+        disp_modify: i18n.formatter.format("Modify"),
 
 
         /*data table */
@@ -143,28 +156,62 @@
     computed: {
       ...mapState(["ellipsisMode"]),
     },
+    watch: {
+      value_searchingFilter: function (value) {
+        const self = this;
+        self.value_tablePage.currentPage = 1;
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+          this.value_searchingFilter
+        );
+      },
+    },
+    async mounted() {
+      const self = this;
+      self.refreshTableItems();
+    },
     methods: {
-      onRowClick({ row }) {
-    console.log('Clicked row:', row);
-    // 执行跳转或其他操作
-    this.$router.push('WiegandBasic');
-  },
       //分頁處理
       handlePageChange({ currentPage, pageSize }) {
         const self = this;
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        //this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-        this.resizeOneTable();
+        self.value_tablePage.currentPage = currentPage;
+        self.value_tablePage.pageSize = pageSize;
+        self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems,self.value_searchingFilter);
+        self.resizeOneTable();
+      },
+      refreshTableItems(cb) {
+        const self = this;
+        if(self.onFetchDataCallback) {
+        self.onFetchDataCallback(function (error, reset, more, tableItems) {
+            // console.log("Form",error, reset, more, tableItems)
+            // console.log("FormDT", tableItems)
+            if (!error) {
+              if (reset) {
+                self.value_allTableItems = [];
+                self.value_dataItemsToShow = [];
+              }
+              if (tableItems) {
+                self.value_allTableItems = self.value_allTableItems.concat(tableItems);
+                self.value_dataItemsToShow = self.generateFilteredData(
+                  self.value_allTableItems,
+                  self.value_searchingFilter
+                );
+                // console.log(self.value_allTableItems,"value_allTableItems")
+                // console.log(self.value_dataItemsToShow,"value_dataItemsToShow")
+              }
+              if (!more && cb) cb();
+            } else if (cb) cb();
+          });
+        } else if (cb) cb();
       },
       // 表格資料處理及搜尋
       generateFilteredData(sourceData, filter) {
         const self = this;
 
         //關鍵字搜尋  item.name裡面看有沒有找到filter
-        const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
+        const filteredItems = filter.length == 0 ? sourceData : sourceData.filter((item) => {
                 return (
-                  item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+                  item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
                 );
               });
 
@@ -174,11 +221,35 @@
           (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
           self.value_tablePage.currentPage * self.value_tablePage.pageSize
         );
-        console.log(sliceList,"sliceListABCS")
+
         return Object.assign([], sliceList);
       },
       clickOnAdd() {
-        console.log("ADD")
+        if (this.onAdd) this.onAdd(this.value_allTableItems);
+      },
+      deleteItem(listToDel) {
+        const self = this;
+        if (self.onDelete) {
+          self.onDelete(listToDel, function (success) {
+            if (success) {
+              listToDel.forEach((deletedItem) => {
+                self.value_allTableItems = self.value_allTableItems.filter(function (item) {
+                  return item.uuid !== deletedItem.uuid;
+                });
+              });
+              self.generateFilteredData(
+                self.value_allTableItems,
+                self.value_searchingFilter
+              );
+            }
+          });
+        }
+      },
+      clickOnSingleDelete(item) {
+        //console.log( "clickOnSingleDelete", item.uuid )
+        const list = [item];
+        //console.log( "list", list )
+        if (list.length > 0) this.deleteItem([item]);
       },
       clickOnMultipleDelete() {
         const self = this;
@@ -197,6 +268,10 @@
             if (cb) cb(false);
           });
         }
+      },
+      clickOnModify(item) {
+        console.log("修改",item)
+        if (this.onModify) this.onModify(item);
       },
       //切換 enable 開關
       activeStatusChange(item) {
