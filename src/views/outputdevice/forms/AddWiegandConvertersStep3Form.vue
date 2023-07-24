@@ -1,47 +1,22 @@
 <template>
   <div id="wrapper">
     <!-- 標題 -->
-    <div>
-      <h2 sm="12">{{ disp_DigitalOutPut1Title }}</h2>
-    </div>
-
+ 
     <!-- 項目 -->
-    <!-- Digital OutPut1 -->
-    <div class="form-check mb-3 ml-2">
-      <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="flexCheckDefault">
-      <label class="form-check-label mt-2" for="flexCheckDefault">
-        {{ disp_IOBoxesBasicEnable }}
-      </label>
+    <!-- Settings -->
+    <div class="mb-3">
+      <h2 sm="12">{{ disp_SettingsTitle }}</h2>
     </div>
-    
-    <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
-    <CRow>
-      <CCol sm="6">
-        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-        :invalid-feedback= "$t('NoEmptyNoSpace')"
-        valid-feedback="ok"
-        :is-valid="isNotEmpty"
-        required/>
-      </CCol>
-    </CRow>
 
     <div class="mt-3">
       <CRow sm="12">
-        <CCol sm="6" class="h5"  >
-          {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2"
-          :invalid-feedback= "$t('NoEmptyNoSpace')"
-          valid-feedback="ok"
-          :is-valid="isNotEmpty"
-          required/>
+        <CCol sm="6" class="h5">
+          {{ disp_WiegandBasicIndex }}
+          <CSelect size="lg" v-model="localStep3form.index" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
         </CCol>
-        <CCol sm="6" class="h5"  >
-          {{ disp_IOBoxesBasicDurationWhenTriggered }}
-          <CInput size="lg" class="mt-2" v-model="value_durationTriggered"
-          :invalid-feedback= "$t('NoEmptyNoSpace')"
-          valid-feedback="ok"
-          :is-valid="isNotEmpty"
-          required/>
+        <CCol sm="6" class="h5">
+          {{ disp_WiegandBasicSystemCode }}
+          <CSelect size="lg" v-model.number="localStep3form.syscode" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" /> 
         </CCol>
       </CRow>
     </div>
@@ -59,22 +34,20 @@
   export default {
     name: "AddCamerasStep3Form",
     props:{
-      step1form: Object
+      step3form: Object
     },
     data() {
       return {
-        localStep2form: { ...this.step2form },
+        localStep3form: { ...this.step3form },
 
         isChecked: true,
 
-        // /*Digital output1 title  */
-        disp_DigitalOutPut1Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut1"),
+        // /*Settings title  */
+        disp_SettingsTitle: i18n.formatter.format("WiegandBasicTitleNameSettings"),
 
         // /**content */
-        disp_IOBoxesBasicEnable: i18n.formatter.format("I/OBoxesBasicCOlNameEnable"),
-        disp_IOBoxesBasicDefaultValue: i18n.formatter.format("I/OBoxesBasicCOlNameDefaultValue"),
-        disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameValueWhenTriggered"),
-        disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameDurationWhenTriggered"),
+        disp_WiegandBasicIndex: i18n.formatter.format("WiegandBasicCOlNameIndex"),
+        disp_WiegandBasicSystemCode: i18n.formatter.format("WiegandBasicCOlNameSystemCode"),
 
         /**v-model */
         value_deviceGroups: "", /**選單 */
