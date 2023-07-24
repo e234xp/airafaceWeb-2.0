@@ -20,10 +20,19 @@ const i18n = new VueI18n({
     messages
 })
 
+//message is key , i18n.messages[i18n.locale][message] 該語系 =>所以會是該語系的某個key的value
 i18n.formatter = {
- format: (message, ...values) => {
-    return i18n.messages[i18n.locale][message]
- }
+    format: (message, ...values) => {
+        let ret = i18n.messages[i18n.locale][message];
+        return ret ?? "!" + message;
+        // if(ret) {
+        //     return ret
+        // } else {
+        //     return message
+        // }
+    }
 }
+
+
 
 export default i18n
