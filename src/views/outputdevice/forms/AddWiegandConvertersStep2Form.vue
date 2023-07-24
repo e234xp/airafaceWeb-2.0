@@ -39,8 +39,6 @@
       return {
           localStep2form: { ...this.step2form },
 
-          isChecked: true,
-
           /*Connection title  */
           disp_ConnectionTitle: i18n.formatter.format("WiegandBasicTitleNameConnection"),
 
