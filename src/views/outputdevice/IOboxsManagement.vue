@@ -54,7 +54,7 @@
       onAdd() {
         this.$router.push({
           name: 'AddIOboxs', params: {
-            value_returnRoutePath: "ioboxsManagement",
+            value_returnRoutePath: "IOboxsManagement",
             value_returnRouteName: i18n.formatter.format("Return")
           }
         });
@@ -114,7 +114,7 @@
       async onModify(item) {
         this.$router.push({
           name: 'ModifyIOboxs', params: {
-            value_returnRoutePath: "ioboxsManagement",
+            value_returnRoutePath: "IOboxsManagement",
             value_returnRouteName: i18n.formatter.format("Return"),
             item: item,
           }

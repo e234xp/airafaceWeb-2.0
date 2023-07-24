@@ -54,7 +54,7 @@
       onAdd() {
         this.$router.push({
           name: 'AddWiegandConverters', params: {
-            value_returnRoutePath: "Wiegandconverters",
+            value_returnRoutePath: "WiegandConverters",
             value_returnRouteName: i18n.formatter.format("Return")
           }
         });
@@ -114,7 +114,7 @@
       async onModify(item) {
         this.$router.push({
           name: 'ModifyWiegandConverters', params: {
-            value_returnRoutePath: "Wiegandconverters",
+            value_returnRoutePath: "WiegandConverters",
             value_returnRouteName: i18n.formatter.format("Return"),
             item: item,
           }
