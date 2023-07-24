@@ -45,7 +45,7 @@
     import "@/airacss/vue-multiselect.css";
 
     export default {
-      name: "AddCamerasStep1Form",
+      name: "AddCamerasStep2Form",
       props:{
         step2form: Object
       },
