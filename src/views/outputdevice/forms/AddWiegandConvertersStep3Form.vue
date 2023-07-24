@@ -40,8 +40,6 @@
       return {
         localStep3form: { ...this.step3form },
 
-        isChecked: true,
-
         // /*Settings title  */
         disp_SettingsTitle: i18n.formatter.format("WiegandBasicTitleNameSettings"),
 

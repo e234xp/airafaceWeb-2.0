@@ -43,16 +43,6 @@
       return {
         localStep1form: { ...this.step1form },
 
-        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
-        value_allTableItems: [],
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
-        },
-        value_searchingFilter: "",
-        isChecked: true,
-
         /*Basic title  */
         disp_header: i18n.formatter.format("WiegandBasicName"),
 
