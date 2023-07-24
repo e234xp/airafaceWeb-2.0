@@ -307,18 +307,40 @@
         }
       },
 
-      // 是否可以按下一步
       checkForm(){
-        if(self.flag_currentSetp === undefined) {
+        const self = this; 
+        if(self.flag_currentSetp === undefined || self.flag_currentSetp === 0) {
+          console.log(1)
           return this.step1form.name === '' || this.step1form.divice_groups === '' || 
           this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
           this.step1form.port === '' || this.step1form.user === '' || 
           this.step1form.pass === '' || this.step1form.connection_info === ''
-        } else if(self.flag_currentSetp === 0) {
-          //ROI todo
         } else if(self.flag_currentSetp === 1) {
-          // return this.step1form.capture_interval === false || this.step1form.divice_groups === '' || 
-          // this.step1form.stream_type === ''
+          //ROI todo
+          console.log(2)
+          return false
+        } 
+        else if(self.flag_currentSetp === 2) {
+          console.log(3)
+          const { target_score, face_min_length, capture_interval } = this.step3form;
+
+          // 檢查 target_score 是否只能輸入 0 或 1
+          if (target_score !== 0 && target_score !== 1) {
+            return true;
+          }
+
+          // 檢查 face_min_length 是否只能輸入數字
+          if (!/^\d+$/.test(face_min_length)) {
+            return true;
+          }
+
+          // 檢查 capture_interval 是否在 100 到 1000 之間 不包含小數點
+          if (!/^\d+$/.test(capture_interval) || capture_interval < 100 || capture_interval > 1000) {
+            return true;
+          }
+
+          // 全部條件都符合才回傳 false，即不禁用按鈕
+          return false;
         }
       },
 
