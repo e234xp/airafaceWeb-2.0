@@ -12,7 +12,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_inputAccessControlInfo, disp_inputAccessControlInfo, disp_selectSchedule, disp_complete]"
+        :steps="[disp_step1, disp_step2, disp_step3, disp_step4, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -25,39 +25,33 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          
           <AddIOboxesStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
-          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
         </CCardBody>
       </CCard>
 
-       <!-- Basic Form-->
+       <!-- Connection Form-->
        <CCard :class="showOnStep(1)">
         <CCardBody>
-          <AddIOboxesStep2Form :step1form="step1form" @updateStep1form="updateStep1form"/>
-          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+          <AddIOboxesStep2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
         </CCardBody>
       </CCard>
 
-       <!-- Basic Form-->
+       <!-- Digital output1 Form-->
        <CCard :class="showOnStep(2)">
         <CCardBody>
-          <AddIOboxesStep3Form :step1form="step1form" @updateStep1form="updateStep1form"/>
-          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+          <AddIOboxesStep3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
         </CCardBody>
       </CCard>
 
-       <!-- Basic Form-->
+       <!-- Digital output2 Form-->
        <CCard :class="showOnStep(3)">
         <CCardBody>
-          <AddIOboxesStep4Form :step1form="step1form" @updateStep1form="updateStep1form"/>
-          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+          <AddIOboxesStep4Form :step4form="step4form" @updateStep4form="updateStep4form"/>
         </CCardBody>
       </CCard>
     </CCol>
     
     <!-- 按鈕的Col -->
-    
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
@@ -114,8 +108,10 @@
         flag_currentSetp: 0,
 
         /**Step 1 2 3 */
-        disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
-        disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+        disp_step1: i18n.formatter.format("VideoDeviceBasic"),
+        disp_step2: i18n.formatter.format("VideoDeviceConnection"),
+        disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+        disp_step4: i18n.formatter.format("VideoDeviceDigitalOutPut2"),
         disp_complete: i18n.formatter.format("Complete"),
 
         /**btn */
@@ -126,14 +122,32 @@
         step1form: {
           name: "",
           divice_groups: [],
-
-       
           ip_address: "",
           port: null, //Number(getPort)
           user: "",
           pass: "",
           connection_info: ""
-          
+        },
+
+        step2form: {
+          ip_address: "",
+          port: null, //Number(getPort)
+          user: "",
+          pass: "",
+        },
+
+        step3form: {
+          efg: "",
+          z: [],
+          abc: "",
+          b: [],
+        },
+
+        step4form: {
+          id: "",
+          opq: [],
+          abc: "",
+          b: [],
         },
      
 
@@ -147,9 +161,7 @@
       AddIOboxesStep4Form: AddIOboxesStep4Form,
       stepprogress: StepProgress,
     },
-    mounted() {
-      
-    },
+   
    
     methods: {
       // 是否可以按下一步
@@ -193,6 +205,15 @@
       // 處理資料傳遞
       updateStep1form(newValue) {
         this.step1form = { ...newValue };
+      },
+      updateStep2form(newValue) {
+        this.step2form = { ...newValue };
+      },
+      updateStep3form(newValue) {
+        this.step3form = { ...newValue };
+      },
+      updateStep4form(newValue) {
+        this.step4form = { ...newValue };
       },
       
       // 決定現在顯示哪一個步驟
@@ -247,6 +268,9 @@
         // todo
         const form = {
           ...this.step1form,
+          ...this.step2form,
+          ...this.step3form,
+          ...this.step4form,
         }
         return form
       },   
@@ -265,7 +289,7 @@
 
             const parameter = self.handleParameter(); // 拿參數
             // console.log("參數",parameter)
-         
+
             self.onFinish(parameter, function (success, result) {
               if (self.obj_loading) self.obj_loading.hide();
               if (result && result.message == "ok") {
