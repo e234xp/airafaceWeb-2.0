@@ -9,11 +9,11 @@
           <CRow sm="12">
             <CCol sm="6" class="h5">
               {{ disp_WiegandBasicDeviceName }}
-              <CInput size="lg" class="mt-2" />
+              <CInput size="lg" class="mt-2" v-model="localStep1form.name"/>
             </CCol>
             <CCol sm="6" class="h5">
               {{ disp_WiegandBasicDeviceGroups }}
-              <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
+              <CSelect size="lg" v-model="localStep1form.value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
               :invalid-feedback= "$t('NoEmptyNoSpace')"
               valid-feedback="ok"
               :is-valid="isNotEmpty"
