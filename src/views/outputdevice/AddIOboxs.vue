@@ -1,7 +1,8 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t('VideoDeviceBasic') }}</div>
+      <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
+      <div class="h1">{{ disp_headertitle }}</div>
 
       <stepprogress
         class="w-step-progress-4"
@@ -24,24 +25,55 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <AddWiegandConvertersStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          
+          <AddIOboxesStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+        </CCardBody>
+      </CCard>
+
+       <!-- Basic Form-->
+       <CCard :class="showOnStep(1)">
+        <CCardBody>
+          <AddIOboxesStep2Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+        </CCardBody>
+      </CCard>
+
+       <!-- Basic Form-->
+       <CCard :class="showOnStep(2)">
+        <CCardBody>
+          <AddIOboxesStep3Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
+        </CCardBody>
+      </CCard>
+
+       <!-- Basic Form-->
+       <CCard :class="showOnStep(3)">
+        <CCardBody>
+          <AddIOboxesStep4Form :step1form="step1form" @updateStep1form="updateStep1form"/>
           <!-- <AddCamerasStep1Form :step1form="step1form"  @updateStep1form="updateStep1form"/> -->
         </CCardBody>
       </CCard>
     </CCol>
     
     <!-- 按鈕的Col -->
-    <!-- AccoutForm -->
+    
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
             >{{ value_returnRouteName }}
+          </CButton>
+        </div>
+        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2 || flag_currentSetp == 3">
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+            >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          :disabled="checkForm()"
           >{{ nextButtonName() }}
           </CButton>
         </div>
@@ -55,7 +87,11 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import AddWiegandConvertersStep1Form from './forms/AddWiegandConvertersStep1Form.vue'
+  import IOboxesBasic from './forms/IOboxesBasic.vue'
+  import AddIOboxesStep1Form from './forms/AddIOboxesStep1Form.vue'
+  import AddIOboxesStep2Form from './forms/AddIOboxesStep2Form.vue'
+  import AddIOboxesStep3Form from './forms/AddIOboxesStep3Form.vue'
+  import AddIOboxesStep4Form from './forms/AddIOboxesStep4Form.vue'
 
   export default {
     name: "AddCameras",
@@ -104,7 +140,11 @@
       };
     },
     components: {
-      AddWiegandConvertersStep1Form: AddWiegandConvertersStep1Form,
+      IOboxesBasic: IOboxesBasic,
+      AddIOboxesStep1Form: AddIOboxesStep1Form,
+      AddIOboxesStep2Form: AddIOboxesStep2Form,
+      AddIOboxesStep3Form: AddIOboxesStep3Form,
+      AddIOboxesStep4Form: AddIOboxesStep4Form,
       stepprogress: StepProgress,
     },
     mounted() {
@@ -212,29 +252,36 @@
       },   
       clickOnNext() {
         const self = this;
+        // console.log(self.flag_currentSetp,"現在第幾步")
         if (self.flag_currentSetp == 0) {
-          self.flag_keepingDownload = false;
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+          self.flag_currentSetp = 1;
+        } else if (self.flag_currentSetp == 1) {
+          self.flag_currentSetp = 2;
+        } else if (self.flag_currentSetp == 2) {
+          self.flag_currentSetp = 3;
+        } else if (self.flag_currentSetp == 3) {
           if (self.onFinish) {
+            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+
             const parameter = self.handleParameter(); // 拿參數
+            // console.log("參數",parameter)
+         
             self.onFinish(parameter, function (success, result) {
-                if (self.obj_loading) self.obj_loading.hide();
-                if (result && result.message == "ok") {
-                  self.flag_currentSetp = 1;
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format("Failed"),
-                    type: "error",
-                    timer: 3000,
-                    confirmButtonColor: "#20a8d8",
-                  });
-                }
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message == "ok") {
+                self.flag_currentSetp = 4;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format("Failed"),
+                  type: "error",
+                  timer: 3000,
+                  confirmButtonColor: "#20a8d8",
+                });
               }
-            );
+            });
           } else {
-            if (self.obj_loading) self.obj_loading.hide();
-            self.flag_currentSetp = 1;
-          }
+            self.flag_currentSetp = 4;
+          } 
         } else {
           self.$router.push({ name: self.value_returnRoutePath });
         }
