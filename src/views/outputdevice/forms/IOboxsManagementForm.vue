@@ -37,10 +37,10 @@
       </CCol>
     </div>
 
-    <!-- <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
+    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
       @click="$router.push('IOboxesBasic')">
       假按鈕
-    </CButton> -->
+    </CButton>
 
     <!-- 下方資料 -->
     <CCard>
