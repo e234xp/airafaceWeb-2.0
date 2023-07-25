@@ -111,8 +111,8 @@ const ModifyWiegandConverters = () => import('@/views/outputdevice/ModifyWiegand
 
 
 
-const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
-const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
+// const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
+// const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
 
 Vue.use(VueRouter)
 
@@ -515,16 +515,16 @@ function configRoutes() {
               name: 'OutputDeviceGroups',
               component: OutputDeviceGroups
             },
-            {
-              path: 'iOboxesBasic',
-              name: 'IOboxesBasic',
-              component: IOboxesBasic
-            },
-            {
-              path: 'wiegandBasic',
-              name: 'WiegandBasic',
-              component: WiegandBasic
-            },
+            // {
+            //   path: 'iOboxesBasic',
+            //   name: 'IOboxesBasic',
+            //   component: IOboxesBasic
+            // },
+            // {
+            //   path: 'wiegandBasic',
+            //   name: 'WiegandBasic',
+            //   component: WiegandBasic
+            // },
           ]
         },
       ]

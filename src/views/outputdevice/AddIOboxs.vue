@@ -81,7 +81,6 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import IOboxesBasic from './forms/IOboxesBasic.vue'
   import AddIOboxesStep1Form from './forms/AddIOboxesStep1Form.vue'
   import AddIOboxesStep2Form from './forms/AddIOboxesStep2Form.vue'
   import AddIOboxesStep3Form from './forms/AddIOboxesStep3Form.vue'
