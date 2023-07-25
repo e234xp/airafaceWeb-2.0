@@ -40,7 +40,7 @@
     <!-- 下方資料 -->
     <CCard>
       <CCardBody>
-        <!-- {{ value_dataItemsToShow }} -->AAAAAB123
+        <!-- {{ value_dataItemsToShow }} -->
         <div>
           <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
@@ -59,10 +59,11 @@
             <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column min-width="8%">
+            <!-- 刪除、修改按鈕 -->
+            <vxe-table-column min-width="8%" >
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
+                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)"> {{ disp_modify
                     }}</vxe-button>
 
                   <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
@@ -109,7 +110,7 @@
     name: "OutputDeviceGroupsForm",
     data() {
       return {
-        value_dataItemsToShow: [],
+        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
         value_allTableItems: [],
         value_tablePage: {
           currentPage: 1,

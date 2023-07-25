@@ -110,7 +110,7 @@
       name: "DeviceGroups",
       data() {
         return {
-          value_dataItemsToShow: [],
+          value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
           value_allTableItems: [],
           value_tablePage: {
             currentPage: 1,
