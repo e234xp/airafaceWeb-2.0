@@ -36,10 +36,6 @@
             </div>
         </CRow>
       </CCol>
-      <!-- <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
-        @click="detailSetting()">
-        假按鈕
-      </CButton> -->
     </div>
 
     <!-- 下方資料 -->
