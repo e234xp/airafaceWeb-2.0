@@ -219,7 +219,7 @@
         return Object.assign([], sliceList);
       },
       clickOnAdd() {
-         if (this.onAdd) this.onAdd(this.value_allTableItems);
+        if (this.onAdd) this.onAdd(this.value_allTableItems);
       },
       deleteItem(listToDel) {
         const self = this;
