@@ -913,3 +913,93 @@ Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
     });
   });
 };
+
+// 韋根
+Vue.prototype.$globalFindWiegandConverters = function (uuid, shift, sliceSize, cb) {
+  return new Promise((resolve) => {
+    const query = { 
+      uuid: uuid,
+      slice_shift: shift,
+      slice_length: sliceSize
+    };
+    postJson2("/airafacelite/findwiegandconverter", query, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalCreateWiegandConverters = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/createwiegandconverter", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalModifyWiegandConverters = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/modifywiegandconverter", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalRemoveWiegandConverters = function (uuid, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+// IO Box
+Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
+  return new Promise((resolve) => {
+    const query = { 
+      uuid: uuid,
+      slice_shift: shift,
+      slice_length: sliceSize
+    };
+    postJson2("/airafacelite/findwiegandconverter", query, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalCreateIobox = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/createwiegandconverter", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalModifyIobox = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/modifywiegandconverter", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalRemoveIobox = function (uuid, cb) {
+  return new Promise((resolve) => {
+    postJson2("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
