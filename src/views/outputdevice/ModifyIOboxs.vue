@@ -23,10 +23,31 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <ModifyWiegandConvertersStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <ModifyIOboxesStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
         </CCardBody>
       </CCard>
     </CCol>
+
+    <!-- Connection Form-->
+    <CCard :class="showOnStep(1)">
+        <CCardBody>
+          <ModifyIOboxesStep2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
+        </CCardBody>
+      </CCard>
+
+       <!-- Digital output1 Form-->
+       <CCard :class="showOnStep(2)">
+        <CCardBody>
+          <ModifyIOboxesStep3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
+        </CCardBody>
+      </CCard>
+
+       <!-- Digital output2 Form-->
+       <CCard :class="showOnStep(3)">
+        <CCardBody>
+          <ModifyIOboxesStep4Form :step4form="step4form" @updateStep4form="updateStep4form"/>
+        </CCardBody>
+      </CCard>
 
     <!-- 按鈕的Col -->
     <CCol sm="12">
@@ -36,15 +57,17 @@
             >{{ value_returnRouteName }}
           </CButton>
         </div>
+        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2 || flag_currentSetp == 3">
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+            >{{ disp_previous }}
+          </CButton>
+        </div>
         <div style="width: 20px"></div>
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
-          >{{ nextButtonName() }}
-          </CButton>
-          <!-- <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
           :disabled="checkForm()"
           >{{ nextButtonName() }}
-          </CButton> -->
+          </CButton>
         </div>
       </div>
     </CCol> 
@@ -56,13 +79,19 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import ModifyWiegandConvertersStep1Form from './forms/ModifyWiegandConvertersStep1Form.vue'
+  import ModifyIOboxesStep1Form from './forms/ModifyIOboxesStep1Form.vue'
+  import ModifyIOboxesStep2Form from './forms/ModifyIOboxesStep2Form.vue'
+  import ModifyIOboxesStep3Form from './forms/ModifyIOboxesStep3Form.vue'
+  import ModifyIOboxesStep4Form from './forms/ModifyIOboxesStep4Form.vue'
 
 
   export default {
     name: "ModifyCameras",
     components: {
-      ModifyWiegandConvertersStep1Form: ModifyWiegandConvertersStep1Form,
+      ModifyIOboxesStep1Form: ModifyIOboxesStep1Form,
+      ModifyIOboxesStep2Form: ModifyIOboxesStep2Form,
+      ModifyIOboxesStep3Form: ModifyIOboxesStep3Form,
+      ModifyIOboxesStep4Form: ModifyIOboxesStep4Form,
       stepprogress: StepProgress, 
     },
     data() {
@@ -96,17 +125,6 @@
         disp_previous: i18n.formatter.format("Previous"),
         disp_next: i18n.formatter.format("Next"),
 
-        step1form: {
-          name: "",
-          divice_groups: [],
-
-          ip_address: "",
-          port: null, //Number(getPort)
-          user: "",
-          pass: "",
-          connection_info: ""
-          
-        },
 
         //要編輯的id
         value_cameraUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
@@ -125,6 +143,12 @@
 
         
         step1form: {},
+
+        step2form: {},
+
+        step3form: {},
+
+        step4form: {},
 
       };
     },
@@ -154,8 +178,14 @@
       updateStep1form(updatedForm) {
         this.step1form = { ...updatedForm };
       },
-      updateStep3form(newValue) {
-        this.step3form = { ...newValue };
+      updateStep2form(updatedForm) {
+        this.step2form = { ...updatedForm };
+      },
+      updateStep3form(updatedForm) {
+        this.step3form = { ...updatedForm };
+      },
+      updateStep4form(updatedForm) {
+        this.step4form = { ...updatedForm };
       },
 
       // 決定現在顯示哪一個步驟
@@ -219,29 +249,36 @@
 
       clickOnNext() {
         const self = this;
+        // console.log(self.flag_currentSetp,"現在第幾步")
         if (self.flag_currentSetp == 0) {
-          self.flag_keepingDownload = false;
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+          self.flag_currentSetp = 1;
+        } else if (self.flag_currentSetp == 1) {
+          self.flag_currentSetp = 2;
+        } else if (self.flag_currentSetp == 2) {
+          self.flag_currentSetp = 3;
+        } else if (self.flag_currentSetp == 3) {
           if (self.onFinish) {
+            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+
             const parameter = self.handleParameter(); // 拿參數
+            // console.log("參數",parameter)
+
             self.onFinish(parameter, function (success, result) {
-                if (self.obj_loading) self.obj_loading.hide();
-                if (result && result.message == "ok") {
-                  self.flag_currentSetp = 1;
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format("Failed"),
-                    type: "error",
-                    timer: 3000,
-                    confirmButtonColor: "#20a8d8",
-                  });
-                }
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message == "ok") {
+                self.flag_currentSetp = 4;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format("Failed"),
+                  type: "error",
+                  timer: 3000,
+                  confirmButtonColor: "#20a8d8",
+                });
               }
-            );
+            });
           } else {
-            if (self.obj_loading) self.obj_loading.hide();
-            self.flag_currentSetp = 1;
-          }
+            self.flag_currentSetp = 4;
+          } 
         } else {
           self.$router.push({ name: self.value_returnRoutePath });
         }
@@ -264,17 +301,17 @@
 
       // 是否可以按下一步
       checkForm(){
-        if(self.flag_currentSetp === undefined) {
-          return this.step1form.name === '' || this.step1form.divice_groups === '' || 
-          this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
-          this.step1form.port === '' || this.step1form.user === '' || 
-          this.step1form.pass === '' || this.step1form.connection_info === ''
-        } else if(self.flag_currentSetp === 0) {
-          //ROI todo
-        } else if(self.flag_currentSetp === 1) {
-          // return this.step1form.capture_interval === false || this.step1form.divice_groups === '' || 
-          // this.step1form.stream_type === ''
-        }
+        // if(self.flag_currentSetp === undefined) {
+        //   return this.step1form.name === '' || this.step1form.divice_groups === '' || 
+        //   this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
+        //   this.step1form.port === '' || this.step1form.user === '' || 
+        //   this.step1form.pass === '' || this.step1form.connection_info === ''
+        // } else if(self.flag_currentSetp === 0) {
+        //   //ROI todo
+        // } else if(self.flag_currentSetp === 1) {
+        //   // return this.step1form.capture_interval === false || this.step1form.divice_groups === '' || 
+        //   // this.step1form.stream_type === ''
+        // }
       },
 
     },

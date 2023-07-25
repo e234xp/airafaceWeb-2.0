@@ -1,177 +1,113 @@
 <template>
-  <div id="wrapper">
-    <!-- 標題 -->
-    <div>
+    <div id="wrapper">
+      <!-- 標題 -->
+      <div>
       <CCol sm="12">
-        <td class="h2">{{ disp_header }}</td>
+          <td class="h1">{{ disp_header }}</td>
       </CCol>
-      WiegandConverters
-      <div style="height: 35px"></div>
-    </div>
 
-   <div class="content">
+      <div style="height: 35px"></div>
+      </div>
       <!-- Basic -->
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicDeviceName }}
-            <CInput size="lg" class="mt-2" style="width: 100%;" v-model="localStep1form.name"/>
+          <CCol sm="6" class="h5" >
+            {{ disp_IOBoxesBasicBrand }}
+            <CSelect size="lg" value="1" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
           </CCol>
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicDeviceGroups }}
-            <v-select v-model="localStep1form.stream_type" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
-            </v-select>
-          </CCol>
-        </CRow>
-      </div>
-
-      <div style="height: 35px"></div>
-
-      <!-- Connection -->
-      <div class="mb-3">
-        <h2 sm="12">{{ disp_ConnectionTitle }}</h2>
-      </div>
-          
-      <div class="mt-3">
-        <CRow sm="12">
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicIP }}
-            <CInput size="lg" class="mt-2" v-model="localStep1form.ip_address"/>
-          </CCol>
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicPort }}
-            <CInput size="lg" class="mt-2" v-model="localStep1form.port"/>
+          <CCol sm="6" class="h5"  >
+            {{ disp_IOBoxesBasicModel }}
+            <CSelect size="lg" value="1" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
           </CCol>
         </CRow>
-      </div>
-
-      <div style="height: 35px"></div>
-
-      <!-- Settings -->
-      <div class="mb-3">
-        <h2 sm="12">{{ disp_SettingsTitle }}</h2>
       </div>
 
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicIndex }}
-            <v-select v-model="localStep1form.ip_address" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
-            </v-select>
+          <CCol sm="6" class="h5"  >
+            {{ disp_IOBoxesBasicDeviceName }}
+            <CInput size="lg" class="mt-2" v-model="value_deviceGroups" />
           </CCol>
-          <CCol sm="6" class="h5">
-            {{ disp_WiegandBasicSystemCode }}
-            <v-select v-model="localStep1form.port" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
-            </v-select>
+          <CCol sm="6" class="h5" >
+            {{ disp_IOBoxesBasicDeviceGroups }}
+            <multiselect class="mt-2"  v-model="value_deviceGroups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
+              :taggable="true" :hideSelected="true" 
+              :show-no-options="false"
+            >
+            </multiselect>
           </CCol>
         </CRow>
       </div>
 
-      <div style="height: 35px"></div>
-   </div>
-   
+    </div>
+  </template>
+    
+  <script>
+    import i18n from "@/i18n";
 
-
-  </div>
-</template>
-  
-<script>
-  import { mapState } from "vuex";
-  import TableObserver from "@/utils/TableObserver.vue";
-  import i18n from "@/i18n";
-
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
-	
-
-
-
-  export default {
-    name: "ModifyCamerasStep1Form",
-    props:{
-      step1form: Object
-    },
-    data() {
+    import VueSelect from 'vue-select';
+    import Multiselect from "vue-multiselect";
+    import "@/airacss/vue-multiselect.css";
+        
+    export default {
+      name: "AddCamerasStep1Form",
+      props:{
+        step1form: Object
+      },
+      data() {
       return {
-        localStep1form: { ...this.step1form },
+          localStep1form: { ...this.step1form },
 
-        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
-        value_allTableItems: [],
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
+          isChecked: true,
+
+          /*Basic title  */
+          disp_header: i18n.formatter.format("I/OBoxesBasicName"),
+
+          /**content */
+          disp_IOBoxesBasicBrand: i18n.formatter.format("I/OBoxesBasicCOlNameBrand"),
+          disp_IOBoxesBasicModel: i18n.formatter.format("I/OBoxesBasicCOlNameModel"),
+          disp_IOBoxesBasicDeviceName: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceName"),
+          disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
+
+          /**v-model */
+          value_deviceGroups: "", /**選單 */
+          value_deviceGroupsList: [1,2,3]
+        };
+      },
+      components: {
+        "v-select": VueSelect,
+        multiselect: Multiselect,
+      },
+      //預設值
+      created() {
+        this.defaultPortValue();
+        this.localStep1form.user = "admin",
+        this.localStep1form.pass = "123456"
+        this.localStep1form.connection_info = "/media/video1"
+      }, 
+      // 拿資料 寫入資料
+      watch: {
+        localStep1form: {
+          handler(newValue) {
+            console.log('emit updateStep1form')
+            this.$emit('updateStep1form', { ...newValue });
+          },
+          deep: true,
         },
-        value_searchingFilter: "",
-        isChecked: true,
-
-        /*Basic title  */
-        disp_header: i18n.formatter.format("WiegandBasicName"),
-
-        /**content */
-        disp_WiegandBasicDeviceName: i18n.formatter.format("WiegandBasicCOlNameDeviceName"),
-        disp_WiegandBasicDeviceGroups: i18n.formatter.format("WiegandBasicCOlNameDeviceGroups"),
- 
-        /*Connection title  */
-        disp_ConnectionTitle: i18n.formatter.format("WiegandBasicTitleNameConnection"),
-
-        /**content */
-        disp_WiegandBasicIP: i18n.formatter.format("WiegandBasicCOlNameIP"),
-        disp_WiegandBasicPort: i18n.formatter.format("WiegandBasicCOlNamePort"),
-
-
-        // /*Settings title  */
-        disp_SettingsTitle: i18n.formatter.format("WiegandBasicTitleNameSettings"),
-
-        // /**content */
-        disp_WiegandBasicIndex: i18n.formatter.format("WiegandBasicCOlNameIndex"),
-        disp_WiegandBasicSystemCode: i18n.formatter.format("WiegandBasicCOlNameSystemCode"),
-
-
-        disp_save: i18n.formatter.format("Save"),
-
-        /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
-      };
-    },
-    components: {
-      "v-select": VueSelect,
-      multiselect: Multiselect,
-    },
-    watch: {
-      localStep1form: {
-        handler(newValue) {
-          console.log('emit updateStep1form')
-          this.$emit('updateStep1form', { ...newValue });
+      },
+      methods: {
+        defaultPortValue() {
+          this.localStep1form.port = 554;
+          return this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535;
         },
-        deep: true,
+        // 判斷欄位空值
+        isNotEmpty(value) {
+          return value !== null && value !== undefined && value !== '';
+        }
       },
     }
+  </script>
 
-    
-    // watch: {
-    //   localStep1form: {
-    //     immediate: true,
-    //     handler(newValue) {
-    //       // 当父组件传递的 form prop 发生变化时，将其保存到本地的 localForm 中
-    //       this.localStep1form = { ...newValue };
-    //     },
-    //   },
-      
-    // },
-    // methods: {
-    //   updateForm() {
-    //     // 触发自定义事件将更新后的 localForm 数据传递回父组件
-    //     this.$emit("updateForm", this.localStep1form);
-    //   },
-    // },
-
-  }
-</script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
+  <style>
+    @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
+  </style>
