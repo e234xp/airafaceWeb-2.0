@@ -262,7 +262,7 @@ let nav = [
         items: [
           {
             permission: ["Admin", "PowerUser"],
-            name: i18n.formatter.format("IOboxs"),
+            name: i18n.formatter.format("IOboxes"),
             to: "/outputdevice/ioboxsManagement",
           },
           {

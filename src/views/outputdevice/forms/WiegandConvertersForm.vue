@@ -129,7 +129,7 @@
         },
         value_searchingFilter: "",
 
-        disp_header: i18n.formatter.format("OutputDeviceRelays"),
+        disp_header: i18n.formatter.format("OutputDeviceRelaysWG"),
         disp_search: i18n.formatter.format("Search"),
         disp_add: i18n.formatter.format("Add"),
         disp_delete: i18n.formatter.format("Delete"),
