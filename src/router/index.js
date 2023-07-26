@@ -84,7 +84,7 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 
 ///////////////////////////////////////////
 /////////// device ///////////
-const CamerasManagement = () => import('@/views/videodevice/CamerasManagement')
+const CameraList = () => import('@/views/videodevice/CameraList')
 const Tablets = () => import('@/views/videodevice/Tablets')
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
 // const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
@@ -94,7 +94,7 @@ const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAcc
 
 ///////////////////////////////////////////
 /////////// device add update///////////
-const AddCameras = () => import('@/views/videodevice/AddCameras')
+const AddCamera = () => import('@/views/videodevice/AddCamera')
 const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
 
 
@@ -429,16 +429,16 @@ function configRoutes() {
         //新項目路由
         {
           path: 'videodevice',
-          redirect: '/videodevice/Cameras',
+          redirect: '/videodevice/cameralist',
           name: 'VideoDevice',
           component: {
             render(c) { return c('router-view') }
           },
           children: [
             {
-              path: 'camerasManagement',
-              name: 'CamerasManagement',
-              component: CamerasManagement
+              path: 'cameralist',
+              name: 'CameraList',
+              component: CameraList
             },
             {
               path: 'tablets',
@@ -451,9 +451,9 @@ function configRoutes() {
               component: DeviceGroups
             },
             {
-              path: 'addCameras',
-              name: 'AddCameras',
-              component: AddCameras
+              path: 'addcamera',
+              name: 'AddCamera',
+              component: AddCamera
             },
             {
               path: 'modifyCameras',
