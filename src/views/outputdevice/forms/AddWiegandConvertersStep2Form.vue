@@ -1,38 +1,25 @@
   <template>
     <div id="wrapper">
       <!-- 標題 -->
-      <div>
-          <h2 sm="12">{{ disp_ConnectionTitle }}</h2>
-      </div>
     
       <!-- 項目 -->
       <!-- Connection -->
-      <div class="mt-3">
-          <CRow sm="12">
-          <CCol sm="6" class="h5"  >
-              {{ disp_IOBoxesBasicIP }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" />
-          </CCol>
-          <CCol sm="6" class="h5"  >
-              {{ disp_IOBoxesBasicPort }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.port" />
-          </CCol>
-          </CRow>
+      <div class="mb-3">
+        <h2 sm="12">{{ disp_ConnectionTitle }}</h2>
       </div>
-
+          
       <div class="mt-3">
-          <CRow sm="12">
-          <CCol sm="6" class="h5"  >
-              {{ disp_IOBoxesBasicUserName }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.user" />
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_WiegandBasicIP }}
+            <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address"/>
           </CCol>
-          <CCol sm="6" class="h5"  >
-              {{ disp_IOBoxesBasicPassword }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.pass" type="password"/>
+          <CCol sm="6" class="h5">
+            {{ disp_WiegandBasicPort }}
+            <CInput size="lg" class="mt-2" v-model.number="localStep2form.port"/>
           </CCol>
-          </CRow>
+        </CRow>
       </div>
-
 
     </div>
   </template>
@@ -40,7 +27,6 @@
   <script>
     import i18n from "@/i18n";
 
-    import VueSelect from 'vue-select';
     import Multiselect from "vue-multiselect";
     import "@/airacss/vue-multiselect.css";
 
@@ -53,16 +39,12 @@
       return {
           localStep2form: { ...this.step2form },
 
-          isChecked: true,
-
           /*Connection title  */
-          disp_ConnectionTitle: i18n.formatter.format("I/OBoxesBasicTitleNameConnection"),
+          disp_ConnectionTitle: i18n.formatter.format("WiegandBasicTitleNameConnection"),
 
           /**content */
-          disp_IOBoxesBasicIP: i18n.formatter.format("I/OBoxesBasicCOlNameIP"),
-          disp_IOBoxesBasicPort: i18n.formatter.format("I/OBoxesBasicCOlNamePort"),
-          disp_IOBoxesBasicUserName: i18n.formatter.format("I/OBoxesBasicCOlNameUserName"),
-          disp_IOBoxesBasicPassword: i18n.formatter.format("I/OBoxesBasicCOlNamePassword"),
+          disp_WiegandBasicIP: i18n.formatter.format("WiegandBasicCOlNameIP"),
+          disp_WiegandBasicPort: i18n.formatter.format("WiegandBasicCOlNamePort"),
 
           /**v-model */
           value_deviceGroups: "", /**選單 */
@@ -70,7 +52,6 @@
         };
       },
       components: {
-        "v-select": VueSelect,
         multiselect: Multiselect,
       },
       //預設值

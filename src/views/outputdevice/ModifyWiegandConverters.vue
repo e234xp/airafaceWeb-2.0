@@ -10,7 +10,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_inputAccessControlInfo, disp_complete]"
+        :steps="[disp_step1, disp_step2, disp_step3, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -28,26 +28,42 @@
       </CCard>
     </CCol>
 
+    <!-- Connection Form-->
+    <CCard :class="showOnStep(1)" style="height: 35rem;">
+      <CCardBody>
+        <ModifyWiegandConvertersStep2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
+      </CCardBody>
+    </CCard>
+
+    <!-- Digital output1 Form-->
+    <CCard :class="showOnStep(2)" style="height: 35rem;">
+      <CCardBody>
+        <ModifyWiegandConvertersStep3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
+      </CCardBody>
+    </CCard>
+
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
             >{{ value_returnRouteName }}
+          </CButton>
+        </div>
+        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2 || flag_currentSetp == 3">
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+            >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          :disabled="false"
           >{{ nextButtonName() }}
           </CButton>
-          <!-- <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
-          :disabled="checkForm()"
-          >{{ nextButtonName() }}
-          </CButton> -->
         </div>
       </div>
-    </CCol> 
+    </CCol>
 
   </div>
 </template>
@@ -57,12 +73,16 @@
 
   import StepProgress from "vue-step-progress";
   import ModifyWiegandConvertersStep1Form from './forms/ModifyWiegandConvertersStep1Form.vue'
+  import ModifyWiegandConvertersStep2Form from './forms/ModifyWiegandConvertersStep2Form.vue'
+  import ModifyWiegandConvertersStep3Form from './forms/ModifyWiegandConvertersStep3Form.vue'
 
 
   export default {
     name: "ModifyCameras",
     components: {
       ModifyWiegandConvertersStep1Form: ModifyWiegandConvertersStep1Form,
+      ModifyWiegandConvertersStep2Form: ModifyWiegandConvertersStep2Form,
+      ModifyWiegandConvertersStep3Form: ModifyWiegandConvertersStep3Form,
       stepprogress: StepProgress, 
     },
     data() {
@@ -87,7 +107,10 @@
         flag_currentSetp: 0,
 
         /**Step 1 2 3 */
-        disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
+        disp_step1: i18n.formatter.format("VideoDeviceBasic"),
+        disp_step2: i18n.formatter.format("VideoDeviceConnection"),
+        disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+        disp_complete: i18n.formatter.format("Complete"),
 
         /**btn */
         disp_complete: i18n.formatter.format("Complete"),
@@ -124,6 +147,10 @@
         
         step1form: {},
 
+        step2form: {},
+
+        step3form: {},
+
       };
     },
     mounted(){
@@ -149,8 +176,12 @@
 
     methods: {
       // Handle the form update from the child component if needed
-      updateStep1form(updatedForm) {
-        this.step1form = { ...updatedForm };
+       // 處理資料傳遞
+       updateStep1form(newValue) {
+        this.step1form = { ...newValue };
+      },
+      updateStep2form(newValue) {
+        this.step2form = { ...newValue };
       },
       updateStep3form(newValue) {
         this.step3form = { ...newValue };
@@ -217,29 +248,34 @@
 
       clickOnNext() {
         const self = this;
+        // console.log(self.flag_currentSetp,"現在第幾步")
         if (self.flag_currentSetp == 0) {
-          self.flag_keepingDownload = false;
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+          self.flag_currentSetp = 1;
+        } else if (self.flag_currentSetp == 1) {
+          self.flag_currentSetp = 2;
+        } else if (self.flag_currentSetp == 2) {
           if (self.onFinish) {
+            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+
             const parameter = self.handleParameter(); // 拿參數
+            // console.log("參數",parameter)
+
             self.onFinish(parameter, function (success, result) {
-                if (self.obj_loading) self.obj_loading.hide();
-                if (result && result.message == "ok") {
-                  self.flag_currentSetp = 1;
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format("Failed"),
-                    type: "error",
-                    timer: 3000,
-                    confirmButtonColor: "#20a8d8",
-                  });
-                }
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message == "ok") {
+                self.flag_currentSetp = 3;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format("Failed"),
+                  type: "error",
+                  timer: 3000,
+                  confirmButtonColor: "#20a8d8",
+                });
               }
-            );
+            });
           } else {
-            if (self.obj_loading) self.obj_loading.hide();
-            self.flag_currentSetp = 1;
-          }
+            self.flag_currentSetp = 3;
+          } 
         } else {
           self.$router.push({ name: self.value_returnRoutePath });
         }

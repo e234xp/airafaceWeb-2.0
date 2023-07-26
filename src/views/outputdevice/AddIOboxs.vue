@@ -1,7 +1,8 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t("VideoDeviceBasic") }}</div>
+      <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
+      <div class="h1">{{ disp_headertitle }}</div>
 
       <stepprogress
         class="w-step-progress-4"
@@ -11,12 +12,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[
-          disp_inputAccessControlInfo,
-          disp_inputAccessControlInfo,
-          disp_selectSchedule,
-          disp_complete,
-        ]"
+        :steps="[disp_step1, disp_step2, disp_step3, disp_step4, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -29,26 +25,74 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <AddWiegandConvertersStep1Form
+          <AddIOboxesStep1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
+          />
+        </CCardBody>
+      </CCard>
+
+      <!-- Connection Form-->
+      <CCard :class="showOnStep(1)">
+        <CCardBody>
+          <AddIOboxesStep2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+          />
+        </CCardBody>
+      </CCard>
+
+      <!-- Digital output1 Form-->
+      <CCard :class="showOnStep(2)">
+        <CCardBody>
+          <AddIOboxesStep3Form
+            :step3form="step3form"
+            @updateStep3form="updateStep3form"
+          />
+        </CCardBody>
+      </CCard>
+
+      <!-- Digital output2 Form-->
+      <CCard :class="showOnStep(3)">
+        <CCardBody>
+          <AddIOboxesStep4Form
+            :step4form="step4form"
+            @updateStep4form="updateStep4form"
           />
         </CCardBody>
       </CCard>
     </CCol>
 
     <!-- 按鈕的Col -->
-    <!-- AccoutForm -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
             >{{ value_returnRouteName }}
+          </CButton>
+        </div>
+        <div
+          v-if="
+            flag_currentSetp == 1 ||
+            flag_currentSetp == 2 ||
+            flag_currentSetp == 3
+          "
+        >
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+            >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
+          <CButton
+            class="btn btn-primary mb-3"
+            size="lg"
+            @click="clickOnNext"
+            :disabled="checkForm()"
             >{{ nextButtonName() }}
           </CButton>
         </div>
@@ -61,10 +105,14 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
-import AddWiegandConvertersStep1Form from "./forms/AddWiegandConvertersStep1Form.vue";
+import IOboxesBasic from "./forms/IOboxesBasic.vue";
+import AddIOboxesStep1Form from "./forms/AddIOboxesStep1Form.vue";
+import AddIOboxesStep2Form from "./forms/AddIOboxesStep2Form.vue";
+import AddIOboxesStep3Form from "./forms/AddIOboxesStep3Form.vue";
+import AddIOboxesStep4Form from "./forms/AddIOboxesStep4Form.vue";
 
 export default {
-  name: "AddCamera",
+  name: "AddCameras",
   data() {
     return {
       param_cardStyle: "height: 35rem;",
@@ -88,8 +136,10 @@ export default {
       flag_currentSetp: 0,
 
       /**Step 1 2 3 */
-      disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
-      disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
+      disp_step2: i18n.formatter.format("VideoDeviceConnection"),
+      disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+      disp_step4: i18n.formatter.format("VideoDeviceDigitalOutPut2"),
       disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
@@ -100,20 +150,43 @@ export default {
       step1form: {
         name: "",
         divice_groups: [],
-
         ip_address: "",
         port: null, //Number(getPort)
         user: "",
         pass: "",
         connection_info: "",
       },
+
+      step2form: {
+        ip_address: "",
+        port: null, //Number(getPort)
+        user: "",
+        pass: "",
+      },
+
+      step3form: {
+        efg: "",
+        z: [],
+        abc: "",
+        b: [],
+      },
+
+      step4form: {
+        id: "",
+        opq: [],
+        abc: "",
+        b: [],
+      },
     };
   },
   components: {
-    AddWiegandConvertersStep1Form: AddWiegandConvertersStep1Form,
+    IOboxesBasic: IOboxesBasic,
+    AddIOboxesStep1Form: AddIOboxesStep1Form,
+    AddIOboxesStep2Form: AddIOboxesStep2Form,
+    AddIOboxesStep3Form: AddIOboxesStep3Form,
+    AddIOboxesStep4Form: AddIOboxesStep4Form,
     stepprogress: StepProgress,
   },
-  mounted() {},
 
   methods: {
     // 是否可以按下一步
@@ -157,6 +230,15 @@ export default {
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
+    },
+    updateStep2form(newValue) {
+      this.step2form = { ...newValue };
+    },
+    updateStep3form(newValue) {
+      this.step3form = { ...newValue };
+    },
+    updateStep4form(newValue) {
+      this.step4form = { ...newValue };
     },
 
     // 決定現在顯示哪一個步驟
@@ -211,22 +293,34 @@ export default {
       // todo
       const form = {
         ...this.step1form,
+        ...this.step2form,
+        ...this.step3form,
+        ...this.step4form,
       };
       return form;
     },
     clickOnNext() {
       const self = this;
+      // console.log(self.flag_currentSetp,"現在第幾步")
       if (self.flag_currentSetp == 0) {
-        self.flag_keepingDownload = false;
-        self.obj_loading = self.$loading.show({
-          container: self.$refs.formContainer,
-        });
+        self.flag_currentSetp = 1;
+      } else if (self.flag_currentSetp == 1) {
+        self.flag_currentSetp = 2;
+      } else if (self.flag_currentSetp == 2) {
+        self.flag_currentSetp = 3;
+      } else if (self.flag_currentSetp == 3) {
         if (self.onFinish) {
+          self.obj_loading = self.$loading.show({
+            container: self.$refs.formContainer,
+          });
+
           const parameter = self.handleParameter(); // 拿參數
+          // console.log("參數",parameter)
+
           self.onFinish(parameter, function (success, result) {
             if (self.obj_loading) self.obj_loading.hide();
             if (result && result.message == "ok") {
-              self.flag_currentSetp = 1;
+              self.flag_currentSetp = 4;
             } else {
               self.$fire({
                 text: i18n.formatter.format("Failed"),
@@ -237,8 +331,7 @@ export default {
             }
           });
         } else {
-          if (self.obj_loading) self.obj_loading.hide();
-          self.flag_currentSetp = 1;
+          self.flag_currentSetp = 4;
         }
       } else {
         self.$router.push({ name: self.value_returnRoutePath });

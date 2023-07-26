@@ -495,7 +495,7 @@
   "OutputDeviceGroup": "輸出設備群組",
   "VideoDeviceCameras": "Cameras",
   "VideoDeviceTablets": "Tablets",
-  "OutputDeviceRelays": "中繼器",
+  "OutputDeviceRelays": "韋根",
   "DeviceName": "設備名稱",
   "DeviceStatus": "狀態",
   "EnableIn": "In",
@@ -591,7 +591,14 @@
 
   "limitNumber0to1": "限制輸入0~1",
   "limitNumbers": "限制輸入數字",
-  "limitNumbers100up": "限制輸入數字100~1000"
+  "limitNumbers100up": "限制輸入數字100~1000",
+
+  "VideoDeviceConnection": "Connection",
+  "VideoDeviceDigitalOutPut1":"DigitalOutPut1",
+  "VideoDeviceDigitalOutPut2":"DigitalOutPut2"
+
+
+       
 
 
   
