@@ -189,7 +189,7 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { total_length: totalLength, camera_list: cameraList },
+        data: { total_length: totalLength, list: cameraList },
       } = await this.$globalFindCameras("", 0, 3000);
 
       let number = totalLength + 1;
