@@ -13,7 +13,7 @@ Vue.use(CoreuiVue)
 const TEST_MODE = true;
 // const _TEST_HOST = "192.168.10.101"; //測試mini的IP
 const _TEST_HOST = "211.75.111.228"; //測試mini的IP 
-const _124_HOST = "192.168.10.124"; //測試mini的IP 
+//const _124_HOST = "192.168.10.124"; //測試mini的IP 
 const _TEST_PORT = "1443"; //測試mini的PORT
 const _HOST = TEST_MODE ? _TEST_HOST : window.location.hostname;
 const _PORT = TEST_MODE ? _TEST_PORT : window.location.port;
@@ -158,12 +158,12 @@ function postJson2(cgi, jsondata, cb) {
   });
 }
 
-function apiServer() {
-  if (global.usingHttps) {
-    return "https://" + _124_HOST + ":" + _PORT;
-  }
-  return "http://" + _124_HOST + ":" + _PORT;
-}
+// function apiServer() {
+//   if (global.usingHttps) {
+//     return "https://" + _124_HOST + ":" + _PORT;
+//   }
+//   return "http://" + _124_HOST + ":" + _PORT;
+// }
 
 function login(accountInfo, cb) {
   postJson("/airafacelite/generatetoken", accountInfo, function (err, data) {
@@ -862,7 +862,7 @@ Vue.prototype.$globalSetAiraManagerSetting = function (managerSettings, cb) {
 // camera start
 Vue.prototype.$globalRemoveCameras = function (uuid, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/removecamera", { uuid: uuid }, function (err, data) {
+    postJson("/airafacelite/removecamera", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -871,7 +871,7 @@ Vue.prototype.$globalRemoveCameras = function (uuid, cb) {
 
 Vue.prototype.$globalCreateCameras = function (camera, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/createcamera", camera, function (err, data) {
+    postJson("/airafacelite/createcamera", camera, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -889,7 +889,7 @@ Vue.prototype.$globalCreateCameras = function (camera, cb) {
 
 Vue.prototype.$globalModifyCameras = function (camera, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/modifycamera", camera, function (err, data) {
+    postJson("/airafacelite/modifycamera", camera, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -907,7 +907,7 @@ Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
       slice_shift: shift,
       slice_length: sliceSize
     };
-    postJson2("/airafacelite/findcamera", query, function (err, data) {
+    postJson("/airafacelite/findcamera", query, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -922,7 +922,7 @@ Vue.prototype.$globalFindWiegandConverters = function (uuid, shift, sliceSize, c
       slice_shift: shift,
       slice_length: sliceSize
     };
-    postJson2("/airafacelite/findwiegandconverter", query, function (err, data) {
+    postJson("/airafacelite/findwiegandconverter", query, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -932,7 +932,7 @@ Vue.prototype.$globalFindWiegandConverters = function (uuid, shift, sliceSize, c
 
 Vue.prototype.$globalCreateWiegandConverters = function (device, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/createwiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/createwiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -942,7 +942,7 @@ Vue.prototype.$globalCreateWiegandConverters = function (device, cb) {
 
 Vue.prototype.$globalModifyWiegandConverters = function (device, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/modifywiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/modifywiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -952,7 +952,7 @@ Vue.prototype.$globalModifyWiegandConverters = function (device, cb) {
 
 Vue.prototype.$globalRemoveWiegandConverters = function (uuid, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
+    postJson("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -967,7 +967,7 @@ Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
       slice_shift: shift,
       slice_length: sliceSize
     };
-    postJson2("/airafacelite/findwiegandconverter", query, function (err, data) {
+    postJson("/airafacelite/findwiegandconverter", query, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -977,7 +977,7 @@ Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
 
 Vue.prototype.$globalCreateIobox = function (device, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/createwiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/createwiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -987,7 +987,7 @@ Vue.prototype.$globalCreateIobox = function (device, cb) {
 
 Vue.prototype.$globalModifyIobox = function (device, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/modifywiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/modifywiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -997,7 +997,7 @@ Vue.prototype.$globalModifyIobox = function (device, cb) {
 
 Vue.prototype.$globalRemoveIobox = function (uuid, cb) {
   return new Promise((resolve) => {
-    postJson2("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
+    postJson("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
