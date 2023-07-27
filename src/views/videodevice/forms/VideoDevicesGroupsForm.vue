@@ -108,6 +108,13 @@
   
     export default {
       name: "DeviceGroups",
+      props: {
+        formData: Object,
+        onAdd: { type: Function },
+        onDelete: { type: Function },
+        onModify: { type: Function },
+        onFetchDataCallback: { type: Function },
+      },
       data() {
         return {
           value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],

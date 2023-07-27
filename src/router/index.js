@@ -93,14 +93,17 @@ const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic')
 const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings')
 
 ///////////////////////////////////////////
-/////////// device add update///////////
-const AddCamera = () => import('@/views/videodevice/AddCamera')
-const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
-
-
+/////////// output device ///////////
 const IOboxsManagement = () => import('@/views/outputdevice/IOboxsManagement')
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters')
 const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups')
+
+///////////////////////////////////////////
+/////////// device add update///////////
+const AddCamera = () => import('@/views/videodevice/AddCamera')
+const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
+const AddVideoDeviceGroups = () => import('@/views/videodevice/AddVideoDeviceGroups')
+const ModifyVideoDeviceGroups = () => import('@/views/videodevice/ModifyVideoDeviceGroups')
 
 ///////////////////////////////////////////
 /////////// output add update///////////
@@ -443,16 +446,6 @@ function configRoutes() {
               component: CameraList
             },
             {
-              path: 'tablets',
-              name: 'Tablets',
-              component: Tablets
-            },
-            {
-              path: 'deviceGroups',
-              name: 'DeviceGroups',
-              component: DeviceGroups
-            },
-            {
               path: 'addcamera',
               name: 'AddCamera',
               component: AddCamera
@@ -463,6 +456,11 @@ function configRoutes() {
               component: ModifyCameras
             },
             {
+              path: 'tablets',
+              name: 'Tablets',
+              component: Tablets
+            },
+            {
               path: 'tabletsBasic',
               name: 'TabletsBasic',
               component: TabletsBasic
@@ -471,6 +469,21 @@ function configRoutes() {
               path: 'tabletsAccessSettings',
               name: 'TabletsAccessSettings',
               component: TabletsAccessSettings
+            },
+            {
+              path: 'deviceGroups',
+              name: 'DeviceGroups',
+              component: DeviceGroups
+            },
+            {
+              path: 'addvideodevicegroups',
+              name: 'AddVideoDeviceGroups',
+              component: AddVideoDeviceGroups
+            },
+            {
+              path: 'Modifyvideodevicegroups',
+              name: 'ModifyVideoDeviceGroups',
+              component: ModifyVideoDeviceGroups
             },
           ]
         },

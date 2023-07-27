@@ -51,8 +51,8 @@
       // 新增
       onAdd() {
         this.$router.push({
-          name: 'AddWiegandConverters', params: {
-            value_returnRoutePath: "WiegandConverters",
+          name: 'AddVideoDeviceGroups', params: {
+            value_returnRoutePath: "DeviceGroups",
             value_returnRouteName: i18n.formatter.format("Return")
           }
         });
