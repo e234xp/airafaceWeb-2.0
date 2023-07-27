@@ -11,27 +11,6 @@
       <!-- Basic -->
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5" >
-            {{ disp_IOBoxesBasicBrand }}
-            <CSelect size="lg" value="1" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-            :invalid-feedback= "$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isNotEmpty"
-            required/>
-          </CCol>
-          <CCol sm="6" class="h5"  >
-            {{ disp_IOBoxesBasicModel }}
-            <CSelect size="lg" value="1" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-            :invalid-feedback= "$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isNotEmpty"
-            required/>
-          </CCol>
-        </CRow>
-      </div>
-
-      <div class="mt-3">
-        <CRow sm="12">
           <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicDeviceName }}
             <CInput size="lg" class="mt-2" v-model="value_deviceGroups" 
@@ -40,16 +19,10 @@
             :is-valid="isNotEmpty"
             required/>
           </CCol>
-          <CCol sm="6" class="h5" >
-            {{ disp_IOBoxesBasicDeviceGroups }}
-            <multiselect class="mt-2"  v-model="value_deviceGroups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
-              :taggable="true" :hideSelected="true" 
-              :show-no-options="false"
-            >
-            </multiselect>
-          </CCol>
         </CRow>
       </div>
+
+     
 
     </div>
   </template>

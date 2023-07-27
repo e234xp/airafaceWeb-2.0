@@ -595,7 +595,9 @@
 
   "VideoDeviceConnection": "Connection",
   "VideoDeviceDigitalOutPut1":"DigitalOutPut1",
-  "VideoDeviceDigitalOutPut2":"DigitalOutPut2"
+  "VideoDeviceDigitalOutPut2":"DigitalOutPut2",
+
+  "NewDeviceGroups": "新增設備群組"
 
 
        

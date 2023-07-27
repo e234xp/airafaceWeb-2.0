@@ -33,24 +33,24 @@
       </CCard>
 
       <!-- Connection Form-->
-      <!-- <CCard :class="showOnStep(1)">
+      <CCard :class="showOnStep(1)">
         <CCardBody>
           <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
           />
         </CCardBody>
-      </CCard> -->
+      </CCard>
 
       <!-- Digital output1 Form-->
-      <!-- <CCard :class="showOnStep(2)">
+      <CCard :class="showOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
             @updateStep3form="updateStep3form"
           />
         </CCardBody>
-      </CCard> -->
+      </CCard>
 
       <!-- Digital output2 Form-->
       <!-- <CCard :class="showOnStep(3)">
@@ -76,8 +76,7 @@
         <div
           v-if="
             flag_currentSetp == 1 ||
-            flag_currentSetp == 2 ||
-            flag_currentSetp == 3
+            flag_currentSetp == 2
           "
         >
           <CButton
@@ -106,8 +105,8 @@ import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
 import Step1Form from "./forms/Step1Form.vue";
-// import Step2Form from "./forms/Step2Form.vue";
-// import Step3Form from "./forms/Step3Form.vue";
+import Step2Form from "./forms/Step2Form.vue";
+import Step3Form from "./forms/Step3Form.vue";
 // import Step4Form from "./forms/Step4Form.vue";
 
 export default {
@@ -180,8 +179,8 @@ export default {
   },
   components: {
     Step1Form: Step1Form,
-    // Step2Form: Step2Form,
-    // Step3Form: Step3Form,
+    Step2Form: Step2Form,
+    Step3Form: Step3Form,
     // Step4Form: Step4Form,
     stepprogress: StepProgress,
   },
