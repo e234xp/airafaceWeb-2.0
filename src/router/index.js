@@ -108,6 +108,8 @@ const AddIOboxs = () => import('@/views/outputdevice/AddIOboxs')
 const ModifyIOboxs = () => import('@/views/outputdevice/ModifyIOboxs')
 const AddWiegandConverters = () => import('@/views/outputdevice/AddWiegandConverters')
 const ModifyWiegandConverters = () => import('@/views/outputdevice/ModifyWiegandConverters')
+const AddOutputDeviceGroups = () => import('@/views/outputdevice/AddOutputDeviceGroups')
+const ModifyOutputDeviceGroups = () => import('@/views/outputdevice/ModifyOutputDeviceGroups')
 
 
 
@@ -514,6 +516,16 @@ function configRoutes() {
               path: 'outputDeviceGroups',
               name: 'OutputDeviceGroups',
               component: OutputDeviceGroups
+            },
+            {
+              path: 'addoutputdevicegroups',
+              name: 'AddOutputDeviceGroups',
+              component: AddOutputDeviceGroups
+            },
+            {
+              path: 'modifyoutputdevicegroups',
+              name: 'ModifyOutputDeviceGroups',
+              component: ModifyOutputDeviceGroups
             },
             // {
             //   path: 'iOboxesBasic',

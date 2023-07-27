@@ -12,7 +12,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step2, disp_step3, disp_step4, disp_complete]"
+        :steps="[disp_step1, disp_step2, disp_step3, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -25,7 +25,7 @@
       <!-- Basic Form-->
       <CCard :class="showOnStep(0)">
         <CCardBody>
-          <AddIOboxesStep1Form
+          <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
           />
@@ -33,34 +33,34 @@
       </CCard>
 
       <!-- Connection Form-->
-      <CCard :class="showOnStep(1)">
+      <!-- <CCard :class="showOnStep(1)">
         <CCardBody>
-          <AddIOboxesStep2Form
+          <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
 
       <!-- Digital output1 Form-->
-      <CCard :class="showOnStep(2)">
+      <!-- <CCard :class="showOnStep(2)">
         <CCardBody>
-          <AddIOboxesStep3Form
+          <Step3Form
             :step3form="step3form"
             @updateStep3form="updateStep3form"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
 
       <!-- Digital output2 Form-->
-      <CCard :class="showOnStep(3)">
+      <!-- <CCard :class="showOnStep(3)">
         <CCardBody>
-          <AddIOboxesStep4Form
+          <Step4Form
             :step4form="step4form"
             @updateStep4form="updateStep4form"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -105,13 +105,13 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
-import AddIOboxesStep1Form from "./forms/AddIOboxesStep1Form.vue";
-import AddIOboxesStep2Form from "./forms/AddIOboxesStep2Form.vue";
-import AddIOboxesStep3Form from "./forms/AddIOboxesStep3Form.vue";
-import AddIOboxesStep4Form from "./forms/AddIOboxesStep4Form.vue";
+import Step1Form from "./forms/Step1Form.vue";
+// import Step2Form from "./forms/Step2Form.vue";
+// import Step3Form from "./forms/Step3Form.vue";
+// import Step4Form from "./forms/Step4Form.vue";
 
 export default {
-  name: "AddCameras",
+  name: "AddOutputDeviceGroups",
 
   data() {
     return {
@@ -139,7 +139,6 @@ export default {
       disp_step1: i18n.formatter.format("VideoDeviceBasic"),
       disp_step2: i18n.formatter.format("VideoDeviceConnection"),
       disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
-      disp_step4: i18n.formatter.format("VideoDeviceDigitalOutPut2"),
       disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
@@ -180,10 +179,10 @@ export default {
     };
   },
   components: {
-    AddIOboxesStep1Form: AddIOboxesStep1Form,
-    AddIOboxesStep2Form: AddIOboxesStep2Form,
-    AddIOboxesStep3Form: AddIOboxesStep3Form,
-    AddIOboxesStep4Form: AddIOboxesStep4Form,
+    Step1Form: Step1Form,
+    // Step2Form: Step2Form,
+    // Step3Form: Step3Form,
+    // Step4Form: Step4Form,
     stepprogress: StepProgress,
   },
 
@@ -235,9 +234,6 @@ export default {
     },
     updateStep3form(newValue) {
       this.step3form = { ...newValue };
-    },
-    updateStep4form(newValue) {
-      this.step4form = { ...newValue };
     },
 
     // 決定現在顯示哪一個步驟
@@ -305,9 +301,7 @@ export default {
         self.flag_currentSetp = 1;
       } else if (self.flag_currentSetp == 1) {
         self.flag_currentSetp = 2;
-      } else if (self.flag_currentSetp == 2) {
-        self.flag_currentSetp = 3;
-      } else if (self.flag_currentSetp == 3) {
+      }  else if (self.flag_currentSetp == 2) {
         if (self.onFinish) {
           self.obj_loading = self.$loading.show({
             container: self.$refs.formContainer,
@@ -319,7 +313,7 @@ export default {
           self.onFinish(parameter, function (success, result) {
             if (self.obj_loading) self.obj_loading.hide();
             if (result && result.message == "ok") {
-              self.flag_currentSetp = 4;
+              self.flag_currentSetp = 3;
             } else {
               self.$fire({
                 text: i18n.formatter.format("Failed"),
@@ -330,7 +324,7 @@ export default {
             }
           });
         } else {
-          self.flag_currentSetp = 4;
+          self.flag_currentSetp = 3;
         }
       } else {
         self.$router.push({ name: self.value_returnRoutePath });
@@ -344,8 +338,6 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_next;
-        case 3:
           return this.disp_complete;
         default:
           return this.disp_next;
