@@ -18,7 +18,9 @@
             v-model.number="localStep3form.face_min_length"
             :invalid-feedback="disp_limitNumbers"
             valid-feedback="ok"
-            :is-valid="limitNumber"
+            :is-valid="
+              isFieldPassed('face_min_length', localStep3form.face_min_length)
+            "
             required
             placeholder=""
           />
@@ -40,7 +42,9 @@
             v-model.number="localStep3form.target_score"
             :invalid-feedback="disp_limitNumber0to1"
             valid-feedback="ok"
-            :is-valid="limitNumber0to1"
+            :is-valid="
+              isFieldPassed('target_score', localStep3form.target_score)
+            "
             required
             placeholder=""
           />
@@ -60,9 +64,12 @@
             class="h5"
             style="width: 100%"
             v-model.number="localStep3form.capture_interval"
-            :invalid-feedback="disp_limitNumbers"
+            pattern="[0-9]*"
+            :invalid-feedback="disp_limitNumber100up"
             valid-feedback="ok"
-            :is-valid="limitNumber"
+            :is-valid="
+              isFieldPassed('capture_interval', localStep3form.capture_interval)
+            "
             required
             placeholder=""
           />
@@ -73,37 +80,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import TableObserver from "@/utils/TableObserver.vue";
 import i18n from "@/i18n";
 
 export default {
   name: "Step3Form",
   props: {
     step3form: Object,
+    defaultValues: Object,
+    isFieldPassed: Function,
   },
   data() {
     return {
       localStep3form: { ...this.step3form },
-
-      value_dataItemsToShow: [
-        {
-          enable: false,
-          name: "",
-          timestamp: "",
-          remark: "",
-          modifier: "",
-          remark1: "",
-        },
-      ],
-      value_allTableItems: [],
-      value_tablePage: {
-        currentPage: 1,
-        pageSize: 5,
-        totalResult: 0,
-      },
-      value_searchingFilter: "",
-      isChecked: true,
 
       /*Face Capture title  */
       disp_subtitleFaceCapture: i18n.formatter.format("VideoFaceCapture"),
@@ -119,30 +107,25 @@ export default {
 
       disp_limitNumbers: i18n.formatter.format("limitNumbers"),
       disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"),
+      disp_limitNumber100up: i18n.formatter.format("limitNumbers100up"),
     };
   },
   watch: {
     localStep3form: {
       handler(newValue) {
-        console.log("emit updateStep3form");
         this.$emit("updateStep3form", { ...newValue });
       },
       deep: true,
     },
-  },
-
-  methods: {
-    limitNumber0to1(val) {
-      if (!/^[01]$/.test(val)) {
-        return false;
-      }
-      return true;
-    },
-    limitNumber(value) {
-      if (!/^[0-9]/.test(value)) {
-        return false;
-      }
-      return true;
+    defaultValues: {
+      handler(newValue) {
+        this.localStep3form = {
+          ...this.localStep3form,
+          ...newValue,
+        };
+      },
+      deep: true,
+      immediate: true,
     },
   },
 };
