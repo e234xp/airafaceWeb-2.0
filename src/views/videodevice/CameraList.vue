@@ -31,7 +31,7 @@ export default {
     async getItems(shift, sliceSize) {
       const ret = await this.$globalFindCameras("", shift, sliceSize);
       const {
-        data: { camera_list: list },
+        data: { list: dataList },
         error,
       } = ret;
 
@@ -45,7 +45,7 @@ export default {
         });
       }
 
-      return list;
+      return dataList;
     },
 
     // 新增
