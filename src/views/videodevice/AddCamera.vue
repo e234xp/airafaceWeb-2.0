@@ -347,7 +347,7 @@ export default {
     },
 
     //送api 完成
-    async create(data) {
+    create(data) {
       return this.$globalCreateCameras(data);
     },
 
