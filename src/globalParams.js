@@ -967,7 +967,7 @@ Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
       slice_shift: shift,
       slice_length: sliceSize
     };
-    postJson("/airafacelite/findwiegandconverter", query, function (err, data) {
+    postJson("/airafacelite/findiobox", query, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -977,7 +977,7 @@ Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
 
 Vue.prototype.$globalCreateIobox = function (device, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/createwiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/createiobox", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -987,7 +987,7 @@ Vue.prototype.$globalCreateIobox = function (device, cb) {
 
 Vue.prototype.$globalModifyIobox = function (device, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/modifywiegandconverter", device, function (err, data) {
+    postJson("/airafacelite/modifyiobox", device, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
@@ -997,9 +997,92 @@ Vue.prototype.$globalModifyIobox = function (device, cb) {
 
 Vue.prototype.$globalRemoveIobox = function (uuid, cb) {
   return new Promise((resolve) => {
-    postJson("/airafacelite/removewiegandconverter", { uuid: uuid }, function (err, data) {
+    postJson("/airafacelite/removeiobox", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
       resolve({ error: err, data: data });
     });
   });
 };
+
+
+
+// VideoDevice Group
+Vue.prototype.$globalVideoDeviceGroup = function (uuid, shift, sliceSize, cb) {
+  return new Promise((resolve) => {
+    const query = { 
+      uuid: uuid,
+      slice_shift: shift,
+      slice_length: sliceSize
+    };
+    postJson("/airafacelite/findvideodevicegroup", query, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalCreateVideoDeviceGroup = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/createvideodevicegroup", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalModifyVideoDeviceGroup = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/modifyvideodevicegroup", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+// OutputDevice Group
+Vue.prototype.$globalFindWiegandOutputDeviceGroup = function (uuid, shift, sliceSize, cb) {
+  return new Promise((resolve) => {
+    const query = { 
+      uuid: uuid,
+      slice_shift: shift,
+      slice_length: sliceSize
+    };
+    postJson("/airafacelite/findoutputdevicegroup", query, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalCreateOutputDeviceGroup = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/createoutputdevicegroup", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalModifyOutputDeviceGroup = function (device, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/modifyoutputdevicegroup", device, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
+
+Vue.prototype.$globalRemoveOutputDeviceGroup = function (uuid, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/removeoutputdevicegroup", { uuid: uuid }, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
