@@ -878,15 +878,6 @@ Vue.prototype.$globalCreateCameras = function (camera, cb) {
   });
 };
 
-// Vue.prototype.$globalManualClockin = function (submitData, cb) {
-//   return new Promise((resolve) => {
-//     postJson("/airafacelite/manualclockin", submitData, function (err, data) {
-//       if (cb) cb(err, err ? null : data.result);
-//       resolve({ error: err, data: err ? null : data.result });
-//     });
-//   });
-// };
-
 Vue.prototype.$globalModifyCamera = function (camera, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifycamera", camera, function (err, data) {
@@ -898,10 +889,6 @@ Vue.prototype.$globalModifyCamera = function (camera, cb) {
 
 Vue.prototype.$globalFindCameras = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
-    // console.log(uuid,"ID")
-    // console.log(shift,"shift")
-    // console.log(sliceSize,"sliceSize")
-    // console.log(cb,"cb")
     const query = { 
       uuid: uuid,
       slice_shift: shift,
@@ -930,7 +917,7 @@ Vue.prototype.$globalFindWiegandConverters = function (uuid, shift, sliceSize, c
 };
 
 
-Vue.prototype.$globalCreateWiegandConverters = function (device, cb) {
+Vue.prototype.$globalCreateWiegandConverter = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/createwiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
@@ -940,7 +927,7 @@ Vue.prototype.$globalCreateWiegandConverters = function (device, cb) {
 };
 
 
-Vue.prototype.$globalModifyWiegandConverters = function (device, cb) {
+Vue.prototype.$globalModifyWiegandConverter = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifywiegandconverter", device, function (err, data) {
       if (cb) cb(err, data);
@@ -960,7 +947,7 @@ Vue.prototype.$globalRemoveWiegandConverters = function (uuid, cb) {
 };
 
 // IO Box
-Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
+Vue.prototype.$globalFindIoBoxs = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
     const query = { 
       uuid: uuid,
@@ -975,7 +962,7 @@ Vue.prototype.$globalFindWiegandIobox = function (uuid, shift, sliceSize, cb) {
 };
 
 
-Vue.prototype.$globalCreateIobox = function (device, cb) {
+Vue.prototype.$globalCreateIoBox = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/createiobox", device, function (err, data) {
       if (cb) cb(err, data);
@@ -985,7 +972,7 @@ Vue.prototype.$globalCreateIobox = function (device, cb) {
 };
 
 
-Vue.prototype.$globalModifyIobox = function (device, cb) {
+Vue.prototype.$globalModifyIoBox = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifyiobox", device, function (err, data) {
       if (cb) cb(err, data);
@@ -995,7 +982,7 @@ Vue.prototype.$globalModifyIobox = function (device, cb) {
 };
 
 
-Vue.prototype.$globalRemoveIobox = function (uuid, cb) {
+Vue.prototype.$globalRemoveIoBoxs = function (uuid, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/removeiobox", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);
@@ -1007,7 +994,7 @@ Vue.prototype.$globalRemoveIobox = function (uuid, cb) {
 
 
 // VideoDevice Group
-Vue.prototype.$globalVideoDeviceGroup = function (uuid, shift, sliceSize, cb) {
+Vue.prototype.$globalFindVideoDeviceGroups = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
     const query = { 
       uuid: uuid,
@@ -1032,7 +1019,7 @@ Vue.prototype.$globalCreateVideoDeviceGroup = function (device, cb) {
 };
 
 
-Vue.prototype.$globalModifyVideoDeviceGroup = function (device, cb) {
+Vue.prototype.$globalModifyVideoDeviceGroups = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifyvideodevicegroup", device, function (err, data) {
       if (cb) cb(err, data);
@@ -1042,7 +1029,7 @@ Vue.prototype.$globalModifyVideoDeviceGroup = function (device, cb) {
 };
 
 // OutputDevice Group
-Vue.prototype.$globalFindWiegandOutputDeviceGroup = function (uuid, shift, sliceSize, cb) {
+Vue.prototype.$globalFindOutputDeviceGroups = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
     const query = { 
       uuid: uuid,
@@ -1067,7 +1054,7 @@ Vue.prototype.$globalCreateOutputDeviceGroup = function (device, cb) {
 };
 
 
-Vue.prototype.$globalModifyOutputDeviceGroup = function (device, cb) {
+Vue.prototype.$globalModifyOutputDeviceGroups = function (device, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifyoutputdevicegroup", device, function (err, data) {
       if (cb) cb(err, data);
