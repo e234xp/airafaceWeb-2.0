@@ -213,21 +213,21 @@ export default {
       connection_info: this.parameters,
       // Add other properties as needed
     }),
-      (this.step2form = {
-        roi: [
-          {
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 0,
-          },
-        ],
-      }),
-      (this.step3form = {
-        capture_interval: this.captureInterval,
-        target_score: this.targetScore,
-        face_min_length: this.faceMinimumSize,
-      });
+    (this.step2form = {
+      roi: [
+        {
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 0,
+        },
+      ],
+    }),
+    (this.step3form = {
+      capture_interval: this.captureInterval,
+      target_score: this.targetScore,
+      face_min_length: this.faceMinimumSize,
+    });
   },
 
   methods: {
