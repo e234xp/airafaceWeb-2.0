@@ -2,11 +2,11 @@
   <div id="wrapper">
     <!-- 標題 -->
     <div>
-      <h2 sm="12">{{ disp_DigitalOutPut1Title }}</h2>
+      <h2 sm="12">{{  disp_DigitalOutPut2Title }}</h2>
     </div>
-
+  
     <!-- 項目 -->
-    <!-- Digital OutPut1 -->
+    <!-- Digital OutPut2 -->
     <div class="form-check mb-3 ml-2">
       <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="flexCheckDefault">
       <label class="form-check-label mt-2" for="flexCheckDefault">
@@ -17,11 +17,7 @@
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-        :invalid-feedback= "$t('NoEmptyNoSpace')"
-        valid-feedback="ok"
-        :is-valid="isNotEmpty"
-        required/>
+        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
       </CCol>
     </CRow>
 
@@ -29,19 +25,11 @@
       <CRow sm="12">
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2"
-          :invalid-feedback= "$t('NoEmptyNoSpace')"
-          valid-feedback="ok"
-          :is-valid="isNotEmpty"
-          required/>
+          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
         </CCol>
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
-          <CInput size="lg" class="mt-2" v-model="value_durationTriggered"
-          :invalid-feedback= "$t('NoEmptyNoSpace')"
-          valid-feedback="ok"
-          :is-valid="isNotEmpty"
-          required/>
+          <CInput size="lg" class="mt-1" />
         </CCol>
       </CRow>
     </div>
@@ -57,29 +45,31 @@
   import "@/airacss/vue-multiselect.css";
 
   export default {
-    name: "AddCamerasStep3Form",
+    name: "Step4Form",
     props:{
-      step1form: Object
+      step3form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
     },
     data() {
       return {
-        localStep2form: { ...this.step2form },
-
+        localStep4form: { ...this.step4form },
+ 
         isChecked: true,
 
-        // /*Digital output1 title  */
-        disp_DigitalOutPut1Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut1"),
+        /*Digital output2 title  */
+        disp_DigitalOutPut2Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut2"),
 
-        // /**content */
+        /**content */
         disp_IOBoxesBasicEnable: i18n.formatter.format("I/OBoxesBasicCOlNameEnable"),
         disp_IOBoxesBasicDefaultValue: i18n.formatter.format("I/OBoxesBasicCOlNameDefaultValue"),
         disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameValueWhenTriggered"),
         disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameDurationWhenTriggered"),
 
+
         /**v-model */
         value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3],
-        value_durationTriggered: "",
+        value_deviceGroupsList: [1,2,3]
       };
     },
     components: {
@@ -89,29 +79,29 @@
     //預設值
     created() {
       // this.defaultPortValue();
-      // this.localStep3form.user = "admin",
-      // this.localStep3form.pass = "123456"
-      // this.localStep3form.connection_info = "/media/video1"
+      // this.localStep4form.user = "admin",
+      // this.localStep4form.pass = "123456"
+      // this.localStep4form.connection_info = "/media/video1"
     }, 
     // 拿資料 寫入資料
     watch: {
-      localStep3form: {
+      localStep4form: {
         handler(newValue) {
-          console.log('emit updateStep3form')
-          this.$emit('updateStep3form', { ...newValue });
+          console.log('emit updateStep4form')
+          this.$emit('updateStep4form', { ...newValue });
         },
         deep: true,
       },
-    },
-    methods: {
-      defaultPortValue() {
-        // this.localStep3form.port = 554;
-        // return this.localStep3form.port !== null && this.localStep3form.port >= 0 && this.localStep3form.port <= 65535;
+      defaultValues: {
+        handler(newValue) {
+          this.localStep1form = {
+            ...this.localStep1form,
+            ...newValue,
+          };
+        },
+        deep: true,
+        immediate: true,
       },
-      // 判斷欄位空值
-      isNotEmpty(value) {
-        return value !== null && value !== undefined && value !== '';
-      }
     },
   }
 </script>

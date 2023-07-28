@@ -11,11 +11,19 @@
           <CRow sm="12">
           <CCol sm="6" class="h5"  >
               {{ disp_IOBoxesBasicIP }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" />
+              <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" 
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)"
+                required/>
           </CCol>
           <CCol sm="6" class="h5"  >
               {{ disp_IOBoxesBasicPort }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.port" />
+              <CInput size="lg" class="mt-2" v-model="localStep2form.port" 
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('port', localStep2form.port)"
+                required/>
           </CCol>
           </CRow>
       </div>
@@ -24,11 +32,19 @@
           <CRow sm="12">
           <CCol sm="6" class="h5"  >
               {{ disp_IOBoxesBasicUserName }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.user" />
+              <CInput size="lg" class="mt-2" v-model="localStep2form.username" 
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('user', localStep2form.username)"
+                required/>
           </CCol>
           <CCol sm="6" class="h5"  >
               {{ disp_IOBoxesBasicPassword }}
-              <CInput size="lg" class="mt-2" v-model="localStep2form.pass" type="password"/>
+              <CInput size="lg" class="mt-2" v-model="localStep2form.password" type="password"
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('pass', localStep2form.password)"
+                required/>
           </CCol>
           </CRow>
       </div>
@@ -40,14 +56,15 @@
   <script>
     import i18n from "@/i18n";
 
-    import VueSelect from 'vue-select';
-    import Multiselect from "vue-multiselect";
+
     import "@/airacss/vue-multiselect.css";
 
     export default {
       name: "AddCamerasStep2Form",
       props:{
-        step2form: Object
+        step2form: Object,
+        defaultValues: Object,
+        isFieldPassed: Function,
       },
       data() {
       return {
@@ -69,16 +86,7 @@
           value_deviceGroupsList: [1,2,3]
         };
       },
-      components: {
-        "v-select": VueSelect,
-        multiselect: Multiselect,
-      },
-      //預設值
-      created() {
-        this.defaultPortValue();
-        this.localStep2form.user = "admin",
-        this.localStep2form.pass = "123456"
-      }, 
+
       // 拿資料 寫入資料
       watch: {
         localStep2form: {
@@ -88,17 +96,18 @@
           },
           deep: true,
         },
-      },
-      methods: {
-        defaultPortValue() {
-          this.localStep2form.port = 554;
-          return this.localStep2form.port !== null && this.localStep2form.port >= 0 && this.localStep2form.port <= 65535;
+        defaultValues: {
+          handler(newValue) {
+            this.localStep2form = {
+              ...this.localStep2form,
+              ...newValue,
+            };
+          },
+          deep: true,
+          immediate: true,
         },
-        // 判斷欄位空值
-        isNotEmpty(value) {
-          return value !== null && value !== undefined && value !== '';
-        }
       },
+
     }
   </script>
     
