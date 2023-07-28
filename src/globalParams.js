@@ -887,7 +887,7 @@ Vue.prototype.$globalCreateCameras = function (camera, cb) {
 //   });
 // };
 
-Vue.prototype.$globalModifyCameras = function (camera, cb) {
+Vue.prototype.$globalModifyCamera = function (camera, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/modifycamera", camera, function (err, data) {
       if (cb) cb(err, data);
