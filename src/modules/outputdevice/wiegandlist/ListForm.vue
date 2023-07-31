@@ -12,12 +12,12 @@
       <CCol sm="12">
         <CRow>
             <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="clickOnAdd()">
+              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="handleOnAdd()">
                 {{ disp_add }}
               </CButton>
             </div>
             <div>
-              <CButton  class="btn btn-danger mb-3" size="lg" @click="clickOnMultipleDelete()">
+              <CButton  class="btn btn-danger mb-3" size="lg" @click="handleOnMultipleDelete()">
                 {{ disp_delete }}
               </CButton>
             </div>
@@ -78,10 +78,10 @@
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
+                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="handleOnModify(row)">{{ disp_modify
                     }}</vxe-button>
 
-                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
+                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="handleOnSingleDelete(row)">{{ disp_delete
                     }}</vxe-button>
                 </div>
               </template>
