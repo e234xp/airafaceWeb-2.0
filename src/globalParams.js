@@ -947,7 +947,7 @@ Vue.prototype.$globalRemoveWiegandConverters = function (uuid, cb) {
 };
 
 // IO Box
-Vue.prototype.$globalFindIoBoxs = function (uuid, shift, sliceSize, cb) {
+Vue.prototype.$globalFindIoBoxes = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
     const query = { 
       uuid: uuid,
@@ -982,7 +982,7 @@ Vue.prototype.$globalModifyIoBox = function (device, cb) {
 };
 
 
-Vue.prototype.$globalRemoveIoBoxs = function (uuid, cb) {
+Vue.prototype.$globalRemoveIoBoxes = function (uuid, cb) {
   return new Promise((resolve) => {
     postJson("/airafacelite/removeiobox", { uuid: uuid }, function (err, data) {
       if (cb) cb(err, data);

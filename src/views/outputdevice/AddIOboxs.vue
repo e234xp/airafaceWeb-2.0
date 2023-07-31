@@ -99,7 +99,7 @@
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
-            @click="handleNext(flag_currentSetp)"
+            @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
             >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
@@ -238,7 +238,7 @@ export default {
     async getDefaultName() {
       const {
         data: { total_length: totalLength, list: IOboxList },
-      } = await this.$globalFindIoBox("", 0, 3000);
+      } = await this.$globalFindIoBoxes("", 0, 3000);
 
       let number = totalLength + 1;
       let name = `IO Box-${number}`;
@@ -274,6 +274,10 @@ export default {
         }
 
         case 3: {
+          return true;
+        }
+
+        case 4: {
           return true;
         }
       }
@@ -373,7 +377,7 @@ export default {
       switch (this.flag_currentSetp) {
         case 0:
         case 1: 
-        case 2: {
+        case 2:{
           this.flag_currentSetp += 1;
 
           break;
@@ -426,6 +430,8 @@ export default {
         case 2:
           return this.disp_next;
         case 3:
+          return this.disp_next;
+        case 4:
           return this.disp_complete;
         default:
           return this.disp_next;
