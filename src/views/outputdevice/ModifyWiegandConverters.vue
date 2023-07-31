@@ -21,26 +21,34 @@
     <!-- 步驟 -->
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard :class="showOnStep(0)">
+      <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <ModifyWiegandConvertersStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+        </CCardBody>
+      </CCard>
+    
+
+      <!-- Connection Form-->
+      <CCard v-else-if="isOnStep(1)">
+        <CCardBody>
+          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
+        </CCardBody>
+      </CCard>
+
+      <!-- Digital output1 Form-->
+      <CCard v-else-if="isOnStep(2)">
+        <CCardBody>
+          <Step3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
+        </CCardBody>
+      </CCard>
+
+        <!-- Digital output1 Form-->
+        <CCard v-else-if="isOnStep(3)">
+        <CCardBody>
+          <Step4Form :step3form="step3form" @updateStep3form="updateStep3form"/>
         </CCardBody>
       </CCard>
     </CCol>
-
-    <!-- Connection Form-->
-    <CCard :class="showOnStep(1)" style="height: 35rem;">
-      <CCardBody>
-        <ModifyWiegandConvertersStep2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
-      </CCardBody>
-    </CCard>
-
-    <!-- Digital output1 Form-->
-    <CCard :class="showOnStep(2)" style="height: 35rem;">
-      <CCardBody>
-        <ModifyWiegandConvertersStep3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
-      </CCardBody>
-    </CCard>
 
     <!-- 按鈕的Col -->
     <CCol sm="12">
@@ -84,9 +92,13 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import Step1Form from './forms/Step1Form.vue'
-  import Step2Form from './forms/Step2Form.vue'
-  import Step3Form from './forms/Step3Form.vue'
+
+
+  import Step1Form from "@/modules/outputdevice/modifywiegand/Step1Form.vue";
+  import Step2Form from "@/modules/outputdevice/modifywiegand/Step2Form.vue";
+  import Step3Form from "@/modules/outputdevice/modifywiegand/Step3Form.vue";
+  import Step4Form from "@/modules/outputdevice/modifywiegand/Step4Form.vue";
+
 
 
   export default {
@@ -95,6 +107,7 @@
       Step1Form: Step1Form,
       Step2Form: Step2Form,
       Step3Form: Step3Form,
+      Step4Form: Step4Form,
       stepprogress: StepProgress, 
     },
     data() {
