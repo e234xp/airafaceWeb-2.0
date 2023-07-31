@@ -21,33 +21,34 @@
     <!-- 步驟 -->
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard :class="showOnStep(0)">
+      <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <ModifyIOboxesStep1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
         </CCardBody>
       </CCard>
-    </CCol>
-
-    <!-- Connection Form-->
-    <CCard :class="showOnStep(1)">
+    
+      <!-- Connection Form-->
+      <CCard v-else-if="isOnStep(1)">
         <CCardBody>
-          <ModifyIOboxesStep2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
+          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
         </CCardBody>
       </CCard>
 
        <!-- Digital output1 Form-->
-       <CCard :class="showOnStep(2)">
+       <CCard v-else-if="isOnStep(2)">
         <CCardBody>
-          <ModifyIOboxesStep3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
+          <Step3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
         </CCardBody>
       </CCard>
 
        <!-- Digital output2 Form-->
-       <CCard :class="showOnStep(3)">
+       <CCard v-else-if="isOnStep(3)">
         <CCardBody>
-          <ModifyIOboxesStep4Form :step4form="step4form" @updateStep4form="updateStep4form"/>
+          <Step4Form :step4form="step4form" @updateStep4form="updateStep4form"/>
         </CCardBody>
       </CCard>
+    </CCol>
+      
 
     <!-- 按鈕的Col -->
     <CCol sm="12">
@@ -79,19 +80,21 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import ModifyIOboxesStep1Form from './forms/ModifyIOboxesStep1Form.vue'
-  import ModifyIOboxesStep2Form from './forms/ModifyIOboxesStep2Form.vue'
-  import ModifyIOboxesStep3Form from './forms/ModifyIOboxesStep3Form.vue'
-  import ModifyIOboxesStep4Form from './forms/ModifyIOboxesStep4Form.vue'
+  import Step1Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step1Form.vue";
+  import Step2Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step2Form.vue";
+  import Step3Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step3Form.vue";
+  import Step4Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step4Form.vue";
 
+
+  
 
   export default {
     name: "ModifyCameras",
     components: {
-      ModifyIOboxesStep1Form: ModifyIOboxesStep1Form,
-      ModifyIOboxesStep2Form: ModifyIOboxesStep2Form,
-      ModifyIOboxesStep3Form: ModifyIOboxesStep3Form,
-      ModifyIOboxesStep4Form: ModifyIOboxesStep4Form,
+      Step1Form: Step1Form,
+      Step2Form: Step2Form,
+      Step3Form: Step3Form,
+      Step4Form: Step4Form,
       stepprogress: StepProgress, 
     },
     data() {

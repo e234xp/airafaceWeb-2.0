@@ -42,12 +42,7 @@
         </CCardBody>
       </CCard>
 
-        <!-- Digital output1 Form-->
-        <CCard v-else-if="isOnStep(3)">
-        <CCardBody>
-          <Step4Form :step3form="step3form" @updateStep3form="updateStep3form"/>
-        </CCardBody>
-      </CCard>
+      <!-- Digital output1 Form-->
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -97,7 +92,7 @@
   import Step1Form from "@/modules/outputdevice/modifywiegand/Step1Form.vue";
   import Step2Form from "@/modules/outputdevice/modifywiegand/Step2Form.vue";
   import Step3Form from "@/modules/outputdevice/modifywiegand/Step3Form.vue";
-  import Step4Form from "@/modules/outputdevice/modifywiegand/Step4Form.vue";
+
 
 
 
@@ -107,7 +102,7 @@
       Step1Form: Step1Form,
       Step2Form: Step2Form,
       Step3Form: Step3Form,
-      Step4Form: Step4Form,
+
       stepprogress: StepProgress, 
     },
     data() {
