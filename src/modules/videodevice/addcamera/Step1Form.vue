@@ -300,7 +300,7 @@ import Multiselect from "vue-multiselect";
 import "@/airacss/vue-multiselect.css";
 
 export default {
-  name: "Step1Form",
+  name: "AddCamerasStep1Form",
   props: {
     step1form: Object,
     defaultValues: Object,
@@ -340,7 +340,7 @@ export default {
       value_deviceGroupsList: ["A", "B", "C"],
 
       //設備類型
-      value_deviceTypesList: ["rtsp", "SDP"],
+      value_deviceTypesList: ["rtsp", "sdp"],
     };
   },
   components: {
@@ -376,13 +376,12 @@ export default {
     },
     defaultValues: {
       handler(newValue) {
-        this.localStep1form = {
-          ...this.localStep1form,
-          ...newValue,
-        };
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.step1form).includes(key)) return;
+          this.localStep1form[key] = value;
+        });
       },
       deep: true,
-      immediate: true,
     },
   },
 };

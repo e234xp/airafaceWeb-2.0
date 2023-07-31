@@ -2,6 +2,7 @@
   <div id="wrapper">
     <div>
       <div class="h1">{{ disp_headertitle }}</div>
+
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -23,30 +24,33 @@
       <div style="height: 35px"></div>
     </div>
 
-    <!-- 步驟 -->
+    <!-- 項目 -->
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard v-if="isOnStep(0)" class="h-100">
+      <CCard v-if="isOnStep(0)">
         <CCardBody>
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
             :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
           />
         </CCardBody>
       </CCard>
+
       <!-- ROI -->
-      <CCard v-else-if="isOnStep(1)" :style="param_cardStyle">
+      <CCard v-else-if="isOnStep(1)">
         <CCardBody> </CCardBody>
       </CCard>
 
       <!-- FaceCapture Form -->
-      <CCard v-else-if="isOnStep(2)" class="h-100">
+      <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
             @updateStep3form="updateStep3form"
             :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -121,122 +125,63 @@ export default {
       /**Step 1 2 3 */
       disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
       disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+      disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
-      disp_complete: i18n.formatter.format("Complete"),
       disp_previous: i18n.formatter.format("Previous"),
       disp_next: i18n.formatter.format("Next"),
 
-      //要編輯的id
-      value_cameraUuid:
-        this.$route.params.item && this.$route.params.item.uuid
-          ? this.$route.params.item.uuid
-          : "",
+      uuid: "",
+      step1form: {
+        name: "",
+        divice_groups: [],
 
-      // 第一步驟
-      deviceName:
-        this.$route.params.item && this.$route.params.item.name
-          ? this.$route.params.item.name
-          : "",
-      value_deviceGroups:
-        this.$route.params.item && this.$route.params.item.divice_groups
-          ? this.$route.params.item.divice_groups
-          : "",
-
-      // video source
-      value_deviceType:
-        this.$route.params.item && this.$route.params.item.stream_type
-          ? this.$route.params.item.stream_type
-          : "",
-      ip_address:
-        this.$route.params.item && this.$route.params.item.ip_address
-          ? this.$route.params.item.ip_address
-          : "",
-      port:
-        this.$route.params.item && this.$route.params.item.port
-          ? this.$route.params.item.port
-          : "",
-      userName:
-        this.$route.params.item && this.$route.params.item.user
-          ? this.$route.params.item.user
-          : "",
-      password:
-        this.$route.params.item && this.$route.params.item.pass
-          ? this.$route.params.item.pass
-          : "",
-      parameters:
-        this.$route.params.item && this.$route.params.item.connection_info
-          ? this.$route.params.item.connection_info
-          : "",
-
-      // roi:[],
-
-      step1form: {},
-
-      step2form: {},
-
-      step3form: {},
-
-      // 第三步驟
-      captureInterval:
-        this.$route.params.item && this.$route.params.item.capture_interval
-          ? this.$route.params.item.capture_interval
-          : "",
-      targetScore:
-        this.$route.params.item && this.$route.params.item.target_score
-          ? this.$route.params.item.target_score
-          : "",
-      faceMinimumSize:
-        this.$route.params.item && this.$route.params.item.face_min_length
-          ? this.$route.params.item.face_min_length
-          : "",
+        stream_type: "",
+        ip_address: "",
+        port: null,
+        user: "",
+        pass: "",
+        connection_info: "",
+      },
+      step2form: {
+        roi: [
+          {
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 0,
+          },
+        ],
+      },
+      step3form: {
+        capture_interval: null,
+        target_score: null,
+        face_min_length: null,
+      },
+      defaultValues: {},
     };
   },
   components: {
+    stepprogress: StepProgress,
     Step1Form: Step1Form,
     Step3Form: Step3Form,
-    stepprogress: StepProgress,
   },
-
-  // 給預設值 把那一支設備裡面的資料拿出來
-  created() {
-    // Give the form object initial values
-    (this.step1form = {
-      uuid: this.value_cameraUuid,
-      name: this.deviceName,
-      divice_groups: this.value_deviceGroups,
-      stream_type: this.value_deviceType,
-      ip_address: this.ip_address,
-      port: this.port,
-      user: this.userName,
-      pass: this.password,
-      connection_info: this.parameters,
-      // Add other properties as needed
-    }),
-    (this.step2form = {
-      roi: [
-        {
-          x1: 0,
-          y1: 0,
-          x2: 0,
-          y2: 0,
-        },
-      ],
-    }),
-    (this.step3form = {
-      capture_interval: this.captureInterval,
-      target_score: this.targetScore,
-      face_min_length: this.faceMinimumSize,
-    });
+  async created() {
+    this.defaultValues = await this.getDefaultValues();
+    this.uuid = this.defaultValues.uuid;
   },
 
   methods: {
-    // Handle the form update from the child component if needed
-    updateStep1form(updatedForm) {
-      this.step1form = { ...updatedForm };
+    // 處理資料傳遞
+    updateStep1form(newValue) {
+      this.step1form = { ...newValue };
     },
-    updateStep3form(updatedForm) {
-      this.step3form = { ...updatedForm };
+    updateStep3form(newValue) {
+      this.step3form = { ...newValue };
+    },
+
+    async getDefaultValues() {
+      return this.$route.params.item;
     },
 
     // 是否可以按下一步
@@ -333,12 +278,12 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
-    // 按下一步
     async handleNext() {
       switch (this.flag_currentSetp) {
         case 0:
         case 1: {
           this.flag_currentSetp += 1;
+
           break;
         }
 
@@ -347,21 +292,19 @@ export default {
             container: this.$refs.formContainer,
           });
 
-          const { uuid, ...step1Data } = this.step1form
-
           const parameter = {
-              ...step1Data,
+            uuid: this.uuid,
+            data: {
+              ...this.step1form,
               ...this.step2form,
               ...this.step3form,
+            },
           };
 
-          const dataParameter = {uuid, data:parameter };
-          
-          const response = await this.modify(dataParameter);
-          
+          const { data } = await this.modify(parameter);
+
           this.obj_loading.hide();
-          // 如果成功拿到資料
-          if (response.data && response.data.message == "ok") {
+          if (data && data.message == "ok") {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
@@ -374,8 +317,10 @@ export default {
 
           break;
         }
+
         default: {
           this.$router.push({ name: this.value_returnRoutePath });
+
           break;
         }
       }

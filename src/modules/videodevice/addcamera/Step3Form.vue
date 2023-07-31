@@ -83,7 +83,7 @@
 import i18n from "@/i18n";
 
 export default {
-  name: "Step3Form",
+  name: "AddCameraStep3Form",
   props: {
     step3form: Object,
     defaultValues: Object,
@@ -119,13 +119,12 @@ export default {
     },
     defaultValues: {
       handler(newValue) {
-        this.localStep3form = {
-          ...this.localStep3form,
-          ...newValue,
-        };
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.localStep3form).includes(key)) return;
+          this.localStep3form[key] = value;
+        });
       },
       deep: true,
-      immediate: true,
     },
   },
 };
