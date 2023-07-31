@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t("VideoDeviceBasic") }}</div>
+      <div class="h1">{{ disp_headertitle }}</div>
 
       <stepprogress
         class="w-step-progress-4"
@@ -39,12 +39,12 @@
       </CCard>
 
       <!-- ROI -->
-      <CCard v-else-if="isOnStep(1)" :style="param_cardStyle">
+      <CCard v-else-if="isOnStep(1)">
         <CCardBody> </CCardBody>
       </CCard>
 
       <!-- FaceCapture Form -->
-      <CCard v-else-if="isOnStep(2)" :style="param_cardStyle">
+      <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
@@ -78,7 +78,7 @@
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
-            @click="handleNext(flag_currentSetp)"
+            @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
             >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
@@ -92,6 +92,7 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
+
 import Step1Form from "@/modules/videodevice/addcamera/Step1Form.vue";
 import Step3Form from "@/modules/videodevice/addcamera/Step3Form.vue";
 
@@ -108,7 +109,10 @@ export default {
         ? this.$route.params.value_returnRouteName
         : "",
 
+      disp_header: i18n.formatter.format("ModifyCameras"), //編輯設備
+
       /*Basic title  */
+      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
 
       // step setting
       param_activeColor: "#6baee3",

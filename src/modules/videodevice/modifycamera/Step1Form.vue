@@ -1,30 +1,49 @@
 <template>
   <div id="wrapper">
     <!-- 標題 -->
-  
+
     <div>
-      <h2 sm="12">{{ disp_headertitle }}</h2>  
+      <h2 sm="12">{{ disp_headertitle }}</h2>
     </div>
     <!-- Basic -->
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceName }}</CRow>
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+      >{{ disp_basicDeviceName }}</CRow
+    >
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  v-model="localStep1form.name"
+        <CInput
+          size="lg"
+          class="h5"
+          v-model="localStep1form.name"
           :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
           valid-feedback="ok"
           :is-valid="isFieldPassed('name', localStep1form.name)"
-          required  />
+          required
+        />
       </CCol>
     </CRow>
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_basicDeviceGroups }}</CRow>
+
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+      >{{ disp_basicDeviceGroups }}</CRow
+    >
     <CRow>
       <CCol sm="6">
-        <multiselect placeholder="" v-model="localStep1form.divice_groups" :options="value_deviceGroupsList" :multiple="true"
-            :taggable="true" :hideSelected="true" 
-            :show-no-options="false"
-          >
+        <multiselect
+          placeholder=""
+          v-model="localStep1form.divice_groups"
+          :options="value_deviceGroupsList"
+          :multiple="true"
+          :taggable="true"
+          :hideSelected="true"
+          :show-no-options="false"
+        >
         </multiselect>
-
       </CCol>
     </CRow>
 
@@ -34,11 +53,22 @@
     <div>
       <h2 sm="12">{{ disp_subtitle }}</h2>
     </div>
-    
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_type }}</CRow>
+
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+      >{{ disp_type }}</CRow
+    >
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" value="1" v-model="localStep1form.stream_type" placeholder="請選擇" :options="value_deviceTypesList" />
+        <CSelect
+          size="lg"
+          value="1"
+          v-model="localStep1form.stream_type"
+          placeholder="請選擇"
+          :options="value_deviceTypesList"
+        />
       </CCol>
     </CRow>
 
@@ -260,105 +290,103 @@
         </CRow>
       </div>
     </div>
-       
-
   </div>
 </template>
-  
+
 <script>
-  import i18n from "@/i18n";
+import i18n from "@/i18n";
 
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
-	
+import Multiselect from "vue-multiselect";
+import "@/airacss/vue-multiselect.css";
 
+export default {
+  name: "ModifyCamerasStep1Form",
+  props: {
+    step1form: Object,
+    defaultValues: Object,
+    isFieldPassed: Function,
+  },
+  emits: ["updateStep1form"],
+  data() {
+    return {
+      localStep1form: { ...this.step1form },
 
+      /*Basic title  */
+      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
+      // disp_header: i18n.formatter.format("VideoDeviceBasic"),
 
-  export default {
-    name: "ModifyCamerasStep1Form",
-    props:{
-      step1form: Object,
-      isFieldPassed: Function,
+      /**content */
+      disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
+      disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+
+      /*Video Source title  */
+      disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
+
+      /**content */
+      disp_type: i18n.formatter.format("VideoSourceType"),
+      disp_ipAddress: i18n.formatter.format("VideoSourceIpAddress"),
+      disp_port: i18n.formatter.format("VideoSourcePort"),
+      disp_username: i18n.formatter.format("VideoSourceUsername"),
+      disp_password: i18n.formatter.format("VideoSourcePassword"),
+      disp_parameters: i18n.formatter.format("VideoSourceParameters"),
+      disp_connectionString: i18n.formatter.format(
+        "VideoSourceConnectionString"
+      ),
+
+      // 文字提示
+      disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"), // port 提示文字
+
+      //設備群組 下拉選項
+      value_deviceGroupsList: ["A", "B", "C"],
+
+      //設備類型
+      value_deviceTypesList: ["rtsp", "sdp"],
+    };
+  },
+  components: {
+    multiselect: Multiselect,
+  },
+  computed: {
+    isShowConnectionString() {
+      // 判断輸入框是否都不為空
+      return (
+        this.localStep1form.ip_address !== "" &&
+        this.localStep1form.port !== "" &&
+        this.localStep1form.user !== "" &&
+        this.localStep1form.pass !== "" &&
+        this.localStep1form.connection_info !== ""
+      );
     },
-    data() {
-      return {
-        localStep1form: { ...this.step1form }, // 本地保存父组件传递的 form 数据
-        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
-        value_allTableItems: [],
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
-        },
-        value_searchingFilter: "",
-        isChecked: true,
-
-        /*Basic title  */
-        disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
-        // disp_header: i18n.formatter.format("VideoDeviceBasic"),
-
-        /**content */
-        disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-        disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
-
-        /*Video Source title  */
-        disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
-
-        /**content */
-        disp_type: i18n.formatter.format("VideoSourceType"),
-        disp_ipAddress: i18n.formatter.format("VideoSourceIpAddress"),
-        disp_port: i18n.formatter.format("VideoSourcePort"),
-        disp_username: i18n.formatter.format("VideoSourceUsername"),
-        disp_password: i18n.formatter.format("VideoSourcePassword"),
-        disp_parameters: i18n.formatter.format("VideoSourceParameters"),
-        disp_connectionString: i18n.formatter.format("VideoSourceConnectionString"),
-
-        //設備群組 下拉選項
-        value_deviceGroupsList: ["A","B","C"],
-
-        //設備類型
-        value_deviceTypesList:["rtsp", "SDP"]
-
-      };
+    //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
+    connectionString() {
+      return `${this.localStep1form.stream_type}://${
+        this.localStep1form.user
+      }:${this.localStep1form.pass.replace(/./g, "*")}@${
+        this.localStep1form.ip_address
+      }:${this.localStep1form.port}${this.localStep1form.connection_info}`;
     },
-    components: {
-      "v-select": VueSelect,
-      multiselect: Multiselect,
-    },
-    computed: {
-      isShowConnectionString() {
-        // 判断輸入框是否都不為空
-        return (
-          this.localStep1form.ip_address !== "" &&
-          this.localStep1form.port !== "" &&
-          this.localStep1form.user !== "" &&
-          this.localStep1form.pass !== "" &&
-          this.localStep1form.connection_info !== ""
-        );
+  },
+  // 拿資料 寫入資料
+  watch: {
+    localStep1form: {
+      handler(newValue) {
+        this.$emit("updateStep1form", { ...newValue });
       },
-      //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
-      connectionString() {
-        return `${this.localStep1form.stream_type}://${
-          this.localStep1form.user
-        }:${this.localStep1form.pass.replace(/./g, "*")}@${
-          this.localStep1form.ip_address
-        }:${this.localStep1form.port}${this.localStep1form.connection_info}`;
-      },
+      deep: true,
     },
-    watch: {
-      localStep1form: {
-        handler(newValue) {
-          console.log('emit updateStep1form')
-          this.$emit('updateStep1form', { ...newValue });
-        },
-        deep: true,
+    defaultValues: {
+      handler(newValue) {
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.step1form).includes(key)) return;
+          this.localStep1form[key] = value;
+        });
       },
-    }
-  }
+      deep: true,
+    },
+  },
+};
 </script>
-  
 
 <style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
+@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
 </style>

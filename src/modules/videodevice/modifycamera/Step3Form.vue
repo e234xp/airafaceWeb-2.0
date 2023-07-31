@@ -6,8 +6,8 @@
     </div>
 
     <!-- 項目 -->
-      <!-- Face Capture -->
-      <div class="mt-3">
+    <!-- Face Capture -->
+    <div class="mt-3">
       <CRow sm="12">
         <CCol sm="6" class="h5">
           {{ disp_faceMinimumSize }}
@@ -83,16 +83,15 @@
 import i18n from "@/i18n";
 
 export default {
-  name: "Step3Form",
+  name: "ModifyCameraStep3Form",
   props: {
     step3form: Object,
+    defaultValues: Object,
     isFieldPassed: Function,
   },
   data() {
     return {
       localStep3form: { ...this.step3form },
-
-      isChecked: true,
 
       /*Face Capture title  */
       disp_subtitleFaceCapture: i18n.formatter.format("VideoFaceCapture"),
@@ -114,25 +113,18 @@ export default {
   watch: {
     localStep3form: {
       handler(newValue) {
-        console.log("emit updateStep3form");
         this.$emit("updateStep3form", { ...newValue });
       },
       deep: true,
     },
-  },
-
-  methods: {
-    limitNumber0to1(val) {
-      if (!/^[01]$/.test(val)) {
-        return false;
-      }
-      return true;
-    },
-    limitNumber(value) {
-      if (!/^[0-9]/.test(value)) {
-        return false;
-      }
-      return true;
+    defaultValues: {
+      handler(newValue) {
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.localStep3form).includes(key)) return;
+          this.localStep3form[key] = value;
+        });
+      },
+      deep: true,
     },
   },
 };
