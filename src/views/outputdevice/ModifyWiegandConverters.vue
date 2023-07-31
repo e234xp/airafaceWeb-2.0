@@ -46,20 +46,32 @@
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
             >{{ value_returnRouteName }}
           </CButton>
         </div>
-        <div v-if="flag_currentSetp == 1  || flag_currentSetp == 2 || flag_currentSetp == 3">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev"
+        <div
+          v-if="
+            flag_currentSetp == 1 ||
+            flag_currentSetp == 2 
+          "
+        >
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
             >{{ disp_previous }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext"
-          :disabled="false"
-          >{{ nextButtonName() }}
+          <CButton
+            class="btn btn-primary mb-3"
+            size="lg"
+            @click="handleNext(flag_currentSetp)"
+            :disabled="!isStepPassed(flag_currentSetp)"
+            >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -72,17 +84,17 @@
   import i18n from "@/i18n";
 
   import StepProgress from "vue-step-progress";
-  import ModifyWiegandConvertersStep1Form from './forms/ModifyWiegandConvertersStep1Form.vue'
-  import ModifyWiegandConvertersStep2Form from './forms/ModifyWiegandConvertersStep2Form.vue'
-  import ModifyWiegandConvertersStep3Form from './forms/ModifyWiegandConvertersStep3Form.vue'
+  import Step1Form from './forms/Step1Form.vue'
+  import Step2Form from './forms/Step2Form.vue'
+  import Step3Form from './forms/Step3Form.vue'
 
 
   export default {
     name: "ModifyCameras",
     components: {
-      ModifyWiegandConvertersStep1Form: ModifyWiegandConvertersStep1Form,
-      ModifyWiegandConvertersStep2Form: ModifyWiegandConvertersStep2Form,
-      ModifyWiegandConvertersStep3Form: ModifyWiegandConvertersStep3Form,
+      Step1Form: Step1Form,
+      Step2Form: Step2Form,
+      Step3Form: Step3Form,
       stepprogress: StepProgress, 
     },
     data() {
@@ -129,21 +141,6 @@
           
         },
 
-        //要編輯的id
-        value_cameraUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
-        
-        // 第一步驟
-        deviceName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : "",
-        value_deviceGroups: this.$route.params.item && this.$route.params.item.divice_groups ? this.$route.params.item.divice_groups : "",
-        
-
-        value_deviceType: this.$route.params.item && this.$route.params.item.stream_type ? this.$route.params.item.stream_type : "",
-        ip_address: this.$route.params.item && this.$route.params.item.ip_address ? this.$route.params.item.ip_address : "",
-        port: this.$route.params.item && this.$route.params.item.port ? this.$route.params.item.port : "",
-        userName: this.$route.params.item && this.$route.params.item.user ? this.$route.params.item.user : "",
-        password: this.$route.params.item && this.$route.params.item.pass ? this.$route.params.item.pass : "",
-        parameters: this.$route.params.item && this.$route.params.item.connection_info ? this.$route.params.item.connection_info : "",
-
         
         step1form: {},
 
@@ -153,25 +150,11 @@
 
       };
     },
-    mounted(){
-      console.log("當前步驟",self.flag_currentSetp)
-    },
-    // 給預設值 把那一支設備裡面的資料拿出來
-    created() {
-      // Give the form object initial values
-      this.step1form = {
-        uuid: this.value_cameraUuid,
-        name: this.deviceName,
-        divice_groups:this.value_deviceGroups,
-        stream_type: this.value_deviceType,
-        ip_address: this.ip_address,
-        port: this.port,
-        user: this.userName,
-        pass: this.password,
-        connection_info: this.parameters
-        // Add other properties as needed
-      }
 
+    // 給預設值 把那一支設備裡面的資料拿出來
+    async created() {
+      this.defaultValues = await this.getDefaultValues();
+      this.uuid = this.defaultValues.uuid;
     },
 
     methods: {
@@ -187,129 +170,172 @@
         this.step3form = { ...newValue };
       },
 
-      // 決定現在顯示哪一個步驟
-      showOnStep(step) {
-        return step == this.flag_currentSetp ? "d-block" : "d-none";
-      },
-      // 上一步按鈕
-      clickOnPrev() {
-        const self = this;
-        console.log(self.value_returnRoutePath,"路徑2")
-
-        if (self.flag_currentSetp == 0) {
-          if (self.value_returnRoutePath.length > 0) {
-            self.$router.push({ name: self.value_returnRoutePath });
-          } 
-        } else if (self.flag_currentSetp > 0) self.flag_currentSetp--;
-        console.log("當前步驟",self.flag_currentSetp)
-      },
-      onFinish( data, cb ) {
-        const self = this;
-        const dataForModify = {
-            uuid : self.value_cameraUuid,
-            data : {
-              name: data.name,
-              divice_groups: data.divice_groups,
-              stream_type: data.stream_type,
-
-              ip_address: data.ip_address,
-              port: data.port,
-              user: data.user,
-              pass: data.pass,
-              connection_info: data.connection_info,
-
-              capture_interval: data.capture_interval,
-              target_score: data.target_score,
-              roi: [
-                  {
-                      "x1": 0,
-                      "y1": 0,
-                      "x2": 0,
-                      "y2": 0
-                  }
-              ],
-              face_min_length: data.face_min_length,
-            }
-        };
-        self.$globalModifyCameras( dataForModify, ( error, result ) => {
-          if( cb ) cb( error == null, result );
-        });
+      async getDefaultValues() {
+        return this.$route.params.item;
       },
 
-      handleParameter(){
-        // todo
-        const form = {
-          ...this.step1form,
-        
+          // 是否可以按下一步
+    isStepPassed(step) {
+      switch (step) {
+        case 0: {
+          return this.isFormPassed(this.step1form);
         }
-        console.log("formDT",form)
-        return form
-      },
 
-      clickOnNext() {
-        const self = this;
-        // console.log(self.flag_currentSetp,"現在第幾步")
-        if (self.flag_currentSetp == 0) {
-          self.flag_currentSetp = 1;
-        } else if (self.flag_currentSetp == 1) {
-          self.flag_currentSetp = 2;
-        } else if (self.flag_currentSetp == 2) {
-          if (self.onFinish) {
-            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        case 1: {
+          // todo ROI
+          return true;
+        }
 
-            const parameter = self.handleParameter(); // 拿參數
-            // console.log("參數",parameter)
+        case 2: {
+          return this.isFormPassed(this.step3form);
+        }
 
-            self.onFinish(parameter, function (success, result) {
-              if (self.obj_loading) self.obj_loading.hide();
-              if (result && result.message == "ok") {
-                self.flag_currentSetp = 3;
-              } else {
-                self.$fire({
-                  text: i18n.formatter.format("Failed"),
-                  type: "error",
-                  timer: 3000,
-                  confirmButtonColor: "#20a8d8",
-                });
-              }
-            });
+        case 3: {
+          return true;
+        }
+      }
+    },
+
+    isFormPassed(form) {
+      return Object.entries(form).every(([key, value]) => {
+        return this.isFieldPassed(key, value);
+      });
+    },
+
+    isFieldPassed(key, value) {
+      const rules = {
+        name: "nonEmpty",
+        divice_groups: "nonEmpty",
+        stream_type: "nonEmpty",
+        ip_address: "nonEmpty",
+        port: "port",
+        user: "nonEmpty",
+        pass: "password",
+        connection_info: "nonEmpty",
+        target_score: "target_score",
+        face_min_length: "passitiveInt",
+        capture_interval: "captureInterval",
+      };
+      const rule = rules[key];
+      if (!rule) return true;
+      switch (rule) {
+        case "nonEmpty": {
+          return !!value;
+        }
+
+        case "port": {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && number >= 1 && number <= 65535;
+        }
+
+        case "password": {
+          return !!value;
+        }
+
+        case "passitiveInt": {
+          return /^\d+$/.test(value);
+        }
+
+        case "target_score": {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 1;
+        }
+
+        case "captureInterval": {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 100 && value <= 1000;
+        }
+      }
+    },
+
+    // 決定現在顯示哪一個步驟
+    isOnStep(step) {
+      return this.flag_currentSetp === step;
+    },
+
+    // 上一步按鈕
+    async handlePrev() {
+      if (this.flag_currentSetp > 0) {
+        this.flag_currentSetp -= 1;
+        return;
+      }
+
+      if (this.value_returnRoutePath.length === 0) return;
+
+      this.$router.push({ name: this.value_returnRoutePath });
+    },
+
+
+    async handleNext() {
+      switch (this.flag_currentSetp) {
+        case 0:
+        case 1: {
+          this.flag_currentSetp += 1;
+
+          break;
+        }
+
+        case 2: {
+          this.obj_loading = this.$loading.show({
+            container: this.$refs.formContainer,
+          });
+
+          const parameter = {
+            uuid: this.uuid,
+            data: {
+              ...this.step1form,
+              ...this.step2form,
+              ...this.step3form,
+            },
+          };
+          
+          const { data } = await this.modify(parameter);
+
+          this.obj_loading.hide();
+          if (data && data.message == "ok") {
+            this.flag_currentSetp += 1;
           } else {
-            self.flag_currentSetp = 3;
-          } 
-        } else {
-          self.$router.push({ name: self.value_returnRoutePath });
-        }
-      },
+            this.$fire({
+              text: i18n.formatter.format("Failed"),
+              type: "error",
+              timer: 3000,
+              confirmButtonColor: "#20a8d8",
+            });
+          }
 
-      nextButtonName() {
-        switch (this.flag_currentSetp) {
-          case 0:
-            return this.disp_next;
-          case 1:
-            return this.disp_next;
-          case 2:
-            return this.disp_next;
-          case 3:
-            return this.disp_complete;
-          default:
-            return this.disp_next;
+          break;
         }
-      },
 
-      // 是否可以按下一步
-      checkForm(){
-        if(self.flag_currentSetp === undefined) {
-          return this.step1form.name === '' || this.step1form.divice_groups === '' || 
-          this.step1form.stream_type === '' || this.step1form.ip_address === '' || 
-          this.step1form.port === '' || this.step1form.user === '' || 
-          this.step1form.pass === '' || this.step1form.connection_info === ''
-        } else if(self.flag_currentSetp === 0) {
-          //ROI todo
-        } else if(self.flag_currentSetp === 1) {
-          // return this.step1form.capture_interval === false || this.step1form.divice_groups === '' || 
-          // this.step1form.stream_type === ''
+        default: {
+          this.$router.push({ name: this.value_returnRoutePath });
+
+          break;
         }
-      },
+      }
+    },
+
+    //送api 完成
+    modify(data) {
+      return this.$globalModifyWiegandConverter(data);
+    },
+
+    nextButtonName(step) {
+      switch (step) {
+        case 0:
+          return this.disp_next;
+        case 1:
+          return this.disp_next;
+        case 2:
+          return this.disp_next;
+        case 3:
+          return this.disp_complete;
+        default:
+          return this.disp_next;
+      }
+    },
 
     },
   }

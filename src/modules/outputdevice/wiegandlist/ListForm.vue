@@ -45,8 +45,17 @@
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
+          <vxe-table :data="value_dataItemsToShow" stripe align="center"     
+            :cell-style="
+              () => {
+                return 'fontSize:18px;';
+              }
+            "
+            :header-cell-style="
+              () => {
+                return 'fontSize:18px;';
+              }
+            " ref="mainTable" :auto-resize="true" keep-source
               highlight-current-row :edit-config="{ trigger: 'manual', mode: 'row' }">
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
