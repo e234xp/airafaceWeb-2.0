@@ -104,10 +104,11 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
-import Step1Form from "./forms/Step1Form.vue";
-import Step2Form from "./forms/Step2Form.vue";
-import Step3Form from "./forms/Step3Form.vue";
+import Step1Form from "@/modules/videodevice/modifyvideodevicegroups/Step1Form.vue";
+import Step2Form from "@/modules/videodevice/modifyvideodevicegroups/Step2Form.vue";
+import Step3Form from "@/modules/videodevice/modifyvideodevicegroups/Step3Form.vue";
 // import Step4Form from "./forms/Step4Form.vue";
+
 
 export default {
   name: "AddOutputDeviceGroups",

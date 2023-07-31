@@ -3,6 +3,7 @@
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
       <div class="h1">{{ disp_headertitle }}</div>
+      
 
       <stepprogress
         class="w-step-progress-4"
@@ -104,9 +105,11 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
-import Step1Form from "./forms/Step1Form.vue";
-import Step2Form from "./forms/Step2Form.vue";
-import Step3Form from "./forms/Step3Form.vue";
+
+import Step1Form from "@/modules/videodevice/addvideodevicegroups/Step1Form.vue";
+import Step2Form from "@/modules/videodevice/addvideodevicegroups/Step2Form.vue";
+import Step3Form from "@/modules/videodevice/addvideodevicegroups/Step3Form.vue";
+
 // import Step4Form from "./forms/Step4Form.vue";
 
 export default {
