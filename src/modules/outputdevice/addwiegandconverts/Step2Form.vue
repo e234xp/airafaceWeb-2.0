@@ -12,15 +12,23 @@
         <CRow sm="12">
           <CCol sm="6" class="h5">
             {{ disp_WiegandBasicIP }}
-            <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address"/>
+            <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address"
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)"
+                required/>
           </CCol>
           <CCol sm="6" class="h5">
             {{ disp_WiegandBasicPort }}
-            <CInput size="lg" class="mt-2" v-model.number="localStep2form.port"/>
+            <CInput size="lg" class="mt-2" v-model.number="localStep2form.port"
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('port', localStep2form.port)"
+                required/>
           </CCol>
         </CRow>
       </div>
-
+{{ localStep2form }}
     </div>
   </template>
     
@@ -33,7 +41,9 @@
     export default {
       name: "AddCamerasStep2Form",
       props:{
-        step2form: Object
+        step2form: Object,
+        defaultValues: Object,
+        isFieldPassed: Function,
       },
       data() {
       return {
@@ -54,12 +64,6 @@
       components: {
         multiselect: Multiselect,
       },
-      //預設值
-      created() {
-        this.defaultPortValue();
-        this.localStep2form.user = "admin",
-        this.localStep2form.pass = "123456"
-      }, 
       // 拿資料 寫入資料
       watch: {
         localStep2form: {
@@ -69,17 +73,18 @@
           },
           deep: true,
         },
-      },
-      methods: {
-        defaultPortValue() {
-          this.localStep2form.port = 554;
-          return this.localStep2form.port !== null && this.localStep2form.port >= 0 && this.localStep2form.port <= 65535;
+        defaultValues: {
+          handler(newValue) {
+            this.localStep2form = {
+              ...this.localStep2form,
+              ...newValue,
+            };
+          },
+          deep: true,
+          immediate: true,
         },
-        // 判斷欄位空值
-        isNotEmpty(value) {
-          return value !== null && value !== undefined && value !== '';
-        }
       },
+      
     }
   </script>
     

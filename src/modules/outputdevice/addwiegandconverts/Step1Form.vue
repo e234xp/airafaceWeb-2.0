@@ -9,15 +9,17 @@
           <CRow sm="12">
             <CCol sm="6" class="h5">
               {{ disp_WiegandBasicDeviceName }}
-              <CInput size="lg" class="mt-2" v-model="localStep1form.name"/>
+              <CInput size="lg" class="mt-2" v-model="localStep1form.name"
+                :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('name', localStep1form.name)"
+                required/>
             </CCol>
             <CCol sm="6" class="h5">
               {{ disp_WiegandBasicDeviceGroups }}
-              <CSelect size="lg" v-model="localStep1form.value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-              :invalid-feedback= "$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isNotEmpty"
-              required/>
+              <CSelect size="lg" v-model="localStep1form.divice_groups" 
+              :options="value_deviceGroupsList" 
+              :filterable="true" class="font-control mt-2"/>
             </CCol>
           </CRow>
         </div>
@@ -37,7 +39,9 @@
   export default {
     name: "CamerasBasic",
     props:{
-      step1form: Object
+      step1form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
     },
     data() {
       return {
@@ -59,13 +63,7 @@
     components: {
       Multiselect: Multiselect
     },
-    //預設值
-    created() {
-      // this.defaultPortValue();
-      // this.localStep3form.user = "admin",
-      // this.localStep3form.pass = "123456"
-      // this.localStep3form.connection_info = "/media/video1"
-    }, 
+   
     // 拿資料 寫入資料
     watch: {
       localStep1form: {
@@ -75,17 +73,18 @@
         },
         deep: true,
       },
-    },
-    methods: {
-      defaultPortValue() {
-        // this.localStep3form.port = 554;
-        // return this.localStep3form.port !== null && this.localStep3form.port >= 0 && this.localStep3form.port <= 65535;
+      defaultValues: {
+        handler(newValue) {
+          this.localStep1form = {
+            ...this.localStep1form,
+            ...newValue,
+          };
+        },
+        deep: true,
+        immediate: true,
       },
-      // 判斷欄位空值
-      isNotEmpty(value) {
-        return value !== null && value !== undefined && value !== '';
-      }
     },
+   
 
   }
 </script>

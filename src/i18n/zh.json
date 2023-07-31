@@ -587,6 +587,9 @@
   "WiegandBasicTitleNameSettings": "Settings",
   "WiegandBasicCOlNameIndex":"Index:",
   "WiegandBasicCOlNameSystemCode":"System code:",
+  "WiegandBasicCOlNameDataFormat":"Data format:",
+
+
   "ModifyCameras": "修改設備",
 
   "limitNumber0to1": "限制輸入0~1",
@@ -597,7 +600,9 @@
   "VideoDeviceDigitalOutPut1":"DigitalOutPut1",
   "VideoDeviceDigitalOutPut2":"DigitalOutPut2",
 
-  "NewDeviceGroups": "新增設備群組"
+  "NewDeviceGroups": "新增設備群組",
+
+  "placeholder": "請選擇"
 
 
        
