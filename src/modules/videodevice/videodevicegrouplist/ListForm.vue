@@ -66,7 +66,7 @@
 
             <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="videoDevices" :title="disp_videoDevices" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="camera_count" :title="disp_videoDevices" width="auto" align="center">
             </vxe-table-column>
 
             <vxe-table-column :show-overflow="ellipsisMode" field="outputDevices" :title="disp_outputDevices" width="auto" align="center">
@@ -225,12 +225,27 @@
         async refreshTableItems() {
           const self = this;
           const tableItems = await self.onGetItems();
-
-          self.value_allTableItems = self.value_allTableItems.concat(tableItems);
+          self.value_allTableItems = self.processFields(tableItems);
+          // self.value_allTableItems = self.value_allTableItems.concat(tableItems);
           self.value_dataItemsToShow = self.generateFilteredData(
             self.value_allTableItems,
             self.value_searchingFilter
           );
+        },
+        processFields(sourceData) {
+      
+          let modifyFieldsData = sourceData.map(item => {
+            
+            let modifiedItem = { ...item };
+      
+            modifiedItem.camera_count = modifiedItem.camera_uuid_list.length;
+
+            //到時候改成tablet
+            // modifiedItem.wiegand_converter_count = modifiedItem.wiegand_converter_uuid_list.length;
+
+            return modifiedItem;
+          });
+          return modifyFieldsData;
         },
         // 表格資料處理及搜尋
         generateFilteredData(sourceData, filter) {
