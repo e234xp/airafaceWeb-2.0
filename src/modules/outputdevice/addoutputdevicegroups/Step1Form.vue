@@ -1,98 +1,72 @@
 <template>
-    <div id="wrapper">
-      <!-- 標題 -->
-      <div>
-      <CCol sm="12">
-          <td class="h1">{{ disp_header }}</td>
-      </CCol>
-
-      <div style="height: 35px"></div>
-      </div>
-      <!-- Basic -->
-      <div class="mt-3">
-        <CRow sm="12">
-          <CCol sm="6" class="h5"  >
-            {{ disp_IOBoxesBasicDeviceName }}
-            <CInput size="lg" class="mt-2" v-model="value_deviceGroups" 
-            :invalid-feedback= "$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isNotEmpty"
-            required/>
-          </CCol>
-        </CRow>
-      </div>
-
-     
-
+  <div id="wrapper">
+    <!-- 標題 -->
+    <div>
+    <CCol sm="12">
+        <td class="h1">{{ disp_header }}</td>
+    </CCol>
+   
+    <div style="height: 35px"></div>
     </div>
-  </template>
-    
-  <script>
-    import i18n from "@/i18n";
+    <!-- Basic -->
+    <div class="mt-3">
+      <CRow sm="12">
+        <CCol sm="6" class="h5"  >
+          {{ disp_OutputDeviceBasicDeviceName }}
+          <CInput size="lg" class="mt-2" v-model="localStep1form.name" 
+          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+          valid-feedback="ok"
+          :is-valid="isFieldPassed('name', localStep1form.name)"
+          required/>
+        </CCol>
+      </CRow>
+    </div>
+  </div>
+</template>
+  
+<script>
+  import i18n from "@/i18n";
+      
+  export default {
+    name: "Step1Form",
+    props:{
+      step1form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
+    },
+    data() {
+    return {
+        localStep1form: { ...this.step1form },
 
-    import VueSelect from 'vue-select';
-    import Multiselect from "vue-multiselect";
-    import "@/airacss/vue-multiselect.css";
-        
-    export default {
-      name: "AddCamerasStep1Form",
-      props:{
-        step1form: Object
-      },
-      data() {
-      return {
-          localStep1form: { ...this.step1form },
+        isChecked: true,
 
-          isChecked: true,
+        /*Basic title  */
+        disp_header: i18n.formatter.format("OutputDeviceGroupBasicName"),
 
-          /*Basic title  */
-          disp_header: i18n.formatter.format("I/OBoxesBasicName"),
-
-          /**content */
-          disp_IOBoxesBasicBrand: i18n.formatter.format("I/OBoxesBasicCOlNameBrand"),
-          disp_IOBoxesBasicModel: i18n.formatter.format("I/OBoxesBasicCOlNameModel"),
-          disp_IOBoxesBasicDeviceName: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceName"),
-          disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
-
-          /**v-model */
-          value_deviceGroups: "", /**選單 */
-          value_deviceGroupsList: [1,2,3]
-        };
-      },
-      components: {
-        "v-select": VueSelect,
-        multiselect: Multiselect,
-      },
-      //預設值
-      created() {
-        this.defaultPortValue();
-        this.localStep1form.user = "admin",
-        this.localStep1form.pass = "123456"
-        this.localStep1form.connection_info = "/media/video1"
-      }, 
-      // 拿資料 寫入資料
-      watch: {
-        localStep1form: {
-          handler(newValue) {
-            console.log('emit updateStep1form')
-            this.$emit('updateStep1form', { ...newValue });
-          },
-          deep: true,
+        /**content */
+        disp_OutputDeviceBasicDeviceName: i18n.formatter.format("OutputDeviceGroupsBasicCOlNameDeviceName"),
+      };
+    },
+    // 拿資料 寫入資料
+    watch: {
+      localStep1form: {
+        handler(newValue) {
+          console.log('emit updateStep1form')
+          this.$emit('updateStep1form', { ...newValue });
         },
+        deep: true,
       },
-      methods: {
-        defaultPortValue() {
-          this.localStep1form.port = 554;
-          return this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535;
+      defaultValues: {
+        handler(newValue) {
+          this.localStep1form = {
+            ...this.localStep1form,
+            ...newValue,
+          };
         },
-        // 判斷欄位空值
-        isNotEmpty(value) {
-          return value !== null && value !== undefined && value !== '';
-        }
+        deep: true,
+        immediate: true,
       },
-    }
-  </script>
-
-  <style>
-    @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-  </style>
+    },
+   
+  }
+</script>
