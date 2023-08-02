@@ -21,7 +21,7 @@
           </CCol>
         </CRow>
       </div>
-
+      {{ localStep1form }}
      
 
     </div>
