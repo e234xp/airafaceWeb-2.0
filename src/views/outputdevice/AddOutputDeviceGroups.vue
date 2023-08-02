@@ -1,6 +1,7 @@
 <template>
   <div id="wrapper">
     <div>
+      <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
       <div class="h1">{{ disp_headertitle }}</div>
 
       <stepprogress
@@ -22,7 +23,7 @@
     <!-- 項目 -->
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard v-if="isOnStep(0)" style="height: 35rem">
+      <CCard v-if="isOnStep(0)">
         <CCardBody>
           <Step1Form
             :step1form="step1form"
@@ -32,10 +33,9 @@
           />
         </CCardBody>
       </CCard>
-    
 
       <!-- Connection Form-->
-      <!-- <CCard v-else-if="isOnStep(1)" style="height: 35rem">
+      <!-- <CCard v-else-if="isOnStep(1)">
         <CCardBody>
           <Step2Form
             :step2form="step2form"
@@ -46,8 +46,8 @@
         </CCardBody>
       </CCard> -->
 
-      <!-- Settings Form-->
-      <!-- <CCard v-else-if="isOnStep(2)" style="height: 35rem">
+      <!-- Digital output1 Form-->
+      <!-- <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
@@ -59,11 +59,13 @@
       </CCard> -->
 
       <!-- Digital output2 Form-->
-      <!-- <CCard :class="showOnStep(3)">
+      <!-- <CCard v-else-if="isOnStep(3)">
         <CCardBody>
           <Step4Form
             :step4form="step4form"
             @updateStep4form="updateStep4form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
           />
         </CCardBody>
       </CCard> -->
@@ -81,7 +83,9 @@
         </div>
         <div
           v-if="
-            flag_currentSetp == 1
+            flag_currentSetp == 1 ||
+            flag_currentSetp == 2 ||
+            flag_currentSetp == 3
           "
         >
           <CButton
@@ -99,7 +103,6 @@
             :disabled="!isStepPassed(flag_currentSetp)"
             >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
-          {{ flag_currentSetp }}
         </div>
       </div>
     </CCol>
@@ -107,18 +110,19 @@
 </template>
 
 <script>
-  import i18n from "@/i18n";
+import i18n from "@/i18n";
 
-  import StepProgress from "vue-step-progress";
-  import Step1Form from "@/modules/outputdevice/addoutputdevicegroups/Step1Form.vue";
-  import Step2Form from "@/modules/outputdevice/addoutputdevicegroups/Step2Form.vue";
-  import Step3Form from "@/modules/outputdevice/addoutputdevicegroups/Step3Form.vue";
-  import Step4Form from "@/modules/outputdevice/addoutputdevicegroups/Step4Form.vue";
+import StepProgress from "vue-step-progress";
+import Step1Form from "@/modules/outputdevice/addoutputdevicegroups/Step1Form.vue";
+import Step2Form from "@/modules/outputdevice/addoutputdevicegroups/Step2Form.vue";
+import Step3Form from "@/modules/outputdevice/addoutputdevicegroups/Step3Form.vue";
+import Step4Form from "@/modules/outputdevice/addoutputdevicegroups/Step4Form.vue";
 
 
 
 export default {
   name: "AddOutputDeviceGroups",
+
   data() {
     return {
       param_cardStyle: "height: 35rem;",
@@ -145,6 +149,7 @@ export default {
       disp_step1: i18n.formatter.format("VideoDeviceBasic"),
       disp_step2: i18n.formatter.format("VideoDeviceConnection"),
       disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+      disp_step4: i18n.formatter.format("VideoDeviceDigitalOutPut2"),
       disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
@@ -153,18 +158,30 @@ export default {
       disp_next: i18n.formatter.format("Next"),
 
       step1form: {
-        name: ""
+        name: "",
       },
 
       // step2form: {
       //   ip_address: "",
-      //   port: null,
+      //   port: null, //Number(getPort)
+      //   username: "",
+      //   password: "",
       // },
 
       // step3form: {
-      //   bits: null,
-      //   index: null,
-      //   syscode: null,
+      //   no: 1,
+      //   enable: true,
+      //   default: false,
+      //   trigger: true,
+      //   delay: 3
+      // },
+
+      // step4form: {
+      //   no: 2,
+      //   enable: false,
+      //   default: true,
+      //   trigger: false,
+      //   delay: 1
       // },
 
       defaultValues: {}
@@ -180,9 +197,8 @@ export default {
   async created() {
     this.defaultValues = await this.getDefaultValues();
   },
-
-
   methods: {
+
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
@@ -193,11 +209,13 @@ export default {
     // updateStep3form(newValue) {
     //   this.step3form = { ...newValue };
     // },
+    // updateStep4form(newValue) {
+    //   this.step4form = { ...newValue };
+    // },
 
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        port: 1001,
       };
 
       return form;
@@ -205,7 +223,7 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { total_length: totalLength, result: deviceList },
+        data: { total_length: totalLength, result: deviceList},
       } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
 
       let number = totalLength + 1;
@@ -223,8 +241,10 @@ export default {
       return deviceList.some((device) => device.name === name);
     },
 
-    // 是否可以按下一步
-    isStepPassed(step) {
+
+    
+     // 是否可以按下一步
+     isStepPassed(step) {
       switch (step) {
         case 0: {
           return this.isFormPassed(this.step1form);
@@ -306,7 +326,7 @@ export default {
     },
 
     // 上一步按鈕
-    handlePrev() {
+    async handlePrev() {
       if (this.flag_currentSetp > 0) {
         this.flag_currentSetp -= 1;
         return;
@@ -317,10 +337,23 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
+
+    //送api 完成
+    handleParameter() {
+      const form = {
+        ...this.step1form,
+        wiegand_converter_uuid_list: ["0acefb9b-c1ac-4091-9b63-505519401d4f"],
+        iobox_uuid_list: []
+      };
+      console.log(form,"form")
+      return form;
+    },
+
     async handleNext() {
       switch (this.flag_currentSetp) {
         // case 0:
-        // case 1: {
+        // case 1: 
+        // case 2:{
         //   this.flag_currentSetp += 1;
 
         //   break;
@@ -331,14 +364,9 @@ export default {
             container: this.$refs.formContainer,
           });
 
-          const parameter = {
-            ...this.step1form,
-            wiegand_converter_uuid_list: [],
-            iobox_uuid_list: []
-            // ...this.step2form,
-            // ...this.step3form,
-          };
-
+          const parameter = this.handleParameter();
+          console.log(parameter,"送的資料")
+          
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();
@@ -366,7 +394,7 @@ export default {
 
     //送api 完成
     create(data) {
-      return this.$globalCreateWiegandConverter(data);
+      return this.$globalCreateOutputDeviceGroup(data);
     },
 
     nextButtonName(step) {
@@ -379,8 +407,6 @@ export default {
           return this.disp_next;
       }
     },
-
-
   },
 };
 </script>

@@ -35,7 +35,7 @@
       </CCard>
 
       <!-- Connection Form-->
-      <CCard v-else-if="isOnStep(1)">
+      <!-- <CCard v-else-if="isOnStep(1)">
         <CCardBody>
           <Step2Form
             :step2form="step2form"
@@ -44,10 +44,10 @@
             :defaultValues="defaultValues"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
 
       <!-- Digital output1 Form-->
-      <CCard v-else-if="isOnStep(2)">
+      <!-- <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
@@ -56,10 +56,10 @@
             :defaultValues="defaultValues"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
 
       <!-- Digital output2 Form-->
-      <CCard v-else-if="isOnStep(3)">
+      <!-- <CCard v-else-if="isOnStep(3)">
         <CCardBody>
           <Step4Form
             :step4form="step4form"
@@ -68,7 +68,7 @@
             :defaultValues="defaultValues"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -99,7 +99,7 @@
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
-            @click="handleNext(flag_currentSetp)"
+            @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
             >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
@@ -189,16 +189,15 @@ export default {
   },
   components: {
     Step1Form: Step1Form,
-    Step2Form: Step2Form,
-    Step3Form: Step3Form,
-    Step4Form: Step4Form,
+    // Step2Form: Step2Form,
+    // Step3Form: Step3Form,
+    // Step4Form: Step4Form,
     stepprogress: StepProgress,
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
     this.uuid = this.defaultValues.uuid;
   },
-
   methods: {
 
     // 處理資料傳遞
@@ -216,32 +215,54 @@ export default {
     // },
 
     async getDefaultValues() {
-      return this.$route.params.item;
+      const form = {
+        name: await this.getDefaultName(),
+      };
+
+      return form;
     },
+
+    async getDefaultName() {
+      const {
+        data: { total_length: totalLength, result: deviceList},
+      } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
+
+      let number = totalLength + 1;
+      let name = `OutputGroup-${number}`;
+      // Check for duplicates, if found, increment the number and check again
+      while (this.isDuplicateName(deviceList, name)) {
+        number++;
+        name = `OutputGroup-${number}`;
+      }
+
+      return name;
+    },
+
+    isDuplicateName(deviceList, name) {
+      return deviceList.some((device) => device.name === name);
+    },
+
+
     
-    // 是否可以按下一步
-    isStepPassed(step) {
+     // 是否可以按下一步
+     isStepPassed(step) {
       switch (step) {
         case 0: {
           return this.isFormPassed(this.step1form);
         }
 
-        case 1: {
-          // todo ROI
-          return true;
-        }
+        // case 1: {
+        //   // todo ROI
+        //   return true;
+        // }
 
         // case 2: {
         //   return this.isFormPassed(this.step3form);
         // }
 
-        // case 3: {
-        //   return true;
-        // }
-
-        // case 4: {
-        //   return true;
-        // }
+        case 1: {
+          return true;
+        }
       }
     },
 
@@ -320,23 +341,12 @@ export default {
 
     //送api 完成
     handleParameter() {
-      const iopoint = [];
-      iopoint.push(this.step3form);
-      iopoint.push(this.step4form);
-
-      // todo
       const form = {
         uuid: this.uuid,
-        data: {
-          ...this.step1form,
-          // ...this.step2form,
-          // iopoint
-        },
-        wiegand_converter_uuid_list: [],
-        iobox_uuid_list: []
-
-      }
-     
+        ...this.step1form,
+        wiegand_converter_uuid_list: ["0acefb9b-c1ac-4091-9b63-505519401d4f"],
+        iobox_uuid_list: ["df61f1dd-33ad-45a9-99f4-3618cacedf68"]
+      };
       console.log(form,"form")
       return form;
     },
@@ -345,7 +355,7 @@ export default {
       switch (this.flag_currentSetp) {
         // case 0:
         // case 1: 
-        // case 2: {
+        // case 2:{
         //   this.flag_currentSetp += 1;
 
         //   break;
@@ -359,7 +369,7 @@ export default {
           const parameter = this.handleParameter();
           console.log(parameter,"送的資料")
           
-          const { data } = await this.modify(parameter);
+          const { data } = await this.create(parameter);
 
           this.obj_loading.hide();
           if (data && data.message == "ok") {
@@ -385,7 +395,7 @@ export default {
     },
 
     //送api 完成
-    modify(data) {
+    create(data) {
       return this.$globalModifyOutputDeviceGroups(data);
     },
 
