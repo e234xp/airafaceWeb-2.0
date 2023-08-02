@@ -127,7 +127,7 @@
           value_searchingFilter: "",
   
           // btn
-          disp_header: i18n.formatter.format("NewDeviceGroups"),
+          disp_header: i18n.formatter.format("NewVideoDeviceGroups"),
           disp_search: i18n.formatter.format("Search"),
           disp_add: i18n.formatter.format("Add"),
           disp_delete: i18n.formatter.format("Delete"),

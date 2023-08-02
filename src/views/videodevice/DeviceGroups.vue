@@ -18,7 +18,7 @@
   export default {
     name: "DeviceGroups",
     mixins: [TableObserver],
-    components: { VideoDevicesGroupsForm },
+    components: { ListForm },
     data() {
       return {
         value_dataItemsToShow: [],

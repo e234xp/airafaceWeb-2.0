@@ -600,7 +600,8 @@
   "VideoDeviceDigitalOutPut1":"DigitalOutPut1",
   "VideoDeviceDigitalOutPut2":"DigitalOutPut2",
 
-  "NewDeviceGroups": "新增設備群組",
+  "NewDeviceGroups": "新增輸出設備群組",
+  "NewVideoDeviceGroups": "新增影像設備群組",
 
   "placeholder": "請選擇"
 
