@@ -12,12 +12,12 @@
       <CCol sm="12">
         <CRow>
             <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="clickOnAdd()">
+              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="handleOnAdd()">
                 {{ disp_add }}
               </CButton>
             </div>
             <div>
-              <CButton  class="btn btn-danger mb-3" size="lg" @click="clickOnMultipleDelete()">
+              <CButton  class="btn btn-danger mb-3" size="lg" @click="handleOnMultipleDelete()">
                 {{ disp_delete }}
               </CButton>
             </div>
@@ -42,9 +42,26 @@
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div>
-          <vxe-table :data="value_dataItemsToShow"  stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row>
+          <vxe-table 
+            :data="value_dataItemsToShow"  
+            stripe
+            align="center"
+            :cell-style="
+              () => {
+                return 'fontSize:18px;';
+              }
+            "
+            :header-cell-style="
+              () => {
+                return 'fontSize:18px;';
+              }
+            "
+            ref="mainTable" 
+            :auto-resize="true"
+            keep-source
+            highlight-current-row
+            :edit-config="{ trigger: 'manual', mode: 'row' }"
+          >
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
@@ -63,10 +80,10 @@
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">{{ disp_modify
+                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="handleOnModify(row)">{{ disp_modify
                     }}</vxe-button>
 
-                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">{{ disp_delete
+                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="handleOnSingleDelete(row)">{{ disp_delete
                     }}</vxe-button>
                 </div>
               </template>
@@ -107,13 +124,13 @@
     import i18n from "@/i18n";
   
     export default {
-      name: "DeviceGroups",
+      name: "videoDeviceGroups",
+      mixins: [TableObserver],
       props: {
-        formData: Object,
         onAdd: { type: Function },
         onDelete: { type: Function },
         onModify: { type: Function },
-        onFetchDataCallback: { type: Function },
+        onGetItems: { type: Function },
       },
       data() {
         return {
@@ -142,54 +159,94 @@
           
         };
       },
+      updated() {
+        const self = this;
+
+        self.value_dataItemsToShow.forEach((item) => {
+          const modifyButtonId = "actionOnModify_" + item.uuid;
+          const deleteButtonId = "actionOnDelete_" + item.uuid;
+
+          let new_deleteButton = null;
+          let new_modifyButton = null;
+          let old_deleteButton = document.getElementById(deleteButtonId);
+          let old_modifyButton = document.getElementById(modifyButtonId);
+          if (old_deleteButton && old_deleteButton.parentNode) {
+            new_deleteButton = old_deleteButton.cloneNode(true);
+            old_deleteButton.parentNode.replaceChild(
+              new_deleteButton,
+              old_deleteButton
+            );
+          }
+
+          if (old_modifyButton && old_modifyButton.parentNode) {
+            new_modifyButton = old_modifyButton.cloneNode(true);
+            old_modifyButton.parentNode.replaceChild(
+              new_modifyButton,
+              old_modifyButton
+            );
+          }
+
+          if (new_deleteButton)
+            new_deleteButton.addEventListener("click", function () {
+              self.handleOnSingleDelete(item);
+            });
+          if (new_modifyButton)
+            new_modifyButton.addEventListener("click", function () {
+              self.handleOnModify(item);
+            });
+        });
+      },
       computed: {
         ...mapState(["ellipsisMode"]),
+      },
+      watch: {
+        value_searchingFilter: function () {
+          const self = this;
+          self.value_tablePage.currentPage = 1;
+          this.value_dataItemsToShow = this.generateFilteredData(
+            this.value_allTableItems,
+            this.value_searchingFilter
+          );
+        },
+      },
+      async mounted() {
+        const self = this;
+        self.refreshTableItems();
       },
       methods: {
         //分頁處理
         handlePageChange({ currentPage, pageSize }) {
-          const self = this;
-          self.value_tablePage.currentPage = currentPage;
-          self.value_tablePage.pageSize = pageSize;
-          self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems,self.value_searchingFilter);
-          self.resizeOneTable();
+          this.value_tablePage.currentPage = currentPage;
+          this.value_tablePage.pageSize = pageSize;
+          this.value_dataItemsToShow = this.generateFilteredData(
+            this.value_allTableItems,
+            this.value_searchingFilter
+          );
         },
-        refreshTableItems(cb) {
+        async refreshTableItems() {
           const self = this;
-          if(self.onFetchDataCallback) {
-          self.onFetchDataCallback(function (error, reset, more, tableItems) {
-              // console.log("Form",error, reset, more, tableItems)
-              // console.log("FormDT", tableItems)
-              if (!error) {
-                if (reset) {
-                  self.value_allTableItems = [];
-                  self.value_dataItemsToShow = [];
-                }
-                if (tableItems) {
-                  self.value_allTableItems = self.value_allTableItems.concat(tableItems);
-                  self.value_dataItemsToShow = self.generateFilteredData(
-                    self.value_allTableItems,
-                    self.value_searchingFilter
-                  );
-                  // console.log(self.value_allTableItems,"value_allTableItems")
-                  // console.log(self.value_dataItemsToShow,"value_dataItemsToShow")
-                }
-                if (!more && cb) cb();
-              } else if (cb) cb();
-            });
-          } else if (cb) cb();
+          const tableItems = await self.onGetItems();
+
+          self.value_allTableItems = self.value_allTableItems.concat(tableItems);
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+            self.value_searchingFilter
+          );
         },
         // 表格資料處理及搜尋
         generateFilteredData(sourceData, filter) {
           const self = this;
 
-          //關鍵字搜尋  item.name裡面看有沒有找到filter
-          const filteredItems = filter.length == 0 ? sourceData : sourceData.filter((item) => {
+          //關鍵字搜尋  item.name裡面看有沒有找到filter ip_address
+          const filteredItems =
+            filter.length == 0
+              ? sourceData
+              : sourceData.filter((item) => {
                   return (
-                    item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+                    item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                    item.ip_address.toLowerCase().indexOf(filter.toLowerCase()) > -1
                   );
                 });
-
           self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
 
           const sliceList = filteredItems.slice(
@@ -199,66 +256,47 @@
 
           return Object.assign([], sliceList);
         },
-        clickOnAdd() {
-          if (this.onAdd) this.onAdd(this.value_allTableItems);
+        handleOnAdd() {
+          this.onAdd(this.value_allTableItems);
+        },
+        handleOnModify(item) {
+          this.onModify(item);
         },
         deleteItem(listToDel) {
           const self = this;
-          if (self.onDelete) {
-            self.onDelete(listToDel, function (success) {
-              if (success) {
-                listToDel.forEach((deletedItem) => {
-                  self.value_allTableItems = self.value_allTableItems.filter(function (item) {
-                    return item.uuid !== deletedItem.uuid;
-                  });
-                });
-                self.generateFilteredData(
-                  self.value_allTableItems,
-                  self.value_searchingFilter
-                );
-              }
+
+          self.onDelete(listToDel, function (success) {
+            if (!success) return;
+
+            const uuidsToDel = listToDel.map(({ uuid }) => uuid);
+            self.value_allTableItems = self.value_allTableItems.filter((item) => {
+              return !uuidsToDel.includes(item.uuid);
             });
-          }
+
+            self.value_dataItemsToShow = self.generateFilteredData(
+              self.value_allTableItems,
+              self.value_searchingFilter
+            );
+          });
         },
-        clickOnSingleDelete(item) {
-          //console.log( "clickOnSingleDelete", item.uuid )
-          const list = [item];
-          //console.log( "list", list )
-          if (list.length > 0) this.deleteItem([item]);
+        handleOnSingleDelete(item) {
+          const self = this;
+
+          if (!item) return;
+          self.deleteItem([item]);
         },
-        clickOnMultipleDelete() {
+        handleOnMultipleDelete() {
           const self = this;
           const list = this.$refs.mainTable.getCheckboxRecords();
-          if (list.length > 0) {
-            self.$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
-              confirmButtonText: i18n.formatter.format("Confirm"),
-              cancelButtonText: i18n.formatter.format("Cancel"),
-              confirmButtonColor: "#20a8d8",
-              cancelButtonColor: "#f86c6b",
-            })
-            .then((v) => {
-              //self.deleteItem(list);
-            })
-            .catch((e) => {
-              if (cb) cb(false);
-            });
-          }
+
+          if (list.length === 0) return;
+
+          self.deleteItem(list);
         },
-        clickOnModify(item) {
-          console.log("修改",item)
-          if (this.onModify) this.onModify(item);
+        activeStatusChange() {
+          console.log("ABC");
         },
-        //切換 enable 開關
-        activeStatusChange(item) {
-          console.log("ABC")
-        },
-        headerCellStyle(row, column, rowIndex, columnIndex) {
-          return "fontSize: 18px";
-        },
-          cellStyle(row, column, rowIndex, columnIndex) {
-          return "fontSize:18px;";
-        },
-      },
+      }
     }
   </script>
     

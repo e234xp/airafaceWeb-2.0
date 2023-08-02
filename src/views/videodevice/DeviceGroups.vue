@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ListForm from "@/modules/videodevice/cameralist/ListForm.vue";
+import ListForm from "@/modules/videodevice/videodevicegrouplist/ListForm.vue";
 
 import TableObserver from "@/utils/TableObserver.vue";
 import i18n from "@/i18n";
