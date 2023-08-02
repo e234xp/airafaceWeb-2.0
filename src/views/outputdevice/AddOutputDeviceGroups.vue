@@ -118,8 +118,6 @@ import Step2Form from "@/modules/outputdevice/addoutputdevicegroups/Step2Form.vu
 import Step3Form from "@/modules/outputdevice/addoutputdevicegroups/Step3Form.vue";
 import Step4Form from "@/modules/outputdevice/addoutputdevicegroups/Step4Form.vue";
 
-
-
 export default {
   name: "AddOutputDeviceGroups",
 
@@ -184,7 +182,7 @@ export default {
       //   delay: 1
       // },
 
-      defaultValues: {}
+      defaultValues: {},
     };
   },
   components: {
@@ -198,7 +196,6 @@ export default {
     this.defaultValues = await this.getDefaultValues();
   },
   methods: {
-
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
@@ -223,9 +220,9 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { totalLength: totalLength, result: deviceList},
+        data: { totalLength: totalLength, result: deviceList },
       } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
-   
+
       let number = totalLength + 1;
       let name = `OutputGroup-${number}`;
       // Check for duplicates, if found, increment the number and check again
@@ -241,10 +238,8 @@ export default {
       return deviceList.some((device) => device.name === name);
     },
 
-
-    
-     // 是否可以按下一步
-     isStepPassed(step) {
+    // 是否可以按下一步
+    isStepPassed(step) {
       switch (step) {
         case 0: {
           return this.isFormPassed(this.step1form);
@@ -337,22 +332,21 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
-
     //送api 完成
     handleParameter() {
       const form = {
         ...this.step1form,
         wiegand_converter_uuid_list: [],
-        iobox_uuid_list: []
+        iobox_uuid_list: [],
       };
-      console.log(form,"form")
+      console.log(form, "form");
       return form;
     },
 
     async handleNext() {
       switch (this.flag_currentSetp) {
         // case 0:
-        // case 1: 
+        // case 1:
         // case 2:{
         //   this.flag_currentSetp += 1;
 
@@ -365,8 +359,8 @@ export default {
           });
 
           const parameter = this.handleParameter();
-          console.log(parameter,"送的資料")
-          
+          console.log(parameter, "送的資料");
+
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();

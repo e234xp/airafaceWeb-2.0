@@ -3,7 +3,6 @@
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
       <div class="h1">{{ disp_headertitle }}</div>
-      
 
       <stepprogress
         class="w-step-progress-4"
@@ -34,7 +33,7 @@
           />
         </CCardBody>
       </CCard>
-{{flag_currentSetp}}
+      {{ flag_currentSetp }}
       <!-- Connection Form-->
       <!-- <CCard :class="showOnStep(1)">
         <CCardBody>
@@ -76,12 +75,7 @@
             >{{ value_returnRouteName }}
           </CButton>
         </div>
-        <div
-          v-if="
-            flag_currentSetp == 1 ||
-            flag_currentSetp == 2
-          "
-        >
+        <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
@@ -154,7 +148,7 @@ export default {
         name: "",
       },
 
-      defaultValues: {}
+      defaultValues: {},
 
       // step2form: {
       //   ip_address: "",
@@ -224,8 +218,6 @@ export default {
 
       return name;
     },
-
-    
 
     isDuplicateName(videoGroupList, name) {
       return videoGroupList.some((videoGroup) => videoGroup.name === name);
@@ -327,7 +319,6 @@ export default {
 
     async handleNext() {
       switch (this.flag_currentSetp) {
-  
         case 0: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
@@ -379,9 +370,6 @@ export default {
           return this.disp_complete;
       }
     },
-
-
-    
   },
 };
 </script>

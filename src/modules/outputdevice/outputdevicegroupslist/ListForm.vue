@@ -11,28 +11,36 @@
     <div>
       <CCol sm="12">
         <CRow>
-            <div>
-              <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="handleOnAdd()">
-                {{ disp_add }}
-              </CButton>
-            </div>
-            <div>
-              <CButton  class="btn btn-danger mb-3" size="lg" @click="handleOnMultipleDelete()">
-                {{ disp_delete }}
-              </CButton>
-            </div>
-            <div style="margin-left: auto">
-              <CInput
-                v-model.lazy="value_searchingFilter"
-                style="width: 400px"
-                size="lg"
-                :placeholder="disp_search"
-              >
-                <template #prepend-content>
-                  <CIcon name="cil-search" />
-                </template>
-              </CInput>
-            </div>
+          <div>
+            <CButton
+              size="lg"
+              class="btn btn-primary mr-3 mb-3"
+              @click="handleOnAdd()"
+            >
+              {{ disp_add }}
+            </CButton>
+          </div>
+          <div>
+            <CButton
+              class="btn btn-danger mb-3"
+              size="lg"
+              @click="handleOnMultipleDelete()"
+            >
+              {{ disp_delete }}
+            </CButton>
+          </div>
+          <div style="margin-left: auto">
+            <CInput
+              v-model.lazy="value_searchingFilter"
+              style="width: 400px"
+              size="lg"
+              :placeholder="disp_search"
+            >
+              <template #prepend-content>
+                <CIcon name="cil-search" />
+              </template>
+            </CInput>
+          </div>
         </CRow>
       </CCol>
     </div>
@@ -42,7 +50,10 @@
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center"     
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
             :cell-style="
               () => {
                 return 'fontSize:18px;';
@@ -52,39 +63,77 @@
               () => {
                 return 'fontSize:18px;';
               }
-            " ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row :edit-config="{ trigger: 'manual', mode: 'row' }">
+            "
+            ref="mainTable"
+            :auto-resize="true"
+            keep-source
+            highlight-current-row
+            :edit-config="{ trigger: 'manual', mode: 'row' }"
+          >
+            <vxe-table-column
+              type="checkbox"
+              align="center"
+              width="auto"
+            ></vxe-table-column>
 
-            <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="name"
+              :title="disp_group"
+              align="center"
+              width="auto"
+            ></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center" width="auto"></vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="iobox_count" :title="disp_videoDevices" width="auto" align="center">
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="iobox_count"
+              :title="disp_videoDevices"
+              width="auto"
+              align="center"
+            >
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="wiegand_converter_count" :title="disp_outputDevices" width="auto" align="center">
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="wiegand_converter_count"
+              :title="disp_outputDevices"
+              width="auto"
+              align="center"
+            >
             </vxe-table-column>
-            
-            <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="auto" align="center">
+
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="rules"
+              :title="disp_rules"
+              width="auto"
+              align="center"
+            >
             </vxe-table-column>
 
             <!-- 刪除、修改按鈕 -->
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="handleOnModify(row)">{{ disp_modify
-                    }}</vxe-button>
+                  <vxe-button
+                    class="btn-in-cell-primary btn-in-cell"
+                    @click="handleOnModify(row)"
+                    >{{ disp_modify }}</vxe-button
+                  >
 
-                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="handleOnSingleDelete(row)">{{ disp_delete
-                    }}</vxe-button>
+                  <vxe-button
+                    class="btn-in-cell-danger btn-in-cell"
+                    @click="handleOnSingleDelete(row)"
+                    >{{ disp_delete }}</vxe-button
+                  >
                 </div>
               </template>
             </vxe-table-column>
-
           </vxe-table>
         </div>
 
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -92,15 +141,15 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" 
-          :current-page="value_tablePage.currentPage" 
+          ]"
+          :current-page="value_tablePage.currentPage"
           :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" 
-          @page-change="handlePageChange">
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        >
         </vxe-pager>
       </CCardBody>
     </CCard>
-
   </div>
 </template>
 
@@ -120,31 +169,37 @@ export default {
   },
   data() {
     return {
-      value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
-        value_allTableItems: [],
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
+      value_dataItemsToShow: [
+        {
+          enable: false,
+          name: "",
+          timestamp: "",
+          remark: "",
+          modifier: "",
+          remark1: "",
         },
-        value_searchingFilter: "",
+      ],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 5,
+        totalResult: 0,
+      },
+      value_searchingFilter: "",
 
-        disp_header: i18n.formatter.format("NewDeviceGroups"),
+      disp_header: i18n.formatter.format("NewDeviceGroups"),
 
-         // btn
-        disp_search: i18n.formatter.format("Search"),
-        disp_add: i18n.formatter.format("Add"),
-        disp_delete: i18n.formatter.format("Delete"),
-        disp_modify: i18n.formatter.format("Modify"),
+      // btn
+      disp_search: i18n.formatter.format("Search"),
+      disp_add: i18n.formatter.format("Add"),
+      disp_delete: i18n.formatter.format("Delete"),
+      disp_modify: i18n.formatter.format("Modify"),
 
-
-
-        /*data table */
-        disp_group: i18n.formatter.format("VideoDevicesGroup"),
-        disp_videoDevices: i18n.formatter.format("IOboxes"),
-        disp_outputDevices: i18n.formatter.format("Wiegandboxs"),
-        disp_rules: i18n.formatter.format("Rules"),
-
+      /*data table */
+      disp_group: i18n.formatter.format("VideoDevicesGroup"),
+      disp_videoDevices: i18n.formatter.format("IOboxes"),
+      disp_outputDevices: i18n.formatter.format("Wiegandboxs"),
+      disp_rules: i18n.formatter.format("Rules"),
     };
   },
   updated() {
@@ -222,14 +277,13 @@ export default {
       );
     },
     processFields(sourceData) {
-      
-      let modifyFieldsData = sourceData.map(item => {
-        
+      let modifyFieldsData = sourceData.map((item) => {
         let modifiedItem = { ...item };
-  
+
         modifiedItem.iobox_count = modifiedItem.iobox_uuid_list.length;
 
-        modifiedItem.wiegand_converter_count = modifiedItem.wiegand_converter_uuid_list.length;
+        modifiedItem.wiegand_converter_count =
+          modifiedItem.wiegand_converter_uuid_list.length;
 
         return modifiedItem;
       });

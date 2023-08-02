@@ -29,7 +29,11 @@ export default {
     },
 
     async getItems(shift, sliceSize) {
-      const ret = await this.$globalFindOutputDeviceGroups("", shift, sliceSize);
+      const ret = await this.$globalFindOutputDeviceGroups(
+        "",
+        shift,
+        sliceSize
+      );
       const {
         data: { result: dataList },
         error,
