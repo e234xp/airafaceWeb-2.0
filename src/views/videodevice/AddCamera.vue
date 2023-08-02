@@ -55,7 +55,7 @@
         </CCardBody>
       </CCard>
     </CCol>
-
+    {{ step1form.divice_groups }}
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">

@@ -25,23 +25,23 @@
         />
       </CCol>
     </CRow>
-
-    <CRow
-      sm="12"
-      class="h5 ml-2 mb-3"
-      style="padding-top: 10px; text-align: right"
-      >{{ disp_basicDeviceGroups }}</CRow
-    >
+    TEST: {{ step1form.divice_groups }} 
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right" >{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
         <multiselect
-          placeholder=""
-          v-model="localStep1form.divice_groups"
-          :options="value_deviceGroupsList"
-          :multiple="true"
-          :taggable="true"
-          :hideSelected="true"
-          :show-no-options="false"
+           v-model="localStep1form.divice_groups"
+                  placeholder=""
+                  :options="value_deviceGroupsList"
+                  :multiple="true"
+                  :taggable="true"
+                  :hideSelected="true"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
+                  :show-no-options="false"
+                  label="name"
+                  track-by="value"
         >
         </multiselect>
       </CCol>
@@ -335,9 +335,13 @@ export default {
 
       // 文字提示
       disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"), // port 提示文字
+      dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
+      disp_select: i18n.formatter.format("Select"),
+      disp_selected: i18n.formatter.format("Selected"),
+      disp_deselect: i18n.formatter.format("Deselect"),
 
       //設備群組 下拉選項
-      value_deviceGroupsList: ["A", "B", "C"],
+      value_deviceGroupsList: [],
 
       //設備類型
       value_deviceTypesList: ["rtsp", "sdp"],
@@ -382,6 +386,21 @@ export default {
         });
       },
       deep: true,
+    },
+  },
+  mounted() {
+    this.formatNameList();
+  },
+  methods: {
+    /**設備群組 */
+    async formatNameList() {
+      const self = this;
+      let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
+      let groups = res.data.result; /**拿回所有group */
+      //const handleData = groups.map(({ name, uuid }) => ({ label: `${name}`, value: uuid })); 
+      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
+      console.log(handleData)
+      this.value_deviceGroupsList = handleData;
     },
   },
 };
