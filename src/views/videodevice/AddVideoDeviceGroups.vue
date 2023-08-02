@@ -211,7 +211,7 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { total_length: totalLength, list: videoGroupList },
+        data: { total_length: totalLength, result: videoGroupList },
       } = await this.$globalFindVideoDeviceGroups("", 0, 3000);
 
       let number = totalLength + 1;

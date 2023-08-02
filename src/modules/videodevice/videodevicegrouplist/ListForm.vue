@@ -64,7 +64,7 @@
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center" width="auto"></vxe-table-column>
 
             <vxe-table-column :show-overflow="ellipsisMode" field="videoDevices" :title="disp_videoDevices" width="auto" align="center">
             </vxe-table-column>
