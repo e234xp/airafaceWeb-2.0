@@ -29,10 +29,12 @@
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
           />
         </CCardBody>
       </CCard>
-
+{{flag_currentSetp}}
       <!-- Connection Form-->
       <!-- <CCard :class="showOnStep(1)">
         <CCardBody>
@@ -150,12 +152,6 @@ export default {
 
       step1form: {
         name: "",
-        divice_groups: [],
-        ip_address: "",
-        port: null, //Number(getPort)
-        user: "",
-        pass: "",
-        connection_info: "",
       },
 
       defaultValues: {}
@@ -208,11 +204,6 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        stream_type: "rtsp",
-        user: "admin",
-        pass: "123456",
-        port: 554,
-        connection_info: "/media/video1",
       };
 
       return form;
@@ -220,13 +211,13 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { total_length: totalLength, list: cameraList },
-      } = await this.$globalFindCameras("", 0, 3000);
+        data: { total_length: totalLength, list: videoGroupList },
+      } = await this.$globalFindVideoDeviceGroups("", 0, 3000);
 
       let number = totalLength + 1;
       let name = `Camera-${number}`;
       // Check for duplicates, if found, increment the number and check again
-      while (this.isDuplicateName(cameraList, name)) {
+      while (this.isDuplicateName(videoGroupList, name)) {
         number++;
         name = `Camera-${number}`;
       }
@@ -234,8 +225,8 @@ export default {
       return name;
     },
 
-    isDuplicateName(cameraList, name) {
-      return cameraList.some((camera) => camera.name === name);
+    isDuplicateName(videoGroupList, name) {
+      return videoGroupList.some((videoGroup) => videoGroup.name === name);
     },
 
     // 是否可以按下一步
@@ -245,10 +236,10 @@ export default {
           return this.isFormPassed(this.step1form);
         }
 
-        // case 1: {
-        //   // todo ROI
-        //   return true;
-        // }
+        case 1: {
+          // todo ROI
+          return true;
+        }
 
         // case 2: {
         //   return this.isFormPassed(this.step3form);
@@ -334,19 +325,16 @@ export default {
 
     async handleNext() {
       switch (this.flag_currentSetp) {
+  
         case 0: {
-          this.flag_currentSetp += 1;
-
-          break;
-        }
-
-        case 1: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
 
           const parameter = {
             ...this.step1form,
+            camera_uuid_list: [],
+            tablet_uuid_list: [],
             // ...this.step2form,
             // ...this.step3form,
           };

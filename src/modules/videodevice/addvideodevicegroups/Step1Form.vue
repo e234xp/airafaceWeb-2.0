@@ -13,11 +13,13 @@
         <CRow sm="12">
           <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicDeviceName }}
-            <CInput size="lg" class="mt-2" v-model="value_deviceGroups" 
-            :invalid-feedback= "$t('NoEmptyNoSpace')"
+            <CInput size="lg" class="mt-2" 
+            v-model="localStep1form.name"
+            :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
             valid-feedback="ok"
-            :is-valid="isNotEmpty"
-            required/>
+            :is-valid="isFieldPassed('name', localStep1form.name)"
+            required
+            />
           </CCol>
         </CRow>
       </div>
@@ -29,15 +31,13 @@
     
   <script>
     import i18n from "@/i18n";
-
-    import VueSelect from 'vue-select';
-    import Multiselect from "vue-multiselect";
-    import "@/airacss/vue-multiselect.css";
         
     export default {
-      name: "AddCamerasStep1Form",
+      name: "AddVideoDeviceGroupStep1Form",
       props:{
-        step1form: Object
+        step1form: Object,
+        defaultValues: Object,
+        isFieldPassed: Function,
       },
       data() {
       return {
@@ -46,49 +46,29 @@
           isChecked: true,
 
           /*Basic title  */
-          disp_header: i18n.formatter.format("I/OBoxesBasicName"),
+          disp_header: i18n.formatter.format("VideoDeviceGroupsBasicName"),
 
           /**content */
-          disp_IOBoxesBasicBrand: i18n.formatter.format("I/OBoxesBasicCOlNameBrand"),
-          disp_IOBoxesBasicModel: i18n.formatter.format("I/OBoxesBasicCOlNameModel"),
-          disp_IOBoxesBasicDeviceName: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceName"),
-          disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
-
-          /**v-model */
-          value_deviceGroups: "", /**選單 */
-          value_deviceGroupsList: [1,2,3]
+          disp_IOBoxesBasicDeviceName: i18n.formatter.format("VideoDeviceGroupsBasicCOlNameDeviceName"),
         };
       },
-      components: {
-        "v-select": VueSelect,
-        multiselect: Multiselect,
-      },
-      //預設值
-      created() {
-        this.defaultPortValue();
-        this.localStep1form.user = "admin",
-        this.localStep1form.pass = "123456"
-        this.localStep1form.connection_info = "/media/video1"
-      }, 
       // 拿資料 寫入資料
       watch: {
         localStep1form: {
           handler(newValue) {
-            console.log('emit updateStep1form')
-            this.$emit('updateStep1form', { ...newValue });
+            this.$emit("updateStep1form", { ...newValue });
           },
           deep: true,
         },
-      },
-      methods: {
-        defaultPortValue() {
-          this.localStep1form.port = 554;
-          return this.localStep1form.port !== null && this.localStep1form.port >= 0 && this.localStep1form.port <= 65535;
+        defaultValues: {
+          handler(newValue) {
+            Object.entries(newValue).forEach(([key, value]) => {
+              if (!Object.keys(this.step1form).includes(key)) return;
+              this.localStep1form[key] = value;
+            });
+          },
+          deep: true,
         },
-        // 判斷欄位空值
-        isNotEmpty(value) {
-          return value !== null && value !== undefined && value !== '';
-        }
       },
     }
   </script>

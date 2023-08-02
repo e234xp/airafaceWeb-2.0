@@ -589,6 +589,10 @@
   "WiegandBasicCOlNameSystemCode":"System code:",
   "WiegandBasicCOlNameDataFormat":"Data format:",
 
+  "VideoDeviceGroupsBasicName": "新增影像群組",
+  "VideoDeviceGroupsBasicCOlNameDeviceName": "影像群組名稱",
+  "OutputDeviceGroupBasicName": "新增設備群組",
+  "OutputDeviceGroupsBasicCOlNameDeviceName": "設備群組名稱",
 
   "ModifyCameras": "修改設備",
 

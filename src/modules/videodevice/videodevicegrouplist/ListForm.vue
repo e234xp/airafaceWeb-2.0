@@ -159,43 +159,43 @@
           
         };
       },
-      updated() {
-        const self = this;
+      // updated() {
+      //   const self = this;
 
-        self.value_dataItemsToShow.forEach((item) => {
-          const modifyButtonId = "actionOnModify_" + item.uuid;
-          const deleteButtonId = "actionOnDelete_" + item.uuid;
+      //   self.value_dataItemsToShow.forEach((item) => {
+      //     const modifyButtonId = "actionOnModify_" + item.uuid;
+      //     const deleteButtonId = "actionOnDelete_" + item.uuid;
 
-          let new_deleteButton = null;
-          let new_modifyButton = null;
-          let old_deleteButton = document.getElementById(deleteButtonId);
-          let old_modifyButton = document.getElementById(modifyButtonId);
-          if (old_deleteButton && old_deleteButton.parentNode) {
-            new_deleteButton = old_deleteButton.cloneNode(true);
-            old_deleteButton.parentNode.replaceChild(
-              new_deleteButton,
-              old_deleteButton
-            );
-          }
+      //     let new_deleteButton = null;
+      //     let new_modifyButton = null;
+      //     let old_deleteButton = document.getElementById(deleteButtonId);
+      //     let old_modifyButton = document.getElementById(modifyButtonId);
+      //     if (old_deleteButton && old_deleteButton.parentNode) {
+      //       new_deleteButton = old_deleteButton.cloneNode(true);
+      //       old_deleteButton.parentNode.replaceChild(
+      //         new_deleteButton,
+      //         old_deleteButton
+      //       );
+      //     }
 
-          if (old_modifyButton && old_modifyButton.parentNode) {
-            new_modifyButton = old_modifyButton.cloneNode(true);
-            old_modifyButton.parentNode.replaceChild(
-              new_modifyButton,
-              old_modifyButton
-            );
-          }
+      //     if (old_modifyButton && old_modifyButton.parentNode) {
+      //       new_modifyButton = old_modifyButton.cloneNode(true);
+      //       old_modifyButton.parentNode.replaceChild(
+      //         new_modifyButton,
+      //         old_modifyButton
+      //       );
+      //     }
 
-          if (new_deleteButton)
-            new_deleteButton.addEventListener("click", function () {
-              self.handleOnSingleDelete(item);
-            });
-          if (new_modifyButton)
-            new_modifyButton.addEventListener("click", function () {
-              self.handleOnModify(item);
-            });
-        });
-      },
+      //     if (new_deleteButton)
+      //       new_deleteButton.addEventListener("click", function () {
+      //         self.handleOnSingleDelete(item);
+      //       });
+      //     if (new_modifyButton)
+      //       new_modifyButton.addEventListener("click", function () {
+      //         self.handleOnModify(item);
+      //       });
+      //   });
+      // },
       computed: {
         ...mapState(["ellipsisMode"]),
       },
