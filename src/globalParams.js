@@ -1028,6 +1028,16 @@ Vue.prototype.$globalModifyVideoDeviceGroups = function (device, cb) {
   });
 };
 
+
+Vue.prototype.$globalRemoveVideoDeviceGroups = function (uuid, cb) {
+  return new Promise((resolve) => {
+    postJson("/airafacelite/removevideodevicegroup", { uuid: uuid }, function (err, data) {
+      if (cb) cb(err, data);
+      resolve({ error: err, data: data });
+    });
+  });
+};
+
 // OutputDevice Group
 Vue.prototype.$globalFindOutputDeviceGroups = function (uuid, shift, sliceSize, cb) {
   return new Promise((resolve) => {
