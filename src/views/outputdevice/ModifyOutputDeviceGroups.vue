@@ -344,8 +344,8 @@ export default {
       const form = {
         uuid: this.uuid,
         ...this.step1form,
-        wiegand_converter_uuid_list: ["0acefb9b-c1ac-4091-9b63-505519401d4f"],
-        iobox_uuid_list: ["df61f1dd-33ad-45a9-99f4-3618cacedf68"]
+        wiegand_converter_uuid_list: [],
+        iobox_uuid_list: []
       };
       console.log(form,"form")
       return form;

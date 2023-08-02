@@ -342,7 +342,7 @@ export default {
     handleParameter() {
       const form = {
         ...this.step1form,
-        wiegand_converter_uuid_list: ["0acefb9b-c1ac-4091-9b63-505519401d4f"],
+        wiegand_converter_uuid_list: [],
         iobox_uuid_list: []
       };
       console.log(form,"form")
