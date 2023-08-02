@@ -225,7 +225,7 @@ export default {
       const {
         data: { totalLength: totalLength, result: deviceList},
       } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
-      console.log(deviceList, "數量:",totalLength)
+   
       let number = totalLength + 1;
       let name = `OutputGroup-${number}`;
       // Check for duplicates, if found, increment the number and check again
