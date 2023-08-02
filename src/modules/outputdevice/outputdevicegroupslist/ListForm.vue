@@ -57,12 +57,6 @@
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column field="enable" :title="disp_enable" width="auto">
-              <template #default="{ row }"> 
-                <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
-              </template>
-            </vxe-table-column>
-
             <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_videoDevices" align="center" width="auto"></vxe-table-column>
 
             <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_outputDevices" width="auto" align="center">
@@ -283,9 +277,6 @@ export default {
       if (list.length === 0) return;
 
       self.deleteItem(list);
-    },
-    activeStatusChange() {
-      console.log("ABC");
     },
   },
 };
