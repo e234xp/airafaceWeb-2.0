@@ -57,14 +57,17 @@
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_videoDevices" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_outputDevices" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="videoDevices" :title="disp_videoDevices" width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_rules" width="auto" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="outputDevices" :title="disp_outputDevices" width="auto" align="center">
             </vxe-table-column>
-
+            
+            <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="auto" align="center">
+            </vxe-table-column>
+              
             <!-- 刪除、修改按鈕 -->
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
