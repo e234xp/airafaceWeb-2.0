@@ -8,7 +8,7 @@
     <!-- 項目 -->
     <!-- Digital OutPut1 -->
     <div class="form-check mb-3 ml-2">
-      <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="flexCheckDefault">
+      <input class="form-check-input" type="checkbox" v-model="localStep3form.enable" value="" id="flexCheckDefault">
       <label class="form-check-label mt-2" for="flexCheckDefault">
         {{ disp_IOBoxesBasicEnable }}
       </label>
@@ -17,8 +17,9 @@
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-        
+        <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2" 
+        :placeholder="dis_placeholder"
+      
         valid-feedback="ok"
         
         required/>
@@ -29,15 +30,17 @@
       <CRow sm="12">
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2"
+          <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger" 
+            :filterable="true" class="font-control mt-2" 
+            :placeholder="dis_placeholder"
+            
+            valid-feedback="ok"
           
-          valid-feedback="ok"
-          
-          required/>
+            required/>
         </CCol>
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
-          <CInput size="lg" class="mt-2" v-model="value_durationTriggered"
+          <CInput size="lg" class="mt-2" v-model="localStep3form.delay"
             />
         </CCol>
       </CRow>
@@ -49,7 +52,6 @@
 <script>
   import i18n from "@/i18n";
 
-  import VueSelect from 'vue-select';
   import Multiselect from "vue-multiselect";
   import "@/airacss/vue-multiselect.css";
 
@@ -68,6 +70,7 @@
 
         // /*Digital output1 title  */
         disp_DigitalOutPut1Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut1"),
+        dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
 
         // /**content */
         disp_IOBoxesBasicEnable: i18n.formatter.format("I/OBoxesBasicCOlNameEnable"),
@@ -76,13 +79,12 @@
         disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameDurationWhenTriggered"),
 
         /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3],
+        value_deviceDefaultValue: [0, 1],
+        value_deviceTrigger: [0, 1],
         value_durationTriggered: "",
       };
     },
     components: {
-      "v-select": VueSelect,
       Multiselect: Multiselect
     },
 
@@ -109,8 +111,3 @@
    
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
