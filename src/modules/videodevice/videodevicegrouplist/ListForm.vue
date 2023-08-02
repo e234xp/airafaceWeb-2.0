@@ -40,7 +40,6 @@
     <!-- 下方資料 -->
     <CCard>
       <CCardBody>
-        <!-- {{ value_dataItemsToShow }} -->
         <div>
           <vxe-table 
             :data="value_dataItemsToShow"  
@@ -134,7 +133,7 @@
       },
       data() {
         return {
-          value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
+          value_dataItemsToShow: [{ group:'',videoDevices:'',outputDevices:'',rules:''}],
           value_allTableItems: [],
           value_tablePage: {
             currentPage: 1,

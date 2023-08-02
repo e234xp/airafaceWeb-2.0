@@ -31,7 +31,7 @@ export default {
     async getItems(shift, sliceSize) {
       const ret = await this.$globalFindVideoDeviceGroups("", shift, sliceSize);
       const {
-        data: { list: dataList },
+        data: { result: dataList },
         error,
       } = ret;
 
