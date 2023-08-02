@@ -2,18 +2,19 @@
     <div id="wrapper">
       <!-- 標題 -->
       <div>
-      <CCol sm="12">
-          <td class="h1">{{ disp_header }}</td>
-      </CCol>
-     
-      <div style="height: 35px"></div>
+        <CCol sm="12">
+            <td class="h1">{{ disp_header }}</td>
+        </CCol>
+      
+        <div style="height: 35px"></div>
       </div>
+      {{ localStep1form.brand }}
       <!-- Basic -->
       <div class="mt-3">
         <CRow sm="12">
           <CCol sm="6" class="h5" >
             {{ disp_IOBoxesBasicBrand }}
-            <CSelect size="lg" v-model="localStep1form.brand" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
+            <CSelect size="lg" v-model="localStep1form.brand" :options="value_brandList" :filterable="true" class="font-control mt-2" 
           
             valid-feedback="ok"
             
@@ -21,7 +22,7 @@
           </CCol>
           <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicModel }}
-            <CSelect size="lg" v-model="localStep1form.model" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
+            <CSelect size="lg" v-model="localStep1form.model" :options="value_modelList" :filterable="true" class="font-control mt-2" 
           
             valid-feedback="ok"
             
@@ -57,7 +58,7 @@
   <script>
     import i18n from "@/i18n";
 
-    import VueSelect from 'vue-select';
+
     import Multiselect from "vue-multiselect";
     import "@/airacss/vue-multiselect.css";
         
@@ -84,12 +85,12 @@
           disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
 
           /**v-model */
-          value_deviceGroups: "", /**選單 */
-          value_deviceGroupsList: [1,2,3]
+          value_deviceGroupsList: [],
+          value_brandList: ["airo IO Box"],
+          value_modelList: ["TCP-KP-C2"]
         };
       },
       components: {
-        "v-select": VueSelect,
         multiselect: Multiselect,
       },
       // 拿資料 寫入資料
@@ -115,7 +116,3 @@
      
     }
   </script>
-
-  <style>
-    @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-  </style>
