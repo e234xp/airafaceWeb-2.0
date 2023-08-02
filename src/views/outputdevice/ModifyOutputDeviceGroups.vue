@@ -70,7 +70,7 @@
         </CCardBody>
       </CCard> -->
     </CCol>
-
+{{  step1form }}
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -215,16 +215,12 @@ export default {
     // },
 
     async getDefaultValues() {
-      const form = {
-        name: await this.getDefaultName(),
-      };
-
-      return form;
+      return this.$route.params.item;
     },
 
     async getDefaultName() {
       const {
-        data: { total_length: totalLength, result: deviceList},
+        data: { totalLength: totalLength, result: deviceList},
       } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
 
       let number = totalLength + 1;
