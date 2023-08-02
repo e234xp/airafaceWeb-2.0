@@ -2,14 +2,14 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <OutputDeviceGroupsForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
+        <ListForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
       </CCol>
     </CRow>
   </div>
 </template>
   
 <script>
-  import OutputDeviceGroupsForm from './forms/OutputDeviceGroupsForm.vue'
+  import ListForm from "@/modules/outputdevice/outputdevicegroupslist/ListForm.vue";
 
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
@@ -18,7 +18,7 @@
   export default {
     name: "OutputDeviceGroups",
     mixins: [TableObserver],
-    components: { OutputDeviceGroupsForm },
+    components: { ListForm },
     data() {
       return {
         value_dataItemsToShow: [],
