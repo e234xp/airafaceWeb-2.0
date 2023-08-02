@@ -215,15 +215,17 @@ export default {
       } = await this.$globalFindVideoDeviceGroups("", 0, 3000);
 
       let number = totalLength + 1;
-      let name = `Camera-${number}`;
+      let name = `Video-${number}`;
       // Check for duplicates, if found, increment the number and check again
       while (this.isDuplicateName(videoGroupList, name)) {
         number++;
-        name = `Camera-${number}`;
+        name = `Video-${number}`;
       }
 
       return name;
     },
+
+    
 
     isDuplicateName(videoGroupList, name) {
       return videoGroupList.some((videoGroup) => videoGroup.name === name);
