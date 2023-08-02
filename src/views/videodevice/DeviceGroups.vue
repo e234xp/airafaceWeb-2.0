@@ -2,14 +2,14 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <VideoDevicesGroupsForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
+        <ListForm :formData="$data" :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onFetchDataCallback="onFetchDataCallback"/>
       </CCol>
     </CRow>
   </div>
 </template>
   
 <script>
-  import VideoDevicesGroupsForm from './forms/VideoDevicesGroupsForm.vue'
+  import ListForm from "@/modules/videodevice/videodevicegrouplist/ListForm.vue";
 
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
