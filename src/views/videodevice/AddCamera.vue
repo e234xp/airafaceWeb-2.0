@@ -324,7 +324,7 @@ export default {
             ...this.step2form,
             ...this.step3form,
           };
-
+          console.log(parameter)
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();

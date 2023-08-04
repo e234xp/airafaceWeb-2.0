@@ -30,7 +30,7 @@
     <CRow>
       <CCol sm="6">
         <multiselect
-           v-model="localStep1form.divice_groups"
+           v-model="groupValue"
                   placeholder=""
                   :options="value_deviceGroupsList"
                   :multiple="true"
@@ -41,7 +41,7 @@
                   :deselect-label="disp_deselect"
                   :show-no-options="false"
                   label="name"
-                  track-by="value"
+                  
         >
         </multiselect>
       </CCol>
@@ -343,6 +343,8 @@ export default {
       //設備群組 下拉選項
       value_deviceGroupsList: [],
 
+      groupValue:[],
+
       //設備類型
       value_deviceTypesList: ["rtsp", "sdp"],
     };
@@ -369,6 +371,7 @@ export default {
         this.localStep1form.ip_address
       }:${this.localStep1form.port}${this.localStep1form.connection_info}`;
     },
+
   },
   // 拿資料 寫入資料
   watch: {
@@ -387,6 +390,13 @@ export default {
       },
       deep: true,
     },
+    // 將選擇的群組value轉換成數字陣列
+    groupValue: {
+      handler(newValue) {
+        this.localStep1form.divice_groups = newValue.map(item=> item.value);
+      },
+      deep: true,
+    }
   },
   mounted() {
     this.formatNameList();
