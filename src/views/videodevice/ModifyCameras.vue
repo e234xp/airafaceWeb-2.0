@@ -2,7 +2,6 @@
   <div id="wrapper">
     <div>
       <div class="h1">{{ disp_headertitle }}</div>
-
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -168,6 +167,7 @@ export default {
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
+    console.log(this.defaultValues);
     this.uuid = this.defaultValues.uuid;
   },
 
