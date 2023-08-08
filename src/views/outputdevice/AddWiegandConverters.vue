@@ -82,16 +82,18 @@
             >{{ disp_previous }}
           </CButton>
         </div>
+
         <div style="width: 20px"></div>
+
         <div>
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
-            @click="handleNext(flag_currentSetp)"
+            @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
             >{{ nextButtonName(flag_currentSetp) }}
           </CButton>
-          {{ flag_currentSetp }}
+
         </div>
       </div>
     </CCol>
@@ -105,6 +107,7 @@ import StepProgress from "vue-step-progress";
 import Step1Form from "@/modules/outputdevice/addwiegandconverts/Step1Form.vue";
 import Step2Form from "@/modules/outputdevice/addwiegandconverts/Step2Form.vue";
 import Step3Form from "@/modules/outputdevice/addwiegandconverts/Step3Form.vue";
+import { getIsFieldPassedFunction } from "@/utils";
 
 
 export default {
@@ -153,9 +156,10 @@ export default {
       },
 
       step3form: {
-        bits: null,
-        index: null,
-        syscode: null,
+        bits: 26,
+        index: 1,
+        syscode: 1,
+        special_card_number:""
       },
 
       defaultValues: {}
@@ -187,6 +191,7 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
+        ip_address: "192.168.1.100",
         port: 1001,
       };
 
@@ -222,11 +227,11 @@ export default {
 
         case 1: {
           // todo ROI
-          return true;
+          return this.isFormPassed(this.step2form);;
         }
 
         case 2: {
-          return this.isFormPassed(this.step3form);
+          return true;
         }
 
         case 3: {
@@ -241,54 +246,24 @@ export default {
       });
     },
 
-    isFieldPassed(key, value) {
-      const rules = {
+    isFieldPassed: getIsFieldPassedFunction({
+      customValidators: {
+        syscode: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 255;
+        },
+        // specialCardNumber: (value) => /^\d+$/.test(value),
+      },
+      rules: {
         name: "nonEmpty",
-        divice_groups: "nonEmpty",
-        stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
-      };
-      const rule = rules[key];
-      if (!rule) return true;
-      switch (rule) {
-        case "nonEmpty": {
-          return !!value;
-        }
-
-        case "port": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && number >= 1 && number <= 65535;
-        }
-
-        case "password": {
-          return !!value;
-        }
-
-        case "passitiveInt": {
-          return /^\d+$/.test(value);
-        }
-
-        case "target_score": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 0 && value <= 1;
-        }
-
-        case "captureInterval": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
-        }
-      }
-    },
+        index: "nonEmpty",
+        syscode: "syscode",
+        special_card_number: "nonEmpty"
+      },
+    }),
 
     // 決定現在顯示哪一個步驟
     isOnStep(step) {
@@ -364,7 +339,7 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_complete;
+          return this.disp_next;
         case 3:
           return this.disp_complete;
         default:
