@@ -10,46 +10,47 @@
     </div>
     <!-- Basic -->
     <div class="mt-3">
-      <CRow sm="12">
-        <CCol sm="6" class="h5" >
-          {{ disp_IOBoxesBasicBrand }}
-          <CSelect size="lg" v-model="localStep1form.brand" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-        
-          valid-feedback="ok"
-          
-          required/>
-        </CCol>
-        <CCol sm="6" class="h5"  >
-          {{ disp_IOBoxesBasicModel }}
-          <CSelect size="lg" v-model="localStep1form.model" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-        
-          valid-feedback="ok"
-          
-          required/>
-        </CCol>
-      </CRow>
-    </div>
+        <CRow sm="12">
+          <CCol sm="6" class="h5" >
+            {{ disp_IOBoxesBasicBrand }}
+            <CSelect size="lg" v-model="localStep1form.brand" :options="value_brandList" :filterable="true" class="font-control mt-2" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('brand', localStep1form.brand)"
+            required/>
+          </CCol>
+          <CCol sm="6" class="h5"  >
+            {{ disp_IOBoxesBasicModel }}
+            <CSelect size="lg" v-model="localStep1form.model" :options="value_modelList" :filterable="true" class="font-control mt-2" 
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('model', localStep1form.model)"
+            required/>
+          </CCol>
+        </CRow>
+      </div>
 
-    <div class="mt-3">
-      <CRow sm="12">
-        <CCol sm="6" class="h5"  >
-          {{ disp_IOBoxesBasicDeviceName }}
-          <CInput size="lg" class="mt-2" v-model="localStep1form.name" 
-          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-          valid-feedback="ok"
-          :is-valid="isFieldPassed('name', localStep1form.name)"
-          required/>
-        </CCol>
-        <CCol sm="6" class="h5" >
-          {{ disp_IOBoxesBasicDeviceGroups }}
-          <multiselect class="mt-2"  v-model="localStep1form.divice_groups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
-            :taggable="true" :hideSelected="true" 
-            :show-no-options="false"
-          >
-          </multiselect>
-        </CCol>
-      </CRow>
-    </div>
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5"  >
+            {{ disp_IOBoxesBasicDeviceName }}
+            <CInput size="lg" class="mt-2" v-model="localStep1form.name" 
+            :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('name', localStep1form.name)"
+            required/>
+          </CCol>
+
+          <CCol sm="6" class="h5 d-none" >
+            {{ disp_IOBoxesBasicDeviceGroups }}
+            <multiselect class="mt-2"  v-model="localStep1form.divice_groups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
+              :taggable="true" :hideSelected="true" 
+              :show-no-options="false"
+            >
+            </multiselect>
+          </CCol>
+        </CRow>
+      </div>
 
   </div>
 </template>
@@ -83,8 +84,10 @@
         disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
 
         /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
+        value_deviceGroupsList: ["A","B"],
+        value_brandList: ["airo IO Box"],
+        value_modelList: ["TCP-KP-C2"]
+        
       };
     },
     components: {
