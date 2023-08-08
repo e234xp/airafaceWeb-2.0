@@ -3,6 +3,7 @@
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
       <div class="h1">{{ disp_headertitle }}</div>
+      {{step1form}}
 
       <stepprogress
         class="w-step-progress-4"
@@ -117,6 +118,7 @@ import Step1Form from "@/modules/outputdevice/addioboxes/Step1Form.vue";
 import Step2Form from "@/modules/outputdevice/addioboxes/Step2Form.vue";
 import Step3Form from "@/modules/outputdevice/addioboxes/Step3Form.vue";
 import Step4Form from "@/modules/outputdevice/addioboxes/Step4Form.vue";
+import { getIsFieldPassedFunction } from "@/utils";
 
 
 
@@ -173,16 +175,18 @@ export default {
 
       step3form: {
         no: 1,
-        enable: true,
+        name: "Do 1",
+        enable: false,
         default: false,
-        trigger: true,
+        trigger: false,
         delay: 3
       },
 
       step4form: {
         no: 2,
+        name: "Do 2",
         enable: false,
-        default: true,
+        default: false,
         trigger: false,
         delay: 1
       },
@@ -229,7 +233,7 @@ export default {
         ip_address: "192.168.1.102",
         port: 12345,
         username: "admin",
-        pass: "123456"
+        password: "123456"
       };
 
       return form;
@@ -265,8 +269,7 @@ export default {
         }
 
         case 1: {
-          // todo ROI
-          return true;
+          return this.isFormPassed(this.step2form);
         }
 
         case 2: {
@@ -274,7 +277,7 @@ export default {
         }
 
         case 3: {
-          return true;
+          return this.isFormPassed(this.step4form);
         }
 
         case 4: {
@@ -285,58 +288,30 @@ export default {
 
     isFormPassed(form) {
       return Object.entries(form).every(([key, value]) => {
+        this.isFieldPassed(key, value)
         return this.isFieldPassed(key, value);
       });
     },
 
-    isFieldPassed(key, value) {
-      const rules = {
+    isFieldPassed: getIsFieldPassedFunction({
+      customValidators: {
+        delay: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 100 && value <= 1000;
+        },
+      },
+      rules: {
+        brand: "nonEmpty",
+        model: "nonEmpty",
         name: "nonEmpty",
-        divice_groups: "nonEmpty",
-        stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
         user: "nonEmpty",
         pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
-      };
-      const rule = rules[key];
-      if (!rule) return true;
-      switch (rule) {
-        case "nonEmpty": {
-          return !!value;
-        }
-
-        case "port": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && number >= 1 && number <= 65535;
-        }
-
-        case "password": {
-          return !!value;
-        }
-
-        case "passitiveInt": {
-          return /^\d+$/.test(value);
-        }
-
-        case "target_score": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 0 && value <= 1;
-        }
-
-        case "captureInterval": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
-        }
-      }
-    },
+        delay: "delay",
+      },
+    }),
 
     // 決定現在顯示哪一個步驟
     isOnStep(step) {
@@ -359,8 +334,14 @@ export default {
     //送api 完成
     handleParameter() {
       const iopoint = [];
+      this.step3form.default = this.step3form.default === 1 ? true : false;
+      this.step3form.trigger = this.step3form.trigger === 1 ? true : false;
+      this.step4form.default = this.step4form.default === 1 ? true : false;
+      this.step4form.trigger = this.step4form.trigger === 1 ? true : false;
+      
       iopoint.push(this.step3form);
       iopoint.push(this.step4form);
+
 
       // todo
       const form = {
