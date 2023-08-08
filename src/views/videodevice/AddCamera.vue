@@ -55,7 +55,7 @@
         </CCardBody>
       </CCard>
     </CCol>
-    {{ step1form.divice_groups }}
+    
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -169,6 +169,7 @@ export default {
   async created() {
     this.defaultValues = await this.getDefaultValues();
   },
+
 
   methods: {
     // 處理資料傳遞
@@ -285,6 +286,12 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
+    // 處理下拉選單選項
+    handleDeviceGroups() {
+      let obj = {...this.step1form}
+      return this.step1form.divice_groups = obj.divice_groups.map(i => i.value);
+    },
+
     async handleNext() {
       switch (this.flag_currentSetp) {
         case 0:
@@ -298,7 +305,7 @@ export default {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
-
+          this.handleDeviceGroups();
           const parameter = {
             ...this.step1form,
             ...this.step2form,

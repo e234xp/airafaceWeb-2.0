@@ -25,12 +25,12 @@
         />
       </CCol>
     </CRow>
-    TEST: {{ step1form.divice_groups }} 
+   
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right" >{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
         <multiselect
-           v-model="groupValue"
+           v-model="localStep1form.divice_groups"
                   placeholder=""
                   :options="value_deviceGroupsList"
                   :multiple="true"
@@ -41,12 +41,11 @@
                   :deselect-label="disp_deselect"
                   :show-no-options="false"
                   label="name"
-                  
         >
         </multiselect>
       </CCol>
     </CRow>
-
+    
     <div style="height: 35px"></div>
 
     <!-- Video Source -->
@@ -390,13 +389,6 @@ export default {
       },
       deep: true,
     },
-    // 將選擇的群組value轉換成數字陣列
-    groupValue: {
-      handler(newValue) {
-        this.localStep1form.divice_groups = newValue.map(item=> item.value);
-      },
-      deep: true,
-    }
   },
   mounted() {
     this.formatNameList();
@@ -412,7 +404,9 @@ export default {
       console.log(handleData)
       this.value_deviceGroupsList = handleData;
     },
+  
   },
+
 };
 </script>
 
