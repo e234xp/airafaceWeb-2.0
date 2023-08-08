@@ -6,8 +6,8 @@
     </div>
 
     <!-- 項目 -->
-    <!-- Digital OutPut1 -->
-    <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
+   <!-- Digital OutPut1 -->
+   <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
       <input class="form-check-input" type="checkbox" v-model="localStep3form.enable" value="" id="flexCheckDefault">
       <label class="form-check-label mt-2" for="flexCheckDefault">
         {{ disp_IOBoxesBasicEnable }}
@@ -55,7 +55,7 @@
   import "@/airacss/vue-multiselect.css";
 
   export default {
-    name: "Step3Form",
+    name: "ModifyIoBoxesStep3Form",
     props:{
       step3form: Object,
       defaultValues: Object,

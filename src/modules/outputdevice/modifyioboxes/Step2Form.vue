@@ -29,7 +29,7 @@
       </div>
       
     <div class="mt-3">
-      <CRow sm="12">
+        <CRow sm="12">
         <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicUserName }}
             <CInput size="lg" class="mt-2" v-model="localStep2form.username" 
@@ -46,7 +46,7 @@
               :is-valid="isFieldPassed('pass', localStep2form.password)"
               required/>
         </CCol>
-      </CRow>
+        </CRow>
     </div>
 
   </div>
@@ -55,11 +55,10 @@
 <script>
   import i18n from "@/i18n";
 
-
   import "@/airacss/vue-multiselect.css";
 
   export default {
-    name: "AddCamerasStep2Form",
+    name: "ModifyIoBoxesStep2Form",
     props:{
       step2form: Object,
       defaultValues: Object,
@@ -69,8 +68,6 @@
     return {
         localStep2form: { ...this.step2form },
 
-        isChecked: true,
-
         /*Connection title  */
         disp_ConnectionTitle: i18n.formatter.format("I/OBoxesBasicTitleNameConnection"),
 
@@ -79,13 +76,8 @@
         disp_IOBoxesBasicPort: i18n.formatter.format("I/OBoxesBasicCOlNamePort"),
         disp_IOBoxesBasicUserName: i18n.formatter.format("I/OBoxesBasicCOlNameUserName"),
         disp_IOBoxesBasicPassword: i18n.formatter.format("I/OBoxesBasicCOlNamePassword"),
-
-        /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
       };
     },
-
     // 拿資料 寫入資料
     watch: {
       localStep2form: {
@@ -109,8 +101,3 @@
 
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>

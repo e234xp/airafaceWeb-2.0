@@ -55,7 +55,7 @@
   import "@/airacss/vue-multiselect.css";
 
   export default {
-    name: "Step4Form",
+    name: "ModifyIoBoxesStep4Form",
     props:{
       step3form: Object,
       defaultValues: Object,
