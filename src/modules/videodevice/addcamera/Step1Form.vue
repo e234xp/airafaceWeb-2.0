@@ -324,6 +324,7 @@ export default {
         });
       },
       deep: true,
+      immediate: true,
     },
   },
   mounted() {

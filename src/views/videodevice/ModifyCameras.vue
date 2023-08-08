@@ -93,6 +93,8 @@ import StepProgress from "vue-step-progress";
 
 import Step1Form from "@/modules/videodevice/modifycamera/Step1Form.vue";
 import Step3Form from "@/modules/videodevice/modifycamera/Step3Form.vue";
+import { getIsFieldPassedFunction } from "@/utils";
+
 
 export default {
   name: "ModifyCameras",
@@ -238,8 +240,20 @@ export default {
       });
     },
 
-    isFieldPassed(key, value) {
-      const rules = {
+    isFieldPassed: getIsFieldPassedFunction({
+      customValidators: {
+        target_score: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 1;
+        },
+        captureInterval: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 100 && value <= 1000;
+        },
+      },
+      rules: {
         name: "nonEmpty",
         divice_groups: "nonEmpty",
         stream_type: "nonEmpty",
@@ -251,41 +265,8 @@ export default {
         target_score: "target_score",
         face_min_length: "passitiveInt",
         capture_interval: "captureInterval",
-      };
-      const rule = rules[key];
-      if (!rule) return true;
-      switch (rule) {
-        case "nonEmpty": {
-          return !!value;
-        }
-
-        case "port": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && number >= 1 && number <= 65535;
-        }
-
-        case "password": {
-          return !!value;
-        }
-
-        case "passitiveInt": {
-          return /^\d+$/.test(value);
-        }
-
-        case "target_score": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 0 && value <= 1;
-        }
-
-        case "captureInterval": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
-        }
-      }
-    },
+      },
+    }),
 
     // 決定現在顯示哪一個步驟
     isOnStep(step) {
