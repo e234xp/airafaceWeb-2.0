@@ -50,7 +50,7 @@
           />
         </CCol>
       </CRow>
-{{ localStep3form }}
+
       <!-- 圖片 -->
       <CRow sm="12">
         <CCol sm="1">
@@ -118,11 +118,6 @@ export default {
         ),
       disp_SpecialCardNumber: i18n.formatter.format("SpecialCardNumber"),
       disp_SpecialCardHint: i18n.formatter.format("SpecialCardHint"),
-
-      /**v-model */
-      value_deviceGroups: "" /**選單 */,
-      value_deviceGroupsList: [1, 2, 3],
-      value_durationTriggered: "",
     };
   },
   // 拿資料 寫入資料

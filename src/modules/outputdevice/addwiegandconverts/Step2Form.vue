@@ -36,7 +36,7 @@
         </CCol>
       </CRow>
     </div>
-    {{ localStep2form }}
+
   </div>
 </template>
 
