@@ -18,7 +18,7 @@
             :options="value_deviceGroupsList"
             :filterable="true"
             class="font-control mt-2"
-            :placeholder="disp_Placeholder"
+            :placeholder="dis_placeholder"
           />
         </CCol>
       </CRow>
@@ -101,7 +101,7 @@ export default {
     return {
       localStep3form: { ...this.step3form },
 
-      disp_Placeholder: i18n.formatter.format("placeholder"),
+      dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
 
       // /*Settings title  */
       disp_SettingsTitle: i18n.formatter.format(
