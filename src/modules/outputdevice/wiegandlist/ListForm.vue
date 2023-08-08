@@ -36,10 +36,6 @@
         </CRow>
       </CCol>
     </div>
-    <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" 
-      @click="$router.push('WiegandBasicForm')">
-      假按鈕
-    </CButton>
     <!-- 下方資料 -->
     <CCard>
       <CCardBody>
