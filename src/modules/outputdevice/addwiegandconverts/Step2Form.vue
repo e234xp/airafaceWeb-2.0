@@ -62,10 +62,6 @@ export default {
       /**content */
       disp_WiegandBasicIP: i18n.formatter.format("WiegandBasicCOlNameIP"),
       disp_WiegandBasicPort: i18n.formatter.format("WiegandBasicCOlNamePort"),
-
-      /**v-model */
-      value_deviceGroups: "" /**選單 */,
-      value_deviceGroupsList: [1, 2, 3],
     };
   },
   // 拿資料 寫入資料
