@@ -27,7 +27,7 @@
           </CCol>
           </CRow>
       </div>
-
+{{localStep2form}}
       <div class="mt-3">
           <CRow sm="12">
           <CCol sm="6" class="h5"  >
@@ -98,10 +98,10 @@
         },
         defaultValues: {
           handler(newValue) {
-            this.localStep2form = {
-              ...this.localStep2form,
-              ...newValue,
-            };
+            Object.entries(newValue).forEach(([key, value]) => {
+              if (!Object.keys(this.step2form).includes(key)) return;
+              this.localStep2form[key] = value;
+            });
           },
           deep: true,
           immediate: true,

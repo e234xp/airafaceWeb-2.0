@@ -7,7 +7,7 @@
 
     <!-- 項目 -->
     <!-- Digital OutPut1 -->
-    <div class="form-check mb-3 ml-2">
+    <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
       <input class="form-check-input" type="checkbox" v-model="localStep3form.enable" value="" id="flexCheckDefault">
       <label class="form-check-label mt-2" for="flexCheckDefault">
         {{ disp_IOBoxesBasicEnable }}
@@ -18,29 +18,28 @@
     <CRow>
       <CCol sm="6">
         <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2" 
-        :placeholder="dis_placeholder"
-      
-        valid-feedback="ok"
-        
-        required/>
+        :placeholder="dis_placeholder"/>
       </CCol>
     </CRow>
 
+    <!-- trigger -->
     <div class="mt-3">
       <CRow sm="12">
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicValueWhenTriggered }}
           <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger" 
-            :filterable="true" class="font-control mt-2" 
+            :filterable="true" class="font-control mt-2"
             :placeholder="dis_placeholder"
-            
-            valid-feedback="ok"
-          
-            required/>
+            />
         </CCol>
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
           <CInput size="lg" class="mt-2" v-model="localStep3form.delay"
+            pattern="[0-9]*"
+            :invalid-feedback="disp_limitNumber100up"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('delay', localStep3form.delay)"
+            required
             />
         </CCol>
       </CRow>
@@ -70,7 +69,9 @@
 
         // /*Digital output1 title  */
         disp_DigitalOutPut1Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut1"),
-        dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
+        dis_placeholder: i18n.formatter.format("placeholder"), // 提示文字
+        disp_limitNumber100up: i18n.formatter.format("limitNumbers100up"),
+
 
         // /**content */
         disp_IOBoxesBasicEnable: i18n.formatter.format("I/OBoxesBasicCOlNameEnable"),
@@ -81,7 +82,6 @@
         /**v-model */
         value_deviceDefaultValue: [0, 1],
         value_deviceTrigger: [0, 1],
-        value_durationTriggered: "",
       };
     },
     components: {
@@ -99,10 +99,10 @@
       },
       defaultValues: {
         handler(newValue) {
-          this.localStep1form = {
-            ...this.localStep1form,
-            ...newValue,
-          };
+          Object.entries(newValue).forEach(([key, value]) => {
+            if (!Object.keys(this.step3form).includes(key)) return;
+            this.localStep3form[key] = value;
+          });
         },
         deep: true,
         immediate: true,

@@ -15,17 +15,17 @@
           <CCol sm="6" class="h5" >
             {{ disp_IOBoxesBasicBrand }}
             <CSelect size="lg" v-model="localStep1form.brand" :options="value_brandList" :filterable="true" class="font-control mt-2" 
-          
+            :invalid-feedback="$t('NoEmptyNoSpace')"
             valid-feedback="ok"
-            
+            :is-valid="isFieldPassed('brand', localStep1form.brand)"
             required/>
           </CCol>
           <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicModel }}
             <CSelect size="lg" v-model="localStep1form.model" :options="value_modelList" :filterable="true" class="font-control mt-2" 
-          
+            :invalid-feedback="$t('NoEmptyNoSpace')"
             valid-feedback="ok"
-            
+            :is-valid="isFieldPassed('model', localStep1form.model)"
             required/>
           </CCol>
         </CRow>
@@ -41,7 +41,8 @@
             :is-valid="isFieldPassed('name', localStep1form.name)"
             required/>
           </CCol>
-          <CCol sm="6" class="h5" >
+
+          <CCol sm="6" class="h5 d-none" >
             {{ disp_IOBoxesBasicDeviceGroups }}
             <multiselect class="mt-2"  v-model="localStep1form.divice_groups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
               :taggable="true" :hideSelected="true" 
@@ -85,7 +86,7 @@
           disp_IOBoxesBasicDeviceGroups: i18n.formatter.format("I/OBoxesBasicCOlNameDeviceGroups"),
 
           /**v-model */
-          value_deviceGroupsList: [],
+          value_deviceGroupsList: ["A","B"],
           value_brandList: ["airo IO Box"],
           value_modelList: ["TCP-KP-C2"]
         };
