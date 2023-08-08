@@ -71,72 +71,8 @@
       </CCol>
     </CRow>
 
+    <!-- 類型等於sdp時 -->
     <div id="type" v-if="localStep1form.stream_type !== 'rtsp'">
-      <div class="mt-3">
-        <CRow sm="12">
-          <CCol sm="6" class="h5">
-            {{ disp_ipAddress }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.ip_address"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
-              required
-            />
-          </CCol>
-
-          <CCol sm="6" class="h5">
-            {{ disp_port }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model.number="localStep1form.port"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('port', localStep1form.port)"
-              required
-            />
-          </CCol>
-        </CRow>
-      </div>
-
-      <div class="mt-3">
-        <CRow sm="12">
-          <CCol sm="6" class="h5">
-            {{ disp_username }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.user"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('user', localStep1form.user)"
-              required
-            />
-          </CCol>
-
-          <CCol sm="6" class="h5">
-            {{ disp_password }}
-            <CInput
-              size="lg"
-              type="password"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.pass"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('pass', localStep1form.pass)"
-              required
-            />
-          </CCol>
-        </CRow>
-      </div>
-
       <CRow
         sm="12"
         class="h5 ml-2 mb-3"
@@ -179,7 +115,7 @@
       </div>
     </div>
 
-    <!-- 類型不等於rtsp時 -->
+    <!-- rtsp時 -->
     <div id="type" v-else>
       <div class="mt-3">
         <CRow sm="12">
