@@ -27,7 +27,7 @@
           </CCol>
           </CRow>
       </div>
-{{localStep2form}}
+      
       <div class="mt-3">
           <CRow sm="12">
           <CCol sm="6" class="h5"  >

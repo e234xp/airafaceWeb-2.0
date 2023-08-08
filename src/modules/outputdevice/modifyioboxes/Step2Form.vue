@@ -8,28 +8,28 @@
     <!-- 項目 -->
     <!-- Connection -->
     <div class="mt-3">
-        <CRow sm="12">
-        <CCol sm="6" class="h5"  >
-            {{ disp_IOBoxesBasicIP }}
-            <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" 
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)"
-              required/>
-        </CCol>
-        <CCol sm="6" class="h5"  >
-            {{ disp_IOBoxesBasicPort }}
-            <CInput size="lg" class="mt-2" v-model="localStep2form.port" 
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('port', localStep2form.port)"
-              required/>
-        </CCol>
-        </CRow>
-    </div>
-
+          <CRow sm="12">
+          <CCol sm="6" class="h5"  >
+              {{ disp_IOBoxesBasicIP }}
+              <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" 
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)"
+                required/>
+          </CCol>
+          <CCol sm="6" class="h5"  >
+              {{ disp_IOBoxesBasicPort }}
+              <CInput size="lg" class="mt-2" v-model="localStep2form.port" 
+                :invalid-feedback="$t('NoEmptyNoSpace')"
+                valid-feedback="ok"
+                :is-valid="isFieldPassed('port', localStep2form.port)"
+                required/>
+          </CCol>
+          </CRow>
+      </div>
+      
     <div class="mt-3">
-        <CRow sm="12">
+      <CRow sm="12">
         <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicUserName }}
             <CInput size="lg" class="mt-2" v-model="localStep2form.username" 
@@ -46,7 +46,7 @@
               :is-valid="isFieldPassed('pass', localStep2form.password)"
               required/>
         </CCol>
-        </CRow>
+      </CRow>
     </div>
 
   </div>
@@ -97,7 +97,6 @@
       },
       defaultValues: {
         handler(newValue) {
-          console.log(newValue)
           Object.entries(newValue).forEach(([key, value]) => {
             if (!Object.keys(this.step2form).includes(key)) return;
             this.localStep2form[key] = value;
