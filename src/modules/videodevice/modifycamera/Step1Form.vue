@@ -42,6 +42,7 @@
           :taggable="true"
           :hideSelected="true"
           :show-no-options="false"
+          label="name"
         >
         </multiselect>
       </CCol>
@@ -337,7 +338,7 @@ export default {
       disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"), // port 提示文字
 
       //設備群組 下拉選項
-      value_deviceGroupsList: ["A", "B", "C"],
+      value_deviceGroupsList: [],
 
       //設備類型
       value_deviceTypesList: ["rtsp", "sdp"],
@@ -385,6 +386,22 @@ export default {
       immediate: true,
     },
   },
+
+  mounted() {
+    this.formatNameList();
+  },
+  methods: {
+    /**設備群組 */
+    async formatNameList() {
+      const self = this;
+      let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
+      let groups = res.data.result; /**拿回所有group */
+      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
+      this.value_deviceGroupsList = handleData;
+    },
+  
+  },
+
 };
 </script>
 

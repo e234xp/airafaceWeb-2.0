@@ -36,7 +36,6 @@
           />
         </CCardBody>
       </CCard>
-
       <!-- ROI -->
       <CCard v-else-if="isOnStep(1)">
         <CCardBody> </CCardBody>
@@ -158,6 +157,12 @@ export default {
         face_min_length: null,
       },
       defaultValues: {},
+
+      groupList:[], //下拉選單選項
+
+      selectedNames: [], //要轉換的names
+
+      groupArray: this.$route.params.item.divice_groups //設備群組的selected(選中的)
     };
   },
   components: {
@@ -167,11 +172,32 @@ export default {
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
-    console.log(this.defaultValues);
     this.uuid = this.defaultValues.uuid;
+  },
+  mounted() {
+    this.formatNameList(); //拿回groupList
   },
 
   methods: {
+    /**設備群組 */
+    async formatNameList() {
+      const self = this;
+      let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
+      let groups = res.data.result; /**拿回所有group */
+      self.groupList = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); //options只留name uuid
+
+      //找回name
+      await self.groupArray.forEach(value => {
+        let foundOptionName = self.groupList.find(option => option.value === value); // return obj
+    
+        if (foundOptionName) {
+          self.selectedNames.push(foundOptionName); // 將對應的 name 放入 selectedNames 陣列中
+        } else {
+          self.selectedNames.push(null); // 如果找不到，放入 null
+        }
+        self.defaultValues.divice_groups = self.selectedNames;
+      });
+    },
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
