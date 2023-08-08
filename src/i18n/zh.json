@@ -607,7 +607,9 @@
   "NewDeviceGroups": "新增輸出設備群組",
   "NewVideoDeviceGroups": "新增影像設備群組",
 
-  "placeholder": "請選擇"
+  "placeholder": "請選擇",
+  "SpecialCardNumber": "訪客卡號",
+  "SpecialCardHint":"一般情況下，當識別成功時，我們會提供被識別者的卡號。不過，您也可以選擇使用特定的卡號。若要這樣做，請在這裡指定該卡號，然後前往存取規則頁面以完成相關設定。"
 
 
        

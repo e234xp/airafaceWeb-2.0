@@ -23,28 +23,42 @@
       <!-- Basic Form-->
       <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form"/>
+          <Step1Form
+            :step1form="step1form"
+            @updateStep1form="updateStep1form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          />
         </CCardBody>
       </CCard>
-    
 
       <!-- Connection Form-->
       <CCard v-else-if="isOnStep(1)">
         <CCardBody>
-          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form"/>
+          <Step2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          />
         </CCardBody>
       </CCard>
 
       <!-- Digital output1 Form-->
       <CCard v-else-if="isOnStep(2)">
         <CCardBody>
-          <Step3Form :step3form="step3form" @updateStep3form="updateStep3form"/>
+          <Step3Form
+            :step3form="step3form"
+            @updateStep3form="updateStep3form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          />
         </CCardBody>
       </CCard>
 
       <!-- Digital output1 Form-->
     </CCol>
-
+{{step1form}}
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -55,12 +69,7 @@
             >{{ value_returnRouteName }}
           </CButton>
         </div>
-        <div
-          v-if="
-            flag_currentSetp == 1 ||
-            flag_currentSetp == 2 
-          "
-        >
+        <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
@@ -79,110 +88,109 @@
         </div>
       </div>
     </CCol>
-
   </div>
 </template>
-  
+
 <script>
-  import i18n from "@/i18n";
+import i18n from "@/i18n";
 
-  import StepProgress from "vue-step-progress";
+import StepProgress from "vue-step-progress";
 
+import Step1Form from "@/modules/outputdevice/modifywiegand/Step1Form.vue";
+import Step2Form from "@/modules/outputdevice/modifywiegand/Step2Form.vue";
+import Step3Form from "@/modules/outputdevice/modifywiegand/Step3Form.vue";
+import { getIsFieldPassedFunction } from "@/utils";
 
-  import Step1Form from "@/modules/outputdevice/modifywiegand/Step1Form.vue";
-  import Step2Form from "@/modules/outputdevice/modifywiegand/Step2Form.vue";
-  import Step3Form from "@/modules/outputdevice/modifywiegand/Step3Form.vue";
+export default {
+  name: "ModifyCameras",
+  components: {
+    Step1Form: Step1Form,
+    Step2Form: Step2Form,
+    Step3Form: Step3Form,
 
+    stepprogress: StepProgress,
+  },
+  data() {
+    return {
+      param_cardStyle: "height: 35rem;",
 
+      value_returnRoutePath: this.$route.params.value_returnRoutePath
+        ? this.$route.params.value_returnRoutePath
+        : "",
+      value_returnRouteName: this.$route.params.value_returnRouteName
+        ? this.$route.params.value_returnRouteName
+        : "",
 
+      disp_header: i18n.formatter.format("ModifyCameras"), //編輯設備
 
-  export default {
-    name: "ModifyCameras",
-    components: {
-      Step1Form: Step1Form,
-      Step2Form: Step2Form,
-      Step3Form: Step3Form,
+      /*Basic title  */
+      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
 
-      stepprogress: StepProgress, 
+      // step setting
+      param_activeColor: "#6baee3",
+      param_passiveColor: "#919bae",
+      param_lineThickness: 3,
+      param_activeThickness: 3,
+      param_passiveThickness: 3,
+      flag_currentSetp: 0,
+
+      /**Step 1 2 3 */
+      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
+      disp_step2: i18n.formatter.format("VideoDeviceConnection"),
+      disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+      disp_complete: i18n.formatter.format("Complete"),
+
+      /**btn */
+      disp_complete: i18n.formatter.format("Complete"),
+      disp_previous: i18n.formatter.format("Previous"),
+      disp_next: i18n.formatter.format("Next"),
+
+      step1form: {
+        name: "",
+        divice_groups: [],
+      },
+
+      step2form: {
+        ip_address: "",
+        port: null,
+      },
+
+      step3form: {
+        bits: 0,
+        index: 0,
+        syscode: 0,
+        special_card_number:""
+      },
+
+      defaultValues: {}
+    };
+  },
+
+  // 給預設值 把那一支設備裡面的資料拿出來
+  async created() {
+    this.defaultValues = await this.getDefaultValues();
+    this.uuid = this.defaultValues.uuid;
+  },
+
+  methods: {
+    // Handle the form update from the child component if needed
+    // 處理資料傳遞
+    updateStep1form(newValue) {
+      this.step1form = { ...newValue };
     },
-    data() {
-      return {
-        param_cardStyle: "height: 35rem;",
-        
-        value_returnRoutePath : this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
-        value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
-
-        disp_header: i18n.formatter.format("ModifyCameras"), //編輯設備
-
-  
-        /*Basic title  */
-        disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
-
-        // step setting
-        param_activeColor: "#6baee3",
-        param_passiveColor: "#919bae",
-        param_lineThickness: 3,
-        param_activeThickness: 3,
-        param_passiveThickness: 3,
-        flag_currentSetp: 0,
-
-        /**Step 1 2 3 */
-        disp_step1: i18n.formatter.format("VideoDeviceBasic"),
-        disp_step2: i18n.formatter.format("VideoDeviceConnection"),
-        disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
-        disp_complete: i18n.formatter.format("Complete"),
-
-        /**btn */
-        disp_complete: i18n.formatter.format("Complete"),
-        disp_previous: i18n.formatter.format("Previous"),
-        disp_next: i18n.formatter.format("Next"),
-
-        step1form: {
-          name: "",
-          divice_groups: [],
-
-          ip_address: "",
-          port: null, //Number(getPort)
-          user: "",
-          pass: "",
-          connection_info: ""
-          
-        },
-
-        
-        step1form: {},
-
-        step2form: {},
-
-        step3form: {},
-
-      };
+    updateStep2form(newValue) {
+      this.step2form = { ...newValue };
+    },
+    updateStep3form(newValue) {
+      this.step3form = { ...newValue };
     },
 
-    // 給預設值 把那一支設備裡面的資料拿出來
-    async created() {
-      this.defaultValues = await this.getDefaultValues();
-      this.uuid = this.defaultValues.uuid;
+    async getDefaultValues() {
+      console.log(this.$route.params.item,"h0")
+      return this.$route.params.item;
     },
 
-    methods: {
-      // Handle the form update from the child component if needed
-       // 處理資料傳遞
-       updateStep1form(newValue) {
-        this.step1form = { ...newValue };
-      },
-      updateStep2form(newValue) {
-        this.step2form = { ...newValue };
-      },
-      updateStep3form(newValue) {
-        this.step3form = { ...newValue };
-      },
-
-      async getDefaultValues() {
-        return this.$route.params.item;
-      },
-
-          // 是否可以按下一步
+    // 是否可以按下一步
     isStepPassed(step) {
       switch (step) {
         case 0: {
@@ -190,12 +198,12 @@
         }
 
         case 1: {
-          // todo ROI
-          return true;
+          return this.isFormPassed(this.step2form);
         }
 
         case 2: {
-          return this.isFormPassed(this.step3form);
+          return true;
+          //return this.isFormPassed(this.step3form);
         }
 
         case 3: {
@@ -210,54 +218,24 @@
       });
     },
 
-    isFieldPassed(key, value) {
-      const rules = {
+    isFieldPassed: getIsFieldPassedFunction({
+      customValidators: {
+        syscode: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 255;
+        },
+        // specialCardNumber: (value) => /^\d+$/.test(value),
+      },
+      rules: {
         name: "nonEmpty",
-        divice_groups: "nonEmpty",
-        stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
-      };
-      const rule = rules[key];
-      if (!rule) return true;
-      switch (rule) {
-        case "nonEmpty": {
-          return !!value;
-        }
-
-        case "port": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && number >= 1 && number <= 65535;
-        }
-
-        case "password": {
-          return !!value;
-        }
-
-        case "passitiveInt": {
-          return /^\d+$/.test(value);
-        }
-
-        case "target_score": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 0 && value <= 1;
-        }
-
-        case "captureInterval": {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
-        }
-      }
-    },
+        index: "nonEmpty",
+        syscode: "syscode",
+        special_card_number: "nonEmpty",
+      },
+    }),
 
     // 決定現在顯示哪一個步驟
     isOnStep(step) {
@@ -275,7 +253,6 @@
 
       this.$router.push({ name: this.value_returnRoutePath });
     },
-
 
     async handleNext() {
       switch (this.flag_currentSetp) {
@@ -299,7 +276,7 @@
               ...this.step3form,
             },
           };
-          
+
           const { data } = await this.modify(parameter);
 
           this.obj_loading.hide();
@@ -344,7 +321,6 @@
           return this.disp_next;
       }
     },
-
-    },
-  }
+  },
+};
 </script>

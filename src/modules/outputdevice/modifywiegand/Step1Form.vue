@@ -2,90 +2,95 @@
   <div id="wrapper">
     <!-- 標題 -->
     <div class="content">
-        <!-- Basic -->
-        <div class="mt-3">
-          <CRow sm="12">
-            <CCol sm="6" class="h5">
-              {{ disp_WiegandBasicDeviceName }}
-              <CInput size="lg" class="mt-2" v-model="localStep1form.name"/>
-            </CCol>
-            <CCol sm="6" class="h5">
-              {{ disp_WiegandBasicDeviceGroups }}
-              <CSelect size="lg" v-model="localStep1form.value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" 
-              :invalid-feedback= "$t('NoEmptyNoSpace')"
+      <!-- Basic -->
+      <div class="mt-3">
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_WiegandBasicDeviceName }}
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.name"
+              :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
               valid-feedback="ok"
-              :is-valid="isNotEmpty"
-              required/>
-            </CCol>
-          </CRow>
-        </div>
+              :is-valid="isFieldPassed('name', localStep1form.name)"
+              required
+            />
+          </CCol>
+          <CCol sm="6" class="h5 d-none">
+            {{ disp_WiegandBasicDeviceGroups }}
+            <CSelect
+              size="lg"
+              v-model="localStep1form.divice_groups"
+              :options="value_deviceGroupsList"
+              :filterable="true"
+              class="font-control mt-2"
+              :placeholder="dis_placeholder"
+            />
+          </CCol>
+        </CRow>
+      </div>
     </div>
   </div>
 </template>
-  
+
 <script>
-  import i18n from "@/i18n";
+import i18n from "@/i18n";
 
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
+import Multiselect from "vue-multiselect";
+import "@/airacss/vue-multiselect.css";
 
-  export default {
-    name: "ModifyCamerasStep1Form",
-    props:{
-      step1form: Object
-    },
-    data() {
-      return {
-        localStep1form: { ...this.step1form },
+export default {
+  name: "ModifyWiegandConvertersStep1Form",
+  props: {
+    step1form: Object,
+    defaultValues: Object,
+    isFieldPassed: Function,
+  },
+  data() {
+    return {
+      localStep1form: { ...this.step1form },
 
-        /*Basic title  */
-        disp_header: i18n.formatter.format("WiegandBasicName"),
+      /*Basic title  */
+      disp_header: i18n.formatter.format("WiegandBasicName"),
 
-        /**content */
-        disp_WiegandBasicDeviceName: i18n.formatter.format("WiegandBasicCOlNameDeviceName"),
-        disp_WiegandBasicDeviceGroups: i18n.formatter.format("WiegandBasicCOlNameDeviceGroups"),
-    
+      /**content */
+      disp_WiegandBasicDeviceName: i18n.formatter.format(
+        "WiegandBasicCOlNameDeviceName"
+      ),
+      disp_WiegandBasicDeviceGroups: i18n.formatter.format(
+        "WiegandBasicCOlNameDeviceGroups"
+      ),
+      dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
 
-        /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
-      };
-    },
-    components: {
-      "v-select": VueSelect,
-      multiselect: Multiselect,
-    },
-    //預設值
-    created() {
-      // this.defaultPortValue();
-      // this.localStep2form.user = "admin",
-      // this.localStep2form.pass = "123456"
-    }, 
-    // 拿資料 寫入資料
-    watch: {
-      localStep1form: {
-        handler(newValue) {
-          console.log('emit updateStep1form')
-          this.$emit('updateStep1form', { ...newValue });
-        },
-        deep: true,
+      /**v-model */
+      value_deviceGroups: "" /**選單 */,
+      value_deviceGroupsList: [1, 2, 3],
+    };
+  },
+  components: {
+    multiselect: Multiselect,
+  },
+  // 拿資料 寫入資料
+  watch: {
+    localStep1form: {
+      handler(newValue) {
+        console.log("emit updateStep1form");
+        this.$emit("updateStep1form", { ...newValue });
       },
+      deep: true,
     },
-    methods: {
-      // defaultPortValue() {
-      //   this.localStep2form.port = 554;
-      //   return this.localStep2form.port !== null && this.localStep2form.port >= 0 && this.localStep2form.port <= 65535;
-      // },
-      // 判斷欄位空值
-      isNotEmpty(value) {
-        return value !== null && value !== undefined && value !== '';
-      }
+    defaultValues: {
+      handler(newValue) {
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.step1form).includes(key)) return;
+          this.localStep1form[key] = value;
+        });
+      },
+      deep: true,
+      immediate: true,
     },
-  }
-</script>
+  },
   
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
+};
+</script>
