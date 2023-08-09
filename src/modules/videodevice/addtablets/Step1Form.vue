@@ -18,7 +18,7 @@
       </CCol>
     </CRow>
     
-      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletUUID }}</CRow>
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletID }}</CRow>
       <CRow>
         <CCol sm="6">
           <CInput size="lg"  class="h5"  style="width: 100%;" />
@@ -86,7 +86,7 @@ export default {
 
       /**content */
       disp_type: i18n.formatter.format("TabletsBasicCOlNameDeviceType"),
-      disp_tabletUUID: i18n.formatter.format("TabletsBasicCOlNameDeviceID"),
+      disp_tabletID: i18n.formatter.format("TabletsBasicCOlNameDeviceID"),
       disp_tabletDeviceName: i18n.formatter.format("TabletsBasicCOlNameDeviceName"),
       disp_tabletDeviceGroups: i18n.formatter.format("TabletsBasicCOlNameDeviceGroups"),
 
