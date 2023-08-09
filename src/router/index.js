@@ -85,7 +85,7 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 ///////////////////////////////////////////
 /////////// device ///////////
 const CameraList = () => import('@/views/videodevice/CameraList')
-const Tablets = () => import('@/views/videodevice/Tablets')
+const TabletsList = () => import('@/views/videodevice/Tablets')
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
 // const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
 // const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
@@ -102,6 +102,10 @@ const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups
 /////////// device add update///////////
 const AddCamera = () => import('@/views/videodevice/AddCamera')
 const ModifyCameras = () => import('@/views/videodevice/ModifyCameras')
+
+const AddTablets = () => import('@/views/videodevice/AddTablets')
+const ModifyTablets = () => import('@/views/videodevice/ModifyTablets')
+
 const AddVideoDeviceGroups = () => import('@/views/videodevice/AddVideoDeviceGroups')
 const ModifyVideoDeviceGroups = () => import('@/views/videodevice/ModifyVideoDeviceGroups')
 
@@ -456,9 +460,19 @@ function configRoutes() {
               component: ModifyCameras
             },
             {
-              path: 'tablets',
-              name: 'Tablets',
-              component: Tablets
+              path: 'tabletslist',
+              name: 'TabletsList',
+              component: TabletsList
+            },
+            {
+              path: 'addtablets',
+              name: 'AddTablets',
+              component: AddTablets
+            },
+            {
+              path: 'modifytablets',
+              name: 'ModifyTablets',
+              component: ModifyTablets
             },
             {
               path: 'tabletsBasic',
