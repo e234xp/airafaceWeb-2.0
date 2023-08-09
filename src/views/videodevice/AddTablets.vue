@@ -40,7 +40,14 @@
 
       <!-- ROI -->
       <CCard v-else-if="isOnStep(1)">
-        <CCardBody> </CCardBody>
+        <CCardBody>
+          <Step2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          /> 
+        </CCardBody>
       </CCard>
 
       <!-- FaceCapture Form -->
@@ -93,12 +100,13 @@ import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
 
-import Step1Form from "@/modules/videodevice/addcamera/Step1Form.vue";
-import Step3Form from "@/modules/videodevice/addcamera/Step3Form.vue";
+import Step1Form from "@/modules/videodevice/addtablets/Step1Form.vue";
+import Step2Form from "@/modules/videodevice/addtablets/Step2Form.vue";
+import Step3Form from "@/modules/videodevice/addtablets/Step3Form.vue";
 import { getIsFieldPassedFunction } from "@/utils";
 
 export default {
-  name: "AddCameras",
+  name: "AddTablets",
   data() {
     return {
       param_cardStyle: "height: 35rem;",
@@ -164,6 +172,7 @@ export default {
   components: {
     stepprogress: StepProgress,
     Step1Form: Step1Form,
+    Step2Form: Step2Form,
     Step3Form: Step3Form,
   },
   async created() {
@@ -175,6 +184,9 @@ export default {
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
+    },
+    updateStep2orm(newValue) {
+      this.step2form = { ...newValue };
     },
     updateStep3form(newValue) {
       this.step3form = { ...newValue };
@@ -217,6 +229,7 @@ export default {
     isStepPassed(step) {
       switch (step) {
         case 0: {
+          return true;
           return this.isFormPassed(this.step1form);
         }
 
@@ -226,6 +239,7 @@ export default {
         }
 
         case 2: {
+          return true;
           return this.isFormPassed(this.step3form);
         }
 
