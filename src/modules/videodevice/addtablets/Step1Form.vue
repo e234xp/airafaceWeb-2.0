@@ -10,30 +10,62 @@
     </div>
     <!-- Basic -->
     <div class="mt-3">
-      <CRow sm="12">
-        <CCol sm="6" class="h5">
-          {{ disp_IOBoxesBasicDeviceName }}
-          <CInput
-            size="lg"
-            class="mt-2"
-            v-model="localStep1form.name"
-            :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-            valid-feedback="ok"
-            :is-valid="isFieldPassed('name', localStep1form.name)"
-            required
-          />
+
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right" >{{ disp_type }}</CRow>
+    <CRow>
+      <CCol sm="6">
+        <CSelect size="lg" value="1" v-model="localStep1form.stream_type" :placeholder="dis_placeholder" :options="value_deviceTypesList" />
+      </CCol>
+    </CRow>
+    
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletUUID }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput size="lg"  class="h5"  style="width: 100%;" />
+        </CCol>
+      </CRow>
+
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceName }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput size="lg"  class="h5"  style="width: 100%;" />
+        </CCol>
+      </CRow>
+
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceGroups }}</CRow>
+      <CRow>
+        <CCol sm="6">
+          <multiselect
+            v-model="localStep1form.divice_groups"
+                    placeholder=""
+                    :options="value_deviceGroupsList"
+                    :multiple="true"
+                    :taggable="true"
+                    :hideSelected="true"
+                    :select-label="disp_select"
+                    :selected-label="disp_selected"
+                    :deselect-label="disp_deselect"
+                    :show-no-options="false"
+                    label="name"
+                    track-by="value"
+          >
+          </multiselect>
         </CCol>
       </CRow>
     </div>
-    {{ localStep1form }}
+    
+    <!-- {{ localStep1form }} -->
   </div>
 </template>
 
 <script>
 import i18n from "@/i18n";
 
+import Multiselect from "vue-multiselect";
+import "@/airacss/vue-multiselect.css";
+
 export default {
-  name: "AddVideoDeviceGroupStep1Form",
+  name: "AddTabletsStep1Form",
   props: {
     step1form: Object,
     defaultValues: Object,
@@ -43,16 +75,29 @@ export default {
     return {
       localStep1form: { ...this.step1form },
 
-      isChecked: true,
+      // 文字提示
+      dis_placeholder: i18n.formatter.format("placeholder"), // 提示文字
+      disp_select: i18n.formatter.format("Select"),
+      disp_selected: i18n.formatter.format("Selected"),
+      disp_deselect: i18n.formatter.format("Deselect"),
 
       /*Basic title  */
-      disp_header: i18n.formatter.format("VideoDeviceGroupsBasicName"),
+      disp_header: i18n.formatter.format("TabletsBasicName"),
 
       /**content */
-      disp_IOBoxesBasicDeviceName: i18n.formatter.format(
-        "VideoDeviceGroupsBasicCOlNameDeviceName"
-      ),
+      disp_type: i18n.formatter.format("TabletsBasicCOlNameDeviceType"),
+      disp_tabletUUID: i18n.formatter.format("TabletsBasicCOlNameDeviceID"),
+      disp_tabletDeviceName: i18n.formatter.format("TabletsBasicCOlNameDeviceName"),
+      disp_tabletDeviceGroups: i18n.formatter.format("TabletsBasicCOlNameDeviceGroups"),
+
+      value_deviceTypesList: ["airaTablet", "airaTablet xs"],
+
+      //設備群組 下拉選項
+      value_deviceGroupsList: [],
     };
+  },
+  components: {
+    multiselect: Multiselect,
   },
   // 拿資料 寫入資料
   watch: {
@@ -72,9 +117,21 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.formatNameList();
+  },
+  methods: {
+    /**設備群組 */
+    async formatNameList() {
+      const self = this;
+      let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
+      let groups = res.data.result; /**拿回所有group */
+      //const handleData = groups.map(({ name, uuid }) => ({ label: `${name}`, value: uuid })); 
+      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
+      console.log(handleData)
+      this.value_deviceGroupsList = handleData;
+    },
+  
+  },
 };
 </script>
-
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>
