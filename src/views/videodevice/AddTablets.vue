@@ -185,7 +185,7 @@ export default {
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
     },
-    updateStep2orm(newValue) {
+    updateStep2form(newValue) {
       this.step2form = { ...newValue };
     },
     updateStep3form(newValue) {
