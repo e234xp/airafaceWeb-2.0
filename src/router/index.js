@@ -85,7 +85,7 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 ///////////////////////////////////////////
 /////////// device ///////////
 const CameraList = () => import('@/views/videodevice/CameraList')
-const TabletsList = () => import('@/views/videodevice/Tablets')
+const TabletsList = () => import('@/views/videodevice/TabletsList')
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups')
 // const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
 // const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
