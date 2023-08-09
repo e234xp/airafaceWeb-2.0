@@ -119,9 +119,11 @@ export default {
     },
     defaultValues: {
       handler(newValue) {
+        const localStep3formKeys = Object.keys(this.localStep3form);
         Object.entries(newValue).forEach(([key, value]) => {
-          if (!Object.keys(this.localStep3form).includes(key)) return;
-          this.localStep3form[key] = value;
+          if (localStep3formKeys.includes(key)) {
+            this.localStep3form[key] = value;
+          }
         });
       },
       deep: true,
@@ -130,3 +132,21 @@ export default {
   },
 };
 </script>
+
+<!-- defaultValues: {
+  handler(newValue) {
+    Object.entries(newValue).forEach(([key, value]) => {
+      if (
+        !Object.keys(this.localStep3form).includes(key) ||
+        this.localStep3form === null ||
+        typeof this.localStep3form !== 'object'
+      ) {
+        return;
+      }
+      this.localStep3form[key] = value;
+    });
+  },
+  deep: true,
+  immediate: true,
+}, -->
+
