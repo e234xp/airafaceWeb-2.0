@@ -12,26 +12,30 @@
     <!-- 項目 -->
     <CCard>
       <CCardBody>
-          <!-- Basic -->
+          <!-- two Factor -->
           <CRow sm="12" class="h2 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_twoFactor }}</CRow>
           <CRow>
             <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
+              <CSelect
+                size="lg"
+                v-model="name"
+                placeholder="請選擇"
+                :options="cardAccessOptions"
+              />
             </CCol>
           </CRow>
 
           <div style="height: 35px"></div>
 
-          <!-- Video Source -->
+          <!-- Relay -->
           <div>
             <h2 sm="12">{{ disp_relayTitle }}</h2>
           </div>
 
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Duration }}</CRow>
           <CRow>
-            <CCol sm="12">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            <CCol sm="6">
+              <CInput size="lg" class="h5"/>
             </CCol>
           </CRow>
 
@@ -50,69 +54,257 @@
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_temperatureUnit }}</CRow>
           <CRow>
             <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
+              <CSelect
+                size="lg"
+                v-model="name"
+                placeholder="請選擇"
+                :options="cardAccessOptions"
+              />
             </CCol>
           </CRow>
           <div style="height: 15px"></div>
 
           <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_threshold }}</CRow>
           <CRow>
-            <CCol sm="12">
-              <CInput size="lg"  class="h5"  style="width: 100%;" />
+            <CCol sm="6">
+              <CInput size="lg"  class="h5"/>
             </CCol>
           </CRow>
 
-          <div>
+          <!-- Face masks -->
+          <div class="mt-3">
             <h4 sm="12">{{ disp_faceMasks }}</h4>
           </div>
+          
+          <CRow>
+            <CCol sm="1">
+              <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
+              @update:checked="value_enableStranger = !value_enableStranger" :checked="value_enableStranger">
+            </CSwitch>
+            </CCol>
 
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" v-model="isChecked" value="" id="checkbox1">
-            <label class="form-check-label mt-2" for="flexCheckDefault">
-              {{ disp_enforceFaceMaskCheck }}
-            </label>
-            <input class="form-check-input mt-1 ml-5" type="text" value="" id="cardNo">
-          </div>
+            <CCol sm="11">
+              <h4>{{ disp_enforceFaceMaskCheck }}</h4>
+            </CCol>
+          </CRow>
+
           <div style="height: 35px"></div>
 
 
           <!-- Result Display -->
+          <!-- title -->
           <div>
-            <h4 sm="12">{{ disp_resultDisplayTitle }}</h4>
-          </div>
+            <div>
+              <h2 sm="12">{{ disp_resultDisplayTitle }}</h2>
+            </div>
 
-          <div class="mt-3">
-            <CRow sm="12">
-              <CCol sm="6" class="h5" >
-                {{ disp_shownPhoto }}
-                <v-select  v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control mt-2">
-                </v-select>
+            <!-- content -->
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_shownProfilePhoto }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
               </CCol>
-              <CCol sm="6" class="h5"  >
-                {{ disp_displayDuration }}
-                <CInput size="lg" class="mt-2" style="width: 100%;" />
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_strangerDisplayMessage }}</CRow>
+            <CRow sm="6">
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_displayVerifyDuration }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_showVerifyResult }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+            </CRow>
+
+            <!-- disable content-->
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationSuccessText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationSuccessMessageText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationFailText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationFailMessageText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
               </CCol>
             </CRow>
           </div>
 
-          <CRow sm="6" class="h5 ml-2 mb-3" style="text-align: right; ">{{ disp_resultPrompt }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <v-select v-model="value_deviceGroups" :options="value_deviceGroupsList"  :filterable="true" class="font-control">
-              </v-select>
-            </CCol>
-          </CRow>
+          <!-- Clock setting -->
+          <div>
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableClockMode }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+            </CRow>
 
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataUp }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
 
-        
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataDown }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
 
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoData3 }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
 
-          <!-- 儲存按鈕 -->
-          <div class="d-flex ml-3 justify-content-end">
-            <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" @click="saveData()">
-              {{ disp_save }}
-            </CButton>
+            <!-- disable content -->
+            <!-- A -->
+            <CRow sm="12">
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_enableClockFunction1 }}</h5>
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <!-- B -->
+            <CRow sm="12">
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_enableClockFunction2 }}</h5>
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <!-- C -->
+            <CRow sm="12">
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_enableClockFunction3 }}</h5>
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <!-- D -->
+            <CRow sm="12">
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_enableClockFunction4 }}</h5>
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+
+              <CCol sm="6" class="h5">
+                <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <!-- E單欄 -->
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationSuccessText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockSuccessMessageText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationFailText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+            
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockFailMessageText }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+          </div>
+          
+
+          <!-- RTSP setting -->
+          <!-- title -->
+          <div>
+            <h2 sm="12">{{ disp_RTSPSettingTitle }}</h2>
+          </div>
+
+          <div>
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableRTSPCamera }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ipAddress }}</CRow>
+            <CRow sm="6">
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPUserName }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2"/>
+              </CCol>
+            </CRow>
+
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPPassWord }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg" class="mt-2" type="password"/>
+              </CCol>
+            </CRow>
           </div>
 
       </CCardBody>
@@ -125,11 +317,6 @@
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
   import i18n from "@/i18n";
-
-  import VueSelect from 'vue-select';
-	
-
-
 
   export default {
     name: "CamerasBasic",
@@ -144,6 +331,9 @@
         },
         value_searchingFilter: "",
         isChecked: true,
+
+        dis_placeholder: i18n.formatter.format("placeholder"), // 提示文字
+
 
         /*Basic title  */
         disp_header: i18n.formatter.format("TabletsAccessName"),
@@ -169,34 +359,68 @@
 
         /*Result display title  */
         disp_resultDisplayTitle: i18n.formatter.format("TabletsAccessTitleNameResultDisplay"),
+
         /**content */
-        disp_shownPhoto: i18n.formatter.format("TabletsAccessColNameShownPhoto"),
-        disp_displayDuration: i18n.formatter.format("TabletsAccessColNameDisplayDuration"),
-        disp_resultPrompt: i18n.formatter.format("TabletsAccessColNameResultPrompt"),
+        disp_shownProfilePhoto: i18n.formatter.format("TabletsAccessColNameShownProfilePhoto"),
+        disp_strangerDisplayMessage: i18n.formatter.format("TabletsAccessColNameStrangerDisplayMessage"),
+        disp_displayVerifyDuration: i18n.formatter.format("TabletsAccessColNameDisplayVerifyDuration"),
+        disp_showVerifyResult: i18n.formatter.format("TabletsAccessColNameShowVerifyResult"),
 
+        
+        disp_verifyIndicationSuccessText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationSuccessText"),
+        disp_verifyIndicationSuccessMessageText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationSuccessMessageText"),
+        disp_verifyIndicationFailText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationFailText"),
+        disp_verifyIndicationFailMessageText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationFailMessageText"),
 
+        /* Clock setting */
+        disp_enableClockMode: i18n.formatter.format("TabletsAccessColNameEnableClockMode"),
+        disp_clockInfoDataUp: i18n.formatter.format("TabletsAccessColNameClockInfoData(Up)"),
+        disp_clockInfoDataDown: i18n.formatter.format("TabletsAccessColNameClockInfoData(Down)"),
+        disp_clockInfoData3: i18n.formatter.format("TabletsAccessColNameClockInfoData3"),
 
-        disp_save: i18n.formatter.format("Save"),
+        disp_enableClockFunction1: i18n.formatter.format("TabletsAccessColNameEnableClockFunction1"),
+        disp_enableClockFunction2: i18n.formatter.format("TabletsAccessColNameEnableClockFunction2"),
+        disp_enableClockFunction3: i18n.formatter.format("TabletsAccessColNameEnableClockFunction3"),
+        disp_enableClockFunction4: i18n.formatter.format("TabletsAccessColNameEnableClockFunction4"),
+
+        disp_clockIndicationSuccessText: i18n.formatter.format("TabletsAccessColNameClockIndicationSuccessText"),
+        disp_clockSuccessMessageText: i18n.formatter.format("TabletsAccessColNameClockSuccessMessageText"),
+        disp_clockIndicationFailText: i18n.formatter.format("TabletsAccessColNameClockIndicationFailText"),
+        disp_clockFailMessageText: i18n.formatter.format("TabletsAccessColNameClockFailMessageText"),
+
+        /* RTSP setting */
+        disp_RTSPSettingTitle: i18n.formatter.format("TabletsAccessTitleNameRTSPSetting"),
+
+        /**content */
+        disp_enableRTSPCamera: i18n.formatter.format("TabletsAccessColNameEnableRTSPCamera"),
+        disp_ipAddress: i18n.formatter.format("TabletsAccessColNameIpAddress"),
+        disp_RTSPUserName: i18n.formatter.format("TabletsAccessColNameRTSPUserName"),
+        disp_RTSPPassWord: i18n.formatter.format("TabletsAccessColNameRTSPPassWord"),
+
+        // 預設值i18n
+
+        
+       
+        // checkbox switch
+        value_enableStranger: false,
 
         /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
+
+
+        /**TEST */
+        name:"123",
+        cardAccessOptions: ["C","D"]
       };
-    },
-    components: {
-      "v-select": VueSelect,
     },
     computed: {
       ...mapState(["ellipsisMode"]),
     },
    
     methods: {
-
+      selectFaceMaskCheck(e) {
+        const self = this;
+        self.faceMaskCheck = e.target.value == "1" ? 1 : 0;
+      },
     },
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
