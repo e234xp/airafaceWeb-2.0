@@ -1,9 +1,10 @@
 <template>
   <div id="wrapper">
+    
     <!-- 標題 -->
     <div>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h4">{{ disp_header }}</td>
       </CCol>
 
       <div style="height: 35px"></div>
@@ -13,17 +14,19 @@
     <CCard>
       <CCardBody>
           <!-- two Factor -->
-          <CRow sm="12" class="h2 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_twoFactor }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CSelect
-                size="lg"
-                v-model="name"
-                placeholder="請選擇"
-                :options="cardAccessOptions"
-              />
-            </CCol>
-          </CRow>
+          <div>
+            <CRow sm="12" class="h2 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_twoFactor }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect
+                  size="lg"
+                  v-model="name"
+                  placeholder="請選擇"
+                  :options="cardAccessOptions"
+                />
+              </CCol>
+            </CRow>
+          </div>
 
           <div style="height: 35px"></div>
 
@@ -44,52 +47,56 @@
 
           <!-- Temperature Mask -->
           <div>
-            <h2 sm="12">{{ disp_temperatureMaskTitle }}</h2>
-          </div>
+            <div>
+              <h2 sm="12">{{ disp_temperatureMaskTitle }}</h2>
+            </div>
 
-          <div>
-            <h4 sm="12">{{ disp_subTitleName }}</h4>
-          </div>
+            <div>
+              <h4 sm="12">{{ disp_subTitleName }}</h4>
+            </div>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_temperatureUnit }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CSelect
-                size="lg"
-                v-model="name"
-                placeholder="請選擇"
-                :options="cardAccessOptions"
-              />
-            </CCol>
-          </CRow>
-          <div style="height: 15px"></div>
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_temperatureUnit }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect
+                  size="lg"
+                  v-model="name"
+                  placeholder="請選擇"
+                  :options="cardAccessOptions"
+                />
+              </CCol>
+            </CRow>
+            <div style="height: 15px"></div>
 
-          <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_threshold }}</CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput size="lg"  class="h5"/>
-            </CCol>
-          </CRow>
-
-          <!-- Face masks -->
-          <div class="mt-3">
-            <h4 sm="12">{{ disp_faceMasks }}</h4>
+            <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_threshold }}</CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput size="lg"  class="h5"/>
+              </CCol>
+            </CRow>
           </div>
           
-          <CRow>
-            <CCol sm="1">
-              <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
-              @update:checked="value_enableStranger = !value_enableStranger" :checked="value_enableStranger">
-            </CSwitch>
-            </CCol>
 
-            <CCol sm="11">
-              <h4>{{ disp_enforceFaceMaskCheck }}</h4>
-            </CCol>
-          </CRow>
+          <!-- Face masks -->
+          <div>
+            <div class="mt-3">
+              <h4 sm="12">{{ disp_faceMasks }}</h4>
+            </div>
+            
+            <CRow>
+              <CCol sm="1">
+                <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
+                @update:checked="value_enableStranger = !value_enableStranger" :checked="value_enableStranger">
+              </CSwitch>
+              </CCol>
+
+              <CCol sm="11">
+                <h4>{{ disp_enforceFaceMaskCheck }}</h4>
+              </CCol>
+            </CRow>
+          </div>
 
           <div style="height: 35px"></div>
-
 
           <!-- Result Display -->
           <!-- title -->
@@ -274,10 +281,10 @@
           <!-- RTSP setting -->
           <!-- title -->
           <div>
-            <h2 sm="12">{{ disp_RTSPSettingTitle }}</h2>
-          </div>
+            <div>
+              <h2 sm="12">{{ disp_RTSPSettingTitle }}</h2>
+            </div>
 
-          <div>
             <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableRTSPCamera }}</CRow>
             <CRow>
               <CCol sm="6">
