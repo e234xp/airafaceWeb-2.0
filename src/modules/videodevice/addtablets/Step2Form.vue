@@ -12,28 +12,48 @@
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_recognitionThreshold }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" />
+          <CInput size="lg" class="h5" 
+            v-model.number="localStep2form.ip_address5"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('ip_address5', localStep2form.ip_address5)"
+            required/>
         </CCol>
       </CRow>
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_faceCaptureInternal }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" />
+          <CInput size="lg"  class="h5"  
+            v-model.number="localStep2form.ip_address2"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('ip_address2', localStep2form.ip_address2)"
+            required/>
         </CCol>
       </CRow>
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_faceOverlapRatio }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" />
+          <CInput size="lg" class="h5"
+            v-model.number="localStep2form.ip_address3"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('ip_address3', localStep2form.ip_address3)"
+            required/>
         </CCol>
       </CRow>
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_targetFaceSizeLength }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg"  class="h5"  style="width: 100%;" />
+          <CInput size="lg" class="h5"  
+            v-model.number="localStep2form.ip_address4"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            valid-feedback="ok"
+            :is-valid="isFieldPassed('ip_address4', localStep2form.ip_address4)"
+            required/>
         </CCol>
       </CRow>
 
@@ -88,7 +108,12 @@
             <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Duration }}</CRow>
             <CRow>
               <CCol sm="6">
-                <CInput size="lg" class="h5"/>
+                <CInput size="lg" class="h5"
+                  v-model.number="localStep2form.duration"
+                  :invalid-feedback="$t('NoEmptyNoSpace')"
+                  valid-feedback="ok"
+                  :is-valid="isFieldPassed('duration', localStep2form.duration)"
+                  required/>
               </CCol>
             </CRow>
 
@@ -112,7 +137,7 @@
                     size="lg"
                     v-model="name"
                     placeholder="請選擇"
-                    :options="cardAccessOptions"
+                    :options="temperatureOptions"
                   />
                 </CCol>
               </CRow>
@@ -121,7 +146,7 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_threshold }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg"  class="h5"/>
+                  <CInput size="lg" class="h5" v-model.number="localStep2form.threshold"/>
                 </CCol>
               </CRow>
             </div>
@@ -173,7 +198,12 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_displayVerifyDuration }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2"
+                    v-model.number="localStep2form.verifyDuration"
+                    :invalid-feedback="$t('NoEmptyNoSpace')"
+                    valid-feedback="ok"
+                    :is-valid="isFieldPassed('verifyDuration', localStep2form.verifyDuration)"
+                    required/>
                 </CCol>
               </CRow>
 
@@ -345,21 +375,36 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ipAddress }}</CRow>
               <CRow sm="6">
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2"
+                    v-model.number="localStep2form.rtsp_ip_address"
+                    :invalid-feedback="$t('NoEmptyNoSpace')"
+                    valid-feedback="ok"
+                    :is-valid="isFieldPassed('rtsp_ip_address', localStep2form.rtsp_ip_address)"
+                    required/>
                 </CCol>
               </CRow>
-
+             
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPUserName }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2"
+                    v-model.number="localStep2form.rtsp_username"
+                    :invalid-feedback="$t('NoEmptyNoSpace')"
+                    valid-feedback="ok"
+                    :is-valid="isFieldPassed('rtsp_username', localStep2form.rtsp_username)"
+                    required/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPPassWord }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2" type="password"/>
+                  <CInput size="lg" class="mt-2" type="password"
+                    v-model.number="localStep2form.rtsp_password"
+                    :invalid-feedback="$t('NoEmptyNoSpace')"
+                    valid-feedback="ok"
+                    :is-valid="isFieldPassed('rtsp_password', localStep2form.rtsp_password)"
+                    required/>
                 </CCol>
               </CRow>
             </div>
@@ -396,8 +441,7 @@ export default {
       /*Card access title  */
       disp_cardAccessTitle: i18n.formatter.format("TabletsBasicTitleNameCardAccess"),
 
-      // data
-      cardAccessOptions:["A","B"],
+   
 
       // 延伸項目
       dis_placeholder: i18n.formatter.format("placeholder"), // 提示文字
@@ -469,8 +513,14 @@ export default {
 
       
       
+      // data
+      cardAccessOptions: ["26Bit","32Bit"],
+      temperatureOptions: ["Celsius","Fahrenheit"],
+
       // checkbox switch
       value_enableStranger: false,
+
+
 
       /**v-model */
 

@@ -151,14 +151,15 @@ export default {
 
       // 8/11改
       step2form: {
-        roi: [
-          {
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 0,
-          },
-        ],
+        ip_address5:"",
+        ip_address2:"",
+        ip_address3:"",
+        ip_address4:"",
+        Duration:"",
+        verifyDuration:"",
+        rtsp_ip_address: "",
+        rtsp_username: "",
+        rtsp_password: "",
       },
       step3form: {
         ip_address:"",
@@ -262,6 +263,11 @@ export default {
 
           return Number.isInteger(number) && value >= 100 && value <= 1000;
         },
+        number:(value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 1000;
+        },
       },
       rules: {
         /**步驟1 */
@@ -271,13 +277,16 @@ export default {
         divice_groups: "nonEmpty",
         
         /**步驟2 8/11改*/
-        port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
+        ip_address5:"number",
+        ip_address2:"number",
+        ip_address3:"number",
+        ip_address4:"number",
+        duration:"number",
+        verifyDuration:"number",
+        rtsp_ip_address: "number",
+        rtsp_username: "number",
+        rtsp_password: "password",
+
 
         /**步驟3 */
         ip_address: "nonEmpty",
