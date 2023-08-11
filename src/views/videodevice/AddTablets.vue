@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <div>
+    <div class="tablet">
       <div class="h1">{{ disp_headertitle }}</div>
 
       <stepprogress
@@ -141,16 +141,15 @@ export default {
       disp_next: i18n.formatter.format("Next"),
 
       step1form: {
+        stream_type: "",
         name: "",
+        device_id: "",
         divice_groups: [],
 
-        stream_type: "",
-        ip_address: "",
-        port: null,
-        user: "",
-        pass: "",
-        connection_info: "",
+        device_uuid: "",
       },
+      
+      // 8/11改
       step2form: {
         roi: [
           {
@@ -162,9 +161,8 @@ export default {
         ],
       },
       step3form: {
-        capture_interval: null,
-        target_score: null,
-        face_min_length: null,
+        ip_address:"",
+        device_id: "",
       },
       defaultValues: {},
     };
@@ -195,11 +193,8 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        stream_type: "rtsp",
-        user: "admin",
-        pass: "123456",
-        port: 554,
-        connection_info: "/media/video1",
+        stream_type: "airaTablet",
+        device_id: "Tablet-02",
       };
 
       return form;
@@ -225,7 +220,7 @@ export default {
       return cameraList.some((camera) => camera.name === name);
     },
 
-    // 是否可以按下一步
+    // 是否可以按下一步 8/11改
     isStepPassed(step) {
       switch (step) {
         case 0: {
@@ -269,10 +264,13 @@ export default {
         },
       },
       rules: {
-        name: "nonEmpty",
-        divice_groups: "nonEmpty",
+        /**步驟1 */
         stream_type: "nonEmpty",
-        ip_address: "nonEmpty",
+        name: "nonEmpty",
+        device_id: "nonEmpty",
+        divice_groups: "nonEmpty",
+        
+        /**步驟2 8/11改*/
         port: "port",
         user: "nonEmpty",
         pass: "password",
@@ -280,6 +278,11 @@ export default {
         target_score: "target_score",
         face_min_length: "passitiveInt",
         capture_interval: "captureInterval",
+
+        /**步驟3 */
+        ip_address: "nonEmpty",
+        device_id: "nonEmpty",
+       
       },
     }),
 
