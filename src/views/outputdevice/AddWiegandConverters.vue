@@ -253,13 +253,18 @@ export default {
 
           return Number.isInteger(number) && value >= 0 && value <= 255;
         },
+        index: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 100;
+        },
         // specialCardNumber: (value) => /^\d+$/.test(value),
       },
       rules: {
         name: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
-        index: "nonEmpty",
+        index: "index",
         syscode: "syscode",
         special_card_number: "nonEmpty"
       },

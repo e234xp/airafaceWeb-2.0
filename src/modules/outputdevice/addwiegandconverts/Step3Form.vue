@@ -15,7 +15,7 @@
           <CSelect
             size="lg"
             v-model.number="localStep3form.bits"
-            :options="value_deviceGroupsList"
+            :options="value_DataFormatBitsList"
             :filterable="true"
             class="font-control mt-2"
             :placeholder="dis_placeholder"
@@ -118,6 +118,8 @@ export default {
         ),
       disp_SpecialCardNumber: i18n.formatter.format("SpecialCardNumber"),
       disp_SpecialCardHint: i18n.formatter.format("SpecialCardHint"),
+
+      value_DataFormatBitsList: ["26Bit","32Bit"],
     };
   },
   // 拿資料 寫入資料
