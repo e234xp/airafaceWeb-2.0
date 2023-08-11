@@ -1,7 +1,8 @@
 <template>
   <div id="wrapper">
-    <div>
+    <div class="tablet">
       <div class="h1">{{ disp_headertitle }}</div>
+
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -36,9 +37,17 @@
           />
         </CCardBody>
       </CCard>
+
       <!-- ROI -->
       <CCard v-else-if="isOnStep(1)">
-        <CCardBody> </CCardBody>
+        <CCardBody>
+          <Step2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          /> 
+        </CCardBody>
       </CCard>
 
       <!-- FaceCapture Form -->
@@ -53,7 +62,7 @@
         </CCardBody>
       </CCard>
     </CCol>
-
+    
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -91,13 +100,13 @@ import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
 
-import Step1Form from "@/modules/videodevice/modifycamera/Step1Form.vue";
-import Step3Form from "@/modules/videodevice/modifycamera/Step3Form.vue";
+import Step1Form from "@/modules/videodevice/modifytablets/Step1Form.vue";
+import Step2Form from "@/modules/videodevice/modifytablets/Step2Form.vue";
+import Step3Form from "@/modules/videodevice/modifytablets/Step3Form.vue";
 import { getIsFieldPassedFunction } from "@/utils";
 
-
 export default {
-  name: "ModifyCameras",
+  name: "ModifyAddTablets",
   data() {
     return {
       param_cardStyle: "height: 35rem;",
@@ -131,18 +140,16 @@ export default {
       disp_previous: i18n.formatter.format("Previous"),
       disp_next: i18n.formatter.format("Next"),
 
-      uuid: "",
       step1form: {
+        stream_type: "",
         name: "",
+        device_id: "",
         divice_groups: [],
 
-        stream_type: "",
-        ip_address: "",
-        port: null,
-        user: "",
-        pass: "",
-        connection_info: "",
+        device_uuid: "",
       },
+      
+      // 8/11改
       step2form: {
         roi: [
           {
@@ -154,9 +161,8 @@ export default {
         ],
       },
       step3form: {
-        capture_interval: null,
-        target_score: null,
-        face_min_length: null,
+        ip_address:"",
+        device_id: "",
       },
       defaultValues: {},
 
@@ -170,6 +176,7 @@ export default {
   components: {
     stepprogress: StepProgress,
     Step1Form: Step1Form,
+    Step2Form: Step2Form,
     Step3Form: Step3Form,
   },
   async created() {
@@ -180,8 +187,10 @@ export default {
     this.formatNameList(); //拿回groupList
   },
 
+
   methods: {
-    /**設備群組 */
+
+    /**取回設備群組 */
     async formatNameList() {
       const self = this;
       let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
@@ -199,10 +208,12 @@ export default {
         }
         self.defaultValues.divice_groups = self.selectedNames;
       });
-    },
-    // 處理資料傳遞
+    },    // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
+    },
+    updateStep2form(newValue) {
+      this.step2form = { ...newValue };
     },
     updateStep3form(newValue) {
       this.step3form = { ...newValue };
@@ -212,10 +223,12 @@ export default {
       return this.$route.params.item;
     },
 
-    // 是否可以按下一步
+    
+    // 是否可以按下一步 8/11改
     isStepPassed(step) {
       switch (step) {
         case 0: {
+          return true;
           return this.isFormPassed(this.step1form);
         }
 
@@ -225,6 +238,7 @@ export default {
         }
 
         case 2: {
+          return true;
           return this.isFormPassed(this.step3form);
         }
 
@@ -254,10 +268,13 @@ export default {
         },
       },
       rules: {
-        name: "nonEmpty",
-        divice_groups: "nonEmpty",
+        /**步驟1 */
         stream_type: "nonEmpty",
-        ip_address: "nonEmpty",
+        name: "nonEmpty",
+        device_id: "nonEmpty",
+        divice_groups: "nonEmpty",
+        
+        /**步驟2 8/11改*/
         port: "port",
         user: "nonEmpty",
         pass: "password",
@@ -265,6 +282,11 @@ export default {
         target_score: "target_score",
         face_min_length: "passitiveInt",
         capture_interval: "captureInterval",
+
+        /**步驟3 */
+        ip_address: "nonEmpty",
+        device_id: "nonEmpty",
+       
       },
     }),
 
@@ -285,6 +307,8 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
+    
+
     async handleNext() {
       switch (this.flag_currentSetp) {
         case 0:
@@ -298,7 +322,7 @@ export default {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
-
+         
           const parameter = {
             uuid: this.uuid,
             data: {
@@ -307,7 +331,7 @@ export default {
               ...this.step3form,
             },
           };
-
+          console.log(parameter)
           const { data } = await this.modify(parameter);
 
           this.obj_loading.hide();
