@@ -148,7 +148,7 @@ export default {
 
         device_uuid: "",
       },
-      
+
       // 8/11改
       step2form: {
         roi: [
@@ -206,11 +206,11 @@ export default {
       } = await this.$globalFindCameras("", 0, 3000);
 
       let number = totalLength + 1;
-      let name = `Camera-${number}`;
+      let name = `Tablet-${number}`;
       // Check for duplicates, if found, increment the number and check again
       while (this.isDuplicateName(cameraList, name)) {
         number++;
-        name = `Camera-${number}`;
+        name = `Tablet-${number}`;
       }
 
       return name;
