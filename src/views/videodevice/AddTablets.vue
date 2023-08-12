@@ -140,6 +140,27 @@ export default {
       disp_previous: i18n.formatter.format("Previous"),
       disp_next: i18n.formatter.format("Next"),
 
+      //default value i18n
+      disp_previous: i18n.formatter.format("Previous"),
+      
+      i18nYes: i18n.formatter.format("TabletsAccessDefaultYes"), //"Yes",
+      i18nNo: i18n.formatter.format("TabletsAccessDefaultNo"),  //"No",
+      i18nWelcome: i18n.formatter.format("TabletsAccessDefaultWelcome"),          //"歡迎光臨",
+      i18nIdentifyS: i18n.formatter.format("TabletsAccessDefaultIdentifyS"),        //"辨識成功",
+      i18nIdentifySM: i18n.formatter.format("TabletsAccessDefaultIdentifySM"),       //"請通行",
+      i18nIdentifyF: i18n.formatter.format("TabletsAccessDefaultIdentifyF"),        //"辨識失敗",
+      i18nIdentifyFM: i18n.formatter.format("TabletsAccessDefaultIdentifyFM"),       //"請洽服務人員",
+      i18nClockInfoDataUp: i18n.formatter.format("TabletsAccessDefaultClockInfoDataUp"),  // "美好的一天",
+      i18nClockInfoDataDown: i18n.formatter.format("TabletsAccessDefaultClockInfoDataDown"),// "你好",
+      i18nClockInfoData3n: i18n.formatter.format("TabletsAccessDefaultClockInfoData3n"),  // "請選擇打卡功能",
+      i18nClockText1: i18n.formatter.format("TabletsAccessDefaultClockText1"),       // "上班",
+      i18nClockText2: i18n.formatter.format("TabletsAccessDefaultClockText2"),       // "下班",
+      i18nClockText3: i18n.formatter.format("TabletsAccessDefaultClockText3"),       // "休息開始",
+      i18nClockText4: i18n.formatter.format("TabletsAccessDefaultClockText4"),       // "休息結束",
+      i18nClockText5: i18n.formatter.format("TabletsAccessDefaultClockText5"),       // "打卡成功",
+      i18nClockText6: i18n.formatter.format("TabletsAccessDefaultClockText6"),       // "請重新打卡",
+
+
       step1form: {
         stream_type: "",
         name: "",
@@ -151,12 +172,54 @@ export default {
 
       // 8/11改
       step2form: {
+        //前五項
         ip_address5:"",
         ip_address2:"",
         ip_address3:"",
         ip_address4:"",
-        Duration:"",
-        verifyDuration:"",
+
+        card_access_option:"",
+
+        //進階項目
+        enable_two_factor_authentication: false,
+        duration:3000,
+        temperatureSetting: "Celsius",
+        threshold:"37.5",
+        value_enableStranger: false,
+
+
+        //Result  display date
+        show_profile_photo:"",
+        stranger_display_name:"",
+        show_verify_result:"",
+        display_verify_duration:"",
+
+        verify_indication_success_text: "",
+        verify_indication_success_message_text: "",
+        verify_indication_fail_text: "",
+        verify_indication_fail_message_text: "",
+
+        //clock setting
+        enable_clock_mode: false,
+        clock_info_data_1: "",
+        clock_info_data_2: "你好",
+        clock_info_data_3: "請選擇打卡功能",
+        enable_clock_function_1: true,
+        enable_clock_function_2: true,
+        enable_clock_function_3: false,
+        enable_clock_function_4: false,
+        clock_function_name_1: "上班",
+        clock_function_name_2: "下班",
+        clock_function_name_3: "休息開始",
+        clock_function_name_4: "休息結束",
+        clock_indication_success_text: "辨識成功",
+        clock_success_message_text: "打卡成功",
+        clock_indication_fail_text: "辨識失敗",
+        clock_fail_message_text: "請重新打卡",
+
+
+        //RTSP data
+        rtsp_enable_camera:false,
         rtsp_ip_address: "",
         rtsp_username: "",
         rtsp_password: "",
@@ -192,11 +255,40 @@ export default {
     },
 
     async getDefaultValues() {
+      console.log(this.i18nClockInfoDataUp,"up4")
       const form = {
         name: await this.getDefaultName(),
         stream_type: "airaTablet",
         device_id: "Tablet-02",
+
+        //result display
+        stranger_display_name:this.i18nIdentifyS,
+
+        verify_indication_success_text: "",
+        verify_indication_success_message_text: "",
+        verify_indication_fail_text: "",
+        verify_indication_fail_message_text: "",
+
+        //clock df
+        enable_clock_mode: false,
+        clock_info_data_1: this.i18nClockInfoDataUp,
+        clock_info_data_2: this.i18nClockInfoDataDown,
+        clock_info_data_3: this.i18nClockInfoData3n,
+        enable_clock_function_1: true,
+        enable_clock_function_2: true,
+        enable_clock_function_3: false,
+        enable_clock_function_4: false,
+        clock_function_name_1: this.i18nClockText1,
+        clock_function_name_2: this.i18nClockText2,
+        clock_function_name_3: this.i18nClockText3,
+        clock_function_name_4: this.i18nClockText4,
+        clock_indication_success_text: this.i18nIdentifyS,
+        clock_success_message_text: this.i18nClockText5,
+        clock_indication_fail_text: this.i18nIdentifyF,
+        clock_fail_message_text: this.i18nClockText6,
       };
+
+
 
       return form;
     },
@@ -282,7 +374,7 @@ export default {
         ip_address3:"number",
         ip_address4:"number",
         duration:"number",
-        verifyDuration:"number",
+        display_verify_duration:"number",
         rtsp_ip_address: "number",
         rtsp_username: "number",
         rtsp_password: "password",

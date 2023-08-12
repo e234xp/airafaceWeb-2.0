@@ -184,7 +184,7 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_shownProfilePhoto }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.show_profile_photo" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
               </CRow>
 
@@ -199,10 +199,10 @@
               <CRow>
                 <CCol sm="6">
                   <CInput size="lg" class="mt-2"
-                    v-model.number="localStep2form.verifyDuration"
+                    v-model.number="localStep2form.display_verify_duration"
                     :invalid-feedback="$t('NoEmptyNoSpace')"
                     valid-feedback="ok"
-                    :is-valid="isFieldPassed('verifyDuration', localStep2form.verifyDuration)"
+                    :is-valid="isFieldPassed('display_verify_duration', localStep2form.display_verify_duration)"
                     required/>
                 </CCol>
               </CRow>
@@ -239,38 +239,38 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationFailMessageText }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2"  v-model="localStep2form.verifyDuration"/>
                 </CCol>
               </CRow>
             </div>
-
+            
             <!-- Clock setting -->
             <div>
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableClockMode }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataUp }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_1"/>
                 </CCol>
               </CRow>
-
+{{ localStep2form}} 123
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataDown }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_2"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoData3 }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_3"/>
                 </CCol>
               </CRow>
 
@@ -279,12 +279,12 @@
               <CRow sm="12">
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_enableClockFunction1 }}</h5>
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_1" />
                 </CCol>
               </CRow>
 
@@ -292,12 +292,12 @@
               <CRow sm="12">
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_enableClockFunction2 }}</h5>
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_2" />
                 </CCol>
               </CRow>
 
@@ -305,12 +305,12 @@
               <CRow sm="12">
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_enableClockFunction3 }}</h5>
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_3" />
                 </CCol>
               </CRow>
 
@@ -318,12 +318,12 @@
               <CRow sm="12">
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_enableClockFunction4 }}</h5>
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
                 <CCol sm="6" class="h5">
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_4"/>
                 </CCol>
               </CRow>
 
@@ -331,28 +331,28 @@
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationSuccessText }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_success_text"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockSuccessMessageText }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_success_message_text"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationFailText }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_fail_text"/>
                 </CCol>
               </CRow>
               
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockFailMessageText }}</CRow>
               <CRow>
                 <CCol sm="6">
-                  <CInput size="lg" class="mt-2"/>
+                  <CInput size="lg" class="mt-2" v-model="localStep2form.clock_fail_message_text"/>
                 </CCol>
               </CRow>
             </div>
@@ -516,6 +516,7 @@ export default {
       // data
       cardAccessOptions: ["26Bit","32Bit"],
       temperatureOptions: ["Celsius","Fahrenheit"],
+      shownProfilePhotoOptions: ["Yes","No"],
 
       // checkbox switch
       value_enableStranger: false,
