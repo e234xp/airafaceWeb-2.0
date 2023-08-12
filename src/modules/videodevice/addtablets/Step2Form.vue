@@ -23,7 +23,7 @@
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_faceCaptureInternal }}</CRow>
       <CRow>
-        <CCol sm="6">
+        <CCol sm="6">face_capture_interval
           <CInput size="lg"  class="h5"  
             v-model.number="localStep2form.ip_address2"
             :invalid-feedback="$t('NoEmptyNoSpace')"
@@ -35,7 +35,7 @@
 
       <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_faceOverlapRatio }}</CRow>
       <CRow>
-        <CCol sm="6">
+        <CCol sm="6">face_overlap_ratio
           <CInput size="lg" class="h5"
             v-model.number="localStep2form.ip_address3"
             :invalid-feedback="$t('NoEmptyNoSpace')"
@@ -87,7 +87,7 @@
             <div>
               <CRow sm="12" class="h2 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_twoFactor }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">enable_two_factor_authentication
                   <CSelect
                     size="lg"
                     v-model="name"
@@ -107,7 +107,7 @@
 
             <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_Duration }}</CRow>
             <CRow>
-              <CCol sm="6">
+              <CCol sm="6">relay_delay
                 <CInput size="lg" class="h5"
                   v-model.number="localStep2form.duration"
                   :invalid-feedback="$t('NoEmptyNoSpace')"
@@ -217,28 +217,28 @@
               <!-- disable content-->
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationSuccessText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">verify_indication_success_text
                   <CInput size="lg" class="mt-2"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationSuccessMessageText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">verify_indication_success_message_text
                   <CInput size="lg" class="mt-2"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationFailText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">verify_indication_fail_text
                   <CInput size="lg" class="mt-2"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_verifyIndicationFailMessageText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">verify_indication_fail_message_text
                   <CInput size="lg" class="mt-2"  v-model="localStep2form.verifyDuration"/>
                 </CCol>
               </CRow>
@@ -248,28 +248,28 @@
             <div>
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableClockMode }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">enable_clock_mode
                   <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataUp }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_info_data_1
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_1"/>
                 </CCol>
               </CRow>
-{{ localStep2form}} 123
+              
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoDataDown }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_info_data_2
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_2"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockInfoData3 }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_info_data_3
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_3"/>
                 </CCol>
               </CRow>
@@ -277,12 +277,12 @@
               <!-- disable content -->
               <!-- A -->
               <CRow sm="12">
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">enable_clock_function_1
                   <h5 class="ml-2">{{ disp_enableClockFunction1 }}</h5>
                   <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">clock_function_name_1
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_1" />
                 </CCol>
@@ -290,12 +290,12 @@
 
               <!-- B -->
               <CRow sm="12">
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">enable_clock_function_2
                   <h5 class="ml-2">{{ disp_enableClockFunction2 }}</h5>
                   <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">clock_function_name_2
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_2" />
                 </CCol>
@@ -303,12 +303,12 @@
 
               <!-- C -->
               <CRow sm="12">
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">enable_clock_function_3
                   <h5 class="ml-2">{{ disp_enableClockFunction3 }}</h5>
                   <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">clock_function_name_3
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_3" />
                 </CCol>
@@ -316,12 +316,12 @@
 
               <!-- D -->
               <CRow sm="12">
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">enable_clock_function_4
                   <h5 class="ml-2">{{ disp_enableClockFunction4 }}</h5>
                   <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="shownProfilePhotoOptions" />
                 </CCol>
 
-                <CCol sm="6" class="h5">
+                <CCol sm="6" class="h5">clock_function_name_4
                   <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_4"/>
                 </CCol>
@@ -330,28 +330,28 @@
               <!-- E單欄 -->
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationSuccessText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_indication_success_text
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_success_text"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockSuccessMessageText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_success_message_text
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_success_message_text"/>
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockIndicationFailText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_indication_fail_text
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_fail_text"/>
                 </CCol>
               </CRow>
               
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockFailMessageText }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">clock_fail_message_text
                   <CInput size="lg" class="mt-2" v-model="localStep2form.clock_fail_message_text"/>
                 </CCol>
               </CRow>
@@ -367,14 +367,14 @@
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_enableRTSPCamera }}</CRow>
               <CRow>
-                <CCol sm="6">
-                  <CSelect class="mt-2" size="lg" value="1" v-model="name" :placeholder="dis_placeholder" :options="cardAccessOptions" />
+                <CCol sm="6">enable_rtsp_camera
+                  <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_rtsp_camera" :placeholder="dis_placeholder" :options="cardAccessOptions" />
                 </CCol>
               </CRow>
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_ipAddress }}</CRow>
               <CRow sm="6">
-                <CCol sm="6">
+                <CCol sm="6">ip_address
                   <CInput size="lg" class="mt-2"
                     v-model.number="localStep2form.rtsp_ip_address"
                     :invalid-feedback="$t('NoEmptyNoSpace')"
@@ -386,7 +386,7 @@
              
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPUserName }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">rtsp_username
                   <CInput size="lg" class="mt-2"
                     v-model.number="localStep2form.rtsp_username"
                     :invalid-feedback="$t('NoEmptyNoSpace')"
@@ -398,7 +398,7 @@
 
               <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_RTSPPassWord }}</CRow>
               <CRow>
-                <CCol sm="6">
+                <CCol sm="6">rtsp_password
                   <CInput size="lg" class="mt-2" type="password"
                     v-model.number="localStep2form.rtsp_password"
                     :invalid-feedback="$t('NoEmptyNoSpace')"
