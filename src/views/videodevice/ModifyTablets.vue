@@ -51,7 +51,7 @@
       </CCard>
 
       <!-- FaceCapture Form -->
-      <CCard v-else-if="isOnStep(2)">
+      <!-- <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
@@ -60,7 +60,7 @@
             :defaultValues="defaultValues"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
     </CCol>
     
     <!-- 按鈕的Col -->
@@ -100,13 +100,13 @@ import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
 
-import Step1Form from "@/modules/videodevice/modifytablets/Step1Form.vue";
-import Step2Form from "@/modules/videodevice/modifytablets/Step2Form.vue";
-import Step3Form from "@/modules/videodevice/modifytablets/Step3Form.vue";
+import Step1Form from "@/modules/videodevice/addtablets/Step1Form.vue";
+import Step2Form from "@/modules/videodevice/addtablets/Step2Form.vue";
+// import Step3Form from "@/modules/videodevice/addtablets/Step3Form.vue";
 import { getIsFieldPassedFunction } from "@/utils";
 
 export default {
-  name: "ModifyAddTablets",
+  name: "ModifyTablets",
   data() {
     return {
       param_cardStyle: "height: 35rem;",
@@ -140,29 +140,120 @@ export default {
       disp_previous: i18n.formatter.format("Previous"),
       disp_next: i18n.formatter.format("Next"),
 
+      //default value i18n
+      disp_previous: i18n.formatter.format("Previous"),
+      
+      i18nYes: i18n.formatter.format("TabletsAccessDefaultYes"), //"Yes",
+      i18nNo: i18n.formatter.format("TabletsAccessDefaultNo"),  //"No",
+      i18nWelcome: i18n.formatter.format("TabletsAccessDefaultWelcome"),          //"歡迎光臨",
+      i18nIdentifyS: i18n.formatter.format("TabletsAccessDefaultIdentifyS"),        //"辨識成功",
+      i18nIdentifySM: i18n.formatter.format("TabletsAccessDefaultIdentifySM"),       //"請通行",
+      i18nIdentifyF: i18n.formatter.format("TabletsAccessDefaultIdentifyF"),        //"辨識失敗",
+      i18nIdentifyFM: i18n.formatter.format("TabletsAccessDefaultIdentifyFM"),       //"請洽服務人員",
+      i18nClockInfoDataUp: i18n.formatter.format("TabletsAccessDefaultClockInfoDataUp"),  // "美好的一天",
+      i18nClockInfoDataDown: i18n.formatter.format("TabletsAccessDefaultClockInfoDataDown"),// "你好",
+      i18nClockInfoData3n: i18n.formatter.format("TabletsAccessDefaultClockInfoData3n"),  // "請選擇打卡功能",
+      i18nClockText1: i18n.formatter.format("TabletsAccessDefaultClockText1"),       // "上班",
+      i18nClockText2: i18n.formatter.format("TabletsAccessDefaultClockText2"),       // "下班",
+      i18nClockText3: i18n.formatter.format("TabletsAccessDefaultClockText3"),       // "休息開始",
+      i18nClockText4: i18n.formatter.format("TabletsAccessDefaultClockText4"),       // "休息結束",
+      i18nClockText5: i18n.formatter.format("TabletsAccessDefaultClockSuccess"),       // "打卡成功",
+      i18nClockText6: i18n.formatter.format("TabletsAccessDefaultClockText5"),       // "請重新打卡",
+
+      uuid: "",
       step1form: {
-        stream_type: "",
         name: "",
-        device_id: "",
+        identity: "",
         divice_groups: [],
 
         device_uuid: "",
       },
-      
+
       // 8/11改
       step2form: {
-        roi: [
-          {
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 0,
-          },
-        ],
+        //前五項
+        verify_target_score: 0.9,
+        face_capture_interval:500,
+        face_overlap_ratio:0.5,
+        target_face_size_height: 80,
+        target_face_size_width: 80,
+
+        //進階項目
+        //Card
+        enable_id_card: true,
+        support_wiegand_bits:	 34,
+        group_list_to_pass: [],
+        enable_trigger_relay: false,
+        relay_delay: 3000,
+        enable_two_factor_authentication: false,
+
+
+        //Temp
+        temperature_unit_celsius: true,
+        high_temperature: 37.5,
+        have_to_wear_face_mask: false,
+
+        //Result  display date
+        enable_name_mask: false,
+        show_profile_photo: true,
+        stranger_display_name: "",
+        display_verify_result_time: 2000,
+        show_verify_indication: false,
+
+        verify_indication_success_text: "",
+        verify_indication_success_message_text: "",
+        verify_indication_fail_text: "",
+        verify_indication_fail_message_text: "",
+
+        //clock setting
+        enable_clock_mode: false,
+        clock_info_data_1: "",
+        clock_info_data_2: "",
+        clock_info_data_3: "",
+        enable_clock_function_1: true,
+        enable_clock_function_2: true,
+        enable_clock_function_3: false,
+        enable_clock_function_4: false,
+        clock_function_name_1: "",
+        clock_function_name_2: "",
+        clock_function_name_3: "",
+        clock_function_name_4: "",
+        clock_indication_success_text: "",
+        clock_success_message_text: "",
+        clock_indication_fail_text: "",
+        clock_fail_message_text: "",
+
+        //RTSP data
+        enable_rtsp_camera:true,
+        ip_address: "",
+        rtsp_username: "",
+        rtsp_password: "",
       },
-      step3form: {
-        ip_address:"",
-        device_id: "",
+    
+      step4form: {
+        code: "code",
+        description: "",
+        relay_start_power: 1,
+        relay_end_power: 0,
+        low_temperature: 34,
+        enable_high_temperature_sound_alert: true,
+        enable_high_temperature_trigger_relay: false,
+        high_temperature_trigger_relay_start_power: 1,
+        high_temperature_trigger_relay_delay: 3000,
+        high_temperature_trigger_relay_end_power: 0,
+        temperature_detection_is_must: true,
+        indicator_message: "請露出額頭以便測量體溫",
+        qr_code_id: "",
+        high_temperature_no_pass: true,
+        high_temperature_alert_text: "溫度過高請勿進入",
+        low_temperature_alert_text: "溫度過低, 請露出額頭測量",
+        enable_contact_tracing_qr_code: false,
+        contact_tracing_qr_code: "",
+        health_statement: false,
+        sessionId: "$2a$10$1469c0462c5464025a663OaJkNxMc89CKWnr6/KB.lB7rKYAU2wRK",
+        device_uuid: "",
+        enable_pos_intergration: false,
+        pos_brand: ""
       },
       defaultValues: {},
 
@@ -177,7 +268,7 @@ export default {
     stepprogress: StepProgress,
     Step1Form: Step1Form,
     Step2Form: Step2Form,
-    Step3Form: Step3Form,
+    // Step3Form: Step3Form,
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
@@ -189,7 +280,7 @@ export default {
 
 
   methods: {
-
+    // 處理資料傳遞
     /**取回設備群組 */
     async formatNameList() {
       const self = this;
@@ -215,15 +306,15 @@ export default {
     updateStep2form(newValue) {
       this.step2form = { ...newValue };
     },
-    updateStep3form(newValue) {
-      this.step3form = { ...newValue };
-    },
-
+   
     async getDefaultValues() {
       return this.$route.params.item;
     },
-
     
+    
+
+   
+
     // 是否可以按下一步 8/11改
     isStepPassed(step) {
       switch (step) {
@@ -238,11 +329,6 @@ export default {
         }
 
         case 2: {
-          return true;
-          return this.isFormPassed(this.step3form);
-        }
-
-        case 3: {
           return true;
         }
       }
@@ -266,22 +352,34 @@ export default {
 
           return Number.isInteger(number) && value >= 100 && value <= 1000;
         },
+        number:(value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 1000;
+        },
+        displayVerifyResultTime:(value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 10000;
+        },
       },
       rules: {
         /**步驟1 */
-        stream_type: "nonEmpty",
         name: "nonEmpty",
         device_id: "nonEmpty",
         divice_groups: "nonEmpty",
         
         /**步驟2 8/11改*/
-        port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
+        ip_address5:"number",
+        ip_address2:"number",
+        ip_address3:"number",
+        divice_groups:"number",
+        duration:"number",
+        display_verify_result_time:"displayVerifyResultTime",
+        rtsp_ip_address: "number",
+        rtsp_username: "nonEmpty",
+        rtsp_password: "password",
+
 
         /**步驟3 */
         ip_address: "nonEmpty",
@@ -307,29 +405,30 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
-    
+    // 處理下拉選單選項
+    handleDeviceGroups() {
+      let obj = {...this.step1form}
+      return this.step1form.divice_groups = obj.divice_groups.map(i => i.value);
+    },
 
     async handleNext() {
       switch (this.flag_currentSetp) {
-        case 0:
-        case 1: {
+        case 0: {
           this.flag_currentSetp += 1;
 
           break;
         }
 
-        case 2: {
+        case 1: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
-         
+          this.handleDeviceGroups();
           const parameter = {
             uuid: this.uuid,
-            data: {
-              ...this.step1form,
-              ...this.step2form,
-              ...this.step3form,
-            },
+            ...this.step1form,
+            ...this.step2form,
+            ...this.step4form
           };
           console.log(parameter)
           const { data } = await this.modify(parameter);
@@ -359,7 +458,7 @@ export default {
 
     //送api 完成
     modify(data) {
-      return this.$globalModifyCamera(data);
+      return this.$globalModifyTablet(data);
     },
 
     nextButtonName(step) {
@@ -369,8 +468,6 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_next;
-        case 3:
           return this.disp_complete;
         default:
           return this.disp_next;
