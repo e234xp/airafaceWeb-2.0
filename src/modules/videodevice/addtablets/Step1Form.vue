@@ -6,29 +6,29 @@
       <h2 sm="12">{{ disp_header }}</h2>
     </div>
     <!-- Basic -->
-    <CRow
+    <!-- <CRow
       sm="12"
       class="h5 ml-2 mb-3"
       style="padding-top: 10px; text-align: right"
       >{{ disp_type }}</CRow
-    >
-    <CRow>
+    > -->
+    <!-- <CRow>
       <CCol sm="6">
         <CSelect size="lg" value="1" v-model="localStep1form.stream_type" :placeholder="dis_placeholder" :options="value_deviceTypesList" />
       </CCol>
-    </CRow>
+    </CRow> -->
 
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceName }}</CRow>
     <CRow>
       <CCol sm="6">name
-        <CInput size="lg"  class="h5"  style="width: 100%;" />
+        <CInput size="lg"  class="h5"  style="width: 100%;"  v-model="localStep1form.name"/>
       </CCol>
     </CRow>
    
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletID }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg"  class="h5"  style="width: 100%;" />
+        <CInput size="lg"  class="h5"  style="width: 100%;"  v-model="localStep1form.identity"/>
       </CCol>
     </CRow>
     
