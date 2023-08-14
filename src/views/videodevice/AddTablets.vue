@@ -51,7 +51,7 @@
       </CCard>
 
       <!-- FaceCapture Form -->
-      <CCard v-else-if="isOnStep(2)">
+      <!-- <CCard v-else-if="isOnStep(2)">
         <CCardBody>
           <Step3Form
             :step3form="step3form"
@@ -60,7 +60,7 @@
             :defaultValues="defaultValues"
           />
         </CCardBody>
-      </CCard>
+      </CCard> -->
     </CCol>
     
     <!-- 按鈕的Col -->
@@ -102,7 +102,7 @@ import StepProgress from "vue-step-progress";
 
 import Step1Form from "@/modules/videodevice/addtablets/Step1Form.vue";
 import Step2Form from "@/modules/videodevice/addtablets/Step2Form.vue";
-import Step3Form from "@/modules/videodevice/addtablets/Step3Form.vue";
+// import Step3Form from "@/modules/videodevice/addtablets/Step3Form.vue";
 import { getIsFieldPassedFunction } from "@/utils";
 
 export default {
@@ -157,14 +157,13 @@ export default {
       i18nClockText2: i18n.formatter.format("TabletsAccessDefaultClockText2"),       // "下班",
       i18nClockText3: i18n.formatter.format("TabletsAccessDefaultClockText3"),       // "休息開始",
       i18nClockText4: i18n.formatter.format("TabletsAccessDefaultClockText4"),       // "休息結束",
-      i18nClockText5: i18n.formatter.format("TabletsAccessDefaultClockText5"),       // "打卡成功",
-      i18nClockText6: i18n.formatter.format("TabletsAccessDefaultClockText6"),       // "請重新打卡",
+      i18nClockText5: i18n.formatter.format("TabletsAccessDefaultClockSuccess"),       // "打卡成功",
+      i18nClockText6: i18n.formatter.format("TabletsAccessDefaultClockText5"),       // "請重新打卡",
 
 
       step1form: {
-        stream_type: "",
         name: "",
-        device_id: "",
+        identity: "",
         divice_groups: [],
 
         device_uuid: "",
@@ -173,26 +172,33 @@ export default {
       // 8/11改
       step2form: {
         //前五項
-        ip_address5:"",
-        ip_address2:"",
-        ip_address3:"",
-        ip_address4:"",
-
-        card_access_option:"",
+        verify_target_score: 0.9,
+        face_capture_interval:500,
+        face_overlap_ratio:0.5,
+        target_face_size_height: 80,
+        target_face_size_width: 80,
 
         //進階項目
+        //Card
+        enable_id_card: true,
+        support_wiegand_bits:	 34,
+        group_list_to_pass: [],
+        enable_trigger_relay: false,
+        relay_delay: 3000,
         enable_two_factor_authentication: false,
-        duration:3000,
-        temperatureSetting: "Celsius",
-        threshold:"37.5",
-        value_enableStranger: false,
 
+
+        //Temp
+        temperature_unit_celsius: true,
+        high_temperature: 37.5,
+        have_to_wear_face_mask: false,
 
         //Result  display date
-        show_profile_photo:"",
-        stranger_display_name:"",
-        show_verify_result:"",
-        display_verify_duration:"",
+        enable_name_mask: false,
+        show_profile_photo: true,
+        stranger_display_name: "",
+        display_verify_result_time: 2000,
+        show_verify_indication: false,
 
         verify_indication_success_text: "",
         verify_indication_success_message_text: "",
@@ -202,31 +208,52 @@ export default {
         //clock setting
         enable_clock_mode: false,
         clock_info_data_1: "",
-        clock_info_data_2: "你好",
-        clock_info_data_3: "請選擇打卡功能",
+        clock_info_data_2: "",
+        clock_info_data_3: "",
         enable_clock_function_1: true,
         enable_clock_function_2: true,
         enable_clock_function_3: false,
         enable_clock_function_4: false,
-        clock_function_name_1: "上班",
-        clock_function_name_2: "下班",
-        clock_function_name_3: "休息開始",
-        clock_function_name_4: "休息結束",
-        clock_indication_success_text: "辨識成功",
-        clock_success_message_text: "打卡成功",
-        clock_indication_fail_text: "辨識失敗",
-        clock_fail_message_text: "請重新打卡",
-
+        clock_function_name_1: "",
+        clock_function_name_2: "",
+        clock_function_name_3: "",
+        clock_function_name_4: "",
+        clock_indication_success_text: "",
+        clock_success_message_text: "",
+        clock_indication_fail_text: "",
+        clock_fail_message_text: "",
 
         //RTSP data
-        rtsp_enable_camera:false,
-        rtsp_ip_address: "",
+        enable_rtsp_camera:true,
+        ip_address: "",
         rtsp_username: "",
         rtsp_password: "",
       },
-      step3form: {
-        ip_address:"",
-        device_id: "",
+    
+      step4form: {
+        code: "code",
+        description: "",
+        relay_start_power: 1,
+        relay_end_power: 0,
+        low_temperature: 34,
+        enable_high_temperature_sound_alert: true,
+        enable_high_temperature_trigger_relay: false,
+        high_temperature_trigger_relay_start_power: 1,
+        high_temperature_trigger_relay_delay: 3000,
+        high_temperature_trigger_relay_end_power: 0,
+        temperature_detection_is_must: true,
+        indicator_message: "請露出額頭以便測量體溫",
+        qr_code_id: "",
+        high_temperature_no_pass: true,
+        high_temperature_alert_text: "溫度過高請勿進入",
+        low_temperature_alert_text: "溫度過低, 請露出額頭測量",
+        enable_contact_tracing_qr_code: false,
+        contact_tracing_qr_code: "",
+        health_statement: false,
+        sessionId: "$2a$10$1469c0462c5464025a663OaJkNxMc89CKWnr6/KB.lB7rKYAU2wRK",
+        device_uuid: "",
+        enable_pos_intergration: false,
+        pos_brand: ""
       },
       defaultValues: {},
     };
@@ -235,10 +262,11 @@ export default {
     stepprogress: StepProgress,
     Step1Form: Step1Form,
     Step2Form: Step2Form,
-    Step3Form: Step3Form,
+    // Step3Form: Step3Form,
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
+    console.log(this.defaultValues,"CREATED")
   },
 
 
@@ -255,19 +283,17 @@ export default {
     },
 
     async getDefaultValues() {
-      console.log(this.i18nClockInfoDataUp,"up4")
       const form = {
         name: await this.getDefaultName(),
-        stream_type: "airaTablet",
-        device_id: "Tablet-02",
+        identity: "Tablet-02",
 
         //result display
-        stranger_display_name:this.i18nIdentifyS,
+        stranger_display_name:this.i18nWelcome,
 
-        verify_indication_success_text: "",
-        verify_indication_success_message_text: "",
-        verify_indication_fail_text: "",
-        verify_indication_fail_message_text: "",
+        verify_indication_success_text: this.i18nIdentifyS,
+        verify_indication_success_message_text: this.i18nIdentifySM,
+        verify_indication_fail_text: this.i18nIdentifyF,
+        verify_indication_fail_message_text: this.i18nIdentifyFM,
 
         //clock df
         enable_clock_mode: false,
@@ -286,9 +312,14 @@ export default {
         clock_success_message_text: this.i18nClockText5,
         clock_indication_fail_text: this.i18nIdentifyF,
         clock_fail_message_text: this.i18nClockText6,
+
+       
+        ip_address: "192.168.10.48:8554",
+        rtsp_username: "root",
+        rtsp_password: "12345"
       };
 
-
+      console.log("GO!,",form)
 
       return form;
     },
@@ -296,7 +327,7 @@ export default {
     async getDefaultName() {
       const {
         data: { total_length: totalLength, list: cameraList },
-      } = await this.$globalFindCameras("", 0, 3000);
+      } = await this.$globalFindTablets("", 0, 3000);
 
       let number = totalLength + 1;
       let name = `Tablet-${number}`;
@@ -328,11 +359,6 @@ export default {
 
         case 2: {
           return true;
-          return this.isFormPassed(this.step3form);
-        }
-
-        case 3: {
-          return true;
         }
       }
     },
@@ -360,10 +386,14 @@ export default {
 
           return Number.isInteger(number) && value >= 0 && value <= 1000;
         },
+        displayVerifyResultTime:(value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 10000;
+        },
       },
       rules: {
         /**步驟1 */
-        stream_type: "nonEmpty",
         name: "nonEmpty",
         device_id: "nonEmpty",
         divice_groups: "nonEmpty",
@@ -372,11 +402,11 @@ export default {
         ip_address5:"number",
         ip_address2:"number",
         ip_address3:"number",
-        ip_address4:"number",
+        divice_groups:"number",
         duration:"number",
-        display_verify_duration:"number",
+        display_verify_result_time:"displayVerifyResultTime",
         rtsp_ip_address: "number",
-        rtsp_username: "number",
+        rtsp_username: "nonEmpty",
         rtsp_password: "password",
 
 
@@ -412,14 +442,13 @@ export default {
 
     async handleNext() {
       switch (this.flag_currentSetp) {
-        case 0:
-        case 1: {
+        case 0: {
           this.flag_currentSetp += 1;
 
           break;
         }
 
-        case 2: {
+        case 1: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
@@ -428,6 +457,7 @@ export default {
             ...this.step1form,
             ...this.step2form,
             ...this.step3form,
+            ...this.step4form
           };
           console.log(parameter)
           const { data } = await this.create(parameter);
@@ -457,7 +487,7 @@ export default {
 
     //送api 完成
     create(data) {
-      return this.$globalCreateCameras(data);
+      return this.$globalCreateTablets(data);
     },
 
     nextButtonName(step) {
@@ -467,8 +497,6 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_next;
-        case 3:
           return this.disp_complete;
         default:
           return this.disp_next;
