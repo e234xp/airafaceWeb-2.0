@@ -29,7 +29,7 @@ export default {
     },
 
     async getItems(shift, sliceSize) {
-      const ret = await this.$globalFindCameras("", shift, sliceSize);
+      const ret = await this.$globalFindTablets("", shift, sliceSize);
       const {
         data: { list: dataList },
         error,
@@ -91,7 +91,7 @@ export default {
     },
 
     async deleteCamera(uuid, cb) {
-      const ret = await this.$globalRemoveCameras(uuid);
+      const ret = await this.$globalRemoveTablets(uuid);
       const { error } = ret;
 
       if (error) {
