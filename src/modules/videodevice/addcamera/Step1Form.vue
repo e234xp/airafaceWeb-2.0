@@ -340,7 +340,8 @@ export default {
       //const handleData = groups.map(({ name, uuid }) => ({ label: `${name}`, value: uuid })); 
       const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
       console.log(handleData)
-      this.value_deviceGroupsList = handleData;
+      const result = handleData.filter((item) => item.value.length > 1)
+      this.value_deviceGroupsList = result;
     },
   
   },
