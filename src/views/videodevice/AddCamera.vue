@@ -188,6 +188,9 @@ export default {
         pass: "123456",
         port: 554,
         connection_info: "/media/video1",
+        face_min_length: 0,
+        target_score: 0.85,
+        capture_interval: 500
       };
 
       return form;
