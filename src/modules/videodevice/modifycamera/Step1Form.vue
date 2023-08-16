@@ -43,6 +43,7 @@
           :hideSelected="true"
           :show-no-options="false"
           label="name"
+          track-by="value"
         >
         </multiselect>
       </CCol>
