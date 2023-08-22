@@ -259,7 +259,6 @@ export default {
       },
       rules: {
         name: "nonEmpty",
-        divice_groups: "nonEmpty",
         stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
