@@ -13,7 +13,7 @@
         {{ disp_IOBoxesBasicEnable }}
       </label>
     </div>
-    {{ value_deviceDefaultValue }}
+    
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
