@@ -98,10 +98,10 @@
         },
         defaultValues: {
           handler(newValue) {
-            this.localStep1form = {
-              ...this.localStep1form,
-              ...newValue,
-            };
+            Object.entries(newValue).forEach(([key, value]) => {
+              if (!Object.keys(this.step1form).includes(key)) return;
+              this.localStep1form[key] = value;
+            });
           },
           deep: true,
           immediate: true,
