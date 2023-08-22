@@ -11,9 +11,9 @@
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
         :steps="[
-          disp_inputAccessControlInfo,
-          disp_inputAccessControlInfo,
-          disp_selectSchedule,
+          disp_step1,
+          disp_step2,
+          disp_step3,
           disp_complete,
         ]"
         icon-class="fa fa-check"
@@ -123,8 +123,9 @@ export default {
       flag_currentSetp: 0,
 
       /**Step 1 2 3 */
-      disp_inputAccessControlInfo: i18n.formatter.format("VideoDeviceBasic"),
-      disp_selectSchedule: i18n.formatter.format("SelectSchedule"),
+      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
+      disp_step2: i18n.formatter.format("VideoDeviceROI"),
+      disp_step3: i18n.formatter.format("VideoFaceCapture"),
       disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
@@ -261,7 +262,6 @@ export default {
       },
       rules: {
         name: "nonEmpty",
-      
         stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
