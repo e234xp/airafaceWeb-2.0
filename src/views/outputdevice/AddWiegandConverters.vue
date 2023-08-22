@@ -232,7 +232,7 @@ export default {
         }
 
         case 2: {
-          return true;
+          return this.isFormPassed(this.step3form);
         }
 
         case 3: {
