@@ -37,7 +37,7 @@
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
           <CInput size="lg" class="mt-2" v-model="localStep4form.delay"
             pattern="[0-9]*"
-            :invalid-feedback="disp_limitNumber100up"
+            :invalid-feedback="disp_limitNumber1to30"
             valid-feedback="ok"
             :is-valid="isFieldPassed('delay', localStep4form.delay)"
             required
@@ -72,9 +72,9 @@
         /*Digital output2 title  */
         disp_DigitalOutPut2Title: i18n.formatter.format("I/OBoxesBasicTitleNameDigitalOutPut2"),
         dis_placeholder: i18n.formatter.format("placeholder"), // 提示文字
-        disp_limitNumber100up: i18n.formatter.format("limitNumbers100up"),
+        disp_limitNumber1to30: i18n.formatter.format("limitNumbers1to30"),
 
-
+        
         /**content */
         disp_IOBoxesBasicEnable: i18n.formatter.format("I/OBoxesBasicCOlNameEnable"),
         disp_IOBoxesBasicDefaultValue: i18n.formatter.format("I/OBoxesBasicCOlNameDefaultValue"),
