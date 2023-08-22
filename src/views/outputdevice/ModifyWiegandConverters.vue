@@ -232,8 +232,7 @@ export default {
         ip_address: "nonEmpty",
         port: "port",
         index: "nonEmpty",
-        syscode: "syscode",
-        special_card_number: "nonEmpty",
+        syscode: "syscode"
       },
     }),
 

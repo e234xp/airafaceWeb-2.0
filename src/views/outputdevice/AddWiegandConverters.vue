@@ -135,9 +135,9 @@ export default {
       flag_currentSetp: 0,
 
       /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
-      disp_step2: i18n.formatter.format("VideoDeviceConnection"),
-      disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
+      disp_step1: i18n.formatter.format("WiegandStep1Name"),
+      disp_step2: i18n.formatter.format("WiegandStep2Name"),
+      disp_step3: i18n.formatter.format("WiegandStep3Name"),
       disp_complete: i18n.formatter.format("Complete"),
 
       /**btn */
@@ -265,8 +265,7 @@ export default {
         ip_address: "nonEmpty",
         port: "port",
         index: "index",
-        syscode: "syscode",
-        special_card_number: "nonEmpty"
+        syscode: "syscode"
       },
     }),
 

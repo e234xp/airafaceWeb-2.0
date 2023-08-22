@@ -74,11 +74,7 @@
             size="lg"
             class="mt-2"
             v-model="localStep3form.special_card_number"
-            :invalid-feedback="$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isFieldPassed('special_card_number', localStep3form.special_card_number)"
-            required
-          />
+            />
         </CCol>
       </CRow>
      
