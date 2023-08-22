@@ -8,25 +8,18 @@
       
         <div style="height: 35px"></div>
       </div>
-      {{ localStep1form.brand }}
       <!-- Basic -->
       <div class="mt-3">
         <CRow sm="12">
           <CCol sm="6" class="h5" >
             {{ disp_IOBoxesBasicBrand }}
             <CSelect size="lg" v-model="localStep1form.brand" :options="value_brandList" :filterable="true" class="font-control mt-2" 
-            :invalid-feedback="$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isFieldPassed('brand', localStep1form.brand)"
-            required/>
+            />
           </CCol>
           <CCol sm="6" class="h5"  >
             {{ disp_IOBoxesBasicModel }}
             <CSelect size="lg" v-model="localStep1form.model" :options="value_modelList" :filterable="true" class="font-control mt-2" 
-            :invalid-feedback="$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="isFieldPassed('model', localStep1form.model)"
-            required/>
+            />
           </CCol>
         </CRow>
       </div>

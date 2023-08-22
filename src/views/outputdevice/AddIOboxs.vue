@@ -3,7 +3,6 @@
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
       <div class="h1">{{ disp_headertitle }}</div>
-      {{step1form}}
 
       <stepprogress
         class="w-step-progress-4"
@@ -302,8 +301,6 @@ export default {
         },
       },
       rules: {
-        brand: "nonEmpty",
-        model: "nonEmpty",
         name: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
