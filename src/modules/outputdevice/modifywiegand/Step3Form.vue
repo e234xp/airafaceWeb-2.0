@@ -102,7 +102,6 @@
 <script>
 import i18n from "@/i18n";
 
-import VueSelect from "vue-select";
 import Multiselect from "vue-multiselect";
 import "@/airacss/vue-multiselect.css";
 
@@ -141,16 +140,9 @@ export default {
     };
   },
   components: {
-    "v-select": VueSelect,
     Multiselect: Multiselect,
   },
-  //預設值
-  created() {
-    // this.defaultPortValue();
-    // this.localStep3form.user = "admin",
-    // this.localStep3form.pass = "123456"
-    // this.localStep3form.connection_info = "/media/video1"
-  },
+
   // 拿資料 寫入資料
   watch: {
     localStep3form: {
@@ -160,20 +152,16 @@ export default {
       },
       deep: true,
     },
-  },
-  methods: {
-    defaultPortValue() {
-      // this.localStep3form.port = 554;
-      // return this.localStep3form.port !== null && this.localStep3form.port >= 0 && this.localStep3form.port <= 65535;
-    },
-    // 判斷欄位空值
-    isNotEmpty(value) {
-      return value !== null && value !== undefined && value !== "";
+    defaultValues: {
+      handler(newValue) {
+        Object.entries(newValue).forEach(([key, value]) => {
+          if (!Object.keys(this.step3form).includes(key)) return;
+          this.localStep3form[key] = value;
+        });
+      },
+      deep: true,
+      immediate: true,
     },
   },
 };
 </script>
-
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>

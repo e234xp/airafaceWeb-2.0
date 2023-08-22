@@ -88,7 +88,3 @@ export default {
   },
 };
 </script>
-
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>
