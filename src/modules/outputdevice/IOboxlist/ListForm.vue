@@ -110,24 +110,6 @@
             >
             </vxe-table-column>
 
-            <vxe-table-column
-              :show-overflow="ellipsisMode"
-              field="in"
-              :title="disp_In"
-              width="auto"
-              align="center"
-            >
-            </vxe-table-column>
-
-            <vxe-table-column
-              :show-overflow="ellipsisMode"
-              field="out"
-              :title="disp_out"
-              width="auto"
-              align="center"
-            >
-            </vxe-table-column>
-
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
@@ -217,8 +199,6 @@ export default {
       disp_deviceName: i18n.formatter.format("DeviceName"),
       disp_status: i18n.formatter.format("DeviceStatus"),
       disp_ipAddress: i18n.formatter.format("IpAddress"),
-      disp_In: i18n.formatter.format("EnableIn"),
-      disp_out: i18n.formatter.format("EnableOut"),
     };
   },
   updated() {
