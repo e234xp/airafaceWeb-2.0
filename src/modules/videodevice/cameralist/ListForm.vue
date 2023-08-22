@@ -110,24 +110,7 @@
             >
             </vxe-table-column>
 
-            <vxe-table-column
-              :show-overflow="ellipsisMode"
-              field="in"
-              :title="disp_In"
-              width="auto"
-              align="center"
-            >
-            </vxe-table-column>
-
-            <vxe-table-column
-              :show-overflow="ellipsisMode"
-              field="out"
-              :title="disp_out"
-              width="auto"
-              align="center"
-            >
-            </vxe-table-column>
-
+            
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
