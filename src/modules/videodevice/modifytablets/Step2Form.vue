@@ -587,7 +587,7 @@ export default {
 
       /**v-model */
       value_allowedPersonnelGroupList: [],
-      displayNameOptions:[ {name:"Partial name", value:true}, {label:"Full name", value:false} ],
+      displayNameOptions:[ {label:"Partial name", value:true}, {label:"Full name", value:false} ],
 
 
       /**TEST */
