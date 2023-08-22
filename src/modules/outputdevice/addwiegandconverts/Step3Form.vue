@@ -114,8 +114,9 @@ export default {
         ),
       disp_SpecialCardNumber: i18n.formatter.format("SpecialCardNumber"),
       disp_SpecialCardHint: i18n.formatter.format("SpecialCardHint"),
-
-      value_DataFormatBitsList: ["26Bit","32Bit"],
+      
+      value_DataFormatBitsList:[ {label:"26-bit", value:26}, {label:"34-bit", value:34} ],
+      // value_DataFormatBitsList: ["26-bit","34-bit"],
     };
   },
   // 拿資料 寫入資料

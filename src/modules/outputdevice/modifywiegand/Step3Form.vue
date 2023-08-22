@@ -15,7 +15,7 @@
           <CSelect
             size="lg"
             v-model.number="localStep3form.bits"
-            :options="value_dataFormatList"
+            :options="value_DataFormatBitsList"
             :filterable="true"
             class="font-control mt-2"
             :placeholder="dis_placeholder"
@@ -137,7 +137,7 @@ export default {
 
 
       /**v-model */
-      value_dataFormatList: [1, 2, 3],
+      value_DataFormatBitsList:[ {label:"26-bit", value:26}, {label:"34-bit", value:34} ],
     };
   },
   components: {

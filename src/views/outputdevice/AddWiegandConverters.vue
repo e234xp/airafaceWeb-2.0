@@ -193,6 +193,7 @@ export default {
         name: await this.getDefaultName(),
         ip_address: "192.168.1.100",
         port: 1001,
+        bits: 26
       };
 
       return form;
