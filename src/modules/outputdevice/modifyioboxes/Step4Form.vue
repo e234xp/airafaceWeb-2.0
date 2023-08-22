@@ -82,8 +82,8 @@
 
 
         /**v-model */
-        value_deviceDefaultValue: [0, 1],
-        value_deviceTrigger: [0, 1],
+        value_deviceDefaultValue: [ {label:"0", value:false}, {label: "1", value:true} ],
+        value_deviceTrigger: [ {label:"0", value:false}, {label: "1", value:true} ],
         
       };
     },

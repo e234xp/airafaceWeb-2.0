@@ -13,7 +13,7 @@
         {{ disp_IOBoxesBasicEnable }}
       </label>
     </div>
-    
+    {{  value_deviceDefaultValue }}
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
@@ -81,8 +81,8 @@
         disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameDurationWhenTriggered"),
 
         /**v-model */
-        value_deviceDefaultValue: [0, 1],
-        value_deviceTrigger: [0, 1],
+        value_deviceDefaultValue: [ {label:"0", value:false}, {label: "1", value:true} ],
+        value_deviceTrigger: [ {label:"0", value:false}, {label: "1", value:true} ],
       };
     },
     components: {
