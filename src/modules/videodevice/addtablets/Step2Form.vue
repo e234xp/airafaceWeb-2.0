@@ -574,7 +574,7 @@ export default {
 
       
       // data
-      cardAccessOptions: [ {label:"26Bit", value:26}, {label:"34Bit", value:34} ],
+      cardAccessOptions: [ {label:"26-bit", value:26}, {label:"34-bit", value:34} ],
       temperatureOptions: [ {label:"Celsius", value:true}, {label:"Fahrenheit", value:false} ],
       showOptions: ["Yes","No"],
       showOptions: [ {label:"Yes", value:true}, {label:"No", value:false} ],
