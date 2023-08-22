@@ -55,10 +55,9 @@
           />
         </CCardBody>
       </CCard>
-
       <!-- Digital output1 Form-->
     </CCol>
-{{step1form}}
+
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -231,7 +230,7 @@ export default {
         name: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
-        index: "nonEmpty",
+        index: "passitiveInt",
         syscode: "syscode"
       },
     }),
