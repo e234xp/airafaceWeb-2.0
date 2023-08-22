@@ -164,7 +164,7 @@ export default {
 
       selectedNames: [], //要轉換的names
 
-      groupArray: this.$route.params.item.divice_groups //設備群組的selected(選中的)
+      selectedArray: this.$route.params.item.divice_groups //設備群組的selected(選中的) ["0","1"]
     };
   },
   components: {
@@ -186,19 +186,25 @@ export default {
       const self = this;
       let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
       let groups = res.data.result; /**拿回所有group */
-      self.groupList = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); //options只留name uuid
-
+      self.groupList = groups.map(({ name, uuid }) => ({ name: name, value: uuid })).filter((item) => item.value.length > 1); //options只留name uuid
+      console.log(self.groupList,"map結果") // [{},{},{}]
       //找回name
-      await self.groupArray.forEach(value => {
-        let foundOptionName = self.groupList.find(option => option.value === value); // return obj
-    
-        if (foundOptionName) {
-          self.selectedNames.push(foundOptionName); // 將對應的 name 放入 selectedNames 陣列中
-        } else {
-          self.selectedNames.push(null); // 如果找不到，放入 null
-        }
-        self.defaultValues.divice_groups = self.selectedNames;
-      });
+     
+      let ans = self.groupList.filter(group => self.selectedArray.includes(group.value))
+      self.defaultValues.divice_groups = ans;
+        console.log(ans,"ans")
+        // console.log("有下拉");
+        // await self.selectedArray.forEach(val => {
+        //   let foundOptionName = self.groupList.find( (option) => option.value === val); // return obj
+        //   console.log(foundOptionName,"foundOptionName")
+        //   if(foundOptionName != undefined) {
+        //       self.selectedNames.push(foundOptionName); // 將對應的 name 放入 selectedNames 陣列中
+        //   } else {
+        //     self.defaultValues.divice_groups = self.defaultValues.divice_groups
+        //   }
+        // });
+        // self.defaultValues.divice_groups = self.selectedNames;
+      
     },
     // 處理資料傳遞
     updateStep1form(newValue) {
@@ -255,7 +261,7 @@ export default {
       },
       rules: {
         name: "nonEmpty",
-        divice_groups: "nonEmpty",
+      
         stream_type: "nonEmpty",
         ip_address: "nonEmpty",
         port: "port",
