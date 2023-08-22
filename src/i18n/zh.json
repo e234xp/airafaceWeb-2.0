@@ -634,6 +634,9 @@
   "I/OBoxesBasicCOlNameDurationWhenTriggered":"Duration when triggered:",
   "I/OBoxesBasicTitleNameDigitalOutPut2": "Digital output #2",
 
+  "WiegandStep1Name": "Basic",
+  "WiegandStep2Name": "Connection",
+  "WiegandStep3Name": "Setting",
   "WiegandBasicName": "Basic",
   "WiegandBasicCOlNameDeviceName":"Device name:",
   "WiegandBasicCOlNameDeviceGroups":"Device groups:",
@@ -657,6 +660,7 @@
   "limitNumber0to1": "限制輸入0~1",
   "limitNumbers": "限制輸入數字",
   "limitNumbers100up": "限制輸入數字100~1000",
+  "limitNumbers1to30": "限制輸入數字1~30",
 
   "VideoDeviceConnection": "Connection",
   "VideoDeviceDigitalOutPut1":"DigitalOutPut1",
