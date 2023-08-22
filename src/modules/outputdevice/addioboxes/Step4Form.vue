@@ -18,7 +18,7 @@
     <CRow>
       <CCol sm="6">
         <CSelect size="lg" v-model="localStep4form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2" 
-        :placeholder="dis_placeholder"/>
+        :placeholder="dis_placeholder" :disabled="localStep4form.enable"/>
       </CCol>
     </CRow>
 
@@ -30,6 +30,7 @@
           <CSelect size="lg" v-model="localStep4form.trigger" :options="value_deviceTrigger" 
             :filterable="true" class="font-control mt-2"
             :placeholder="dis_placeholder"
+            :disabled="localStep4form.enable"
             />
         </CCol>
         <CCol sm="6" class="h5"  >
@@ -40,6 +41,7 @@
             valid-feedback="ok"
             :is-valid="isFieldPassed('delay', localStep4form.delay)"
             required
+            :disabled="localStep4form.enable"
             />
         </CCol>
       </CRow>

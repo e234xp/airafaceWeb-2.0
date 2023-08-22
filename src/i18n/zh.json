@@ -506,6 +506,7 @@
   "OutputDevices": "輸出設備數量",
   "Rules": "規則",
   "VideoDeviceBasic": "Basic",
+  "VideoDeviceROI":"ROI",
   "BasicDeviceName": "設備名稱:",
   "BasicDeviceGroups": "設備群組:",
   "VideoDeviceVideoSource": "Video Source",
@@ -537,6 +538,11 @@
   "TabletsBasicCOlNameFaceOverlapRatio": "Face Overlap Ratio:",
   "TabletsBasicCOlNameTargetFaceSizeLength": "Target face size length(pixels):",
   "TabletsBasicTitleNameCardAccess": "Card access",
+  "TabletsBasicCOlNameAllowedPersonnelGroups": "Allowed personnel groups",
+  "TabletsBasicCOlNameTriggerRelay": "Trigger relay",
+  "TabletsBasicCOlNameRelayInternal": "Relay internal(milliseconds)",
+  "TabletsAccessCOlNameTwoFactor": "Two-Factor authentication(Face and card are both required)",
+
   "TabletsBasicTitleNameEnrollmentInfo": "Enrollment info",
 
   "TabletsBasicCOlNameServerAddress":"Server address:",
@@ -544,9 +550,6 @@
   "TabletsBasicCOlNameHint":"Enter the sever address and the enroll ID on the tablet to enroll.",
 
   "TabletsAccessName": "Advanced settings",
-  "TabletsAccessCOlNameTwoFactor": "Two-Factor authentication(Face and card are both required)",
-  "TabletsAccessTitleNameRelay": "Relay",
-  "TabletsAccessCOlNameDuration": "Duration(milliseconds):",
   "TabletsAccessTitleNameTemperatureMask": "Temperature & Mask",
   "TabletsAccessSubTitleName": "Temperature settings",
   "TabletsAccessColNameTemperatureUnit": "Temperature unit:",
@@ -554,8 +557,10 @@
   "TabletsAccessColNameFaceMasks": "Face masks",
   "TabletsAccessColNameEnforceFaceMaskCheck": "Enforce face mask check",
 
+
   "TabletsAccessTitleNameResultDisplay": "Result display",
-  "TabletsAccessColNameShownProfilePhoto": "Shown profile photo:",
+  "TabletsAccessColNameDisplayName": "Display Name",
+  "TabletsAccessColNameDisplayProfilePhoto": "Display profile photo:",
   "TabletsAccessColNameStrangerDisplayMessage": "Stranger display message:",
   "TabletsAccessColNameDisplayVerifyDuration": "Display verify duration(milliseconds):",
   "TabletsAccessColNameShowVerifyResult": "Show verify result:",
@@ -580,9 +585,9 @@
   "TabletsAccessColNameIpAddress":  "IP address:",
   "TabletsAccessColNameRTSPUserName": "RTSP user name:",
   "TabletsAccessColNameRTSPPassWord": "RTSP pass word:",
+
   "TabletsAccessDefaultYes":"Yes",
   "TabletsAccessDefaultNo":"No",
-
   "TabletsAccessDefaultWelcome":"歡迎光臨",
   "TabletsAccessDefaultIdentifyS":"辨識成功",
   "TabletsAccessDefaultIdentifySM":"請通行",
@@ -595,7 +600,9 @@
   "TabletsAccessDefaultClockText2": "下班",
   "TabletsAccessDefaultClockText3": "休息開始",
   "TabletsAccessDefaultClockText4": "休息結束",
+  "TabletsAccessDefaultClockSuccess": "打卡成功",
   "TabletsAccessDefaultClockText5": "請重新打卡",
+  
 
   
 
