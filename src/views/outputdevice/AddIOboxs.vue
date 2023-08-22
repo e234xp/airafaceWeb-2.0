@@ -177,8 +177,8 @@ export default {
         name: "Do 1",
         enable: false,
         default: false,
-        trigger: false,
-        delay: 3
+        trigger: true,
+        delay: null
       },
 
       step4form: {
@@ -186,8 +186,8 @@ export default {
         name: "Do 2",
         enable: false,
         default: false,
-        trigger: false,
-        delay: 1
+        trigger: true,
+        delay: null
       },
 
       defaultValues: {}
@@ -232,7 +232,11 @@ export default {
         ip_address: "192.168.1.102",
         port: 12345,
         username: "admin",
-        password: "123456"
+        password: "123456",
+
+        default: false,
+        trigger: true,
+        delay:3
       };
 
       return form;
@@ -297,7 +301,7 @@ export default {
         delay: (value) => {
           const number = parseInt(value, 10);
 
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
+          return Number.isInteger(number) && value >= 1 && value <= 30;
         },
       },
       rules: {
