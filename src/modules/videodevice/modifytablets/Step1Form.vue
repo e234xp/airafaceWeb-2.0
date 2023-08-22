@@ -128,8 +128,9 @@ export default {
       const self = this;
       let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
       let groups = res.data.result; /**拿回所有group */
-      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
-      this.value_deviceGroupsList = handleData;
+      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid }));
+      const result = handleData.filter((item) => item.value.length > 1)
+      this.value_deviceGroupsList = result;
     },
   
   },

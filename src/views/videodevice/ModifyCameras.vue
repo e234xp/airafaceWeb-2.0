@@ -290,6 +290,11 @@ export default {
 
       this.$router.push({ name: this.value_returnRoutePath });
     },
+    // 處理下拉選單選項
+    handleDeviceGroups() {
+      let obj = {...this.step1form}
+      return this.step1form.divice_groups = obj.divice_groups.map(i => i.value);
+    },
 
     async handleNext() {
       switch (this.flag_currentSetp) {
@@ -304,7 +309,7 @@ export default {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
-
+          this.handleDeviceGroups();
           const parameter = {
             uuid: this.uuid,
             data: {

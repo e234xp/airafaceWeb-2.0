@@ -34,7 +34,7 @@
     
     <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_tabletDeviceGroups }}</CRow>
     <CRow>
-      <CCol sm="6">divice_groups
+      <CCol sm="6">
         <multiselect
           v-model="localStep1form.divice_groups"
                   placeholder=""
@@ -128,8 +128,9 @@ export default {
       const self = this;
       let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
       let groups = res.data.result; /**拿回所有group */
-      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid })); 
-      this.value_deviceGroupsList = handleData;
+      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid }));
+      const result = handleData.filter((item) => item.value.length > 1)
+      this.value_deviceGroupsList = result;
     },
   
   },
