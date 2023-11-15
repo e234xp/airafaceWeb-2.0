@@ -69,7 +69,7 @@ export default {
       self.$globalTriggerRelay1((error, data) => {
         if (data && data.message === "ok") {
           self.$fire({
-            text: i18n.formatter.format("ok"),
+            text: i18n.formatter.format("OK"),
             type: "success",
             timer: 2000,
           });
@@ -88,7 +88,7 @@ export default {
       self.$globalTriggerRelay2((error, data) => {
         if (data && data.message === "ok") {
           self.$fire({
-            text: i18n.formatter.format("ok"),
+            text: i18n.formatter.format("OK"),
             type: "success",
             timer: 2000,
           });

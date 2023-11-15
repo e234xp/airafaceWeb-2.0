@@ -2,17 +2,10 @@
   <div>
     <CCol sm="12">
       <div class="h1 mb-5">{{ disp_header }}</div>
-      <stepprogress
-        class="w-step-progress-2"
-        :active-thickness="param_activeThickness"
-        :passive-thickness="param_passiveThickness"
-        :active-color="param_activeColor"
-        :passive-color="param_passiveColor"
-        :steps="[disp_inputAccountInfo, disp_complete]"
-        :current-step="flag_currentSetp"
-        :line-thickness="param_lineThickness"
-        icon-class="fa fa-check"
-      >
+      <stepprogress class="w-step-progress-2" :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
+        :passive-color="param_passiveColor" :steps="[disp_inputAccountInfo, disp_complete]"
+        :current-step="flag_currentSetp" :line-thickness="param_lineThickness" icon-class="fa fa-check">
       </stepprogress>
     </CCol>
     <CCol sm="12">
@@ -27,49 +20,30 @@
             </tr>
             <tr>
               <td class="table-td">
-                <CInput
-                  size="lg"
-                  valid-feedback="ok"
-                  :invalid-feedback="disp_noEmptyNoSpaceNoSpecial"
-                  value=""
-                  v-model="value_accountName"
-                  placeholder=""
-                  :is-valid="accountNameValidator"
-                  required
-                  :disabled="flag_modifyMode"
-                />
+                <CInput class="mb-form-row" size="lg" :invalid-feedback="disp_noEmptyNorSpaceNeigherRepeat" value=""
+                  v-model="value_accountName" placeholder="" :is-valid="accountNameValidator" required
+                  :disabled="flag_modifyMode" />
               </td>
               <td class="table-td">
-                <CInput
-                  size="lg"
-                  valid-feedback="ok"
-                  :invalid-feedback="disp_noEmptyNorSpace"
-                  value=""
-                  v-model="value_password"
-                  placeholder=""
-                  :is-valid="passwordValidator"
-                  required
-                />
+                <CInput class="mb-form-row" size="lg" :type="flag_view_password ? 'text' : 'password'"
+                  :invalid-feedback="disp_noEmptyNorSpace" value="" v-model="value_password" placeholder=""
+                  :is-valid="passwordValidator" required>
+                  <template #append-content>
+                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
+                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    </CButton>
+                  </template>
+                </CInput>
               </td>
               <td class="table-td">
-                <CInput
-                  size="lg"
-                  valid-feedback="ok"
-                  :invalid-feedback="disp_passwordIsDifferent"
-                  value=""
-                  v-model="value_passwordConfirm"
-                  placeholder=""
-                  :is-valid="passwordConfirmValidator"
-                  required
-                />
+                <CInput class="mb-form-row" size="lg" :type="flag_view_password ? 'text' : 'password'"
+                  :invalid-feedback="disp_passwordIsDifferent" value="" v-model="value_passwordConfirm" placeholder=""
+                  :is-valid="passwordConfirmValidator" required />
               </td>
               <td class="table-td">
-                <CSelect
-                  size="lg"
-                  :value.sync="value_accountPermission"
-                  :options="value_accountPermissionList"
-                  @change="selAccountPermission($event)"
-                />
+                <CSelect size="lg" :value.sync="value_accountPermission" :options="value_accountPermissionList"
+                  @change="selAccountPermission($event)" />
               </td>
             </tr>
           </table>
@@ -80,7 +54,7 @@
             </tr>
             <tr>
               <td colspan="4" class="table-td pr-0">
-                <CInput size="lg" v-model="value_remarks" />
+                <CInput class="mb-form-row" size="lg" v-model="value_remarks" />
               </td>
             </tr>
           </table>
@@ -101,17 +75,13 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev"
-            >{{ value_returnRouteName }}
+          <CButton class="btn btn-primary fz-lg" @click="clickOnPrev">{{ value_returnRouteName }}
           </CButton>
         </div>
         <div style="width: 20px"></div>
         <div>
-          <CButton
-            class="btn btn-primary fz-lg"
-            @click="clickOnNext"
-            :disabled="!flag_accountNamePass || !flag_passwordConfirmPass"
-            >{{ nextButtonName() }}
+          <CButton class="btn btn-primary fz-lg" @click="clickOnNext"
+            :disabled="!flag_accountNamePass || !flag_passwordConfirmPass">{{ nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -119,215 +89,211 @@
   </div>
 </template>
 <script>
-import i18n from "../../../i18n";
+  import i18n from '@/i18n';
 
-import StepProgress from "vue-step-progress";
-// import "vue-step-progress/dist/main.css";
-import "../../../../src/airacss/vue-step-progress.css";
+  import StepProgress from 'vue-step-progress';
+  import '@/airacss/vue-step-progress.css';
 
-Date.prototype.yyyy_mm_dd = function () {
-  var mm = this.getMonth() + 1; // getMonth() is zero-based
-  var dd = this.getDate();
+  Date.prototype.yyyy_mm_dd = function () {
+    const mm = this.getMonth() + 1; // getMonth() is zero-based
+    const dd = this.getDate();
 
-  return [
-    this.getFullYear() + "-",
-    (mm > 9 ? "" : "0") + mm + "-",
-    (dd > 9 ? "" : "0") + dd,
-  ].join("");
-};
+    return `${this.getFullYear()}-${(mm > 9 ? '' : '0') + mm}-${(dd > 9 ? '' : '0') + dd}`;
+  };
 
-const defaultlState = () => {
-  return {
+  const defaultlState = () => ({
     obj_loading: null,
-    param_cardStyle: "height: 35rem;",
-    param_activeColor: "#6baee3",
-    param_passiveColor: "#919bae",
+    param_cardStyle: 'height: 35rem;',
+    param_activeColor: '#6baee3',
+    param_passiveColor: '#919bae',
     param_lineThickness: 3,
     param_activeThickness: 3,
     param_passiveThickness: 3,
 
-    disp_passwordIsDifferent: i18n.formatter.format("PasswordIsDifferent"),
-    disp_noEmptyNorSpace: i18n.formatter.format("NoEmptyNoSpace"),
-    disp_noEmptyNoSpaceNoSpecial: i18n.formatter.format("NoEmptyNoSpaceNoSpecial"),
+    disp_passwordIsDifferent: i18n.formatter.format('PasswordIsDifferent'),
+    disp_noEmptyNorSpace: i18n.formatter.format('NoEmptyNoSpace'),
+    disp_noEmptyNoSpaceNoSpecial: i18n.formatter.format('NoEmptyNoSpaceNoSpecial'),
+    disp_noEmptyNorSpaceNeigherRepeat: i18n.formatter.format('NoEmptyNorSpaceNeigherRepeat'),
 
-    disp_inputAccountInfo: i18n.formatter.format("AccountInfo"),
-    disp_saveChanges: i18n.formatter.format("SaveChanges"),
-    disp_complete: i18n.formatter.format("Complete"),
-    disp_previous: i18n.formatter.format("Previous"),
-    disp_next: i18n.formatter.format("Next"),
-    disp_select: i18n.formatter.format("Select"),
-    disp_search: i18n.formatter.format("Search"),
-    disp_create: i18n.formatter.format("Create"),
-    disp_password: i18n.formatter.format("Password"),
-    disp_confirmPassword: i18n.formatter.format("ConfirmPassword"),
-    disp_accountPermission: i18n.formatter.format("Permission"),
-    disp_accountName: i18n.formatter.format("Account"),
-    disp_remarks: i18n.formatter.format("Remarks"),
+    disp_inputAccountInfo: i18n.formatter.format('AccountInfo'),
+    disp_saveChanges: i18n.formatter.format('SaveChanges'),
+    disp_complete: i18n.formatter.format('Complete'),
+    disp_previous: i18n.formatter.format('Previous'),
+    disp_next: i18n.formatter.format('Next'),
+    disp_select: i18n.formatter.format('Select'),
+    disp_search: i18n.formatter.format('Search'),
+    disp_create: i18n.formatter.format('Create'),
+    disp_password: i18n.formatter.format('Password'),
+    disp_confirmPassword: i18n.formatter.format('ConfirmPassword'),
+    disp_accountPermission: i18n.formatter.format('Permission'),
+    disp_accountName: i18n.formatter.format('Account'),
+    disp_remarks: i18n.formatter.format('Remarks'),
 
     flag_modifyMode: false,
     flag_currentSelection: 0,
 
-    value_returnRoutePath: "",
-    value_returnRouteName: "",
+    value_returnRoutePath: '',
+    value_returnRouteName: '',
     value_account_list: [],
 
     flag_currentSetp: 0,
 
-    value_accountName: "",
+    value_accountName: '',
     flag_accountNamePass: false,
 
-    value_password: "",
+    flag_view_password: false,
+    value_password: '',
     flag_passwordPass: false,
-    value_passwordConfirm: "",
+    value_passwordConfirm: '',
     flag_passwordConfirmPass: false,
 
-    value_accountPermission: "User",
+    value_accountPermission: 'User',
     value_accountPermissionList: [
-      { value: "Admin", label: "Admin" },
-      { value: "PowerUser", label: "Power User" },
-      { value: "User", label: "User" },
+      { value: 'Admin', label: 'Admin' },
+      { value: 'PowerUser', label: 'Power User' },
+      { value: 'User', label: 'User' },
     ],
 
-    value_remarks: "",
-    disp_header: "none", //i18n.formatter.format("CreatePerson"),
-  };
-};
-export default {
-  name: "AccountForm",
-  props: {
-    formData: Object,
-    onFinish: { type: Function },
-  },
-  data() {
-    return Object.assign({}, defaultlState(), this.formData);
-  },
-  created() {},
-  mounted() {},
-  updated() {},
-  beforeRouteEnter(to, from, next) {
-    next();
-  },
-  beforeRouteLeave(to, from, next) {
-    // this.flag_keepingDownload = false;
-    next();
-  },
-  watch: {
-    value_searchingFilterForAll: function (value) {
-      this.updateData();
+    value_remarks: '',
+    disp_header: 'none',
+  });
+  export default {
+    name: 'AccountForm',
+    props: {
+      formData: Object,
+      onFinish: { type: Function },
     },
-    value_searchingFilterForSelected: function (value) {
-      this.updateData();
+    data() {
+      // return Object.assign({}, defaultlState(), this.formData);
+      const cloneObject = {};
+      Object.assign(cloneObject, defaultlState(), this.formData);
+
+      return cloneObject;
     },
-  },
-  methods: {
-    headerCellStyle(row, column, rowIndex, columnIndex) {
-      return "fontSize: 16px";
+    watch: {
+      value_searchingFilterForAll: () => {
+        this.updateData();
+      },
+      value_searchingFilterForSelected: () => {
+        this.updateData();
+      },
     },
-    cellStyle(row, column, rowIndex, columnIndex) {
-      return "fontSize: 16px;";
-    },
-    selAccountPermission(e) {
-      const self = this;
-      self.value_accountPermission = e.target.value;
-    },
-    nextButtonName() {
-      switch (this.flag_currentSetp) {
-        case 0:
-          return this.flag_modifyMode ? this.disp_saveChanges : this.disp_create;
-        case 1:
-          return this.disp_complete;
-        default:
-          return this.disp_next;
-      }
-    },
-    clickOnPrev() {
-      const self = this;
-      if (self.flag_currentSetp == 0) {
-        if (self.value_returnRoutePath.length > 0) {
-          self.$router.push({ name: self.value_returnRoutePath });
-          self.flag_keepingDownload = false;
+    methods: {
+      // headerCellStyle(row, column, rowIndex, columnIndex) {
+      headerCellStyle() {
+        return 'fontSize: 16px';
+      },
+      // cellStyle(row, column, rowIndex, columnIndex) {
+      cellStyle() {
+        return 'fontSize: 16px;';
+      },
+      viewPassword() {
+        const self = this;
+
+        self.flag_view_password = !self.flag_view_password;
+      },
+      selAccountPermission(e) {
+        const self = this;
+        self.value_accountPermission = e.target.value;
+      },
+      nextButtonName() {
+        switch (this.flag_currentSetp) {
+          case 0:
+            return this.flag_modifyMode ? this.disp_saveChanges : this.disp_create;
+          case 1:
+            return this.disp_complete;
+          default:
+            return this.disp_next;
         }
-      } else if (self.flag_currentSetp > 0) self.flag_currentSetp--;
-    },
-    clickOnNext() {
-      const self = this;
-      if (self.flag_currentSetp == 0) {
-        self.flag_keepingDownload = false;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        if (self.onFinish)
-          self.onFinish(
-            {
-              uuid: self.value_accountUuid,
-              username: self.value_accountName,
-              password: self.value_password,
-              permission: self.value_accountPermission,
-              remarks: self.value_remarks,
-            },
-            function (success, result) {
-              if (self.obj_loading) self.obj_loading.hide();
-              if (result && result.message == "ok") {
-                self.flag_currentSetp = 1;
-              } else {
-                //self.$alert( self.disp_registerFailed + " : " + ( result && result.message ? result.message : "network loss") );
-                self.$fire({
-                  text: i18n.formatter.format("Failed"),
-                  type: "error",
-                  timer: 3000,
-                  confirmButtonColor: "#20a8d8",
-                });
-              }
-            }
-          );
-        else {
-          if (self.obj_loading) self.obj_loading.hide();
-          self.flag_currentSetp = 1;
-        }
-      } else {
-        self.$router.push({ name: self.value_returnRoutePath });
-      }
-    },
-    passwordConfirmValidator(val) {
-      const self = this;
-      if (
-        self.value_passwordConfirm.length > 0 &&
-        self.value_passwordConfirm == self.value_password
-      ) {
-        self.flag_passwordConfirmPass = true;
-      } else {
-        self.flag_passwordConfirmPass = false;
-      }
-      return self.flag_passwordConfirmPass;
-    },
-    passwordValidator(val) {
-      const self = this;
-      if (val.indexOf(" ") >= 0) {
-        self.flag_passwordPass = false;
-      } else {
-        self.flag_passwordPass = val.length > 0;
-      }
-      return self.flag_passwordPass;
-    },
-    accountNameValidator(val) {
-      const self = this;
-      self.flag_accountNamePass = false;
-      if (/^[a-zA-Z0-9]+$/.test(val)) {
-        self.flag_accountNamePass = true;
-      }
-      if (self.flag_accountNamePass) {
-        self.value_account_list.forEach((account) => {
-          if (account.username.toLowerCase() == val.toLowerCase()) {
-            self.flag_accountNamePass = false;
+      },
+      clickOnPrev() {
+        const self = this;
+        if (self.flag_currentSetp === 0) {
+          if (self.value_returnRoutePath.length > 0) {
+            self.$router.push({ name: self.value_returnRoutePath });
+            self.flag_keepingDownload = false;
           }
-        });
-      }
-      return self.flag_accountNamePass;
+        } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
+      },
+      clickOnNext() {
+        const self = this;
+        if (self.flag_currentSetp === 0) {
+          self.flag_keepingDownload = false;
+          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+          if (self.onFinish) {
+            self.onFinish(
+              {
+                uuid: self.value_accountUuid,
+                username: self.value_accountName,
+                password: self.value_password,
+                permission: self.value_accountPermission,
+                remarks: self.value_remarks,
+              },
+              (success, result) => {
+                if (self.obj_loading) self.obj_loading.hide();
+                if (result && result.message === 'ok') {
+                  self.flag_currentSetp = 1;
+                } else {
+                  // self.$alert( self.disp_registerFailed + ' : ' + ( result && result.message ? result.message : 'network loss') );
+                  self.$fire({
+                    text: i18n.formatter.format('Failed'),
+                    type: 'error',
+                    timer: 3000,
+                    confirmButtonColor: '#20a8d8',
+                  });
+                }
+              },
+            );
+          } else {
+            if (self.obj_loading) self.obj_loading.hide();
+            self.flag_currentSetp = 1;
+          }
+        } else {
+          self.$router.push({ name: self.value_returnRoutePath });
+        }
+      },
+      passwordConfirmValidator() {
+        const self = this;
+        if (
+          self.value_passwordConfirm.length > 0
+          && self.value_passwordConfirm === self.value_password
+        ) {
+          self.flag_passwordConfirmPass = true;
+        } else {
+          self.flag_passwordConfirmPass = false;
+        }
+        return self.flag_passwordConfirmPass;
+      },
+      passwordValidator(val) {
+        const self = this;
+        if (val.indexOf(' ') >= 0) {
+          self.flag_passwordPass = false;
+        } else {
+          self.flag_passwordPass = val.length > 0;
+        }
+        return self.flag_passwordPass;
+      },
+      accountNameValidator(val) {
+        const self = this;
+        self.flag_accountNamePass = false;
+        if (/^[a-zA-Z0-9]+$/.test(val)) {
+          self.flag_accountNamePass = true;
+        }
+        if (self.flag_accountNamePass) {
+          self.value_account_list.forEach((account) => {
+            if (account.username.toLowerCase() === val.toLowerCase()) {
+              self.flag_accountNamePass = false;
+            }
+          });
+        }
+        return self.flag_accountNamePass;
+      },
+      showOnStep(step) {
+        return step === this.flag_currentSetp ? 'd-block' : 'd-none';
+      },
     },
-    showOnStep(step) {
-      return step == this.flag_currentSetp ? "d-block" : "d-none";
+    components: {
+      stepprogress: StepProgress,
     },
-  },
-  components: {
-    stepprogress: StepProgress,
-  },
-};
+  };
 </script>

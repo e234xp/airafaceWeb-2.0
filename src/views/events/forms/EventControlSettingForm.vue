@@ -32,7 +32,6 @@
                     <div class="h5">{{ disp_eventControlName }}</div>
                     <CInput
                       size="lg"
-                      valid-feedback="ok"
                       :invalid-feedback="disp_noEmptyNorSpaceNeigherRepeat"
                       value=""
                       v-model="value_eventControlName"
@@ -111,7 +110,6 @@
                 <div class="h5">{{ disp_eventLineAccessToken }}</div>
                 <CInput
                   size="lg"
-                  valid-feedback="ok"
                   :invalid-feedback="disp_noEmptyNorSpaceNeigherRepeat"
                   value=""
                   v-model="value_eventLineAccessToken"
@@ -134,7 +132,6 @@
                   </div>
                   <CInput
                     size="lg"
-                    valid-feedback="ok"
                     :invalid-feedback="disp_noEmptyNoSpaceOnly"
                     value=""
                     v-model="value_eventHttpHostAddress"
@@ -174,19 +171,19 @@
                   />
                 </div>
               </CCol>
-              <CCol sm="3"
-                ><div class="column-space-between">
+              <CCol sm="3">
+                <div class="column-space-between">
                   <div class="h5">{{ disp_eventHttpPass }}</div>
                   <form>
-                    <CInput
-                      class="mb-form-row"
-                      size="lg"
-                      value=""
-                      v-model="value_eventHttpPass"
-                      placeholder=""
-                      type="password"
-                      autocomplete="on"
-                    />
+                    <CInput class="mb-form-row" size="lg" value="" v-model="value_eventHttpPass" placeholder=""
+                      :type="flag_view_password ? 'text' : 'password'" autocomplete="on">
+                      <template #append-content>
+                        <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
+                          <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                          <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                        </CButton>
+                      </template>
+                    </CInput>
                   </form>
                 </div>
               </CCol>
@@ -205,7 +202,6 @@
                   v-model="value_eventHttpUrl"
                   placeholder=""
                   :is-valid="urlValidator"
-                  valid-feedback="ok"
                   :invalid-feedback="value_dataCheck"
                 />
               </CCol>
@@ -234,7 +230,6 @@
                 <div class="h5">{{ disp_eventSMTPHostAddress }}</div>
                 <CInput
                   size="lg"
-                  valid-feedback="ok"
                   :invalid-feedback="disp_noEmptyNorSpaceNeigherRepeat"
                   value=""
                   v-model="value_eventSMTPHostAddress"
@@ -352,7 +347,6 @@
                                 size="lg"
                                 style="display: block; margin-bottom: 0px"
                                 value=""
-                                valid-feedback="ok"
                                 :invalid-feedback="disp_noEmptyNoSpaceOnly"
                                 v-model="value_newFieldKey"
                                 placeholder=""
@@ -508,7 +502,6 @@
                             :is-valid="
                               value_eventHttpMethod == 'GET' ? null : customDataValidator
                             "
-                            valid-feedback="ok"
                             :invalid-feedback="value_dataCheck"
                           ></CTextarea>
                           <CTextarea
@@ -519,7 +512,6 @@
                               value_eventHttpMethod == 'POST' ? null : customUrlValidator
                             "
                             spellcheck="false"
-                            valid-feedback="ok"
                             :invalid-feedback="value_dataCheck"
                             rows="10"
                             placeholder=""
@@ -825,6 +817,7 @@ const defaultlState = () => {
     //   pageSize: 6,
     //   totalResult: 0
     // },
+      flag_view_password: false,
     param_boxDisabled: false,
 
     param_cardStyle: "height: 35rem;", //
@@ -1444,6 +1437,11 @@ export default {
   },
   watch: {},
   methods: {
+      viewPassword() {
+        const self = this;
+
+        self.flag_view_password = !self.flag_view_password;
+      },
     makeid(length) {
       let result = "";
       let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

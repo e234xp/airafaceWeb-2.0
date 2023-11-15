@@ -17,21 +17,12 @@
             </div>
 
             <div>
-              <CButton
-                class="btn btn-danger mr-3 mb-3"
-                size="lg"
-                @click="clickOnMultipleDelete()"
-              >
+              <CButton class="btn btn-danger mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()">
                 {{ disp_delete }}
               </CButton>
             </div>
             <div style="margin-left: auto">
-              <CInput
-                v-model.lazy="value_searchingFilter"
-                style="width: 400px"
-                size="lg"
-                :placeholder="disp_search"
-              >
+              <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>

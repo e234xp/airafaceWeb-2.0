@@ -31,11 +31,11 @@
               <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" align="center" width="auto"></vxe-table-column>
 
               <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
-                  <template #default="{ row }"> 
+                  <template #default="{ row }">
                     <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
                   </template>
               </vxe-table-column> -->
-              
+
             </vxe-table>
           </div>
 
@@ -47,10 +47,10 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" 
-            :current-page="value_tablePage.currentPage" 
+            ]"
+            :current-page="value_tablePage.currentPage"
             :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" 
+            :total="value_tablePage.totalResult"
             @page-change="handlePageChange">
           </vxe-pager>
         </CCardBody>
@@ -59,7 +59,7 @@
 
     </div>
   </template>
-    
+
   <script>
     import i18n from "@/i18n";
     import { mapState } from "vuex";
@@ -109,8 +109,8 @@
       },
       //預設值
       created() {
-      
-      }, 
+
+      },
       // 拿資料 寫入資料
       watch: {
         // localStep2form: {
@@ -188,8 +188,3 @@
       },
     }
   </script>
-    
-
-  <style>
-    @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-  </style>

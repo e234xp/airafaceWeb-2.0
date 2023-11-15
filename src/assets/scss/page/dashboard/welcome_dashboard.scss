@@ -1,0 +1,163 @@
+$welcome-anim-duration: 1.0s;
+
+.welcome-dashboard {
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    overflow: hidden;
+}
+
+.welcome-logo {
+    // position: absolute;
+    // top: 60px;
+    left: 60px;
+    height: 32px;
+    width: 200px;
+    // background-image: url("./assets/img/aira-logo-white.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.welcome-header {
+    width: 100%;
+    height: 325px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 160px;
+    margin-bottom: 60px;
+}
+
+.welcome-message {
+    font-family: $theme-font;
+    font-size: 88px;
+    color: #FFBE5C;
+    font-weight: 300;
+    line-height: 0.8em;
+}
+
+.welcome-title {
+    font-family: $theme-font;
+    font-size: 72px;
+    color: white;
+    font-weight: 700;
+    line-height: 0.8em;
+}
+
+.welcome-subtitle {
+    font-family: $theme-font;
+    font-size: 30px;
+    color: white;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    // position: absolute;
+    // bottom: 0;
+    width: 100%;
+    // margin-bottom: 0.8em;
+}
+
+.welcome-cards-container {
+    display: flex;
+    width: 100%;
+    height: 54%;
+    justify-content: start;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.welcome-card {
+    height: 571px; // 320 + 55 + 20 + 34 + 28 + 20 + 28 + 14 + 12 + 14 + 12 + 14
+    width: 430px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-card-img {
+    height: 320px;
+    width: 320px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    align-items: center;
+}
+
+.welcome-card-text-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-card-title,
+.welcome-card-name,
+.welcome-card-department,
+.welcome-card-remarks {
+    font-family: $theme-font;
+    text-overflow: ellipsis;
+    line-height: 0.8em;
+}
+
+.welcome-card-title {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.welcome-card-name {
+    color: white;
+    font-size: 48px;
+    font-weight: 500;
+    margin-bottom: 28px;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.welcome-card-department {
+    color: #B1B1B1;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 28px;
+}
+
+.welcome-card-remarks {
+    color: #B1B1B1;
+    font-size: 20px;
+    font-weight: 400;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+}
+
+.welcome-fade-out {
+    transition: opacity $welcome-anim-duration ease-out;
+    opacity: 0;
+}
+
+.shrink {
+    transition: all $welcome-anim-duration ease-out;
+    transform: translateX(-100%);
+}
+
+.welcome-fade-out {
+    transition: opacity $welcome-anim-duration ease-out;
+    opacity: 0;
+}
+
+.welcome-fade-in {
+    animation: fade-in-amin 0.5s;
+}
+
+@keyframes fade-in-amin {
+
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

@@ -1,17 +1,17 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t("VideoDeviceBasic") }}</div>
+      <div class="h1">{{ $t("TitleWiegandConverter") }}</div>
 
       <stepprogress
-        class="w-step-progress-4"
+        class="w-step-progress-3"
         :active-thickness="param_activeThickness"
         :passive-thickness="param_passiveThickness"
         :active-color="param_activeColor"
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step2, disp_step3, disp_complete]"
+        :steps="[disp_step1, disp_step3, disp_complete]"
         icon-class="fa fa-check"
       >
       </stepprogress>
@@ -19,7 +19,6 @@
       <div style="height: 35px"></div>
     </div>
 
-    <!-- 項目 -->
     <CCol sm="12">
       <!-- Basic Form-->
       <CCard v-if="isOnStep(0)" style="height: 35rem">
@@ -32,26 +31,13 @@
           />
         </CCardBody>
       </CCard>
-    
 
-      <!-- Connection Form-->
+      <!-- Settings Form-->
       <CCard v-else-if="isOnStep(1)" style="height: 35rem">
         <CCardBody>
           <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
-          />
-        </CCardBody>
-      </CCard>
-
-      <!-- Settings Form-->
-      <CCard v-else-if="isOnStep(2)" style="height: 35rem">
-        <CCardBody>
-          <Step3Form
-            :step3form="step3form"
-            @updateStep3form="updateStep3form"
             :isFieldPassed="isFieldPassed"
             :defaultValues="defaultValues"
           />
@@ -71,9 +57,7 @@
         </div>
         <div
           v-if="
-            flag_currentSetp == 1 ||
-            flag_currentSetp == 2 ||
-            flag_currentSetp == 3
+            flag_currentSetp == 1
           "
         >
           <CButton
@@ -101,80 +85,77 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 
-import StepProgress from "vue-step-progress";
-import Step1Form from "@/modules/outputdevice/addwiegandconverts/Step1Form.vue";
-import Step2Form from "@/modules/outputdevice/addwiegandconverts/Step2Form.vue";
-import Step3Form from "@/modules/outputdevice/addwiegandconverts/Step3Form.vue";
-import { getIsFieldPassedFunction } from "@/utils";
+import StepProgress from 'vue-step-progress';
+import '@/airacss/vue-step-progress.css';
 
+import Step1Form from '@/modules/outputdevice/addwiegandconverts/Step1Form.vue';
+import Step2Form from '@/modules/outputdevice/addwiegandconverts/Step2Form.vue';
+
+import { getIsFieldPassedFunction } from '@/utils';
 
 export default {
-  name: "AddWiegandConverters",
+  name: 'AddWiegandConverters',
+  components: {
+    stepprogress: StepProgress,
+    Step1Form,
+    Step2Form,
+  },
   data() {
     return {
-      param_cardStyle: "height: 35rem;",
+      param_cardStyle: 'height: 35rem;',
 
       value_returnRoutePath: this.$route.params.value_returnRoutePath
         ? this.$route.params.value_returnRoutePath
-        : "",
+        : '',
       value_returnRouteName: this.$route.params.value_returnRouteName
         ? this.$route.params.value_returnRouteName
-        : "",
+        : '',
 
-      /*Basic title  */
-      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
+      // /*Basic title  */
+      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
 
       // step setting
-      param_activeColor: "#6baee3",
-      param_passiveColor: "#919bae",
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
 
-      /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format("WiegandStep1Name"),
-      disp_step2: i18n.formatter.format("WiegandStep2Name"),
-      disp_step3: i18n.formatter.format("WiegandStep3Name"),
-      disp_complete: i18n.formatter.format("Complete"),
+      // /**Step 1 2 3 */
+      disp_step1: i18n.formatter.format('WiegandStep1Name'),
+      disp_step2: i18n.formatter.format('WiegandStep2Name'),
+      disp_step3: i18n.formatter.format('WiegandStep3Name'),
+      disp_complete: i18n.formatter.format('Complete'),
 
-      /**btn */
-      disp_complete: i18n.formatter.format("Complete"),
-      disp_previous: i18n.formatter.format("Previous"),
-      disp_next: i18n.formatter.format("Next"),
+      // /**btn */
+      // disp_complete: i18n.formatter.format('Complete'),
+      disp_previous: i18n.formatter.format('Previous'),
+      disp_next: i18n.formatter.format('Next'),
 
       step1form: {
-        name: "",
+        name: '',
         divice_groups: [],
-      },
-
-      step2form: {
-        ip_address: "",
+        ip_address: '',
         port: null,
       },
 
-      step3form: {
+      step2form: {
         bits: 26,
         index: 1,
         syscode: 1,
-        special_card_number:""
+        special_card_number: '',
       },
 
-      defaultValues: {}
+      defaultValues: {},
     };
   },
-  components: {
-    Step1Form: Step1Form,
-    Step2Form: Step2Form,
-    Step3Form: Step3Form,
-    stepprogress: StepProgress,
-  },
+
   async created() {
     this.defaultValues = await this.getDefaultValues();
   },
-
 
   methods: {
     // 處理資料傳遞
@@ -184,16 +165,13 @@ export default {
     updateStep2form(newValue) {
       this.step2form = { ...newValue };
     },
-    updateStep3form(newValue) {
-      this.step3form = { ...newValue };
-    },
 
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        ip_address: "192.168.1.100",
+        ip_address: '192.168.1.100',
         port: 1001,
-        bits: 26
+        bits: 26,
       };
 
       return form;
@@ -202,13 +180,13 @@ export default {
     async getDefaultName() {
       const {
         data: { total_length: totalLength, list: deviceList },
-      } = await this.$globalFindWiegandConverters("", 0, 3000);
+      } = await this.$globalFindWiegandConverters('', 0, 3000);
 
       let number = totalLength + 1;
       let name = `Wiegand-${number}`;
       // Check for duplicates, if found, increment the number and check again
       while (this.isDuplicateName(deviceList, name)) {
-        number++;
+        number += 1;
         name = `Wiegand-${number}`;
       }
 
@@ -227,24 +205,18 @@ export default {
         }
 
         case 1: {
-          // todo ROI
-          return this.isFormPassed(this.step2form);;
+          return this.isFormPassed(this.step2form);
         }
 
-        case 2: {
-          return this.isFormPassed(this.step3form);
-        }
-
-        case 3: {
+        case 2:
+        default: {
           return true;
         }
       }
     },
 
     isFormPassed(form) {
-      return Object.entries(form).every(([key, value]) => {
-        return this.isFieldPassed(key, value);
-      });
+      return Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value));
     },
 
     isFieldPassed: getIsFieldPassedFunction({
@@ -262,11 +234,11 @@ export default {
         // specialCardNumber: (value) => /^\d+$/.test(value),
       },
       rules: {
-        name: "nonEmpty",
-        ip_address: "nonEmpty",
-        port: "port",
-        index: "index",
-        syscode: "syscode"
+        name: 'nonEmpty',
+        ip_address: 'nonEmpty',
+        port: 'port',
+        index: 'index',
+        syscode: 'syscode',
       },
     }),
 
@@ -289,14 +261,13 @@ export default {
 
     async handleNext() {
       switch (this.flag_currentSetp) {
-        case 0:
-        case 1: {
+        case 0: {
           this.flag_currentSetp += 1;
 
           break;
         }
 
-        case 2: {
+        case 1: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
@@ -304,20 +275,19 @@ export default {
           const parameter = {
             ...this.step1form,
             ...this.step2form,
-            ...this.step3form,
           };
 
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();
-          if (data && data.message == "ok") {
+          if (data && data.message === 'ok') {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format("Failed"),
-              type: "error",
+              text: i18n.formatter.format('Failed'),
+              type: 'error',
               timer: 3000,
-              confirmButtonColor: "#20a8d8",
+              confirmButtonColor: '#20a8d8',
             });
           }
 
@@ -332,7 +302,7 @@ export default {
       }
     },
 
-    //送api 完成
+    // 送api 完成
     create(data) {
       return this.$globalCreateWiegandConverter(data);
     },
@@ -344,15 +314,11 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_next;
-        case 3:
           return this.disp_complete;
         default:
           return this.disp_next;
       }
     },
-
-
   },
 };
 </script>

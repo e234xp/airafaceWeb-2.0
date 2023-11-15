@@ -2,112 +2,141 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CPersonForm
-        :formData="$data"
-        :enableAdminField="false"
-        :modifyMode="true"
-        :canModify="canModify"
-        :onFinish="onFinish"
-        />
+        <CPersonForm :formData="$data" :enableAdminField="false" :modifyMode="true" :canModify="canModify"
+          :onFinish="onFinish" />
       </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
+import i18n from '@/i18n';
+import CPersonForm from './forms/PersonForm.vue';
 
-import CPersonForm from './forms/PersonForm.vue'
+const dayjs = require('dayjs');
 
-import i18n from "../../i18n"
 export default {
   name: 'ModifyVisitor',
   components: { CPersonForm },
-  data () {
-    var selectedGroupList = [];
-    var assignedGroupList = [];
-    if( this.$route.params.item ) {
-      if( this.$route.params.item.group_list ) {
-        selectedGroupList = this.$route.params.item.group_list;
+  data() {
+    const selectedGroupList = [];
+    const assignedGroupList = [];
+    if (this.$route.params.item) {
+      if (this.$route.params.item.group_list) {
+        const groups = this.$route.params.item.group_list || [];
+
+        for (let i = 0; i < groups.length; i += 1) {
+          if (!((groups[i] === 'All Person') || (groups[i] === 'All Visitor'))) {
+            selectedGroupList.push(groups[i]);
+          }
+        }
       }
-      if( this.$route.params.item.assigned_group_list ) {
-        this.$route.params.item.assigned_group_list.forEach( g => {
+      if (this.$route.params.item.assigned_group_list) {
+        this.$route.params.item.assigned_group_list.forEach((g) => {
           assignedGroupList.push(g);
         });
       }
     }
 
     return {
-      value_returnRoutePath : this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
-      value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
-      
-      value_personUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
-      value_personId: this.$route.params.item && this.$route.params.item.id ? this.$route.params.item.id : "",
-      value_personName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : "",
-      value_cardNumber: this.$route.params.item && this.$route.params.item.card_number ? this.$route.params.item.card_number : "",
-      value_emailAddress: this.$route.params.item && this.$route.params.item.extra_info.email ? this.$route.params.item.extra_info.email : "",
-      value_department: this.$route.params.item && this.$route.params.item.extra_info.department ? this.$route.params.item.extra_info.department : "",
-      value_jobTitle: this.$route.params.item && this.$route.params.item.extra_info.title ? this.$route.params.item.extra_info.title : "",
-      value_extensionNumber: this.$route.params.item && this.$route.params.item.extra_info.extension_number ? this.$route.params.item.extra_info.extension_number : "",
-      value_phoneNumber: this.$route.params.item && this.$route.params.item.extra_info.phone_number ? this.$route.params.item.extra_info.phone_number : "",
-      value_effectiveDate: this.$route.params.item && this.$route.params.item.begin_date > 0 ? new Date( this.$route.params.item.begin_date ).yyyy_mm_dd() : "",
-      value_expireDate: this.$route.params.item && this.$route.params.item.expire_date > 0 ? new Date( this.$route.params.item.expire_date ).yyyy_mm_dd() : "",
-      value_remarks: this.$route.params.item && this.$route.params.item.extra_info.remarks ? this.$route.params.item.extra_info.remarks : "",
+      value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : '',
+      value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
+      value_allPerson: this.$route.params.value_allPerson ? this.$route.params.value_allPerson : [],
+
+      value_personUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : '',
+      value_personId: this.$route.params.item && this.$route.params.item.id ? this.$route.params.item.id : '',
+      value_personName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : '',
+      value_cardNumber: this.$route.params.item && this.$route.params.item.card_number ? this.$route.params.item.card_number : '',
+      value_emailAddress: this.$route.params.item && this.$route.params.item.extra_info.email
+        ? this.$route.params.item.extra_info.email
+        : '',
+      value_department: this.$route.params.item && this.$route.params.item.extra_info.department
+        ? this.$route.params.item.extra_info.department
+        : '',
+      value_jobTitle: this.$route.params.item && this.$route.params.item.extra_info.title ? this.$route.params.item.extra_info.title : '',
+      value_extensionNumber: this.$route.params.item && this.$route.params.item.extra_info.extension_number
+        ? this.$route.params.item.extra_info.extension_number
+        : '',
+      value_phoneNumber: this.$route.params.item && this.$route.params.item.extra_info.phone_number
+        ? this.$route.params.item.extra_info.phone_number
+        : '',
+      value_effectiveDate: this.$route.params.item && this.$route.params.item.begin_date > 0
+        ? dayjs(this.$route.params.item.begin_date).format('YYYY-MM-DD')
+        : '',
+      value_expireDate: this.$route.params.item && this.$route.params.item.expire_date > 0
+        ? dayjs(this.$route.params.item.expire_date).format('YYYY-MM-DD')
+        : '',
+      value_remarks: this.$route.params.item && this.$route.params.item.extra_info.remarks
+        ? this.$route.params.item.extra_info.remarks
+        : '',
       value_selectedGroupList: selectedGroupList,
-      value_assignedGroupList : assignedGroupList,
-      value_photoToRegisterToShow : this.$route.params.item && this.$route.params.item.register_image ? "data:image/jpeg;base64," + this.$route.params.item.register_image : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==",
-      value_photoToDisplayToShow: this.$route.params.item && this.$route.params.item.display_image ? "data:image/jpeg;base64," + this.$route.params.item.display_image : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==",
-      value_photoToRegister: this.$route.params.item && this.$route.params.item.register_image ? this.$route.params.item.register_image : "",
-      value_photoToDisplay: this.$route.params.item && this.$route.params.item.display_image ? this.$route.params.item.display_image : "",
-      value_asAdmin : false,
-      flag_currentSetp : 0,
-      disp_header: i18n.formatter.format("ModifyVisitor"),
-      disp_inputPersonInfo: i18n.formatter.format("InputVisitorInfo"),
-      disp_selectRegisterPhoto: i18n.formatter.format("SelectRegisterPhoto"),
-      disp_complete: i18n.formatter.format("Complete"),
-      disp_personId: i18n.formatter.format("VisitorId"),
-      disp_personName: i18n.formatter.format("VisitorName"),
+      value_assignedGroupList: assignedGroupList,
+      value_photoToRegisterToShow: this.$route.params.item && this.$route.params.item.register_image
+        ? `data:image/jpeg;base64,${this.$route.params.item.register_image}`
+        : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAK'
+        + 'ACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_photoToDisplayToShow: this.$route.params.item && this.$route.params.item.display_image
+        ? `data:image/jpeg;base64,${this.$route.params.item.display_image}`
+        : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAK'
+        + 'ACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_photoToRegister: this.$route.params.item && this.$route.params.item.register_image ? this.$route.params.item.register_image : '',
+      value_photoToDisplay: this.$route.params.item && this.$route.params.item.display_image ? this.$route.params.item.display_image : '',
+      value_asAdmin: this.$route.params.item && this.$route.params.item.as_admin ? this.$route.params.item.as_admin : false,
+      flag_currentSetp: 0,
+      disp_header: i18n.formatter.format('ModifyVisitor'),
+      disp_inputPersonInfo: i18n.formatter.format('InputVisitorInfo'),
+      disp_selectRegisterPhoto: i18n.formatter.format('SelectRegisterPhoto'),
+      disp_complete: i18n.formatter.format('Complete'),
+
+      disp_personId: i18n.formatter.format('VisitorId'),
+      disp_personName: i18n.formatter.format('VisitorName'),
     };
   },
   created() {
-    if( this.value_returnRoutePath === "" ) this.$router.push({ name: 'VisitorManagement' });
+    if (this.value_returnRoutePath === '') this.$router.push({ name: 'VisitorManagement' });
   },
   methods: {
-    canModify () {
+    canModify() {
       return true;
     },
-    onFinish( data, cb ) {
+    onFinish(data, cb) {
       const self = this;
-      const beginDate = ( data.begin_date && data.begin_date.length > 0 ) ? new Date( data.begin_date.replace( "-", "/" ) + " 00:00:00" ).getTime() : 0;
-      const expireDate = ( data.expir_date && data.expir_date.length > 0 ) ? new Date( data.expir_date.replace( "-", "/" ) + " 00:00:00" ).getTime() : 0;
+      const beginDate = (data.begin_date && data.begin_date.length > 0) ? new Date(`${data.begin_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
+      const expireDate = (data.expir_date && data.expir_date.length > 0) ? new Date(`${data.expir_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
+
+      if (data.group_list.indexOf('All Visitor') === -1) {
+        data.group_list.push('All Visitor');
+      }
+
       const dataForModify = {
-          uuid : self.value_personUuid,
-          data : {
-            id : data.id,
-            name : data.name,
-            card_number : data.card_number,
-            display_image : data.display_image,
-            register_image : data.register_image,
-            begin_date : beginDate,
-            expire_date : expireDate,
-            group_list : data.group_list,
-            card_facility_code : "", 
-            as_admin : false,
-            extra_info : {
-              title : data.title,
-              department : data.department,
-              email : data.email,
-              phone_number : data.phone_number,
-              extension_number : data.extension_number,
-              remarks : data.remarks
-            }
-          }
+        uuid: self.value_personUuid,
+        data: {
+          id: data.id + '',
+          name: data.name + '',
+          card_number: data.card_number + '',
+          begin_date: beginDate || 0,
+          expire_date: expireDate || 0,
+          group_list: data.group_list || [],
+          card_facility_code: '',
+          display_image: data.display_image + '',
+          register_image: data.register_image + '',
+          as_admin: false,
+          extra_info: {
+            title: data.title + '',
+            department: data.department + '',
+            email: data.email + '',
+            phone_number: data.phone_number + '',
+            extension_number: data.extension_number + '',
+            remarks: data.remarks + '',
+          },
+        },
       };
       // console.log( JSON.stringify(dataForRegister) );
-      self.$globalModifyVisitor( dataForModify, ( error, result ) => {
-        if( cb ) cb( error == null, result );
-        //self.$router.push({ name: self.value_returnRoutePath })
+      self.$globalModifyVisitor(dataForModify, (error, result) => {
+        if (cb) cb(error == null, result);
+        // self.$router.push({ name: self.value_returnRoutePath })
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>

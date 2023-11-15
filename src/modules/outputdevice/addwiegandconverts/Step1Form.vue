@@ -13,7 +13,6 @@
               class="mt-2"
               v-model="localStep1form.name"
               :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-              valid-feedback="ok"
               :is-valid="isFieldPassed('name', localStep1form.name)"
               required
             />
@@ -27,6 +26,30 @@
               :filterable="true"
               class="font-control mt-2"
               :placeholder="dis_placeholder"
+            />
+          </CCol>
+        </CRow>
+        <CRow sm="12">
+          <CCol sm="6" class="h5">
+            {{ disp_WiegandBasicIP }}
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.ip_address"
+              :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
+              required
+            />
+          </CCol>
+          <CCol sm="6" class="h5">
+            {{ disp_WiegandBasicPort }}
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model.number="localStep1form.port"
+              :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('port', localStep1form.port)"
+              required
             />
           </CCol>
         </CRow>
@@ -49,22 +72,17 @@ export default {
     return {
       localStep1form: { ...this.step1form },
 
-      /*Basic title  */
       disp_header: i18n.formatter.format("WiegandBasicName"),
 
-      /**content */
-      disp_WiegandBasicDeviceName: i18n.formatter.format(
-        "WiegandBasicCOlNameDeviceName"
-      ),
-      disp_WiegandBasicDeviceGroups: i18n.formatter.format(
-        "WiegandBasicCOlNameDeviceGroups"
-      ),
+      disp_WiegandBasicDeviceName: i18n.formatter.format("WiegandBasicCOlNameDeviceName"),
+      disp_WiegandBasicDeviceGroups: i18n.formatter.format("WiegandBasicCOlNameDeviceGroups"),
+      disp_WiegandBasicIP: i18n.formatter.format("WiegandBasicCOlNameIP"),
+      disp_WiegandBasicPort: i18n.formatter.format("WiegandBasicCOlNamePort"),
 
       dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
 
-      /**v-model */
-      value_deviceGroups: "" /**選單 */,
-      value_deviceGroupsList: [1, 2, 3],
+      value_deviceGroups: "",
+      // value_deviceGroupsList: [1, 2, 3],
     };
   },
   // 拿資料 寫入資料

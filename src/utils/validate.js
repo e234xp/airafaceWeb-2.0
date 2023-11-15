@@ -9,6 +9,7 @@ function getIsFieldPassedFunction({ customValidators, rules }) {
 
   return (fieldName, fieldValue) => {
     const rule = rules[fieldName];
+
     if (!rule) {
       return true;
     }

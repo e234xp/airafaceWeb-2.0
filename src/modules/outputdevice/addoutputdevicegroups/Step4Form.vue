@@ -4,7 +4,7 @@
     <div>
       <h2 sm="12">{{  disp_DigitalOutPut2Title }}</h2>
     </div>
-  
+
     <!-- 項目 -->
     <!-- Digital OutPut2 -->
     <div class="form-check mb-3 ml-2">
@@ -13,7 +13,7 @@
         {{ disp_IOBoxesBasicEnable }}
       </label>
     </div>
-    
+
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
@@ -36,7 +36,7 @@
 
   </div>
 </template>
-  
+
 <script>
   import i18n from "@/i18n";
 
@@ -52,7 +52,7 @@
     data() {
       return {
         localStep4form: { ...this.step4form },
- 
+
         isChecked: true,
 
         /*Digital output2 title  */
@@ -80,7 +80,7 @@
       // this.localStep4form.user = "admin",
       // this.localStep4form.pass = "123456"
       // this.localStep4form.connection_info = "/media/video1"
-    }, 
+    },
     // 拿資料 寫入資料
     watch: {
       localStep4form: {
@@ -103,8 +103,3 @@
     },
   }
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>

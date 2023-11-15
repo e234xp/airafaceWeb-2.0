@@ -18,7 +18,6 @@
             class="mt-2"
             v-model="localStep1form.name"
             :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-            valid-feedback="ok"
             :is-valid="isFieldPassed('name', localStep1form.name)"
             required
           />

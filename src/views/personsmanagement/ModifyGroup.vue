@@ -2,75 +2,68 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CGroupForm
-        :formData="$data"
-        :onFinish="onFinish"
-        />
+        <CGroupForm :formData="$data" :onFinish="onFinish" />
       </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
+import i18n from '@/i18n';
+import CGroupForm from './forms/GroupForm.vue';
 
-import CGroupForm from './forms/GroupForm.vue'
-
-import i18n from "../../i18n"
 export default {
   name: 'ModifyGroup',
   components: { CGroupForm },
-  data () {
+  data() {
     return {
-      value_returnRoutePath : this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
-      value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
-      
-      value_groupUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : "",
-      value_groupName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : "",
-      value_remarks: this.$route.params.item && this.$route.params.item.remarks ? this.$route.params.item.remarks : "",
+      value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : '',
+      value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
+
+      value_groupUuid: this.$route.params.item && this.$route.params.item.uuid ? this.$route.params.item.uuid : '',
+      value_groupName: this.$route.params.item && this.$route.params.item.name ? this.$route.params.item.name : '',
+      value_remarks: this.$route.params.item && this.$route.params.item.remarks ? this.$route.params.item.remarks : '',
       value_selectedPersonList: this.$route.params.item && this.$route.params.item.person_list ? this.$route.params.item.person_list : [],
       value_selectedVisitorList: this.$route.params.item && this.$route.params.item.visitor_list ? this.$route.params.item.visitor_list : [],
 
-      disp_header: i18n.formatter.format("ModifyGroup"),
-      flag_modifyMode : true,
+      disp_header: i18n.formatter.format('ModifyGroup'),
+      flag_modifyMode: true,
     };
   },
   created() {
-    if( this.value_returnRoutePath === "" ) this.$router.push({ name: 'GroupManagement' });
+    if (this.value_returnRoutePath === '') this.$router.push({ name: 'GroupManagement' });
   },
-  mounted () {
-    
+  mounted() {
+
   },
   methods: {
-    onFinish( data, cb ) {
+    onFinish(data, cb) {
       const self = this;
       const dataForModify = {
-        uuid : data.uuid,
-        // name : data.value_groupName,
-        remarks : data.remarks
-      }
+        uuid: data.uuid,
+        remarks: data.remarks,
+      };
       let personUuidList = null;
-      if( data.person_list ) {
+      if (data.person_list) {
         personUuidList = [];
-        data.person_list.forEach( person => {
-          personUuidList.push( person.uuid )
+        data.person_list.forEach((person) => {
+          personUuidList.push(person.uuid);
         });
-        dataForModify["person_uuid_list"] = personUuidList;
+        dataForModify.person_uuid_list = personUuidList;
       }
-      
+
       let visitorUuidList = null;
-      if( data.visitor_list ) {
+      if (data.visitor_list) {
         visitorUuidList = [];
-        data.visitor_list.forEach( visitor => {
-          //console.log( visitor );
-          visitorUuidList.push( visitor.uuid )
+        data.visitor_list.forEach((visitor) => {
+          visitorUuidList.push(visitor.uuid);
         });
-        dataForModify["visitor_uuid_list"] = visitorUuidList;
+        dataForModify.visitor_uuid_list = visitorUuidList;
       }
-      self.$globalModifyGroup( dataForModify, ( error, result ) => {
-        if( cb ) cb( error == null, result );
-         // self.$router.push({ name: self.value_returnRoutePath })
+      self.$globalModifyGroup(dataForModify, (error, result) => {
+        if (cb) cb(error == null, result);
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>

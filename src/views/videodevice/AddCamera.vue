@@ -2,7 +2,6 @@
   <div id="wrapper">
     <div>
       <div class="h1">{{ disp_headertitle }}</div>
-
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -20,7 +19,7 @@
         icon-class="fa fa-check"
       >
       </stepprogress>
-      
+
       <div style="height: 35px"></div>
     </div>
 
@@ -37,10 +36,17 @@
           />
         </CCardBody>
       </CCard>
-
       <!-- ROI -->
       <CCard v-else-if="isOnStep(1)">
-        <CCardBody> </CCardBody>
+        <CCardBody>
+          <Step2Form
+            :step1form="step1form"
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :isFieldPassed="isFieldPassed"
+            :defaultValues="defaultValues"
+          />
+        </CCardBody>
       </CCard>
 
       <!-- FaceCapture Form -->
@@ -55,7 +61,7 @@
         </CCardBody>
       </CCard>
     </CCol>
-    
+
     <!-- 按鈕的Col -->
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
@@ -89,70 +95,61 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 
-import StepProgress from "vue-step-progress";
+import StepProgress from 'vue-step-progress';
+import '@/airacss/vue-step-progress.css';
 
-import Step1Form from "@/modules/videodevice/addcamera/Step1Form.vue";
-import Step3Form from "@/modules/videodevice/addcamera/Step3Form.vue";
-import { getIsFieldPassedFunction } from "@/utils";
+import Step1Form from '@/modules/videodevice/addcamera/Step1Form.vue';
+import Step2Form from '@/modules/videodevice/addcamera/Step2Form.vue';
+import Step3Form from '@/modules/videodevice/addcamera/Step3Form.vue';
+import { getIsFieldPassedFunction } from '@/utils';
 
 export default {
-  name: "AddCameras",
+  name: 'AddCameras',
   data() {
     return {
-      param_cardStyle: "height: 35rem;",
+      param_cardStyle: 'height: 35rem;',
 
       value_returnRoutePath: this.$route.params.value_returnRoutePath
         ? this.$route.params.value_returnRoutePath
-        : "",
+        : '',
       value_returnRouteName: this.$route.params.value_returnRouteName
         ? this.$route.params.value_returnRouteName
-        : "",
+        : '',
 
-      disp_header: i18n.formatter.format("ModifyCameras"), //編輯設備
+      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
 
-      /*Basic title  */
-      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
-
-      // step setting
-      param_activeColor: "#6baee3",
-      param_passiveColor: "#919bae",
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
 
-      /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
-      disp_step2: i18n.formatter.format("VideoDeviceROI"),
-      disp_step3: i18n.formatter.format("VideoFaceCapture"),
-      disp_complete: i18n.formatter.format("Complete"),
+      // Step 1 2 3
+      disp_step1: i18n.formatter.format('VideoDeviceBasic'),
+      disp_step2: i18n.formatter.format('VideoDeviceROI'),
+      disp_step3: i18n.formatter.format('VideoFaceCapture'),
+      disp_complete: i18n.formatter.format('Complete'),
 
-      /**btn */
-      disp_previous: i18n.formatter.format("Previous"),
-      disp_next: i18n.formatter.format("Next"),
+      // btn
+      disp_previous: i18n.formatter.format('Previous'),
+      disp_next: i18n.formatter.format('Next'),
 
       step1form: {
-        name: "",
+        name: '',
         divice_groups: [],
-
-        stream_type: "",
-        ip_address: "",
+        divice_group_uuids: [],
+        stream_type: '',
+        ip_address: '',
         port: null,
-        user: "",
-        pass: "",
-        connection_info: "",
+        user: '',
+        pass: '',
+        connection_info: '',
       },
       step2form: {
-        roi: [
-          {
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 0,
-          },
-        ],
+        roi: [{}, {}, {}, {}, {}],
       },
       step3form: {
         capture_interval: null,
@@ -164,18 +161,29 @@ export default {
   },
   components: {
     stepprogress: StepProgress,
-    Step1Form: Step1Form,
-    Step3Form: Step3Form,
+    Step1Form,
+    Step2Form,
+    Step3Form,
   },
   async created() {
     this.defaultValues = await this.getDefaultValues();
   },
 
-
   methods: {
     // 處理資料傳遞
     updateStep1form(newValue) {
       this.step1form = { ...newValue };
+
+      if (this.step1form.stream_type === 'sdp') {
+        this.step1form.ip_address = '1.1.1.1';
+      }
+
+      if (!this.step1form.user) {
+        this.step1form.user = '0';
+      }
+    },
+    updateStep2form(newValue) {
+      this.step2form = { ...newValue };
     },
     updateStep3form(newValue) {
       this.step3form = { ...newValue };
@@ -184,14 +192,15 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        stream_type: "rtsp",
-        user: "admin",
-        pass: "123456",
+        stream_type: 'rtsp',
+        user: 'admin',
+        pass: '123456',
         port: 554,
-        connection_info: "/media/video1",
+        connection_info: '/media/video1',
+        roi: [{}, {}, {}, {}, {}],
         face_min_length: 0,
         target_score: 0.85,
-        capture_interval: 500
+        capture_interval: 500,
       };
 
       return form;
@@ -200,13 +209,13 @@ export default {
     async getDefaultName() {
       const {
         data: { total_length: totalLength, list: cameraList },
-      } = await this.$globalFindCameras("", 0, 3000);
+      } = await this.$globalFindCameras('', 0, 3000);
 
       let number = totalLength + 1;
       let name = `Camera-${number}`;
       // Check for duplicates, if found, increment the number and check again
       while (this.isDuplicateName(cameraList, name)) {
-        number++;
+        number += 1;
         name = `Camera-${number}`;
       }
 
@@ -214,35 +223,49 @@ export default {
     },
 
     isDuplicateName(cameraList, name) {
-      return cameraList.some((camera) => camera.name === name);
+      if (cameraList) {
+        return cameraList.some((camera) => camera.name === name);
+      }
+
+      return false;
     },
 
-    // 是否可以按下一步
     isStepPassed(step) {
       switch (step) {
         case 0: {
           return this.isFormPassed(this.step1form);
         }
-
         case 1: {
           // todo ROI
           return true;
         }
-
         case 2: {
           return this.isFormPassed(this.step3form);
         }
-
         case 3: {
           return true;
         }
+        default:
+          return true;
       }
     },
 
     isFormPassed(form) {
-      return Object.entries(form).every(([key, value]) => {
-        return this.isFieldPassed(key, value);
-      });
+      return Object.entries(form).every(
+        ([key, value]) => {
+          let ret = false;
+
+          if (form.stream_type === 'sdp') {
+            if (key === 'ip_address') ret = true;
+            else if (key === 'port') ret = true;
+            else ret = this.isFieldPassed(key, value);
+          } else {
+            ret = this.isFieldPassed(key, value);
+          }
+
+          return ret;
+        },
+      );
     },
 
     isFieldPassed: getIsFieldPassedFunction({
@@ -259,16 +282,16 @@ export default {
         },
       },
       rules: {
-        name: "nonEmpty",
-        stream_type: "nonEmpty",
-        ip_address: "nonEmpty",
-        port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
+        name: 'nonEmpty',
+        stream_type: 'nonEmpty',
+        ip_address: 'nonEmpty',
+        port: 'port',
+        // user: 'nonEmpty',
+        // pass: 'password',
+        connection_info: 'nonEmpty',
+        target_score: 'target_score',
+        face_min_length: 'passitiveInt',
+        capture_interval: 'captureInterval',
       },
     }),
 
@@ -286,13 +309,8 @@ export default {
 
       if (this.value_returnRoutePath.length === 0) return;
 
-      this.$router.push({ name: this.value_returnRoutePath });
-    },
-
-    // 處理下拉選單選項
-    handleDeviceGroups() {
-      let obj = {...this.step1form}
-      return this.step1form.divice_groups = obj.divice_groups.map(i => i.value);
+      this.$router.go(-1);
+      // this.$router.push({ name: this.value_returnRoutePath });
     },
 
     async handleNext() {
@@ -300,32 +318,30 @@ export default {
         case 0:
         case 1: {
           this.flag_currentSetp += 1;
-
           break;
         }
-
         case 2: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
-          this.handleDeviceGroups();
           const parameter = {
             ...this.step1form,
             ...this.step2form,
             ...this.step3form,
           };
-          console.log(parameter)
+          parameter.divice_groups = this.step1form.divice_group_uuids;
+
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();
-          if (data && data.message == "ok") {
+          if (data && data.message === 'ok') {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format("Failed"),
-              type: "error",
+              text: i18n.formatter.format('Failed'),
+              type: 'error',
               timer: 3000,
-              confirmButtonColor: "#20a8d8",
+              confirmButtonColor: '#20a8d8',
             });
           }
 
@@ -340,7 +356,7 @@ export default {
       }
     },
 
-    //送api 完成
+    // 送api 完成
     create(data) {
       return this.$globalCreateCameras(data);
     },

@@ -13,27 +13,20 @@
       <CRow sm="12">
         <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicDeviceName }}
-          <CInput
-            size="lg"
-            class="mt-2"
-            v-model="localStep1form.name"
+          <CInput size="lg" class="mt-2" v-model="localStep1form.name"
             :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-            valid-feedback="ok"
-            :is-valid="isFieldPassed('name', localStep1form.name)"
-            required
-          />
+            :is-valid="isFieldPassed('name', localStep1form.name)" required />
         </CCol>
       </CRow>
     </div>
-    {{ localStep1form }}
   </div>
 </template>
 
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 
 export default {
-  name: "AddVideoDeviceGroupStep1Form",
+  name: 'AddVideoDeviceGroupStep1Form',
   props: {
     step1form: Object,
     defaultValues: Object,
@@ -45,12 +38,10 @@ export default {
 
       isChecked: true,
 
-      /*Basic title  */
-      disp_header: i18n.formatter.format("VideoDeviceGroupsBasicName"),
+      disp_header: i18n.formatter.format('VideoDeviceGroupsBasicName'),
 
-      /**content */
       disp_IOBoxesBasicDeviceName: i18n.formatter.format(
-        "VideoDeviceGroupsBasicCOlNameDeviceName"
+        'VideoDeviceGroupsBasicCOlNameDeviceName',
       ),
     };
   },
@@ -58,7 +49,7 @@ export default {
   watch: {
     localStep1form: {
       handler(newValue) {
-        this.$emit("updateStep1form", { ...newValue });
+        this.$emit('updateStep1form', { ...newValue });
       },
       deep: true,
     },
@@ -74,7 +65,3 @@ export default {
   },
 };
 </script>
-
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>

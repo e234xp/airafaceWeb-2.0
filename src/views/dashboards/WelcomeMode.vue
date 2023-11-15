@@ -2,7 +2,7 @@
   <div>
     <div class="leadToDashboard" @dblclick="leadToDashboard"></div>
 
-    <div ref="advertisingPanel" class="welcome-panel"
+    <div ref="advertisingPanel1" class="welcome-panel"
       style="position: absolute; z-index: 100; background-color: black;">
       <CCarousel animate :interval="config.advertisingDuration * 1000" class="carousel" ref="carouselpanel">
         <CCarouselItem v-for="(page, i) in config.advertising" :key="i">

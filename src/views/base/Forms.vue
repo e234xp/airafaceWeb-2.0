@@ -903,8 +903,8 @@ export default {
       options: ['Option 1', 'Option 2', 'Option 3'],
       selectOptions: [
         'Option 1', 'Option 2', 'Option 3',
-        { 
-          value: 'some value', 
+        {
+          value: 'some value',
           label: 'Selected option'
         }
       ],

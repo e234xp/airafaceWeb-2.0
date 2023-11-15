@@ -104,7 +104,10 @@
                     position: "left",
                     align: "center",
                     labels: {
-                      color: self.chartLegendColor
+                      color: self.chartLegendColor,
+                      font: {
+                        size: 20
+                      }
                     }
                   },
                   annotation: {
@@ -171,8 +174,15 @@
                       },
                     },
                   },
+
+                  tooltip: {
+                    enabled: true,
+                    mode: 'nearest',
+                    intersect: false
+                  }
                 },
                 maintainAspectRatio: false,
+                pointHitDetectionRadius : 1,
                 scales: {
                   x: {
                     beginAtZero: true,
@@ -186,7 +196,7 @@
                     ticks: {
                       color: "white",
                       font: {
-                        size: 12,
+                        size: 20,
                         family: "'Noto Sans', sans-serif",
                         weight: 100,
                       },
@@ -207,10 +217,6 @@
                     },
                   }
                 },
-                // interaction: {
-                //   mode: 'point',
-                //   intersect: false
-                // },
               },
             });
           }
@@ -219,6 +225,7 @@
           }
         }
       },
+
       setupAttendanceDoughnutChart(ctx, chartData, isShowGroup) {
         const self = this;
 

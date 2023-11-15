@@ -4,7 +4,7 @@
     <div>
       <h2 sm="12">{{  disp_DigitalOutPut2Title }}</h2>
     </div>
-  
+
     <!-- 項目 -->
     <!-- Digital OutPut2 -->
     <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
@@ -13,11 +13,11 @@
         {{ disp_IOBoxesBasicEnable }}
       </label>
     </div>
-    
+
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="localStep4form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2" 
+        <CSelect size="lg" v-model="localStep4form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2"
         :placeholder="dis_placeholder" :disabled="localStep4form.enable"/>
       </CCol>
     </CRow>
@@ -27,7 +27,7 @@
       <CRow sm="12">
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="localStep4form.trigger" :options="value_deviceTrigger" 
+          <CSelect size="lg" v-model="localStep4form.trigger" :options="value_deviceTrigger"
             :filterable="true" class="font-control mt-2"
             :placeholder="dis_placeholder"
             :disabled="localStep4form.enable"
@@ -38,7 +38,6 @@
           <CInput size="lg" class="mt-2" v-model="localStep4form.delay"
             pattern="[0-9]*"
             :invalid-feedback="disp_limitNumber1to30"
-            valid-feedback="ok"
             :is-valid="isFieldPassed('delay', localStep4form.delay)"
             required
             :disabled="localStep4form.enable"
@@ -49,7 +48,7 @@
 
   </div>
 </template>
-  
+
 <script>
   import i18n from "@/i18n";
 
@@ -66,7 +65,7 @@
     data() {
       return {
         localStep4form: { ...this.step4form },
- 
+
         isChecked: true,
 
         /*Digital output2 title  */
@@ -84,13 +83,13 @@
         /**v-model */
         value_deviceDefaultValue: [ {label:"0", value:false}, {label: "1", value:true} ],
         value_deviceTrigger: [ {label:"0", value:false}, {label: "1", value:true} ],
-        
+
       };
     },
     components: {
       Multiselect: Multiselect
     },
- 
+
     // 拿資料 寫入資料
     watch: {
       localStep4form: {

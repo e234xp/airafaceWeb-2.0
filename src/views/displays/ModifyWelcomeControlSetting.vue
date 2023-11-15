@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import i18n from "@/i18n"
+import i18n from "@/i18n";
 
   import WelcomeControlSettingForm from './forms/WelcomeControlSettingForm.vue'
 
@@ -18,15 +18,19 @@
     components: { WelcomeControlSettingForm },
     data() {
       return {
-        value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
-        value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
+        value_returnRoutePath: this.$route.params.value_returnRoutePath
+          ? this.$route.params.value_returnRoutePath
+          : "",
+        value_returnRouteName: this.$route.params.value_returnRouteName
+          ? this.$route.params.value_returnRouteName
+          : "",
       };
     },
     created() {
       const self = this;
     },
     mounted() {
-      
+
     },
     methods: {
       onFinish(modifiedSetting, cb) {

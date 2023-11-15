@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    
+
     <!-- 標題 -->
     <div>
       <CCol sm="12">
@@ -75,14 +75,14 @@
               </CCol>
             </CRow>
           </div>
-          
+
 
           <!-- Face masks -->
           <div>
             <div class="mt-3">
               <h4 sm="12">{{ disp_faceMasks }}</h4>
             </div>
-            
+
             <CRow>
               <CCol sm="1">
                 <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
@@ -268,7 +268,7 @@
                 <CInput size="lg" class="mt-2"/>
               </CCol>
             </CRow>
-            
+
             <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px;text-align: right; ">{{ disp_clockFailMessageText }}</CRow>
             <CRow>
               <CCol sm="6">
@@ -276,7 +276,7 @@
               </CCol>
             </CRow>
           </div>
-          
+
 
           <!-- RTSP setting -->
           <!-- title -->
@@ -319,7 +319,7 @@
 
   </div>
 </template>
-  
+
 <script>
   import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
@@ -353,7 +353,7 @@
         /**content */
         disp_Duration: i18n.formatter.format("TabletsAccessCOlNameDuration"),
 
-        
+
         /*Temperature & Mask title  */
         disp_temperatureMaskTitle: i18n.formatter.format("TabletsAccessTitleNameTemperatureMask"),
         /**content */
@@ -373,7 +373,7 @@
         disp_displayVerifyDuration: i18n.formatter.format("TabletsAccessColNameDisplayVerifyDuration"),
         disp_showVerifyResult: i18n.formatter.format("TabletsAccessColNameShowVerifyResult"),
 
-        
+
         disp_verifyIndicationSuccessText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationSuccessText"),
         disp_verifyIndicationSuccessMessageText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationSuccessMessageText"),
         disp_verifyIndicationFailText: i18n.formatter.format("TabletsAccessColNameVerifyIndicationFailText"),
@@ -406,8 +406,8 @@
 
         // 預設值i18n
 
-        
-       
+
+
         // checkbox switch
         value_enableStranger: false,
 
@@ -422,12 +422,12 @@
     computed: {
       ...mapState(["ellipsisMode"]),
     },
-   
+
     methods: {
       selectFaceMaskCheck(e) {
         const self = this;
         self.faceMaskCheck = e.target.value == "1" ? 1 : 0;
       },
     },
-  }
+  };
 </script>

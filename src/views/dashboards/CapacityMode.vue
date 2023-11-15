@@ -1,6 +1,6 @@
 <template>
-  <div class="capacity">
-    <div class="header">
+  <div class="capacity ratio-wrap ratio-wrap-16x9">
+    <div class="header" :style="'zoom: ' + zoomRatio + ' !important;'">
       <div ref="identity" class="identity" @click="toLoginPage"></div>
       <div class="timer-panel">
         <div ref="timerpanel">2020/05/28 18:18:18</div>
@@ -14,7 +14,7 @@
       <div ref="title" class="title">title</div>
     </div>
 
-    <div v-show="showEventPanel" ref="eventpanel" class="event">
+    <div v-show="showEventPanel" ref="eventpanel" class="event" :style="'zoom: ' + zoomRatio + ' !important;'">
       <div class="title">
         <span class="caption">{{ disp_abnormalPerson }}</span>
         <select class="selection">
@@ -44,8 +44,8 @@
       </CCarousel>
     </div>
 
-    <div class="d-flex">
-      <div class="entryed" :class="{'hideEventPanel': !showEventPanel}">
+    <div class="d-flex" style="height: inherit;" :style="'zoom: ' + zoomRatio + ' !important;'">
+      <div class=" entryed" style="height: inherit;" :class="{'hideEventPanel': !showEventPanel}">
         <div class="title">
           <span class="caption">
             {{ disp_peopleInTheVenue }}：{{entryPersons.length }}
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div class="leaved" :class="{'hideEventPanel': !showEventPanel}">
+      <div class="leaved" style="height: inherit;" :class="{'hideEventPanel': !showEventPanel}">
         <div class="title">
           <span class="caption">
             {{ disp_hasLeft }}：{{departPersons.length }}
@@ -110,9 +110,9 @@
       </div>
     </div>
 
-    <div class="visitor-list" id="visitor-list"></div>
+    <div class="visitor-list" id="visitor-list" :style="'zoom: ' + zoomRatio + ' !important;'"></div>
 
-    <CModal :show.sync="confirmTemplatureModal">
+    <CModal :show.sync="confirmTemplatureModal" :style="'zoom: ' + zoomRatio + ' !important;'">
       <template #header>
         <div class="alertModal_Title">
           {{ isFalseAlerm ? $t('Temperature.falseAlarmResponseTitle') : $t('Temperature.confirmResponseTitle') }}
@@ -134,7 +134,8 @@
             :invalidFeedback="$t('CForm.This_is_a_required_numeric')" :isValid="checkIfValid('updatedTemplature')"
             :value.sync="$v.updatedTemplature.$model">
           </CInput>
-          <span class="mt-4 pt-2">{{config.temperature_unit_celsius ? '°C' : '°F' }}</span>
+          <span v-if="$deviceProfile.supportTemperature" class="mt-4 pt-2">{{config.temperature_unit_celsius ? '°C' :
+            '°F' }}</span>
         </div>
       </CRow>
 
@@ -204,6 +205,8 @@
     },
     data: function () {
       return {
+        zoomRatio: 0,
+
         airaLogo,
         config: {},
         tabletConfig: {},
@@ -262,31 +265,31 @@
                 timestamp: payload["timestamp"],
                 fullname: person == undefined ? "" : person["name"],
                 employeeno: person == undefined ? "" : person["id"],
-                group: person == undefined ? "" : person["group_list"] == undefined ? "" : person["group_list"][0],
+                group: person == undefined ? "" : person["group_list"] == undefined ? "[]" : person["group_list"],
                 jobtitle: person == undefined ? "" : person["extra_info"] == undefined ? "" : person["extra_info"]["title"],
                 department: person == undefined ? "" : person["extra_info"] == undefined ? "" : person["extra_info"]["department"],
                 snapshot: payload["face_image"],
                 register: person == undefined ? "" : person["register_image"],
                 display: person == undefined ? "" : person["display_image"],
                 person_id: person["uuid"],
-                score: person["score"],
+                score: person["score"] || 0.0,
                 is_high_temperature: payload["is_high_temperature"],
                 bgcolor1: '#7e8e8f',
                 bgcolor2: '#485556',
-                photoImage: '',
+                photoImage: defaultPhotoImage,
                 clock_mode_function: payload["verify_mode"],
                 faceId: payload[""]
               }
 
               var inGroup = false;
               if (this.config) {
-                if (this.config.displayGroup.indexOf(data.group) >= 0) {
-                  inGroup = true;
-                }
+                inGroup = data.group.some(value => this.config.displayGroup.indexOf(value) >= 0);
               }
 
               if (!inGroup)
                 return;
+
+              data.group = data.group.join(',');
 
               var idx = this.visitors.findIndex(x => x.person_id === data.person_id);
               if (idx == -1) { this.visitors.push(data); }
@@ -299,15 +302,15 @@
               this.splitDepartPage();
 
               if (this.eventPages.length >= 1)
-                if (this.eventPages[0].length == 1)
+                if (this.eventPages[0].length >= 1)
                   this.$refs.eventCarouselPanel.setFirstActive();
 
               if (this.entryPages.length >= 1)
-                if (this.entryPages[0].length == 1)
+                if (this.entryPages[0].length >= 1)
                   this.$refs.entryCarouselPanel.setFirstActive();
 
               if (this.departPages.length >= 1)
-                if (this.departPages[0].length == 1)
+                if (this.departPages[0].length >= 1)
                   this.$refs.departCarouselPanel.setFirstActive();
             }
             break;
@@ -359,20 +362,20 @@
                       timestamp: payload["timestamp"],
                       fullname: payload["name"],
                       employeeno: payload["id"],
-                      group: person["group_list"] == undefined ? "" : person["group_list"][0],
+                      group: person["group_list"] == undefined ? "" : person["group_list"],
                       jobtitle: person["extra_info"] == undefined ? "" : person["extra_info"]["title"],
                       department: person["extra_info"] == undefined ? "" : person["extra_info"]["department"],
                       snapshot: payload["face_image"],
                       register: person["register_image"],
                       display: person["display_image"],
                       person_id: person["uuid"],
-                      score: payload["verify_score"],
+                      score: payload["verify_score"] || 0.0,
                       temperature: (payload["temperature"]) + "",
                       clock_mode_function: payload["verify_mode"],
                       is_high_temperature: payload["high_temperature"],
                       bgcolor1: '#7e8e8f',
                       bgcolor2: '#485556',
-                      photoImage: '',
+                      photoImage: defaultPhotoImage,
                     }
 
                     self.setCardDisplayPhoto(data);
@@ -387,16 +390,18 @@
               self.splitEntryPage();
               self.splitDepartPage();
 
+
+              console.log("111 mounted", self.entryPages.length, self.entryPages[0].length, self.departPages.length, self.departPages[0].length);
               if (self.eventPages.length >= 1)
-                if (self.eventPages[0].length == 1)
+                if (self.eventPages[0].length >= 1)
                   self.$refs.eventCarouselPanel.setFirstActive();
 
               if (self.entryPages.length >= 1)
-                if (self.entryPages[0].length == 1)
+                if (self.entryPages[0].length >= 1)
                   self.$refs.entryCarouselPanel.setFirstActive();
 
               if (self.departPages.length >= 1)
-                if (self.departPages[0].length == 1)
+                if (self.departPages[0].length >= 1)
                   self.$refs.departCarouselPanel.setFirstActive();
             }
           });
@@ -405,6 +410,8 @@
           self.$router.push('/login');
         }
       });
+
+      self.initViews();
 
       this.timerClick();
       this.setHtmlFontSize();
@@ -418,6 +425,19 @@
       window.removeEventListener('resize', this.resizeHandler);
 
       this.unSubscribe();
+
+      const self = this;
+
+      const mainElement = document.querySelector(".c-main");
+      const headerElement = document.querySelector(".c-header");
+      const footerElement = document.querySelector(".c-footer");
+      const containerElement = document.querySelector(".container-fluid");
+
+      if (mainElement) mainElement.classList.remove("c-main-reset");
+      if (headerElement) headerElement.classList.remove("c-header-reset");
+      if (footerElement) footerElement.classList.remove("c-footer-reset");
+      if (containerElement) containerElement.classList.remove("container-fluid-reset");
+
     },
 
     computed: {
@@ -468,6 +488,39 @@
     },
 
     methods: {
+      initViews() {
+        const self = this;
+        const mainElement = document.querySelector(".c-main");
+        const headerElement = document.querySelector(".c-header");
+        const footerElement = document.querySelector(".c-footer");
+        const containerElement = document.querySelector(".container-fluid");
+
+        // 把 coreUI 套件的一些預設元件的樣式清除掉
+        if (mainElement) mainElement.classList.add("c-main-reset");
+        if (headerElement) headerElement.classList.add("c-header-reset");
+        if (footerElement) footerElement.classList.add("c-footer-reset");
+        if (containerElement) containerElement.classList.add("container-fluid-reset");
+
+        self.zoomViews();
+
+        window.addEventListener("resize", function () {
+          self.zoomViews();
+        });
+      },
+
+      // Tulip
+      zoomViews() {
+        const self = this;
+        let dashboard = document.querySelector(".capacity");
+        if (dashboard) {
+          let width = dashboard.clientWidth;
+          let height = dashboard.clientHeight;
+
+          let rW = width / 1920;
+          let rH = height / 1080;
+          self.zoomRatio = Math.min(rW, rH);
+        }
+      },
       async setDisplayItems(config, reset) {
         let self = this;
 
@@ -512,17 +565,17 @@
         this.splitDepartPage();
 
 
+        console.log("111 setDisplayItems", this.entryPages.length, this.entryPages[0].length, this.departPages.length, this.departPages[0].length);
         if (this.eventPages.length >= 1)
-          if (this.eventPages[0].length == 1)
+          if (this.eventPages[0].length >= 1)
             this.$refs.eventCarouselPanel.setFirstActive();
 
-
         if (this.entryPages.length >= 1)
-          if (this.entryPages[0].length == 1)
+          if (this.entryPages[0].length >= 1)
             this.$refs.entryCarouselPanel.setFirstActive();
 
         if (this.departPages.length >= 1)
-          if (this.departPages[0].length == 1)
+          if (this.departPages[0].length >= 1)
             this.$refs.departCarouselPanel.setFirstActive();
       },
 
@@ -592,8 +645,21 @@
         return data;
       },
 
+      setPersonInfoMask(data) {
+        if (data.employeeno.length > 3)
+          data.employeeno = "*****" + data.employeeno.substr(data.employeeno.length - 3, 3);
+        else
+          data.employeeno = "*****" + data.employeeno.substr(data.employeeno.length - 1, 1);
+
+        if (data.fullname.length > 3)
+          data.fullname = "*****" + data.fullname.substr(data.fullname.length - 3, 3);
+        else
+          data.fullname = "*****" + data.fullname.substr(data.fullname.length - 1, 1);
+      },
+
       setPersonInOut(data, entryPersons, departPersons, isReloadData = false) {
         let self = this;
+        if (self.config.enableInfoMask) { this.setPersonInfoMask(data); }
 
         data.areaA = self.getPersonInfo(self.config.areaA, data) || "";
         data.areaB = self.getPersonInfo(self.config.areaB, data) || "";
@@ -648,12 +714,15 @@
       async setCardDisplayPhoto(data) {
         switch (this.config.displayPhoto) {
           case 'RegisterPhoto':
-            let ret1 = await this.$globalFetchPhoto(data.person_id);
-            data.photoImage = data == undefined ? "" : ret1.data.register_image
+            this.$globalFetchPhoto(data.person_id, (err, ret) => {
+              data.photoImage = ret == undefined ? defaultPhotoImage : ret.register_image;
+            });
+
             break;
           case 'DisplayPhoto':
-            let ret2 = await this.$globalFetchPhoto(data.person_id);
-            data.photoImage = data == undefined ? "" : ret2.data.display_image
+            this.$globalFetchPhoto(data.person_id, (err, ret) => {
+              data.photoImage = ret == undefined ? defaultPhotoImage : ret.display_image;
+            });
             break;
           case 'None':
             data.photoImage = defaultPhotoImage;;
@@ -804,7 +873,7 @@
           }
           catch (ex) { }
 
-          // Visitor List Panel  
+          // Visitor List Panel
           if (this.visitors.length >= 1) {
             try {
               for (let idx = this.visitors.length - 1; idx >= 0; idx--) {
@@ -910,7 +979,7 @@
               var hh = diff % 24;
               hh = (hh > 9 ? "" : "0") + hh;
 
-              self.residenceTime = hh + ":" + mm + ":" + ss;
+              self.residenceTime = hh + ":" + mm + ":" + ((ss > 9 ? "" : "0") + Math.floor(ss));
             }
           }
 
@@ -979,13 +1048,15 @@
               container.appendChild(p);
               p.innerText = new Date(v["timestamp"]).HH_MM_SS();
 
-              var p = document.createElement("p");
-              p.style.float = 'right';
+              // if (v["score"]) {
+              //   var p = document.createElement("p");
+              //   p.style.float = 'right';
 
-              container.appendChild(p);
-              p.innerText = (+v["score"] * 100).toFixed(2) + '%';
+              //   container.appendChild(p);
+              //   p.innerText = (+v["score"] * 100).toFixed(2) + '%';
 
-              this.visitor_list.appendChild(card);
+              //   this.visitor_list.appendChild(card);
+              // }
             }
           }
           else {
@@ -1026,7 +1097,7 @@
         if (eventPagesPersons) {
           for (let i = 0; i < eventPagesPersons.length; i++) {
             let data = eventPagesPersons[i];
-            if (data.photoImage === "") {
+            if (data.photoImage === defaultPhotoImage) {
               await this.setCardDisplayPhoto(data);
             }
           }
@@ -1048,7 +1119,7 @@
         if (entryPagesPersons) {
           for (let i = 0; i < entryPagesPersons.length; i++) {
             let data = entryPagesPersons[i];
-            if (data.photoImage === "") {
+            if (data.photoImage === defaultPhotoImage) {
               await this.setCardDisplayPhoto(data);
             }
           }
@@ -1070,7 +1141,7 @@
         if (departPagesPersons) {
           for (let i = 0; i < departPagesPersons.length; i++) {
             let data = departPagesPersons[i];
-            if (data.photoImage === "") {
+            if (data.photoImage === defaultPhotoImage) {
               await this.setCardDisplayPhoto(data);
             }
           }
@@ -1119,11 +1190,12 @@
         if (!temp) return temp;
         if (isNaN(Number(temp))) return temp;
 
-        if (this.config.temperature_unit_celsius) {
-          return Number(temp).toFixed(1) + '°C'
-        }
+        // if (this.config.temperature_unit_celsius) {
+        //   return Number(temp).toFixed(1) + '°C'
+        // }
 
-        return Number((+temp * 9 / 5) + 32).toFixed(1) + '°F';
+        // return Number((+temp * 9 / 5) + 32).toFixed(1) + '°F';
+        return "" ;
       },
 
       setHtmlFontSize() {
@@ -1156,20 +1228,20 @@
         if (!this.cardresized) {
           this.cardresized = true;
 
-          for (let i = 0; i < eventItem.length; i++) {
-            const e = eventItem[i];
-            e.style.setProperty("zoom", 1.0, "important");
-          }
+          // for (let i = 0; i < eventItem.length; i++) {
+          //   const e = eventItem[i];
+          //   e.style.setProperty("zoom", 1.0, "important");
+          // }
 
-          for (let i = 0; i < entryedItem.length; i++) {
-            const e = entryedItem[i];
-            e.style.setProperty("zoom", 1.0, "important");
-          }
+          // for (let i = 0; i < entryedItem.length; i++) {
+          //   const e = entryedItem[i];
+          //   e.style.setProperty("zoom", 1.0, "important");
+          // }
 
-          for (let i = 0; i < leavedItem.length; i++) {
-            const e = leavedItem[i];
-            e.style.setProperty("zoom", 1.0, "important");
-          }
+          // for (let i = 0; i < leavedItem.length; i++) {
+          //   const e = leavedItem[i];
+          //   e.style.setProperty("zoom", 1.0, "important");
+          // }
 
           this.setHtmlFontSize();
           this.splitEventPage();
@@ -1177,30 +1249,30 @@
           this.splitDepartPage();
         }
 
-        let width = 1273;
-        let height = 857;
+        // let width = 1273;
+        // let height = 857;
 
-        width = entryedItem[0].clientWidth;
-        height = entryedItem[0].clientHeight;
+        // width = entryedItem[0].clientWidth;
+        // height = entryedItem[0].clientHeight;
 
-        let rW = width / 1273;
-        let rH = height / 857;
-        let zoom = Math.min(rW, rH);
+        // let rW = width / 1273;
+        // let rH = height / 857;
+        // let zoom = Math.min(rW, rH);
 
-        for (let i = 0; i < eventItem.length; i++) {
-          const e = eventItem[i];
-          e.style.setProperty("zoom", zoom, "important");
-        }
+        // for (let i = 0; i < eventItem.length; i++) {
+        //   const e = eventItem[i];
+        //   e.style.setProperty("zoom", zoom, "important");
+        // }
 
-        for (let i = 0; i < entryedItem.length; i++) {
-          const e = entryedItem[i];
-          e.style.setProperty("zoom", zoom, "important");
-        }
+        // for (let i = 0; i < entryedItem.length; i++) {
+        //   const e = entryedItem[i];
+        //   e.style.setProperty("zoom", zoom, "important");
+        // }
 
-        for (let i = 0; i < leavedItem.length; i++) {
-          const e = leavedItem[i];
-          e.style.setProperty("zoom", zoom, "important");
-        }
+        // for (let i = 0; i < leavedItem.length; i++) {
+        //   const e = leavedItem[i];
+        //   e.style.setProperty("zoom", zoom, "important");
+        // }
 
       },
 
@@ -1378,8 +1450,6 @@
     }
   }
 
-  // ======= event =======
-
   .event {
     height: 26.4rem;
   }
@@ -1431,14 +1501,13 @@
     float: left;
   }
 
-  // ======= entryed leaved  =======
-
   .entryed {
     width: 127.5rem;
     flex: 2 2 auto;
-    /* height: calc(100vh - 80px); */
-    height: 850px;
+    height: calc(100vh - 80px);
+    /* height: 850px; */
     border-right: .2rem solid rgba(255, 255, 255, 0.1);
+    min-height: 400px;
   }
 
   .entryed .title,
@@ -1512,9 +1581,10 @@
   .leaved {
     width: 64.5rem;
     flex: 1 1 auto;
-    /* height: calc(100vh - 80px); */
-    height: 850px;
+    height: calc(100vh - 80px);
+    /* height: 850px; */
     border-left: .2rem solid rgba(255, 255, 255, 0.1);
+    min-height: 400px;
   }
 
   .leaved .title {

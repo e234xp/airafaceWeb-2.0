@@ -44,9 +44,9 @@
   </div>
 </template>
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 export default {
-  name: "COccupancy",
+  name: 'COccupancy',
   props: {
     personId: String,
     status: String,
@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 // card background color
 .person {
   &.NORMAL {
@@ -152,7 +152,7 @@ export default {
     padding: 0.6rem 0.6rem 0 10.5rem;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       border-radius: 0.4rem;
       width: 100%;
@@ -182,7 +182,7 @@ export default {
     height: 2.4rem;
     margin-right: 1rem;
     float: left;
-    background-image: url("/img/capacity/normal.png");
+    background-image: url('/img/capacity/normal.png');
     background-repeat: no-repeat;
     background-size: cover;
   }

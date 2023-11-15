@@ -18,15 +18,19 @@
     components: { OccupancyControlSettingForm },
     data() {
       return {
-        value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : "",
-        value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
+        value_returnRoutePath: this.$route.params.value_returnRoutePath
+          ? this.$route.params.value_returnRoutePath
+          : "",
+        value_returnRouteName: this.$route.params.value_returnRouteName
+          ? this.$route.params.value_returnRouteName
+          : "",
       };
     },
     created() {
       const self = this;
     },
     mounted() {
-      
+
     },
     methods: {
       onFinish(modifiedSetting, cb) {

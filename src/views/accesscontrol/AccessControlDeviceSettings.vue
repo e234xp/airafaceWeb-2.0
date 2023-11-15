@@ -13,11 +13,11 @@
         <CCardBody>
           <table class="table-layout">
             <tr>
-              <th class="h5  table-th">
+              <th class="h5 col-4 table-th">
                 {{ disp_startSignal }}
               </th>
-              <th class="h5  table-th">{{ disp_durationForHoldingStartSignal }}</th>
-              <th class="h5  table-th">{{ disp_endSignal }}</th>
+              <th class="h5 col-4 table-th">{{ disp_durationForHoldingStartSignal }}</th>
+              <th class="h5 col-4 table-th">{{ disp_endSignal }}</th>
               <!-- <th class="h5 w-25 table-th">{{ disp_enableIdCardPassMode }}</th> -->
             </tr>
             <tr>
@@ -29,7 +29,7 @@
                   " />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_durationForHoldingRelayOneStartSignal"
+                <CInput class="mb-form-row" size="lg" v-model="value_durationForHoldingRelayOneStartSignal"
                   :is-valid="isRelayOneHoldingTimeNumber" />
               </td>
               <td class="table-td">
@@ -46,15 +46,15 @@
             </tr>
 
             <tr>
+              <!-- <td class="table-td"></td> -->
+              <td class="table-td col-3"></td>
+              <td class="table-td col-3"></td>
               <td class="table-td">
                 <CButton class="btn btn-primary w-100" @click="clickOnApplyRelayOneSettings"
                   :disabled="flag_changingRelayOneSettings || !flag_relayOneSettingsOk">
                   <div style="font-size: 20px">{{ disp_apply }}</div>
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
             </tr>
           </table>
         </CCardBody>
@@ -81,7 +81,7 @@
                   @change="selRelayTwoStartSignal($event)" :disabled="!flag_support_custom_start_end_sign" />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_durationForHoldingRelayTwoStartSignal"
+                <CInput class="mb-form-row" size="lg" v-model="value_durationForHoldingRelayTwoStartSignal"
                   :is-valid="isRelayTwoHoldingTimeNumber" />
               </td>
               <td class="table-td">
@@ -107,14 +107,14 @@
         <CCardBody>
           <table class="table-layout">
             <tr>
-              <th class="h5 table-th">{{ disp_wiegandFormat }}</th>
-              <th class="h5 table-th">{{ disp_strangerID }}</th>
-              <th class="h5 table-th">
+              <th class="h5 col-4 table-th">{{ disp_wiegandFormat }}</th>
+              <th class="h5 col-4 table-th">
                 <div v-if="value_enableStranger" class="h5">
                   {{ disp_enableStranger }}
                 </div>
                 <div v-else class="h5">{{ disp_disableStranger }}</div>
               </th>
+              <th class="h5 col-4 table-th">{{ disp_strangerID }}</th>
               <!-- <th class="h5 w-25 table-th">{{ disp_enableIdCardPassMode }}</th> -->
             </tr>
             <tr>
@@ -123,15 +123,15 @@
                   @change="selWiegandBits($event)" />
               </td>
               <td class="table-td">
-                <CInput size="lg" class="input-no-spin" v-model="value_strangerCardId" required
+                <CSwitch size="lg" class="ml-2 mb-16" color="success" shape="pill"
+                  @update:checked="value_enableStranger = !value_enableStranger" :checked="value_enableStranger">
+                </CSwitch>
+              </td>
+              <td class="table-td">
+                <CInput class="mb-form-row input-no-spin" size="lg" v-model="value_strangerCardId" required
                   :disabled="!value_enableStranger"
                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                   maxLength="20" type="number" />
-              </td>
-              <td class="table-td">
-                <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
-                  @update:checked="value_enableStranger = !value_enableStranger" :checked="value_enableStranger">
-                </CSwitch>
               </td>
               <!-- <td class="table-td">
                 <CSelect size="lg" :value.sync="value_enableIdCardPassModeOnWiegand"
@@ -139,15 +139,15 @@
               </td> -->
             </tr>
             <tr>
+              <!-- <td class="table-td"></td> -->
+              <td class="table-td col-3"></td>
+              <td class="table-td col-3"></td>
               <td class="table-td">
                 <CButton class="btn btn-primary w-100" @click="clickOnApplyWiegand"
                   :disabled="flag_changingWiegandSettings">
                   <div style="font-size: 20px">{{ disp_apply }}</div>
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
             </tr>
           </table>
         </CCardBody>
@@ -163,15 +163,14 @@
         <CCardBody>
           <table class="table-layout">
             <tr>
-              <th class="h5 table-th">{{ disp_wiegandFormat }}</th>
-              <th class="h5 table-th">{{ disp_strangerID }}</th>
-              <th class="h5 table-th">
+              <th class="h5 col-4 table-th">{{ disp_wiegandFormat }}</th>
+              <th class="h5 col-4 table-th">
                 <div v-if="value_enableBoxStranger" class="h5">
                   {{ disp_enableStranger }}
                 </div>
                 <div v-else class="h5">{{ disp_disableStranger }}</div>
               </th>
-              <!-- <th class="h5 w-25 table-th">{{ disp_enableIdCardPassMode }}</th> -->
+              <th class="h5 col-4 table-th">{{ disp_strangerID }}</th>
             </tr>
             <tr>
               <td class="table-td">
@@ -179,32 +178,27 @@
                   @change="selWiegandBoxBits($event)" />
               </td>
               <td class="table-td">
-                <CInput size="lg" class="input-no-spin" v-model="value_wiegandBoxStrangerCardId" required
-                  :disabled="!value_enableBoxStranger"
-                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                  maxLength="20" type="number" />
-              </td>
-              <td class="table-td">
-                <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
+                <CSwitch size="lg" class="ml-3 mb-16" color="success" shape="pill"
                   @update:checked="value_enableBoxStranger = !value_enableBoxStranger"
                   :checked="value_enableBoxStranger">
                 </CSwitch>
               </td>
-              <!-- <td class="table-td">
-                <CSelect size="lg" :value.sync="value_enableIdCardPassModeOnWiegand"
-                  :options="value_enableDisableListToShow" @change="selEnableIdCardBypassModeWiegand($event)" />
-              </td> -->
+              <td class="table-td">
+                <CInput class="mb-form-row" size="lg" v-model="value_wiegandBoxStrangerCardId" required
+                  :disabled="!value_enableBoxStranger"
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                  maxLength="20" type="number" />
+              </td>
             </tr>
             <tr>
+              <td class="table-td col-3"></td>
+              <td class="table-td col-3"></td>
               <td class="table-td">
                 <CButton class="btn btn-primary w-100" @click="clickOnApplyWiegand"
                   :disabled="flag_changingWieganBoxdSettings">
                   <div style="font-size: 20px">{{ disp_apply }}</div>
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
             </tr>
           </table>
         </CCardBody>
@@ -242,8 +236,6 @@
 
         disp_wiegandBoxSettings: i18n.formatter.format("WiegandBox"),
 
-
-
         value_enableIdCardPassModeOnRelay1: false,
         value_enableIdCardPassModeOnRelay2: false,
         value_enableIdCardPassModeOnWiegand: false,
@@ -276,7 +268,7 @@
         value_wiegandBitslList: [
           { value: 26, label: "26 bits" },
           { value: 34, label: "34 bits" },
-          // { value: 35, label: "35 bits" },
+          { value: 64, label: "64 bits" },
         ],
         value_tabletSettings: null,
         value_enableStranger: false,
@@ -340,13 +332,12 @@
           self.value_wiegandBits = self.value_tabletSettings.support_wiegand_bits;
           self.value_enableStranger = self.value_tabletSettings.enable_stranger_card_id;
           self.value_strangerCardId = self.value_tabletSettings.stranger_card_id;
-          self.value_enableIdCardPassModeOnWiegand =
-            self.value_tabletSettings.id_card_pass_mode_on_wiegand;
+          self.value_enableIdCardPassModeOnWiegand = self.value_tabletSettings.id_card_pass_mode_on_wiegand;
 
           //weigand Box
           self.value_wiegandBoxBits = self.value_tabletSettings.wiegand_box_support_wiegand_bits;
-          self.value_enableStranger = self.value_tabletSettings.wiegand_box_enable_stranger_card_id;
-          self.value_strangerCardId = self.value_tabletSettings.wiegand_box_stranger_card_id;
+          self.value_enableBoxStranger = self.value_tabletSettings.wiegand_box_enable_stranger_card_id;
+          self.value_wiegandBoxStrangerCardId = self.value_tabletSettings.wiegand_box_stranger_card_id;
         }
       });
     },
@@ -450,8 +441,8 @@
                 self.value_enableIdCardPassModeOnWiegand = self.value_tabletSettings.id_card_pass_mode_on_wiegand;
 
                 self.value_wiegandBoxBits = self.value_tabletSettings.wiegand_box_support_wiegand_bits;
-                self.value_enableStranger = self.value_tabletSettings.wiegand_box_enable_stranger_card_id;
-                self.value_strangerCardId = self.value_tabletSettings.wiegand_box_stranger_card_id;
+                self.value_enableBoxStranger = self.value_tabletSettings.wiegand_box_enable_stranger_card_id;
+                self.value_wiegandBoxStrangerCardId = self.value_tabletSettings.wiegand_box_stranger_card_id;
 
                 retry = false;
                 pass = true;

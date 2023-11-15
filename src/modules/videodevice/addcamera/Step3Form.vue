@@ -11,68 +11,30 @@
       <CRow sm="12">
         <CCol sm="6" class="h5">
           {{ disp_faceMinimumSize }}
-          <CInput
-            size="lg"
-            class="mt-3"
-            style="width: 100%"
-            v-model.number="localStep3form.face_min_length"
-            :invalid-feedback="disp_limitNumbers"
-            valid-feedback="ok"
-            :is-valid="
+          <CInput size="lg" class="mt-3" style="width: 100%" v-model.number="localStep3form.face_min_length"
+            :invalid-feedback="disp_limitNumbers" :is-valid="
               isFieldPassed('face_min_length', localStep3form.face_min_length)
-            "
-            required
-            placeholder=""
-          />
+            " required placeholder="" />
         </CCol>
       </CRow>
 
-      <CRow
-        sm="6"
-        class="h5 ml-2 mb-3"
-        style="padding-top: 10px; text-align: right"
-        >{{ disp_targetScore }}</CRow
-      >
+      <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_targetScore }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput
-            size="lg"
-            class="h5"
-            style="width: 100%"
-            v-model.number="localStep3form.target_score"
-            :invalid-feedback="disp_limitNumber0to1"
-            valid-feedback="ok"
-            :is-valid="
+          <CInput size="lg" class="h5" style="width: 100%" v-model.number="localStep3form.target_score"
+            :invalid-feedback="disp_limitNumber0to1" :is-valid="
               isFieldPassed('target_score', localStep3form.target_score)
-            "
-            required
-            placeholder=""
-          />
+            " required placeholder="" />
         </CCol>
       </CRow>
 
-      <CRow
-        sm="6"
-        class="h5 ml-2 mb-3"
-        style="padding-top: 10px; text-align: right"
-        >{{ disp_captureInterval }}</CRow
-      >
+      <CRow sm="6" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_captureInterval }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput
-            size="lg"
-            class="h5"
-            style="width: 100%"
-            v-model.number="localStep3form.capture_interval"
-            pattern="[0-9]*"
-            :invalid-feedback="disp_limitNumber100up"
-            valid-feedback="ok"
-            :is-valid="
+          <CInput size="lg" class="h5" style="width: 100%" v-model.number="localStep3form.capture_interval"
+            pattern="[0-9]*" :invalid-feedback="disp_limitNumber100up" :is-valid="
               isFieldPassed('capture_interval', localStep3form.capture_interval)
-            "
-            required
-            placeholder=""
-          />
+            " required placeholder="" />
         </CCol>
       </CRow>
     </div>
@@ -80,10 +42,10 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 
 export default {
-  name: "AddCameraStep3Form",
+  name: 'AddCameraStep3Form',
   props: {
     step3form: Object,
     defaultValues: Object,
@@ -93,37 +55,33 @@ export default {
     return {
       localStep3form: { ...this.step3form },
 
-      /*Face Capture title  */
-      disp_subtitleFaceCapture: i18n.formatter.format("VideoFaceCapture"),
+      disp_subtitleFaceCapture: i18n.formatter.format('VideoFaceCapture'),
 
-      /**content */
       disp_faceMinimumSize: i18n.formatter.format(
-        "VideoBasicCOlNameFaceMinimumSize"
+        'VideoBasicCOlNameFaceMinimumSize',
       ),
-      disp_targetScore: i18n.formatter.format("VideoBasicCOlNameTargetScore"),
+      disp_targetScore: i18n.formatter.format('VideoBasicCOlNameTargetScore'),
       disp_captureInterval: i18n.formatter.format(
-        "VideoBasicCOlNameCaptureInterval"
+        'VideoBasicCOlNameCaptureInterval',
       ),
 
-      disp_limitNumbers: i18n.formatter.format("limitNumbers"),
-      disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"),
-      disp_limitNumber100up: i18n.formatter.format("limitNumbers100up"),
+      disp_limitNumbers: i18n.formatter.format('limitNumbers'),
+      disp_limitNumber0to1: i18n.formatter.format('limitNumber0to1'),
+      disp_limitNumber100up: i18n.formatter.format('limitNumbers100up'),
     };
   },
   watch: {
     localStep3form: {
       handler(newValue) {
-        this.$emit("updateStep3form", { ...newValue });
+        this.$emit('updateStep3form', { ...newValue });
       },
       deep: true,
     },
     defaultValues: {
       handler(newValue) {
-        const localStep3formKeys = Object.keys(this.localStep3form);
         Object.entries(newValue).forEach(([key, value]) => {
-          if (localStep3formKeys.includes(key)) {
-            this.localStep3form[key] = value;
-          }
+          if (!Object.keys(this.step3form).includes(key)) return;
+          this.localStep3form[key] = value;
         });
       },
       deep: true,
@@ -132,21 +90,3 @@ export default {
   },
 };
 </script>
-
-<!-- defaultValues: {
-  handler(newValue) {
-    Object.entries(newValue).forEach(([key, value]) => {
-      if (
-        !Object.keys(this.localStep3form).includes(key) ||
-        this.localStep3form === null ||
-        typeof this.localStep3form !== 'object'
-      ) {
-        return;
-      }
-      this.localStep3form[key] = value;
-    });
-  },
-  deep: true,
-  immediate: true,
-}, -->
-

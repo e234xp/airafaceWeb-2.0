@@ -13,11 +13,11 @@
         {{ disp_IOBoxesBasicEnable }}
       </label>
     </div>
-    {{  value_deviceDefaultValue }}
+
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2" 
+        <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2"
         :placeholder="dis_placeholder" :disabled="localStep3form.enable"/>
       </CCol>
     </CRow>
@@ -27,7 +27,7 @@
       <CRow sm="12">
         <CCol sm="6" class="h5"  >
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger" 
+          <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger"
             :filterable="true" class="font-control mt-2"
             :placeholder="dis_placeholder"
             :disabled="localStep3form.enable"
@@ -38,7 +38,6 @@
           <CInput size="lg" class="mt-2" v-model="localStep3form.delay"
             pattern="[0-9]*"
             :invalid-feedback="disp_limitNumber1to30"
-            valid-feedback="ok"
             :is-valid="isFieldPassed('delay', localStep3form.delay)"
             required
             :disabled="localStep3form.enable"
@@ -49,7 +48,7 @@
 
   </div>
 </template>
-  
+
 <script>
   import i18n from "@/i18n";
 
@@ -109,7 +108,7 @@
         immediate: true,
       },
     },
-   
+
   }
 </script>
-  
+

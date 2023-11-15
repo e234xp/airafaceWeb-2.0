@@ -18,14 +18,12 @@
             class="mt-2"
             v-model="localStep1form.name"
             :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-            valid-feedback="ok"
             :is-valid="isFieldPassed('name', localStep1form.name)"
             required
           />
         </CCol>
       </CRow>
     </div>
-    {{ localStep1form }}
   </div>
 </template>
 
@@ -75,6 +73,3 @@ export default {
 };
 </script>
 
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>

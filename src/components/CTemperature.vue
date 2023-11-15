@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-    import i18n from "@/i18n";
+    import i18n from '@/i18n';
 
     export default {
         name: 'CTemperature',
@@ -69,15 +69,15 @@
         },
         data() {
             return {
-                disp_acknowledge: i18n.formatter.format("Acknowledge"),
-                disp_falsealarm: i18n.formatter.format("FalseAlarm")
+                disp_acknowledge: i18n.formatter.format('Acknowledge'),
+                disp_falsealarm: i18n.formatter.format('FalseAlarm')
             }
         }
 
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
     .btn-leave {
         padding: 0.25rem 0.25rem !important;
         background-color: rgba(108, 117, 125, 0.2);
@@ -193,17 +193,17 @@
         height: 2.4rem;
         margin-right: 1rem;
         float: left;
-        background-image: url("/img/capacity/normal.png");
+        background-image: url('/img/capacity/normal.png');
         background-repeat: no-repeat;
         background-size: cover;
     }
 
     .carditem .danger .statusIcon {
-        background-image: url("/img/capacity/danger.png");
+        background-image: url('/img/capacity/danger.png');
     }
 
     .carditem .warning .statusIcon {
-        background-image: url("/img/capacity/warning.png");
+        background-image: url('/img/capacity/warning.png');
     }
 
     .carditem .eventIcon {

@@ -1,6 +1,6 @@
 <template>
   <div class="c-app">
-    <div class="backdrop"></div>
+    <!-- <div class="backdrop"></div> -->
     <!-- <TheSidebar/> -->
     <TheSidebar v-if="isFullScreen" />
     <CWrapper>
@@ -22,37 +22,32 @@
 </template>
 
 <script>
-  import Vue from "vue";
-  import router from "../router";
-  import store from "../store";
-  import TheSidebar from "./TheSidebar";
-  import TheHeader from "./TheHeader";
-  import TheFooter from "./TheFooter";
+// import Vue from 'vue';
+// import router from '../router';
+// import store from '../store';
+import TheSidebar from './TheSidebar.vue';
+import TheHeader from './TheHeader.vue';
+import TheFooter from './TheFooter.vue';
 
-  export default {
-    name: "TheContainer",
-    components: {
-      TheSidebar,
-      TheHeader,
-      TheFooter,
-    },
+export default {
+  name: 'TheContainer',
+  components: {
+    TheSidebar,
+    TheHeader,
+    TheFooter,
+  },
 
-    computed: {
-      isFullScreen() {
-        // console.log("TheContainer isFullScreen", this.$router.currentRoute.path);
-
-        // if (this.$router.currentRoute.path == "/login")
-        //   return false;
-        // else
-        return sessionStorage.getItem("displayMode") == "Setting";
-      },
+  computed: {
+    isFullScreen() {
+      return sessionStorage.getItem('displayMode') === 'Setting';
     },
-    created() {
-      this.$webSocketsConnect({ apiSocketPath: window.apiSocketPath });
-    },
-    mounted() { },
-    methods: {},
-  };
+  },
+  created() {
+    this.$webSocketsConnect({ apiSocketPath: window.apiSocketPath });
+  },
+  mounted() { },
+  methods: {},
+};
 </script>
 
 <style scoped>

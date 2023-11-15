@@ -12,10 +12,9 @@
 </template>
 
 <script>
-
+import i18n from "@/i18n"
 import AccessControlSettingForm from './forms/AccessControlSettingForm.vue'
 
-import i18n from "../../i18n"
 export default {
   name: 'ModifyAccessControlSetting',
   components: { AccessControlSettingForm },
@@ -36,7 +35,7 @@ export default {
     const self = this;
     if( self.value_returnRoutePath === "" ) self.$router.push({ name: 'AccessControlManagement' });
     if( self.$route.params.value_accessControlSetting ) self.value_accessControlSetting = self.$route.params.value_accessControlSetting;
-    
+
   },
   methods: {
     onFinish( modifiedSetting, cb ) {

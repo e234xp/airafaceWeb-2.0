@@ -12,9 +12,8 @@
 </template>
 
 <script>
-
+import i18n from "@/i18n"
 import AccessControlSettingForm from './forms/AccessControlSettingForm.vue'
-import i18n from "../../i18n"
 
 export default {
   name: 'CreateAccessControlSetting',
@@ -25,7 +24,7 @@ export default {
       value_returnRouteName : this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : "",
       value_group_list : this.$route.params.value_group_list ? this.$route.params.value_group_list : [],
       value_exstingAccessControlSettingsList : this.$route.params.value_exstingAccessControlSettingsList ? this.$route.params.value_exstingAccessControlSettingsList : [],
-      
+
       disp_header: i18n.formatter.format("CreateAccessControl"),
       flag_modifyMode : false,
       //flag_currentSetp : 0
@@ -35,7 +34,7 @@ export default {
     if( this.value_returnRoutePath === "" ) this.$router.push({ name: 'AccessControlManagement' });
   },
   mounted () {
-    
+
   },
   methods: {
     onFinish( newSetting, cb ) {

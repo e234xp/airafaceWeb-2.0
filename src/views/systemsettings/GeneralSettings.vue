@@ -6,7 +6,7 @@
       </div>
       <div style="height: 30px"></div>
       <!-- 辨識設定 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_faceVerifySettings }}</span>
@@ -20,11 +20,6 @@
               <th class="h5 w-25 table-th">{{ disp_antiSpoofingThreshold }}</th>
               <th class="h5 w-25 table-th">{{ disp_faceDetectThreshold }}</th>
               <th class="h5 w-25 table-th"></th>
-              <!-- <th class="h5 w-25 table-th">
-                <div v-if="flag_support_enhance_facemask">
-                  {{ disp_faceMaskEnhancement }}
-                </div>
-              </th> -->
             </tr>
             <tr>
               <td class="table-td">
@@ -81,7 +76,7 @@
         </CCardBody>
       </CCard>
       <!-- 平板顯示設定 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_tabletDisplaySettings }}</span>
@@ -139,7 +134,7 @@
         </CCardBody>
       </CCard>
       <!-- 成為網路攝影機 -->
-      <CCard v-if="flag_support_rtsp">
+      <CCard v-if="flag_support_rtsp" v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_turnsIpCamera }}</span>
@@ -183,8 +178,15 @@
                   :disabled="!value_enableRtsp" />
               </td>
               <td class="table-td">
-                <CInput size="lg" type="password" v-model="value_rtspPassword" :value="value_rtspPassword"
-                  :disabled="!value_enableRtsp" />
+                <CInput size="lg" :type="flag_view_password ? 'text' : 'password'" v-model="value_rtspPassword"
+                  :value="value_rtspPassword" :disabled="!value_enableRtsp">
+                  <template #append-content>
+                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
+                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    </CButton>
+                  </template>
+                </CInput>
               </td>
               <td class="table-td">
                 <CButton class="btn btn-primary fz-xl" @click="clickOnApplyRtsp" :disabled="flag_changingRtsp">
@@ -197,7 +199,7 @@
         </CCardBody>
       </CCard>
       <!-- 打卡鐘模式 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_clockinMode }}</span>
@@ -222,7 +224,7 @@
         </CCardBody>
       </CCard>
       <!-- 門禁對講機 -->
-      <CCard v-if="flag_support_intercom && deviceType !== deviceTypes.TYPE_AIRA_TABLET_M">
+      <CCard v-if="flag_support_intercom && deviceType !== deviceTypes.TYPE_AIRA_TABLET_M" v-show="false">
         <CCardHeader>
           <div>
             <span class="h3" style="display: inline-block; position: relative; margin-right: 33px">{{
@@ -257,7 +259,7 @@
         </CCardBody>
       </CCard>
       <!-- 自定義功能按鈕 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_customButton }}</span>
@@ -288,7 +290,7 @@
         </CCardBody>
       </CCard>
       <!-- 警示設定 -->
-      <CCard v-if="flag_support_high_temp_sound_alert">
+      <CCard v-if="flag_support_high_temp_sound_alert" v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_alarmSettings }}</span>
@@ -327,7 +329,7 @@
         </CCardBody>
       </CCard>
       <!-- 平板介面語言 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_tabletInterfaceLangurage }}</span>
@@ -407,7 +409,7 @@
         </CCardBody>
       </CCard>
       <!-- 系統管理密碼 -->
-      <CCard>
+      <CCard v-show="false">
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_tabletSystemPassword }}</span>
@@ -425,7 +427,15 @@
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_tabletSystemPassword" :value="value_tabletSystemPassword" />
+                <CInput size="lg" v-model="value_tabletSystemPassword" :value="value_tabletSystemPassword"
+                  :type="flag_view_password ? 'text' : 'password'">
+                  <template #append-content>
+                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
+                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    </CButton>
+                  </template>
+                </CInput>
               </td>
               <td class="table-td">
                 <CButton class="btn btn-primary fz-lg" @click="clickOnApplyTabletSystemPassword"
@@ -444,113 +454,116 @@
 </template>
 
 <script>
-  import i18n from "../../i18n";
-  import { mapState } from "vuex";
-  import { deviceTypes } from "../../globalParams.js";
+  import i18n from '@/i18n';
+  import { deviceTypes } from '@/globalParams.js';
+  import { mapState } from 'vuex';
 
   export default {
-    name: "GeneralSettings",
+    name: 'GeneralSettings',
 
     data() {
       return {
-        param_cardStyle: "height: 26rem;",
-        disp_header: i18n.formatter.format("GeneralSettings"),
-        disp_enable: i18n.formatter.format("Enable"),
-        disp_disable: i18n.formatter.format("Disable"),
-        disp_username: i18n.formatter.format("Username"),
-        disp_password: i18n.formatter.format("Password"),
-        disp_turnsIpCamera: i18n.formatter.format("TurnsIpCamera"),
-        disp_apply: i18n.formatter.format("Apply"),
-        disp_clockinMode: i18n.formatter.format("ClockinMode"),
-        disp_customButton: i18n.formatter.format("CustomButton"),
-        disp_clockIn: i18n.formatter.format("ClockIn"),
-        disp_clockOut: i18n.formatter.format("ClockOut"),
-        disp_enableIntercom: i18n.formatter.format("EnableIntercom"),
-        disp_disableIntercom: i18n.formatter.format("DisableIntercom"),
-        disp_intercomSettings: i18n.formatter.format("Intercom"),
-        disp_download: i18n.formatter.format("Download"),
-        disp_faceVerifySettings: i18n.formatter.format("FaceVerifySettings"),
-        disp_verifyResultPhoto: i18n.formatter.format("VerifyResultPhoto"),
-        disp_tabletDisplaySettings: i18n.formatter.format("TabletDisplaySettings"),
-        disp_verifyThreshold: i18n.formatter.format("VerifyThreshold"),
-        disp_antiSpoofingThreshold: i18n.formatter.format("AntiSpoofingThreshold"),
-        disp_faceDetectThreshold: i18n.formatter.format("FaceDetectThreshold"),
-        disp_faceMaskDetection: i18n.formatter.format("FaceMaskDetection"),
-        disp_showVerifyIndication: i18n.formatter.format("ShowVerifyIndication"),
-        disp_temperatureDisplayingUnit: i18n.formatter.format("TemperatureDisplayingUnit"),
-        disp_alarmVolume: i18n.formatter.format("AlarmVolume"),
-        disp_enableIdCard: i18n.formatter.format("EnableIdCard"),
+        param_cardStyle: 'height: 26rem;',
+
+        flag_view_password: false,
+
+        disp_header: i18n.formatter.format('GeneralSettings'),
+        disp_enable: i18n.formatter.format('Enable'),
+        disp_disable: i18n.formatter.format('Disable'),
+        disp_username: i18n.formatter.format('Username'),
+        disp_password: i18n.formatter.format('Password'),
+        disp_turnsIpCamera: i18n.formatter.format('TurnsIpCamera'),
+        disp_apply: i18n.formatter.format('Apply'),
+        disp_clockinMode: i18n.formatter.format('ClockinMode'),
+        disp_customButton: i18n.formatter.format('CustomButton'),
+        disp_clockIn: i18n.formatter.format('ClockIn'),
+        disp_clockOut: i18n.formatter.format('ClockOut'),
+        disp_enableIntercom: i18n.formatter.format('EnableIntercom'),
+        disp_disableIntercom: i18n.formatter.format('DisableIntercom'),
+        disp_intercomSettings: i18n.formatter.format('Intercom'),
+        disp_download: i18n.formatter.format('Download'),
+        disp_faceVerifySettings: i18n.formatter.format('FaceVerifySettings'),
+        disp_verifyResultPhoto: i18n.formatter.format('VerifyResultPhoto'),
+        disp_tabletDisplaySettings: i18n.formatter.format('TabletDisplaySettings'),
+        disp_verifyThreshold: i18n.formatter.format('VerifyThreshold'),
+        disp_antiSpoofingThreshold: i18n.formatter.format('AntiSpoofingThreshold'),
+        disp_faceDetectThreshold: i18n.formatter.format('FaceDetectThreshold'),
+        disp_faceMaskDetection: i18n.formatter.format('FaceMaskDetection'),
+        disp_showVerifyIndication: i18n.formatter.format('ShowVerifyIndication'),
+        disp_temperatureDisplayingUnit: i18n.formatter.format('TemperatureDisplayingUnit'),
+        disp_alarmVolume: i18n.formatter.format('AlarmVolume'),
+        disp_enableIdCard: i18n.formatter.format('EnableIdCard'),
         disp_enableTwoFactorAuthentication: i18n.formatter.format(
-          "EnableTwoFactorAuthentication"
+          'EnableTwoFactorAuthentication'
         ),
         disp_highTemperatureThreshold:
-          i18n.formatter.format("HighTemperatureThreshold") +
-          " " +
-          i18n.formatter.format("Celsius"),
+          i18n.formatter.format('HighTemperatureThreshold') +
+          ' ' +
+          i18n.formatter.format('Celsius'),
 
-        disp_tabletInterfaceLangurage: i18n.formatter.format("TabletInterfaceLangurage"),
+        disp_tabletInterfaceLangurage: i18n.formatter.format('TabletInterfaceLangurage'),
         disp_tabletInterfaceLangurageList: i18n.formatter.format(
-          "TabletInterfaceLangurageList"
+          'TabletInterfaceLangurageList'
         ),
-        disp_alarmSettings: i18n.formatter.format("AlarmSettings"),
-        disp_tabletSystemPassword: i18n.formatter.format("TabletSystemPassword"),
-        disp_centralManagement: i18n.formatter.format("CentralManagement"),
-        disp_willLossAllPersonData: i18n.formatter.format("WillLossAllPersonData"),
-        disp_faceMaskEnhancement: i18n.formatter.format("FaceMaskEnhancement"),
+        disp_alarmSettings: i18n.formatter.format('AlarmSettings'),
+        disp_tabletSystemPassword: i18n.formatter.format('TabletSystemPassword'),
+        disp_centralManagement: i18n.formatter.format('CentralManagement'),
+        disp_willLossAllPersonData: i18n.formatter.format('WillLossAllPersonData'),
+        disp_faceMaskEnhancement: i18n.formatter.format('FaceMaskEnhancement'),
 
-        disp_hostname: i18n.formatter.format("HostName"),
-        disp_url: "URL",
-        value_airaManagerHostName: "",
+        disp_hostname: i18n.formatter.format('HostName'),
+        disp_url: 'URL',
+        value_airaManagerHostName: '',
         value_airaManagerPort: 8443,
         value_enableAiraManager: false,
-        value_customFunctionUrl: "",
+        value_customFunctionUrl: '',
 
         value_enableDisableListToShow: [
-          { value: true, label: i18n.formatter.format("Yes") },
-          { value: false, label: i18n.formatter.format("No") },
+          { value: true, label: i18n.formatter.format('Yes') },
+          { value: false, label: i18n.formatter.format('No') },
         ],
         value_haveToWearFaceMask: false,
         value_faceMaskEnhancement: false,
         value_enableIdCard: false,
         value_enableTwoFactorAuthentication: false,
         value_verifyResultPhotoList: [
-          { value: true, label: i18n.formatter.format("RegisterPhoto") },
-          { value: false, label: i18n.formatter.format("CapturedPhoto") },
+          { value: true, label: i18n.formatter.format('RegisterPhoto') },
+          { value: false, label: i18n.formatter.format('CapturedPhoto') },
         ],
         value_showVerifyIndication: false,
         value_showVerifyIndicationList: [
-          { value: true, label: i18n.formatter.format("Yes") },
-          { value: false, label: i18n.formatter.format("No") },
+          { value: true, label: i18n.formatter.format('Yes') },
+          { value: false, label: i18n.formatter.format('No') },
         ],
         value_showProfilePhoto: false,
         value_temperatureDisplayingUnitList: [
-          { value: true, label: i18n.formatter.format("Celsius") },
-          { value: false, label: i18n.formatter.format("Fahrenheit") },
+          { value: true, label: i18n.formatter.format('Celsius') },
+          { value: false, label: i18n.formatter.format('Fahrenheit') },
         ],
         value_temperatureUnitCelsius: true,
         value_highTemperatureThreshold: 37.5,
         value_highTemperatureThreshold_Celsius: 37.5,
         value_highTemperatureThreshold_Fahrenheit: 99.5,
         value_alarmVolumeList: [
-          { value: 1.0, label: "100 %" },
-          { value: 0.9, label: "90 %" },
-          { value: 0.8, label: "80 %" },
-          { value: 0.7, label: "70 %" },
-          { value: 0.6, label: "60 %" },
-          { value: 0.5, label: "50 %" },
-          { value: 0.4, label: "40 %" },
-          { value: 0.3, label: "30 %" },
-          { value: 0.2, label: "20 %" },
-          { value: 0.1, label: "10 %" },
-          { value: 0.0, label: "Off" },
+          { value: 1.0, label: '100 %' },
+          { value: 0.9, label: '90 %' },
+          { value: 0.8, label: '80 %' },
+          { value: 0.7, label: '70 %' },
+          { value: 0.6, label: '60 %' },
+          { value: 0.5, label: '50 %' },
+          { value: 0.4, label: '40 %' },
+          { value: 0.3, label: '30 %' },
+          { value: 0.2, label: '20 %' },
+          { value: 0.1, label: '10 %' },
+          { value: 0.0, label: 'Off' },
         ],
         value_alarmVolume: 0.1,
         value_displayVerifyResultTime: 3000,
         flag_changingTabletInterfaceLangurage: false,
-        value_tabletInterfaceLangurage: "zh",
+        value_tabletInterfaceLangurage: 'zh',
         value_tabletInterfaceLangurageList: [],
-        value_tabletSystemPassword: "123456",
-        disp_displayVerifyResultTime: i18n.formatter.format("VerifyResultDisplayDuration"),
+        value_tabletSystemPassword: '123456',
+        disp_displayVerifyResultTime: i18n.formatter.format('VerifyResultDisplayDuration'),
         flag_changingRtsp: false,
         flag_changingClockInMode: false,
         flag_changingDisplaySettings: false,
@@ -561,8 +574,8 @@
         flag_displaySettingsOk: true,
         value_enableRtsp: false,
         value_rtspActivated: false,
-        value_rtspUsername: "",
-        value_rtspPassword: "",
+        value_rtspUsername: '',
+        value_rtspPassword: '',
         value_tabletSettings: null,
         value_enableClockinMode: false,
         value_enableCustomButton: false,
@@ -574,9 +587,9 @@
         value_enableIntercom: false,
         flag_changingIntercomSettings: false,
         flag_changingCustomButton: false,
-        value_videoPath: "",
+        value_videoPath: '',
         flag_downloadingFile: false,
-        value_rtspPath: "",
+        value_rtspPath: '',
         flag_changingTabletSystemPassword: false,
 
         flag_support_enhance_facemask: false,
@@ -593,13 +606,13 @@
       //const HOST = window.location.host;
       //self.value_rtspPath = 'https://' + HOST + '/exe/intercom.zip';
       self.value_videoPath =
-        "https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip";
+        'https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip';
       self.value_rtspPath =
-        "rtsp://[username]:[password]@" + window.location.hostname + ":8554/live.sdp";
+        'rtsp://[username]:[password]@' + window.location.hostname + ':8554/live.sdp';
 
       self.$globalGetSystemInfo(function (err, data) {
         if (data != null) {
-          if (data.device_type == "airaTablet_xs") {
+          if (data.device_type == 'airaTablet_xs') {
             self.flag_support_enhance_facemask = true;
             self.flag_support_rtsp = false;
             self.flag_support_intercom = false;
@@ -629,13 +642,14 @@
       self.$globalGetTabletSetting(function (err, data) {
         if (!err) {
           self.value_tabletSettings = data;
+
           self.value_rtspUsername = self.checkAndReturnValue(
             self.value_tabletSettings.rtsp_username,
-            ""
+            ''
           );
           self.value_rtspPassword = self.checkAndReturnValue(
             self.value_tabletSettings.rtsp_password,
-            ""
+            ''
           );
           self.value_enableRtsp = self.checkAndReturnValue(
             self.value_tabletSettings.enable_rtsp_camera,
@@ -690,6 +704,12 @@
             self.value_tabletSettings.high_temperature,
             38
           );
+
+          self.value_tabletSystemPassword = self.checkAndReturnValue(
+            self.value_tabletSettings.system_password,
+            '123456'
+          );
+
           self.value_highTemperatureThreshold_Fahrenheit =
             (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
           self.value_highTemperatureThreshold =
@@ -697,11 +717,11 @@
               ? self.value_highTemperatureThreshold_Celsius
               : self.value_highTemperatureThreshold_Fahrenheit;
           self.disp_highTemperatureThreshold =
-            i18n.formatter.format("HighTemperatureThreshold") +
-            " " +
+            i18n.formatter.format('HighTemperatureThreshold') +
+            ' ' +
             (self.value_temperatureUnitCelsius === true
-              ? i18n.formatter.format("Celsius")
-              : i18n.formatter.format("Fahrenheit"));
+              ? i18n.formatter.format('Celsius')
+              : i18n.formatter.format('Fahrenheit'));
 
           self.value_verifyThreshold = self.checkAndReturnValue(
             self.value_tabletSettings.score_for_valid_face,
@@ -729,11 +749,12 @@
             );
             self.value_customFunctionUrl = self.checkAndReturnValue(
               self.value_tabletSettings.custom_trigger_button_settings.url,
-              ""
+              ''
             );
           }
         }
       });
+
       self.$globalFetchSupportedlanguagelist(function (err, data) {
         if (!err) {
           self.value_tabletInterfaceLangurageList = [];
@@ -748,7 +769,7 @@
           });
           if (activeLang.length > 0) {
             self.value_tabletInterfaceLangurage = activeLang[0].language;
-          } else self.value_tabletInterfaceLangurage = "zh";
+          } else self.value_tabletInterfaceLangurage = 'zh';
         }
       });
     },
@@ -756,7 +777,7 @@
       this.deviceTypes = deviceTypes;
     },
     computed: {
-      ...mapState(["deviceType"]),
+      ...mapState(['deviceType']),
     },
     watch: {
       value_highTemperatureThreshold: function (value) {
@@ -771,6 +792,12 @@
       },
     },
     methods: {
+      viewPassword() {
+        const self = this;
+
+        self.flag_view_password = !self.flag_view_password;
+      },
+
       checkAndReturnValue(value, defaultValue) {
         if (value != null) return value;
         return defaultValue;
@@ -790,38 +817,38 @@
       },
       selEnableTwoFactorAuthentication(e) {
         const self = this;
-        self.value_enableTwoFactorAuthentication = e.target.value == "true" ? true : false;
+        self.value_enableTwoFactorAuthentication = e.target.value == 'true' ? true : false;
       },
       selEnableIdCard(e) {
         const self = this;
-        self.value_enableIdCard = e.target.value == "true" ? true : false;
+        self.value_enableIdCard = e.target.value == 'true' ? true : false;
       },
 
       selFaceMaskDetection(e) {
         const self = this;
-        self.value_haveToWearFaceMask = e.target.value == "true" ? true : false;
+        self.value_haveToWearFaceMask = e.target.value == 'true' ? true : false;
       },
       selFaceMaskEnhancement(e) {
         const self = this;
-        self.value_faceMaskEnhancement = e.target.value == "true" ? true : false;
+        self.value_faceMaskEnhancement = e.target.value == 'true' ? true : false;
       },
       selVerifyDisplayPhoto(e) {
         const self = this;
-        self.value_showProfilePhoto = e.target.value == "true" ? true : false;
+        self.value_showProfilePhoto = e.target.value == 'true' ? true : false;
       },
       selShowVerifyIndication(e) {
         const self = this;
-        self.value_showVerifyIndication = e.target.value == "true" ? true : false;
+        self.value_showVerifyIndication = e.target.value == 'true' ? true : false;
       },
       selShowTemperatureUnit(e) {
         const self = this;
-        self.value_temperatureUnitCelsius = e.target.value == "true" ? true : false;
+        self.value_temperatureUnitCelsius = e.target.value == 'true' ? true : false;
         self.disp_highTemperatureThreshold =
-          i18n.formatter.format("HighTemperatureThreshold") +
-          " " +
+          i18n.formatter.format('HighTemperatureThreshold') +
+          ' ' +
           (self.value_temperatureUnitCelsius == true
-            ? i18n.formatter.format("Celsius")
-            : i18n.formatter.format("Fahrenheit"));
+            ? i18n.formatter.format('Celsius')
+            : i18n.formatter.format('Fahrenheit'));
         self.value_highTemperatureThreshold =
           self.value_temperatureUnitCelsius == true
             ? self.value_highTemperatureThreshold_Celsius
@@ -869,7 +896,7 @@
           self.value_tabletSettings.custom_trigger_button_settings.url !=
           self.value_customFunctionUrl
         ) {
-          self.value_tabletSettings["custom_trigger_button_settings"] = {
+          self.value_tabletSettings['custom_trigger_button_settings'] = {
             enable: self.value_enableCustomButton,
             url: self.value_customFunctionUrl,
           };
@@ -896,8 +923,8 @@
             }
             if (pass)
               self.$fire({
-                text: i18n.formatter.format("Successful"),
-                type: "success",
+                text: i18n.formatter.format('Successful'),
+                type: 'success',
                 timer: 3000,
               });
             else self.$globalLogout();
@@ -914,7 +941,7 @@
           self.$globalAiraManagerSettings.manager_enable != self.value_enableAiraManager;
 
         if (dataChange) {
-          self.$confirm(i18n.formatter.format("WillLossAllPersonData")).then(() => {
+          self.$confirm(i18n.formatter.format('WillLossAllPersonData')).then(() => {
             //if( confirm( self.disp_willLossAllPersonData ) ) {
             self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
             self.$globalSetAiraManagerSetting(
@@ -928,8 +955,8 @@
                   self.$globalLogout();
                   self
                     .$fire({
-                      text: i18n.formatter.format("CompleteAndRestart"),
-                      type: "success",
+                      text: i18n.formatter.format('CompleteAndRestart'),
+                      type: 'success',
                       showConfirmButton: false,
                       //timerProgressBar : true,
                       timer: 60000,
@@ -973,8 +1000,8 @@
             }
             if (pass)
               self.$fire({
-                text: i18n.formatter.format("Successful"),
-                type: "success",
+                text: i18n.formatter.format('Successful'),
+                type: 'success',
                 timer: 3000,
               });
             else self.$globalLogout();
@@ -1023,8 +1050,8 @@
             }
             if (pass)
               self.$fire({
-                text: i18n.formatter.format("Successful"),
-                type: "success",
+                text: i18n.formatter.format('Successful'),
+                type: 'success',
                 timer: 3000,
               });
             else self.$globalLogout();
@@ -1059,9 +1086,9 @@
             }
             self.$fire({
               text: pass
-                ? i18n.formatter.format("Successful")
-                : i18n.formatter.format("OperationFailed"),
-              type: pass ? "success" : "error",
+                ? i18n.formatter.format('Successful')
+                : i18n.formatter.format('OperationFailed'),
+              type: pass ? 'success' : 'error',
               timer: 3000,
             });
           }
@@ -1090,21 +1117,21 @@
           self.value_tabletSettings.face_detection_threshold !=
           self.value_faceDetectThreshold
         ) {
-          self.value_tabletSettings["score_for_valid_face"] = parseFloat(
+          self.value_tabletSettings['score_for_valid_face'] = parseFloat(
             self.value_verifyThreshold
           );
-          self.value_tabletSettings["anti_spoofing_score"] = parseFloat(
+          self.value_tabletSettings['anti_spoofing_score'] = parseFloat(
             self.value_antiSpoofingThreshold
           );
-          self.value_tabletSettings["face_detection_threshold"] = parseFloat(
+          self.value_tabletSettings['face_detection_threshold'] = parseFloat(
             self.value_faceDetectThreshold
           );
-          self.value_tabletSettings["have_to_wear_face_mask"] =
+          self.value_tabletSettings['have_to_wear_face_mask'] =
             self.value_haveToWearFaceMask;
-          self.value_tabletSettings["face_mask_enhancement"] =
+          self.value_tabletSettings['face_mask_enhancement'] =
             self.value_faceMaskEnhancement;
-          self.value_tabletSettings["enable_id_card"] = self.value_enableIdCard;
-          self.value_tabletSettings["enable_two_factor_authentication"] =
+          self.value_tabletSettings['enable_id_card'] = self.value_enableIdCard;
+          self.value_tabletSettings['enable_two_factor_authentication'] =
             self.value_enableTwoFactorAuthentication;
 
           dataChange = true;
@@ -1118,19 +1145,19 @@
             while (retry) {
               const ret = await self.$globalGetTabletSetting();
               if (!ret.error && ret.data) {
-                self["value_tabletSettings"] = ret.data;
-                self["value_verifyThreshold"] =
+                self['value_tabletSettings'] = ret.data;
+                self['value_verifyThreshold'] =
                   self.value_tabletSettings.score_for_valid_face;
-                self["value_faceDetectThreshold"] =
+                self['value_faceDetectThreshold'] =
                   self.value_tabletSettings.face_detection_threshold;
-                self["value_antiSpoofingThreshold"] =
+                self['value_antiSpoofingThreshold'] =
                   self.value_tabletSettings.anti_spoofing_score;
-                self["value_haveToWearFaceMask"] =
+                self['value_haveToWearFaceMask'] =
                   self.value_tabletSettings.have_to_wear_face_mask;
-                self["value_faceMaskEnhancement"] =
+                self['value_faceMaskEnhancement'] =
                   self.value_tabletSettings.face_mask_enhancement;
-                self["value_enableIdCard"] = self.value_tabletSettings.enable_id_card;
-                self["value_enableTwoFactorAuthentication"] =
+                self['value_enableIdCard'] = self.value_tabletSettings.enable_id_card;
+                self['value_enableTwoFactorAuthentication'] =
                   self.value_tabletSettings.enable_two_factor_authentication;
 
                 retry = false;
@@ -1139,9 +1166,9 @@
             }
             self.$fire({
               text: pass
-                ? i18n.formatter.format("Successful")
-                : i18n.formatter.format("OperationFailed"),
-              type: pass ? "success" : "error",
+                ? i18n.formatter.format('Successful')
+                : i18n.formatter.format('OperationFailed'),
+              type: pass ? 'success' : 'error',
               timer: 3000,
             });
           }
@@ -1199,9 +1226,9 @@
             }
             self.$fire({
               text: pass
-                ? i18n.formatter.format("Successful")
-                : i18n.formatter.format("OperationFailed"),
-              type: pass ? "success" : "error",
+                ? i18n.formatter.format('Successful')
+                : i18n.formatter.format('OperationFailed'),
+              type: pass ? 'success' : 'error',
               timer: 3000,
             });
           }
@@ -1247,9 +1274,9 @@
             }
             self.$fire({
               text: pass
-                ? i18n.formatter.format("Successful")
-                : i18n.formatter.format("OperationFailed"),
-              type: pass ? "success" : "error",
+                ? i18n.formatter.format('Successful')
+                : i18n.formatter.format('OperationFailed'),
+              type: pass ? 'success' : 'error',
               timer: 3000,
             });
           }
@@ -1276,7 +1303,7 @@
               });
               if (activeLang.length > 0) {
                 self.value_tabletInterfaceLangurage = activeLang[0].language;
-              } else self.value_tabletInterfaceLangurage = "zh";
+              } else self.value_tabletInterfaceLangurage = 'zh';
 
               retry = false;
               pass = true;
@@ -1284,9 +1311,9 @@
           }
           self.$fire({
             text: pass
-              ? i18n.formatter.format("Successful")
-              : i18n.formatter.format("OperationFailed"),
-            type: pass ? "success" : "error",
+              ? i18n.formatter.format('Successful')
+              : i18n.formatter.format('OperationFailed'),
+            type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
@@ -1319,9 +1346,9 @@
             }
             self.$fire({
               text: pass
-                ? i18n.formatter.format("Successful")
-                : i18n.formatter.format("OperationFailed"),
-              type: pass ? "success" : "error",
+                ? i18n.formatter.format('Successful')
+                : i18n.formatter.format('OperationFailed'),
+              type: pass ? 'success' : 'error',
               timer: 3000,
             });
           }

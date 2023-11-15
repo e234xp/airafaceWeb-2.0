@@ -25,7 +25,6 @@
                 <div class="h5">{{ disp_accessControlName }}</div>
                 <CInput
                   size="lg"
-                  valid-feedback="ok"
                   :invalid-feedback="disp_noEmptyNorSpaceNeigherRepeat"
                   value=""
                   v-model="value_accessControlName"
@@ -62,7 +61,7 @@
               </CCol>
               <CCol sm="2">
                 <div class="h5">{{ disp_remarks }}</div>
-                <CInput size="lg" v-model="value_accessControlRemarks" />
+                <CInput class="mb-form-row" size="lg" v-model="value_accessControlRemarks" />
               </CCol>
             </CRow>
             <!-- <div style="height:20px;"></div> -->
@@ -197,21 +196,19 @@
   </div>
 </template>
 <script>
+import i18n from "@/i18n";
+
 import { mapState } from "vuex";
 import datepickerLang_Tw from "vue2-datepicker/locale/zh-tw";
-import i18n from "../../../i18n";
 
 import StepProgress from "vue-step-progress";
-// import "vue-step-progress/dist/main.css";
-import "../../../../src/airacss/vue-step-progress.css";
+import "@/airacss/vue-step-progress.css";
 
 import Multiselect from "vue-multiselect";
-//import "vue-multiselect/dist/vue-multiselect.min.css";
-import "../../../../src/airacss/vue-multiselect.css";
+import "@/airacss/vue-multiselect.css";
 
 import VueScheduler from "@duoa/vue-scheduler";
-import "../../../../src/airacss/vue-scheduler.css";
-//import '@duoa/vue-scheduler/dist/vue-scheduler.css'
+import "@/airacss/vue-scheduler.css";
 
 Date.prototype.yyyymmdd_HHMMSS = function () {
   var mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -235,7 +232,7 @@ const defaultlState = () => {
     obj_loading: null,
     value_allTablePage: {
       currentPage: 1,
-      pageSize: 6,
+      pageSize: 10,
       totalResult: 0,
     },
 
@@ -312,40 +309,13 @@ const defaultlState = () => {
     disp_PM: i18n.formatter.format("PM"),
     disp_timeTitle: i18n.formatter.format("Time"),
     disp_weekTitle: i18n.formatter.format("Day"),
-    disp_weekDays: [
-      i18n.formatter.format("Sun"),
-      i18n.formatter.format("Mon"),
-      i18n.formatter.format("Tue"),
-      i18n.formatter.format("Wed"),
-      i18n.formatter.format("Thu"),
-      i18n.formatter.format("Fri"),
-      i18n.formatter.format("Sat"),
+      disp_weekDays: [i18n.formatter.format("Sun"), i18n.formatter.format("Mon"), i18n.formatter.format("Tue"),
+        i18n.formatter.format("Wed"), i18n.formatter.format("Thu"), i18n.formatter.format("Fri"), i18n.formatter.format("Sat")
     ],
     disp_hours: [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "19",
-      "20",
-      "21",
-      "22",
-      "23",
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+        "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+        "21", "22", "23",
     ],
     disp_dragTips: " ",
     disp_reset: i18n.formatter.format("Reset"),

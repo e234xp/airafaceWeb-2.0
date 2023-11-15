@@ -6,54 +6,61 @@
       </CCol>
       <div style="height: 35px"></div>
     </div>
+    <div>
+      <CCol sm="12">
+        <CRow class="justify-content-between">
+          <div class="d-flex align-items-center h-100 mb-3 mr-3">
+            <date-picker style="width: 400px" :lang="this.$globalDatePickerLanguage"
+              v-model="value_specifiedDatetimeRange" type="datetime" range :placeholder="disp_selectDatetimeRange"
+              @change="datePickerDatachange()"></date-picker>
+            <CButton class="btn btn-primary btn-w-normal ml-3" size="lg" @click="clickOnSearch()"
+              :disabled="!flag_enableSearchButton">
+              {{disp_search}}
+            </CButton>
+            <CDropdown :togglerText="toggleText()" class="btn btn-primary btn-w-normal ml-3 p-0 dropdown-theme"
+              size="lg" :disabled="!flag_enableSearchButton">
+              <CDropdownItem @click="exportExcel(true)">{{ disp_exportExcel }} ({{ disp_withPhoto }})</CDropdownItem>
+              <CDropdownItem @click="exportExcel(false)">{{ disp_exportExcel }} ({{ disp_withoutPhoto }})
+              </CDropdownItem>
+            </CDropdown>
+          </div>
 
-    <CCol sm="12">
-      <CRow class="justify-content-between">
-        <div class="d-flex align-items-center h-100 mb-3 mr-3">
-          <date-picker style="width: 400px" :lang="this.$globalDatePickerLanguage"
-            v-model="value_specifiedDatetimeRange" type="datetime" range :placeholder="disp_selectDatetimeRange"
-            @change="datePickerDatachange()"></date-picker>
-          <CButton class="btn btn-secondary btn-icon p-0 ml-2" @click="clickOnSearch()"
-            :disabled="!flag_enableSearchButton">
-            <CIcon name="cil-search" />
-          </CButton>
-          <CDropdown :togglerText="toggleText()" class="btn btn-primary dropdown-export p-0 ml-3 dropdown-theme"
-            size="lg" :disabled="!flag_enableSearchButton">
-            <CDropdownItem @click="exportExcel(true)" class="w-100">{{ disp_exportExcel }} ({{ disp_withPhoto }})
-            </CDropdownItem>
-            <CDropdownItem @click="exportExcel(false)">{{ disp_exportExcel }} ({{ disp_withoutPhoto }})
-            </CDropdownItem>
-          </CDropdown>
-        </div>
-
-        <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
-          <template #prepend-content>
-            <CIcon name="cil-search" />
-          </template>
-        </CInput>
-      </CRow>
-    </CCol>
-    <div style="height: 12px"></div>
-
+          <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+            <template #prepend-content>
+              <CIcon name="cil-search" />
+            </template>
+          </CInput>
+        </CRow>
+      </CCol>
+      <div style="height: 12px"></div>
+    </div>
     <CCard>
       <CCardBody>
         <div>
           <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
             @checkbox-change="selectChangeEvent">
-            <vxe-table-column field="dateTime" :title="disp_dateTime" width="16%" align="center">
+            <vxe-table-column field="dateTime" :title="disp_dateTime" :show-overflow="ellipsisMode" width="16%"
+              align="center">
             </vxe-table-column>
-            <vxe-table-column field="id" :title="disp_id" width="12%" align="center">
+            <vxe-table-column field="id" :title="disp_id" :show-overflow="ellipsisMode" width="13%" align="center">
             </vxe-table-column>
-            <vxe-table-column field="name" :title="disp_name" width="12%" align="center">
+            <vxe-table-column field="name" :title="disp_name" :show-overflow="ellipsisMode" width="13%" align="center">
             </vxe-table-column>
-            <vxe-table-column field="groups" :title="disp_group_list" width="16%" align="center">
+            <vxe-table-column field="groups" :title="disp_group_list" :show-overflow="ellipsisMode" width="16%"
+              align="center">
             </vxe-table-column>
-            <vxe-table-column field="temperature" :title="disp_temperature" width="8%"
+            <vxe-table-column v-if="$deviceProfile.supportTemperature" field="temperature" :title="disp_temperature"
+              :show-overflow="ellipsisMode" width="13%" align="center"></vxe-table-column>
+            <vxe-table-column field="score" :title="disp_verify_score" :show-overflow="ellipsisMode" width="16%"
               align="center"></vxe-table-column>
-            <vxe-table-column field="score" :title="disp_verify_score" width="10%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="showimage" :title="disp_face_image" type="html"></vxe-table-column>
+
+            <vxe-table-column min-width="13%" field="showimage" :title="disp_face_image" type="html"></vxe-table-column>
+            <!-- <vxe-table-column :title="disp_face_image" min-width="13%">
+              <template #default="{ row }">
+                <img :id="row.face_image_id.f + row.face_image_id.uuid" />
+              </template>
+            </vxe-table-column> -->
           </vxe-table>
         </div>
         <vxe-pager :layouts="[
@@ -73,10 +80,10 @@
 </template>
 
 <script>
-  import i18n from "@/i18n";
+  import { mapState } from "vuex";
   import TableObserver from "@/utils/TableObserver.vue";
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
+  import i18n from "@/i18n";
+
   import CTableWrapper from "./ReportTable.vue";
 
   import FileSaver from "file-saver";
@@ -153,10 +160,16 @@
   };
   export default {
     name: "PersonReport",
-    components: { CTableWrapper },
+    components: {
+      CTableWrapper,
+    },
     data() {
       return Object.assign({}, defaultlState(), this.formData);
     },
+    computed: {
+      ...mapState(["ellipsisMode"]),
+    },
+    mixins: [TableObserver],
     created() {
       const self = this;
       let endTime = new Date();
@@ -169,12 +182,11 @@
       self.flag_enableSearchButton = true;
       self.clickOnSearch();
     },
-    mixins: [TableObserver],
     mounted() {
       this.observeTableSize();
     },
     watch: {
-      value_searchingFilter: function (value) {
+      value_searchingFilter(value) {
         this.value_tablePage.currentPage = 1;
         this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
       },
@@ -253,6 +265,7 @@
             self.value_dataItemsToShow = self.generateFilteredData(
               self.value_allTableItems
             );
+
             self.value_tablePage.currentPage = 1;
             if (cb) cb();
           }
@@ -271,12 +284,9 @@
         const filteredItems = sourceData.filter((item) => {
           if (self.value_searchingFilter) {
             if (
-              item.dateTime
-                .toLowerCase()
-                .indexOf(self.value_searchingFilter.toLowerCase()) > -1 ||
-              item.id.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) >
-              -1 ||
-              item.name.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
+              item.id.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
+              || item.name.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
+              || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1)
             ) {
             } else return false;
           }
@@ -311,9 +321,9 @@
       },
 
       async exportExcel(withPhoto) {
-        let salf = this;
+        let self = this;
 
-        salf.flag_downloadingExecl = true;
+        self.flag_downloadingExecl = true;
         var snapshotFolder = null;
 
         var zip = new JsZip();
@@ -322,42 +332,45 @@
 
         var workbook = new Excel.Workbook();
         var worksheet = null;
-        salf.exportNo = 0;
+        self.exportNo = 0;
 
         worksheet = workbook.addWorksheet("Report");
 
         worksheet.columns = [
           { header: "No", key: "No", width: 10 },
-          { header: salf.disp_dateTime, key: "dateTime", width: 10 },
-          { header: salf.disp_id, key: "id", width: 10 },
-          { header: salf.disp_name, key: "name", width: 10 },
-          { header: salf.disp_group_list, key: "groups", width: 10 },
-          { header: salf.disp_temperature, key: "temperature", width: 10 },
-          { header: salf.disp_verify_score, key: "score", width: 10 },
-          { header: salf.disp_face_image, key: "showimage", width: 15 },
+          { header: self.disp_dateTime, key: "dateTime", width: 10 },
+          { header: self.disp_id, key: "id", width: 10 },
+          { header: self.disp_name, key: "name", width: 10 },
+          { header: self.disp_group_list, key: "groups", width: 10 },
+          { header: self.disp_verify_score, key: "score", width: 10 },
+          { header: self.disp_face_image, key: "showimage", width: 15 },
         ];
 
-        salf.excelExecutionAmounts = salf.value_allTableItems.length;
-        salf.excelCounter = 0;
+        if (self.$deviceProfile.supportTemperature) {
+          worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
+        }
 
-        for (let idx = 0; idx < salf.value_allTableItems.length; idx++) {
-          salf.exportNo++;
-          salf.excelCounter++;
+        self.excelExecutionAmounts = self.value_allTableItems.length;
+        self.excelCounter = 0;
+
+        for (let idx = 0; idx < self.value_allTableItems.length; idx++) {
+          self.exportNo++;
+          self.excelCounter++;
 
           worksheet.addRow({
-            No: salf.exportNo,
-            dateTime: salf.value_allTableItems[idx].dateTime,
-            id: salf.value_allTableItems[idx].id,
-            name: salf.value_allTableItems[idx].name,
-            groups: salf.value_allTableItems[idx].groups,
-            temperature: salf.value_allTableItems[idx].temperature,
-            score: salf.value_allTableItems[idx].score,
+            No: self.exportNo,
+            dateTime: self.value_allTableItems[idx].dateTime,
+            id: self.value_allTableItems[idx].id,
+            name: self.value_allTableItems[idx].name,
+            groups: self.value_allTableItems[idx].groups,
+            score: self.value_allTableItems[idx].score,
+            temperature: self.value_allTableItems[idx].temperature,
           });
 
           if (withPhoto) {
-            await salf.sleep(10);
-            var faceImageRet = await salf.$globalFetchVerifyPhoto(
-              salf.value_allTableItems[idx].face_image_id
+            await self.sleep(10);
+            var faceImageRet = await self.$globalFetchVerifyPhoto(
+              self.value_allTableItems[idx].face_image_id
             );
             if (!faceImageRet.error) {
               var photoId = workbook.addImage({
@@ -370,19 +383,19 @@
               );
               worksheet.lastRow.height = 60;
 
-              let fileName = salf.value_allTableItems[idx].dateTime
+              let fileName = self.value_allTableItems[idx].dateTime
                 .replace("-", "_")
                 .replace(" ", "_")
                 .replace(":", "_");
               snapshotFolder.file(
-                salf.exportNo + "_" + salf.value_allTableItems[idx].dateTime + ".jpeg",
-                salf.value_allTableItems[idx].face_image,
+                self.exportNo + "_" + self.value_allTableItems[idx].dateTime + ".jpeg",
+                faceImageRet.data.face_image,
                 { base64: true }
               );
             }
           }
 
-          if (salf.exportNo % 1000 == 0) {
+          if (self.exportNo % 1000 == 0) {
             await workbook.xlsx.writeBuffer().then((data) => {
               var blob = new Blob([data], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -395,14 +408,17 @@
 
             worksheet.columns = [
               { header: "No", key: "No", width: 10 },
-              { header: salf.disp_dateTime, key: "dateTime", width: 10 },
-              { header: salf.disp_id, key: "id", width: 10 },
-              { header: salf.disp_name, key: "name", width: 10 },
-              { header: salf.disp_group_list, key: "groups", width: 10 },
-              { header: salf.disp_temperature, key: "temperature", width: 10 },
-              { header: salf.disp_verify_score, key: "score", width: 10 },
-              { header: salf.disp_face_image, key: "showimage", width: 30 },
+              { header: self.disp_dateTime, key: "dateTime", width: 10 },
+              { header: self.disp_id, key: "id", width: 10 },
+              { header: self.disp_name, key: "name", width: 10 },
+              { header: self.disp_group_list, key: "groups", width: 10 },
+              { header: self.disp_verify_score, key: "score", width: 10 },
+              { header: self.disp_face_image, key: "showimage", width: 30 },
             ];
+
+            if (self.$deviceProfile.supportTemperature) {
+              worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
+            }
           }
         }
 
@@ -420,7 +436,7 @@
           });
         }
 
-        salf.flag_downloadingExecl = false;
+        self.flag_downloadingExecl = false;
       },
     },
   };

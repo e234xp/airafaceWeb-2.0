@@ -6,45 +6,21 @@
       <h2 sm="12">{{ disp_headertitle }}</h2>
     </div>
     <!-- Basic -->
-    <CRow
-      sm="12"
-      class="h5 ml-2 mb-3"
-      style="padding-top: 10px; text-align: right"
-      >{{ disp_basicDeviceName }}</CRow
-    >
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_basicDeviceName }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CInput
-          size="lg"
-          class="h5"
-          v-model="localStep1form.name"
-          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-          valid-feedback="ok"
-          :is-valid="isFieldPassed('name', localStep1form.name)"
-          required
-        />
+        <CInput size="lg" class="h5" v-model="localStep1form.name"
+          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')" :is-valid="isFieldPassed('name', localStep1form.name)"
+          required />
       </CCol>
     </CRow>
 
-    <CRow
-      sm="12"
-      class="h5 ml-2 mb-3"
-      style="padding-top: 10px; text-align: right"
-      >{{ disp_basicDeviceGroups }}</CRow
-    >
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_basicDeviceGroups }}</CRow>
     <CRow>
       <CCol sm="6">
-        <multiselect
-          placeholder=""
-          v-model="localStep1form.divice_groups"
-          :options="value_deviceGroupsList"
-          :multiple="true"
-          :taggable="true"
-          :hideSelected="true"
-          :show-no-options="false"
-          label="name"
-          track-by="value"
-        >
+        <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
+          :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+          v-model="localStep1form.divice_groups" :options="param_deviceGroupsList">
         </multiselect>
       </CCol>
     </CRow>
@@ -56,63 +32,30 @@
       <h2 sm="12">{{ disp_subtitle }}</h2>
     </div>
 
-    <CRow
-      sm="12"
-      class="h5 ml-2 mb-3"
-      style="padding-top: 10px; text-align: right"
-      >{{ disp_type }}</CRow
-    >
+    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_type }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect
-          size="lg"
-          value="1"
-          v-model="localStep1form.stream_type"
-          placeholder="請選擇"
-          :options="value_deviceTypesList"
-        />
+        <CSelect size="lg" :value.sync="localStep1form.stream_type" :options="value_deviceTypesList" />
       </CCol>
     </CRow>
 
     <!-- 類型等於sdp時 -->
     <div id="type" v-if="localStep1form.stream_type !== 'rtsp'">
-      <CRow
-        sm="12"
-        class="h5 ml-2 mb-3"
-        style="padding-top: 10px; text-align: right"
-        >{{ disp_parameters }}</CRow
-      >
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_parameters }}</CRow>
       <CRow>
-        <textarea
-          class="ml-3 mb-3 form-control"
-          v-model="localStep1form.connection_info"
-          rows="5"
-          :invalid-feedback="$t('NoEmptyNoSpace')"
-          valid-feedback="ok"
-          :is-valid="
+        <textarea class="ml-3 mb-3 form-control" v-model="localStep1form.connection_info" rows="5"
+          :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="
             isFieldPassed('connection_info', localStep1form.connection_info)
-          "
-          required
-        >
+          " required>
         </textarea>
       </CRow>
 
       <div v-if="isShowConnectionString">
-        <CRow
-          sm="12"
-          class="h5 ml-2 mb-3"
-          style="padding-top: 10px; text-align: right"
-          >{{ disp_connectionString }}</CRow
-        >
+        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_connectionString }}
+        </CRow>
         <CRow>
           <CCol sm="12">
-            <CInput
-              size="lg"
-              class="h5"
-              style="width: 100%"
-              v-model="connectionString"
-              disabled="disabled"
-            />
+            <CInput size="lg" class="h5" style="width: 100%" v-model="connectionString" disabled="disabled" />
           </CCol>
         </CRow>
       </div>
@@ -124,30 +67,16 @@
         <CRow sm="12">
           <CCol sm="6" class="h5">
             {{ disp_ipAddress }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.ip_address"
+            <CInput size="lg" class="mt-2" style="width: 100%" v-model="localStep1form.ip_address"
               :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
-              required
-            />
+              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)" required />
           </CCol>
 
           <CCol sm="6" class="h5">
             {{ disp_port }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model.number="localStep1form.port"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('port', localStep1form.port)"
-              required
-            />
+            <CInput size="lg" class="mt-2" style="width: 100%" v-model.number="localStep1form.port"
+              :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="isFieldPassed('port', localStep1form.port)"
+              required />
           </CCol>
         </CRow>
       </div>
@@ -156,74 +85,43 @@
         <CRow sm="12">
           <CCol sm="6" class="h5">
             {{ disp_username }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.user"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('user', localStep1form.user)"
-              required
-            />
+            <CInput size="lg" class="mt-2" style="width: 100%" v-model="localStep1form.user"
+              :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="isFieldPassed('user', localStep1form.user)"
+              required />
           </CCol>
 
           <CCol sm="6" class="h5">
             {{ disp_password }}
-            <CInput
-              size="lg"
-              type="password"
-              class="mt-2"
-              style="width: 100%"
-              v-model="localStep1form.pass"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              valid-feedback="ok"
-              :is-valid="isFieldPassed('pass', localStep1form.pass)"
-              required
-            />
+            <CInput size="lg" :type="flag_view_password ? 'text' : 'password'" class="mt-2" style="width: 100%"
+              v-model="localStep1form.pass" :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('pass', localStep1form.pass)" required>
+              <template #append-content>
+                <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
+                  <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                  <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                </CButton>
+              </template>
+            </CInput>
           </CCol>
         </CRow>
       </div>
 
-      <CRow
-        sm="12"
-        class="h5 ml-2 mb-3"
-        style="padding-top: 10px; text-align: right"
-        >{{ disp_parameters }}</CRow
-      >
+      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_parameters }}</CRow>
       <CRow>
         <CCol sm="6">
-          <CInput
-            size="lg"
-            class="h5"
-            style="width: 100%"
-            v-model="localStep1form.connection_info"
-            :invalid-feedback="$t('NoEmptyNoSpace')"
-            valid-feedback="ok"
-            :is-valid="
+          <CInput size="lg" class="h5" style="width: 100%" v-model="localStep1form.connection_info"
+            :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="
               isFieldPassed('connection_info', localStep1form.connection_info)
-            "
-            required
-          />
+            " required />
         </CCol>
       </CRow>
 
       <div v-if="isShowConnectionString">
-        <CRow
-          sm="12"
-          class="h5 ml-2 mb-3"
-          style="padding-top: 10px; text-align: right"
-          >{{ disp_connectionString }}</CRow
-        >
+        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_connectionString }}
+        </CRow>
         <CRow>
           <CCol sm="12">
-            <CInput
-              size="lg"
-              class="h5"
-              style="width: 100%"
-              v-model="connectionString"
-              disabled="disabled"
-            />
+            <CInput size="lg" class="h5" style="width: 100%" v-model="connectionString" disabled="disabled" />
           </CCol>
         </CRow>
       </div>
@@ -232,53 +130,63 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
+import i18n from '@/i18n';
 
-import Multiselect from "vue-multiselect";
-import "@/airacss/vue-multiselect.css";
+import Multiselect from 'vue-multiselect';
+import '@/airacss/vue-multiselect.css';
 
 export default {
-  name: "ModifyCamerasStep1Form",
+  name: 'ModifyCamerasStep1Form',
   props: {
     step1form: Object,
     defaultValues: Object,
     isFieldPassed: Function,
   },
-  emits: ["updateStep1form"],
+  emits: ['updateStep1form'],
   data() {
     return {
       localStep1form: { ...this.step1form },
 
-      /*Basic title  */
-      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
-      // disp_header: i18n.formatter.format("VideoDeviceBasic"),
+      param_deviceGroupsList: [],
+      param_deviceGroupsValue: [],
 
-      /**content */
-      disp_basicDeviceName: i18n.formatter.format("BasicDeviceName"),
-      disp_basicDeviceGroups: i18n.formatter.format("BasicDeviceGroups"),
+      flag_view_password: false,
 
-      /*Video Source title  */
-      disp_subtitle: i18n.formatter.format("VideoDeviceVideoSource"),
+      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
+      // disp_header: i18n.formatter.format('VideoDeviceBasic'),
 
-      /**content */
-      disp_type: i18n.formatter.format("VideoSourceType"),
-      disp_ipAddress: i18n.formatter.format("VideoSourceIpAddress"),
-      disp_port: i18n.formatter.format("VideoSourcePort"),
-      disp_username: i18n.formatter.format("VideoSourceUsername"),
-      disp_password: i18n.formatter.format("VideoSourcePassword"),
-      disp_parameters: i18n.formatter.format("VideoSourceParameters"),
+      disp_basicDeviceName: i18n.formatter.format('BasicDeviceName'),
+      disp_basicDeviceGroups: i18n.formatter.format('BasicDeviceGroups'),
+
+      disp_subtitle: i18n.formatter.format('VideoDeviceVideoSource'),
+
+      disp_type: i18n.formatter.format('VideoSourceType'),
+      disp_ipAddress: i18n.formatter.format('VideoSourceIpAddress'),
+      disp_port: i18n.formatter.format('VideoSourcePort'),
+      disp_username: i18n.formatter.format('VideoSourceUsername'),
+      disp_password: i18n.formatter.format('VideoSourcePassword'),
+      disp_parameters: i18n.formatter.format('VideoSourceParameters'),
       disp_connectionString: i18n.formatter.format(
-        "VideoSourceConnectionString"
+        'VideoSourceConnectionString',
       ),
 
       // 文字提示
-      disp_limitNumber0to1: i18n.formatter.format("limitNumber0to1"), // port 提示文字
+      disp_limitNumber0to1: i18n.formatter.format('limitNumber0to1'), // port 提示文字
+      dis_placeholder: i18n.formatter.format('placeholder'), // port 提示文字
+      disp_select: i18n.formatter.format('Select'),
+      disp_selected: i18n.formatter.format('Selected'),
+      disp_deselect: i18n.formatter.format('Deselect'),
 
-      //設備群組 下拉選項
+      // 設備群組 下拉選項
       value_deviceGroupsList: [],
 
-      //設備類型
-      value_deviceTypesList: ["rtsp", "sdp"],
+      groupValue: [],
+
+      // 設備類型
+      value_deviceTypesList: [
+        { value: 'rtsp', label: i18n.formatter.format('RTSP') },
+        { value: 'sdp', label: i18n.formatter.format('RTP') },
+      ],
     };
   },
   components: {
@@ -288,19 +196,17 @@ export default {
     isShowConnectionString() {
       // 判断輸入框是否都不為空
       return (
-        this.localStep1form.ip_address !== "" &&
-        this.localStep1form.port !== "" &&
-        this.localStep1form.user !== "" &&
-        this.localStep1form.pass !== "" &&
-        this.localStep1form.connection_info !== ""
+        this.localStep1form.ip_address !== ''
+        && this.localStep1form.port !== ''
+        && this.localStep1form.user !== ''
+        && this.localStep1form.pass !== ''
+        && this.localStep1form.connection_info !== ''
       );
     },
-    //連接資訊   let testString = "rtsp://admin:12345@192.168.10.171:554/media/video1";
+    // 連接資訊   let testString = 'rtsp://admin:12345@192.168.10.171:554/media/video1';
     connectionString() {
-      return `${this.localStep1form.stream_type}://${
-        this.localStep1form.user
-      }:${this.localStep1form.pass.replace(/./g, "*")}@${
-        this.localStep1form.ip_address
+      return `${this.localStep1form.stream_type}://${this.localStep1form.user
+      }:${this.localStep1form.pass.replace(/./g, '*')}@${this.localStep1form.ip_address
       }:${this.localStep1form.port}${this.localStep1form.connection_info}`;
     },
   },
@@ -308,13 +214,41 @@ export default {
   watch: {
     localStep1form: {
       handler(newValue) {
-        this.$emit("updateStep1form", { ...newValue });
+        const self = this;
+        const localValue = { ...newValue };
+
+        if (self.param_deviceGroupsValue.length >= 1) {
+          localValue.divice_group_uuids = [];
+          if (localValue.divice_groups.length >= 1) {
+            localValue.divice_group_uuids = localValue.divice_groups.map((item) => {
+              const uuid = self.param_deviceGroupsValue.find((ii) => ii.label === item);
+              return uuid.value;
+            });
+          }
+        }
+        this.$emit('updateStep1form', { ...localValue });
       },
       deep: true,
     },
     defaultValues: {
       handler(newValue) {
-        Object.entries(newValue).forEach(([key, value]) => {
+        const localValue = { ...newValue };
+        if (localValue.divice_group_uuids) {
+          localValue.divice_groups = [];
+
+          const ret = localValue.divice_group_uuids.map((item) => {
+            const uuid = this.param_deviceGroupsValue.find((ii) => ii.value === item);
+            if (uuid) return uuid.label;
+            return null;
+          });
+          ret.map((item) => {
+            if (item !== null) localValue.divice_groups.push(item);
+
+            return true;
+          });
+        }
+
+        Object.entries(localValue).forEach(([key, value]) => {
           if (!Object.keys(this.step1form).includes(key)) return;
           this.localStep1form[key] = value;
         });
@@ -323,27 +257,40 @@ export default {
       immediate: true,
     },
   },
-
   mounted() {
     this.formatNameList();
   },
   methods: {
-    /**設備群組 */
+    viewPassword() {
+      const self = this;
+
+      self.flag_view_password = !self.flag_view_password;
+    },
+
     async formatNameList() {
       const self = this;
-      let res = await self.$globalFindVideoDeviceGroups("", 0, 3000); /**get data */
-      let groups = res.data.result; /**拿回所有group */
-      const handleData = groups.map(({ name, uuid }) => ({ name: name, value: uuid }));
-      console.log(handleData,"handleData")
-      const result = handleData.filter((item) => item.value.length > 1)
-      this.value_deviceGroupsList = result;
-    },
-  
-  },
 
+      const ret = await self.$globalFindVideoDeviceGroups('', 0, 3000);
+      const {
+        data: { result: dataList },
+        error,
+      } = ret;
+
+      if (!error) {
+        self.param_deviceGroupsValue = [];
+        self.param_deviceGroupsList = [];
+        for (let i = 0; i < dataList.length; i += 1) {
+          if (dataList[i].uuid.length === 36) {
+            self.param_deviceGroupsValue.push({ value: dataList[i].uuid, label: dataList[i].name });
+            self.param_deviceGroupsList.push(dataList[i].name);
+
+            if (self.localStep1form.divice_group_uuids.indexOf(dataList[i].uuid) >= 0) {
+              self.localStep1form.divice_groups.push(dataList[i].name);
+            }
+          }
+        }
+      }
+    },
+  },
 };
 </script>
-
-<style>
-@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
-</style>

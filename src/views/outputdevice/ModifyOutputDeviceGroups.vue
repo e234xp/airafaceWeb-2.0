@@ -113,6 +113,8 @@
 import i18n from "@/i18n";
 
 import StepProgress from "vue-step-progress";
+import "@/airacss/vue-step-progress.css";
+
 import Step1Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step1Form.vue";
 import Step2Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step2Form.vue";
 import Step3Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step3Form.vue";

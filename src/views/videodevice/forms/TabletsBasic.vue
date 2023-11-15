@@ -31,7 +31,7 @@
           <CRow>
             <CCol sm="6">
               <multiselect v-model="value_deviceGroups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
-                  :taggable="true" :hideSelected="true" 
+                  :taggable="true" :hideSelected="true"
                   :show-no-options="false"
                 >
               </multiselect>
@@ -95,76 +95,58 @@
 
   </div>
 </template>
-  
+
 <script>
-  import { mapState } from "vuex";
-  import TableObserver from "@/utils/TableObserver.vue";
-  import i18n from "@/i18n";
+import { mapState } from 'vuex';
+import i18n from '@/i18n';
 
-  import VueSelect from 'vue-select';
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
-	
+import Multiselect from 'vue-multiselect';
+import '@/airacss/vue-multiselect.css';
 
+export default {
+  name: 'TabletsBasic',
+  data() {
+    return {
+      value_dataItemsToShow: [{
+        enable: false, name: '', timestamp: '', remark: '', modifier: '', remark1: '',
+      }],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 5,
+        totalResult: 0,
+      },
+      value_searchingFilter: '',
+      isChecked: true,
 
+      disp_header: i18n.formatter.format('TabletsBasicName'),
 
-  export default {
-    name: "CamerasBasic",
-    data() {
-      return {
-        value_dataItemsToShow: [{enable:false,name:'',timestamp:'',remark:'',modifier:'',remark1:''}],
-        value_allTableItems: [],
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
-        },
-        value_searchingFilter: "",
-        isChecked: true,
+      disp_tabletUUID: i18n.formatter.format('TabletsBasicCOlNameUUID'),
+      disp_tabletDeviceName: i18n.formatter.format('TabletsBasicCOlNameDeviceName'),
+      disp_tabletDeviceGroups: i18n.formatter.format('TabletsBasicCOlNameDeviceGroups'),
 
-        /*Basic title  */
-        disp_header: i18n.formatter.format("TabletsBasicName"),
-        /**content */
-        disp_tabletUUID: i18n.formatter.format("TabletsBasicCOlNameUUID"),
-        disp_tabletDeviceName: i18n.formatter.format("TabletsBasicCOlNameDeviceName"),
-        disp_tabletDeviceGroups: i18n.formatter.format("TabletsBasicCOlNameDeviceGroups"),
+      disp_faceAccessTitle: i18n.formatter.format('TabletsBasicTitleNameFaceAccess'),
+      disp_faceDetectionThreshold: i18n.formatter.format('TabletsBasicCOlNameFaceDetectionThreshold'),
+      disp_recognitionThreshold: i18n.formatter.format('TabletsBasicCOlNameRecognitionThreshold'),
+      disp_antiSpoofingThreshold: i18n.formatter.format('TabletsBasicCOlNameAntiSpoofingThreshold'),
 
+      disp_cardAccessTitle: i18n.formatter.format('TabletsBasicTitleNameCardAccess'),
+      disp_enableStrangerCard: i18n.formatter.format('TabletsBasicCOlNameEnableStrangerCard'),
+      disp_save: i18n.formatter.format('Save'),
 
-        /*Face access title  */
-        disp_faceAccessTitle: i18n.formatter.format("TabletsBasicTitleNameFaceAccess"),
-        /**content */
-        disp_faceDetectionThreshold: i18n.formatter.format("TabletsBasicCOlNameFaceDetectionThreshold"),
-        disp_recognitionThreshold: i18n.formatter.format("TabletsBasicCOlNameRecognitionThreshold"),
-        disp_antiSpoofingThreshold: i18n.formatter.format("TabletsBasicCOlNameAntiSpoofingThreshold"),
+      value_deviceGroups: '',
+      value_deviceGroupsList: [1, 2, 3],
+    };
+  },
+  components: {
+    Multiselect,
+  },
+  computed: {
+    ...mapState(['ellipsisMode']),
+  },
 
-        
-        /*Card access title  */
-        disp_cardAccessTitle: i18n.formatter.format("TabletsBasicTitleNameCardAccess"),
-        /**content */
-        disp_enableStrangerCard: i18n.formatter.format("TabletsBasicCOlNameEnableStrangerCard"),
+  methods: {
 
-        disp_save: i18n.formatter.format("Save"),
-
-        /**v-model */
-        value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
-      };
-    },
-    components: {
-      "v-select": VueSelect,
-      Multiselect: Multiselect
-    },
-    computed: {
-      ...mapState(["ellipsisMode"]),
-    },
-   
-    methods: {
-
-    },
-  }
+  },
+};
 </script>
-  
-
-<style>
-  @import url('https://unpkg.com/vue-select@latest/dist/vue-select.css');
-</style>
