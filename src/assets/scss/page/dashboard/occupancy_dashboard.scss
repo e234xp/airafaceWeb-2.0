@@ -66,7 +66,7 @@
 }
 
 .attendance-chart-canvas-wrap {
-  width: 1293px;
+  width: 1302px;
 }
 
 .doughnut-chart-canvas-wrap {
@@ -85,7 +85,8 @@
 }
 
 .current-date-time {
-  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-bottom: unset !important;
   display: flex;
   align-items: center;
 }
@@ -152,6 +153,8 @@
   height: 240px;
   margin-bottom: 25px;
   display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .attendance-header-tag {
@@ -167,7 +170,7 @@
 }
 
 .attendance-statistics-box {
-  width: 504px;
+  width: 558px;
   height: 240px;
   border-right: 1px solid #565758;
   margin-bottom: 22px;
@@ -263,6 +266,7 @@
 }
 
 .person-list-container {
+  padding: 0 1.04%;
   margin-bottom: 1.28%; // <-- 24px / 1872px
 }
 
@@ -546,7 +550,7 @@
 .footer-detail-box {
   position: absolute;
   bottom: 0.96%; // 18px /1872px
-  right: 0;
+  right: 0.96%;
   display: flex;
   color: white;
   display: flex;
