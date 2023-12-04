@@ -65,11 +65,7 @@ const mainVue = new Vue({
     App,
   },
   watch: {
-    // $route(to, from) {
     $route() {
-      // console.log('main.js', to);
-      // console.log('main.js', from);
-
       if (!this.$globalServerTokenIsEffective()) { router.push('/login'); }
     },
   },

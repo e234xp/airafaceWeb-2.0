@@ -80,6 +80,9 @@ export default {
       const self = this;
       self.downloadTableItemsAsync(cb);
     },
+    canDelete() {
+      return !(this.$globalAiraManagerSettings.manager_enable === true);
+    },
     onAdd() {
       const self = this;
       self.$router.push({
@@ -99,7 +102,7 @@ export default {
           uuidListToDel.push(item.uuid);
         });
 
-        self.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
+        self.$confirm('', i18n.formatter.format('ConfirmToDelete'), {
           confirmButtonText: i18n.formatter.format('Confirm'),
           cancelButtonText: i18n.formatter.format('Cancel'),
           confirmButtonColor: '#20a8d8',

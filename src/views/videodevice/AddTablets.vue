@@ -436,7 +436,7 @@ export default {
 
           const postData = {
             cameraOff: true,
-            code: this.step1form.identity,
+            code: this.step1form.device_uuid,
             identity: this.step1form.identity,
             name: this.step1form.name,
             divice_groups: this.step1form.divice_group_uuids,

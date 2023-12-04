@@ -1,10 +1,10 @@
 <template>
   <div>
     <CRow class="flex align-items-start">
-        <CButton class="mx-3 btn btn-outline-primary btn-w-normal" size="lg" @click="changeAttendance()">
-          {{ disp_change }}
-        </CButton>
-        <div class="h1 border-left pl-3">{{ disp_header }}</div>
+      <CButton class="mx-3 btn btn-outline-primary btn-w-normal" size="lg" @click="changeAttendance()">
+        {{ disp_change }}
+      </CButton>
+      <div class="h1 border-left pl-3">{{ disp_header }}</div>
     </CRow>
 
     <div style="height: 20px"></div>
@@ -109,12 +109,12 @@ const defaultlState = () => ({
   value_keyword: '',
   flag_enableSearchButton: false,
 
-    value_tablePage: {
-      currentPage: 1,
-      pageSize: 10,
-      totalResult: 1,
-    },
-  });
+  value_tablePage: {
+    currentPage: 1,
+    pageSize: 10,
+    totalResult: 1,
+  },
+});
 
 export default {
   name: 'ChangeAttendanceClockIn',
@@ -155,135 +155,135 @@ export default {
       self.resizeOneTable();
     },
 
-      // 取得個人uuid
-      async getPersonDetail() {
-        const self = this;
-        const personDatas = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
+    // 取得個人uuid
+    async getPersonDetail() {
+      const self = this;
+      const personDatas = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
 
-        let ret = '';
-        if (personDatas) {
-          const personData = personDatas.data.person_list;
-          const selectMatch = personData.filter((item) => item.name === self.value_keyword);
-          if (selectMatch && selectMatch.length > 0) ret = selectMatch[0].uuid;
+      let ret = '';
+      if (personDatas) {
+        const personData = personDatas.data.person_list;
+        const selectMatch = personData.filter((item) => item.name === self.value_keyword);
+        if (selectMatch && selectMatch.length > 0) ret = selectMatch[0].uuid;
+      }
+
+      return ret;
+    },
+
+    async clickOnSearch() {
+      const self = this;
+      const startTime = self.value_searchDatetimeRange[0].getTime();
+      const endTime = self.value_searchDatetimeRange[1].getTime();
+      const uuid = await self.getPersonDetail();
+
+      const data = {
+        uuid_list: uuid !== '' ? [uuid] : [],
+        start_time: startTime,
+        end_time: endTime,
+        slice_shift: 0,
+        slice_length: 1000,
+      };
+
+      const personResult = (await self.queryPersonResult(data.uuid_list, data.start_time, data.end_time, data.slice_shift, data.slice_length));
+      const sortDate = self.sortDateSourceData(personResult);
+      self.value_allTableItems = self.processFields(sortDate);
+      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
+    },
+
+    async queryPersonResult(uuidList, startTime, endTime, sliceShift, sliceLength) {
+      const self = this;
+
+      let personResult = [];
+      let ret = [];
+      try {
+        ret = await self.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
+
+        if (ret.data.data.length >= 1)
+          personResult = personResult.concat(ret.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+
+      return personResult;
+    },
+    sortDateSourceData(sourceData) {
+      const sort = sourceData.sort((a, b) => b.modifier_time - a.modifier_time);
+      return sort;
+    },
+
+    processFields(sourceData) {
+      let modifyFieldsData = [];
+
+      let value_handleFields = [
+        'verify_mode_string',
+        'name',
+        'timestamp',
+        'remark',
+        'modifier'
+      ]
+
+      sourceData.forEach(item => {
+        let verifyModeString;  //第一個變數
+        switch (item[value_handleFields[0]]) {
+          case 'CLOCK_OUT_MODE':
+          case 'MANUAL_CLOCK_OUT':
+            verifyModeString = item[value_handleFields[0]] = this.disp_clockOut;
+            break;
+          case 'CLOCK_IN_MODE':
+          case 'PASS_MODE':
+          case 'CARD_MODE':
+          case 'MANUAL_CLOCK_IN':
+          default:
+            verifyModeString = item[value_handleFields[0]] = this.disp_clockIn;
+            break;
         }
 
-        return ret;
-      },
+        let userName = `${item.name}\n${item.id}`;
 
-      async clickOnSearch() {
-        const self = this;
-        const startTime = self.value_searchDatetimeRange[0].getTime();
-        const endTime = self.value_searchDatetimeRange[1].getTime();
-        const uuid = await self.getPersonDetail();
+        let timestamp = item.timestamp;
 
-        const data = {
-          uuid_list: uuid !== '' ? [uuid] : [],
-          start_time: startTime,
-          end_time: endTime,
-          slice_shift: 0,
-          slice_length: 1000,
-        };
-
-        const personResult = (await self.queryPersonResult(data.uuid_list, data.start_time, data.end_time, data.slice_shift, data.slice_length));
-        const sortDate = self.sortDateSourceData(personResult);
-        self.value_allTableItems = self.processFields(sortDate);
-        self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
-      },
-
-      async queryPersonResult(uuidList, startTime, endTime, sliceShift, sliceLength) {
-        const self = this;
-
-        let personResult = [];
-        let ret = [];
-        try {
-          ret = await self.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
-
-          if (ret.data.data.length >= 1)
-            personResult = personResult.concat(ret.data.data);
-        } catch (err) {
-          console.error(err);
+        const date = new Date(timestamp);
+        let formattedDate
+        if (!isNaN(date)) {
+          formattedDate = date.toLocaleString();
+        } else {
+          formattedDate = timestamp;
         }
 
-        return personResult;
-      },
-      sortDateSourceData(sourceData) {
-        const sort = sourceData.sort((a, b) => b.modifier_time - a.modifier_time);
-        return sort;
-      },
+        const remark = item[value_handleFields[3]] || '';
 
-      processFields(sourceData) {
-        let modifyFieldsData = [];
+        let modifier = '';
+        if (item['modifier'])
+          modifier += (`${item['modifier']}\n`);
 
-        let value_handleFields = [
-          'verify_mode_string',
-          'name',
-          'timestamp',
-          'remark',
-          'modifier'
-        ]
+        if (item['modifier_time'])
+          modifier += new Date(item['modifier_time']);
 
-        sourceData.forEach(item => {
-          let verifyModeString;  //第一個變數
-          switch(item[value_handleFields[0]] ) {
-            case 'CLOCK_OUT_MODE':
-            case 'MANUAL_CLOCK_OUT':
-              verifyModeString = item[value_handleFields[0]] = this.disp_clockOut;
-              break;
-            case 'CLOCK_IN_MODE':
-            case 'PASS_MODE':
-            case 'CARD_MODE':
-            case 'MANUAL_CLOCK_IN':
-            default :
-              verifyModeString = item[value_handleFields[0]] = this.disp_clockIn;
-              break;
-          }
+        modifyFieldsData.push({ verify_mode_string: verifyModeString, name: userName, timestamp: formattedDate, remark: remark, modifier: modifier })
+      });
+      return modifyFieldsData;
+    },
 
-          let userName = `${item.name}\n${item.id}`;
-
-          let timestamp = item.timestamp;
-
-          const date = new Date(timestamp);
-          let formattedDate
-          if (!isNaN(date)) {
-            formattedDate = date.toLocaleString();
-          } else {
-            formattedDate = timestamp;
-          }
-
-          const remark = item[value_handleFields[3]] || '';
-
-          let modifier = '';
-          if (item['modifier'])
-            modifier += (`${item['modifier']}\n`);
-
-          if (item['modifier_time'])
-            modifier += new Date(item['modifier_time']);
-
-          modifyFieldsData.push({ verify_mode_string: verifyModeString, name: userName, timestamp: formattedDate, remark: remark, modifier: modifier })
-        });
-        return modifyFieldsData;
-      },
-
-      generateFilteredData(sourceData, filter) {
-        const self = this;
-        sourceData.forEach(element => {
-          let modifyDate = element.modifier.split('\n');
-        }
+    generateFilteredData(sourceData, filter) {
+      const self = this;
+      sourceData.forEach(element => {
+        let modifyDate = element.modifier.split('\n');
+      }
+      );
+      const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
+        return (
+          item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
         );
-        const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
-          return (
-            item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-          );
-        });
+      });
 
-        self.value_tablePage.totalResult = filteredItems.length;
+      self.value_tablePage.totalResult = filteredItems.length;
 
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize
-        );
-        return Object.assign([], sliceList);
-      },
+      const sliceList = filteredItems.slice(
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize
+      );
+      return Object.assign([], sliceList);
+    },
 
     // headerCellStyle(row, column, rowIndex, columnIndex) {
     headerCellStyle() {

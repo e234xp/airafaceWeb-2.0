@@ -7,8 +7,8 @@
     <CCol sm="12">
       <CRow>
         <CCol sm="3">
-          <segmented-control :options="segmetionOptions" :selectedSegmentIndex="flag_currentSelection" label="name" value="value"
-            color="#fff" active-color="#20a8d8" :multiple="false" @select="onSelectType" />
+          <segmented-control :options="segmetionOptions" :selectedSegmentIndex="flag_currentSelection" label="name"
+            value="value" color="#fff" active-color="#20a8d8" :multiple="false" @select="onSelectType" />
         </CCol>
         <CCol sm="9">
           <div style="margin-left:auto">
@@ -105,13 +105,13 @@ export default {
     if (this.$route.params.item) {
       if (this.$route.params.item.nameToShow) {
         if (this.$route.params.item.nameToShow == 'All Person') {
-          this.flag_currentSelection = 0 ;
+          this.flag_currentSelection = 0;
           // let selectedItems = this.segmetionOptions.filter((item) => item.value == 'PersonList');
 
           // if (selectedItems)
           //   selectedItems[0].checked = true ;
         } else {
-          this.flag_currentSelection = 1 ;
+          this.flag_currentSelection = 1;
 
           // let selectedItems = this.segmetionOptions.filter((item) => item.value == 'VisitorList');
 

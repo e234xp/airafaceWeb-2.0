@@ -402,6 +402,14 @@ const defaultlState = () => ({
 
   disp_FileType: i18n.formatter.format('FileType'),
   disp_txtSeparator: i18n.formatter.format('txtSeparator'),
+  disp_Comma: i18n.formatter.format('Comma'),
+  disp_Space: i18n.formatter.format('Space'),
+  disp_Tab: i18n.formatter.format('Tab'),
+  disp_Semicolon: i18n.formatter.format('Semicolon'),
+  disp_Customize: i18n.formatter.format('Customize'),
+  disp_TBD: i18n.formatter.format('TBD'),
+
+
   disp_Snapshot: i18n.formatter.format('CapturedPhoto'),
   disp_Fields: i18n.formatter.format('FieldName'),
 
@@ -422,7 +430,7 @@ const defaultlState = () => ({
     { key: 'overTime', value: i18n.formatter.format('Overtime') },
     { key: 'clockinTime', value: i18n.formatter.format('ClockInTime') },
     // { key: 'clockinTemperature', value: i18n.formatter.format('Temperature') },
-    { key: 'clocoutTime', value: i18n.formatter.format('ClockOutTime') },
+    { key: 'clockoutTime', value: i18n.formatter.format('ClockOutTime') },
     // { key: 'clockoutTemperature', value: i18n.formatter.format('Temperature') }
   ],
 
@@ -435,7 +443,7 @@ const defaultlState = () => ({
     'overTime',
     'clockinTime',
     // 'clockinTemperature',
-    'clocoutTime',
+    'clockoutTime',
     // 'clockoutTemperature'
   ],
 
@@ -515,12 +523,13 @@ const defaultlState = () => ({
     specifiedNonHolidays: [{ date_time: 0 }],
   },
 });
+
 export default {
   name: 'DailyAttendanceReportForm',
   props: {
     formData: Object,
-    onFetchPersonDataCallback: { type: Function },
-    onFetchPersonAttendanceDataCallback: { type: Function },
+    onFetchPersonDataCallback: Function,
+    onFetchPersonAttendanceDataCallback: Function,
   },
   data() {
     // return Object.assign({}, defaultlState(), this.formData);
@@ -902,7 +911,7 @@ export default {
             case 'overTime': columns.push({ header: self.disp_over_time, key: 'over_time', width: 10 }); break;
             case 'clockinTime': columns.push({ header: self.disp_clockin, key: 'clockin', width: 10 }); break;
             case 'clockinTemperature': columns.push({ header: self.disp_clockin_temperature, key: 'clockin_temperature', width: 10 }); break;
-            case 'clocoutTime': columns.push({ header: self.disp_clockout, key: 'clockout', width: 10 }); break;
+            case 'clockoutTime': columns.push({ header: self.disp_clockout, key: 'clockout', width: 10 }); break;
             case 'clockoutTemperature': columns.push({ header: self.disp_clockout_temperature, key: 'clockout_temperature', width: 10 }); break;
             default: break;
           }
@@ -958,12 +967,11 @@ export default {
 
             try {
               if (Array.isArray(item.group_list)) {
-                item.groups = (item.group_list || []).join(', ');
+                item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
               } else {
-                item.groups = (JSON.parse(item.group_list) || []).join(', ');
+                item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
               }
-            }
-            catch (ex) {
+            } catch (ex) {
               item.groups = '';
             }
           }
@@ -1007,7 +1015,11 @@ export default {
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      let data = `No${separator}${self.value_masterexportFields.join(separator)}\r\n`;
+      const columns = self.value_detailexportFields.unshift('No');
+      separator = `"${separator}"`;
+      let data = `"${columns.join(separator)}"`;
+
+      // let data = `"No"${separator}"${self.value_detailexportFields.join('\"' + separator + '\"')}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1059,29 +1071,28 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).join(', ');
+              item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             item.groups = '';
           }
         }
 
-        const ln = [self.exportNo];
+        const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
           switch (self.value_masterexportFields[i]) {
-            case 'id': ln.push(item.id); break;
-            case 'name': ln.push(item.nameToShow); break;
-            case 'group_list': ln.push(item.groups); break;
-            case 'timestamp': ln.push(dayjs(self.value_specifiedDate).format('MM/DD')); break;
-            case 'workingTime': ln.push(item.working_time); break;
-            case 'overTime': ln.push(item.over_time); break;
-            case 'clockinTime': ln.push(item.clockin); break;
-            case 'clockinTemperature': ln.push(item.clockin_temperature); break;
-            case 'clocoutTime': ln.push(item.clockout); break;
-            case 'clockoutTemperature': ln.push(item.clockout_temperature); break;
+            case 'id': ln.push(`"${item.id}"`); break;
+            case 'name': ln.push(`"${item.nameToShow}"`); break;
+            case 'group_list': ln.push(`"${item.groups}"`); break;
+            case 'timestamp': ln.push(`"${dayjs(self.value_specifiedDate).format('MM/DD')}"`); break;
+            case 'workingTime': ln.push(`"${item.working_time}"`); break;
+            case 'overTime': ln.push(`"${item.over_time}"`); break;
+            case 'clockinTime': ln.push(`"${item.clockin}"`); break;
+            case 'clockinTemperature': ln.push(`"${item.clockin_temperature}"`); break;
+            case 'clockoutTime': ln.push(`"${item.clockout}"`); break;
+            case 'clockoutTemperature': ln.push(`"${item.clockout_temperature}"`); break;
             default: break;
           }
         }
@@ -1199,12 +1210,15 @@ export default {
 
           try {
             if (Array.isArray(self.value_attendanceDataListToReview[idx].group_list)) {
-              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || []).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || []).filter(
+                (group) => !(group === 'All Person' || group === 'All Visitor'),
+              ).join(', ');
             } else {
-              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).filter(
+                (group) => !(group === 'All Person' || group === 'All Visitor'),
+              ).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             self.value_attendanceDataListToReview[idx].groups = '';
           }
         }
@@ -1293,7 +1307,11 @@ export default {
         personName = self.value_attendanceDataListToReview[0].name;
       }
 
-      let data = `No${separator}${self.value_detailexportFields.join(separator)}\r\n`;
+      const columns = self.value_detailexportFields.unshift('No');
+      separator = `"${separator}"`;
+      let data = `"${columns.join(separator)}"`;
+
+      // let data = `"No"${separator}"${self.value_detailexportFields.join('\"' + separator + '\"')}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1301,57 +1319,53 @@ export default {
         self.exportNo += 1;
         const item = self.value_attendanceDataListToReview[idx];
 
-        {
-          item.nameToShow = item.name;
-          const d = new Date(item.timestamp);
-          item.clockTime = dayjs(d).format('MM/DD HH:mm');
+        item.nameToShow = item.name;
+        item.clockTime = dayjs(item.timestamp).format('MM/DD HH:mm');
 
-          switch (item.verify_mode) {
-            case 1:
-              item.clockMode = i18n.formatter.format('ClockModeCard');
-              break;
-            case 2:
-              item.clockMode = i18n.formatter.format('ClockModePass');
-              break;
-            case 3:
-              item.clockMode = i18n.formatter.format('ClockModeClockIn');
-              break;
-            case 4:
-              item.clockMode = i18n.formatter.format('ClockModeClockOut');
-              break;
-            case 5:
-              item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
-              break;
-            case 6:
-              item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
-              break;
-            default:
-              item.clockMode = i18n.formatter.format('None');
-              break;
-          }
-
-          try {
-            if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).join(', ');
-            } else {
-              item.groups = (JSON.parse(item.group_list) || []).join(', ');
-            }
-          }
-          catch (ex) {
-            item.groups = '';
-          }
+        switch (item.verify_mode) {
+          case 1:
+            item.clockMode = i18n.formatter.format('ClockModeCard');
+            break;
+          case 2:
+            item.clockMode = i18n.formatter.format('ClockModePass');
+            break;
+          case 3:
+            item.clockMode = i18n.formatter.format('ClockModeClockIn');
+            break;
+          case 4:
+            item.clockMode = i18n.formatter.format('ClockModeClockOut');
+            break;
+          case 5:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
+            break;
+          case 6:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
+            break;
+          default:
+            item.clockMode = i18n.formatter.format('None');
+            break;
         }
 
-        const ln = [self.exportNo];
+        try {
+          if (Array.isArray(item.group_list)) {
+            item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
+          } else {
+            item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
+          }
+        } catch (ex) {
+          item.groups = '';
+        }
+
+        const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
           switch (self.value_detailexportFields[i]) {
-            case 'id': ln.push(item.id); break;
-            case 'name': ln.push(item.nameToShow); break;
-            case 'group_list': ln.push(item.groups); break;
-            case 'mode': ln.push(item.clockMode); break;
-            case 'clockTime': ln.push(item.clockTime); break;
-            case 'temperature': ln.push(item.temperature); break;
-            case 'cardno': ln.push(item.card_number); break;
+            case 'id': ln.push(`"${item.id}"`); break;
+            case 'name': ln.push(`"${item.nameToShow}"`); break;
+            case 'group_list': ln.push(`"${item.groups}"`); break;
+            case 'mode': ln.push(`"${item.clockMode}"`); break;
+            case 'clockTime': ln.push(`"${item.clockTime}"`); break;
+            case 'temperature': ln.push(`"${item.temperature}"`); break;
+            case 'cardno': ln.push(`"${item.card_number}}"`); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
@@ -1477,12 +1491,11 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).join('<br>');
+            item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).join('<br>');
+            item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
           }
-        }
-        catch (ex) {
+        } catch (ex) {
           item.groups = '';
         }
 
@@ -1510,7 +1523,10 @@ export default {
               item.clockin_temperature = item.attendance_data_list[0].temperature ? item.attendance_data_list[0].temperature : '';
             }
 
-            let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
+            let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 6);
+            if (outRecord.length === 0) {
+              outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
+            }
             if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
               outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
             }
@@ -1593,12 +1609,11 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).join(', ');
+            item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).join(', ');
+            item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join(', ');
           }
-        }
-        catch (ex) {
+        } catch (ex) {
           item.groups = '';
         }
 
@@ -1725,25 +1740,30 @@ export default {
     generateAttendanceStatusData_V2(workingHourSettings, pItem) {
       const item = pItem;
 
-      const { definedClockinTimeHour, definedClockoutTimeHour, definedOvertimeTimeHour } = workingHourSettings;
+      // const { definedClockinTimeHour, definedClockoutTimeHour, definedOvertimeTimeHour } = workingHourSettings;
+      const definedClockinTimeHour = workingHourSettings.defined_clockin_time_hour || 9;
+      const definedClockoutTimeHour = workingHourSettings.defined_clockout_time_hour || 18;
+      const definedOvertimeTimeHour = workingHourSettings.defined_overtime_time_hour || 18;
 
-      const definedClockinTimeMin = workingHourSettings.definedClockinTimeMin || 0;
-      const definedClockinTimeBufferMins = workingHourSettings.definedClockinTimeBufferMins || 30;
-      const definedClockinTimeLateEnabled = workingHourSettings.definedClockinTimeLateEnabled || true;
-      const definedClockinAdjustmentEnabled = workingHourSettings.definedClockinAdjustmentEnabled || false;
+      const definedClockinTimeMin = workingHourSettings.defined_clockin_time_min || 0;
+      const definedClockinTimeBufferMins = workingHourSettings.defined_clockin_time_buffer_mins || 30;
+      const definedClockinTimeLateEnabled = workingHourSettings.defined_clockin_time_late_enabled || true;
+      const definedClockinAdjustmentEnabled = workingHourSettings.defined_clockin_adjustment_enabled || false;
 
-      const definedClockoutTimeMin = workingHourSettings.definedClockoutTimeMin || 0;
-      const definedClockoutTimeBufferMins = workingHourSettings.definedClockoutTimeBufferMins || 30;
-      const definedClockoutTimeEarlyLeaveEnabled = workingHourSettings.definedClockoutTimeEarlyLeaveEnabled || true;
-      const definedClockoutAdjustmentEnabled = workingHourSettings.definedClockoutAdjustmentEnabled || false;
+      const definedClockoutTimeMin = workingHourSettings.defined_clockout_time_min || 0;
+      const definedClockoutTimeBufferMins = workingHourSettings.defined_clockout_time_buffer_mins || 30;
+      const definedClockoutTimeEarlyLeaveEnabled = workingHourSettings.defined_clockout_time_early_leave_enabled || true;
+      const definedClockoutAdjustmentEnabled = workingHourSettings.defined_clockout_adjustment_enabled || false;
 
-      const definedOvertimeEnabled = workingHourSettings.definedOvertimeEnabled || true;
-      const definedOvertimeTimeMin = workingHourSettings.definedOvertimeTimeMin || 0;
-      const definedOvertimeMinimumMin = workingHourSettings.definedOvertimeMinimumMin || 0;
+      const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled || true;
+      const definedOvertimeTimeMin = workingHourSettings.defined_overtime_time_min || 0;
+      const definedOvertimeMinimumMin = workingHourSettings.defined_overtime_minimum_min || 0;
 
-      const definedBreakTimeMin = workingHourSettings.definedBreakTimeMins || 60;
+      const definedBreakTimeMin = workingHourSettings.defined_break_time_mins || 60;
 
-      const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
+      // const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
+      const specifiedHolidays = workingHourSettings.specified_holidays || [];
+      const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
 
       const self = this;
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
@@ -1869,6 +1889,7 @@ export default {
           if (!item.late) item.late = 0;
           if (!item.early) item.early = 0;
           if (!item.no_record) item.no_record = 0;
+
           // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6: overTime
           if (manualClockInRecord.length > 0) {
             firstClockInRec = manualClockInRecord[manualClockInRecord.length - 1];

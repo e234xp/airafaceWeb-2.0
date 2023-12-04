@@ -74,28 +74,22 @@
             <tr class="table-tr">
               <td class="h5 table-td">
                 <multiselect :class="flag_valueToPass ? 'is-valid' : 'is-invalid'" placeholder="" :multiple="true"
-                  :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                  v-model="value_to"
-                  :options="param_personGroupList"  @input="ccListOnInput"
-                >
-              </multiselect>
+                  :hideSelected="true" :searchable="false" :select-label="disp_select" :selected-label="disp_selected"
+                  :deselect-label="disp_deselect" v-model="value_to" :options="param_personGroupList"
+                  @input="ccListOnInput">
+                </multiselect>
               </td>
               <td class="h5 table-td">
                 <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
                   :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                  v-model="value_cc"
-                  :options="param_personGroupList"
-                >
-              </multiselect>
+                  v-model="value_cc" :options="param_personGroupList">
+                </multiselect>
               </td>
               <td class="h5 table-td">
                 <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
                   :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                  v-model="value_bcc"
-                  :options="param_personGroupList"
-                >
-              </multiselect>
+                  v-model="value_bcc" :options="param_personGroupList">
+                </multiselect>
               </td>
               <td class="h5 table-td"></td>
             </tr>
@@ -127,8 +121,7 @@
                 </ul>
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_language" :options="$options.languageOptions"
-                  @change="selWiegandBoxBits($event)" />
+                <CSelect size="lg" :value.sync="value_language" :options="$options.languageOptions" />
               </td>
             </tr>
             <tr class="table-tr">
@@ -182,371 +175,373 @@
   </div>
 </template>
 <script>
-  import i18n from '@/i18n';
-  import StepProgress from 'vue-step-progress';
-  import '@/airacss/vue-step-progress.css';
-  import Multiselect from 'vue-multiselect';
-  import '@/airacss/vue-multiselect.css';
+import i18n from '@/i18n';
+import StepProgress from 'vue-step-progress';
+import '@/airacss/vue-step-progress.css';
+import Multiselect from 'vue-multiselect';
+import '@/airacss/vue-multiselect.css';
 
-  const defaultlState = () => ({
-    obj_loading: null,
+const defaultlState = () => ({
+  obj_loading: null,
 
-    flag_view_password: false,
+  flag_view_password: false,
 
-    param_cardStyle: 'height: 29rem;',
-    param_activeColor: '#6baee3',
-    param_passiveColor: '#919bae',
-    param_lineThickness: 3,
-    param_activeThickness: 3,
-    param_passiveThickness: 3,
-    param_personGroupListValue: [],
-    param_personGroupList: [],
-    param_Fields: [
-      'timestamp',
-      'person_id',
-      'person_name',
-      'card_number',
-      'title',
-      'department',
-      'email',
-      'phone_number',
-      'extension_number',
-      'remarks',
-      'foreHead_temperature',
-      'face_image',
-      'register_image',
-      'display_image',
-    ],
+  param_cardStyle: 'height: 29rem;',
+  param_activeColor: '#6baee3',
+  param_passiveColor: '#919bae',
+  param_lineThickness: 3,
+  param_activeThickness: 3,
+  param_passiveThickness: 3,
+  param_personGroupListValue: [],
+  param_personGroupList: [],
+  param_Fields: [
+    'timestamp',
+    'person_id',
+    'person_name',
+    'card_number',
+    'title',
+    'department',
+    'email',
+    'phone_number',
+    'extension_number',
+    'remarks',
+    'foreHead_temperature',
+    'face_image',
+    'register_image',
+    'display_image',
+  ],
 
-    disp_header: i18n.formatter.format('NotificationMail'),
-    disp_inputNotificationInfo: i18n.formatter.format('NotificationInfo'),
-    disp_content: i18n.formatter.format('ContentField'),
-    disp_complete: i18n.formatter.format('Complete'),
+  disp_header: i18n.formatter.format('NotificationMail'),
+  disp_inputNotificationInfo: i18n.formatter.format('NotificationInfo'),
+  disp_content: i18n.formatter.format('ContentField'),
+  disp_complete: i18n.formatter.format('Complete'),
 
-    disp_notifyName: i18n.formatter.format('NotifyName'),
-    disp_host: i18n.formatter.format('HostAddress'),
-    disp_security: i18n.formatter.format('SMTPEnabledSecure'),
-    disp_port: i18n.formatter.format('Port'),
-    disp_sender: i18n.formatter.format('SMTPSender'),
-    disp_account: i18n.formatter.format('Username'),
-    disp_password: i18n.formatter.format('Password'),
-    disp_subject: i18n.formatter.format('SMTPSubject'),
-    disp_to: i18n.formatter.format('SMTPTo'),
-    disp_cc: i18n.formatter.format('SMTPCC'),
-    disp_bcc: i18n.formatter.format('SMTPBCC'),
+  disp_notifyName: i18n.formatter.format('NotifyName'),
+  disp_host: i18n.formatter.format('HostAddress'),
+  disp_security: i18n.formatter.format('SMTPEnabledSecure'),
+  disp_port: i18n.formatter.format('Port'),
+  disp_sender: i18n.formatter.format('SMTPSender'),
+  disp_account: i18n.formatter.format('Username'),
+  disp_password: i18n.formatter.format('Password'),
+  disp_subject: i18n.formatter.format('SMTPSubject'),
+  disp_to: i18n.formatter.format('SMTPTo'),
+  disp_cc: i18n.formatter.format('SMTPCC'),
+  disp_bcc: i18n.formatter.format('SMTPBCC'),
 
-    disp_fields: i18n.formatter.format('Fields'),
-    disp_language: i18n.formatter.format('ContentLanguage'),
-    disp_note: i18n.formatter.format('ExpansionField'),
-    disp_select: i18n.formatter.format('Select'),
-    disp_selected: i18n.formatter.format('Selected'),
-    disp_deselect: i18n.formatter.format('Deselect'),
+  disp_fields: i18n.formatter.format('Fields'),
+  disp_language: i18n.formatter.format('ContentLanguage'),
+  disp_note: i18n.formatter.format('ExpansionField'),
+  disp_select: i18n.formatter.format('Select'),
+  disp_selected: i18n.formatter.format('Selected'),
+  disp_deselect: i18n.formatter.format('Deselect'),
 
-    disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
-    disp_noEmptyPortOnly: i18n.formatter.format('NoEmptyPortOnly'),
-    disp_previous: i18n.formatter.format('Previous'),
-    disp_next: i18n.formatter.format('Next'),
+  disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
+  disp_noEmptyPortOnly: i18n.formatter.format('NoEmptyPortOnly'),
+  disp_previous: i18n.formatter.format('Previous'),
+  disp_next: i18n.formatter.format('Next'),
 
-    flag_currentSetp: 0,
+  flag_currentSetp: 0,
 
-    value_uuid: '',
-    value_notifyName: '',
-    value_host: '',
-    value_security: 'SSL',
-    value_port: 587,
-    value_sender: '',
-    value_account: '',
-    value_password: '',
-    value_subject: '',
-    value_to: [],
-    value_cc: [],
-    value_bcc: [],
-    value_language: 'zh',
-    value_selectedFields: ['timestamp'],
-    value_note: '',
+  value_uuid: '',
+  value_notifyName: '',
+  value_host: '',
+  value_security: 'SSL',
+  value_port: 587,
+  value_sender: '',
+  value_account: '',
+  value_password: '',
+  value_subject: '',
+  value_to: [],
+  value_cc: [],
+  value_bcc: [],
+  value_language: 'zh',
+  value_selectedFields: ['timestamp'],
+  value_note: '',
 
-    flag_notifyNamePass: false,
-    flag_hostPass: false,
-    flag_portPass: false,
-    flag_senderPass: false,
-    flag_accountPass: false,
-    flag_passwordPass: false,
-    flag_subjectPass: false,
-    flag_valueToPass: false,
-  });
+  flag_notifyNamePass: false,
+  flag_hostPass: false,
+  flag_portPass: false,
+  flag_senderPass: false,
+  flag_accountPass: false,
+  flag_passwordPass: false,
+  flag_subjectPass: false,
+  flag_valueToPass: false,
+});
 
-  export default {
-    name: 'MailNotifyForm',
-    languageOptions: [
-      { value: 'en', label: 'English' },
-      { value: 'zh', label: '繁體中文' },
-      { value: 'ja', label: '日本語' },
-      { value: 'es', label: 'español' },
-      { value: 'fr', label: 'Français' },
-      { value: 'th', label: 'แบบไทย' },
-    ],
-    props: {
-      formData: { type: Object, default: () => { } },
-      modifyMode: Boolean,
-      onFinish: { type: Function, default: () => null },
-    },
-    data() {
-      // return Object.assign({}, defaultlState(), this.formData);
-      const cloneObject = {};
-      Object.assign(cloneObject, defaultlState(), this.formData);
+export default {
+  name: 'MailNotifyForm',
+  languageOptions: [
+    { value: 'en', label: 'English' },
+    { value: 'zh', label: '繁體中文' },
+    { value: 'ja', label: '日本語' },
+    { value: 'es', label: 'español' },
+    { value: 'fr', label: 'Français' },
+    { value: 'th', label: 'แบบไทย' },
+  ],
+  props: {
+    formData: { type: Object, default: () => { } },
+    modifyMode: Boolean,
+    onFinish: { type: Function, default: () => null },
+  },
+  data() {
+    // return Object.assign({}, defaultlState(), this.formData);
+    const cloneObject = {};
+    Object.assign(cloneObject, defaultlState(), this.formData);
 
-      return cloneObject;
-    },
-    async created() {
+    return cloneObject;
+  },
+  async created() {
+    const self = this;
+
+    // Person Group
+    const ret = await self.$globalGetGroupList();
+    if (!ret.error) {
+      self.param_personGroupList = [];
+      for (let i = 0; i < ret.group_list.length; i += 1) {
+        self.param_personGroupListValue.push({ value: ret.group_list[i].uuid, label: ret.group_list[i].name });
+        self.param_personGroupList.push(ret.group_list[i].name);
+      }
+    }
+
+    self.updateSettings();
+  },
+  updated() { },
+  methods: {
+    async updateSettings() {
       const self = this;
 
-      // Person Group
-      let ret = await self.$globalGetGroupList();
-      if (!ret.error) {
-        self.param_personGroupList = [];
-        for (let i = 0; i < ret.group_list.length; i += 1) {
-          self.param_personGroupListValue.push({ value: ret.group_list[i].uuid, label: ret.group_list[i].name });
-          self.param_personGroupList.push(ret.group_list[i].name);
-        }
+      self.value_uuid = self.value_settingitem.uuid || '';
+      self.value_notifyName = self.value_settingitem.name || `Mail Notify-${(self.value_allRecords.length + 1)}`;
+      self.value_host = self.value_settingitem.host || '';
+      self.value_security = self.value_settingitem.security || 'SSL';
+      self.value_port = +self.value_settingitem.port || 587;
+      self.value_sender = self.value_settingitem.sender || '';
+      self.value_account = self.value_settingitem.email || '';
+      self.value_password = self.value_settingitem.password || '';
+      self.value_subject = self.value_settingitem.subject || '';
+
+      // self.value_to = self.value_settingitem.to || [];
+      self.value_to = self.value_settingitem.to.map((item) => {
+        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
+        return uuid.label;
+      });
+      self.ccListOnInput(self.value_to);
+
+      // self.value_cc = self.value_settingitem.cc || [];
+      self.value_cc = self.value_settingitem.cc.map((item) => {
+        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
+        return uuid.label;
+      });
+
+      // self.value_bcc = self.value_settingitem.bcc || [];
+      self.value_bcc = self.value_settingitem.bcc.map((item) => {
+        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
+        return uuid.label;
+      });
+
+      if (self.value_settingitem.fields) {
+        self.value_selectedFields = self.value_settingitem.fields;
       }
 
-      self.updateSettings();
+      self.value_language = self.value_settingitem.language || 'zh';
+      self.value_note = self.value_settingitem.note || '';
+
+      const fields = [].concat(self.value_selectedFields);
+      for (let i = 0; i < self.param_Fields.length; i += 1) {
+        if (self.value_selectedFields.indexOf(self.param_Fields[i]) < 0) {
+          fields.push(self.param_Fields[i]);
+        }
+      }
+      self.param_Fields = [].concat(fields);
     },
-    updated() { },
-    methods: {
-      async updateSettings() {
-        const self = this;
+    nextButtonName() {
+      switch (this.flag_currentSetp) {
+        case 0:
+          return this.disp_next;
+        case 1:
+          return this.disp_next;
+        case 2:
+          return this.disp_complete;
+        default:
+          return this.disp_next;
+      }
+    },
+    clickOnPrev() {
+      const self = this;
 
-        self.value_uuid = self.value_settingitem.uuid || '';
-        self.value_notifyName = self.value_settingitem.name || `Mail Notify-${(self.value_allRecords.length + 1)}`;
-        self.value_host = self.value_settingitem.host || '';
-        self.value_security = self.value_settingitem.security || 'SSL';
-        self.value_port = +self.value_settingitem.port || 587;
-        self.value_sender = self.value_settingitem.sender || '';
-        self.value_account = self.value_settingitem.email || '';
-        self.value_password = self.value_settingitem.password || '';
-        self.value_subject = self.value_settingitem.subject || '';
-
-        // self.value_to = self.value_settingitem.to || [];
-        self.value_to = self.value_settingitem.to.map((item) => {
-          const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-          return uuid.label;
-        });
-        self.ccListOnInput(self.value_to);
-
-        // self.value_cc = self.value_settingitem.cc || [];
-        self.value_cc = self.value_settingitem.cc.map((item) => {
-          const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-          return uuid.label;
-        });
-
-        // self.value_bcc = self.value_settingitem.bcc || [];
-        self.value_bcc = self.value_settingitem.bcc.map((item) => {
-          const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-          return uuid.label;
-        });
-
-        if (self.value_settingitem.fields) {
-          self.value_selectedFields = self.value_settingitem.fields;
-        }
-
-        self.value_note = self.value_settingitem.note || '';
-
-        const fields = [].concat(self.value_selectedFields);
-        for (let i = 0; i < self.param_Fields.length; i += 1) {
-          if (self.value_selectedFields.indexOf(self.param_Fields[i]) < 0) {
-            fields.push(self.param_Fields[i]);
-          }
-        }
-        self.param_Fields = [].concat(fields);
-      },
-      nextButtonName() {
-        switch (this.flag_currentSetp) {
-          case 0:
-            return this.disp_next;
-          case 1:
-            return this.disp_next;
-          case 2:
-            return this.disp_complete;
-          default:
-            return this.disp_next;
-        }
-      },
-      clickOnPrev() {
-        const self = this;
-
-        if (self.flag_currentSetp === 0) {
-          if (self.value_returnRoutePath.length > 0) {
-            self.$router.push({ name: self.value_returnRoutePath });
-          } else self.updateSettings();
-        } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
-      },
-      clickOnNext() {
-        const self = this;
-
-        if (self.flag_currentSetp === 0) {
-          self.flag_currentSetp = 1;
-        } else if (self.flag_currentSetp === 1) {
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-
-          if (self.onFinish) {
-            const localSelectedToList = self.value_to.map((item) => {
-              const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-              return uuid.value;
-            });
-
-            const localSelectedCCList = self.value_cc.map((item) => {
-              const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-              return uuid.value;
-            });
-
-            const localSelectedBccList = self.value_bcc.map((item) => {
-              const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-              return uuid.value;
-            });
-
-
-            self.onFinish(
-              {
-                uuid: self.value_uuid ? self.value_uuid : undefined,
-                name: self.value_notifyName,
-                enable: true,
-                host: self.value_host,
-                security: self.value_security,
-                port: +self.value_port || 0,
-                sender: self.value_sender,
-                email: self.value_account,
-                password: self.value_password,
-                subject: self.value_subject,
-                to: localSelectedToList || [],
-                cc: localSelectedCCList || [],
-                bcc: localSelectedBccList || [],
-                language: self.value_language,
-                fields: self.value_selectedFields,
-                note: self.value_note,
-              },
-              (success, result) => {
-                if (self.obj_loading) self.obj_loading.hide();
-                if (result && result.message === 'ok') {
-                  self.flag_currentSetp = 2;
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format('Failed'),
-                    type: 'error',
-                    timer: 3000,
-                    confirmButtonColor: '#20a8d8',
-                  });
-                }
-              },
-            );
-          } else {
-            if (self.obj_loading) self.obj_loading.hide();
-            self.flag_currentSetp = 1;
-          }
-        } else {
+      if (self.flag_currentSetp === 0) {
+        if (self.value_returnRoutePath.length > 0) {
           self.$router.push({ name: self.value_returnRoutePath });
-        }
-      },
+        } else self.updateSettings();
+      } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
+    },
+    clickOnNext() {
+      const self = this;
 
-      viewPassword() {
-        const self = this;
+      if (self.flag_currentSetp === 0) {
+        self.flag_currentSetp = 1;
+      } else if (self.flag_currentSetp === 1) {
+        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
 
-        self.flag_view_password = !self.flag_view_password;
-      },
+        if (self.onFinish) {
+          const localSelectedToList = self.value_to.map((item) => {
+            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
+            return uuid.value;
+          });
 
-      showOnStep(step) {
-        return step === this.flag_currentSetp ? 'd-block' : 'd-none';
-      },
+          const localSelectedCCList = self.value_cc.map((item) => {
+            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
+            return uuid.value;
+          });
 
-      notifyNameValidator(val) {
-        const self = this;
+          const localSelectedBccList = self.value_bcc.map((item) => {
+            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
+            return uuid.value;
+          });
 
-        if (val.replace(/\s/g, '').length === 0) {
-          self.flag_notifyNamePass = false;
+          self.onFinish(
+            {
+              uuid: self.value_uuid ? self.value_uuid : undefined,
+              name: self.value_notifyName,
+              enable: true,
+              host: self.value_host,
+              security: self.value_security,
+              port: +self.value_port || 0,
+              sender: self.value_sender,
+              email: self.value_account,
+              password: self.value_password,
+              subject: self.value_subject,
+              to: localSelectedToList || [],
+              cc: localSelectedCCList || [],
+              bcc: localSelectedBccList || [],
+              language: self.value_language,
+              fields: self.value_selectedFields,
+              note: self.value_note,
+            },
+            (success, result) => {
+              if (self.obj_loading) self.obj_loading.hide();
+              if (result && result.message === 'ok') {
+                self.flag_currentSetp = 2;
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format('Failed'),
+                  type: 'error',
+                  timer: 3000,
+                  confirmButtonColor: '#20a8d8',
+                });
+              }
+            },
+          );
         } else {
-          self.flag_notifyNamePass = val.length > 0;
+          if (self.obj_loading) self.obj_loading.hide();
+          self.flag_currentSetp = 1;
         }
+      } else {
+        self.$router.push({ name: self.value_returnRoutePath });
+      }
+    },
 
-        return self.flag_notifyNamePass;
-      },
+    viewPassword() {
+      const self = this;
 
-      hostValidator(val) {
-        const self = this;
+      self.flag_view_password = !self.flag_view_password;
+    },
 
-        if (!/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(val)) {
-          if (!/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/.test(val)) {
-            this.flag_hostPass = false;
-          } else {
-            this.flag_hostPass = true;
-          }
+    showOnStep(step) {
+      return step === this.flag_currentSetp ? 'd-block' : 'd-none';
+    },
+
+    notifyNameValidator(val) {
+      const self = this;
+
+      if (val.replace(/\s/g, '').length === 0) {
+        self.flag_notifyNamePass = false;
+      } else {
+        self.flag_notifyNamePass = val.length > 0;
+      }
+
+      return self.flag_notifyNamePass;
+    },
+
+    hostValidator(val) {
+      const self = this;
+
+      if (!/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(val)) {
+        if (!/^(?!-)[A-Za-z0-9-]+([-.]{1}[a-z0-9]+)*\.[A-Za-z]{2,6}$/.test(val)) {
+          this.flag_hostPass = false;
         } else {
           this.flag_hostPass = true;
         }
+      } else {
+        this.flag_hostPass = true;
+      }
 
-        return self.flag_hostPass;
-      },
+      return self.flag_hostPass;
+    },
 
-      portValidator(val) {
-        const self = this;
+    portValidator(val) {
+      const self = this;
 
-        if (!/^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(val)) {
-          self.flag_portPass = false;
-        } else {
-          self.flag_portPass = true;
-        }
+      if (!/^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(val)) {
+        self.flag_portPass = false;
+      } else {
+        self.flag_portPass = true;
+      }
 
-        return self.flag_portPass;
-      },
+      return self.flag_portPass;
+    },
 
-      senderValidator(val) {
-        const self = this;
+    senderValidator(val) {
+      const self = this;
 
-        if (val.replace(/\s/g, '').length === 0) {
-          self.flag_senderPass = false;
-        } else {
-          self.flag_senderPass = val.length > 0;
-        }
+      if (val.replace(/\s/g, '').length === 0) {
+        self.flag_senderPass = false;
+      } else if (!/^(|([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+).([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5}){1,25})+)*$/.test(val)) {
+        self.flag_senderPass = false;
+      } else {
+        self.flag_senderPass = val.length > 0;
+      }
 
-        return self.flag_senderPass;
-      },
+      return self.flag_senderPass;
+    },
 
-      accountValidator(val) {
-        const self = this;
+    accountValidator(val) {
+      const self = this;
 
-        if (val.replace(/\s/g, '').length === 0) {
-          self.flag_accountPass = false;
-        } else {
-          self.flag_accountPass = val.length > 0;
-        }
+      if (val.replace(/\s/g, '').length === 0) {
+        self.flag_accountPass = false;
+      } else {
+        self.flag_accountPass = val.length > 0;
+      }
 
-        return self.flag_accountPass;
-      },
+      return self.flag_accountPass;
+    },
 
-      passwordValidator(val) {
-        const self = this;
+    passwordValidator(val) {
+      const self = this;
 
-        if (val.replace(/\s/g, '').length === 0) {
-          self.flag_passwordPass = false;
-        } else {
-          self.flag_passwordPass = val.length > 0;
-        }
+      if (val.replace(/\s/g, '').length === 0) {
+        self.flag_passwordPass = false;
+      } else {
+        self.flag_passwordPass = val.length > 0;
+      }
 
-        return self.flag_passwordPass;
-      },
+      return self.flag_passwordPass;
+    },
 
-      subjectValidator(val) {
-        const self = this;
+    subjectValidator(val) {
+      const self = this;
 
-        if (val.replace(/\s/g, '').length === 0) {
-          self.flag_subjectPass = false;
-        } else {
-          self.flag_subjectPass = val.length > 0;
-        }
+      if (val.replace(/\s/g, '').length === 0) {
+        self.flag_subjectPass = false;
+      } else {
+        self.flag_subjectPass = val.length > 0;
+      }
 
-        return this.flag_subjectPass;
-      },
+      return this.flag_subjectPass;
+    },
 
-      ccListOnInput(value) {
+    ccListOnInput(value) {
       if (value.length >= 1) {
         this.flag_valueToPass = true;
       } else {
@@ -554,47 +549,47 @@
       }
     },
 
-      fieldChanged(item, evt) {
-        const self = this;
+    fieldChanged(item, evt) {
+      const self = this;
 
-        if (evt.target.checked) {
-          if (self.value_selectedFields.indexOf(item) < 0) {
-            self.value_selectedFields.push(item);
-          }
-        } else {
-          const idx = self.value_selectedFields.indexOf(item);
-          if (idx >= 0) {
-            self.value_selectedFields.splice(idx, 1);
-          }
+      if (evt.target.checked) {
+        if (self.value_selectedFields.indexOf(item) < 0) {
+          self.value_selectedFields.push(item);
         }
-      },
-
-      fieldMove(item, step) {
-        const self = this;
-
+      } else {
         const idx = self.value_selectedFields.indexOf(item);
-        if ((step === -1) && (idx === 0)) return;
-        if ((step === 1) && (idx === self.value_selectedFields.length - 1)) return;
-
-        let temp = self.param_Fields[idx];
-        self.param_Fields[idx] = self.param_Fields[idx + step];
-        self.param_Fields[idx + step] = temp;
-
-        if (self.param_Fields.length >= 1) {
-          const popped = self.param_Fields.pop();
-          self.param_Fields.push(popped);
+        if (idx >= 0) {
+          self.value_selectedFields.splice(idx, 1);
         }
+      }
+    },
 
-        temp = self.value_selectedFields[idx];
-        self.value_selectedFields[idx] = self.value_selectedFields[idx + step];
-        self.value_selectedFields[idx + step] = temp;
-      },
+    fieldMove(item, step) {
+      const self = this;
+
+      const idx = self.value_selectedFields.indexOf(item);
+      if ((step === -1) && (idx === 0)) return;
+      if ((step === 1) && (idx === self.value_selectedFields.length - 1)) return;
+
+      let temp = self.param_Fields[idx];
+      self.param_Fields[idx] = self.param_Fields[idx + step];
+      self.param_Fields[idx + step] = temp;
+
+      if (self.param_Fields.length >= 1) {
+        const popped = self.param_Fields.pop();
+        self.param_Fields.push(popped);
+      }
+
+      temp = self.value_selectedFields[idx];
+      self.value_selectedFields[idx] = self.value_selectedFields[idx + step];
+      self.value_selectedFields[idx + step] = temp;
     },
-    components: {
-      stepprogress: StepProgress,
-      multiselect: Multiselect,
-    },
-  };
+  },
+  components: {
+    stepprogress: StepProgress,
+    multiselect: Multiselect,
+  },
+};
 </script>
 
 <style>

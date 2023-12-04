@@ -337,6 +337,7 @@ export default {
     ret = await self.$globalGetGroupList();
     if (!ret.error) {
       self.param_personGroupList = [];
+
       for (let i = 0; i < ret.group_list.length; i += 1) {
         self.param_personGroupListValue.push({ value: ret.group_list[i].uuid, label: ret.group_list[i].name });
         self.param_personGroupList.push(ret.group_list[i].name);

@@ -166,7 +166,9 @@ export default {
     Step3Form,
   },
   async created() {
-    this.defaultValues = await this.getDefaultValues();
+    const self = this;
+
+    self.defaultValues = await self.getDefaultValues();
   },
 
   methods: {
@@ -258,9 +260,13 @@ export default {
           if (form.stream_type === 'sdp') {
             if (key === 'ip_address') ret = true;
             else if (key === 'port') ret = true;
-            else ret = this.isFieldPassed(key, value);
+            else {
+              ret = this.isFieldPassed(key, value);
+              console.log('1', key, value, ret);
+            }
           } else {
             ret = this.isFieldPassed(key, value);
+            console.log('2', key, value, ret);
           }
 
           return ret;

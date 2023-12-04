@@ -114,7 +114,7 @@ export default {
       if (items && Array.isArray(items)) {
         const uuidListToDel = [];
         items.forEach((item) => uuidListToDel.push(item.uuid));
-        self.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
+        self.$confirm('', i18n.formatter.format('ConfirmToDelete'), {
           confirmButtonText: i18n.formatter.format('Confirm'),
           cancelButtonText: i18n.formatter.format('Cancel'),
           confirmButtonColor: '#20a8d8',

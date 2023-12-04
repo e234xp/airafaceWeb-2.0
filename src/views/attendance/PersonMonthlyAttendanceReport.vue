@@ -78,7 +78,7 @@ export default {
       // console.log('onFetchDataCallback' )
       const self = this;
       self.flag_keepingDownloadPersonData = true;
-      self.downloadPersonDataAsync(2500, cb);
+      self.downloadPersonDataAsync(250, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnMonth, uuidList, sliceSize, cb) {
@@ -103,6 +103,7 @@ export default {
           } else {
             thereIsMoreData = false;
           }
+
           if (cb) cb(error, reset, true, data.data);
           reset = false;
         } else {
@@ -142,7 +143,7 @@ export default {
       const self = this;
       self.flag_keepingDownloadPersonVerifyResult = true;
       // self.downloadPersonVerifyResultAsync(dateOnMonth, uuidList, 2500, cb);
-      self.downloadPersonVerifyResultAsync(dateOnMonth, [], 2500, cb);
+      self.downloadPersonVerifyResultAsync(dateOnMonth, [], 250, cb);
     },
     setWrapperStyle() {
       document.querySelector('style').textContent

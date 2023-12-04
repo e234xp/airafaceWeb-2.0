@@ -66,7 +66,7 @@
 }
 
 .attendance-chart-canvas-wrap {
-  width: 1302px;
+  width: 1293px;
 }
 
 .doughnut-chart-canvas-wrap {
@@ -85,8 +85,7 @@
 }
 
 .current-date-time {
-  padding-right: 20px;
-  padding-bottom: unset !important;
+  padding-bottom: 20px;
   display: flex;
   align-items: center;
 }
@@ -153,8 +152,6 @@
   height: 240px;
   margin-bottom: 25px;
   display: flex;
-  justify-content: center;
-  gap: 20px;
 }
 
 .attendance-header-tag {
@@ -170,7 +167,7 @@
 }
 
 .attendance-statistics-box {
-  width: 558px;
+  width: 504px;
   height: 240px;
   border-right: 1px solid #565758;
   margin-bottom: 22px;
@@ -266,7 +263,6 @@
 }
 
 .person-list-container {
-  padding: 0 1.04%;
   margin-bottom: 1.28%; // <-- 24px / 1872px
 }
 
@@ -341,26 +337,27 @@
 
 
 
-.normal-person-card {
-  background: $dashboard-primary-gray;
+.dashboard .normal-person-card {
+  background: #38393B;
 }
 
-.abnormal-person-card {
-  border: 4px solid $attendance-present-blue;
-  background: $attendance-present-blue;
+.dashboard .abnormal-person-card {
+  border: 4px solid #2A4361;
+  background: #2A4361;
 }
 
-.absent-person-card {
-  background: $dashboard-gray-disabled;
-}
-
-.absent-person-name {
-  color: $dashboard-white-disabled;
-}
-
-.absent-person-image {
+.dashboard .absent-person-card {
   opacity: 0.2;
+  background: #38393B;
 }
+
+// .absent-person-name {
+//   color: $dashboard-white-disabled;
+// }
+
+// .absent-person-image {
+//   opacity: 0.2;
+// }
 
 .person-image {
   background: $dashboard-mid-gray;
@@ -550,7 +547,7 @@
 .footer-detail-box {
   position: absolute;
   bottom: 0.96%; // 18px /1872px
-  right: 0.96%;
+  right: 0;
   display: flex;
   color: white;
   display: flex;

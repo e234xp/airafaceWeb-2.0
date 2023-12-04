@@ -29,10 +29,10 @@
                 </CInput>
 
                 <CSelect :options="$options.languageOptions" :value="value_lang" @update:value="
-                    (value) => {
-                      setLangChange(value);
-                    }
-                  ">
+                  (value) => {
+                    setLangChange(value);
+                  }
+                ">
                   <template #prepend-content>
                     <CIcon name="cil-speech" />
                   </template>
@@ -48,28 +48,24 @@
                     <CSwitch size="sm" class="ml-0" color="success" shape="pill" @update:checked="switchRememberMe()"
                       :checked="value_rememberMe">
                     </CSwitch>
-                    <span v-if="value_rememberMe" style="
-                        position: absolute;
-                        left: 60px;
-                        top: -1px;
-                        font-size: 15px;
-                        color: #00c861;
-                      ">
+                    <span v-if="value_rememberMe"
+                      style="position: absolute; left: 60px;  top: -1px; font-size: 15px; color: #00c861;">
                       {{ disp_rememberMe }}
                     </span>
-                    <span v-else style="
-                        position: absolute;
-                        left: 60px;
-                        top: -1px;
-                        font-size: 15px;
-                        color: gray;
-                      ">
+                    <span v-else style="position: absolute; left: 60px; top: -1px; font-size: 15px; color: gray;">
                       {{ disp_rememberMe }}
                     </span>
                     <div style="height: 10px"></div>
-                    <CButton style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8" @click="clickOnLogin">
-                      {{ disp_title }}
-                    </CButton>
+
+                    <CRow>
+                      <CCol col="6" class="text-left">
+                        <CButton style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8" @click="clickOnLogin">
+                          {{ disp_title }}
+                        </CButton>
+                      </CCol>
+                      <CCol col="6" class="text-right" style="padding-top: 8px;">
+                      </CCol>
+                    </CRow>
                   </CCol>
                 </CRow>
               </CForm>
@@ -116,7 +112,7 @@ export default {
       value_username: '',
       value_password: '',
       value_displayMode: 'Setting',
-      value_lang: 'zh',
+      value_lang: 'en',
       value_rememberMe: false,
       value_disbleLoginButton: true,
 
@@ -167,7 +163,6 @@ export default {
     }
 
     self.getversionInfo();
-    // this.setWrapperStyle();
 
     document.querySelector('style').textContent
       += '@media screen and (max-width:992px) { '
@@ -186,8 +181,19 @@ export default {
           self.disp_versionNumber = data.fw_version;
           self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${global.webVersion}`;
           self.value_disbleLoginButton = false;
-          store.commit('set', ['deviceType', data.device_type]);
-          Vue.$cookies.set('deviceType', data.device_type);
+
+          for (let i = 0; i < self.$profileLists.length; i += 1) {
+            if (self.$profileLists[i].device_type === data.device_type) {
+              document.title = self.$profileLists[i].device_type;
+
+              // store.commit('set', ['deviceProfile', self.$profileLists[i]]);
+              // console.log('getversionInfo', store.state.deviceProfile);
+
+              localStorage.setItem('deviceProfile', JSON.stringify(self.$profileLists[i]));
+              console.log('getversionInfo', JSON.parse(localStorage.getItem('deviceProfile')));
+              break;
+            }
+          }
         }
       });
     },
@@ -316,15 +322,6 @@ export default {
         },
       );
     },
-
-    // setWrapperStyle() {
-    //   document.querySelector('style').textContent
-    //     += '@media screen and (max-width:992px) { '
-    //     + '.c-wrapper { max-width: 100% !important; margin-left: 0px; } '
-    //     + '.c-sidebar { margin-left: -256px !important; } '
-    //     + '.backdrop { display: none !important; } '
-    //     + '}';
-    // },
   },
 };
 </script>

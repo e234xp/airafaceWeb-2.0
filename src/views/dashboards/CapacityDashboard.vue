@@ -2,7 +2,8 @@
   <div class="ratio-wrap ratio-wrap-16x9" v-show="!isLoadSetting">
     <div class="ratio-content capacity-dashboard"
       :style="{backgroundImage:'url('+displaySettings.background_image+')'}">
-      <div class="dashboard-header d-flex justify-content-between">
+
+      <div class="dashboard-header d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
         <div class="d-flex align-items-center">
           <div class="dashboard-attendance-logo" @click="toLoginPage"
             :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"></div>
@@ -15,7 +16,7 @@
       </div>
 
       <!-------------------  Occupancy ------------------>
-      <div class="dashboard-divider"></div>
+      <div class="dashboard-divider" style="margin-left: 20px; margin-right: 20px;"></div>
 
       <!-------------------  Attendance - BEGIN ------------------>
       <div class="attendance-top-box" v-show="displaySettings.displayChart">
@@ -156,12 +157,23 @@
                   <div v-if="person.status !== 1" class="d-flex align-items-end temperature-info">
                   </div>
                   <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-sm fw-300">
-                    {{
-                    person.clockinRecord ?
-                    person.clockinRecord.timestamp ?
-                    formatEpochTime(person.clockinRecord.timestamp)
-                    : "&nbsp;"
-                    : "&nbsp;" }}
+                    <span style="margin-right: 20px;">
+                      {{
+                      person.clockinRecord ?
+                      person.clockinRecord.timestamp ?
+                      formatEpochTime(person.clockinRecord.timestamp)
+                      : "&nbsp;"
+                      : "&nbsp;" }}
+                    </span>
+
+                    <span>
+                      {{
+                      person.clockoutRecord ?
+                      person.clockoutRecord.timestamp ?
+                      formatEpochTime(person.clockoutRecord.timestamp)
+                      : "&nbsp;"
+                      : "&nbsp;" }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -239,6 +251,20 @@ import { backgroundImage } from '@/utils/welcomeMode';
 import capacityModel from '@/models/CapacityDashboardModel.vue';
 import chartHelper from '@/utils/ChartHelper.vue';
 
+const emptyFace = 'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAAXNSR0IB2cksfwAAA'
+  + 'AlwSFlzAAALEwAACxMBAJqcGAAAAd1QTFRF19nZztDQtbe3vL6+wsPDsbKzubq7ycvL09XV2Nray83Nh4eIWVlaXFxdW1xdYWFiaWlqcnJzfH19hoeIkpOTnp+gq6ysubu7uLm5jI2Oa2tsWlpbWllb'
+  + 'Y2NkgYGCqaqq0tTUwcPDdXV2ZWVmqaurvsDAnZ6ffHx9YGBhzM7OXV1eiYqL1tjYlJWVdnZ3zc/Pk5SUcnN00NLSqKqqgoKDq6ytkZKSa2xs1dfXs7S0jY6Ppqeofn+ApKWmfX1+ra+vhoeHwMLCmJm'
+  + 'Z1NbWeXp6kpOU0NHRnZ6edXZ2pqiof4CAr7GxiIiJuLq6kJGRwMHCl5iZxMXFi4yMeHl6rrCwgoODXl5fgIGClJSVrK2thIWGyMrKoKKiaWpqiouMra6vhYaHz9DQqqusfn5/X19gjo+QqKmp0dPTZG'
+  + 'Rlt7m5bm9ww8XFhISFYmJjpaamfX5+qaqrp6ippKWlioqLa2xts7S1enp7XFxegICBf4CBe3t8z9HRc3N0W1tcwcLDiYmKZ2docHBxxMbGrq+vsrS0gYKDu7y9lZaXbGxtv8DAbW5vpKambG1tl5iYr'
+  + 'K6ub29wmZqabm5vkZOTjo6PyszMsrOzv8HBeXp7iYqKamprsLGxoKGikJGSmJmax8nJ/5q5qgAAAudJREFUeJzt2fdXE0EQB/AlFnLxYoJYsyLRWGKMYDeKgoDYFWsU0KgUY4u9EiP2htgLYPlbvTxE'
+  + '43vZmQkz8tN9/4D5vNm9vd29U8qNGzdu3LgZSZlnwsRJk8u9yrL+H2L5pth+254aCFZMq5w+Y+ascnFi9pyQnqv/iV01rzosSMxfoIsnslDMWBQwGE4WSyFLzIaOLpUxqmMAopd5BYj4cohwUlPLR1Y'
+  + 'ghtYrV3GN1aih9Zo4z/ABD9bfrOUh6yiGXp/gGF5SI1pv4CAemqE3cpA6IrKJg2wmIvUcpIGIbDGXwJ+JRpuGNJlL4GvI66chDUANVLGCJMNuBGo0o61spXVSxkIqSUYAnF10vFpISAissQ1DtpOQHW'
+  + 'ANdL/ZSUJ2gTXQrXM3CdkDF8EmZS8J2QcXCSNIK2nJ74eLIJNy4CAJOXQYrIKslCOk0dI6ia84Y6waImJzjkVHiYif0Yk6RkRCnDtLGxFpZxiqg4gc5yDqBMmwW1lIioREWIc7dZKEnGIZ6jR4NxlNJ'
+  + 'w9RXQSjG9p9KaEcVHuYhlJnkpiRSrOR5rOIYZ9jGyp+HuvkAh9RFxEjwx8tpS4hyGUBQ/m6YeSKBIK8WoJhEaQDvDheFTGUugYYXcw7/J/ErxuNGwLfPH4nbVyQN8UMZd0yGLflGjG/i5PsbzcFuWNC'
+  + 'JFb7aO6OBzIew2X1GpAYd08sSPaeAcnd551TCtJnIJzYD8IyhlVvRnRSasAeAkjukYyRjQKIfiyDPIEMnZJBnoJIlcikPEM+Rz0XMGpfwIaOedjGy1eI4RyF63hEuoX06a6Xcb5L9EcohBN/zxh/o8T'
+  + 'bXhOJfKID2TEQb96WQOSTeVcik+h8XyKRT2CghC0/8QG9kxiS/PjJeVooP6D6kcMvmFz7Z8KoffnKIPJpQpHsIJNwMjQMG8MZvuFkEDIE2sCULHc2CvLNZFTIGTpjmH14byo134saP0SN4q38lDWKz4'
+  + 'rgpI9kqKD4L1KHptMGIb/CAAAAAElFTkSuQmCC';
+
 export default {
   name: 'CapacityDashboard',
 
@@ -310,7 +336,7 @@ export default {
         patrolidleTime: 60,
 
         // Personal View
-        displayGroup: ['All Person'],
+        displayGroup: [],
         displayCardMode: 'STANDARD',
         displayPhoto: 'REGISTER',
         line1: 'NONE',
@@ -387,9 +413,15 @@ export default {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
                 }
+                else {
+                  person.display_image = emptyFace;
+                }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
+                }
+                else {
+                  person.register_image = emptyFace;
                 }
               }
             });
@@ -405,10 +437,14 @@ export default {
               if (err === null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
+                } else {
+                  person.display_image = emptyFace;
                 }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
+                } else {
+                  person.register_image = emptyFace;
                 }
               }
             });
@@ -769,7 +805,10 @@ export default {
         case 'SNAPSHOT':
           ret = person.snapshot_image;
           break;
-        default: ret = ''; break;
+        case 'NONE':
+        default:
+          ret = emptyFace;
+          break;
       }
       return ret;
     },
@@ -823,9 +862,15 @@ export default {
               if (data.display_image !== '') {
                 person.display_image = data.display_image;
               }
+              else {
+                person.display_image = emptyFace;
+              }
 
               if (data.register_image !== '') {
                 person.register_image = data.register_image;
+              }
+              else {
+                person.register_image = emptyFace;
               }
             }
           });

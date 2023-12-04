@@ -83,7 +83,7 @@ export default {
       // console.log('onFetchDataCallback' )
       const self = this;
       self.flag_keepingDownloadPersonData = true;
-      self.downloadPersonDataAsync(2500, cb);
+      self.downloadPersonDataAsync(250, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnDay, uuidList, sliceSize, cb) {
@@ -100,14 +100,9 @@ export default {
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
       while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await self.$globalManualClockinResult(
-          uuidList,
-          startTimeMs,
-          endTimeMs,
-          shitf,
-          sliceSize,
-        );
+        const ret = await self.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+
         if (error == null) {
           if (data.total_length && data.total_length > sliceSize + shitf) {
             thereIsMoreData = true;
@@ -116,9 +111,9 @@ export default {
             thereIsMoreData = false;
           }
 
-          for (let i = 0; i < data.data.length; i++) {
-            data.data[i].timestamp += (new Date().getTimezoneOffset() * 60000);
-          }
+          // for (let i = 0; i < data.data.length; i++) {
+          //   data.data[i].timestamp += (new Date().getTimezoneOffset() * 60000);
+          // }
 
           if (cb) cb(error, reset, true, data.data);
           reset = false;
@@ -134,6 +129,7 @@ export default {
       while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
         const ret = await self.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+
         if (error == null) {
           if (data.total_length && data.total_length > (sliceSize + shitf)) {
             thereIsMoreData = true;
@@ -158,7 +154,7 @@ export default {
       const self = this;
       self.flag_keepingDownloadPersonVerifyResult = true;
       // self.downloadPersonVerifyResultAsync(dateOnDay, uuidList, 2500, cb);
-      self.downloadPersonVerifyResultAsync(dateOnDay, [], 2500, cb);
+      self.downloadPersonVerifyResultAsync(dateOnDay, [], 250, cb);
     },
     setWrapperStyle() {
       document.querySelector('style').textContent

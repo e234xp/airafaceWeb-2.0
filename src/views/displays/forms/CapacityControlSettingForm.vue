@@ -358,7 +358,7 @@ wQotD4BfSdAYSdAnmUaDJ1TUGSZgDLrfSg/+y0YGj+f0uVXda4QBXnbUXlz4uS+xv8BYQAA4+xKsuHwp
         background_image: backgroundImage,
         logo: airalogo,
 
-        displayGroup: ["All Person", "All Visitor"],
+        displayGroup: [],
         displayCardMode: "STANDARD",    // STANDARD, COMPACT
         displayPhoto: "REGISTER",   // NONE, REGISTER, SNAPSHOT, DISPLAY
         line1: "NAME",              // NONE, NAME, PARTIALNAME

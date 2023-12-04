@@ -80,174 +80,226 @@
   </div>
 </template>
 <script>
-  import i18n from '@/i18n';
-  import { mapState } from 'vuex';
-  import TableObserver from '@/utils/TableObserver.vue';
+import i18n from '@/i18n';
+import { mapState } from 'vuex';
+import TableObserver from '@/utils/TableObserver.vue';
 
-  const defaultlState = () => ({
-    value_dataItemsToShow: [],
-    value_allTableItems: [],
-    value_allTableItems_lastStatus: [],
-    value_tablePage: {
-      currentPage: 1,
-      pageSize: 10,
-      totalResult: 0,
-    },
-    value_searchingFilter: '',
-    disp_header: i18n.formatter.format('AccountManagement'),
-    disp_account: i18n.formatter.format('Account'),
-    disp_password: i18n.formatter.format('Password'),
-    disp_permission: i18n.formatter.format('Permission'),
-    disp_search: i18n.formatter.format('Search'),
-    disp_add: i18n.formatter.format('Add'),
-    disp_delete: i18n.formatter.format('Delete'),
-    disp_saveChanges: i18n.formatter.format('SaveChanges'),
-    disp_remarks: i18n.formatter.format('Remarks'),
-    disp_edit: i18n.formatter.format('Modify'),
-  });
-  export default {
-    name: 'AccountManagement',
-    data() {
-      const cloneObject = {};
-      Object.assign(cloneObject, defaultlState(), this.formData);
+const defaultlState = () => ({
+  value_dataItemsToShow: [],
+  value_allTableItems: [],
+  value_allTableItems_lastStatus: [],
+  value_tablePage: {
+    currentPage: 1,
+    pageSize: 10,
+    totalResult: 0,
+  },
+  value_searchingFilter: '',
+  disp_header: i18n.formatter.format('AccountManagement'),
+  disp_account: i18n.formatter.format('Account'),
+  disp_password: i18n.formatter.format('Password'),
+  disp_permission: i18n.formatter.format('Permission'),
+  disp_search: i18n.formatter.format('Search'),
+  disp_add: i18n.formatter.format('Add'),
+  disp_delete: i18n.formatter.format('Delete'),
+  disp_saveChanges: i18n.formatter.format('SaveChanges'),
+  disp_remarks: i18n.formatter.format('Remarks'),
+  disp_edit: i18n.formatter.format('Modify'),
+});
+export default {
+  name: 'AccountManagement',
+  data() {
+    const cloneObject = {};
+    Object.assign(cloneObject, defaultlState(), this.formData);
 
-      return cloneObject;
+    return cloneObject;
+  },
+  created() { },
+  mixins: [TableObserver],
+  mounted() {
+    const self = this;
+    self.refreshTableItems();
+    this.observeTableSize();
+  },
+  computed: {
+    ...mapState(['ellipsisMode']),
+  },
+  updated() {
+    const self = this;
+
+    self.value_dataItemsToShow.forEach((item) => {
+      const localItem = item;
+      localItem.maskpassword = '********';
+
+      const modifyButtonId = `actionOnModify_${localItem.uuid}`;
+      const oldModifyButton = document.getElementById(modifyButtonId);
+      const newModifyButton = oldModifyButton.cloneNode(true);
+      oldModifyButton.parentNode.replaceChild(newModifyButton, oldModifyButton);
+      newModifyButton.addEventListener('click', () => {
+        self.clickOnSave(localItem);
+      });
+    });
+  },
+  watch: {
+    value_searchingFilter: () => {
+      this.value_tablePage.currentPage = 1;
+      this.value_dataItemsToShow = this.generateFilteredData(
+        this.value_allTableItems,
+        this.value_searchingFilter,
+      );
     },
-    created() { },
-    mixins: [TableObserver],
-    mounted() {
+  },
+  methods: {
+    onClickEdit(row) {
+      this.$refs.mainTable.setActiveRow(row);
+    },
+
+    dataHasBeenChangedFun(tableScopeValue) {
+      console.log('dataHasBeenChangedFun', tableScopeValue);
+    },
+
+    checkboxFixed({ row }) {
+      return !row.fixed && this.value_dataItemsToShow.length > 1;
+    },
+    // headerCellStyle(row, column, rowIndex, columnIndex) {
+    headerCellStyle() {
+      return 'fontSize: 18px';
+    },
+    // cellStyle(row, column, rowIndex, columnIndex) {
+    cellStyle() {
+      return 'fontSize:18px;';
+    },
+    generateFilteredData(sourceData, filter) {
       const self = this;
-      self.refreshTableItems();
-      this.observeTableSize();
+
+      const filteredItems = filter.length === 0
+        ? sourceData
+        : sourceData.filter((item) => item.username.toLowerCase().indexOf(filter.toLowerCase()) > -1);
+      self.value_tablePage.totalResult = filteredItems.length;
+      const sliceList = filteredItems.slice(
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+      );
+      sliceList.forEach((pItem) => {
+        const item = pItem;
+
+        const modifyButtonId = `actionOnModify_${item.uuid}`;
+        item.actionButton = `<input type='button' id='${modifyButtonId}'`
+          + ` value='${self.disp_saveChanges}' class='btn btn-outline-primary btn-in-cell p-0'/>`;
+      });
+      return Object.assign([], sliceList);
     },
-    computed: {
-      ...mapState(['ellipsisMode']),
-    },
-    updated() {
+    refreshTableItems() {
       const self = this;
-
-      self.value_dataItemsToShow.forEach((item) => {
-        const localItem = item;
-        localItem.maskpassword = '********';
-
-        const modifyButtonId = `actionOnModify_${localItem.uuid}`;
-        const oldModifyButton = document.getElementById(modifyButtonId);
-        const newModifyButton = oldModifyButton.cloneNode(true);
-        oldModifyButton.parentNode.replaceChild(newModifyButton, oldModifyButton);
-        newModifyButton.addEventListener('click', () => {
-          self.clickOnSave(localItem);
-        });
+      self.$globalFetchAccountList((error, data) => {
+        if (data) {
+          self.value_allTableItems = data.account_list;
+          self.value_allTableItems_lastStatus = [];
+          self.value_allTableItems.forEach((i) => {
+            self.value_allTableItems_lastStatus.push({
+              username: i.username,
+              password: i.password,
+            });
+          });
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+            self.value_searchingFilter,
+          );
+        }
       });
     },
-    watch: {
-      value_searchingFilter: () => {
-        this.value_tablePage.currentPage = 1;
-        this.value_dataItemsToShow = this.generateFilteredData(
-          this.value_allTableItems,
-          this.value_searchingFilter,
-        );
-      },
+    handlePageChange({ currentPage, pageSize }) {
+      this.value_tablePage.currentPage = currentPage;
+      this.value_tablePage.pageSize = pageSize;
+      this.value_dataItemsToShow = this.generateFilteredData(
+        this.value_allTableItems,
+        this.value_searchingFilter,
+      );
+      this.resizeOneTable();
     },
-    methods: {
-      onClickEdit(row) {
-        this.$refs.mainTable.setActiveRow(row);
-      },
 
-      dataHasBeenChangedFun(tableScopeValue) {
-        console.log('dataHasBeenChangedFun', tableScopeValue);
-      },
-
-      checkboxFixed({ row }) {
-        return !row.fixed && this.value_dataItemsToShow.length > 1;
-      },
-      // headerCellStyle(row, column, rowIndex, columnIndex) {
-      headerCellStyle() {
-        return 'fontSize: 18px';
-      },
-      // cellStyle(row, column, rowIndex, columnIndex) {
-      cellStyle() {
-        return 'fontSize:18px;';
-      },
-      generateFilteredData(sourceData, filter) {
-        const self = this;
-
-        const filteredItems = filter.length === 0
-          ? sourceData
-          : sourceData.filter((item) => item.username.toLowerCase().indexOf(filter.toLowerCase()) > -1);
-        self.value_tablePage.totalResult = filteredItems.length;
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-        );
-        sliceList.forEach((pItem) => {
-          const item = pItem;
-
-          const modifyButtonId = `actionOnModify_${item.uuid}`;
-          item.actionButton = `<input type='button' id='${modifyButtonId}'`
-            + ` value='${self.disp_saveChanges}' class='btn btn-outline-primary btn-in-cell p-0'/>`;
-        });
-        return Object.assign([], sliceList);
-      },
-      refreshTableItems() {
-        const self = this;
-        self.$globalFetchAccountList((error, data) => {
-          if (data) {
-            self.value_allTableItems = data.account_list;
-            self.value_allTableItems_lastStatus = [];
-            self.value_allTableItems.forEach((i) => {
-              self.value_allTableItems_lastStatus.push({
-                username: i.username,
-                password: i.password,
-              });
+    onAdd() {
+      const self = this;
+      self.$router.push({
+        name: 'CreateAccount',
+        params: {
+          value_returnRoutePath: 'AccountManagement',
+          value_returnRouteName: i18n.formatter.format('Return'),
+          value_account_list: self.value_allTableItems,
+        },
+      });
+    },
+    clickOnAdd() {
+      if (this.onAdd) this.onAdd();
+    },
+    deleteItem(listToDel) {
+      const self = this;
+      const accountUuidListToDel = [];
+      listToDel.forEach((a) => {
+        accountUuidListToDel.push(a.uuid);
+      });
+      self.$globalRemoveAccount(
+        { account_uuid_list: accountUuidListToDel },
+        (err) => {
+          if (!err) {
+            self.$fire({
+              text: i18n.formatter.format('Successful'),
+              type: 'success',
+              timer: 3000,
             });
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems,
-              self.value_searchingFilter,
-            );
+            accountUuidListToDel.forEach((deletedItemUuid) => {
+              self.value_allTableItems = self.value_allTableItems.filter((item) => item.uuid !== deletedItemUuid);
+            });
+          } else {
+            self.$fire({
+              text: i18n.formatter.format('OperationFailed'),
+              type: 'error',
+              timer: 3000,
+              confirmButtonColor: '#20a8d8',
+            });
           }
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+            self.value_searchingFilter,
+          );
+        },
+      );
+    },
+    clickOnMultipleDelete() {
+      const self = this;
+      self
+        .$confirm('', i18n.formatter.format('ConfirmToDelete'), {
+          confirmButtonText: i18n.formatter.format('Confirm'),
+          cancelButtonText: i18n.formatter.format('Cancel'),
+          confirmButtonColor: '#20a8d8',
+          cancelButtonColor: '#f86c6b',
+        })
+        .then(() => {
+          const list = self.$refs.mainTable.getCheckboxRecords();
+          const listToDel = list.filter((item) => !item.fixed);
+          self.deleteItem(listToDel);
+        })
+        .catch((e) => {
+          console.log('clickOnMultipleDelete', e);
         });
-      },
-      handlePageChange({ currentPage, pageSize }) {
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        this.value_dataItemsToShow = this.generateFilteredData(
-          this.value_allTableItems,
-          this.value_searchingFilter,
-        );
-        this.resizeOneTable();
-      },
+    },
+    clickOnSave(item) {
+      const self = this;
+      const row = self.$refs.mainTable.getRowById(item._XID);
+      const lastAccoutInfo = self.value_allTableItems_lastStatus.filter((i) => i.username === item.username && i.password !== item.password);
 
-      onAdd() {
-        const self = this;
-        self.$router.push({
-          name: 'CreateAccount',
-          params: {
-            value_returnRoutePath: 'AccountManagement',
-            value_returnRouteName: i18n.formatter.format('Return'),
-            value_account_list: self.value_allTableItems,
+      if (lastAccoutInfo.length > 0) {
+        self.$globalModifyAccount(
+          {
+            username: item.username,
+            new_password: item.password,
           },
-        });
-      },
-      clickOnAdd() {
-        if (this.onAdd) this.onAdd();
-      },
-      deleteItem(listToDel) {
-        const self = this;
-        const accountUuidListToDel = [];
-        listToDel.forEach((a) => {
-          accountUuidListToDel.push(a.uuid);
-        });
-        self.$globalRemoveAccount(
-          { account_uuid_list: accountUuidListToDel },
           (err) => {
             if (!err) {
+              lastAccoutInfo[0].password = item.password;
               self.$fire({
                 text: i18n.formatter.format('Successful'),
                 type: 'success',
                 timer: 3000,
-              });
-              accountUuidListToDel.forEach((deletedItemUuid) => {
-                self.value_allTableItems = self.value_allTableItems.filter((item) => item.uuid !== deletedItemUuid);
               });
             } else {
               self.$fire({
@@ -257,73 +309,21 @@
                 confirmButtonColor: '#20a8d8',
               });
             }
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems,
-              self.value_searchingFilter,
-            );
+
+            self.$refs.mainTable.reloadRow(row, {
+              uuid: item.uuid,
+              username: item.username,
+              password: lastAccoutInfo[0].password,
+              permission: item.permission,
+              create_date: item.create_date,
+              last_modify_date: item.last_modify_date,
+              actionButton: item.actionButton,
+            });
           },
         );
-      },
-      clickOnMultipleDelete() {
-        const self = this;
-        self
-          .$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
-            confirmButtonText: i18n.formatter.format('Confirm'),
-            cancelButtonText: i18n.formatter.format('Cancel'),
-            confirmButtonColor: '#20a8d8',
-            cancelButtonColor: '#f86c6b',
-          })
-          .then(() => {
-            const list = self.$refs.mainTable.getCheckboxRecords();
-            const listToDel = list.filter((item) => !item.fixed);
-            self.deleteItem(listToDel);
-          })
-          .catch((e) => {
-            console.log('clickOnMultipleDelete', e);
-          });
-      },
-      clickOnSave(item) {
-        const self = this;
-        const row = self.$refs.mainTable.getRowById(item._XID);
-        const lastAccoutInfo = self.value_allTableItems_lastStatus.filter((i) => i.username === item.username && i.password !== item.password);
-
-        if (lastAccoutInfo.length > 0) {
-          self.$globalModifyAccount(
-            {
-              username: item.username,
-              new_password: item.password,
-            },
-            (err) => {
-              if (!err) {
-                lastAccoutInfo[0].password = item.password;
-                self.$fire({
-                  text: i18n.formatter.format('Successful'),
-                  type: 'success',
-                  timer: 3000,
-                });
-              } else {
-                self.$fire({
-                  text: i18n.formatter.format('OperationFailed'),
-                  type: 'error',
-                  timer: 3000,
-                  confirmButtonColor: '#20a8d8',
-                });
-              }
-
-              self.$refs.mainTable.reloadRow(row, {
-                uuid: item.uuid,
-                username: item.username,
-                password: lastAccoutInfo[0].password,
-                permission: item.permission,
-                create_date: item.create_date,
-                last_modify_date: item.last_modify_date,
-                actionButton: item.actionButton,
-              });
-            },
-          );
-        }
-      },
+      }
     },
-    components: {},
-  };
+  },
+  components: {},
+};
 </script>

@@ -85,6 +85,7 @@ let nav = [
           },
         ],
       },
+
       {
         _name: 'CSidebarNavDropdown',
         name: i18n.formatter.format('PersonsManagement'),

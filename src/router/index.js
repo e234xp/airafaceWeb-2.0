@@ -8,7 +8,8 @@ const TheContainer = () => import('@/containers/TheContainer.vue');
 const Login = () => import('@/views/Login.vue');
 const Mobile = () => import('@/views/Mobile.vue');
 
-/// //////////////  Attendance ////////////////
+/// ////////////////////////////////////////
+/// /////    Attendance    /////////////////
 const PersonMonthlyAttendanceReport = () => import('@/views/attendance/PersonMonthlyAttendanceReport.vue');
 const PersonDailyAttendanceReport = () => import('@/views/attendance/PersonDailyAttendanceReport.vue');
 const AttendanceSettings = () => import('@/views/attendance/AttendanceSettings.vue');
@@ -16,26 +17,26 @@ const ChangeAttendanceClockIn = () => import('@/views/attendance/ChangeAttendanc
 const ChangeAttendance = () => import('@/views/attendance/ChangeAttendance.vue');
 
 /// ////////////////////////////////////////
-/// //////////////  Dashboards /////////////
+/// /////    Dashboards    /////////////////
 const WelcomeDashboard = () => import('@/views/dashboards/WelcomeDashboard.vue');
 const OccupancyDashboard = () => import('@/views/dashboards/OccupancyDashboard.vue');
 const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue');
 
 /// ////////////////////////////////////////
-/// //////////////  Reports ////////////////
+/// /////    Reports    ////////////////////
 const PersonReport = () => import('@/views/reports/PersonReport.vue');
 const VisitorReport = () => import('@/views/reports/VisitorReport.vue');
 const Investigation = () => import('@/views/reports/Investigation.vue');
 
 /// ////////////////////////////////////////
-/// ////////  Persons Management ///////////
+/// /////    Persons Management    /////////
 const PersonManagement = () => import('@/views/personsmanagement/PersonManagement.vue');
 const AddPerson = () => import('@/views/personsmanagement/AddPerson.vue');
-const ModifyVisitor = () => import('@/views/personsmanagement/ModifyVisitor.vue');
+const ModifyPerson = () => import('@/views/personsmanagement/ModifyPerson.vue');
 
 const VisitorManagement = () => import('@/views/personsmanagement/VisitorManagement.vue');
 const AddVisitor = () => import('@/views/personsmanagement/AddVisitor.vue');
-const ModifyPerson = () => import('@/views/personsmanagement/ModifyPerson.vue');
+const ModifyVisitor = () => import('@/views/personsmanagement/ModifyVisitor.vue');
 
 const GroupManagement = () => import('@/views/personsmanagement/GroupManagement.vue');
 const CreateGroup = () => import('@/views/personsmanagement/CreateGroup.vue');
@@ -43,27 +44,27 @@ const ModifyGroup = () => import('@/views/personsmanagement/ModifyGroup.vue');
 const CheckGroup = () => import('@/views/personsmanagement/CheckGroup.vue');
 
 /// ////////////////////////////////////////
-/// ////////  Access Control  ///////////
-const AccessControlManagement = () => import('@/views/accesscontrol/AccessControlManagement.vue');
-const CreateAccessControlSetting = () => import('@/views/accesscontrol/CreateAccessControlSetting.vue');
-const ModifyAccessControlSetting = () => import('@/views/accesscontrol/ModifyAccessControlSetting.vue');
-const AccessControlDeviceSettings = () => import('@/views/accesscontrol/AccessControlDeviceSettings.vue');
-const RemoteTrigger = () => import('@/views/accesscontrol/RemoteTrigger.vue');
+/// /////    Access Control    /////////////
+// const AccessControlManagement = () => import('@/views/accesscontrol/AccessControlManagement.vue');
+// const CreateAccessControlSetting = () => import('@/views/accesscontrol/CreateAccessControlSetting.vue');
+// const ModifyAccessControlSetting = () => import('@/views/accesscontrol/ModifyAccessControlSetting.vue');
+// const AccessControlDeviceSettings = () => import('@/views/accesscontrol/AccessControlDeviceSettings.vue');
+// const RemoteTrigger = () => import('@/views/accesscontrol/RemoteTrigger.vue');
 
 /// ////////////////////////////////////////
-/// ////////  Event Control  ///////////
-const EventControlManagement = () => import('@/views/events/EventControlManagement.vue');
-const CreateEventControlSetting = () => import('@/views/events/CreateEventControlSetting.vue');
-const ModifyEventControlSetting = () => import('@/views/events/ModifyEventControlSetting.vue');
+/// /////    Event Control    //////////////
+// const EventControlManagement = () => import('@/views/events/EventControlManagement.vue');
+// const CreateEventControlSetting = () => import('@/views/events/CreateEventControlSetting.vue');
+// const ModifyEventControlSetting = () => import('@/views/events/ModifyEventControlSetting.vue');
 
 /// ////////////////////////////////////////
-/// //////// Display settings ///////////
+/// /////    Display settings    ///////////
 const ModifyWelcomeControlSetting = () => import('@/views/displays/ModifyWelcomeControlSetting.vue');
 const ModifyOccupancyControlSetting = () => import('@/views/displays/ModifyOccupancyControlSetting.vue');
 const ModifyCapacityControlSetting = () => import('@/views/displays/ModifyCapacityControlSetting.vue');
 
 /// ////////////////////////////////////////
-/// //////// System settings ///////////
+/// /////    System settings    ////////////
 const GeneralSettings = () => import('@/views/systemsettings/GeneralSettings.vue');
 const NetworkSettings = () => import('@/views/systemsettings/NetworkSettings.vue');
 const TimeSettings = () => import('@/views/systemsettings/TimeSettings.vue');
@@ -77,31 +78,31 @@ const IndicationSettings = () => import('@/views/systemsettings/IndicationSettin
 const LicenseSettings = () => import('@/views/systemsettings/LicenseSettings.vue');
 
 /// ////////////////////////////////////////
-/// //////// device ///////////
+/// /////    Device settings    ////////////
 const CameraList = () => import('@/views/videodevice/CameraList.vue');
+const AddCamera = () => import('@/views/videodevice/AddCamera.vue');
+const ModifyCameras = () => import('@/views/videodevice/ModifyCameras.vue');
+
 const TabletsList = () => import('@/views/videodevice/TabletsList.vue');
+const AddTablets = () => import('@/views/videodevice/AddTablets.vue');
+const ModifyTablets = () => import('@/views/videodevice/ModifyTablets.vue');
+
 const DeviceGroups = () => import('@/views/videodevice/DeviceGroups.vue');
-// const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
-// const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
-const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic.vue');
-const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings.vue');
+const AddVideoDeviceGroups = () => import('@/views/videodevice/AddVideoDeviceGroups.vue');
+const ModifyVideoDeviceGroups = () => import('@/views/videodevice/ModifyVideoDeviceGroups.vue');
 
 /// ////////////////////////////////////////
-/// //////// output device ///////////
+/// /////    Output Device    //////////////
 const IOboxsManagement = () => import('@/views/outputdevice/IOboxsManagement.vue');
 const WiegandConverters = () => import('@/views/outputdevice/WiegandConverters.vue');
 const OutputDeviceGroups = () => import('@/views/outputdevice/OutputDeviceGroups.vue');
 
 /// ////////////////////////////////////////
 /// //////// device add update///////////
-const AddCamera = () => import('@/views/videodevice/AddCamera.vue');
-const ModifyCameras = () => import('@/views/videodevice/ModifyCameras.vue');
-
-const AddTablets = () => import('@/views/videodevice/AddTablets.vue');
-const ModifyTablets = () => import('@/views/videodevice/ModifyTablets.vue');
-
-const AddVideoDeviceGroups = () => import('@/views/videodevice/AddVideoDeviceGroups.vue');
-const ModifyVideoDeviceGroups = () => import('@/views/videodevice/ModifyVideoDeviceGroups.vue');
+// const CamerasBasic = () => import('@/views/videodevice/forms/CamerasBasic')
+// const CamerasBasic = () => import('@/views/videodevice/CamerasBasic')
+const TabletsBasic = () => import('@/views/videodevice/forms/TabletsBasic.vue');
+const TabletsAccessSettings = () => import('@/views/videodevice/forms/TabletsAccessSettings.vue');
 
 /// ////////////////////////////////////////
 /// //////// output add update///////////
@@ -116,7 +117,7 @@ const ModifyOutputDeviceGroups = () => import('@/views/outputdevice/ModifyOutput
 // const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
 
 /// ////////////////////////////////////////
-/// ////////  Notify Management ////////////
+/// /////    Notify Management    //////////
 const LineNotifyManagement = () => import('@/views/notifications/LineNotifyManagement.vue');
 const AddLineNotify = () => import('@/views/notifications/AddLineNotify.vue');
 const ModifyLineNotify = () => import('@/views/notifications/ModifyLineNotify.vue');
@@ -130,7 +131,7 @@ const AddHttpNotify = () => import('@/views/notifications/AddHttpNotify.vue');
 const ModifyHttpNotify = () => import('@/views/notifications/ModifyHttpNotify.vue');
 
 /// ////////////////////////////////////////
-/// ////////  Action Rules /////////////////
+/// /////    Action Rules    ///////////////
 const ActionRuleManagement = () => import('@/views/accessrules/ActionRuleManagement.vue');
 const AddActionRule = () => import('@/views/accessrules/AddActionRule.vue');
 const ModifyActionRule = () => import('@/views/accessrules/ModifyActionRule.vue');
@@ -306,66 +307,66 @@ function configRoutes() {
             },
           ],
         },
-        {
-          path: 'accesscontrol',
-          redirect: '/accesscontrol/AccessControlManagement',
-          name: 'AccessControl',
-          component: {
-            render(c) { return c('router-view'); },
-          },
-          children: [
-            {
-              path: 'accesscontrolmanagement',
-              name: 'AccessControlManagement',
-              component: AccessControlManagement,
-            },
-            {
-              path: 'createaccesscontrolsetting',
-              name: 'CreateAccessControlSetting',
-              component: CreateAccessControlSetting,
-            },
-            {
-              path: 'modifyaccesscontrolsetting',
-              name: 'ModifyAccessControlSetting',
-              component: ModifyAccessControlSetting,
-            },
-            {
-              path: 'accesscontroldevicesettings',
-              name: 'AccessControlDeviceSettings',
-              component: AccessControlDeviceSettings,
-            },
-            {
-              path: 'remotetrigger',
-              name: 'RemoteTrigger',
-              component: RemoteTrigger,
-            },
-          ],
-        },
-        {
-          path: 'events',
-          redirect: '/events/EventControlManagement',
-          name: 'EventControl',
-          component: {
-            render(c) { return c('router-view'); },
-          },
-          children: [
-            {
-              path: 'eventcontrolmanagement',
-              name: 'EventControlManagement',
-              component: EventControlManagement,
-            },
-            {
-              path: 'createeventcontrolsetting',
-              name: 'CreateEventControlSetting',
-              component: CreateEventControlSetting,
-            },
-            {
-              path: 'modifyeventcontrolsetting',
-              name: 'ModifyEventControlSetting',
-              component: ModifyEventControlSetting,
-            },
-          ],
-        },
+        // {
+        //   path: 'accesscontrol',
+        //   redirect: '/accesscontrol/AccessControlManagement',
+        //   name: 'AccessControl',
+        //   component: {
+        //     render(c) { return c('router-view'); },
+        //   },
+        //   children: [
+        //     {
+        //       path: 'accesscontrolmanagement',
+        //       name: 'AccessControlManagement',
+        //       component: AccessControlManagement,
+        //     },
+        //     {
+        //       path: 'createaccesscontrolsetting',
+        //       name: 'CreateAccessControlSetting',
+        //       component: CreateAccessControlSetting,
+        //     },
+        //     {
+        //       path: 'modifyaccesscontrolsetting',
+        //       name: 'ModifyAccessControlSetting',
+        //       component: ModifyAccessControlSetting,
+        //     },
+        //     {
+        //       path: 'accesscontroldevicesettings',
+        //       name: 'AccessControlDeviceSettings',
+        //       component: AccessControlDeviceSettings,
+        //     },
+        //     {
+        //       path: 'remotetrigger',
+        //       name: 'RemoteTrigger',
+        //       component: RemoteTrigger,
+        //     },
+        //   ],
+        // },
+        // {
+        //   path: 'events',
+        //   redirect: '/events/EventControlManagement',
+        //   name: 'EventControl',
+        //   component: {
+        //     render(c) { return c('router-view'); },
+        //   },
+        //   children: [
+        //     {
+        //       path: 'eventcontrolmanagement',
+        //       name: 'EventControlManagement',
+        //       component: EventControlManagement,
+        //     },
+        //     {
+        //       path: 'createeventcontrolsetting',
+        //       name: 'CreateEventControlSetting',
+        //       component: CreateEventControlSetting,
+        //     },
+        //     {
+        //       path: 'modifyeventcontrolsetting',
+        //       name: 'ModifyEventControlSetting',
+        //       component: ModifyEventControlSetting,
+        //     },
+        //   ],
+        // },
         {
           path: 'displays',
           redirect: '/displays/ModifyWelcomeControlSetting',
@@ -461,7 +462,6 @@ function configRoutes() {
             },
           ],
         },
-        // 新項目路由
         {
           path: 'videodevice',
           redirect: '/videodevice/cameralist',
@@ -645,42 +645,6 @@ function configRoutes() {
               name: 'ModifyHttpNotify',
               component: ModifyHttpNotify,
             },
-
-            // {
-            //   path: 'httpnotify',
-            //   name: 'ModifyIOboxs',
-            //   component: ModifyIOboxs,
-            // },
-            // {
-            //   path: 'wiegandconverters',
-            //   name: 'WiegandConverters',
-            //   component: WiegandConverters,
-            // },
-            // {
-            //   path: 'addWiegandConverters',
-            //   name: 'AddWiegandConverters',
-            //   component: AddWiegandConverters,
-            // },
-            // {
-            //   path: 'modifyWiegandConverters',
-            //   name: 'ModifyWiegandConverters',
-            //   component: ModifyWiegandConverters,
-            // },
-            // {
-            //   path: 'outputDeviceGroups',
-            //   name: 'OutputDeviceGroups',
-            //   component: OutputDeviceGroups,
-            // },
-            // {
-            //   path: 'iOboxesBasic',
-            //   name: 'IOboxesBasic',
-            //   component: IOboxesBasic,
-            // },
-            // {
-            //   path: 'wiegandBasic',
-            //   name: 'WiegandBasic',
-            //   component: WiegandBasic,
-            // },
           ],
         },
         {

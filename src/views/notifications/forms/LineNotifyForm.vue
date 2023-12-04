@@ -1,15 +1,10 @@
 <template>
   <div>
     <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-3" icon-class="fa fa-check"
-      :active-thickness="param_activeThickness"
-      :passive-thickness="param_passiveThickness"
-      :active-color="param_activeColor"
-      :passive-color="param_passiveColor"
-      :line-thickness="param_lineThickness"
-      :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
-      :current-step="flag_currentSetp"
-    >
+    <stepprogress class="w-step-progress-3" icon-class="fa fa-check" :active-thickness="param_activeThickness"
+      :passive-thickness="param_passiveThickness" :active-color="param_activeColor" :passive-color="param_passiveColor"
+      :line-thickness="param_lineThickness" :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
+      :current-step="flag_currentSetp">
     </stepprogress>
 
     <CCol sm="12">
@@ -29,16 +24,12 @@
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_notifyName" required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="notifyNameValidator"
-                  />
+                <CInput size="lg" v-model="value_notifyName" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="notifyNameValidator" />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_accessToken" required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="accessTokenValidator"
-                />
+                <CInput size="lg" v-model="value_accessToken" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="accessTokenValidator" />
               </td>
               <td class="table-td"></td>
               <td class="table-td"></td>
@@ -57,12 +48,10 @@
             <tr class="table-tr">
               <td class="table-td" rowspan="3">
                 <ul class="list-group">
-                  <li class="list-group-item"
-                    v-for="(item, index) in param_Fields" :key="index">
-                    <input class="form-check-input me-1" type="checkbox" value="item"
-                      :checked="value_selectedFields.indexOf(item) >= 0"
-                      @change="fieldChanged(item, $event)" />
-                    {{ $t(item) }}
+                  <li class="list-group-item" v-for="(item, index) in param_Fields" :key="index">
+                    <input class="form-check-input me-1" type="checkbox" value="item" :checked="item.checked"
+                      :disabled="!item.enabled" @change="fieldChanged(item, $event)" />
+                    {{ $t(item.label) }}
                     <CButton style="float:right; width: 40px; min-width:unset;" @click="fieldMove(item, -1)">
                       <CIcon name="cil-arrow-thick-top" />
                     </CButton>
@@ -73,8 +62,7 @@
                 </ul>
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_language" :options="$options.languageOptions"
-                  @change="selWiegandBoxBits($event)" />
+                <CSelect size="lg" :value.sync="value_language" :options="$options.languageOptions" />
               </td>
             </tr>
             <tr class="table-tr">
@@ -142,20 +130,20 @@ const defaultlState = () => ({
   param_activeThickness: 3,
   param_passiveThickness: 3,
   param_Fields: [
-    'timestamp',
-    'person_id',
-    'person_name',
-    'card_number',
-    'title',
-    'department',
-    'email',
-    'phone_number',
-    'extension_number',
-    'remarks',
-    'foreHead_temperature',
-    'face_image',
-    'register_image',
-    'display_image',
+    { label: 'timestamp', checked: false, enabled: true },
+    { label: 'person_id', checked: false, enabled: true },
+    { label: 'person_name', checked: false, enabled: true },
+    { label: 'card_number', checked: false, enabled: true },
+    { label: 'title', checked: false, enabled: true },
+    { label: 'department', checked: false, enabled: true },
+    { label: 'email', checked: false, enabled: true },
+    { label: 'phone_number', checked: false, enabled: true },
+    { label: 'extension_number', checked: false, enabled: true },
+    { label: 'remarks', checked: false, enabled: true },
+    { label: 'foreHead_temperature', checked: false, enabled: true },
+    { label: 'face_image', checked: false, enabled: true },
+    { label: 'register_image', checked: false, enabled: true },
+    { label: 'display_image', checked: false, enabled: true },
   ],
 
   disp_header: i18n.formatter.format('NotificationLine'),
@@ -221,18 +209,55 @@ export default {
       self.value_notifyName = self.value_settingitem.name || `Line Notify-${(self.value_allRecords.length + 1)}`;
       self.value_accessToken = self.value_settingitem.access_token || '';
       if (self.value_settingitem.fields) {
-        self.value_selectedFields = self.value_settingitem.fields;
+        if (Array.isArray(self.value_settingitem.fields)) {
+          self.value_selectedFields = self.value_settingitem.fields;
+        } else {
+          self.value_selectedFields = ['timestamp'];
+        }
+      } else {
+        self.value_selectedFields = ['timestamp'];
       }
 
+      self.value_language = self.value_settingitem.language || 'zh';
       self.value_note = self.value_settingitem.note || '';
 
-      const fields = [].concat(self.value_selectedFields);
       for (let i = 0; i < self.param_Fields.length; i += 1) {
-        if (self.value_selectedFields.indexOf(self.param_Fields[i]) < 0) {
-          fields.push(self.param_Fields[i]);
+        if (self.value_selectedFields.indexOf(self.param_Fields[i].label) >= 0) {
+          self.param_Fields[i].checked = true;
+          self.param_Fields[i].enabled = true;
+
+          switch (self.param_Fields[i].label) {
+            case 'face_image': {
+              let idx = self.param_Fields.findIndex((obj) => obj.label === 'register_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              idx = self.param_Fields.findIndex((obj) => obj.label === 'display_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              break;
+            }
+            case 'register_image': {
+              let idx = self.param_Fields.findIndex((obj) => obj.label === 'face_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              idx = self.param_Fields.findIndex((obj) => obj.label === 'display_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              break;
+            }
+            default:
+            case 'display_image': {
+              let idx = self.param_Fields.findIndex((obj) => obj.label === 'face_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              idx = self.param_Fields.findIndex((obj) => obj.label === 'register_image') || -1;
+              if (idx !== -1) self.param_Fields[idx].enabled = false;
+
+              break;
+            }
+          }
         }
       }
-      self.param_Fields = [].concat(fields);
     },
     nextButtonName() {
       switch (this.flag_currentSetp) {
@@ -321,40 +346,51 @@ export default {
       return this.flag_accessTokenPass;
     },
 
-    fieldChanged(item, evt) {
+    fieldChanged(pItem, evt) {
       const self = this;
+      const item = pItem;
 
-      if (evt.target.checked) {
-        if (self.value_selectedFields.indexOf(item) < 0) {
-          self.value_selectedFields.push(item);
+      item.checked = evt.target.checked;
+
+      self.value_selectedFields = [];
+      for (let i = 0; i < self.param_Fields.length; i += 1) {
+        if (self.param_Fields[i].checked) {
+          self.value_selectedFields.push(self.param_Fields[i].label);
         }
-      } else {
-        const idx = self.value_selectedFields.indexOf(item);
-        if (idx >= 0) {
-          self.value_selectedFields.splice(idx, 1);
-        }
+      }
+
+      if (['face_image', 'register_image', 'display_image'].indexOf(item.label) >= 0) {
+        let idx = -1;
+        idx = self.param_Fields.findIndex((obj) => obj.label === 'face_image') || -1;
+        if (idx !== -1) self.param_Fields[idx].enabled = !item.checked;
+        idx = self.param_Fields.findIndex((obj) => obj.label === 'register_image') || -1;
+        if (idx !== -1) self.param_Fields[idx].enabled = !item.checked;
+        idx = self.param_Fields.findIndex((obj) => obj.label === 'display_image') || -1;
+        if (idx !== -1) self.param_Fields[idx].enabled = !item.checked;
+
+        idx = self.param_Fields.findIndex((obj) => obj.label === item.label) || -1;
+        if (idx !== -1) self.param_Fields[idx].enabled = true;
       }
     },
 
     fieldMove(item, step) {
       const self = this;
 
-      const idx = self.value_selectedFields.indexOf(item);
-      if ((step === -1) && (idx === 0)) return;
-      if ((step === 1) && (idx === self.value_selectedFields.length - 1)) return;
+      const idx = self.param_Fields.findIndex((obj) => obj.label === item.label) || -1;
 
-      let temp = self.param_Fields[idx];
+      if ((step === -1) && (idx === 0)) return;
+      if ((step === 1) && (idx === self.param_Fields.length - 1)) return;
+
+      const temp = self.param_Fields[idx];
       self.param_Fields[idx] = self.param_Fields[idx + step];
       self.param_Fields[idx + step] = temp;
 
-      if (self.param_Fields.length >= 1) {
-        const popped = self.param_Fields.pop();
-        self.param_Fields.push(popped);
+      self.value_selectedFields = [];
+      for (let i = 0; i < self.param_Fields.length; i += 1) {
+        if (self.param_Fields[i].checked) {
+          self.value_selectedFields.push(self.param_Fields[i].label);
+        }
       }
-
-      temp = self.value_selectedFields[idx];
-      self.value_selectedFields[idx] = self.value_selectedFields[idx + step];
-      self.value_selectedFields[idx + step] = temp;
     },
   },
   components: {

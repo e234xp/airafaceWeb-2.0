@@ -5,7 +5,7 @@
         {{ disp_header }}
       </div>
 
-      <CCard class="mt-5" v-if="flag_support_wifi">
+      <CCard class="mt-5" v-if="deviceProfile.support_wifi">
         <CCardHeader>
           <td>
             <span class="h3">{{ disp_wifiSettings }}</span>
@@ -223,306 +223,280 @@
 </template>
 
 <script>
-  import i18n from '@/i18n';
-  // import { deviceTypes } from '@/globalParams.js';
+import i18n from '@/i18n';
+// import { mapState } from 'vuex';
+// import store from '@/store';
 
-  import { mapState } from 'vuex';
+export default {
+  name: 'NetworkSettings',
 
-  // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  data() {
+    return {
+      param_cardStyle: 'height: 21rem;',
 
-  export default {
-    name: 'NetworkSettings',
+      flag_view_password: false,
 
-    data() {
-      return {
-        param_cardStyle: 'height: 21rem;',
+      disp_header: i18n.formatter.format('NetworkSettings'),
+      disp_enable: i18n.formatter.format('Enable'),
+      disp_disable: i18n.formatter.format('Disable'),
+      disp_wifiSettings: i18n.formatter.format('WifiSettings'),
+      disp_lanSettings: i18n.formatter.format('LanSettings'),
+      disp_linked: i18n.formatter.format('Linked'),
+      disp_notLinked: i18n.formatter.format('NotLinked'),
 
-        flag_view_password: false,
+      disp_currentSsid: i18n.formatter.format('CurrentSsid'),
+      disp_currentIpAddress: i18n.formatter.format('CurrentIpAddress'),
+      disp_wifiPassword: i18n.formatter.format('WifiPassword'),
+      disp_availableWifi: i18n.formatter.format('AvailableWifi'),
+      disp_apply: i18n.formatter.format('Apply'),
+      disp_priorityIsEthernet: i18n.formatter.format('PriorityIsEthernet'),
+      disp_ethernetMode: i18n.formatter.format('EthernetMode'),
 
-        disp_header: i18n.formatter.format('NetworkSettings'),
-        disp_enable: i18n.formatter.format('Enable'),
-        disp_disable: i18n.formatter.format('Disable'),
-        disp_wifiSettings: i18n.formatter.format('WifiSettings'),
-        disp_lanSettings: i18n.formatter.format('LanSettings'),
-        disp_linked: i18n.formatter.format('Linked'),
-        disp_notLinked: i18n.formatter.format('NotLinked'),
+      disp_ipAddress: i18n.formatter.format('IpAddress'),
+      disp_netmask: i18n.formatter.format('Netmask'),
+      disp_gateway: i18n.formatter.format('Gateway'),
+      disp_dns: i18n.formatter.format('DNS'),
 
-        disp_currentSsid: i18n.formatter.format('CurrentSsid'),
-        disp_currentIpAddress: i18n.formatter.format('CurrentIpAddress'),
-        disp_wifiPassword: i18n.formatter.format('WifiPassword'),
-        disp_availableWifi: i18n.formatter.format('AvailableWifi'),
-        disp_apply: i18n.formatter.format('Apply'),
-        disp_priorityIsEthernet: i18n.formatter.format('PriorityIsEthernet'),
-        disp_ethernetMode: i18n.formatter.format('EthernetMode'),
+      flag_wifiCannotBeDisabled: true,
+      flag_lanCannotBeDisabled: true,
+      value_wifiConnected: false,
+      value_wifiActivate: false,
+      value_wifiActiveSsid: '',
+      value_wifiActiveIpaddress: '',
+      value_ethernetActivate: false,
+      value_avaiableWifiSsidList: [],
+      value_avaiableWifiSsidDataList: [],
+      flag_refreshingWifiList: false,
+      flag_wifiNeedPassword: false,
+      value_selectedWifiSsid: '',
+      value_wifiCapabilities: '',
+      value_wifiPassword: '',
+      value_selectedEthernetMode: 'DHCP',
+      value_ethernetModeOptions: ['DHCP', 'STATIC'],
 
-        disp_ipAddress: i18n.formatter.format('IpAddress'),
-        disp_netmask: i18n.formatter.format('Netmask'),
-        disp_gateway: i18n.formatter.format('Gateway'),
-        disp_dns: i18n.formatter.format('DNS'),
+      flag_connectionOk: false,
+      flag_ethernetModeIsDhcp: true,
+      value_ethernetConnected: true,
 
-        flag_wifiCannotBeDisabled: true,
-        flag_lanCannotBeDisabled: true,
-        value_wifiConnected: false,
-        value_wifiActivate: false,
-        value_wifiActiveSsid: '',
-        value_wifiActiveIpaddress: '',
-        value_ethernetActivate: false,
-        value_avaiableWifiSsidList: [],
-        value_avaiableWifiSsidDataList: [],
-        flag_refreshingWifiList: false,
-        flag_wifiNeedPassword: false,
-        value_selectedWifiSsid: '',
-        value_wifiCapabilities: '',
-        value_wifiPassword: '',
-        value_selectedEthernetMode: 'DHCP',
-        value_ethernetModeOptions: ['DHCP', 'STATIC'],
+      value_dhcpEthernetIp: '',
+      value_dhcpEthernetMask: '',
+      value_dhcpEthernetGateway: '',
+      value_dhcpEthernetDns: '',
 
-        flag_connectionOk: false,
-        flag_ethernetModeIsDhcp: true,
-        value_ethernetConnected: true,
-        flag_support_wifi: false,
+      value_staticEthernetIp: '',
+      value_staticEthernetMask: '',
+      value_staticEthernetGateway: '',
+      value_staticEthernetDns: '',
 
-        value_dhcpEthernetIp: '',
-        value_dhcpEthernetMask: '',
-        value_dhcpEthernetGateway: '',
-        value_dhcpEthernetDns: '',
+      deviceProfile: {},
+    };
+  },
+  computed: { },
+  mounted() {
+    const self = this;
+    self.deviceProfile = JSON.parse(localStorage.getItem('deviceProfile'));
+  },
+  created() {
+    const self = this;
 
-        value_staticEthernetIp: '',
-        value_staticEthernetMask: '',
-        value_staticEthernetGateway: '',
-        value_staticEthernetDns: '',
-      };
-    },
-    computed: {
-      ...mapState(['deviceType']),
-    },
-    mounted() {
-      this.deviceTypes = this.$deviceProfile.deviceTypes;
-    },
-    created() {
-      const self = this;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+    self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
 
-      self.$globalGetSystemInfo((err, data) => {
-        if (data != null) {
-          if ((data.device_type === 'airaTablet_xs') || (data.device_type === 'airaFace2')) {
-            self.flag_support_wifi = false;
-          } else {
-            self.flag_support_wifi = true;
-          }
-        }
-      });
-
-      self.fetchWifiInfo((error) => {
-        if (error) {
-          if (self.obj_loading) self.obj_loading.hide();
-          self.$fire({
-            text: i18n.formatter.format('NetworkLoss'),
-            type: 'error',
-            timer: 3000,
-            confirmButtonColor: '#20a8d8',
-          });
-        } else {
-          self.fetchEthernetWifiInfo((err) => {
-            if (err) {
-              self.$fire({
-                text: i18n.formatter.format('NetworkLoss'),
-                type: 'error',
-                timer: 3000,
-                confirmButtonColor: '#20a8d8',
-              });
-            }
-            if (self.obj_loading) self.obj_loading.hide();
-          });
-        }
-      });
-
-      if (self.obj_loading) self.obj_loading.hide();
-
-      self.refreshAvailableWifiSsidList(() => { });
-    },
-    watch: {
-    },
-    methods: {
-      viewPassword() {
-        const self = this;
-
-        self.flag_view_password = !self.flag_view_password;
-      },
-      selWifiSsid(e) {
-        const self = this;
-        self.value_avaiableWifiSsidDataList.forEach((d) => {
-          if (d.label === e.target.value) {
-            self.value_selectedWifiSsid = e.target.value;
-            self.flag_wifiNeedPassword = d.secured;
-            self.value_wifiCapabilities = d.capabilities;
-            self.value_wifiPassword = '';
-          }
+    self.fetchWifiInfo((error) => {
+      if (error) {
+        if (self.obj_loading) self.obj_loading.hide();
+        self.$fire({
+          text: i18n.formatter.format('NetworkLoss'),
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
         });
-      },
-      selEthernetMode(e) {
-        const self = this;
-        if (e.target.value === 'DHCP') {
-          self.flag_ethernetModeIsDhcp = true;
-          self.value_selectedEthernetMode = 'DHCP';
-        } else {
-          self.flag_ethernetModeIsDhcp = false;
-          self.value_selectedEthernetMode = 'STATIC';
-
-          if (self.value_staticEthernetIp === '') self.value_staticEthernetIp = self.value_dhcpEthernetIp;
-          if (self.value_staticEthernetMask === '') self.value_staticEthernetMask = self.value_dhcpEthernetMask;
-          if (self.value_staticEthernetGateway === '') self.value_staticEthernetGateway = self.value_dhcpEthernetGateway;
-          if (self.value_staticEthernetDns === '') self.value_staticEthernetDns = self.value_dhcpEthernetDns;
-        }
-      },
-      refreshAvailableWifiSsidList(cb) {
-        const self = this;
-        self.flag_refreshingWifiList = true;
-        self.$globalFetchWifiList((error, list) => {
-          if (!error && list) {
-            self.value_avaiableWifiSsidList = [];
-            self.value_avaiableWifiSsidDataList = [];
-            self.value_selectedWifiSsid = '';
-            self.value_wifiPassword = '';
-            self.value_wifiCapabilities = '';
-            self.flag_wifiNeedPassword = false;
-            list.forEach((wifi) => {
-              if (wifi.ssid !== self.value_wifiActiveSsid) {
-                if (self.value_selectedWifiSsid === '') {
-                  self.value_selectedWifiSsid = wifi.ssid;
-                  self.flag_wifiNeedPassword = wifi.secured;
-                  self.value_wifiCapabilities = wifi.capabilities;
-                  self.value_wifiPassword = '';
-                }
-                self.value_avaiableWifiSsidList.push(wifi.ssid);
-                self.value_avaiableWifiSsidDataList.push({
-                  label: wifi.ssid,
-                  secured: wifi.secured,
-                  capabilities: wifi.capabilities,
-                });
-              }
+      } else {
+        self.fetchEthernetWifiInfo((err) => {
+          if (err) {
+            self.$fire({
+              text: i18n.formatter.format('NetworkLoss'),
+              type: 'error',
+              timer: 3000,
+              confirmButtonColor: '#20a8d8',
             });
           }
-          self.flag_refreshingWifiList = false;
-          if (cb) cb(error);
+          if (self.obj_loading) self.obj_loading.hide();
         });
-      },
-      fetchWifiInfo(cb) {
-        const self = this;
-        self.$globalFetchWifiInfo((error, info) => {
-          if (!error && info) {
-            self.value_wifiActivate = info.enable;
-            self.value_wifiConnected = info.linked;
-            if (self.value_wifiConnected) {
-              self.value_wifiActiveSsid = info.ssid;
-              self.value_wifiActiveIpaddress = info.ip_address;
-            } else {
-              self.value_wifiActiveSsid = '';
-              self.value_wifiActiveIpaddress = '';
+      }
+    });
+
+    if (self.obj_loading) self.obj_loading.hide();
+
+    self.refreshAvailableWifiSsidList(() => { });
+  },
+  watch: {},
+  methods: {
+    viewPassword() {
+      const self = this;
+
+      self.flag_view_password = !self.flag_view_password;
+    },
+    selWifiSsid(e) {
+      const self = this;
+      self.value_avaiableWifiSsidDataList.forEach((d) => {
+        if (d.label === e.target.value) {
+          self.value_selectedWifiSsid = e.target.value;
+          self.flag_wifiNeedPassword = d.secured;
+          self.value_wifiCapabilities = d.capabilities;
+          self.value_wifiPassword = '';
+        }
+      });
+    },
+    selEthernetMode(e) {
+      const self = this;
+      if (e.target.value === 'DHCP') {
+        self.flag_ethernetModeIsDhcp = true;
+        self.value_selectedEthernetMode = 'DHCP';
+      } else {
+        self.flag_ethernetModeIsDhcp = false;
+        self.value_selectedEthernetMode = 'STATIC';
+
+        if (self.value_staticEthernetIp === '') self.value_staticEthernetIp = self.value_dhcpEthernetIp;
+        if (self.value_staticEthernetMask === '') self.value_staticEthernetMask = self.value_dhcpEthernetMask;
+        if (self.value_staticEthernetGateway === '') self.value_staticEthernetGateway = self.value_dhcpEthernetGateway;
+        if (self.value_staticEthernetDns === '') self.value_staticEthernetDns = self.value_dhcpEthernetDns;
+      }
+    },
+    refreshAvailableWifiSsidList(cb) {
+      const self = this;
+      self.flag_refreshingWifiList = true;
+      self.$globalFetchWifiList((error, list) => {
+        if (!error && list) {
+          self.value_avaiableWifiSsidList = [];
+          self.value_avaiableWifiSsidDataList = [];
+          self.value_selectedWifiSsid = '';
+          self.value_wifiPassword = '';
+          self.value_wifiCapabilities = '';
+          self.flag_wifiNeedPassword = false;
+          list.forEach((wifi) => {
+            if (wifi.ssid !== self.value_wifiActiveSsid) {
+              if (self.value_selectedWifiSsid === '') {
+                self.value_selectedWifiSsid = wifi.ssid;
+                self.flag_wifiNeedPassword = wifi.secured;
+                self.value_wifiCapabilities = wifi.capabilities;
+                self.value_wifiPassword = '';
+              }
+              self.value_avaiableWifiSsidList.push(wifi.ssid);
+              self.value_avaiableWifiSsidDataList.push({
+                label: wifi.ssid,
+                secured: wifi.secured,
+                capabilities: wifi.capabilities,
+              });
             }
-            self.flag_connectionOk = true;
-          } else self.flag_connectionOk = false;
-          if (cb) cb(error);
-        });
-      },
-      fetchEthernetWifiInfo(cb) {
-        const self = this;
-        self.$globalFetchEthernetInfo((error, info) => {
-          if (!error && info) {
-            self.value_ethernetActivate = info.enable;
-            self.value_ethernetConnected = info.linked;
-            self.value_lanActiveIpaddress = info.ip_address;
-            self.flag_ethernetModeIsDhcp = info.is_dhcp;
-            if (self.flag_ethernetModeIsDhcp) {
-              self.value_selectedEthernetMode = 'DHCP';
-              self.value_dhcpEthernetIp = info.ip_address;
-              self.value_dhcpEthernetMask = info.mask;
-              self.value_dhcpEthernetGateway = info.gateway;
-              self.value_dhcpEthernetDns = info.dns;
-            } else {
-              self.value_selectedEthernetMode = 'STATIC';
-              self.value_staticEthernetIp = info.ip_address;
-              self.value_staticEthernetMask = info.mask;
-              self.value_staticEthernetGateway = info.gateway;
-              self.value_staticEthernetDns = info.dns;
-            }
-            self.flag_connectionOk = true;
-          } else self.flag_connectionOk = false;
-          if (cb) cb(error);
-        });
-      },
-      clickOnChangeEthernet() {
-        const self = this;
-        self
-          .$confirm('', i18n.formatter.format('ConfirmToChangeNetwork'), 'question', {
-            confirmButtonText: i18n.formatter.format('Confirm'),
-            cancelButtonText: i18n.formatter.format('Cancel'),
-            confirmButtonColor: '#20a8d8',
-            cancelButtonColor: '#f86c6b',
-          })
-          .then(() => {
-            self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-            self.$globalChangeEthernet(
-              {
-                dhcp: self.flag_ethernetModeIsDhcp,
-                ip_address: self.value_staticEthernetIp,
-                mask: self.value_staticEthernetMask,
-                gateway: self.value_staticEthernetGateway,
-                dns: self.value_staticEthernetDns,
-              },
-              () => {
-                if (self.obj_loading) self.obj_loading.hide();
-                self.$globalLogout();
-              },
-            );
-          })
-          .catch(() => { });
-      },
-      clickOnChangeWifi() {
-        const self = this;
-        self
-          .$confirm('', i18n.formatter.format('ConfirmToChangeNetwork'), 'question', {
-            confirmButtonText: i18n.formatter.format('Confirm'),
-            cancelButtonText: i18n.formatter.format('Cancel'),
-            confirmButtonColor: '#20a8d8',
-            cancelButtonColor: '#f86c6b',
-          })
-          .then(() => {
-            self.flag_refreshingWifiList = true;
+          });
+        }
+        self.flag_refreshingWifiList = false;
+        if (cb) cb(error);
+      });
+    },
+    fetchWifiInfo(cb) {
+      const self = this;
+      self.$globalFetchWifiInfo((error, info) => {
+        if (!error && info) {
+          self.value_wifiActivate = info.enable;
+          self.value_wifiConnected = info.linked;
+          if (self.value_wifiConnected) {
+            self.value_wifiActiveSsid = info.ssid;
+            self.value_wifiActiveIpaddress = info.ip_address;
+          } else {
+            self.value_wifiActiveSsid = '';
+            self.value_wifiActiveIpaddress = '';
+          }
+          self.flag_connectionOk = true;
+        } else self.flag_connectionOk = false;
+        if (cb) cb(error);
+      });
+    },
+    fetchEthernetWifiInfo(cb) {
+      const self = this;
+      self.$globalFetchEthernetInfo((error, info) => {
+        if (!error && info) {
+          self.value_ethernetActivate = info.enable;
+          self.value_ethernetConnected = info.linked;
+          self.value_lanActiveIpaddress = info.ip_address;
+          self.flag_ethernetModeIsDhcp = info.is_dhcp;
+          if (self.flag_ethernetModeIsDhcp) {
+            self.value_selectedEthernetMode = 'DHCP';
+            self.value_dhcpEthernetIp = info.ip_address;
+            self.value_dhcpEthernetMask = info.mask;
+            self.value_dhcpEthernetGateway = info.gateway;
+            self.value_dhcpEthernetDns = info.dns;
+          } else {
+            self.value_selectedEthernetMode = 'STATIC';
+            self.value_staticEthernetIp = info.ip_address;
+            self.value_staticEthernetMask = info.mask;
+            self.value_staticEthernetGateway = info.gateway;
+            self.value_staticEthernetDns = info.dns;
+          }
+          self.flag_connectionOk = true;
+        } else self.flag_connectionOk = false;
+        if (cb) cb(error);
+      });
+    },
+    clickOnChangeEthernet() {
+      const self = this;
+      self
+        .$confirm('', i18n.formatter.format('ConfirmToChangeNetwork'), {
+          confirmButtonText: i18n.formatter.format('Confirm'),
+          cancelButtonText: i18n.formatter.format('Cancel'),
+          confirmButtonColor: '#20a8d8',
+          cancelButtonColor: '#f86c6b',
+        })
+        .then(() => {
+          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+          self.$globalChangeEthernet(
+            {
+              dhcp: self.flag_ethernetModeIsDhcp,
+              ip_address: self.value_staticEthernetIp,
+              mask: self.value_staticEthernetMask,
+              gateway: self.value_staticEthernetGateway,
+              dns: self.value_staticEthernetDns,
+            },
+            () => {
+              if (self.obj_loading) self.obj_loading.hide();
+              self.$globalLogout();
+            },
+          );
+        })
+        .catch(() => { });
+    },
+    clickOnChangeWifi() {
+      const self = this;
+      self
+        .$confirm('', i18n.formatter.format('ConfirmToChangeNetwork'), {
+          confirmButtonText: i18n.formatter.format('Confirm'),
+          cancelButtonText: i18n.formatter.format('Cancel'),
+          confirmButtonColor: '#20a8d8',
+          cancelButtonColor: '#f86c6b',
+        })
+        .then(() => {
+          self.flag_refreshingWifiList = true;
 
-            self.$globalChangeWifi(
-              {
-                ssid: self.value_selectedWifiSsid,
-                pass: self.value_wifiPassword,
-                capabilities: self.value_wifiCapabilities,
-              },
-              (error, data) => {
-                self.flag_refreshingWifiList = false;
+          self.$globalChangeWifi(
+            {
+              ssid: self.value_selectedWifiSsid,
+              pass: self.value_wifiPassword,
+              capabilities: self.value_wifiCapabilities,
+            },
+            (error, data) => {
+              self.flag_refreshingWifiList = false;
 
-                if (error == null) {
-                  if (data.message === 'ok') {
-                    self.$fire({
-                      text: i18n.formatter.format('Successful'),
-                      type: 'success',
-                      timer: 30000,
-                    });
+              if (error == null) {
+                if (data.message === 'ok') {
+                  self.$fire({
+                    text: i18n.formatter.format('Successful'),
+                    type: 'success',
+                    timer: 30000,
+                  });
 
-                    self.flag_refreshingWifiList = false;
+                  self.flag_refreshingWifiList = false;
 
-                    // let loop = 0 ;
-                    // let info = {linked: false};
-                    // while( loop < 3 || !info.linked ) {
-                    // }
-
-                    self.fetchWifiInfo();
-                  } else {
-                    self.$fire({
-                      text: i18n.formatter.format('OperationFailed'),
-                      type: 'error',
-                      timer: 3000,
-                      confirmButtonColor: '#20a8d8',
-                    });
-                  }
+                  self.fetchWifiInfo();
                 } else {
                   self.$fire({
                     text: i18n.formatter.format('OperationFailed'),
@@ -531,11 +505,19 @@
                     confirmButtonColor: '#20a8d8',
                   });
                 }
-              },
-            );
-          })
-          .catch(() => { });
-      },
+              } else {
+                self.$fire({
+                  text: i18n.formatter.format('OperationFailed'),
+                  type: 'error',
+                  timer: 3000,
+                  confirmButtonColor: '#20a8d8',
+                });
+              }
+            },
+          );
+        })
+        .catch(() => { });
     },
-  };
+  },
+};
 </script>

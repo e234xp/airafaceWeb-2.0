@@ -72,6 +72,7 @@
     </CCard>
   </div>
 </template>
+
 <script>
 import i18n from '@/i18n';
 import { mapState } from 'vuex';
@@ -135,22 +136,44 @@ export default {
     self.value_dataItemsToShow.forEach((item) => {
       const checkButtonId = `actionOnCheck_${item.uuid}`;
       const modifyButtonId = `actionOnModify_${item.uuid}`;
+      const deleteButtonId = `actionOnDelete_${item.uuid}`;
 
+      let newCheckButton = null;
       const oldCheckButton = document.getElementById(checkButtonId);
-      if (oldCheckButton) {
-        const newCheckButton = oldCheckButton.cloneNode(true);
+      if (oldCheckButton && oldCheckButton.parentNode) {
+        newCheckButton = oldCheckButton.cloneNode(true);
         oldCheckButton.parentNode.replaceChild(newCheckButton, oldCheckButton);
-        newCheckButton.addEventListener('click', () => {
-          self.clickOnCheck(item);
-        });
+        if (newCheckButton) {
+          newCheckButton.addEventListener('click', () => {
+            self.clickOnCheck(item);
+          });
+        }
       }
+
+      let newModifyButton = null;
       const oldModifyButton = document.getElementById(modifyButtonId);
-      if (oldModifyButton) {
-        const newModifyButton = oldModifyButton.cloneNode(true);
+      if (oldModifyButton && oldModifyButton.parentNode) {
+        newModifyButton = oldModifyButton.cloneNode(true);
         oldModifyButton.parentNode.replaceChild(newModifyButton, oldModifyButton);
-        newModifyButton.addEventListener('click', () => {
-          self.clickOnModify(item);
-        });
+
+        if (newModifyButton) {
+          newModifyButton.addEventListener('click', () => {
+            self.clickOnModify(item);
+          });
+        }
+      }
+
+      let newDeleteButton = null;
+      const oldDeleteButton = document.getElementById(deleteButtonId);
+      if (oldDeleteButton && oldDeleteButton.parentNode) {
+        newDeleteButton = oldDeleteButton.cloneNode(true);
+        oldDeleteButton.parentNode.replaceChild(newDeleteButton, oldDeleteButton);
+
+        if (newDeleteButton) {
+          newDeleteButton.addEventListener('click', () => {
+            self.clickOnSingleDelete(item);
+          });
+        }
       }
     });
   },
@@ -181,7 +204,7 @@ export default {
         : sourceData.filter((item) => (
           item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
           || item.remarks.toLowerCase().indexOf(filter.toLowerCase()) > -1
-          || item.createDate && item.createDate.toLowerCase().indexOf(filter.toLowerCase()) > -1
+          || (item.createDate && item.createDate.toLowerCase().indexOf(filter.toLowerCase())) > -1
         ));
 
       self.value_tablePage.totalResult = filteredItems.length;
@@ -195,8 +218,13 @@ export default {
         localItem.nameToShow = item.name;
         if (item.no_edit !== true) {
           const modifyButtonId = `actionOnModify_${item.uuid}`;
+          const deleteButtonId = `actionOnDelete_${item.uuid}`;
+
           localItem.actionButton = `<input type="button" id="${modifyButtonId}" value="${self.disp_modify}"`
-            + ' class="btn btn-outline-primary btn-in-cell p-0"/>';
+            + ' class="btn btn-outline-primary btn-in-cell p-0"/>'
+            + '<div style="height:15px;"></div>'
+            + `<input type="button" id="${deleteButtonId}" value="${self.disp_delete}"`
+            + ' class="btn btn-outline-danger btn-in-cell p-0"/>';
         } else {
           const checkButtonId = `actionOnCheck_${item.uuid}`;
           localItem.actionButton = `<input type="button" id="${checkButtonId}" value="${self.disp_checkInfo}"`
@@ -257,6 +285,13 @@ export default {
           self.value_allTableItems,
           self.value_searchingFilter,
         );
+      }
+    },
+    clickOnSingleDelete(item) {
+      const self = this;
+      const list = [item];
+      if (list.length > 0) {
+        self.deleteItem(list);
       }
     },
     clickOnMultipleDelete() {

@@ -420,7 +420,7 @@ const defaultlState = () => ({
     numberOfDisplayPersons: 4,
     showDuration: 10,
 
-    displayGroup: ['All Person', 'All Visitor'],
+    displayGroup: [],
     enabledGreetingMode: true,
     caption: '人臉辨識影像解決方案',
     captionSize: 125,

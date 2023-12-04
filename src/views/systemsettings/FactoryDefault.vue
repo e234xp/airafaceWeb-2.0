@@ -41,7 +41,7 @@
         const self = this;
         self.flag_applying = true;
         self
-          .$confirm('', i18n.formatter.format('ConfirmToReboot'), 'question', {
+          .$confirm('', i18n.formatter.format('ConfirmToReboot'), {
             confirmButtonText: i18n.formatter.format('Confirm'),
             cancelButtonText: i18n.formatter.format('Cancel'),
             confirmButtonColor: '#20a8d8',
@@ -83,7 +83,7 @@
         const self = this;
         self.flag_applying = true;
         self
-          .$confirm('', i18n.formatter.format('ConfirmToFactoryDefault'), 'question', {
+          .$confirm('', i18n.formatter.format('ConfirmToFactoryDefault'), {
             confirmButtonText: i18n.formatter.format('Confirm'),
             cancelButtonText: i18n.formatter.format('Cancel'),
             confirmButtonColor: '#20a8d8',
