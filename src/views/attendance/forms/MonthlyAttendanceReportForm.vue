@@ -2,14 +2,21 @@
   <div>
     <div>
       <CCol sm="12">
-        <div class="h1 mb-5">{{ disp_header }}</div>
+        <div class="h1 mb-5">
+          {{ disp_header }}
+        </div>
       </CCol>
     </div>
     <div>
       <CCol sm="12">
         <CCol sm="12">
           <CRow class="flex-row-reverse">
-            <CInput v-model.lazy="value_searchingFilter" style="width: 300px" size="lg" :placeholder="disp_search">
+            <CInput
+              v-model.lazy="value_searchingFilter"
+              style="width: 300px"
+              size="lg"
+              :placeholder="disp_search"
+            >
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -19,29 +26,55 @@
           <CRow class="justify-content-between buttons-group">
             <div class="d-flex buttons-group-left">
               <div v-if="showDetailData()">
-                <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
+                <CButton
+                  class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnReturnToAll()"
+                >
                   <!-- <i class="fa fa-arrow-left"></i> -->
-                  <div class="btn-rwd-icon w-100 h-100 btn-p-md" data-coreui-toggle="tooltip"
-                    title="back to all records">
-                    <i class="bi bi-reply"></i>
+                  <div
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    data-coreui-toggle="tooltip"
+                    title="back to all records"
+                  >
+                    <i class="bi bi-reply" />
                   </div>
-                  <div class="btn-rwd-text btn-p-md">{{ disp_return }}</div>
+                  <div class="btn-rwd-text btn-p-md">
+                    {{ disp_return }}
+                  </div>
                 </CButton>
               </div>
               <div v-if="showAllData()">
-                <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
-                  <div class="btn-rwd-icon w-100 h-100 btn-p-md" data-coreui-toggle="tooltip" title="show all records">
-                    <CIcon size="sm" name="cilPeople" />
+                <CButton
+                  class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnReturnToAll()"
+                >
+                  <div
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    data-coreui-toggle="tooltip"
+                    title="show all records"
+                  >
+                    <CIcon
+                      size="sm"
+                      name="cilPeople"
+                    />
                   </div>
-                  <div class="btn-rwd-text btn-p-md">{{ value_showAllPerson }}</div>
+                  <div class="btn-rwd-text btn-p-md">
+                    {{ value_showAllPerson }}
+                  </div>
                 </CButton>
               </div>
 
               <div v-if="showAllData()">
-                <CButton class="btn btn-outline-success fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowGoodRecordsPerson()">
-                  <div data-coreui-toggle="tooltip" title="show good records" class="btn-rwd-icon w-100 h-100 btn-p-md">
-                    <i class="bi bi-person-fill"></i>
+                <CButton
+                  class="btn btn-outline-success fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnShowGoodRecordsPerson()"
+                >
+                  <div
+                    data-coreui-toggle="tooltip"
+                    title="show good records"
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                  >
+                    <i class="bi bi-person-fill" />
                   </div>
                   <div class="btn-rwd-text btn-p-md">
                     {{ value_showGoodRecordsPerson }}
@@ -50,9 +83,16 @@
               </div>
 
               <div v-if="showAllData()">
-                <CButton class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnShowLatePerson()">
-                  <div data-coreui-toggle="tooltip" title="show late records" class="btn-rwd-icon w-100 h-100 btn-p-md">
-                    <i class="bi bi-alarm-fill"></i>
+                <CButton
+                  class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnShowLatePerson()"
+                >
+                  <div
+                    data-coreui-toggle="tooltip"
+                    title="show late records"
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                  >
+                    <i class="bi bi-alarm-fill" />
                   </div>
                   <div class="btn-rwd-text btn-p-md">
                     {{ value_showLatePerson }}
@@ -61,11 +101,16 @@
               </div>
 
               <div v-if="showAllData()">
-                <CButton class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowLeaveEarlyPerson()">
-                  <div data-coreui-toggle="tooltip" title="show leave early records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md">
-                    <i class="bi bi-clock-history"></i>
+                <CButton
+                  class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnShowLeaveEarlyPerson()"
+                >
+                  <div
+                    data-coreui-toggle="tooltip"
+                    title="show leave early records"
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                  >
+                    <i class="bi bi-clock-history" />
                   </div>
                   <div class="btn-rwd-text btn-p-md">
                     {{ value_showLeaveEarlyPerson }}
@@ -74,13 +119,23 @@
               </div>
 
               <div v-if="showAllData()">
-                <CButton class="btn btn-outline-secondary fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowNoRecordPerson()">
-                  <div data-coreui-toggle="tooltip" title="show people with no records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md">
-                    <CIcon size="sm" name="cilUserX" />
+                <CButton
+                  class="btn btn-outline-secondary fz-md mr-2 mb-3 btn-rwd p-0"
+                  @click="clickOnShowNoRecordPerson()"
+                >
+                  <div
+                    data-coreui-toggle="tooltip"
+                    title="show people with no records"
+                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                  >
+                    <CIcon
+                      size="sm"
+                      name="cilUserX"
+                    />
                   </div>
-                  <div class="btn-rwd-text btn-p-md">{{ value_showNoRecordPerson }}</div>
+                  <div class="btn-rwd-text btn-p-md">
+                    {{ value_showNoRecordPerson }}
+                  </div>
                 </CButton>
               </div>
             </div>
@@ -88,19 +143,32 @@
             <div class="d-flex">
               <div>
                 <CButtonGroup v-if="showAllData()">
-                  <CButton class="btn btn-outline-primary fz-md nowrap-hidden" v-for="(value, key) in [0, 1, 2]"
-                    :key="key" :pressed="value === value_selectedMonth ? true : false" @click="selectMonthType(value)">
+                  <CButton
+                    class="btn btn-outline-primary fz-md nowrap-hidden"
+                    v-for="(value, key) in [0, 1, 2]"
+                    :key="key"
+                    :pressed="value === value_selectedMonth ? true : false"
+                    @click="selectMonthType(value)"
+                  >
                     {{ value_selectedMonthName[value] }}
                   </CButton>
                 </CButtonGroup>
               </div>
-              <date-picker :lang="this.$globalDatePickerLanguage" style="visibility: hidden; width: 0px" type="month"
-                ref="datePicker" @change="datePickerDatachange()" v-model="value_monthPicked"></date-picker>
+              <date-picker
+                :lang="this.$globalDatePickerLanguage"
+                style="visibility: hidden; width: 0px"
+                type="month"
+                ref="datePicker"
+                @change="datePickerDatachange()"
+                v-model="value_monthPicked"
+              />
 
               <!-- 匯出 -->
               <div>
-                <CButton class="btn btn-outline-primary fz-md ml-2 nowrap-hidden"
-                  @click="value_attendanceDataListToReview == null ? flag_masterCollapse = !flag_masterCollapse : flag_detailCollapse = !flag_detailCollapse">
+                <CButton
+                  class="btn btn-outline-primary fz-md ml-2 nowrap-hidden"
+                  @click="value_attendanceDataListToReview == null ? flag_masterCollapse = !flag_masterCollapse : flag_detailCollapse = !flag_detailCollapse"
+                >
                   {{ disp_export }}
                 </CButton>
               </div>
@@ -109,30 +177,78 @@
         </CCol>
       </CCol>
     </div>
-    <CCard v-if="showAllData()" class="mt-3">
+    <CCard
+      v-if="showAllData()"
+      class="mt-3"
+    >
       <CCardBody>
         <div>
           <div id="monthlyAttendanceReportForm">
-            <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" ref="attMainTable">
+            <vxe-table
+              :data="value_dataItemsToShow"
+              stripe
+              align="center"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              ref="attMainTable"
+            >
               <!-- <vxe-table-column type="checkbox" width="6%" align="center"></vxe-table-column> -->
-              <vxe-table-column :show-overflow="ellipsisMode" field="person" :title="disp_person" width="10%"
-                align="left" type="html" style="font: 10px"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="disp_group_list" align="left"
-                type="html" width="10%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="disp_clockDate"
-                width="10%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="workingTimeToShow" :title="disp_working_time"
-                align="left" type="html" width="15%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="attendanceStatusText"
-                :title="disp_attendanceStatus" align="left" type="html" width="15%"></vxe-table-column>
-              <vxe-table-column field="attendanceStatus" :title="disp_monthlyAttendanceStatus" min-width="400"
-                type="html" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="details" title="" min-width="5%"
-                type="html"></vxe-table-column>
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="person"
+                :title="disp_person"
+                width="10%"
+                align="left"
+                type="html"
+                style="font: 10px"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="groups"
+                :title="disp_group_list"
+                align="left"
+                type="html"
+                width="10%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="clockDate"
+                :title="disp_clockDate"
+                width="10%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="workingTimeToShow"
+                :title="disp_working_time"
+                align="left"
+                type="html"
+                width="15%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="attendanceStatusText"
+                :title="disp_attendanceStatus"
+                align="left"
+                type="html"
+                width="15%"
+              />
+              <vxe-table-column
+                field="attendanceStatus"
+                :title="disp_monthlyAttendanceStatus"
+                min-width="400"
+                type="html"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="details"
+                title=""
+                min-width="5%"
+                type="html"
+              />
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -140,11 +256,14 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange">
-          </vxe-pager>
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
-        <div>{{disp_monthlyAttendanceRemark}}</div>
+        <div>{{ disp_monthlyAttendanceRemark }}</div>
       </CCardBody>
     </CCard>
 
@@ -152,26 +271,65 @@
       <CCardBody>
         <div>
           <div>
-            <vxe-table :data="value_dataItemsToShowDetailData" stripe align="center" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle">
-              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="disp_id"
-                width="12%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="disp_name"
-                width="12%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="disp_group_list"
-                width="15%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockMode" :title="disp_clockingMode"
-                width="12%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="disp_clockTime"
-                width="12%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="temperature"
-                v-if="$deviceProfile.supportTemperature" :title="disp_temperature" width="12%"></vxe-table-column>
-              <vxe-table-column field="showimage" :title="disp_face_image" type="html"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="card_number" :title="disp_cardnumber"
-                width="12%"></vxe-table-column>
+            <vxe-table
+              :data="value_dataItemsToShowDetailData"
+              stripe
+              align="center"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+            >
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="id"
+                :title="disp_id"
+                width="12%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="nameToShow"
+                :title="disp_name"
+                width="12%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="groups"
+                :title="disp_group_list"
+                width="15%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="clockMode"
+                :title="disp_clockingMode"
+                width="12%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="clockTime"
+                :title="disp_clockTime"
+                width="12%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="temperature"
+                v-if="$deviceProfile.supportTemperature"
+                :title="disp_temperature"
+                width="12%"
+              />
+              <vxe-table-column
+                field="showimage"
+                :title="disp_face_image"
+                type="html"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="card_number"
+                :title="disp_cardnumber"
+                width="12%"
+              />
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -179,155 +337,296 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePageForDetailData.currentPage"
-            :page-size="value_tablePageForDetailData.pageSize" :total="value_tablePageForDetailData.totalResult"
-            @page-change="handlePageChangeForDetailData">
-          </vxe-pager>
+            ]"
+            :current-page="value_tablePageForDetailData.currentPage"
+            :page-size="value_tablePageForDetailData.pageSize"
+            :total="value_tablePageForDetailData.totalResult"
+            @page-change="handlePageChangeForDetailData"
+          />
         </div>
       </CCardBody>
     </CCard>
 
     <CModal :show.sync="flag_masterCollapse">
       <template #header>
-        <div class="alertModal_Title">{{ disp_ExportSetting }}</div>
+        <div class="alertModal_Title">
+          {{ disp_ExportSetting }}
+        </div>
       </template>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_FileType }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_FileType }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
+          <CSelect
+            size="lg"
+            :value.sync="value_fileType"
+            :options="[`.txt`, `.csv`, `.xlsx`]"
+          />
         </CCol>
       </CRow>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_txtSeparator }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_txtSeparator }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :disabled="value_fileType == '.xlsx'" :value.sync="value_txtSeparator" :options="[
+          <CSelect
+            size="lg"
+            :disabled="value_fileType == '.xlsx'"
+            :value.sync="value_txtSeparator"
+            :options="[
               { label: `comma (,)`, value: ',' },
               { label: `space (_)`, value: 'S' },
               { label: `tab (\\t)`, value: 'T' },
               { label: `semicolon (;)`, value: ';' },
               { label: `customize (TBD)`, value: '' },
-            ]" />
-          <CInput v-model="value_separator" v-show="value_txtSeparator ==''" type="text" size="lg" />
+            ]"
+          />
+          <CInput
+            v-model="value_separator"
+            v-show="value_txtSeparator ==''"
+            type="text"
+            size="lg"
+          />
         </CCol>
       </CRow>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_Snapshot }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_Snapshot }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :value.sync="value_snapshotFileType" :disabled="value_fileType != '.xlsx'"
-            :options="[`Excluded`, `Embaded`, `Files`]" />
+          <CSelect
+            size="lg"
+            :value.sync="value_snapshotFileType"
+            :disabled="value_fileType != '.xlsx'"
+            :options="[$t('Excluded'), $t('Embedded'), $t('Files')]"
+          />
         </CCol>
       </CRow>
 
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_Fields }}
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_Fields }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li class="list-group-item" v-for="(item, index) in value_masterexportFields" :key="index">
-              <input class="form-check-input me-1" type="checkbox" value="item" checked
-                @change="fieldChanged('MASTER', item, $event)"> {{ value_masterfieldsforExport.find(
-              (field) =>
-              {return field.key == item}).value }}
-              <CButton style="float:right;width: 40px; min-width:unset;" @click="fieldMove('MASTER', item, -1)">
+            <li
+              class="list-group-item"
+              v-for="(item, index) in value_masterexportFields"
+              :key="index"
+            >
+              <input
+                class="form-check-input me-1"
+                type="checkbox"
+                value="item"
+                checked
+                @change="fieldChanged('MASTER', item, $event)"
+              > {{ value_masterfieldsforExport.find(
+                (field) =>
+                {return field.key == item}).value }}
+              <CButton
+                style="float:right;width: 40px; min-width:unset;"
+                @click="fieldMove('MASTER', item, -1)"
+              >
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton style="float:right;width: 40px; min-width:unset;" @click="fieldMove('MASTER', item, 1)">
+              <CButton
+                style="float:right;width: 40px; min-width:unset;"
+                @click="fieldMove('MASTER', item, 1)"
+              >
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li class="list-group-item" v-for="(item, index) in value_masternotinExportList" :key="index">
-              <input class="form-check-input me-1" type="checkbox" value="item"
-                @change="fieldChanged('MASTER', item, $event)"> {{ value_masterfieldsforExport.find(
-              (field) =>
-              {return
-              field.key == item}).value}}
+            <li
+              class="list-group-item"
+              v-for="(item, index) in value_masternotinExportList"
+              :key="index"
+            >
+              <input
+                class="form-check-input me-1"
+                type="checkbox"
+                value="item"
+                @change="fieldChanged('MASTER', item, $event)"
+              > {{ value_masterfieldsforExport.find(
+                (field) =>
+                {return
+                 field.key == item}).value }}
             </li>
           </ul>
-
         </CCol>
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton class="ml-1 btn-temp" color="secondary" @click="flag_masterCollapse=false">
-            {{disp_Cancel}}
+          <CButton
+            class="ml-1 btn-temp"
+            color="secondary"
+            @click="flag_masterCollapse=false"
+          >
+            {{ disp_Cancel }}
           </CButton>
-          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset;">
+          <CButton
+            class="ml-1 btn-temp"
+            color="primary"
+            @click="clickOnExport"
+            style="min-width: unset;"
+          >
             {{ disp_Apply }}
           </CButton>
-
         </footer>
       </template>
     </CModal>
 
     <CModal :show.sync="flag_detailCollapse">
       <template #header>
-        <div class="alertModal_Title">{{ disp_ExportSetting }}</div>
+        <div class="alertModal_Title">
+          {{ disp_ExportSetting }}
+        </div>
       </template>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_FileType }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_FileType }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
+          <CSelect
+            size="lg"
+            :value.sync="value_fileType"
+            :options="[`.txt`, `.csv`, `.xlsx`]"
+          />
         </CCol>
       </CRow>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_txtSeparator }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_txtSeparator }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :disabled="value_fileType == '.xlsx'" :value.sync="value_txtSeparator" :options="[
+          <CSelect
+            size="lg"
+            :disabled="value_fileType == '.xlsx'"
+            :value.sync="value_txtSeparator"
+            :options="[
               { label: `comma (,)`, value: ',' },
               { label: `space (_)`, value: 'S' },
               { label: `tab (\\t)`, value: 'T' },
               { label: `semicolon (;)`, value: ';' },
               { label: `customize (TBD)`, value: '' },
-            ]" />
-          <CInput v-model="value_separator" v-show="value_txtSeparator ==''" type="text" size="lg" />
+            ]"
+          />
+          <CInput
+            v-model="value_separator"
+            v-show="value_txtSeparator ==''"
+            type="text"
+            size="lg"
+          />
         </CCol>
       </CRow>
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_Snapshot }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_Snapshot }}
+        </CCol>
         <CCol col="9">
-          <CSelect size="lg" :value.sync="value_snapshotFileType" :disabled="value_fileType != '.xlsx'"
-            :options="[`Excluded`, `Embaded`, `Files`]" />
+          <CSelect
+            size="lg"
+            :value.sync="value_snapshotFileType"
+            :disabled="value_fileType != '.xlsx'"
+            :options="[$t('Excluded'), $t('Embedded'), $t('Files')]"
+          />
         </CCol>
       </CRow>
 
       <CRow>
-        <CCol col="3" class="pt-2 label">{{ disp_Fields }}</CCol>
+        <CCol
+          col="3"
+          class="pt-2 label"
+        >
+          {{ disp_Fields }}
+        </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li class="list-group-item" v-for="(item, index) in value_detailexportFields" :key="index">
-              <input class="form-check-input me-1" type="checkbox" value="item" checked
-                @change="fieldChanged('DETAIL', item, $event)"> {{ value_detailfieldsforExport.find(
-              (field) =>
-              {return field.key == item}).value }}
-              <CButton style="float:right;width: 40px; min-width:unset;" @click="fieldMove('DETAIL', item, -1)">
+            <li
+              class="list-group-item"
+              v-for="(item, index) in value_detailexportFields"
+              :key="index"
+            >
+              <input
+                class="form-check-input me-1"
+                type="checkbox"
+                value="item"
+                checked
+                @change="fieldChanged('DETAIL', item, $event)"
+              > {{ value_detailfieldsforExport.find(
+                (field) =>
+                {return field.key == item}).value }}
+              <CButton
+                style="float:right;width: 40px; min-width:unset;"
+                @click="fieldMove('DETAIL', item, -1)"
+              >
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton style="float:right;width: 40px; min-width:unset;" @click="fieldMove('DETAIL', item, 1)">
+              <CButton
+                style="float:right;width: 40px; min-width:unset;"
+                @click="fieldMove('DETAIL', item, 1)"
+              >
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li class="list-group-item" v-for="(item, index) in value_detailnotinExportList" :key="index">
-              <input class="form-check-input me-1" type="checkbox" value="item"
-                @change="fieldChanged('DETAIL', item, $event)"> {{ value_detailfieldsforExport.find(
-              (field) =>
-              {return
-              field.key == item}).value}}
+            <li
+              class="list-group-item"
+              v-for="(item, index) in value_detailnotinExportList"
+              :key="index"
+            >
+              <input
+                class="form-check-input me-1"
+                type="checkbox"
+                value="item"
+                @change="fieldChanged('DETAIL', item, $event)"
+              > {{ value_detailfieldsforExport.find(
+                (field) =>
+                {return
+                 field.key == item}).value }}
             </li>
           </ul>
-
         </CCol>
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton class="ml-1 btn-temp" color="secondary" @click="flag_detailCollapse=false">
-            {{disp_Cancel}}
+          <CButton
+            class="ml-1 btn-temp"
+            color="secondary"
+            @click="flag_detailCollapse=false"
+          >
+            {{ disp_Cancel }}
           </CButton>
-          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset;">
+          <CButton
+            class="ml-1 btn-temp"
+            color="primary"
+            @click="clickOnExport"
+            style="min-width: unset;"
+          >
             {{ disp_Apply }}
           </CButton>
-
         </footer>
       </template>
     </CModal>
@@ -963,8 +1262,7 @@ export default {
             } else {
               item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             item.groups = '';
           }
 
@@ -1572,7 +1870,7 @@ export default {
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      let data = `"No"${separator}"${self.value_masterexportFields.join("\"" + separator + "\"")}"\r\n`;
+      let data = `"No"${separator}"${self.value_masterexportFields.join(`"${separator}"`)}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1596,27 +1894,26 @@ export default {
             } else {
               item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             item.groups = '';
           }
 
           item.attendanceStatusData = attendanceStatusData;
         }
 
-        const ln = ["\"" + self.exportNo + "\""];
+        const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
           switch (self.value_masterexportFields[i]) {
-            case 'id': ln.push("\"" + item.id + "\""); break;
-            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
-            case 'group_list': ln.push("\"" + item.groups + "\""); break;
-            case 'workingTime': ln.push("\"" + item.working_time + "\""); break;
-            case 'overTime': ln.push("\"" + item.over_time + "\""); break;
-            case 'norecord': ln.push("\"" + item.no_record + "\""); break;
-            case 'arrivallate': ln.push("\"" + item.late + "\""); break;
-            case 'leaveearly': ln.push("\"" + item.early + "\""); break;
-            case 'noentryrecord': ln.push("\"" + item.no_entry + "\""); break;
-            case 'noleaverecord': ln.push("\"" + item.no_leave + "\""); break;
+            case 'id': ln.push(`"${item.id}"`); break;
+            case 'name': ln.push(`"${item.nameToShow}"`); break;
+            case 'group_list': ln.push(`"${item.groups}"`); break;
+            case 'workingTime': ln.push(`"${item.working_time}"`); break;
+            case 'overTime': ln.push(`"${item.over_time}"`); break;
+            case 'norecord': ln.push(`"${item.no_record}"`); break;
+            case 'arrivallate': ln.push(`"${item.late}"`); break;
+            case 'leaveearly': ln.push(`"${item.early}"`); break;
+            case 'noentryrecord': ln.push(`"${item.no_entry}"`); break;
+            case 'noleaverecord': ln.push(`"${item.no_leave}"`); break;
             default: break;
           }
         }
@@ -1738,8 +2035,7 @@ export default {
             } else {
               self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             self.value_attendanceDataListToReview[idx].groups = '';
           }
         }
@@ -1828,7 +2124,7 @@ export default {
         personName = self.value_attendanceDataListToReview[0].name;
       }
 
-      let data = `"No"${separator}"${self.value_detailexportFields.join("\"" + separator + "\"")}"\r\n`;
+      let data = `"No"${separator}"${self.value_detailexportFields.join(`"${separator}"`)}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1870,22 +2166,21 @@ export default {
             } else {
               item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
-          }
-          catch (ex) {
+          } catch (ex) {
             item.groups = '';
           }
         }
 
-        const ln = ["\"" + self.exportNo + "\""];
+        const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
           switch (self.value_detailexportFields[i]) {
-            case 'id': ln.push("\"" + item.id + "\""); break;
-            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
-            case 'group_list': ln.push("\"" + item.groups + "\""); break;
-            case 'mode': ln.push("\"" + item.clockMode + "\""); break;
-            case 'clockTime': ln.push("\"" + item.clockTime + "\""); break;
-            case 'temperature': ln.push("\"" + item.temperature + "\""); break;
-            case 'cardno': ln.push("\"" + item.card_number + "\""); break;
+            case 'id': ln.push(`"${item.id}"`); break;
+            case 'name': ln.push(`"${item.nameToShow}"`); break;
+            case 'group_list': ln.push(`"${item.groups}"`); break;
+            case 'mode': ln.push(`"${item.clockMode}"`); break;
+            case 'clockTime': ln.push(`"${item.clockTime}"`); break;
+            case 'temperature': ln.push(`"${item.temperature}"`); break;
+            case 'cardno': ln.push(`"${item.card_number}"`); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
@@ -2036,8 +2331,7 @@ export default {
           } else {
             item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join('<br>');
           }
-        }
-        catch (ex) {
+        } catch (ex) {
           item.groups = '';
         }
 
@@ -2110,8 +2404,7 @@ export default {
           } else {
             item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
           }
-        }
-        catch (ex) {
+        } catch (ex) {
           item.groups = '';
         }
 

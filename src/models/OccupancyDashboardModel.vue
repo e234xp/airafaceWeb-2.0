@@ -1,14 +1,14 @@
 <script>
-  // 0: 有到 | 1: 未到 | 2: 有到異常
-  export default {
-    data() {
-      return {
-        groupData: [],
-        personData: [],
-        visitorData: [],
-        verifyData: [],
+// 0: 有到 | 1: 未到 | 2: 有到異常
+export default {
+  data() {
+    return {
+      groupData: [],
+      personData: [],
+      visitorData: [],
+      verifyData: [],
 
-      lastRecordTimestamp: 0
+      lastRecordTimestamp: 0,
     };
   },
   methods: {
@@ -21,15 +21,15 @@
     },
 
     async setupGroupData() {
-      let self = this;
+      const self = this;
       self.groupData = [];
 
-      let ret = await self.$globalGetGroupList();
+      const ret = await self.$globalGetGroupList();
       const list = ret.group_list;
-      const error = ret.error;
+      const { error } = ret;
 
       if (error == null) {
-        list.forEach(g => {
+        list.forEach((g) => {
           self.groupData.push(
             {
               uuid: g.uuid,
@@ -38,7 +38,7 @@
               persons: [],
               total: 0,
               present: 0,
-            }
+            },
           );
         });
       }
@@ -47,79 +47,73 @@
     },
 
     async setupPersonData() {
-      console.log("============  setupPersonData");
-      let self = this;
+      console.log('============  setupPersonData');
+      const self = this;
       self.personData = [];
       let shitf = 0;
       let thereIsMoreData = true;
 
-      await new Promise(async (resolve, reject) => {
-        while (thereIsMoreData) {
-          let retPerson = await self.$globalFindPersonWithoutPhoto("", shitf, 2500);
+      await new Promise((resolve) => {
+        (async () => {
+          while (thereIsMoreData) {
+            const retPerson = await self.$globalFindPersonWithoutPhoto('', shitf, 2500);
 
-          let err = retPerson.error;
-          let result = retPerson.data;
-          if (err == null && result) {
-            try {
-              for (let i = 0; i < result.person_list.length; i++) {
-                const p = result.person_list[i];
-                p.status = 1;
-                p.register_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
-                p.display_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
+            const err = retPerson.error;
+            const result = retPerson.data;
+            if (err == null && result) {
+              try {
+                for (let i = 0; i < result.person_list.length; i += 1) {
+                  const p = result.person_list[i];
+                  p.status = 1;
+                  p.register_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                  p.display_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                }
+
+                self.personData = self.personData.concat(result.person_list);
+
+                if (result.slice_shift + result.person_list.length < result.total_length) {
+                  thereIsMoreData = true;
+                  shitf = result.slice_shift + result.person_list.length;
+                } else { thereIsMoreData = false; }
+              } catch (ex) {
+                console.log('setupPersonData 3', ex);
               }
-
-              self.personData = self.personData.concat(result.person_list);
-
-              if (result.slice_shift + result.person_list.length < result.total_length) {
-                thereIsMoreData = true;
-                shitf = result.slice_shift + result.person_list.length;
-              }
-              else
-                thereIsMoreData = false;
-            }
-            catch (ex) {
-              console.log("setupPersonData 3", ex);
-            }
-          }
-          else {
-            thereIsMoreData = false;
-          }
-        }
-
-        thereIsMoreData = true;
-        while (thereIsMoreData) {
-          let retPerson = await self.$globalFindVisitorWithoutPhoto("", shitf, 2500);
-
-          let err = retPerson.error;
-          let result = retPerson.data;
-          if (err == null && result) {
-            try {
-              for (let i = 0; i < result.visitor_list.length; i++) {
-                const p = result.visitor_list[i];
-                p.status = 1;
-                p.register_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
-                p.display_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
-              }
-
-              self.personData = self.personData.concat(result.visitor_list);
-
-              if (result.slice_shift + result.visitor_list.length < result.total_length) {
-                thereIsMoreData = true;
-                shitf = result.slice_shift + result.visitor_list.length;
-              }
-              else
-                thereIsMoreData = false;
-            }
-            catch (ex) {
-              console.log("setupPersonData 4", ex);
+            } else {
+              thereIsMoreData = false;
             }
           }
-          else {
-            thereIsMoreData = false;
-          }
-        }
 
-        resolve();
+          thereIsMoreData = true;
+          while (thereIsMoreData) {
+            const retPerson = await self.$globalFindVisitorWithoutPhoto('', shitf, 2500);
+
+            const err = retPerson.error;
+            const result = retPerson.data;
+            if (err == null && result) {
+              try {
+                for (let i = 0; i < result.visitor_list.length; i += 1) {
+                  const p = result.visitor_list[i];
+                  p.status = 1;
+                  p.register_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                  p.display_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                }
+
+                self.personData = self.personData.concat(result.visitor_list);
+
+                if (result.slice_shift + result.visitor_list.length < result.total_length) {
+                  thereIsMoreData = true;
+                  shitf = result.slice_shift + result.visitor_list.length;
+                } else { thereIsMoreData = false; }
+              } catch (ex) {
+                console.log('setupPersonData 4', ex);
+              }
+            } else {
+              thereIsMoreData = false;
+            }
+          }
+
+          resolve();
+        })();
       });
 
       return self.personData;
@@ -127,47 +121,45 @@
 
     // get Person Info
     async setupVisitorData() {
-      console.log("============  setupVisitorData");
-      let self = this;
+      console.log('============  setupVisitorData');
+      const self = this;
       self.visitorData = [];
       let shitf = 0;
       let thereIsMoreData = true;
 
-      await new Promise(async (resolve, reject) => {
-        while (thereIsMoreData) {
-          console.log("setupVisitorData 1", thereIsMoreData, shitf);
-          let retPerson = await self.$globalFindVisitor('', shitf, 250);
-          console.log("setupVisitorData 2", retPerson);
+      await new Promise((resolve) => {
+        (async () => {
+          while (thereIsMoreData) {
+            console.log('setupVisitorData 1', thereIsMoreData, shitf);
+            const retPerson = await self.$globalFindVisitor('', shitf, 250);
+            console.log('setupVisitorData 2', retPerson);
 
-          let err = retPerson.error;
-          let result = retPerson.data;
-          if (err == null && result) {
-            try {
-              for (let i = 0; i < result.visitor_list.length; i++) {
-                const p = result.visitor_list[i];
-                p.status = 1;
-                p.register_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+            const err = retPerson.error;
+            const result = retPerson.data;
+            if (err == null && result) {
+              try {
+                for (let i = 0; i < result.visitor_list.length; i += 1) {
+                  const p = result.visitor_list[i];
+                  p.status = 1;
+                  p.register_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                }
+
+                self.visitorData = self.visitorData.concat(result.visitor_list);
+
+                if (result.slice_shift + result.visitor_list.length < result.total_length) {
+                  thereIsMoreData = true;
+                  shitf = result.slice_shift + result.visitor_list.length;
+                } else { thereIsMoreData = false; }
+              } catch (ex) {
+                console.log('setupVisitorData 3', ex);
               }
-
-              self.visitorData = self.visitorData.concat(result.visitor_list);
-
-              if (result.slice_shift + result.visitor_list.length < result.total_length) {
-                thereIsMoreData = true;
-                shitf = result.slice_shift + result.visitor_list.length;
-              }
-              else
-                thereIsMoreData = false;
-            }
-            catch (ex) {
-              console.log("setupVisitorData 3", ex);
+            } else {
+              thereIsMoreData = false;
             }
           }
-          else {
-            thereIsMoreData = false;
-          }
-        }
 
-        resolve();
+          resolve();
+        })();
       });
 
       return self.visitorData;
@@ -226,23 +218,23 @@
     },
 
     setupColors() {
-      let enterDataColors = [];
-      for (let i = 0; i < 24; i++) {
+      const enterDataColors = [];
+      for (let i = 0; i < 24; i += 1) {
         if (i > 10) {
-          enterDataColors[i] = "transparent";
+          enterDataColors[i] = 'transparent';
         } else {
-          enterDataColors[i] = self.chartEnterColor;
+          enterDataColors[i] = this.chartEnterColor;
         }
       }
-      let leaveDataColors = [];
-      for (let i = 0; i < 24; i++) {
+      const leaveDataColors = [];
+      for (let i = 0; i < 24; i += 1) {
         if (i > 10) {
-          leaveDataColors[i] = "transparent";
+          leaveDataColors[i] = 'transparent';
         } else {
-          leaveDataColors[i] = self.chartLeaveColor;
+          leaveDataColors[i] = this.chartLeaveColor;
         }
       }
     },
-  }
+  },
 };
 </script>

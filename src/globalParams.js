@@ -13,11 +13,7 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-const currentDate = new Date(Date.now());
-const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
-const day = currentDate.getDate();
-
-global.webVersion = `${month}${day}`;
+global.webVersion = '1205.1652';
 
 const TEST_MODE = process.env.NODE_ENV === 'development'; 
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
@@ -100,7 +96,7 @@ Vue.prototype.$profileLists = [
   },
 ];
 
-global.usingHttps = href.includes('https://') && !TEST_MODE;
+global.usingHttps = href.includes('https://') || TEST_MODE;
 // global.usingHttps = false;
 if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelite/verifyresults`;
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;

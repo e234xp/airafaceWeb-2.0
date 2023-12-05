@@ -58,7 +58,7 @@
   "CreateDate": "Create Date",
   "Create": "Create",
   "NumbersOnly": "Numbers Only",
-  "MoreThan4lettersAndNumbers": "At least 4 alphanumeric characters without repetition",
+  "MoreThan4lettersAndNumbers": "At least 4 alphanumeric characters, and must not be duplicated with other person IDs.",
   "NoEmptyNoSpace": "Cannot be empty or blank.",
   "NoEmptyNoSpaceNoSpecial": "Cannot be empty nor included spaces, special characters.",
   "NoEmptyNoSpaceOnly": "Cannot be empty or blank.",
@@ -825,5 +825,8 @@
   "Logout": "Logout",
   "Identified": "Identified",
   "Unidentified": "Cannot be identified",
-  "phone_number": "Phone number"
+  "phone_number": "Phone number",
+  "Excluded": "Excluded",
+  "Embedded": "Embedded",
+  "Files": "Files"
 }

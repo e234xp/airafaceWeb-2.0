@@ -3,10 +3,10 @@
     <CRow>
       <CCol sm="12">
         <ListForm
-          :onAdd="onAdd"
-          :onDelete="onDelete"
-          :onModify="onModify"
-          :onGetItems="onGetItems"
+          :on-add="onAdd"
+          :on-delete="onDelete"
+          :on-modify="onModify"
+          :on-get-items="onGetItems"
         />
       </CCol>
     </CRow>
@@ -34,6 +34,7 @@ export default {
         data: { list: dataList },
         error,
       } = ret;
+      console.log(dataList);
 
       if (error) {
         this.$fire({

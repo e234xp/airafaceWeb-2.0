@@ -9,62 +9,108 @@
             </CCardHeader>
             <CCardBody>
               <CForm>
-                <p class="text-muted">{{ disp_subtitle }}</p>
-                <CInput :placeholder="disp_username" v-model="value_username">
+                <p class="text-muted">
+                  {{ disp_subtitle }}
+                </p>
+                <CInput
+                  :placeholder="disp_username"
+                  v-model="value_username"
+                >
                   <template #prepend-content>
                     <CIcon name="cil-user" />
                   </template>
                 </CInput>
-                <CInput :placeholder="disp_password" v-model="value_password"
-                  :type="flag_view_password ? 'text' : 'password'">
+                <CInput
+                  :placeholder="disp_password"
+                  v-model="value_password"
+                  :type="flag_view_password ? 'text' : 'password'"
+                >
                   <template #prepend-content>
                     <CIcon name="cil-lock-locked" />
                   </template>
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0 0.275rem 0 0.275rem;">
-                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0 0.275rem 0 0.275rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
 
-                <CSelect :options="$options.languageOptions" :value="value_lang" @update:value="
-                  (value) => {
-                    setLangChange(value);
-                  }
-                ">
+                <CSelect
+                  :options="$options.languageOptions"
+                  :value="value_lang"
+                  @update:value="
+                    (value) => {
+                      setLangChange(value);
+                    }
+                  "
+                >
                   <template #prepend-content>
                     <CIcon name="cil-speech" />
                   </template>
                 </CSelect>
 
-                <CSelect :value.sync="value_displayMode" :options="value_displayModeOptions">
+                <CSelect
+                  :value.sync="value_displayMode"
+                  :options="value_displayModeOptions"
+                >
                   <template #prepend-content>
                     <CIcon name="cil-laptop" />
                   </template>
                 </CSelect>
                 <CRow>
-                  <CCol col="12" class="text-left">
-                    <CSwitch size="sm" class="ml-0" color="success" shape="pill" @update:checked="switchRememberMe()"
-                      :checked="value_rememberMe">
-                    </CSwitch>
-                    <span v-if="value_rememberMe"
-                      style="position: absolute; left: 60px;  top: -1px; font-size: 15px; color: #00c861;">
+                  <CCol
+                    col="12"
+                    class="text-left"
+                  >
+                    <CSwitch
+                      size="sm"
+                      class="ml-0"
+                      color="success"
+                      shape="pill"
+                      @update:checked="switchRememberMe()"
+                      :checked="value_rememberMe"
+                    />
+                    <span
+                      v-if="value_rememberMe"
+                      style="position: absolute; left: 60px;  top: -1px; font-size: 15px; color: #00c861;"
+                    >
                       {{ disp_rememberMe }}
                     </span>
-                    <span v-else style="position: absolute; left: 60px; top: -1px; font-size: 15px; color: gray;">
+                    <span
+                      v-else
+                      style="position: absolute; left: 60px; top: -1px; font-size: 15px; color: gray;"
+                    >
                       {{ disp_rememberMe }}
                     </span>
-                    <div style="height: 10px"></div>
+                    <div style="height: 10px" />
 
                     <CRow>
-                      <CCol col="6" class="text-left">
-                        <CButton style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8" @click="clickOnLogin">
+                      <CCol
+                        col="6"
+                        class="text-left"
+                      >
+                        <CButton
+                          style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8"
+                          @click="clickOnLogin"
+                        >
                           {{ disp_title }}
                         </CButton>
                       </CCol>
-                      <CCol col="6" class="text-right" style="padding-top: 8px;">
-                      </CCol>
+                      <CCol
+                        col="6"
+                        class="text-right"
+                        style="padding-top: 8px;"
+                      />
                     </CRow>
                   </CCol>
                 </CRow>
@@ -180,7 +226,7 @@ export default {
       self.$globalGetSystemInfo((err, data) => {
         if (data) {
           self.disp_versionNumber = data.fw_version;
-          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${this.global.webVersion}`;
+          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${global.webVersion}`;
           self.value_disbleLoginButton = false;
 
           for (let i = 0; i < self.$profileLists.length; i += 1) {

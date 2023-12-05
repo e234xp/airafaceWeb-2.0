@@ -1,144 +1,286 @@
 <template>
   <div>
-    <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-3" icon-class="fa fa-check" :active-thickness="param_activeThickness"
-      :passive-thickness="param_passiveThickness" :active-color="param_activeColor" :passive-color="param_passiveColor"
-      :line-thickness="param_lineThickness" :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
-      :current-step="flag_currentSetp">
-    </stepprogress>
+    <div class="h1 mb-5">
+      {{ disp_header }}
+    </div>
+    <stepprogress
+      class="w-step-progress-3"
+      icon-class="fa fa-check"
+      :active-thickness="param_activeThickness"
+      :passive-thickness="param_passiveThickness"
+      :active-color="param_activeColor"
+      :passive-color="param_passiveColor"
+      :line-thickness="param_lineThickness"
+      :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
+      :current-step="flag_currentSetp"
+    />
 
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_notifyName }}</th>
-              <th class="h5 w-25 table-th">{{ disp_host }}</th>
-              <th class="h5 w-25 table-th">{{ disp_security }}</th>
-              <th class="h5 w-25 table-th">{{ disp_port }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_notifyName }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_host }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_security }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_port }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_notifyName" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="notifyNameValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_notifyName"
+                  required
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="notifyNameValidator"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_host" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="hostValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_host"
+                  required
+                  :invalid-feedback="flag_hostPass"
+                  :is-valid="hostValidator"
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_security" :options="['SSL', 'TLS', 'SSL/TLS']" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_security"
+                  :options="['SSL', 'TLS', 'SSL/TLS']"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_port" required :invalid-feedback="disp_noEmptyPortOnly"
-                  :is-valid="portValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_port"
+                  required
+                  :invalid-feedback="flag_portPass"
+                  :is-valid="portValidator"
+                />
               </td>
             </tr>
             <tr class="table-tr">
-              <th class="h5 table-th">{{ disp_sender }}</th>
-              <th class="h5 table-th">{{ disp_account }}</th>
-              <th class="h5 table-th">{{ disp_password }}</th>
-              <th class="h5 table-th">{{ disp_subject }}</th>
+              <th class="h5 table-th">
+                {{ disp_sender }}
+              </th>
+              <th class="h5 table-th">
+                {{ disp_account }}
+              </th>
+              <th class="h5 table-th">
+                {{ disp_password }}
+              </th>
+              <th class="h5 table-th">
+                {{ disp_subject }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_sender" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="senderValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_sender"
+                  required
+                  :invalid-feedback="flag_senderPass"
+                  :is-valid="senderValidator"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_account" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="accountValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_account"
+                  required
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="accountValidator"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_password" required :type="flag_view_password ? 'text' : 'password'"
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly" :is-valid="passwordValidator">
+                <CInput
+                  size="lg"
+                  v-model="value_password"
+                  required
+                  :type="flag_view_password ? 'text' : 'password'"
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="passwordValidator"
+                >
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0.375rem 0.375rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_subject" required :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                  :is-valid="subjectValidator" />
+                <CInput
+                  size="lg"
+                  v-model="value_subject"
+                  required
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="subjectValidator"
+                />
               </td>
             </tr>
             <tr class="table-tr">
-              <th class="h5 table-th">{{ disp_to }}</th>
-              <th class="h5 table-th">{{ disp_cc }}</th>
-              <th class="h5 table-th">{{ disp_bcc }}</th>
-              <th class="h5 table-th"></th>
+              <th class="h5 table-th">
+                {{ disp_to }}
+              </th>
+              <th class="h5 table-th">
+                {{ disp_cc }}
+              </th>
+              <th class="h5 table-th">
+                {{ disp_bcc }}
+              </th>
+              <th class="h5 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="h5 table-td">
-                <multiselect :class="flag_valueToPass ? 'is-valid' : 'is-invalid'" placeholder="" :multiple="true"
-                  :hideSelected="true" :searchable="false" :select-label="disp_select" :selected-label="disp_selected"
-                  :deselect-label="disp_deselect" v-model="value_to" :options="param_personGroupList"
-                  @input="ccListOnInput">
-                </multiselect>
+                <multiselect
+                  :class="flag_valueToPass ? 'is-valid' : 'is-invalid'"
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
+                  v-model="value_to"
+                  :options="param_personGroupList"
+                  @input="ccListOnInput"
+                />
               </td>
               <td class="h5 table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                  v-model="value_cc" :options="param_personGroupList">
-                </multiselect>
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
+                  v-model="value_cc"
+                  :options="param_personGroupList"
+                />
               </td>
               <td class="h5 table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                  v-model="value_bcc" :options="param_personGroupList">
-                </multiselect>
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
+                  v-model="value_bcc"
+                  :options="param_personGroupList"
+                />
               </td>
-              <td class="h5 table-td"></td>
+              <td class="h5 table-td" />
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(1)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-50 table-th">{{ disp_fields }}</th>
-              <th class="h5 w-50 table-th">{{ disp_language }}</th>
+              <th class="h5 w-50 table-th">
+                {{ disp_fields }}
+              </th>
+              <th class="h5 w-50 table-th">
+                {{ disp_language }}
+              </th>
             </tr>
             <tr class="table-tr">
-              <td class="table-td" rowspan="3">
+              <td
+                class="table-td"
+                rowspan="3"
+              >
                 <ul class="list-group">
-                  <li class="list-group-item" v-for="(item, index) in param_Fields" :key="index">
-                    <input class="form-check-input me-1" type="checkbox" value="item"
-                      :checked="value_selectedFields.indexOf(item) >= 0" @change="fieldChanged(item, $event)" />
+                  <li
+                    class="list-group-item"
+                    v-for="(item, index) in param_Fields"
+                    :key="index"
+                  >
+                    <input
+                      class="form-check-input me-1"
+                      type="checkbox"
+                      value="item"
+                      :checked="value_selectedFields.indexOf(item) >= 0"
+                      @change="fieldChanged(item, $event)"
+                    >
                     {{ $t(item) }}
-                    <CButton style="float:right; width: 40px; min-width:unset;" @click="fieldMove(item, -1)">
+                    <CButton
+                      style="float:right; width: 40px; min-width:unset;"
+                      @click="fieldMove(item, -1)"
+                    >
                       <CIcon name="cil-arrow-thick-top" />
                     </CButton>
-                    <CButton style="float:right; width: 40px; min-width:unset;" @click="fieldMove(item, 1)">
+                    <CButton
+                      style="float:right; width: 40px; min-width:unset;"
+                      @click="fieldMove(item, 1)"
+                    >
                       <CIcon name="cil-arrow-thick-bottom" />
                     </CButton>
                   </li>
                 </ul>
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_language" :options="$options.languageOptions" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_language"
+                  :options="$options.languageOptions"
+                />
               </td>
             </tr>
             <tr class="table-tr">
-              <th class="h5 w-50 table-th">{{ disp_note }}</th>
+              <th class="h5 w-50 table-th">
+                {{ disp_note }}
+              </th>
             </tr>
             <tr>
               <td class="table-td">
-                <CTextarea size="lg" rows="9" v-model="value_note" />
+                <CTextarea
+                  size="lg"
+                  rows="9"
+                  v-model="value_note"
+                />
               </td>
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
@@ -154,19 +296,29 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary fz-lg btn-w-normal" @click="clickOnNext" :disabled="!(flag_notifyNamePass && flag_hostPass && flag_portPass
-              && flag_senderPass && flag_accountPass && flag_passwordPass && flag_subjectPass )">
+          <CButton
+            class="btn btn-primary fz-lg btn-w-normal"
+            @click="clickOnNext"
+            :disabled="!(flag_notifyNamePass && flag_hostPass === '' && flag_portPass === ''
+              && flag_senderPass === '' && flag_accountPass && flag_passwordPass && flag_subjectPass )"
+          >
             {{ nextButtonName() }}
           </CButton>
         </div>
@@ -180,6 +332,8 @@ import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
+
+import { checkDomainName, checkPort, checkEmail } from '@/utils';
 
 const defaultlState = () => ({
   obj_loading: null,
@@ -464,45 +618,18 @@ export default {
     },
 
     hostValidator(val) {
-      const self = this;
-
-      if (!/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(val)) {
-        if (!/^(?!-)[A-Za-z0-9-]+([-.]{1}[a-z0-9]+)*\.[A-Za-z]{2,6}$/.test(val)) {
-          this.flag_hostPass = false;
-        } else {
-          this.flag_hostPass = true;
-        }
-      } else {
-        this.flag_hostPass = true;
-      }
-
-      return self.flag_hostPass;
+      this.flag_hostPass = checkDomainName(val);
+      return this.flag_hostPass === '';
     },
 
     portValidator(val) {
-      const self = this;
-
-      if (!/^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(val)) {
-        self.flag_portPass = false;
-      } else {
-        self.flag_portPass = true;
-      }
-
-      return self.flag_portPass;
+      this.flag_portPass = checkPort(val);
+      return this.flag_hostPass === '';
     },
 
     senderValidator(val) {
-      const self = this;
-
-      if (val.replace(/\s/g, '').length === 0) {
-        self.flag_senderPass = false;
-      } else if (!/^(|([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+).([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5}){1,25})+)*$/.test(val)) {
-        self.flag_senderPass = false;
-      } else {
-        self.flag_senderPass = val.length > 0;
-      }
-
-      return self.flag_senderPass;
+      this.flag_senderPass = checkEmail(val);
+      return this.flag_senderPass === '';
     },
 
     accountValidator(val) {

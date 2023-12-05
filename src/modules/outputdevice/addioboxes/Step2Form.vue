@@ -12,31 +12,75 @@
       </CCardHeader>
       <CCardBody v-show="flag_outPut1Visiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicEnable }}</h5>
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicEnable }}
+            </h5>
             <label class="switch">
-              <input class="form-check-input" type="checkbox" v-model="localStep2form[0].enable">
-              <span class="slider round"></span>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                v-model="localStep2form[0].enable"
+              >
+              <span class="slider round" />
             </label>
           </CCol>
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDefaultValue }}</h5>
-            <CSelect size="lg" v-model="localStep2form[0].default" :options="value_deviceDefaultValue"
-              :filterable="true" class="font-control mt-2" :placeholder="dis_placeholder"
-              :disabled="!localStep2form[0].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDefaultValue }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form[0].default"
+              :options="value_deviceDefaultValue"
+              :filterable="true"
+              class="font-control mt-2"
+              :placeholder="dis_placeholder"
+              :disabled="!localStep2form[0].enable"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicValueWhenTriggered }}</h5>
-            <CSelect size="lg" v-model="localStep2form[0].trigger" :options="value_deviceTrigger" :filterable="true"
-              class="font-control mt-2" :placeholder="dis_placeholder" :disabled="!localStep2form[0].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicValueWhenTriggered }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form[0].trigger"
+              :options="value_deviceTrigger"
+              :filterable="true"
+              class="font-control mt-2"
+              :placeholder="dis_placeholder"
+              :disabled="!localStep2form[0].enable"
+            />
           </CCol>
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDurationWhenTriggered }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form[0].delay" pattern="[0-9]*"
-              :invalid-feedback="disp_limitNumber1to30" :is-valid="isFieldPassed('delay', localStep2form[0].delay)"
-              required :disabled="!localStep2form[0].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDurationWhenTriggered }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form[0].delay"
+              pattern="[0-9]*"
+              :invalid-feedback="disp_limitNumber1to30"
+              :is-valid="isFieldPassed('delay', localStep2form[0].delay)"
+              required
+              :disabled="!localStep2form[0].enable"
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -54,36 +98,79 @@
       </CCardHeader>
       <CCardBody v-show="flag_outPut2Visiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicEnable }}</h5>
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicEnable }}
+            </h5>
             <label class="switch">
-              <input class="form-check-input" type="checkbox" v-model="localStep2form[1].enable">
-              <span class="slider round"></span>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                v-model="localStep2form[1].enable"
+              >
+              <span class="slider round" />
             </label>
           </CCol>
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDefaultValue }}</h5>
-            <CSelect size="lg" v-model="localStep2form[1].default" :options="value_deviceDefaultValue"
-              :filterable="true" class="font-control mt-2" :placeholder="dis_placeholder"
-              :disabled="!localStep2form[1].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDefaultValue }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form[1].default"
+              :options="value_deviceDefaultValue"
+              :filterable="true"
+              class="font-control mt-2"
+              :placeholder="dis_placeholder"
+              :disabled="!localStep2form[1].enable"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicValueWhenTriggered }}</h5>
-            <CSelect size="lg" v-model="localStep2form[1].trigger" :options="value_deviceTrigger" :filterable="true"
-              class="font-control mt-2" :placeholder="dis_placeholder" :disabled="!localStep2form[1].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicValueWhenTriggered }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form[1].trigger"
+              :options="value_deviceTrigger"
+              :filterable="true"
+              class="font-control mt-2"
+              :placeholder="dis_placeholder"
+              :disabled="!localStep2form[1].enable"
+            />
           </CCol>
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDurationWhenTriggered }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form[1].delay" pattern="[0-9]*"
-              :invalid-feedback="disp_limitNumber1to30" :is-valid="isFieldPassed('delay', localStep2form[1].delay)"
-              required :disabled="!localStep2form[1].enable" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDurationWhenTriggered }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form[1].delay"
+              pattern="[0-9]*"
+              :invalid-feedback="disp_limitNumber1to30"
+              :is-valid="isFieldPassed('delay', localStep2form[1].delay)"
+              required
+              :disabled="!localStep2form[1].enable"
+            />
           </CCol>
         </CRow>
       </CCardBody>
     </CCard>
-
   </div>
 </template>
 

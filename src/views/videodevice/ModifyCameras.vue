@@ -1,7 +1,9 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ disp_headertitle }}
+      </div>
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -17,10 +19,9 @@
           disp_complete,
         ]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -31,8 +32,8 @@
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -43,8 +44,8 @@
             :step1form="step1form"
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -55,8 +56,8 @@
           <Step3Form
             :step3form="step3form"
             @updateStep3form="updateStep3form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -69,24 +70,27 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>

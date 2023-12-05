@@ -58,7 +58,7 @@
   "CreateDate": "登録日",
   "Create": "登録",
   "NumbersOnly": "数字が必要",
-  "MoreThan4lettersAndNumbers": "繰り返しを含まない少なくとも 4 文字の英数字",
+  "MoreThan4lettersAndNumbers": "最低4文字の英数字で、他の従業員番号と重複していてはいけません。",
   "NoEmptyNoSpace": "空または空白にすることはできません",
   "NoEmptyNoSpaceNoSpecial": "空、スペース、特殊文字は使用できません",
   "NoEmptyNoSpaceOnly": "空または空白にすることはできません",
@@ -258,7 +258,7 @@
   "Displays": "ボード",
   "Welcome": "ウェルカムボード",
   "Occupancy": "出席ボード",
-  "Capacity": "出席ボード",
+  "Capacity": "占有ボード",
   "ModifyWelcomeControl": "ウェルカムボードの設定",
   "ModifyOccupancyControl": "占有ボードの設定",
   "ModifyCapacityControl": "出席ボードの設定",
@@ -762,7 +762,7 @@
   "Recurrent": "再発",
   "AddROI": "作成する",
   "RemoveROI": "取り除く",
-  "VideoDeviceROI": "ROIS",
+  "VideoDeviceROI": "ロワ",
   "ClockInChannel": "クロックイン用のデバイス",
   "ClockOutChannel": "クロックアウト用のデバイス",
   "MenuAttendanceBoard": "出席ボード",
@@ -825,5 +825,8 @@
   "Logout": "サインアウト",
   "Identified": "認識する",
   "Unidentified": "不十分です",
-  "phone_number": "電話"
+  "phone_number": "電話",
+  "Excluded": "除外",
+  "Embedded": "埋め込み",
+  "Files": "ファイル"
 }

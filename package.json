@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "start": "npm run serve",
-    "build": "vue-cli-service build --mode production"
+    "build": "vue-cli-service build --mode production",
+    "i18n2csv": "node ./scripts/i18n2csv.js",
+    "csv2i18n": "node ./scripts/csv2i18n.js"
   },
   "dependencies": {
     "@coreui/coreui": "^3.4.0",
@@ -19,6 +21,7 @@
     "blueimp-load-image": "^5.16.0",
     "chart.js": "^4.3.0",
     "core-js": "^3.9.1",
+    "csvtojson": "2.0.10",
     "dayjs": "^1.11.10",
     "easy-circular-progress": "^1.0.4",
     "element-ui": "^2.15.3",
