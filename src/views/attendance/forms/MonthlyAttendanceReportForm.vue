@@ -959,12 +959,12 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).join(', ');
+              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
           }
-          catch(ex) {
+          catch (ex) {
             item.groups = '';
           }
 
@@ -1572,7 +1572,7 @@ export default {
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      let data = `No${separator}${self.value_masterexportFields.join(separator)}\r\n`;
+      let data = `"No"${separator}"${self.value_masterexportFields.join("\"" + separator + "\"")}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1592,31 +1592,31 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).join(', ');
+              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
           }
-          catch(ex) {
+          catch (ex) {
             item.groups = '';
           }
 
           item.attendanceStatusData = attendanceStatusData;
         }
 
-        const ln = [self.exportNo];
+        const ln = ["\"" + self.exportNo + "\""];
         for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
           switch (self.value_masterexportFields[i]) {
-            case 'id': ln.push(item.id); break;
-            case 'name': ln.push(item.nameToShow); break;
-            case 'group_list': ln.push(item.groups); break;
-            case 'workingTime': ln.push(item.working_time); break;
-            case 'overTime': ln.push(item.over_time); break;
-            case 'norecord': ln.push(item.no_record); break;
-            case 'arrivallate': ln.push(item.late); break;
-            case 'leaveearly': ln.push(item.early); break;
-            case 'noentryrecord': ln.push(item.no_entry); break;
-            case 'noleaverecord': ln.push(item.no_leave); break;
+            case 'id': ln.push("\"" + item.id + "\""); break;
+            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
+            case 'group_list': ln.push("\"" + item.groups + "\""); break;
+            case 'workingTime': ln.push("\"" + item.working_time + "\""); break;
+            case 'overTime': ln.push("\"" + item.over_time + "\""); break;
+            case 'norecord': ln.push("\"" + item.no_record + "\""); break;
+            case 'arrivallate': ln.push("\"" + item.late + "\""); break;
+            case 'leaveearly': ln.push("\"" + item.early + "\""); break;
+            case 'noentryrecord': ln.push("\"" + item.no_entry + "\""); break;
+            case 'noleaverecord': ln.push("\"" + item.no_leave + "\""); break;
             default: break;
           }
         }
@@ -1734,12 +1734,12 @@ export default {
 
           try {
             if (Array.isArray(self.value_attendanceDataListToReview[idx].group_list)) {
-              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || []).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             } else {
-              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
           }
-          catch(ex) {
+          catch (ex) {
             self.value_attendanceDataListToReview[idx].groups = '';
           }
         }
@@ -1828,7 +1828,7 @@ export default {
         personName = self.value_attendanceDataListToReview[0].name;
       }
 
-      let data = `No${separator}${self.value_detailexportFields.join(separator)}\r\n`;
+      let data = `"No"${separator}"${self.value_detailexportFields.join("\"" + separator + "\"")}"\r\n`;
 
       self.exportNo = 0;
 
@@ -1866,26 +1866,26 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).join(', ');
+              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
             }
           }
-          catch(ex) {
+          catch (ex) {
             item.groups = '';
           }
         }
 
-        const ln = [self.exportNo];
+        const ln = ["\"" + self.exportNo + "\""];
         for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
           switch (self.value_detailexportFields[i]) {
-            case 'id': ln.push(item.id); break;
-            case 'name': ln.push(item.nameToShow); break;
-            case 'group_list': ln.push(item.groups); break;
-            case 'mode': ln.push(item.clockMode); break;
-            case 'clockTime': ln.push(item.clockTime); break;
-            case 'temperature': ln.push(item.temperature); break;
-            case 'cardno': ln.push(item.card_number); break;
+            case 'id': ln.push("\"" + item.id + "\""); break;
+            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
+            case 'group_list': ln.push("\"" + item.groups + "\""); break;
+            case 'mode': ln.push("\"" + item.clockMode + "\""); break;
+            case 'clockTime': ln.push("\"" + item.clockTime + "\""); break;
+            case 'temperature': ln.push("\"" + item.temperature + "\""); break;
+            case 'cardno': ln.push("\"" + item.card_number + "\""); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
@@ -2032,12 +2032,12 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).join('<br>');
+            item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join('<br>');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).join('<br>');
+            item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join('<br>');
           }
         }
-        catch(ex) {
+        catch (ex) {
           item.groups = '';
         }
 
@@ -2077,6 +2077,7 @@ export default {
         const item = pItem;
 
         item.nameToShow = item.name;
+
         item.clockTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
 
         switch (item.verify_mode) {
@@ -2092,6 +2093,12 @@ export default {
           case 4:
             item.clockMode = i18n.formatter.format('ClockModeClockOut');
             break;
+          case 5:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
+            break;
+          case 6:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
+            break;
           default:
             item.clockMode = i18n.formatter.format('None');
             break;
@@ -2099,12 +2106,12 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).join(', ');
+            item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).join(', ');
+            item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
           }
         }
-        catch(ex) {
+        catch (ex) {
           item.groups = '';
         }
 
@@ -2156,7 +2163,6 @@ export default {
                   if (personVrItems && personVrItems.length > 0) {
                     self.value_allTableItems.forEach((record) => {
                       const person = record;
-
                       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
                       dataListOnUuid.forEach((d) => {
                         if (!person.attendance_data_list) {
@@ -2230,25 +2236,30 @@ export default {
     generateAttendanceStatusData_V2(workingHourSettings, pItem) {
       const item = pItem;
 
-      const { definedClockinTimeHour, definedClockoutTimeHour, definedOvertimeTimeHour } = workingHourSettings;
+      // const { definedClockinTimeHour, definedClockoutTimeHour, definedOvertimeTimeHour } = workingHourSettings;
+      const definedClockinTimeHour = workingHourSettings.defined_clockin_time_hour || 9;
+      const definedClockoutTimeHour = workingHourSettings.defined_clockout_time_hour || 18;
+      const definedOvertimeTimeHour = workingHourSettings.defined_overtime_time_hour || 18;
 
-      const definedClockinTimeMin = workingHourSettings.definedClockinTimeMin || 0;
-      const definedClockinTimeBufferMins = workingHourSettings.definedClockinTimeBufferMins || 30;
-      const definedClockinTimeLateEnabled = workingHourSettings.definedClockinTimeLateEnabled || true;
-      const definedClockinAdjustmentEnabled = workingHourSettings.definedClockinAdjustmentEnabled || false;
+      const definedClockinTimeMin = workingHourSettings.defined_clockin_time_min || 0;
+      const definedClockinTimeBufferMins = workingHourSettings.defined_clockin_time_buffer_mins || 30;
+      const definedClockinTimeLateEnabled = workingHourSettings.defined_clockin_time_late_enabled || true;
+      const definedClockinAdjustmentEnabled = workingHourSettings.defined_clockin_adjustment_enabled || false;
 
-      const definedClockoutTimeMin = workingHourSettings.definedClockoutTimeMin || 0;
-      const definedClockoutTimeBufferMins = workingHourSettings.definedClockoutTimeBufferMins || 30;
-      const definedClockoutTimeEarlyLeaveEnabled = workingHourSettings.definedClockoutTimeEarlyLeaveEnabled || true;
-      const definedClockoutAdjustmentEnabled = workingHourSettings.definedClockoutAdjustmentEnabled || false;
+      const definedClockoutTimeMin = workingHourSettings.defined_clockout_time_min || 0;
+      const definedClockoutTimeBufferMins = workingHourSettings.defined_clockout_time_buffer_mins || 30;
+      const definedClockoutTimeEarlyLeaveEnabled = workingHourSettings.defined_clockout_time_early_leave_enabled || true;
+      const definedClockoutAdjustmentEnabled = workingHourSettings.defined_clockout_adjustment_enabled || false;
 
-      const definedOvertimeEnabled = workingHourSettings.definedOvertimeEnabled || true;
-      const definedOvertimeTimeMin = workingHourSettings.definedOvertimeTimeMin || 0;
-      const definedOvertimeMinimumMin = workingHourSettings.definedOvertimeMinimumMin || 0;
+      const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled || true;
+      const definedOvertimeTimeMin = workingHourSettings.defined_overtime_time_min || 0;
+      const definedOvertimeMinimumMin = workingHourSettings.defined_overtime_minimum_min || 0;
 
-      const definedBreakTimeMin = workingHourSettings.definedBreakTimeMins || 60;
+      const definedBreakTimeMin = workingHourSettings.defined_break_time_mins || 60;
 
-      const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
+      // const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
+      const specifiedHolidays = workingHourSettings.specified_holidays || [];
+      const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
 
       const self = this;
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];

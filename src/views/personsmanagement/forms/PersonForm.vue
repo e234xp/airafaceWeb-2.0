@@ -624,7 +624,7 @@ export default {
         const file = e.target.files[0];
         let mb = file.size / 1024 / 1024;
 
-        if (mb >= 2) {
+        if (mb >= 10) {
           if (from == 'REGISTER') {
             self.flag_maxRegisterFileSize = false;
           } else {

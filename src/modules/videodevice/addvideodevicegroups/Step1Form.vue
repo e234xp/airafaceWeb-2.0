@@ -14,7 +14,7 @@
         <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicDeviceName }}
           <CInput size="lg" class="mt-2" v-model="localStep1form.name"
-            :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+            :invalid-feedback="$t('NoEmptyNoSpaceNoSpecialRepeat')"
             :is-valid="isFieldPassed('name', localStep1form.name)" required />
         </CCol>
       </CRow>

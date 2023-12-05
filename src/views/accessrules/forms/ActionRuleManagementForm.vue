@@ -259,8 +259,11 @@ export default {
 
     formatSchedule(sche) {
       const self = this;
-      const ret = self.param_timeRangeListValue.find((ii) => ii.value === sche);
-      return ret.label;
+      if (sche) {
+        const ret = self.param_timeRangeListValue.find((ii) => ii.value === sche);
+        return ret.label;
+      }
+      return '';
     },
 
     async generateFilteredData(sourceData, filter) {

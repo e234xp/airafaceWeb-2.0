@@ -76,7 +76,7 @@ export default {
       if (!items || !Array.isArray(items)) return;
 
       const uuidListToDel = items.map(({ uuid }) => uuid);
-      this.$confirm("", i18n.formatter.format("ConfirmToDelete"), "question", {
+      this.$confirm("", i18n.formatter.format("ConfirmToDelete"), {
         confirmButtonText: i18n.formatter.format("Confirm"),
         cancelButtonText: i18n.formatter.format("Cancel"),
         confirmButtonColor: "#20a8d8",

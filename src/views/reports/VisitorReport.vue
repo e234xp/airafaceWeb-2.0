@@ -80,366 +80,355 @@
 </template>
 
 <script>
-  import { mapState } from "vuex";
-  import TableObserver from "@/utils/TableObserver.vue";
-  import i18n from "@/i18n";
+import i18n from '@/i18n';
+import { mapState } from 'vuex';
+import TableObserver from '@/utils/TableObserver.vue';
 
-  import CTableWrapper from "./ReportTable.vue";
+import FileSaver from 'file-saver';
+import Excel from 'exceljs/dist/exceljs.min';
+import JsZip from 'jszip';
 
-  import FileSaver from "file-saver";
-  import Excel from "exceljs/dist/exceljs.min.js";
+const dayjs = require('dayjs');
 
-  import JsZip from "jszip";
+const defaultlState = () => ({
+  obj_loading: null,
 
-  Date.prototype.yyyymmdd_HHMMSS = function () {
-    var mm = this.getMonth() + 1; // getMonth() is zero-based
-    var dd = this.getDate();
-    var HH = this.getHours();
-    var MM = this.getMinutes();
-    var SS = this.getSeconds();
+  param_cardStyle: 'height: 35rem;',
+  param_activeColor: '#6baee3',
+  param_passiveColor: '#919bae',
+  param_lineThickness: 3,
+  param_activeThickness: 3,
+  param_passiveThickness: 3,
 
-    return [
-      this.getFullYear() + "-",
-      (mm > 9 ? "" : "0") + mm + "-",
-      (dd > 9 ? "" : "0") + dd + " ",
-      (HH > 9 ? "" : "0") + HH + ":",
-      (MM > 9 ? "" : "0") + MM + ":",
-      (SS > 9 ? "" : "0") + SS,
-    ].join("");
-  };
+  flag_enableSearchButton: false,
+  flag_downloadingExecl: false,
 
-  const defaultlState = () => {
-    return {
-      obj_loading: null,
+  excelExecutionAmounts: 0,
+  excelCounter: 0,
 
-      param_cardStyle: "height: 35rem;",
-      param_activeColor: "#6baee3",
-      param_passiveColor: "#919bae",
-      param_lineThickness: 3,
-      param_activeThickness: 3,
-      param_passiveThickness: 3,
+  disp_select: i18n.formatter.format('Select'),
+  disp_selected: i18n.formatter.format('Selected'),
+  disp_deselect: i18n.formatter.format('Deselect'),
 
-      flag_enableSearchButton: false,
-      flag_downloadingExecl: false,
+  disp_header: i18n.formatter.format('VisitorReport'),
+  disp_selectDatetimeRange: i18n.formatter.format('DateTime'),
 
-      excelExecutionAmounts: 0,
-      excelCounter: 0,
+  disp_search: i18n.formatter.format('Search'),
+  disp_exportExcel: i18n.formatter.format('ExportExcel'),
+  disp_withPhoto: i18n.formatter.format('WithPhoto'),
+  disp_withoutPhoto: i18n.formatter.format('WithoutPhoto'),
 
-      disp_select: i18n.formatter.format("Select"), //
-      disp_selected: i18n.formatter.format("Selected"), //
-      disp_deselect: i18n.formatter.format("Deselect"), //
+  disp_dateTime: i18n.formatter.format('Time'),
+  disp_id: i18n.formatter.format('PersonId'),
+  disp_name: i18n.formatter.format('PersonName'),
+  disp_group_list: i18n.formatter.format('GroupName'),
+  disp_temperature: i18n.formatter.format('Temperature'),
+  disp_verify_score: i18n.formatter.format('Score'),
+  disp_face_image: i18n.formatter.format('CapturedPhoto'),
 
-      disp_header: i18n.formatter.format("VisitorReport"),
-      disp_selectDatetimeRange: i18n.formatter.format("DateTime"),
+  value_searchingFilter: '',
+  value_specifiedDatetimeRange: [],
 
-      disp_search: i18n.formatter.format("Search"),
-      disp_exportExcel: i18n.formatter.format("ExportExcel"),
-      disp_withPhoto: i18n.formatter.format("WithPhoto"),
-      disp_withoutPhoto: i18n.formatter.format("WithoutPhoto"),
+  value_allTableItems: [],
+  value_dataTotalLength: 0,
+  value_dataItemsToShow: [],
+  value_tablePage: {
+    currentPage: 1,
+    pageSize: 10,
+    totalResult: 0,
+  },
+});
 
-      disp_dateTime: i18n.formatter.format("Time"),
-      disp_id: i18n.formatter.format("PersonId"),
-      disp_name: i18n.formatter.format("PersonName"),
-      disp_group_list: i18n.formatter.format("GroupName"),
-      disp_temperature: i18n.formatter.format("Temperature"),
-      disp_verify_score: i18n.formatter.format("Score"),
-      disp_face_image: i18n.formatter.format("CapturedPhoto"),
+export default {
+  name: 'VisitorReport',
+  components: {
+    // CTableWrapper,
+  },
+  data() {
+    // return Object.assign({}, defaultlState(), this.formData);
+    const cloneObject = {};
+    Object.assign(cloneObject, defaultlState(), this.formData);
 
-      value_searchingFilter: "",
-      value_specifiedDatetimeRange: [],
+    return cloneObject;
+  },
+  computed: {
+    ...mapState(['ellipsisMode']),
+  },
+  mixins: [TableObserver],
+  created() {
+    const self = this;
+    const endTime = new Date();
+    endTime.setHours(23, 59, 59, 999);
+    const endTimeTimestamp = endTime.getTime();
+    const startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
 
-      value_allTableItems: [],
-      value_dataTotalLength: 0,
-      value_dataItemsToShow: [],
-      value_tablePage: {
-        currentPage: 1,
-        pageSize: 10,
-        totalResult: 0,
-      },
-    };
-  };
-  export default {
-    name: "PersonReport",
-    components: {
-      CTableWrapper,
+    self.value_specifiedDatetimeRange[0] = new Date(startTimeTimestamp);
+    self.value_specifiedDatetimeRange[1] = endTime;
+    self.flag_enableSearchButton = true;
+    self.clickOnSearch();
+  },
+  mounted() {
+    this.observeTableSize();
+  },
+  watch: {
+    value_searchingFilter() {
+      this.value_tablePage.currentPage = 1;
+      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
     },
-    data() {
-      return Object.assign({}, defaultlState(), this.formData);
+  },
+  methods: {
+    toggleText() {
+      return i18n.formatter.format('ExportExcel');
     },
-    computed: {
-      ...mapState(["ellipsisMode"]),
+    headerCellStyle() {
+      return 'fontSize: 18px';
     },
-    mixins: [TableObserver],
-    created() {
+    cellStyle() {
+      return 'fontSize:18px;';
+    },
+    datePickerDatachange() {
       const self = this;
-      let endTime = new Date();
-      endTime.setHours(23, 59, 59, 999);
-      let endTimeTimestamp = endTime.getTime();
-      let startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
-
-      self.value_specifiedDatetimeRange[0] = new Date(startTimeTimestamp);
-      self.value_specifiedDatetimeRange[1] = endTime;
       self.flag_enableSearchButton = true;
-      self.clickOnSearch();
     },
-    mounted() {
-      this.observeTableSize();
+    selectAllEvent() {
+
     },
-    watch: {
-      value_searchingFilter(value) {
-        this.value_tablePage.currentPage = 1;
-        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-      },
+    selectChangeEvent() {
+
     },
-    methods: {
-      toggleText() {
-        return i18n.formatter.format("ExportExcel");
-      },
-      headerCellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize: 18px";
-      },
-      cellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize:18px;";
-      },
-      datePickerDatachange() {
-        const self = this;
-        self.flag_enableSearchButton = true;
-      },
-      selectAllEvent({ checked, records }) {
-        // console.log(checked ? '所有勾选事件' : '所有取消事件', records)
-      },
-      selectChangeEvent({ checked, records }) {
-        // console.log(checked ? '勾选事件' : '取消事件', records)
-      },
 
-      clickOnSearch() {
-        let startTime = this.value_specifiedDatetimeRange[0].getTime();
-        let endTime = this.value_specifiedDatetimeRange[1].getTime();
+    clickOnSearch() {
+      const startTime = this.value_specifiedDatetimeRange[0].getTime();
+      const endTime = this.value_specifiedDatetimeRange[1].getTime();
 
-        let data = {
-          start_time: startTime,
-          end_time: endTime,
-          slice_shift: 0,
-          slice_length: 10000,
-          with_image: false,
-          uuid_list: [],
-        };
+      const data = {
+        start_time: startTime,
+        end_time: endTime,
+        slice_shift: 0,
+        slice_length: 10000,
+        with_image: false,
+        uuid_list: [],
+      };
 
-        this.queryVisitorResult(data);
-      },
-      queryVisitorResult(_data) {
-        const self = this;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.$globalGetVisitorResult(_data, function (error, data) {
-          if (self.obj_loading) self.obj_loading.hide();
+      this.queryVisitorResult(data);
+    },
+    queryVisitorResult(_data) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.$globalGetVisitorResult(_data, (error, data) => {
+        if (self.obj_loading) self.obj_loading.hide();
 
-          if (!error) {
-            self.value_allTableItems = data.result.data;
-            self.value_dataTotalLength = data.result.total_length;
-            self.value_allTableItems.sort(function (a, b) {
-              if (a.timestamp < b.timestamp) return 1;
-              if (a.timestamp > b.timestamp) return -1;
-              return 0;
-            });
-            self.value_allTableItems.forEach((item) => {
-              try {
-                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
-                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
-                item["groups"] = "";
-                // item["showimage"] =
-                //   !item.face_image ?
-                //     `<span />` :
-                //     item.face_image.length == 0 ?
-                //       `<span />` :
-                //       `<img src='data:image/jpeg;base64,${item.face_image}' width='100' height='100'>`;
-                var showimageId = item.face_image_id
-                  ? item.face_image_id.f + item.face_image_id.uuid
-                  : "";
-                item[
-                  "showimage"
-                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
-              } catch (ex) {
-                console.log(ex);
-              }
-            });
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems
-            );
+        if (!error) {
+          self.value_allTableItems = data.result.data;
+          self.value_dataTotalLength = data.result.total_length;
+          self.value_allTableItems.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return 1;
+            if (a.timestamp > b.timestamp) return -1;
+            return 0;
+          });
+          self.value_allTableItems.forEach((pItem) => {
+            const item = pItem;
+            try {
+              item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
 
-            self.value_tablePage.currentPage = 1;
-            if (cb) cb();
-          }
-        });
-      },
-      handlePageChange({ currentPage, pageSize }) {
-        const self = this;
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-        this.resizeOneTable();
-      },
+              item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+              item.groups = item.group_list;
+              item.groups = JSON.parse(item.group_list);
+              item.groups = item.groups.filter((g) => g !== 'All Visitor');
+              item.groups = item.groups.join(',');
 
-      generateFilteredData(sourceData) {
-        const self = this;
-        const filteredItems = sourceData.filter((item) => {
-          if (self.value_searchingFilter) {
-            if (
-              item.id.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
-              || item.name.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
-              || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1)
-            ) {
-            } else return false;
-          }
-
-          return true;
-        });
-        // self.value_tablePage.totalResult = self.value_dataTotalLength; //filteredItems.length;
-        self.value_tablePage.totalResult = filteredItems.length;
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize
-        );
-        sliceList.forEach(async (slicei) => {
-          try {
-            var showimageId = slicei.face_image_id
-              ? slicei.face_image_id.f + slicei.face_image_id.uuid
-              : "";
-            if (showimageId.length > 0) {
-              var dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
-              if (dataImage.error == null && dataImage.data) {
-                var ele = document.getElementById(showimageId);
-                if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
-              }
+              const showimageId = item.face_image_id
+                ? item.face_image_id.f + item.face_image_id.uuid
+                : '';
+              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf`
+                + 'FcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAA'
+                + 'QAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+            } catch (ex) {
+              console.log(ex);
             }
-          } catch (e) { }
-        });
-        return Object.assign([], sliceList);
-      },
+          });
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+          );
 
-      sleep(milliseconds) {
-        return new Promise((resolve) => setTimeout(resolve, milliseconds));
-      },
+          self.value_tablePage.currentPage = 1;
+          // if (cb) cb();
+        }
+      });
+    },
+    handlePageChange({ currentPage, pageSize }) {
+      const self = this;
+      self.value_tablePage.currentPage = currentPage;
+      self.value_tablePage.pageSize = pageSize;
+      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
+      self.resizeOneTable();
+    },
 
-      async exportExcel(withPhoto) {
-        let self = this;
-
-        self.flag_downloadingExecl = true;
-        var snapshotFolder = null;
-
-        var zip = new JsZip();
-
-        if (withPhoto) snapshotFolder = zip.folder("snapshot");
-
-        var workbook = new Excel.Workbook();
-        var worksheet = null;
-        self.exportNo = 0;
-
-        worksheet = workbook.addWorksheet("Report");
-
-        worksheet.columns = [
-          { header: "No", key: "No", width: 10 },
-          { header: self.disp_dateTime, key: "dateTime", width: 10 },
-          { header: self.disp_id, key: "id", width: 10 },
-          { header: self.disp_name, key: "name", width: 10 },
-          { header: self.disp_group_list, key: "groups", width: 10 },
-          { header: self.disp_verify_score, key: "score", width: 10 },
-          { header: self.disp_face_image, key: "showimage", width: 15 },
-        ];
-
-        if (self.$deviceProfile.supportTemperature) {
-          worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
+    generateFilteredData(sourceData) {
+      const self = this;
+      const filteredItems = sourceData.filter((item) => {
+        if (self.value_searchingFilter) {
+          if (
+            item.id.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
+            || item.name.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
+            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1)
+          ) {
+            return true;
+          }
+          return false;
         }
 
-        self.excelExecutionAmounts = self.value_allTableItems.length;
-        self.excelCounter = 0;
+        return true;
+      });
 
-        for (let idx = 0; idx < self.value_allTableItems.length; idx++) {
-          self.exportNo++;
-          self.excelCounter++;
+      self.value_tablePage.totalResult = filteredItems.length;
+      const sliceList = filteredItems.slice(
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+      );
+      sliceList.forEach(async (slicei) => {
+        try {
+          const showimageId = slicei.face_image_id
+            ? slicei.face_image_id.f + slicei.face_image_id.uuid
+            : '';
+          if (showimageId.length > 0) {
+            const dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
+            if (dataImage.error == null && dataImage.data) {
+              const ele = document.getElementById(showimageId);
+              if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
+            }
+          }
+        } catch (e) {
+          console.log('sliceList.forEach 315', e);
+        }
+      });
+      return Object.assign([], sliceList);
+    },
 
-          worksheet.addRow({
-            No: self.exportNo,
-            dateTime: self.value_allTableItems[idx].dateTime,
-            id: self.value_allTableItems[idx].id,
-            name: self.value_allTableItems[idx].name,
-            groups: self.value_allTableItems[idx].groups,
-            score: self.value_allTableItems[idx].score,
-            temperature: self.value_allTableItems[idx].temperature,
+    sleep(milliseconds) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    },
+
+    async exportExcel(withPhoto) {
+      const self = this;
+
+      self.flag_downloadingExecl = true;
+      let snapshotFolder = null;
+
+      const zip = new JsZip();
+
+      if (withPhoto) snapshotFolder = zip.folder('snapshot');
+
+      let workbook = new Excel.Workbook();
+      let worksheet = null;
+      self.exportNo = 0;
+
+      worksheet = workbook.addWorksheet('Report');
+
+      worksheet.columns = [
+        { header: 'No', key: 'No', width: 10 },
+        { header: self.disp_dateTime, key: 'dateTime', width: 10 },
+        { header: self.disp_id, key: 'id', width: 10 },
+        { header: self.disp_name, key: 'name', width: 10 },
+        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: self.disp_verify_score, key: 'score', width: 10 },
+        { header: self.disp_face_image, key: 'showimage', width: 15 },
+      ];
+
+      if (self.$deviceProfile.supportTemperature) {
+        worksheet.columns.push({ header: self.disp_temperature, key: 'temperature', width: 10 });
+      }
+
+      self.excelExecutionAmounts = self.value_allTableItems.length;
+      self.excelCounter = 0;
+
+      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
+        self.exportNo += 1;
+        self.excelCounter += 1;
+
+        worksheet.addRow({
+          No: self.exportNo,
+          dateTime: self.value_allTableItems[idx].dateTime,
+          id: self.value_allTableItems[idx].id,
+          name: self.value_allTableItems[idx].name,
+          groups: self.value_allTableItems[idx].groups,
+          score: self.value_allTableItems[idx].score,
+          temperature: self.value_allTableItems[idx].temperature,
+        });
+
+        if (withPhoto) {
+          await self.sleep(10);
+          const faceImageRet = await self.$globalFetchVerifyPhoto(
+            self.value_allTableItems[idx].face_image_id,
+          );
+          if (!faceImageRet.error) {
+            const photoId = workbook.addImage({
+              base64: faceImageRet.data.face_image,
+              extension: 'jpeg',
+            });
+            worksheet.addImage(
+              photoId,
+              `H${worksheet.rowCount}:H${worksheet.rowCount}`,
+            );
+            worksheet.lastRow.height = 60;
+
+            const fileName = self.value_allTableItems[idx].dateTime
+              .replace('-', '_')
+              .replace(' ', '_')
+              .replace(':', '_');
+            snapshotFolder.file(
+              `${self.exportNo}_${fileName}.jpeg`,
+              faceImageRet.data.face_image,
+              { base64: true },
+            );
+          }
+        }
+
+        if (self.exportNo % 1000 === 0) {
+          await workbook.xlsx.writeBuffer().then((data) => {
+            const blob = new Blob([data], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            zip.file('Investigation-Report.xlsx', blob);
           });
 
-          if (withPhoto) {
-            await self.sleep(10);
-            var faceImageRet = await self.$globalFetchVerifyPhoto(
-              self.value_allTableItems[idx].face_image_id
-            );
-            if (!faceImageRet.error) {
-              var photoId = workbook.addImage({
-                base64: faceImageRet.data.face_image,
-                extension: "jpeg",
-              });
-              worksheet.addImage(
-                photoId,
-                "H" + worksheet.rowCount + ":H" + worksheet.rowCount
-              );
-              worksheet.lastRow.height = 60;
+          workbook = new Excel.Workbook();
+          worksheet = workbook.addWorksheet('Report');
 
-              let fileName = self.value_allTableItems[idx].dateTime
-                .replace("-", "_")
-                .replace(" ", "_")
-                .replace(":", "_");
-              snapshotFolder.file(
-                self.exportNo + "_" + self.value_allTableItems[idx].dateTime + ".jpeg",
-                faceImageRet.data.face_image,
-                { base64: true }
-              );
-            }
-          }
+          worksheet.columns = [
+            { header: 'No', key: 'No', width: 10 },
+            { header: self.disp_dateTime, key: 'dateTime', width: 10 },
+            { header: self.disp_id, key: 'id', width: 10 },
+            { header: self.disp_name, key: 'name', width: 10 },
+            { header: self.disp_group_list, key: 'groups', width: 10 },
+            { header: self.disp_verify_score, key: 'score', width: 10 },
+            { header: self.disp_face_image, key: 'showimage', width: 30 },
+          ];
 
-          if (self.exportNo % 1000 == 0) {
-            await workbook.xlsx.writeBuffer().then((data) => {
-              var blob = new Blob([data], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-              });
-              zip.file("Investigation-Report.xlsx", blob);
-            });
-
-            workbook = new Excel.Workbook();
-            worksheet = workbook.addWorksheet("Report");
-
-            worksheet.columns = [
-              { header: "No", key: "No", width: 10 },
-              { header: self.disp_dateTime, key: "dateTime", width: 10 },
-              { header: self.disp_id, key: "id", width: 10 },
-              { header: self.disp_name, key: "name", width: 10 },
-              { header: self.disp_group_list, key: "groups", width: 10 },
-              { header: self.disp_verify_score, key: "score", width: 10 },
-              { header: self.disp_face_image, key: "showimage", width: 30 },
-            ];
-
-            if (self.$deviceProfile.supportTemperature) {
-              worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
-            }
+          if (self.$deviceProfile.supportTemperature) {
+            worksheet.columns.push({ header: self.disp_temperature, key: 'temperature', width: 10 });
           }
         }
+      }
 
-        if (workbook != null) {
-          workbook.xlsx.writeBuffer().then((data) => {
-            var blob = new Blob([data], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-
-            zip.file("Investigation-Report.xlsx", blob);
-
-            zip.generateAsync({ type: "blob" }).then(function (content) {
-              FileSaver.saveAs(content, "Investigation-Report.zip");
-            });
+      if (workbook != null) {
+        workbook.xlsx.writeBuffer().then((data) => {
+          const blob = new Blob([data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
-        }
 
-        self.flag_downloadingExecl = false;
-      },
+          zip.file('Investigation-Report.xlsx', blob);
+
+          zip.generateAsync({ type: 'blob' }).then((content) => {
+            FileSaver.saveAs(content, 'Investigation-Report.zip');
+          });
+        });
+      }
+
+      self.flag_downloadingExecl = false;
     },
-  };
+  },
+};
 </script>
 
 <style>

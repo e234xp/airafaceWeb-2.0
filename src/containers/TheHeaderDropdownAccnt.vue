@@ -9,12 +9,14 @@
       </CHeaderNavLink>
     </template>
     <CDropdownItem @click="logout()">
-      <CIcon name="cil-lock-locked" /> Logout
+      <CIcon name="cil-lock-locked" />{{ $t("Logout") }}
     </CDropdownItem>
   </CDropdown>
 </template>
 
 <script>
+// import i18n from '@/i18n';
+
 export default {
   name: 'TheHeaderDropdownAccnt',
   data() {

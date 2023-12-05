@@ -57,6 +57,7 @@
                 }}</label>
             </div>
           </CCol>
+          <!-- <CCol sm="6"></CCol> -->
           <CCol sm="6" class="d-flex flex-wrap justify-content-end">
             <span v-if="exportNo >= 1" class="h5" style="
               float: right;
@@ -131,573 +132,553 @@
 </template>
 
 <script>
-  import i18n from "@/i18n";
-  import TableObserver from "@/utils/TableObserver.vue";
-  import Multiselect from "vue-multiselect";
-  import "@/airacss/vue-multiselect.css";
-  import CTableWrapper from "./ReportTable.vue";
+import i18n from '@/i18n';
+import TableObserver from '@/utils/TableObserver.vue';
+import Multiselect from 'vue-multiselect';
+import '@/airacss/vue-multiselect.css';
 
-  import FileSaver from "file-saver";
-  import Excel from "exceljs/dist/exceljs.min.js";
+import FileSaver from 'file-saver';
+import Excel from 'exceljs/dist/exceljs.min';
 
-  import JsZip from "jszip";
+import JsZip from 'jszip';
 
-  Date.prototype.yyyymmdd_HHMMSS = function () {
-    var mm = this.getMonth() + 1; // getMonth() is zero-based
-    var dd = this.getDate();
-    var HH = this.getHours();
-    var MM = this.getMinutes();
-    var SS = this.getSeconds();
+const dayjs = require('dayjs');
 
-    return [
-      this.getFullYear() + "-",
-      (mm > 9 ? "" : "0") + mm + "-",
-      (dd > 9 ? "" : "0") + dd + " ",
-      (HH > 9 ? "" : "0") + HH + ":",
-      (MM > 9 ? "" : "0") + MM + ":",
-      (SS > 9 ? "" : "0") + SS,
-    ].join("");
-  };
+const defaultlState = () => ({
+  obj_loading: null,
 
-  Date.prototype.yyyymmdd = function () {
-    var mm = this.getMonth() + 1; // getMonth() is zero-based
-    var dd = this.getDate();
+  param_cardStyle: 'height: 35rem;',
+  param_activeColor: '#6baee3',
+  param_passiveColor: '#919bae',
+  param_lineThickness: 3,
+  param_activeThickness: 3,
+  param_passiveThickness: 3,
 
-    return [this.getFullYear(), (mm > 9 ? "" : "0") + mm, (dd > 9 ? "" : "0") + dd].join(
-      ""
-    );
-  };
+  flag_enableSearchButton: false,
+  flag_downloadingExecl: false,
 
-  const defaultlState = () => {
-    return {
-      obj_loading: null,
+  excelExecutionAmounts: 0,
+  excelCounter: 0,
+  exportNo: 0,
 
-      param_cardStyle: "height: 35rem;",
-      param_activeColor: "#6baee3",
-      param_passiveColor: "#919bae",
-      param_lineThickness: 3,
-      param_activeThickness: 3,
-      param_passiveThickness: 3,
+  value_displayResultTypeList: [
+    { value: 'Person', label: i18n.formatter.format('Person') },
+    { value: 'Visitor', label: i18n.formatter.format('Visitor') },
+    { value: 'Stranger', label: i18n.formatter.format('Stranger') },
+  ],
 
-      flag_enableSearchButton: false,
-      flag_downloadingExecl: false,
+  value_displayPersonGroupList: [],
 
-      excelExecutionAmounts: 0,
-      excelCounter: 0,
-      exportNo: 0,
+  disp_select: i18n.formatter.format('Select'),
+  disp_selected: i18n.formatter.format('Selected'),
+  disp_deselect: i18n.formatter.format('Deselect'),
 
-      value_displayResultTypeList: [
-        { value: "Person", label: i18n.formatter.format("Person") },
-        { value: "Visitor", label: i18n.formatter.format("Visitor") },
-        { value: "Stranger", label: i18n.formatter.format("Stranger") },
-      ],
+  disp_header: i18n.formatter.format('Investigation'),
+  disp_selectDatetimeRange: i18n.formatter.format('DateTime'),
+  disp_keyword: i18n.formatter.format('Keyword'),
+  disp_groups: i18n.formatter.format('Group'),
+  disp_resultType: i18n.formatter.format('ResultType'),
 
-      value_displayPersonGroupList: [],
+  disp_temperature_ALL: i18n.formatter.format('All'),
+  disp_temperature_Normal: i18n.formatter.format('Normal'),
+  disp_temperature_OverTemperature: i18n.formatter.format('OverTemperature'),
 
-      disp_select: i18n.formatter.format("Select"), //
-      disp_selected: i18n.formatter.format("Selected"), //
-      disp_deselect: i18n.formatter.format("Deselect"), //
+  disp_search: i18n.formatter.format('Search'),
+  disp_exportExcel: i18n.formatter.format('ExportExcel'),
+  disp_withPhoto: i18n.formatter.format('WithPhoto'),
+  disp_withoutPhoto: i18n.formatter.format('WithoutPhoto'),
 
-      disp_header: i18n.formatter.format("Investigation"),
-      disp_selectDatetimeRange: i18n.formatter.format("DateTime"),
-      disp_keyword: i18n.formatter.format("Keyword"),
-      disp_groups: i18n.formatter.format("Group"),
-      disp_resultType: i18n.formatter.format("ResultType"),
-      disp_temperature: i18n.formatter.format("OverTemperature"),
+  disp_dateTime: i18n.formatter.format('Time'),
+  disp_id: i18n.formatter.format('PersonId'),
+  disp_name: i18n.formatter.format('PersonName'),
+  disp_cardnumber: i18n.formatter.format('CardNumber'),
+  disp_group_list: i18n.formatter.format('GroupName'),
+  disp_temperature: i18n.formatter.format('Temperature'),
+  disp_verify_mode: i18n.formatter.format('ClockModePass'),
+  disp_verify_score: i18n.formatter.format('Score'),
+  disp_face_image: i18n.formatter.format('CapturedPhoto'),
 
-      disp_temperature_ALL: i18n.formatter.format("All"),
-      disp_temperature_Normal: i18n.formatter.format("Normal"),
-      disp_temperature_OverTemperature: i18n.formatter.format("OverTemperature"),
+  value_searchingFilter: '',
+  value_searchDatetimeRange: [],
+  value_keyword: '',
+  value_searchGroups: [],
+  value_searchTypes: 'Person',
+  value_Temperature: 'All',
 
-      disp_search: i18n.formatter.format("Search"),
-      disp_exportExcel: i18n.formatter.format("ExportExcel"),
-      disp_withPhoto: i18n.formatter.format("WithPhoto"),
-      disp_withoutPhoto: i18n.formatter.format("WithoutPhoto"),
+  value_allTableItems: [],
+  value_dataTotalLength: 0,
+  value_dataItemsToShow: [],
+  value_tablePage: {
+    currentPage: 1,
+    pageSize: 10,
+    totalResult: 0,
+  },
+});
 
-      disp_dateTime: i18n.formatter.format("Time"),
-      disp_id: i18n.formatter.format("PersonId"),
-      disp_name: i18n.formatter.format("PersonName"),
-      disp_cardnumber: i18n.formatter.format("CardNumber"),
-      disp_group_list: i18n.formatter.format("GroupName"),
-      disp_temperature: i18n.formatter.format("Temperature"),
-      disp_verify_mode: i18n.formatter.format("ClockModePass"),
-      disp_verify_score: i18n.formatter.format("Score"),
-      disp_face_image: i18n.formatter.format("CapturedPhoto"),
+export default {
+  name: 'Investigation',
+  // components: { CTableWrapper, multiselect: Multiselect },
+  components: { multiselect: Multiselect },
+  data() {
+    // return Object.assign({}, defaultlState(), this.formData);
+    const cloneObject = {};
+    Object.assign(cloneObject, defaultlState(), this.formData);
 
-      value_searchingFilter: "",
-      value_searchDatetimeRange: [],
-      value_keyword: "",
-      value_searchGroups: [],
-      value_searchTypes: "Person",
-      value_Temperature: "All",
+    return cloneObject;
+  },
+  mixins: [TableObserver],
+  created() {
+    const self = this;
+    const endTime = new Date();
+    endTime.setHours(23, 59, 59, 999);
+    const endTimeTimestamp = endTime.getTime();
+    const startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
 
-      value_allTableItems: [],
-      value_dataTotalLength: 0,
-      value_dataItemsToShow: [],
-      value_tablePage: {
-        currentPage: 1,
-        pageSize: 10,
-        totalResult: 0,
-      },
-    };
-  };
-  export default {
-    name: "Investigation",
-    components: { CTableWrapper, multiselect: Multiselect },
-    data() {
-      return Object.assign({}, defaultlState(), this.formData);
+    self.value_searchDatetimeRange[0] = new Date(startTimeTimestamp);
+    self.value_searchDatetimeRange[1] = endTime;
+    self.flag_enableSearchButton = true;
+    self.clickOnSearch();
+  },
+
+  async mounted() {
+    const self = this;
+
+    const personGroups = await self.$globalGetGroupList();
+    if (personGroups.group_list) {
+      personGroups.group_list.forEach((item) => {
+        self.value_displayPersonGroupList.push(item.name);
+      });
+    }
+
+    this.observeTableSize();
+  },
+  methods: {
+    toggleText() {
+      return i18n.formatter.format('ExportExcel');
     },
-    // watch: {
-    //   value_searchingFilter(value) {
-    //     this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems, this.value_searchingFilter);
-    //   }
-    // },
-    mixins: [TableObserver],
-    created() {
+    headerCellStyle() {
+      return 'fontSize: 18px';
+    },
+    cellStyle() {
+      return 'fontSize:18px;';
+    },
+    datePickerDatachange() {
       const self = this;
-      let endTime = new Date();
-      endTime.setHours(23, 59, 59, 999);
-      let endTimeTimestamp = endTime.getTime();
-      let startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
-
-      self.value_searchDatetimeRange[0] = new Date(startTimeTimestamp);
-      self.value_searchDatetimeRange[1] = endTime;
       self.flag_enableSearchButton = true;
-      self.clickOnSearch();
+    },
+    selectAllEvent() {
+    },
+    selectChangeEvent() {
     },
 
-    async mounted() {
+    selectTypeChange() {
+      if (this.value_searchTypes !== 'Person') {
+        this.value_searchGroups = [];
+      }
+    },
+
+    clickOnSearch() {
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime = this.value_searchDatetimeRange[1].getTime();
+
+      const data = {
+        start_time: startTime,
+        end_time: endTime,
+        slice_shift: 0,
+        slice_length: 10000,
+        with_image: false,
+        uuid_list: [],
+      };
+
+      console.log(data);
+
+      switch (this.value_searchTypes) {
+        case 'Visitor':
+          this.queryVisitorResult(data);
+          break;
+        case 'Stranger':
+          this.queryStrangerResult(data);
+          break;
+        case 'Person':
+        default:
+          this.queryPersonResult(data);
+          break;
+      }
+    },
+
+    queryPersonResult(_data) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.$globalGetPersonResult(_data, (error, data) => {
+        if (self.obj_loading) self.obj_loading.hide();
+
+        if (!error) {
+          self.value_allTableItems = data.result.data;
+          self.value_dataTotalLength = data.result.total_length;
+          self.value_allTableItems.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return 1;
+            if (a.timestamp > b.timestamp) return -1;
+            return 0;
+          });
+          self.value_allTableItems.forEach((pItem) => {
+            const item = pItem;
+            try {
+              item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+              item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+              // item.groups = eval(item.group_list).join(', ');
+              item.groups = item.group_list;
+              item.groups = item.group_list;
+              item.groups = JSON.parse(item.group_list);
+              item.groups = item.groups.filter((g) => g !== 'All Person');
+              item.groups = item.groups.filter((g) => g !== 'All Visitor');
+              item.groups = item.groups.join(',');
+
+              switch (item.verify_mode) {
+                case 1:
+                  item.clockMode = i18n.formatter.format('ClockModeCard');
+                  break;
+                case 2:
+                  item.clockMode = i18n.formatter.format('ClockModePass');
+                  break;
+                case 3:
+                  item.clockMode = i18n.formatter.format('ClockModeClockIn');
+                  break;
+                case 4:
+                  item.clockMode = i18n.formatter.format('ClockModeClockOut');
+                  break;
+                default:
+                  item.lockMode = i18n.formatter.format('None');
+                  break;
+              }
+
+              const showimageId = item.face_image_id
+                ? item.face_image_id.f + item.face_image_id.uuid
+                : '';
+              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ`
+                + 'AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAA'
+                + 'AAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+            } catch (ex) {
+              console.log(ex);
+            }
+          });
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+          );
+          self.value_tablePage.currentPage = 1;
+
+          // if (cb) cb();
+        }
+      });
+    },
+    queryVisitorResult(_data) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.$globalGetVisitorResult(_data, (error, data) => {
+        if (self.obj_loading) self.obj_loading.hide();
+
+        if (!error) {
+          self.value_allTableItems = data.result.data;
+          self.value_dataTotalLength = data.result.total_length;
+          self.value_allTableItems.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return 1;
+            if (a.timestamp > b.timestamp) return -1;
+            return 0;
+          });
+          self.value_allTableItems.forEach((pItem) => {
+            const item = pItem;
+            try {
+              item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+              item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+              item.groups = '';
+              const showimageId = item.face_image_id
+                ? item.face_image_id.f + item.face_image_id.uuid
+                : '';
+              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
+                + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
+                + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+            } catch (ex) {
+              console.log(ex);
+            }
+          });
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+          );
+          self.value_tablePage.currentPage = 1;
+          // if (cb) cb();
+        }
+      });
+    },
+    queryStrangerResult(_data) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.$globalGetStrangerResult(_data, (error, data) => {
+        if (self.obj_loading) self.obj_loading.hide();
+
+        if (!error) {
+          self.value_allTableItems = data.result.data;
+          self.value_dataTotalLength = data.result.total_length;
+          self.value_allTableItems.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return 1;
+            if (a.timestamp > b.timestamp) return -1;
+            return 0;
+          });
+          self.value_allTableItems.forEach((pItem) => {
+            const item = pItem;
+            try {
+              item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+              item.id = '';
+              item.name = '';
+              item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+              item.groups = '';
+              const showimageId = item.face_image_id
+                ? item.face_image_id.f + item.face_image_id.uuid
+                : '';
+              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfF`
+                + 'cSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQA'
+                + 'AAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+            } catch (ex) {
+              console.log(ex);
+            }
+          });
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+          );
+          self.value_tablePage.currentPage = 1;
+
+          // if (cb) cb();
+        }
+      });
+    },
+
+    handlePageChange({ currentPage, pageSize }) {
+      const self = this;
+      self.value_tablePage.currentPage = currentPage;
+      self.value_tablePage.pageSize = pageSize;
+      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
+      self.resizeOneTable();
+    },
+
+    generateFilteredData(sourceData) {
+      const self = this;
+      const filteredItems = sourceData.filter((item) => {
+        if (self.value_keyword) {
+          if (
+            item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+            || item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+            || item.card_number.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1)
+          ) {
+            return true;
+          }
+          return false;
+        }
+
+        if (self.value_searchGroups.length >= 1) {
+          let pass = false;
+
+          for (let i = 0; i < self.value_searchGroups.length; i += 1) {
+            // const g = self.value_searchGroups[i];
+
+            // const pos = eval(item.group_list).indexOf(self.value_searchGroups[i]);
+            const pos = item.group_list.indexOf(self.value_searchGroups[i]);
+
+            if (pos >= 0) {
+              pass = true;
+              break;
+            }
+          }
+
+          if (!pass) return false;
+        }
+
+        switch (self.value_Temperature) {
+          case 'Normal':
+            return !item.high_temperature;
+          case 'OverTemperature':
+            return item.high_temperature;
+          case 'All':
+          default:
+            return true;
+        }
+      });
+      self.value_tablePage.totalResult = filteredItems.length;
+      const sliceList = filteredItems.slice(
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+      );
+      sliceList.forEach(async (slicei) => {
+        try {
+          const showimageId = slicei.face_image_id
+            ? slicei.face_image_id.f + slicei.face_image_id.uuid
+            : '';
+          if (showimageId.length > 0) {
+            const dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
+            const ele = document.getElementById(showimageId);
+            if (dataImage.error == null && dataImage.data) {
+              if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
+            } else if (ele) {
+              ele.src = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmT'
+                + '0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQV'
+                + 'QIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==';
+            }
+          }
+        } catch (e) {
+          console.log('sliceList.forEach 535', e);
+        }
+      });
+      return Object.assign([], sliceList);
+    },
+
+    sleep(milliseconds) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    },
+
+    async exportExcel(withPhoto) {
       const self = this;
 
-      let personGroups = await self.$globalGetGroupList();
-      if (personGroups.group_list) {
-        personGroups.group_list.forEach((item) => {
-          // self.value_displayGroupList.push({ value: item.uuid, label: item.name });
-          self.value_displayPersonGroupList.push(item.name);
+      self.flag_downloadingExecl = true;
+      let snapshotFolder = null;
+
+      const zip = new JsZip();
+
+      if (withPhoto) snapshotFolder = zip.folder('snapshot');
+
+      let workbook = new Excel.Workbook();
+      let worksheet = null;
+
+      self.exportNo = 0;
+      self.excelExecutionAmounts = self.value_allTableItems.length;
+      self.excelCounter = 0;
+
+      worksheet = workbook.addWorksheet('Investigation-Report');
+
+      worksheet.columns = [
+        { header: 'No', key: 'No', width: 10 },
+        { header: self.disp_dateTime, key: 'dateTime', width: 10 },
+        { header: self.disp_id, key: 'id', width: 10 },
+        { header: self.disp_name, key: 'name', width: 10 },
+        { header: self.disp_cardnumber, key: 'card_number', width: 10 },
+        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: self.disp_verify_mode, key: 'clockMode', width: 10 },
+        { header: self.disp_verify_score, key: 'score', width: 10 },
+        { header: self.disp_face_image, key: 'showimage', width: 15 },
+      ];
+
+      if (self.$deviceProfile.supportTemperature) {
+        worksheet.columns.push({ header: self.disp_temperature, key: 'temperature', width: 10 });
+      }
+
+      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
+        self.exportNo += 1;
+        self.excelCounter += 1;
+
+        worksheet.addRow({
+          No: self.exportNo,
+          dateTime: self.value_allTableItems[idx].dateTime,
+          id: self.value_allTableItems[idx].id,
+          name: self.value_allTableItems[idx].name,
+          card_number: self.value_allTableItems[idx].card_number,
+          groups: self.value_allTableItems[idx].groups,
+          temperature: self.value_allTableItems[idx].temperature,
+          clockMode: self.value_allTableItems[idx].clockMode,
+          score: self.value_allTableItems[idx].score,
+        });
+
+        if (withPhoto) {
+          await self.sleep(10);
+          const faceImageRet = await self.$globalFetchVerifyPhoto(
+            self.value_allTableItems[idx].face_image_id,
+          );
+          if (!faceImageRet.error) {
+            const photoId = workbook.addImage({
+              base64: faceImageRet.data.face_image,
+              extension: 'jpeg',
+            });
+            worksheet.addImage(
+              photoId,
+              `J${worksheet.rowCount}:J${worksheet.rowCount}`,
+            );
+            worksheet.lastRow.height = 60;
+
+            const fileName = self.value_allTableItems[idx].dateTime
+              .replace('-', '_')
+              .replace(' ', '_')
+              .replace(':', '_');
+            snapshotFolder.file(
+              `${self.exportNo}_${fileName}.jpeg`,
+              faceImageRet.data.face_image,
+              { base64: true },
+            );
+          }
+        }
+
+        if (self.exportNo % 10000 === 0) {
+          await workbook.xlsx.writeBuffer().then((data) => {
+            const n = self.exportNo / 10000;
+            let filename = '';
+            if (n >= 2) {
+              filename = `investigation_Report_${dayjs(new Date()).format('YYYYMMDD')}_${n}.xlsx`;
+            } else {
+              filename = `investigation_Report_${dayjs(new Date()).format('YYYYMMDD')}.xlsx`;
+            }
+
+            const blob = new Blob([data], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            zip.file(filename, blob);
+          });
+
+          workbook = new Excel.Workbook();
+          worksheet = workbook.addWorksheet('Investigation-Report');
+
+          worksheet.columns = [
+            { header: 'No', key: 'No', width: 10 },
+            { header: self.disp_dateTime, key: 'dateTime', width: 10 },
+            { header: self.disp_id, key: 'id', width: 10 },
+            { header: self.disp_name, key: 'name', width: 10 },
+            { header: self.disp_cardnumber, key: 'card_number', width: 10 },
+            { header: self.disp_group_list, key: 'groups', width: 10 },
+            { header: self.disp_verify_mode, key: 'clockMode', width: 10 },
+            { header: self.disp_verify_score, key: 'score', width: 10 },
+            { header: self.disp_face_image, key: 'showimage', width: 15 },
+          ];
+
+          if (self.$deviceProfile.supportTemperature) {
+            worksheet.columns.push({ header: self.disp_temperature, key: 'temperature', width: 10 });
+          }
+        }
+      }
+
+      if (workbook != null) {
+        workbook.xlsx.writeBuffer().then((data) => {
+          const rN = Math.floor(self.exportNo / 10000) + 1;
+
+          let reportname = '';
+          if (rN >= 2) {
+            reportname = `investigation_Report_${dayjs(new Date()).format('YYYYMMDD')}_${rN}.xlsx`;
+          } else {
+            reportname = `investigation_Report_${dayjs(new Date()).format('YYYYMMDD')}.xlsx`;
+          }
+
+          const blob = new Blob([data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+
+          zip.file(reportname, blob);
+
+          zip.generateAsync({ type: 'blob' }).then((content) => {
+            FileSaver.saveAs(
+              content,
+              `investigation_Report_${dayjs(new Date()).format('YYYYMMDD')}.zip`,
+            );
+          });
         });
       }
 
-      this.observeTableSize();
+      self.flag_downloadingExecl = false;
     },
-    methods: {
-      toggleText() {
-        return i18n.formatter.format("ExportExcel");
-      },
-      headerCellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize: 18px";
-      },
-      cellStyle(row, column, rowIndex, columnIndex) {
-        return "fontSize:18px;";
-      },
-      datePickerDatachange() {
-        const self = this;
-        self.flag_enableSearchButton = true;
-      },
-      selectAllEvent({ checked, records }) {
-        // console.log(checked ? '所有勾选事件' : '所有取消事件', records)
-      },
-      selectChangeEvent({ checked, records }) {
-        // console.log(checked ? '勾选事件' : '取消事件', records)
-      },
-
-      selectTypeChange(event) {
-        if (this.value_searchTypes != "Person") {
-          this.value_searchGroups = [];
-        }
-      },
-
-      clickOnSearch() {
-        // var d = new Date()
-        // var timezoneOffset = d.getTimezoneOffset();
-        // let startTime = this.value_searchDatetimeRange[0].getTime() + timezoneOffset;
-        // let endTime = this.value_searchDatetimeRange[1].getTime() + timezoneOffset;
-        let startTime = this.value_searchDatetimeRange[0].getTime();
-        let endTime = this.value_searchDatetimeRange[1].getTime();
-
-        let data = {
-          start_time: startTime,
-          end_time: endTime,
-          slice_shift: 0,
-          slice_length: 10000,
-          with_image: false,
-          uuid_list: [],
-        };
-
-        console.log(data);
-
-        switch (this.value_searchTypes) {
-          case "Person":
-            this.queryPersonResult(data);
-            break;
-          case "Visitor":
-            this.queryVisitorResult(data);
-            break;
-          case "Stranger":
-            this.queryStrangerResult(data);
-            break;
-        }
-      },
-      queryPersonResult(_data) {
-        const self = this;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.$globalGetPersonResult(_data, function (error, data) {
-          if (self.obj_loading) self.obj_loading.hide();
-
-          if (!error) {
-            self.value_allTableItems = data.result.data;
-            self.value_dataTotalLength = data.result.total_length;
-            self.value_allTableItems.sort(function (a, b) {
-              if (a.timestamp < b.timestamp) return 1;
-              if (a.timestamp > b.timestamp) return -1;
-              return 0;
-            });
-            self.value_allTableItems.forEach((item) => {
-              try {
-                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
-                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
-                item["groups"] = eval(item.group_list).join(", ");
-
-                switch (item.verify_mode) {
-                  case 1:
-                    item["clockMode"] = i18n.formatter.format("ClockModeCard");
-                    break;
-                  case 2:
-                    item["clockMode"] = i18n.formatter.format("ClockModePass");
-                    break;
-                  case 3:
-                    item["clockMode"] = i18n.formatter.format("ClockModeClockIn");
-                    break;
-                  case 4:
-                    item["clockMode"] = i18n.formatter.format("ClockModeClockOut");
-                    break;
-                  default:
-                    item["clockMode"] = i18n.formatter.format("None");
-                    break;
-                }
-
-                var showimageId = item.face_image_id
-                  ? item.face_image_id.f + item.face_image_id.uuid
-                  : "";
-                item[
-                  "showimage"
-                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
-              } catch (ex) {
-                console.log(ex);
-              }
-            });
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems
-            );
-            self.value_tablePage.currentPage = 1;
-            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
-
-            if (cb) cb();
-          }
-        });
-      },
-      queryVisitorResult(_data) {
-        const self = this;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.$globalGetVisitorResult(_data, function (error, data) {
-          if (self.obj_loading) self.obj_loading.hide();
-
-          if (!error) {
-            self.value_allTableItems = data.result.data;
-            self.value_dataTotalLength = data.result.total_length;
-            self.value_allTableItems.sort(function (a, b) {
-              if (a.timestamp < b.timestamp) return 1;
-              if (a.timestamp > b.timestamp) return -1;
-              return 0;
-            });
-            self.value_allTableItems.forEach((item) => {
-              try {
-                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
-                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
-                item["groups"] = "";
-                var showimageId = item.face_image_id
-                  ? item.face_image_id.f + item.face_image_id.uuid
-                  : "";
-                item[
-                  "showimage"
-                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
-              } catch (ex) {
-                console.log(ex);
-              }
-            });
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems
-            );
-            self.value_tablePage.currentPage = 1;
-            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
-            if (cb) cb();
-          }
-        });
-      },
-      queryStrangerResult(_data) {
-        const self = this;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.$globalGetStrangerResult(_data, function (error, data) {
-          if (self.obj_loading) self.obj_loading.hide();
-
-          if (!error) {
-            self.value_allTableItems = data.result.data;
-            self.value_dataTotalLength = data.result.total_length;
-            self.value_allTableItems.sort(function (a, b) {
-              if (a.timestamp < b.timestamp) return 1;
-              if (a.timestamp > b.timestamp) return -1;
-              return 0;
-            });
-            self.value_allTableItems.forEach((item) => {
-              try {
-                item["dateTime"] = new Date(item.timestamp).yyyymmdd_HHMMSS();
-                item["id"] = "";
-                item["name"] = "";
-                item["score"] = (item.verify_score * 100).toFixed(2) + "%";
-                item["groups"] = "";
-                var showimageId = item.face_image_id
-                  ? item.face_image_id.f + item.face_image_id.uuid
-                  : "";
-                item[
-                  "showimage"
-                ] = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>`;
-              } catch (ex) {
-                console.log(ex);
-              }
-            });
-            self.value_dataItemsToShow = self.generateFilteredData(
-              self.value_allTableItems
-            );
-            self.value_tablePage.currentPage = 1;
-            // self.value_tablePage.totalResult = self.value_dataItemsToShow.length;
-            if (cb) cb();
-          }
-        });
-      },
-
-      handlePageChange({ currentPage, pageSize }) {
-        const self = this;
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-        this.resizeOneTable();
-      },
-
-      generateFilteredData(sourceData) {
-        const self = this;
-        const filteredItems = sourceData.filter((item) => {
-          if (self.value_keyword) {
-            if (
-              item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-              || item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-              || item.card_number.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-              || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1)
-            ) {
-            } else return false;
-          }
-
-          if (self.value_searchGroups.length >= 1) {
-            let pass = false;
-
-            for (let i = 0; i < self.value_searchGroups.length; i++) {
-              const g = self.value_searchGroups[i];
-
-              let pos = eval(item.group_list).indexOf(self.value_searchGroups[i]);
-
-              if (pos >= 0) {
-                pass = true;
-                break;
-              }
-            }
-
-            if (!pass) return false;
-          }
-
-          switch (self.value_Temperature) {
-            case "All":
-              return true;
-              break;
-            case "Normal":
-              return !item.high_temperature;
-              break;
-            case "OverTemperature":
-              return item.high_temperature;
-              break;
-          }
-          return true;
-        });
-        //self.value_tablePage.totalResult = self.value_dataTotalLength; //filteredItems.length;
-        self.value_tablePage.totalResult = filteredItems.length;
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize
-        );
-        sliceList.forEach(async (slicei) => {
-          try {
-            var showimageId = slicei.face_image_id
-              ? slicei.face_image_id.f + slicei.face_image_id.uuid
-              : "";
-            if (showimageId.length > 0) {
-              var dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
-              var ele = document.getElementById(showimageId);
-              if (dataImage.error == null && dataImage.data) {
-                if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
-              } else {
-                if (ele)
-                  ele.src = `data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==`;
-              }
-            }
-          } catch (e) { }
-        });
-        return Object.assign([], sliceList);
-      },
-
-      sleep(milliseconds) {
-        return new Promise((resolve) => setTimeout(resolve, milliseconds));
-      },
-
-      async exportExcel(withPhoto) {
-        let self = this;
-
-        self.flag_downloadingExecl = true;
-        var snapshotFolder = null;
-
-        var zip = new JsZip();
-
-        if (withPhoto) snapshotFolder = zip.folder("snapshot");
-
-        var workbook = new Excel.Workbook();
-        var worksheet = null;
-
-        self.exportNo = 0;
-        self.excelExecutionAmounts = self.value_allTableItems.length;
-        self.excelCounter = 0;
-
-        worksheet = workbook.addWorksheet("Investigation-Report");
-
-        worksheet.columns = [
-          { header: "No", key: "No", width: 10 },
-          { header: self.disp_dateTime, key: "dateTime", width: 10 },
-          { header: self.disp_id, key: "id", width: 10 },
-          { header: self.disp_name, key: "name", width: 10 },
-          { header: self.disp_cardnumber, key: "card_number", width: 10 },
-          { header: self.disp_group_list, key: "groups", width: 10 },
-          { header: self.disp_verify_mode, key: "clockMode", width: 10 },
-          { header: self.disp_verify_score, key: "score", width: 10 },
-          { header: self.disp_face_image, key: "showimage", width: 15 },
-        ];
-
-        if (self.$deviceProfile.supportTemperature) {
-          worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
-        }
-
-        for (let idx = 0; idx < self.value_allTableItems.length; idx++) {
-          self.exportNo++;
-          self.excelCounter++;
-
-          worksheet.addRow({
-            No: self.exportNo,
-            dateTime: self.value_allTableItems[idx].dateTime,
-            id: self.value_allTableItems[idx].id,
-            name: self.value_allTableItems[idx].name,
-            card_number: self.value_allTableItems[idx].card_number,
-            groups: self.value_allTableItems[idx].groups,
-            temperature: self.value_allTableItems[idx].temperature,
-            clockMode: self.value_allTableItems[idx].clockMode,
-            score: self.value_allTableItems[idx].score,
-          });
-
-          if (withPhoto) {
-            await self.sleep(10);
-            var faceImageRet = await self.$globalFetchVerifyPhoto(
-              self.value_allTableItems[idx].face_image_id
-            );
-            if (!faceImageRet.error) {
-              var photoId = workbook.addImage({
-                base64: faceImageRet.data.face_image,
-                extension: "jpeg",
-              });
-              worksheet.addImage(
-                photoId,
-                "J" + worksheet.rowCount + ":J" + worksheet.rowCount
-              );
-              worksheet.lastRow.height = 60;
-
-              let fileName = self.value_allTableItems[idx].dateTime
-                .replace("-", "_")
-                .replace(" ", "_")
-                .replace(":", "_");
-              snapshotFolder.file(
-                self.exportNo + "_" + self.value_allTableItems[idx].dateTime + ".jpeg",
-                faceImageRet.data.face_image,
-                { base64: true }
-              );
-            }
-          }
-
-          if (self.exportNo % 10000 == 0) {
-            var n = self.exportNo / 10000;
-
-            var filename = "";
-            if (n >= 2)
-              var filename = `investigation_Report_${new Date().yyyymmdd()}_${n}.xlsx`;
-            else var filename = `investigation_Report_${new Date().yyyymmdd()}.xlsx`;
-
-            await workbook.xlsx.writeBuffer().then((data) => {
-              var blob = new Blob([data], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-              });
-              zip.file(filename, blob);
-            });
-
-            workbook = new Excel.Workbook();
-            worksheet = workbook.addWorksheet("Investigation-Report");
-
-            worksheet.columns = [
-              { header: "No", key: "No", width: 10 },
-              { header: self.disp_dateTime, key: "dateTime", width: 10 },
-              { header: self.disp_id, key: "id", width: 10 },
-              { header: self.disp_name, key: "name", width: 10 },
-              { header: self.disp_cardnumber, key: "card_number", width: 10 },
-              { header: self.disp_group_list, key: "groups", width: 10 },
-              { header: self.disp_verify_mode, key: "clockMode", width: 10 },
-              { header: self.disp_verify_score, key: "score", width: 10 },
-              { header: self.disp_face_image, key: "showimage", width: 15 },
-            ];
-
-            if (self.$deviceProfile.supportTemperature) {
-              worksheet.columns.push({ header: self.disp_temperature, key: "temperature", width: 10 });
-            }
-          }
-        }
-
-        if (workbook != null) {
-          workbook.xlsx.writeBuffer().then((data) => {
-            var n = Math.floor(self.exportNo / 10000) + 1;
-
-            var filename = "";
-            if (n >= 2)
-              filename = `investigation_Report_${new Date().yyyymmdd()}_${n}.xlsx`;
-            else filename = `investigation_Report_${new Date().yyyymmdd()}.xlsx`;
-
-            var blob = new Blob([data], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-
-            zip.file(filename, blob);
-
-            zip.generateAsync({ type: "blob" }).then(function (content) {
-              FileSaver.saveAs(
-                content,
-                `investigation_Report_${new Date().yyyymmdd()}.zip`
-              );
-            });
-          });
-        }
-
-        self.flag_downloadingExecl = false;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style>

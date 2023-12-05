@@ -9,13 +9,24 @@ const state = {
   ellipsisMode: false,
   deviceType: '',
   deviceTypes: {
-    TYPE_AIRA_TABLET_M: 'airaTablet_plus',
+    TYPE_AIRA_TABLET_M: 'airaFace2',
   },
   deviceName: '',
 
   persons: [],
 
   availableLicenseAmount: 0,
+
+  deviceProfile: {
+    device_type: '',
+    support_wifi: false,
+    support_enhance_facemask: false,
+    support_rtsp: false,
+    support_intercom: false,
+    support_high_temp_sound_alert: false,
+    support_invalid_result_show_switch: false,
+    support_show_verify_indication: false,
+  },
 };
 
 const mutations = {
@@ -33,18 +44,13 @@ const mutations = {
     const localState = pState;
     localState[variable] = value;
   },
-  // changeNotifications: (pState, payload) => {
+
   changeNotifications: () => {
-    // console.log('changeNotifications', pState);
-    // console.log('changeNotifications', new Date());
-    // console.log('changeNotifications', payload);
+
   },
 
-  // changeWebSocket: (pState, payload) => {
   changeWebSocket: () => {
-    // console.log('changeWebSocket', new Date());
-    // console.log('changeWebSocket', pState);
-    // console.log('changeWebSocket', payload);
+
   },
 
   changeEllipsisMode(pState) {
@@ -59,16 +65,15 @@ const mutations = {
       default:
         break;
     }
-    // console.log('state.deviceName', state.deviceName); // stday todo
   },
 };
 
 const actions = {
   setNotifications: ({ commit }, payload) => {
     const o = JSON.parse(payload);
-    // console.log('setNotifications', o);
     commit('changeNotifications', o);
   },
+
   setWebSocketChange: ({ commit }, payload) => {
     commit('changeWebSocket', payload);
   },

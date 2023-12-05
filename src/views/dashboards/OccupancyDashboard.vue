@@ -2,7 +2,8 @@
   <div class="ratio-wrap ratio-wrap-16x9" v-show="!isLoadSetting">
     <div class="ratio-content dashboard" style="position: absolute; z-index: 50;"
       :style="{backgroundImage:'url('+displaySettings.background_image+')'}">
-      <div class="dashboard-header d-flex justify-content-between">
+
+      <div class="dashboard-header d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
         <div class="d-flex align-items-center">
           <div class="dashboard-attendance-logo" @click="toLoginPage"
             :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"></div>
@@ -15,10 +16,11 @@
       </div>
 
       <!-------------------  Occupancy ------------------>
-      <div class="dashboard-divider"></div>
+      <div class="dashboard-divider" style="margin-left: 20px; margin-right: 20px;"></div>
 
       <!-------------------  Attendance - BEGIN ------------------>
-      <div class="attendance-top-box" v-show="displaySettings.displayChart">
+      <div class="attendance-top-box" style="margin-left: 20px; margin-right: 20px;"
+        v-show="displaySettings.displayChart">
         <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
         <div class="attendance-statistics-box">
           <!-- 第 1 列：標籤 -->
@@ -65,7 +67,9 @@
       <!-------------------  Attendance - END ------------------>
 
       <!-- Occupancy/Attendance 顯示人員資料列表 -->
-      <div v-if="!isShowGroup" :class="[
+      <div v-if="!isShowGroup"
+        style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
+        :class="[
           getGridStyleByAmount(),
           ,
           'd-flex',
@@ -107,12 +111,23 @@
                 <span class="temperature-unit fz-sm">°{{ displaySettings.temperatureUnit }}</span> -->
               </div>
               <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-sm fw-300">
-                {{
-                person.clockinRecord ?
-                person.clockinRecord.timestamp ?
-                formatEpochTime(person.clockinRecord.timestamp)
-                : "&nbsp;"
-                : "&nbsp;" }}
+                <span style="margin-right: 20px;">
+                  {{
+                  person.clockinRecord ?
+                  person.clockinRecord.timestamp ?
+                  formatEpochTime(person.clockinRecord.timestamp)
+                  : "&nbsp;"
+                  : "&nbsp;" }}
+                </span>
+
+                <span>
+                  {{
+                  person.clockoutRecord ?
+                  person.clockoutRecord.timestamp ?
+                  formatEpochTime(person.clockoutRecord.timestamp)
+                  : "&nbsp;"
+                  : "&nbsp;" }}
+                </span>
               </div>
             </div>
           </div>
@@ -120,7 +135,9 @@
       </div>
 
       <!-- Attendance 顯示群組資料列表 -->
-      <div v-if="isShowGroup" :class="[
+      <div v-if="isShowGroup"
+        style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
+        :class="[
           getGridStyleByAmount(),
           ,
           'd-flex',
@@ -147,44 +164,42 @@
       </div>
 
       <!-- footer -->
-      <div class="footer-box-wrap">
-        <div class="footer-box w-100vw">
-          <div v-show="isLoadSetting" class="align-items-center" style="color:white">
-            Loading...
-          </div>
+      <div class="footer-box d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
+        <div v-show="isLoadSetting" class="align-items-center" style="color:white">
+          Loading...
+        </div>
 
-          <!-- 分頁按鈕和滑桿 -->
-          <div class="pager d-flex align-items-center justify-content-center">
-            <button class="btn-reset" :disabled="currentPageIndex === 0" @click="onClickPrev">
-              <img v-if="currentPageIndex === 0" class="pager-left-arrow"
-                src="@/assets/img/pager_left_arrow_disabled.svg" />
-              <img v-else class="pager-left-arrow" src="@/assets/img/pager_left_arrow.svg" />
-            </button>
-            <!-- <button v-for="(item, i) in currentPageIndex" class="pager-left-dots btn-reset"
-              @click="onClickPagerDot(i)"></button> -->
-            <button v-for="(item, i) in range(dispPageIndexStart, currentPageIndex - 1)" :key="i"
-              class="pager-left-dots btn-reset" @click="onClickPagerDot(i)"></button>
+        <!-- 分頁按鈕和滑桿 -->
+        <div class="pager d-flex align-items-center justify-content-center">
+          <button class="btn-reset" :disabled="currentPageIndex === 0" @click="onClickPrev">
+            <img v-if="currentPageIndex === 0" class="pager-left-arrow"
+              src="@/assets/img/pager_left_arrow_disabled.svg" />
+            <img v-else class="pager-left-arrow" src="@/assets/img/pager_left_arrow.svg" />
+          </button>
+          <!-- <button v-for="(item, i) in currentPageIndex" class="pager-left-dots btn-reset"
+            @click="onClickPagerDot(i)"></button> -->
+          <button v-for="(item, i) in range(dispPageIndexStart, currentPageIndex - 1)" :key="i"
+            class="pager-left-dots btn-reset" @click="onClickPagerDot(i)"></button>
 
-            <div class="pager-progressbar-box">
-              <div class="pager-progressbar-track"></div>
-              <div class="pager-progressbar-thumb" :style="{ width: pageProgressPercentage }"></div>
-            </div>
-            <!-- <button v-for="(item, i) in totalPageIndex - currentPageIndex" class="pager-right-dots btn-reset"
-              @click="onClickPagerDot(i + currentPageIndex + 1)"></button> -->
-            <button v-for="(item, i) in range(currentPageIndex + 1, dispPageIndexEnd)" :key="i"
-              class="pager-right-dots btn-reset" @click="onClickPagerDot(i + currentPageIndex + 1)"></button>
+          <div class="pager-progressbar-box">
+            <div class="pager-progressbar-track"></div>
+            <div class="pager-progressbar-thumb" :style="{ width: pageProgressPercentage }"></div>
+          </div>
+          <!-- <button v-for="(item, i) in totalPageIndex - currentPageIndex" class="pager-right-dots btn-reset"
+            @click="onClickPagerDot(i + currentPageIndex + 1)"></button> -->
+          <button v-for="(item, i) in range(currentPageIndex + 1, dispPageIndexEnd)" :key="i"
+            class="pager-right-dots btn-reset" @click="onClickPagerDot(i + currentPageIndex + 1)"></button>
 
-            <button class="btn-reset" :disabled="currentPageIndex === totalPageIndex" @click="onClickNext">
-              <img v-if="currentPageIndex === totalPageIndex" class="pager-right-arrow"
-                src="@/assets/img/pager_right_arrow_disabled.svg" />
-              <img v-else class="pager-right-arrow" src="@/assets/img/pager_right_arrow.svg" />
-            </button>
-          </div>
-          <!-- 右下角 powered by aira 字樣 -->
-          <div class="footer-detail-box">
-            <div class="footer-detail-text">powered by</div>
-            <img src="@/assets/img/aira-logo-white.svg" alt="" class="footer-logo" />
-          </div>
+          <button class="btn-reset" :disabled="currentPageIndex === totalPageIndex" @click="onClickNext">
+            <img v-if="currentPageIndex === totalPageIndex" class="pager-right-arrow"
+              src="@/assets/img/pager_right_arrow_disabled.svg" />
+            <img v-else class="pager-right-arrow" src="@/assets/img/pager_right_arrow.svg" />
+          </button>
+        </div>
+        <!-- 右下角 powered by aira 字樣 -->
+        <div class="footer-detail-box">
+          <div class="footer-detail-text">powered by</div>
+          <img src="@/assets/img/aira-logo-white.svg" alt="" class="footer-logo" />
         </div>
       </div>
     </div>
@@ -200,6 +215,20 @@ import { backgroundImage } from '@/utils/welcomeMode';
 
 import occupancyModel from '@/models/OccupancyDashboardModel.vue';
 import chartHelper from '@/utils/ChartHelper.vue';
+
+const emptyFace = 'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAAXNSR0IB2cksfwAAA'
+  + 'AlwSFlzAAALEwAACxMBAJqcGAAAAd1QTFRF19nZztDQtbe3vL6+wsPDsbKzubq7ycvL09XV2Nray83Nh4eIWVlaXFxdW1xdYWFiaWlqcnJzfH19hoeIkpOTnp+gq6ysubu7uLm5jI2Oa2tsWlpbWllb'
+  + 'Y2NkgYGCqaqq0tTUwcPDdXV2ZWVmqaurvsDAnZ6ffHx9YGBhzM7OXV1eiYqL1tjYlJWVdnZ3zc/Pk5SUcnN00NLSqKqqgoKDq6ytkZKSa2xs1dfXs7S0jY6Ppqeofn+ApKWmfX1+ra+vhoeHwMLCmJm'
+  + 'Z1NbWeXp6kpOU0NHRnZ6edXZ2pqiof4CAr7GxiIiJuLq6kJGRwMHCl5iZxMXFi4yMeHl6rrCwgoODXl5fgIGClJSVrK2thIWGyMrKoKKiaWpqiouMra6vhYaHz9DQqqusfn5/X19gjo+QqKmp0dPTZG'
+  + 'Rlt7m5bm9ww8XFhISFYmJjpaamfX5+qaqrp6ippKWlioqLa2xts7S1enp7XFxegICBf4CBe3t8z9HRc3N0W1tcwcLDiYmKZ2docHBxxMbGrq+vsrS0gYKDu7y9lZaXbGxtv8DAbW5vpKambG1tl5iYr'
+  + 'K6ub29wmZqabm5vkZOTjo6PyszMsrOzv8HBeXp7iYqKamprsLGxoKGikJGSmJmax8nJ/5q5qgAAAudJREFUeJzt2fdXE0EQB/AlFnLxYoJYsyLRWGKMYDeKgoDYFWsU0KgUY4u9EiP2htgLYPlbvTxE'
+  + '43vZmQkz8tN9/4D5vNm9vd29U8qNGzdu3LgZSZlnwsRJk8u9yrL+H2L5pth+254aCFZMq5w+Y+ascnFi9pyQnqv/iV01rzosSMxfoIsnslDMWBQwGE4WSyFLzIaOLpUxqmMAopd5BYj4cohwUlPLR1Y'
+  + 'ghtYrV3GN1aih9Zo4z/ABD9bfrOUh6yiGXp/gGF5SI1pv4CAemqE3cpA6IrKJg2wmIvUcpIGIbDGXwJ+JRpuGNJlL4GvI66chDUANVLGCJMNuBGo0o61spXVSxkIqSUYAnF10vFpISAissQ1DtpOQHW'
+  + 'ANdL/ZSUJ2gTXQrXM3CdkDF8EmZS8J2QcXCSNIK2nJ74eLIJNy4CAJOXQYrIKslCOk0dI6ia84Y6waImJzjkVHiYif0Yk6RkRCnDtLGxFpZxiqg4gc5yDqBMmwW1lIioREWIc7dZKEnGIZ6jR4NxlNJ'
+  + 'w9RXQSjG9p9KaEcVHuYhlJnkpiRSrOR5rOIYZ9jGyp+HuvkAh9RFxEjwx8tpS4hyGUBQ/m6YeSKBIK8WoJhEaQDvDheFTGUugYYXcw7/J/ErxuNGwLfPH4nbVyQN8UMZd0yGLflGjG/i5PsbzcFuWNC'
+  + 'JFb7aO6OBzIew2X1GpAYd08sSPaeAcnd551TCtJnIJzYD8IyhlVvRnRSasAeAkjukYyRjQKIfiyDPIEMnZJBnoJIlcikPEM+Rz0XMGpfwIaOedjGy1eI4RyF63hEuoX06a6Xcb5L9EcohBN/zxh/o8T'
+  + 'bXhOJfKID2TEQb96WQOSTeVcik+h8XyKRT2CghC0/8QG9kxiS/PjJeVooP6D6kcMvmFz7Z8KoffnKIPJpQpHsIJNwMjQMG8MZvuFkEDIE2sCULHc2CvLNZFTIGTpjmH14byo134saP0SN4q38lDWKz4'
+  + 'rgpI9kqKD4L1KHptMGIb/CAAAAAElFTkSuQmCC';
 
 export default {
   name: 'OccupancyDashboard',
@@ -273,7 +302,7 @@ export default {
         patrolidleTime: 60,
 
         // Personal View
-        displayGroup: ['All Person'],
+        displayGroup: [],
         displayCardMode: 'STANDARD',
         displayPhoto: 'REGISTER',
         line1: 'NAME',
@@ -311,7 +340,7 @@ export default {
       let ret = 0;
       if (self.displaySettings.enableSummaryView) {
         if (self.isShowGroup) {
-          const presentArray = self.persons.filter((p) => p.punchMode === 3);
+          const presentArray = self.persons.filter((p) => p.status === 0);
           ret = presentArray.length;
         } else {
           const currentGroupData = self.groupPersons.find((g) => g.groupName === self.currentGroup);
@@ -319,7 +348,7 @@ export default {
 
           if (currentGroupData && currentGroupData.persons) {
             presentArray = currentGroupData.persons.filter(
-              (p) => p.punchMode === 3,
+              (p) => p.status === 0,
             );
           }
           ret = presentArray.length;
@@ -329,7 +358,7 @@ export default {
 
         if (self.persons) {
           presentArray = self.persons.filter(
-            (p) => p.punchMode === 3,
+            (p) => p.status === 0,
           );
         }
         ret = presentArray.length;
@@ -394,9 +423,15 @@ export default {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
                   }
+                  else {
+                    person.display_image = emptyFace;
+                  }
 
                   if (data.register_image !== '') {
                     person.register_image = data.register_image;
+                  }
+                  else {
+                    person.register_image = emptyFace;
                   }
                 }
               });
@@ -418,9 +453,15 @@ export default {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
                 }
+                else {
+                  person.display_image = emptyFace;
+                }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
+                }
+                else {
+                  person.register_image = emptyFace;
                 }
               }
             });
@@ -726,16 +767,111 @@ export default {
         if (r.group_list) {
           if (Array.isArray(r.group_list)) {
             inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
+
+            if (inDisplayGroup) {
+              console.log(r);
+              console.log(r.group_list, self.displaySettings.displayGroup, inDisplayGroup);
+            }
           }
         }
 
         if (!inDisplayGroup) {
           self.persons.splice(i, 1);
         }
+      }
 
-        self.persons.sort((a, b) => {
+      self.persons.sort((a, b) => {
+        let ret = 0;
+
+        if (a.name < b.name) {
+          ret = -1;
+        } else if (a.name > b.name) {
+          ret = 1;
+        } else {
+          ret = 0;
+        }
+        return ret;
+      });
+
+      switch (self.displaySettings.summaryBy) {
+        case 'DEPARTMENT':
+          self.groupPersons = [];
+
+          self.persons.forEach((p) => {
+            const person = p;
+
+            const depart = person.extra_info.department || '';
+
+            const gp = self.groupPersons.find((g) => g.groupName === depart);
+            person.punchMode = 0;
+            if (gp) {
+              gp.persons.push(person);
+              gp.total += 1;
+            } else {
+              self.groupPersons.push({
+                groupName: depart, persons: [person], present: 0, total: 1,
+              });
+            }
+          });
+
+          break;
+        case 'JOBTITLE':
+          self.groupPersons = [];
+
+          self.persons.forEach((p) => {
+            const person = p;
+
+            const title = person.extra_info.title || '';
+
+            const gp = self.groupPersons.find((g) => g.groupName === title);
+            person.punchMode = 0;
+            if (gp) {
+              gp.persons.push(person);
+              gp.total += 1;
+            } else {
+              self.groupPersons.push({
+                groupName: title, persons: [person], present: 0, total: 1,
+              });
+            }
+          });
+          break;
+        case 'GROUP':
+        default:
+          self.groupPersons = [];
+
+          self.persons.forEach((p) => {
+            const person = p;
+
+            const groupList = person.group_list || [];
+
+            for (let j = 0; j < groupList.length; j += 1) {
+              const group = groupList[j];
+
+              const gp = self.groupPersons.find((g) => g.groupName === group);
+
+              person.punchMode = 0;
+              if (gp) {
+                gp.persons.push(person);
+                gp.total += 1;
+              } else {
+                if ((self.displaySettings.displayGroup.indexOf(group) >= 0)) {
+                  self.groupPersons.push({
+                    groupName: group, persons: [person], present: 0, total: 1,
+                  });
+                }
+              }
+            }
+          });
+          break;
+      }
+
+      // 3.0 from Persons tp GroupPersons
+      self.groupPersons.forEach((pGroup) => {
+        const group = pGroup;
+
+        group.total = group.persons.length;
+        group.persons.sort((a, b) => {
           let ret = 0;
-
           if (a.name < b.name) {
             ret = -1;
           } else if (a.name > b.name) {
@@ -745,95 +881,8 @@ export default {
           }
           return ret;
         });
-
-        switch (self.displaySettings.summaryBy) {
-          case 'DEPARTMENT':
-            self.groupPersons = [];
-
-            self.persons.forEach((p) => {
-              const person = p;
-
-              const depart = person.extra_info.department || '';
-
-              const gp = self.groupPersons.find((g) => g.groupName === depart);
-              person.punchMode = 0;
-              if (gp) {
-                gp.persons.push(person);
-                gp.total += 1;
-              } else {
-                self.groupPersons.push({
-                  groupName: depart, persons: [person], present: 0, total: 1,
-                });
-              }
-            });
-
-            break;
-          case 'JOBTITLE':
-            self.groupPersons = [];
-
-            self.persons.forEach((p) => {
-              const person = p;
-
-              const title = person.extra_info.title || '';
-
-              const gp = self.groupPersons.find((g) => g.groupName === title);
-              person.punchMode = 0;
-              if (gp) {
-                gp.persons.push(person);
-                gp.total += 1;
-              } else {
-                self.groupPersons.push({
-                  groupName: title, persons: [person], present: 0, total: 1,
-                });
-              }
-            });
-            break;
-          case 'GROUP':
-          default:
-            self.groupPersons = [];
-
-            self.persons.forEach((p) => {
-              const person = p;
-
-              const groupList = person.group_list || [];
-              for (let j = 0; j < groupList.length; j += 1) {
-                const group = groupList[j];
-
-                const gp = self.groupPersons.find((g) => g.groupName === group);
-
-                person.punchMode = 0;
-                if (gp) {
-                  gp.persons.push(person);
-                  gp.total += 1;
-                } else {
-                  self.groupPersons.push({
-                    groupName: group, persons: [person], present: 0, total: 1,
-                  });
-                }
-              }
-            });
-            break;
-        }
-
-        // 3.0 from Persons tp GroupPersons
-        self.groupPersons.forEach((pGroup) => {
-          const group = pGroup;
-
-          group.total = group.persons.length;
-          group.persons.sort((a, b) => {
-            let ret = 0;
-            if (a.name < b.name) {
-              ret = -1;
-            } else if (a.name > b.name) {
-              ret = 1;
-            } else {
-              ret = 0;
-            }
-            return ret;
-          });
-        });
-        // console.log( 'mounted groupPersons 2',self.groupPersons) ;
-      }
+      });
+      // console.log( 'mounted groupPersons 2',self.groupPersons) ;
     },
 
     PartialName(pPerson) {
@@ -900,7 +949,10 @@ export default {
         case 'SNAPSHOT':
           ret = person.snapshot_image;
           break;
-        default: ret = ''; break;
+        case 'NONE':
+        default:
+          ret = emptyFace;
+          break;
       }
       return ret;
     },
@@ -948,9 +1000,15 @@ export default {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
                   }
+                  else {
+                    person.display_image = emptyFace;
+                  }
 
                   if (data.register_image !== '') {
                     person.register_image = data.register_image;
+                  }
+                  else {
+                    person.register_image = emptyFace;
                   }
                 }
               });
@@ -975,9 +1033,15 @@ export default {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
                 }
+                else {
+                  person.display_image = emptyFace;
+                }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
+                }
+                else {
+                  person.register_image = emptyFace;
                 }
               }
             });
@@ -1193,7 +1257,7 @@ export default {
                 if (person.clockinRecord.timestamp < person.clockoutRecord.timestamp) {
                   // in < out
                   person.punchMode = 4;
-                  person.status = 1;
+                  person.status = 2;
                 } else {
                   // in >= out
                   person.punchMode = 3;
@@ -1522,8 +1586,19 @@ export default {
           + 'QVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
           self.$globalFetchPhoto(person.uuid, (err, data) => {
             if (err === null && data) {
-              if (data.display_image !== '') person.display_image = data.display_image;
-              if (data.register_image !== '') person.register_image = data.register_image;
+              if (data.display_image !== '') {
+                person.display_image = data.display_image;
+              }
+              else {
+                person.display_image = emptyFace;
+              }
+
+              if (data.register_image !== '') {
+                person.register_image = data.register_image;
+              }
+              else {
+                person.register_image = emptyFace;
+              }
             }
           });
         }

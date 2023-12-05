@@ -303,11 +303,15 @@
 <script>
 import i18n from '@/i18n';
 
+import Multiselect from 'vue-multiselect';
+import '@/airacss/vue-multiselect.css';
+
 export default {
   name: 'AttendanceSettings',
 
-  components: {},
-
+  components: {
+    multiselect: Multiselect,
+  },
   data() {
     return {
       obj_loading: null,

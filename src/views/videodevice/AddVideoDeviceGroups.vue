@@ -94,7 +94,10 @@ export default {
 
   },
   async created() {
-    this.defaultValues = await this.getDefaultValues();
+    const self = this;
+    self.defaultValues = await self.getDefaultValues();
+
+    self.isFormPassed(self.step1form);
   },
 
   methods: {
@@ -148,43 +151,29 @@ export default {
     isFieldPassed(key, value) {
       const rules = {
         name: 'nonEmpty',
-        divice_groups: 'nonEmpty',
-        stream_type: 'nonEmpty',
-        ip_address: 'nonEmpty',
-        port: 'port',
-        user: 'nonEmpty',
-        pass: 'password',
-        connection_info: 'nonEmpty',
-        target_score: 'target_score',
-        face_min_length: 'passitiveInt',
-        capture_interval: 'captureInterval',
       };
       const rule = rules[key];
       if (!rule) return true;
       switch (rule) {
         case 'nonEmpty': {
-          return !!value;
-        }
-        case 'port': {
-          const number = parseInt(value, 10);
+          let ret = !!value;
 
-          return Number.isInteger(number) && number >= 1 && number <= 65535;
-        }
-        case 'password': {
-          return !!value;
-        }
-        case 'passitiveInt': {
-          return /^\d+$/.test(value);
-        }
-        case 'target_score': {
-          const number = parseInt(value, 10);
+          switch (key) {
+            case 'name' :
+              if (value.replace(/\s/g, '').length === 0) {
+                ret = false;
+              } else if (value.replace(/[^\+\)\(\*\&\^\%\$\#\@\!\~\|\}\{\"\:\?\>\<\,\.\/\'\;\\\]\[\=\`\]\]]/g, '').length === 0) {
+                ret = true;
+              } else {
+                ret = false;
+              }
+              break;
+            default:
+              ret = !!value;
+              break;
+          }
 
-          return Number.isInteger(number) && value >= 0 && value <= 1;
-        }
-        case 'captureInterval': {
-          const number = parseInt(value, 10);
-
-          return Number.isInteger(number) && value >= 100 && value <= 1000;
+          return ret;
         }
         default:
           return true;
