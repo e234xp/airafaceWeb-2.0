@@ -6,11 +6,13 @@
           :onDelete="onDelete" :onImport="onImport" :onFetchDataCallback="onFetchDataCallback" />
       </CCol>
     </CRow>
+    <canvas ref="qrcode" id="qrcode" style="display: none;"></canvas>
   </div>
 </template>
 
 <script>
 import i18n from '@/i18n';
+import QrCodeWithLogo from 'qr-code-with-logo';
 import CPersonManagementForm from './forms/PersonManagementForm.vue';
 
 export default {
@@ -61,7 +63,32 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
-          if (cb) cb(error, reset, thereIsMoreData, data.visitor_list);
+          if (cb) {
+            // const vList = [];
+            const tempReset = !!reset;
+            const tempMore = !!thereIsMoreData;
+            data.visitor_list.forEach(async (item) => {
+              const qrCanvas = this.$refs.qrcode;
+              const num = { uuid: item.uuid };
+              const jstr = JSON.stringify(num);
+
+              await QrCodeWithLogo.toCanvas({
+                canvas: qrCanvas,
+                content: jstr,
+                width: 220,
+                height: 220,
+                logo: {
+                  src: '/img/logo/airaLogo.png',
+                  radius: 1,
+                },
+              });
+              // console.log(qrCanvas.toDataURL());
+              cb(error, tempReset, tempMore, [{ ...item, qrCode: `<img src='${qrCanvas.toDataURL()}' width='100' height='100'>` }]);
+              // vList.push({ ...item, qrCode: `<img src='${qrCanvas.toDataURL()}' width='100' height='100'>` });
+            });
+            // console.log(vList);
+            // cb(error, reset, thereIsMoreData, vList);
+          }
           reset = false;
         } else {
           thereIsMoreData = false;

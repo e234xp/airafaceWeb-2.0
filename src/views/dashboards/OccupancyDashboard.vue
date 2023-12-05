@@ -303,6 +303,7 @@ export default {
   computed: {
     ...mapState(['deviceName']),
     attendancePresent() {
+      // from persons and groupPersons
       // this.refreshKey;
 
       const self = this;
@@ -337,6 +338,7 @@ export default {
       return ret;
     },
     attendanceTotal() {
+      // from persons and groupPersons
       // this.refreshKey;
 
       const self = this;
@@ -466,6 +468,7 @@ export default {
     // console.log('created start');
 
     this.unSubscribe = this.$store.subscribe(async (mutation) => {
+      console.log(mutation);
       let payload = {};
       let person = {};
       switch (mutation.type) {
@@ -478,7 +481,6 @@ export default {
           }
           break;
         case 'changeNotifications':
-        default:
           if (mutation.payload.statusCode === '200') {
             console.log('created subscribe', 'mutation payload statusCode == 200');
             return;
@@ -521,6 +523,8 @@ export default {
           self.refreshBarChart();
           self.refreshDoughnutChart();
           break;
+        default:
+          break;
       }
     });
 
@@ -561,6 +565,7 @@ export default {
 
     // 1.5 Load Attendance Config
     setting = await self.$globalGetAttendanceSettings();
+    console.log(setting);
     valueSetting = setting || {};
 
     const videoDeviceGroupIn = valueSetting.data.video_device_group_in;
@@ -711,7 +716,8 @@ export default {
     async initialGroupPerson() {
       const self = this;
 
-      self.persons = await self.setupPersonData();
+      self.persons = [...await self.setupPersonData(), ...await self.setupVisitorData()];
+      console.log(self.persons);
 
       for (let i = self.persons.length - 1; i >= 0; i -= 1) {
         const r = self.persons[i];
@@ -1001,6 +1007,7 @@ export default {
 
     // Tulip
     refreshDoughnutChart() {
+      // from attendancePresent and persons
       // console.log('refreshDoughnutChart ============================');
 
       const self = this;
@@ -1063,7 +1070,7 @@ export default {
 
     //  merge Person and Verify Date
     applyVerifyToPerson(data) {
-      // console.log('============  applyVerifyToPerson');
+      console.log('============  applyVerifyToPerson');
       const self = this;
 
       let passModeRecord = [];
@@ -1072,7 +1079,10 @@ export default {
       if (data.length >= 1) {
         passModeRecord = data.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
+        console.log(passModeRecord);
+        console.log(clockModeRecord);
 
+        // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
           if (self.params_entryChannels.indexOf(passModeRecord[i].source_id) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
@@ -1089,6 +1099,7 @@ export default {
           }
         }
 
+        // 處理進出人員狀態 clockModeRecord
         if (clockModeRecord.length >= 1) {
           clockModeRecord.sort((a, b) => a.timestamp - b.timestamp);
 
@@ -1103,6 +1114,7 @@ export default {
             switch (mode) {
               case 3:
                 {
+                  // 人員進入
                   if (person) {
                     // clockinRecord
                     person.clockinRecord = record;
@@ -1111,11 +1123,13 @@ export default {
                     if (person.presentRecord) {
                       const last = person.presentRecord[person.presentRecord.length - 1];
                       if (last.out) {
+                        // 如果人員最後一筆紀錄是 out，就插入一筆新的紀錄 in
                         person.presentRecord.push({
                           in: hour,
                         });
                       }
                     } else {
+                      // 如果人員之前沒有任何紀錄，也插入一筆新的紀錄 in
                       person.presentRecord = [];
                       person.presentRecord.push({
                         in: hour,
@@ -1123,7 +1137,8 @@ export default {
                     }
                   }
 
-                  // hourlyPersonInData
+                  // hourlyPersonInData => Map()<hour, uuid[]>
+                  // 更新 hourlyPersonInData
                   const hValue = self.hourlyPersonInData.get(hour) || [];
                   hValue.push(uuid);
 
@@ -1140,12 +1155,14 @@ export default {
                     if (person.presentRecord) {
                       const last = person.presentRecord[person.presentRecord.length - 1];
                       if (!last.out) {
+                        // 補上人員的 out 時間點
                         person.presentRecord[person.presentRecord.length - 1].out = hour;
                       }
                     }
                   }
 
-                  // hourlyPersonOutData
+                  // hourlyPersonOutData => Map()<hour, uuid[]>
+                  // 更新 hourlyPersonOutData
                   const hValue = self.hourlyPersonOutData.get(hour) || [];
                   hValue.push(uuid);
 
@@ -1158,21 +1175,27 @@ export default {
 
             if (person) {
               if ((!person.clockinRecord) && (!person.clockoutRecord)) {
+                // 沒有 in & 沒有 out
                 person.punchMode = 0;
                 person.status = 1;
               } else if ((!person.clockinRecord) && (person.clockoutRecord)) {
+                // 沒有 in & 有 out
                 person.punchMode = 0;
                 person.status = 1;
               }
               if ((person.clockinRecord) && (!person.clockoutRecord)) {
+                // 有 in & 沒有 out
                 person.punchMode = 3;
                 person.status = 0;
               }
               if ((person.clockinRecord) && (person.clockoutRecord)) {
+                // 有 in & 有 out
                 if (person.clockinRecord.timestamp < person.clockoutRecord.timestamp) {
+                  // in < out
                   person.punchMode = 4;
                   person.status = 1;
                 } else {
+                  // in >= out
                   person.punchMode = 3;
                   person.status = 0;
                 }

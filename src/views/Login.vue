@@ -136,6 +136,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
+        { value: 'SelfCheckin', label: 'SelfCheckin' },
       ],
     };
   },
@@ -184,7 +185,7 @@ export default {
       self.$globalGetSystemInfo((err, data) => {
         if (data) {
           self.disp_versionNumber = data.fw_version;
-          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${global.webVersion}`;
+          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${this.global.webVersion}`;
           self.value_disbleLoginButton = false;
           store.commit('set', ['deviceType', data.device_type]);
           Vue.$cookies.set('deviceType', data.device_type);
@@ -238,6 +239,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
+        { value: 'SelfCheckin', label: 'SelfCheckin' },
       ];
     },
     clickOnLogin() {

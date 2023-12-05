@@ -11,32 +11,96 @@ import i18n from '@/i18n';
 
 Vue.use(CoreuiVue);
 
-global.webVersion = '1108';
+/* eslint-disable */
 
-const TEST_MODE = true;
-// const TEST_HOST = '192.168.10.84'; // Plus
-const TEST_HOST = '192.168.10.95'; // airaTablet_plus
+const currentDate = new Date(Date.now());
+const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+const day = currentDate.getDate();
+
+global.webVersion = `${month}${day}`;
+
+const TEST_MODE = process.env.NODE_ENV === 'development'; 
+// const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
+const TEST_HOST = '192.168.10.122'; // airaFace2
 
-const TEST_PORT = '443'; //測試mini的PORT
+const TEST_PORT = '443'; // 測試mini的PORT
 const HOST = TEST_MODE ? TEST_HOST : window.location.hostname;
 const PORT = TEST_MODE ? TEST_PORT : window.location.port;
 const href = window.location.href.toLowerCase();
 
-const listParmeters = { uuid: '', slice_shift: 0, slice_length: 3000 };
+const listParmeters = { uuid: '', slice_shift: 0, slice_length: 2500 };
+Vue.use(webSocketService, { store, reconnectInterval: 1000 });
 
-export const deviceTypes = {
-  TYPE_AIRA_TABLET_M: 'airaFace2',
-};
+Vue.prototype.$t = (str) => i18n.formatter.format(str);
 
 export default {};
 
 Vue.prototype.$deviceProfile = {
-  deviceTypes: 'airaFace2',
-  supportTemperature: false,
+  device_type: '',
+  support_wifi: false,
+  support_enhance_facemask: false,
+  support_rtsp: false,
+  support_intercom: false,
+  support_high_temp_sound_alert: false,
+  support_invalid_result_show_switch: false,
+  support_show_verify_indication: false,
 };
 
-global.usingHttps = href.includes('https://') || TEST_MODE;
+Vue.prototype.$profileLists = [
+  {
+    device_type: 'airaTablet_plus',
+    support_temperature: true,
+
+    support_wifi: true,
+
+    support_relay1: true,
+    support_relay2: true,
+    support_custom_start_end_sign: true,
+
+    support_enhance_facemask: true,
+    support_rtsp: true,
+    support_intercom: true,
+    support_high_temp_sound_alert: true,
+    support_invalid_result_show_switch: false,
+    support_show_verify_indication: true,
+  },
+  {
+    device_type: 'airaTablet_xs',
+    support_temperature: false,
+
+    support_wifi: false,
+
+    support_relay1: true,
+    support_relay2: false,
+    support_custom_start_end_sign: false,
+
+    support_enhance_facemask: true,
+    support_rtsp: false,
+    support_intercom: false,
+    support_high_temp_sound_alert: false,
+    support_invalid_result_show_switch: true,
+    support_show_verify_indication: false,
+  },
+  {
+    device_type: 'airaFace 2',
+    support_temperature: false,
+    support_wifi: false,
+
+    support_relay1: false,
+    support_relay2: false,
+    support_custom_start_end_sign: false,
+
+    support_enhance_facemask: true,
+    support_rtsp: true,
+    support_intercom: false,
+    support_high_temp_sound_alert: true,
+    support_invalid_result_show_switch: false,
+    support_show_verify_indication: true,
+  },
+];
+
+global.usingHttps = href.includes('https://') && !TEST_MODE;
 // global.usingHttps = false;
 if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelite/verifyresults`;
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
@@ -50,8 +114,6 @@ function apiServerPath() {
   }
   return `http://${HOST}:${PORT}`;
 }
-
-Vue.use(webSocketService, { store, reconnectInterval: 1000 });
 
 let maintainSessionTimer = null;
 let maintainSessionFailCounter = 0;
@@ -90,10 +152,6 @@ function getTokenString() {
     }
 
     return ret;
-    // let now = Date.now();
-    // if (store.state.serverToken.expire + 300000 > now) {
-    //   return store.state.serverToken.token;
-    // }
   }
   return '';
 }
@@ -117,7 +175,8 @@ function postJson(cgi, jsondata, cb) {
     && cgi !== '/airafacelite/generatetoken'
     && cgi !== '/airafacelite/maintaintoken'
     && cgi !== '/system/downloadsyslog'
-    && cgi !== '/system/systeminfo') {
+    && cgi !== '/system/systeminfo'
+  ) {
     if (cb) cb('error', null);
     return;
   }
@@ -133,14 +192,15 @@ function postJson(cgi, jsondata, cb) {
   };
   const FETCH_TIMEOUT = 300000;
   timeout(FETCH_TIMEOUT,
-    fetch(apiServerPath() + cgi, requestOptions).then(
-      (response) => {
-        if (response.status !== 200) {
-          throw new Error('Bad response from server');
-        }
-        return response.json();
-      },
-    )
+    fetch(apiServerPath() + cgi, requestOptions)
+      .then(
+        (response) => {
+          if (response.status !== 200) {
+            throw new Error('Bad response from server');
+          }
+          return response.json();
+        },
+      )
       .then((data) => {
         if (cb) cb(null, data);
       })
@@ -182,13 +242,10 @@ function maintainToken(tokenInfo, cb) {
           permission: data.permission,
         };
         store.commit('set', ['serverToken', serverToken]);
-        // Vue.$cookies.set("serverToken", serverToken);
       }
       if (cb) cb(err, data);
     });
 }
-
-Vue.prototype.$t = (str) => i18n.formatter.format(str);
 
 Vue.prototype.$globalFindPerson = (
   uuid, shift, sliceSize, cb,
@@ -1429,10 +1486,10 @@ Vue.prototype.$globalGetTabletList = (
   postJson('/airafacelite/findtablet', query,
     (err, data) => {
       const d = {
-        slice_length: data.slice_length,
-        slice_shift: data.slice_shift,
-        total_length: data.total_length,
-        data_list: data.list,
+        slice_length: data ? data.slice_length || 0 : 0,
+        slice_shift: data ? data.slice_shift || 0 : 0,
+        total_length: data ? data.total_length || 20 : 0,
+        data_list: data ? data.list || [] : 0,
       };
 
       if (cb) cb(err, d);

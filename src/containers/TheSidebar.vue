@@ -22,15 +22,17 @@
 </template>
 
 <script>
-import store from '../store';
-//import nav from './_nav'
+// import store from '../store';
+// import nav from './_nav'
 
 // if( store.state.serverToken && store.state.serverToken === 'Admin' ) {
 
 // }
 // else {
+
 import i18n from '@/i18n';
-let nav = [
+
+const nav = [
   {
     _name: 'CSidebarNav',
     _children: [
@@ -221,6 +223,11 @@ let nav = [
             name: i18n.formatter.format('Capacity'),
             to: '/displays/modifycapacitycontrolsetting',
           },
+          {
+            permission: ['Admin', 'PowerUser'],
+            name: 'Self Checkin',
+            to: '/displays/modifyselfcheckincontrolsetting',
+          },
         ],
       },
 
@@ -288,17 +295,31 @@ export default {
   computed: {
     show() {
       const self = this;
-      nav.forEach((n) => {
-        n._children = n._children.filter((child) => {
-          const c = child.permission.filter((p) => {
-            //console.log( self.$store.state.serverToken.permission )
-            return (
-              self.$store.state.serverToken &&
-              self.$store.state.serverToken.permission &&
-              p == self.$store.state.serverToken.permission
-            );
-          });
-          child.items = child.items.filter((item) => {
+      nav.forEach((n, idx) => {
+        const list = n._children.filter((child) => {
+          const c = child.permission.filter((p) => self.$store.state.serverToken
+            && self.$store.state.serverToken.permission
+            && p === self.$store.state.serverToken.permission);
+          // child.items = child.items.filter((item) => {
+          //   let ns = [];
+          //   if (item.not_support_detype_type) {
+          //     ns = item.not_support_detype_type.filter((dt) => {
+          //       console.log('dt', dt);
+          //       return self.$store.state.deviceType === dt;
+          //     });
+          //   }
+          //   const i = item.permission.filter((p) => (
+          //     self.$store.state.serverToken
+          //     && self.$store.state.serverToken.permission
+          //     && p === self.$store.state.serverToken.permission
+          //   ));
+
+          //   return i.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
+          // });
+          return c.length > 0;
+        });
+        list.forEach((child, i) => {
+          list[i].items = child.items.filter((item) => {
             let ns = [];
             if (item.not_support_detype_type) {
               ns = item.not_support_detype_type.filter((dt) => {
@@ -306,16 +327,16 @@ export default {
                 return self.$store.state.deviceType === dt;
               });
             }
-            const i = item.permission.filter((p) => (
+            const temp = item.permission.filter((p) => (
               self.$store.state.serverToken
               && self.$store.state.serverToken.permission
               && p === self.$store.state.serverToken.permission
             ));
 
-            return i.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
+            return temp.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
           });
-          return c.length > 0;
         });
+        nav[idx]._children = list;
       });
       if (self.$globalServerTokenIsEffective()) {
         self.$store.commit('set', ['sidebarShow', true]);

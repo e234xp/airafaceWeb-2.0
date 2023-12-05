@@ -5,6 +5,7 @@
       return {
         groupData: [],
         personData: [],
+        visitorData: [],
         verifyData: [],
 
         // hourlyPersonInData: new Map(),
@@ -137,6 +138,54 @@
         });
 
         return self.personData;
+      },
+
+      // get Person Info
+      async setupVisitorData() {
+        console.log("============  setupVisitorData");
+        let self = this;
+        self.visitorData = [];
+        let shitf = 0;
+        let thereIsMoreData = true;
+
+        await new Promise(async (resolve, reject) => {
+          while (thereIsMoreData) {
+            console.log("setupVisitorData 1", thereIsMoreData, shitf);
+            let retPerson = await self.$globalFindVisitor('', shitf, 250);
+            console.log("setupVisitorData 2", retPerson);
+
+            let err = retPerson.error;
+            let result = retPerson.data;
+            if (err == null && result) {
+              try {
+                for (let i = 0; i < result.visitor_list.length; i++) {
+                  const p = result.visitor_list[i];
+                  p.status = 1;
+                  p.register_image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+                }
+
+                self.visitorData = self.visitorData.concat(result.visitor_list);
+
+                if (result.slice_shift + result.visitor_list.length < result.total_length) {
+                  thereIsMoreData = true;
+                  shitf = result.slice_shift + result.visitor_list.length;
+                }
+                else
+                  thereIsMoreData = false;
+              }
+              catch (ex) {
+                console.log("setupVisitorData 3", ex);
+              }
+            }
+            else {
+              thereIsMoreData = false;
+            }
+          }
+
+          resolve();
+        });
+
+        return self.visitorData;
       },
 
       // get Verify Data
