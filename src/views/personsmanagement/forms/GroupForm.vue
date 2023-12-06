@@ -498,14 +498,14 @@ export default {
         self.flag_groupNamePass = false;
         // } else if (val.replace(/[a-zA-Z0-9\s]/g, '').length === 0) {
         // } else if (val.replace(/[^\.\+\*\?\^\$\(\)\[\]\{\}\|\'\"\/\,]/g, '').length === 0) {
-      } else if (val.replace(/[^\+\)\(\*\&\^\%\$\#\@\!\~\|\}\{\"\:\?\>\<\,\.\/\'\;\\\]\[\=\`\]\]]/g, '').length === 0) {
+      } else if (val.replace(/[^+)(*&^%$#@!~|}{":?><,./';\][=`]/g, '').length === 0) {
         self.flag_groupNamePass = true;
       } else {
         self.flag_groupNamePass = false;
       }
       if (self.flag_groupNamePass) {
         self.value_group_list.forEach((group) => {
-          if (group.name.toLowerCase() === val.toLowerCase()) {
+          if (group.name.trim().toLowerCase() === val.trim().toLowerCase()) {
             self.flag_groupNamePass = false;
           }
         });

@@ -409,7 +409,6 @@ const defaultlState = () => ({
   disp_Customize: i18n.formatter.format('Customize'),
   disp_TBD: i18n.formatter.format('TBD'),
 
-
   disp_Snapshot: i18n.formatter.format('CapturedPhoto'),
   disp_Fields: i18n.formatter.format('FieldName'),
 
@@ -1506,40 +1505,59 @@ export default {
         item.clockout = '';
         item.clockout_temperature = '';
 
-        if (item.attendance_data_list) {
-          item.attendance_data_list.sort((a, b) => a.timestamp - b.timestamp);
+        if (item.attendanceStatusData.attendance_data) {
+          if (item.attendanceStatusData.attendance_data.firstClockInRec) {
+            item.clockin = item.attendanceStatusData.attendance_data.firstClockInRec.timestamp
+              ? dayjs(new Date(item.attendanceStatusData.attendance_data.firstClockInRec.timestamp)).format('HH:mm:ss')
+              : '';
 
-          if (item.attendance_data_list.length >= 1) {
-            let inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 5);
-            if (inRecord.length === 0) {
-              inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 3);
-            }
-            if (inRecord.length === 0) {
-              inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-            }
-
-            if (inRecord.length >= 1) {
-              item.clockin = dayjs(new Date(item.attendance_data_list[0].timestamp)).format('HH:mm:ss');
-              item.clockin_temperature = item.attendance_data_list[0].temperature ? item.attendance_data_list[0].temperature : '';
-            }
-
-            let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 6);
-            if (outRecord.length === 0) {
-              outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
-            }
-            if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
-              outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-            }
-
-            if (outRecord.length >= 1) {
-              item.clockout = dayjs(new Date(
-                item.attendance_data_list[item.attendance_data_list.length - 1].timestamp,
-              )).format('HH:mm:ss');
-              item.clockout_temperature = item.attendance_data_list[item.attendance_data_list.length - 1].temperature
-                ? item.attendance_data_list[item.attendance_data_list.length - 1].temperature
-                : '';
-            }
+            item.clockin_temperature = item.attendanceStatusData.attendance_data.firstClockInRec.temperature
+              ? item.attendanceStatusData.attendance_data.firstClockInRec.temperature
+              : '';
           }
+
+          if (item.attendanceStatusData.attendance_data.lastClockOutRec) {
+            item.clockout = item.attendanceStatusData.attendance_data.lastClockOutRec.timestamp
+              ? dayjs(new Date(item.attendanceStatusData.attendance_data.lastClockOutRec.timestamp)).format('HH:mm:ss')
+              : '';
+
+            item.clockout_temperature = item.attendanceStatusData.attendance_data.lastClockOutRec.temperature
+              ? item.attendanceStatusData.attendance_data.lastClockOutRec.temperature
+              : '';
+          }
+          // item.attendance_data_list.sort((a, b) => a.timestamp - b.timestamp);
+
+          // if (item.attendance_data_list.length >= 1) {
+          //   let inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 5);
+          //   if (inRecord.length === 0) {
+          //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 3);
+          //   }
+          //   if (inRecord.length === 0) {
+          //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
+          //   }
+
+          //   if (inRecord.length >= 1) {
+          //     item.clockin = dayjs(new Date(item.attendance_data_list[0].timestamp)).format('HH:mm:ss');
+          //     item.clockin_temperature = item.attendance_data_list[0].temperature ? item.attendance_data_list[0].temperature : '';
+          //   }
+
+          //   let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 6);
+          //   if (outRecord.length === 0) {
+          //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
+          //   }
+          //   if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
+          //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
+          //   }
+
+          //   if (outRecord.length >= 1) {
+          //     item.clockout = dayjs(new Date(
+          //       item.attendance_data_list[item.attendance_data_list.length - 1].timestamp,
+          //     )).format('HH:mm:ss');
+          //     item.clockout_temperature = item.attendance_data_list[item.attendance_data_list.length - 1].temperature
+          //       ? item.attendance_data_list[item.attendance_data_list.length - 1].temperature
+          //       : '';
+          //   }
+          // }
 
           console.log(item.clockin_temperature, item.clockout_temperature);
 
@@ -1692,6 +1710,7 @@ export default {
                             card_number: d.card_number,
                             group_list: d.group_list,
                             face_image_id: d.face_image_id,
+                            modifier_time: d.modifier_time,
                           });
                         }
                       });
@@ -1801,6 +1820,8 @@ export default {
         attendance_data: {
           clock_in_status: [],
           clock_out_status: [],
+          firstClockInRec: {},
+          lastClockOutRec: {},
           working_time: [],
           over_time: [],
         },
@@ -1874,13 +1895,13 @@ export default {
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockInModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockOutModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-          manualClockInRecord.sort((a, b) => a.timestamp - b.timestamp);
-          manualClockOutRecord.sort((a, b) => a.timestamp - b.timestamp);
+          manualClockInRecord.sort((a, b) => a.modifier_time - b.modifier_time);
+          manualClockOutRecord.sort((a, b) => a.modifier_time - b.modifier_time);
 
           let clockInStatus = _STATUS_NONE;
           let clockOutStatus = _STATUS_NONE;
-          let firstClockInRec = {};
-          let lastClockOutRec = {};
+          let firstClockInRec = null;
+          let lastClockOutRec = null;
 
           let clockInTimeStamp = 0;
           let clockOutTimeStamp = 0;
@@ -2065,6 +2086,8 @@ export default {
 
           returnData.attendance_data.clock_in_status.push(clockInStatus);
           returnData.attendance_data.clock_out_status.push(clockOutStatus);
+          if (firstClockInRec) returnData.attendance_data.firstClockInRec = firstClockInRec;
+          if (lastClockOutRec) returnData.attendance_data.lastClockOutRec = lastClockOutRec;
 
           let workingTime = 0;
           if ((clockOutTimeStamp > 0) && (clockInTimeStamp > 0)) {
