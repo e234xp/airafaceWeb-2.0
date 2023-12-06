@@ -3,59 +3,157 @@
     <!-- 標題 -->
 
     <div>
-      <h2 sm="12">{{ disp_headertitle }}</h2>
+      <h2 sm="12">
+        {{ disp_headertitle }}
+      </h2>
     </div>
     <!-- +-ROI -->
-    <CRow sm="12" class="h5 ml-2 mb-3">
-      <CCol sm="1" style="display: flex; justify-content: right; align-items: right;">
-        <img src="/img/notify.png" >
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+    >
+      <CCol
+        sm="1"
+        style="display: flex; justify-content: right; align-items: right;"
+      >
+        <img src="/img/notify.png">
       </CCol>
       <CCol sm="10">
         {{ disp_msgLoadingVideo }}
       </CCol>
-      <CCol sm="1"></CCol>
+      <CCol sm="1" />
     </CRow>
-    <CRow sm="12" class="h5 ml-2" style="text-align: center;">
-      <CCol sm="1"></CCol>
+    <CRow
+      sm="12"
+      class="h5 ml-2"
+      style="text-align: center;"
+    >
+      <CCol sm="1" />
       <CCol sm="2">
-        <span style="background-color: #FF6C6C;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;">1</span>
-        <CButton class="btn btn-primary btn-roi mr-3" size="sm" @click="addROI(0)">{{ disp_addROI }} 1 </CButton>
-        <CButton class="btn btn-primary btn-roi" size="sm" @click="removeROI(0)">{{ disp_removeROI }} 1 </CButton>
-
+        <span
+          style="background-color: #FF6C6C;
+        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        >1</span>
+        <CButton
+          class="btn btn-primary btn-roi mr-3"
+          size="sm"
+          @click="addROI(0)"
+        >
+          {{ disp_addROI }} 1
+        </CButton>
+        <CButton
+          class="btn btn-primary btn-roi"
+          size="sm"
+          @click="removeROI(0)"
+        >
+          {{ disp_removeROI }} 1
+        </CButton>
       </CCol>
       <CCol sm="2">
-        <span style="background-color: #FFC93E;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;">2</span>
-        <CButton class="btn btn-primary btn-roi mr-3" size="sm" @click="addROI(1)">{{ disp_addROI }} 2 </CButton>
-        <CButton class="btn btn-primary btn-roi" size="sm" @click="removeROI(1)">{{ disp_removeROI }} 2 </CButton>
+        <span
+          style="background-color: #FFC93E;
+        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        >2</span>
+        <CButton
+          class="btn btn-primary btn-roi mr-3"
+          size="sm"
+          @click="addROI(1)"
+        >
+          {{ disp_addROI }} 2
+        </CButton>
+        <CButton
+          class="btn btn-primary btn-roi"
+          size="sm"
+          @click="removeROI(1)"
+        >
+          {{ disp_removeROI }} 2
+        </CButton>
       </CCol>
       <CCol sm="2">
-        <span style="background-color: #DC79FF;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;">3</span>
-        <CButton class="btn btn-primary btn-roi mr-3" size="sm" @click="addROI(2)">{{ disp_addROI }} 3 </CButton>
-        <CButton class="btn btn-primary btn-roi" size="sm" @click="removeROI(2)">{{ disp_removeROI }} 3 </CButton>
+        <span
+          style="background-color: #DC79FF;
+        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        >3</span>
+        <CButton
+          class="btn btn-primary btn-roi mr-3"
+          size="sm"
+          @click="addROI(2)"
+        >
+          {{ disp_addROI }} 3
+        </CButton>
+        <CButton
+          class="btn btn-primary btn-roi"
+          size="sm"
+          @click="removeROI(2)"
+        >
+          {{ disp_removeROI }} 3
+        </CButton>
       </CCol>
       <CCol sm="2">
-        <span style="background-color: #90D678;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;">4</span>
-        <CButton class="btn btn-primary btn-roi mr-3" size="sm" @click="addROI(3)">{{ disp_addROI }} 4 </CButton>
-        <CButton class="btn btn-primary btn-roi" size="sm" @click="removeROI(3)">{{ disp_removeROI }} 4 </CButton>
+        <span
+          style="background-color: #90D678;
+        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        >4</span>
+        <CButton
+          class="btn btn-primary btn-roi mr-3"
+          size="sm"
+          @click="addROI(3)"
+        >
+          {{ disp_addROI }} 4
+        </CButton>
+        <CButton
+          class="btn btn-primary btn-roi"
+          size="sm"
+          @click="removeROI(3)"
+        >
+          {{ disp_removeROI }} 4
+        </CButton>
       </CCol>
       <CCol sm="2">
-        <span style="background-color: #7DD2FF;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;">5</span>
-        <CButton class="btn btn-primary btn-roi mr-3" size="sm" @click="addROI(4)">{{ disp_addROI }} 5 </CButton>
-        <CButton class="btn btn-primary btn-roi" size="sm" @click="removeROI(4)">{{ disp_removeROI }} 5 </CButton>
+        <span
+          style="background-color: #7DD2FF;
+        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        >5</span>
+        <CButton
+          class="btn btn-primary btn-roi mr-3"
+          size="sm"
+          @click="addROI(4)"
+        >
+          {{ disp_addROI }} 5
+        </CButton>
+        <CButton
+          class="btn btn-primary btn-roi"
+          size="sm"
+          @click="removeROI(4)"
+        >
+          {{ disp_removeROI }} 5
+        </CButton>
       </CCol>
-      <CCol sm="1"></CCol>
+      <CCol sm="1" />
     </CRow>
 
     <!-- ROI Image -->
-    <CRow sm="12" class="h5 ml-2 mb-3">
-      <CCol sm="12" style="display: flex; justify-content: center; align-items: center;">
-        <img v-show="!flag_snapshotReadly" src="/img/noImage.png" width="1024" height="576">
-        <canvas v-show="flag_snapshotReadly" ref="sketchpad" id="canvas" width="1024" height="576"></canvas>
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+    >
+      <CCol
+        sm="12"
+        style="display: flex; justify-content: center; align-items: center;"
+      >
+        <img
+          v-show="!flag_snapshotReadly"
+          src="/img/noImage.png"
+          width="1024"
+          height="576"
+        >
+        <canvas
+          v-show="flag_snapshotReadly"
+          ref="sketchpad"
+          id="canvas"
+          width="1024"
+          height="576"
+        />
       </CCol>
     </CRow>
   </div>
@@ -75,8 +173,8 @@ export default {
   emits: ['updateStep2form'],
   data() {
     return {
-      localStep1form: { ...this.step1form },
-      localStep2form: { ...this.step2form },
+      localStep1form: {},
+      localStep2form: {},
 
       // Basic title
       disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
@@ -121,6 +219,11 @@ export default {
       deep: true,
       immediate: true,
     },
+  },
+
+  created() {
+    this.localStep1form = { ...this.step1form };
+    this.localStep2form = { ...this.step2form };
   },
 
   mounted() {

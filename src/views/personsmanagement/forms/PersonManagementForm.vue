@@ -106,7 +106,7 @@
               :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent" :edit-config="{ trigger: 'manual', mode: 'row' }">
               <vxe-table-column type="checkbox" width="4%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="disp_id" width="14%"
+              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="disp_id" width="120px"
                 style="font: 10px">
               </vxe-table-column>
               <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="disp_name"
@@ -134,6 +134,10 @@
                   <img :id="getDisplayImgId(row.uuid)" />
                 </template>
               </vxe-table-column> -->
+
+               <!-- 顯示 QR code -->
+               <vxe-table-column width="170" field="qrCode" :title="'QR code'" type="html" v-if="formData.type === 'Visitor'">
+              </vxe-table-column>
 
               <!-- 編輯和刪除按鈕 -->
               <!-- <vxe-table-column field="actionButton" title="" width="12%" type="html" /> -->

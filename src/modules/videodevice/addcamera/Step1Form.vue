@@ -3,102 +3,214 @@
     <!-- 標題 -->
 
     <div>
-      <h2 sm="12">{{ disp_headertitle }}</h2>
+      <h2 sm="12">
+        {{ disp_headertitle }}
+      </h2>
     </div>
     <!-- Basic -->
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_basicDeviceName }}</CRow>
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+    >
+      {{ disp_basicDeviceName }}
+    </CRow>
     <CRow>
       <CCol sm="6">
-        <CInput size="lg" class="h5" v-model="localStep1form.name"
-          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')" :is-valid="isFieldPassed('name', localStep1form.name)"
-          required />
+        <CInput
+          size="lg"
+          class="h5"
+          v-model="localStep1form.name"
+          :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+          :is-valid="isFieldPassed('name', localStep1form.name)"
+          required
+        />
       </CCol>
     </CRow>
 
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_basicDeviceGroups }}</CRow>
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+    >
+      {{ disp_basicDeviceGroups }}
+    </CRow>
     <CRow>
       <CCol sm="6">
-        <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-          :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-          v-model="localStep1form.divice_groups" :options="param_deviceGroupsList">
-        </multiselect>
+        <multiselect
+          placeholder=""
+          :multiple="true"
+          :hide-selected="true"
+          :searchable="false"
+          :select-label="disp_select"
+          :selected-label="disp_selected"
+          :deselect-label="disp_deselect"
+          v-model="localStep1form.divice_groups"
+          :options="param_deviceGroupsList"
+        />
       </CCol>
     </CRow>
 
-    <div style="height: 35px"></div>
+    <div style="height: 35px" />
 
     <!-- Video Source -->
     <div>
-      <h2 sm="12">{{ disp_subtitle }}</h2>
+      <h2 sm="12">
+        {{ disp_subtitle }}
+      </h2>
     </div>
 
-    <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_type }}</CRow>
+    <CRow
+      sm="12"
+      class="h5 ml-2 mb-3"
+      style="padding-top: 10px; text-align: right"
+    >
+      {{ disp_type }}
+    </CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" :value.sync="localStep1form.stream_type" :options="value_deviceTypesList" />
+        <CSelect
+          size="lg"
+          :value.sync="localStep1form.stream_type"
+          :options="value_deviceTypesList"
+        />
       </CCol>
     </CRow>
 
     <!-- 類型等於sdp時 -->
-    <div id="type" v-if="localStep1form.stream_type !== 'rtsp'">
-      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_parameters }}</CRow>
+    <div
+      id="type"
+      v-if="localStep1form.stream_type !== 'rtsp'"
+    >
+      <CRow
+        sm="12"
+        class="h5 ml-2 mb-3"
+        style="padding-top: 10px; text-align: right"
+      >
+        {{ disp_parameters }}
+      </CRow>
       <CRow>
-        <textarea class="ml-3 mb-3 form-control" v-model="localStep1form.connection_info" rows="5"
-          :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="
+        <textarea
+          class="ml-3 mb-3 form-control"
+          v-model="localStep1form.connection_info"
+          rows="5"
+          :invalid-feedback="$t('NoEmptyNoSpace')"
+          :is-valid="
             isFieldPassed('connection_info', localStep1form.connection_info)
-          " required>
-        </textarea>
+          "
+          required
+        />
       </CRow>
 
       <div v-if="isShowConnectionString">
-        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_connectionString }}
+        <CRow
+          sm="12"
+          class="h5 ml-2 mb-3"
+          style="padding-top: 10px; text-align: right"
+        >
+          {{ disp_connectionString }}
         </CRow>
         <CRow>
           <CCol sm="12">
-            <CInput size="lg" class="h5" style="width: 100%" v-model="connectionString" disabled="disabled" />
+            <CInput
+              size="lg"
+              class="h5"
+              style="width: 100%"
+              v-model="connectionString"
+              disabled="disabled"
+            />
           </CCol>
         </CRow>
       </div>
     </div>
 
     <!-- rtsp時 -->
-    <div id="type" v-else>
+    <div
+      id="type"
+      v-else
+    >
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_ipAddress }}
-            <CInput size="lg" class="mt-2" style="width: 100%" v-model="localStep1form.ip_address"
+            <CInput
+              size="lg"
+              class="mt-2"
+              style="width: 100%"
+              v-model="localStep1form.ip_address"
               :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)" required />
+              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
+              required
+            />
           </CCol>
 
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_port }}
-            <CInput size="lg" class="mt-2" style="width: 100%" v-model.number="localStep1form.port"
-              :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="isFieldPassed('port', localStep1form.port)"
-              required />
+            <CInput
+              size="lg"
+              class="mt-2"
+              style="width: 100%"
+              v-model.number="localStep1form.port"
+              :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('port', localStep1form.port)"
+              required
+            />
           </CCol>
         </CRow>
       </div>
 
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_username }}
-            <CInput size="lg" class="mt-2" style="width: 100%" v-model="localStep1form.user"
-              :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="isFieldPassed('user', localStep1form.user)"
-              required />
+            <CInput
+              size="lg"
+              class="mt-2"
+              style="width: 100%"
+              v-model="localStep1form.user"
+              :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('user', localStep1form.user)"
+              required
+            />
           </CCol>
 
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_password }}
-            <CInput size="lg" :type="flag_view_password ? 'text' : 'password'" class="mt-2" style="width: 100%"
-              v-model="localStep1form.pass" :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('pass', localStep1form.pass)" required>
+            <CInput
+              size="lg"
+              :type="flag_view_password ? 'text' : 'password'"
+              class="mt-2"
+              style="width: 100%"
+              v-model="localStep1form.pass"
+              :invalid-feedback="$t('NoEmptyNoSpace')"
+              :is-valid="isFieldPassed('pass', localStep1form.pass)"
+              required
+            >
               <template #append-content>
-                <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                  <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                  <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                <CButton
+                  @click="viewPassword"
+                  style="padding: 0.375rem 0.375rem;"
+                >
+                  <CIcon
+                    v-show="flag_view_password"
+                    src="/img/eye-slash.png"
+                  />
+                  <CIcon
+                    v-show="!flag_view_password"
+                    src="/img/eye.png"
+                  />
                 </CButton>
               </template>
             </CInput>
@@ -106,22 +218,46 @@
         </CRow>
       </div>
 
-      <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_parameters }}</CRow>
+      <CRow
+        sm="12"
+        class="h5 ml-2 mb-3"
+        style="padding-top: 10px; text-align: right"
+      >
+        {{ disp_parameters }}
+      </CRow>
       <CRow>
         <CCol sm="6">
-          <CInput size="lg" class="h5" style="width: 100%" v-model="localStep1form.connection_info"
-            :invalid-feedback="$t('NoEmptyNoSpace')" :is-valid="
+          <CInput
+            size="lg"
+            class="h5"
+            style="width: 100%"
+            v-model="localStep1form.connection_info"
+            :invalid-feedback="$t('NoEmptyNoSpace')"
+            :is-valid="
               isFieldPassed('connection_info', localStep1form.connection_info)
-            " required />
+            "
+            required
+          />
         </CCol>
       </CRow>
 
       <div v-if="isShowConnectionString">
-        <CRow sm="12" class="h5 ml-2 mb-3" style="padding-top: 10px; text-align: right">{{ disp_connectionString }}
+        <CRow
+          sm="12"
+          class="h5 ml-2 mb-3"
+          style="padding-top: 10px; text-align: right"
+        >
+          {{ disp_connectionString }}
         </CRow>
         <CRow>
           <CCol sm="12">
-            <CInput size="lg" class="h5" style="width: 100%" v-model="connectionString" disabled="disabled" />
+            <CInput
+              size="lg"
+              class="h5"
+              style="width: 100%"
+              v-model="connectionString"
+              disabled="disabled"
+            />
           </CCol>
         </CRow>
       </div>
@@ -138,14 +274,23 @@ import '@/airacss/vue-multiselect.css';
 export default {
   name: 'AddCamerasStep1Form',
   props: {
-    step1form: Object,
-    defaultValues: Object,
-    isFieldPassed: Function,
+    step1form: {
+      type: Object,
+      default: () => ({}),
+    },
+    defaultValues: {
+      type: Object,
+      default: () => ({}),
+    },
+    isFieldPassed: {
+      type: Function,
+      default: () => () => true,
+    },
   },
   emits: ['updateStep1form'],
   data() {
     return {
-      localStep1form: { ...this.step1form },
+      localStep1form: {},
 
       param_deviceGroupsList: [],
       param_deviceGroupsValue: [],
@@ -256,6 +401,9 @@ export default {
       deep: true,
       immediate: true,
     },
+  },
+  created() {
+    this.localStep1form = { ...this.step1form };
   },
   mounted() {
     this.formatNameList();

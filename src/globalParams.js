@@ -11,9 +11,11 @@ import i18n from '@/i18n';
 
 Vue.use(CoreuiVue);
 
-global.webVersion = '1130';
+/* eslint-disable */
 
-const TEST_MODE = true;
+global.webVersion = '1205.1652';
+
+const TEST_MODE = process.env.NODE_ENV === 'development'; 
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
 const TEST_HOST = '192.168.10.122'; // airaFace2

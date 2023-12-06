@@ -1,0 +1,831 @@
+,en,zh,jp,es,fr,th
+Reports,Reports,報表,レポート,Informes,Rapports,รายงาน
+Devices,Device,設備,デバイス,Dispositivo,Appareil,อุปกรณ์
+PersonsManagement,Person,人員,パーソン,Persona,Personne,บุคคล
+VisitorsManagement,Visitor,訪客,ビジター,Visitante,Visiteur,ผู้มาเยือน
+Person,Person,人員,パーソン,Persona,Personne,บุคคล
+Visitor,Visitor,訪客,ビジター,Visitante,Visiteur,ผู้มาเยือน
+Settings,Settings,設定,設定,Colocar,Paramètres,การตั้งค่า
+PersonReport,Person Report,人員報表,パーソン,Informe de personal,Rapport de la personne,รายงานบุคคล
+VisitorReport,Visitor Report,訪客報表,ビジター,Informe de visitante,Rapport des visiteurs,รายงานผู้เยี่ยมชม
+AddPerson,Add Person,新增人員,パーソン追加,Agregar persona,Ajouter une personne,เพิ่มบุคคล
+AddVisitor,Add Visitor,新增訪客,ビジター追加,Agregar visitante,Ajouter un visiteur,เพิ่มผู้เยี่ยมชม
+ModifyPerson,Modify Person,修改人員,パーソン編集,Modificar a la persona,Modifier la personne,ปรับเปลี่ยนบุคคล
+ModifyVisitor,Modify Visitor,修改訪客,ビジター編集,Modificar el visitante,Modifier un visiteur,ปรับเปลี่ยนผู้เยี่ยมชม
+InputPersonInfo,Input Person Info,輸入人員資訊,パーソン情報,Información de la persona de entrada,Informations sur la personne d'entrée,ข้อมูลบุคคลป้อนข้อมูล
+InputVisitorInfo,Input Visitor Info,輸入訪客資訊,ビジター情報,Información del visitante de entrada,Informations sur les visiteurs d'entrée,ข้อมูลผู้เข้าชมป้อนข้อมูล
+InputGroupInfo,Input Group Info,輸入群組資訊,グループ情報,Información del grupo de entrada,Informations sur le groupe d'entrée,ข้อมูลกลุ่มอินพุต
+SelectGroupPerson,Select Person,選擇群組人員,パーソン選択,Seleccionar Persona,Sélectionner la personne,เลือกบุคคล
+SelectRegisterPhoto,Select Registered Photo,選擇註冊照片,写真選択,Seleccione Foto registrada,Sélectionnez la photo enregistrée,เลือกรูปภาพที่ลงทะเบียน
+CapturedPhoto,Captured Photo,抓拍照片,撮影した写真,Foto capturada,Photo capturée,ภาพที่จับได้
+RegisterPhoto,Registered photo,註冊時的照片,登録写真,Foto registrada,Photo enregistrée,ภาพถ่ายที่ลงทะเบียน
+DisplayPhoto,Photo for display,顯示用的照片,表示する写真,Foto para la pantalla,Photo pour l'affichage,รูปภาพสำหรับการแสดงผล
+Register,Register,註冊,登録,Registro,Enregistrer,ลงทะเบียน
+Complete,Complete,完成,完了,Completo,Achevé,สมบูรณ์
+CompleteAndRestart,"Complete, system will restart in 60 sec, please wait.","完成, 系統將會在 60秒 內重新啟動, 請稍待",システムは60秒以内に再起動します 暫くお待ちください,"Completado, el sistema se reiniciará en 60 segundos, espere un poco","Achevé, le système va redémarrer dans 60 sec, merci de patienter",เสร็จสิ้นระบบจะรีสตาร์ทใน 60 วินาทีโปรดรอ
+Confirm,Confirm,確定,確認,Confirmar,Confirmer,ยืนยัน
+ConfirmToDelete,Are you sure to delete?,你確定要刪除嗎？,本当に削除しますか？,¿Estás seguro de eliminar?,Êtes-vous sûr de vouloir supprimer?,คุณแน่ใจว่าจะลบ?
+ConfirmToProcess,Are you sure to proceed ?,你確定要這樣做嗎？,これを確実に行いますか？,¿Estás seguro de continuar?,Êtes-vous sûr de continuer?,คุณแน่ใจว่าจะดำเนินการต่อไป?
+ConfirmToChangeNetwork,Please confirm modification. You may have to reconnect,確定要變更？你將需要重新連線,再接続が必要ですが宜しいですか？,Confirme la modificación. Puede que tengas que volver a conectarte,Veuillez confirmer la modification. Vous devrez peut-être vous reconnecter,โปรดยืนยันการดัดแปลง คุณอาจต้องเชื่อมต่ออีกครั้ง
+OK,OK,確定,OK,DE ACUERDO,VALIDE,ตกลง
+Cancel,Cancel,取消,キャンセル,Cancelar,Annuler,ยกเลิก
+Failed,Failed,失敗,失敗,Fallido,Échoué,ล้มเหลว
+Successful,Successful,成功,成功,Exitoso,Réussi,ประสบความสำเร็จ
+RegisterFailed,Registration Failed,註冊失敗,登録失敗,Registro fallido,Échec de l'enregistrement,การลงทะเบียนไม่สำเร็จ
+RegisterCompleted,Registration Completed,註冊完成,登録完了,Registro completado,Inscription terminée,การลงทะเบียนเสร็จสมบูรณ์
+NetworkLoss,Network Loss,連線失敗,ネットワークロス,Pérdida de red,Perte de réseau,การสูญเสียเครือข่าย
+LostConnection,Lost Connection,失去連線,接続断,Conexión perdida,Connexion perdue,การเชื่อมต่อที่หายไป
+OperationFailed,Operation Failed,操作失敗,操作失敗,Operación fallida,L'opération a échoué,การดำเนินการล้มเหลว
+CannotBeBlank,Can not be Blank!,不能為空,フィールドの空白 スペース は使えません,¡No puede estar en blanco!,Ne peut être vide!,ไม่ว่าง!
+Blank,Blank,空白,空白,Blanco,Vide,ว่างเปล่า
+GET,GET,GET,GET,CONSEGUIR,OBTENIR,รับ
+POST,POST,POST,POST,CORREO,POSTE,โพสต์
+Default,Default,預設,プリセット,Por defecto,Défaut,ค่าเริ่มต้น
+Custom,Custom,客製化,カスタマイズ,Costumbre,Personalisé,กำหนดเอง
+Next,Next,下一步,次,Próximo,Suivant,ต่อไป
+Previous,Previous,上一步,前,Anterior,Précédent,ก่อนหน้า
+PersonId,Person ID,人員編號,パーソンID,ID de persona,ID de personne,รหัสบุคคล
+PersonName,Person Name,人員姓名,パーソン名,Nombre de la persona,Nom de la personne,ชื่อบุคคล
+VisitorId,Visitor ID,訪客編號,ビジターID,ID de visitante,ID du visiteur,รหัสผู้เยี่ยมชม
+VisitorName,Visitor Name,訪客姓名,ビジター名,Nombre del visitante,Nom du visiteur,ชื่อผู้เยี่ยมชม
+Department,Department,部門,部署,Departamento,Département,แผนก
+JobTitle,Job Title,職稱,タイトル,Título profesional,Titre d'emploi,ตำแหน่งงาน
+Group,Group,群組,グループ,Grupo,Groupe,กลุ่ม
+AssignedGroup,Central Assigned Group,中央指派群組,中央割り当てグループ,Grupo asignado central,Groupe central assigné,กลุ่มที่ได้รับมอบหมายส่วนกลาง
+GroupName,Group Name,群組名稱,グループ名,Nombre del grupo,Nom de groupe,ชื่อกลุ่ม
+NumberOfPersonInGroup,Persons,人員數量,パーソン,Personas,Personnes,บุคคล
+NumberOfVisitorInGroup,Visitors,訪客數量,ビジター,Visitantes,Visiteurs,ผู้เยี่ยมชม
+CreateDate,Create Date,建立時間,登録日,Fecha de Creación,créer un rendez-vous,วันที่สร้าง
+Create,Create,創建,登録,Crear,Créer,สร้าง
+NumbersOnly,Numbers Only,僅能使用數字,数字が必要,Solo numeros,Chiffres uniquement,ตัวเลขเท่านั้น
+MoreThan4lettersAndNumbers,"At least 4 alphanumeric characters, and must not be duplicated with other person IDs.",至少 4 個英數字符且不與其他人員編號重複,最低4文字の英数字で、他の従業員番号と重複していてはいけません。,"Al menos 4 personajes alfanuméricos, y no deben duplicarse con otras identificaciones de persona.",Au moins 4 caractères alphanumériques et ne doivent pas être dupliqués avec d'autres ID de personne.,อย่างน้อย 4 ตัวอักษรตัวอักษรและตัวเลขและต้องไม่ซ้ำกับรหัสบุคคลอื่น
+NoEmptyNoSpace,Cannot be empty or blank.,不能為空或空白,空または空白にすることはできません,No puede estar vacío o en blanco.,Ne peut pas être vide ou vide.,ไม่สามารถว่างเปล่าหรือว่างเปล่า
+NoEmptyNoSpaceNoSpecial,"Cannot be empty nor included spaces, special characters.",不能為空、空格或特殊字元,空、スペース、特殊文字は使用できません,"No puede estar vacío ni espacios incluidos, caracteres especiales.","Ne peut pas être vide ni inclus des espaces, des caractères spéciaux.",ไม่สามารถว่างเปล่าหรือรวมถึงช่องว่างอักขระพิเศษ
+NoEmptyNoSpaceOnly,Cannot be empty or blank.,不能為空或空白,空または空白にすることはできません,No puede estar vacío o en blanco.,Ne peut pas être vide ou vide.,ไม่สามารถว่างเปล่าหรือว่างเปล่า
+NoEmptyNorSpaceNeigherRepeat,"Cannot be empty, cannot be duplicated",不能為空，不能重複,空にすることはできず、繰り返すこともできません,"No puede estar vacío, no se puede duplicar","Ne peut pas être vide, ne peut pas être dupliqué",ไม่สามารถว่างเปล่าไม่สามารถทำซ้ำได้
+PasswordIsDifferent,Passwords do not match,密碼不匹配,パスワードが一致していません,Las contraseñas no coinciden,Les mots de passe ne correspondent pas,รหัสผ่านไม่ตรงกัน
+EffectiveDate,Effective Date,生效日期,発効日,Fecha efectiva,Date effective,วันที่มีผล
+ExpireDate,Expiration Date,失效日期,有効期限,Fecha de Expiración,Date d'expiration,วันหมดอายุ
+EffectivOn,Effective On,生效於,開始日,Efectivo sobre,Efficace sur,มีผลต่อ
+ExpireOn,Expire On,失效於,満了日,Vence en,Expire le,หมดอายุ
+Select,Select,選擇,選択,Seleccionar,Sélectionner,เลือก
+Selected,Selected,已選擇,選択済み,Seleccionado,Choisi,ที่เลือก
+Deselect,Deselect,移除選擇,選択解除,Deseleccionar,Désélectionner,ยกเลิกการเลือก
+CardNumber,Card Number,卡號,カード番号,Número de tarjeta,Numéro de carte,หมายเลขบัตร
+EmailAddress,Email Address,電子信箱,Emailアドレス,Dirección de correo electrónico,Adresse e-mail,ที่อยู่อีเมล
+ExtensionNumber,Extension Number,分機號碼,内線番号,Número de extensión,Numéro de poste,หมายเลขส่วนขยาย
+PhoneNumber,Phone Number,電話號碼,電話番号,Número de teléfono,Numéro de téléphone,หมายเลขโทรศัพท์
+Remarks,Remarks,備註,備考,Observaciones,Remarques,หมายเหตุ
+SelectPhoto,Select Photo,選擇照片,選択,Seleccione Foto,Sélectionner la photo,เลือกรูปภาพ
+TakePhoto,Take Photo,拍攝照片,撮影,Tomar foto,Prendre une photo,ถ่ายภาพ
+UseWebCamPhoto,Use Photo,使用照片,写真,Usar foto,Utiliser la photo,ใช้รูปภาพ
+Add,Add,新增,追加,Agregar,Ajouter,เพิ่ม
+Template,Download Template,下載範本,テンプレートをダウンロード,Plantilla de descarga,Télécharger le modèle,ดาวน์โหลดเทมเพลต
+Import,Import,匯入,インポート,Importar,Importer,นำเข้า
+Export,Export,匯出,エクスポート,Exportar,Exporter,ส่งออก
+Return,Return,返回,戻る,Devolver,Retour,กลับ
+Delete,Delete,刪除,削除,Borrar,Supprimer,ลบ
+Modify,Modify,編輯,編集,Modificar,Modifier,แก้ไข
+Search,Search,搜尋,検索,Buscar,Recherche,ค้นหา
+CreateGroup,Create Group,創建群組,グループ登録,Crea un grupo,Créer un groupe,สร้างกลุ่ม
+ModifyGroup,Modify Group,修改群組,グループ編集,Modificar grupo,Modifier le groupe,แก้ไขกลุ่ม
+Insert,Insert,加入,追加,Insertar,Insérer,แทรก
+Remove,Remove,移除,削除,Eliminar,Retirer,ลบ
+JSON,JSON,JSON,JSON,Json,Json,JSON
+XML,XML,XML,XML,Xml,Xml,XML
+JSONType,JSON Format,JSON 格式,JSON タイプ,Formato json,Format JSON,รูปแบบ JSON
+XMLType,XML Format,XML 格式,XML タイプ,Formato XML,Format XML,รูปแบบ xml
+InvalidURL,Invalid URL,無效URL格式,無效URLタイプ,URL invalida,URL invalide,URL ไม่ถูกต้อง
+InvalidJSON,Invalid JSON,無效JSON格式,無効JSONタイプ,JSON no válido,JSON non valide,JSON ไม่ถูกต้อง
+InvalidXML,Invalid XML,無效XML格式,無効XMLタイプ,XML inválido,XML non valide,XML ไม่ถูกต้อง
+InvalidQueryString,Invalid QueryString,無效QueryString格式,無效QueryStringタイプ,Consulta no válida,Requêtes non valides,Querystring ไม่ถูกต้อง
+PersonList,Person List,人員列表,パーソンリスト,Lista de personas,Liste de personnes,รายชื่อบุคคล
+VisitorList,Visitor List,訪客列表,ビジターリスト,Lista de visitantes,Liste des visiteurs,รายชื่อผู้เยี่ยมชม
+SystemSettings,System Settings,系統設定,システム設定,Ajustes del sistema,Les paramètres du système,การตั้งค่าระบบ
+GeneralSettings,General Settings,一般設定,全般設定,Configuración general,réglages généraux,การตั้งค่าทั่วไป
+NetworkSettings,Network Settings,網路設定,ネットワーク設定,Configuración de la red,Paramètres réseau,การตั้งค่าเครือข่าย
+Enable,Enable,啟用,有効,Habilitar,Activer,เปิดใช้งาน
+Disable,Disable,停用,無効,Deshabilitar,Désactiver,ปิดการใช้งาน
+WifiSettings,Wi-Fi Settings,無線網路設定,Wi-Fi設定,Configuración de Wi-Fi,Paramètres Wifi,การตั้งค่า Wi-Fi
+LanSettings,LAN Settings,有線網路設定,LAN設定,Configuración de LAN,Paramètres lan,การตั้งค่า LAN
+Linked,Connected,已連線,接続済み,Conectado,Connecté,ซึ่งเชื่อมต่อกัน
+NotLinked,Not Connected,未連線,接続されていません,No conectado,Pas connecté,ไม่ได้เชื่อมต่อ
+CurrentSsid,Current SSID,目前 SSID,現在のSSID,SSID actual,SSID actuel,SSID ปัจจุบัน
+CurrentIpAddress,Current IP Address,目前 IP 位址,現在のIPアドレス,Dirección IP actual,Adresse IP actuelle,ที่อยู่ IP ปัจจุบัน
+WifiPassword,Wi-Fi Password,無線網路密碼,Wi-Fiパスワード,Contraseña de wifi,Mot de passe WiFi,รหัสผ่าน Wi-Fi
+WifiSsid,Wi-Fi SSID,無線網路 SSID,Wi-Fi SSID,Wi-Fi SSID,Wi-Fi SSID,Wi-Fi SSID
+AvailableWifi,Available Wi-Fi SSID,可用的無線網路,利用可能なWi-Fi SSID,Wi-Fi SSID disponible,SSID Wi-Fi disponible,Wi-Fi SSID ที่มีอยู่
+Apply,Apply,套用,適用,Aplicar,Appliquer,นำมาใช้
+PriorityIsEthernet,( Wired Network Preferred),(有線網路優先),(有線ネットワークが好ましい),(Red Wired preferida),(Réseau câblé préféré),(ต้องการเครือข่ายแบบใช้สาย)
+EthernetMode,Ethernet Mode,區域網路模式,イーサネットモード,Modo Ethernet,Mode Ethernet,โหมดอีเธอร์เน็ต
+IpAddress,IP Address,IP 位址,IPアドレス,Dirección IP,Adresse IP,ที่อยู่ IP
+Netmask,Subnet Mask,子網路遮罩,ネットマスク,Máscara de subred,Masque de sous-réseau,หน้ากากซับเน็ต
+Gateway,Default Gateway,閘道,ゲートウェイ,Puerta de enlace predeterminada,Passerelle par défaut,เกตเวย์เริ่มต้น
+DNS,DNS,DNS,DNS,DNS,DNS,DNS
+TimeSettings,Time Settings,時間設置,時間設定,Configuración de Hora,Paramètres de temps,การตั้งค่าเวลา
+CurrentSystemTime,Current System Time,目前系統時間,現在のシステム時間,Tiempo actual del sistema,Heure du système actuel,เวลาระบบปัจจุบัน
+CurrentLocalTime,Local Time,本地時間,ローカル時間,Hora local,Heure locale,เวลาท้องถิ่น
+CurrentDeviceTime,Device Time,裝置時間,デバイス時間,Tiempo del dispositivo,Heure de l'appareil,เวลาอุปกรณ์
+NtpServer,NTP Server,時間伺服器,NTPサーバー,Servidor NTP,Serveur NTP,เซิร์ฟเวอร์ NTP
+Timezone,Time Zone,時區,タイムゾーン,Zona horaria,Fuseau horaire,เขตเวลา
+SynyMethodLocalTime,Sync with local time,與本地時間同步,ローカル時間と同期,Sincronizar con la hora local,Synchroniser avec l'heure locale,ซิงค์กับเวลาท้องถิ่น
+SynyMethodNtpServer,Sync with NTP server,與時間伺服器同步,NTPサーバーと同期,Sincronizar con el servidor NTP,Synchroniser avec le serveur NTP,ซิงค์กับเซิร์ฟเวอร์ NTP
+FactoryDefault,Factory Default,系統重設,初期化,Predeterminado de fábrica,Défaut de fabrication,ค่าเริ่มต้นจากโรงงาน
+Excecute,Excecute,執行,実行,Ejecutar,Exécuter,ทำให้ดีขึ้น
+ConfirmToFactoryDefault,Will lost all data and reboot,將刪除所有資料，系統將重新啟動,全てのデータが削除され再起動します,Se perderán todos los datos y se reiniciará,Toutes les données seront effacées et le système redémarrera,จะสูญเสียข้อมูลทั้งหมดและรีบูต
+Reboot,Reboot,重新開機,再起動,Reiniciar,Redémarrer,รีบูต
+ConfirmToReboot,System will reboot,系統將重新啟動,システム再起動,El sistema se reiniciará,Le système redémarrera,ระบบจะรีบูต
+BackupAndRestore,Backup & Restore,備份與還原,バックアップ&リストア,Copia de seguridad de restauracion,Restauration de sauvegarde,สำรองและกู้คืน
+RestoreDatabase,Restore Database,還原資料庫,リストアDB,Restaurar base de datos,Restaurer la base de données,กู้คืนฐานข้อมูล
+BackupDatabase,Backup Database,備份資料庫,バックアップDB,Base de datos de respaldo,Base de données de sauvegarde,ฐานข้อมูลสำรอง
+Download,Download,下載,ダウンロード,Descargar,Télécharger,การดาวน์โหลด
+Upload,Upload,上傳,アップロード,Subir,Télécharger,ที่อัพโหลด
+UpgradeSoftware,Upgrade Software,軟體更新,アップグレード,Software de actualización,MAJ progiciel,อัพเกรดซอฟต์แวร์
+TurnsIpCamera,Video Output (RTSP),影像輸出 (RTSP),ビデオ出力（RTSP）,Salida de video (RTSP),Flux vidéo (RTSP),เอาต์พุตวิดีโอ (RTSP)
+Account,Account Name,帳號,アカウント,Nombre de la cuenta,Nom du compte,ชื่อบัญชี
+Username,Username,帳號,ユーザー名,Nombre de usuario,Nom d'utilisateur,ชื่อผู้ใช้
+Password,Password,密碼,パスワード,Contraseña,Mot de passe,รหัสผ่าน
+ConfirmPassword,Confirm Password,確認密碼,再入力,confirmar Contraseña,Confirmez le mot de passe,ยืนยันรหัสผ่าน
+ClockinMode,Time Clock Mode,打卡鐘模式,出退勤モード,Modo de reloj de tiempo,Mode horloge de temps,โหมดนาฬิกาเวลา
+ClockIn,Clock In,上班,出社,Registrar Entrada,ENTRER,นาฬิกาใน
+ClockOut,Clock Out,下班,退出,Registrar Salida,SORTIR,นาฬิกาออก
+WorkingTime,Working hours,上班時數,勤務時間,Horas Laborales,Heures d'ouverture,ชั่วโมงทำงาน
+Overtime,Overtime hours,加班時數,残業時間,Horas extras,Heures supplémentaires,ชั่วโมงการทำงานล่วงเวลา
+EnableIntercom,Enable Intercom,啟用,有効,Habilitar intercomunicador,Activer l'interphone,เปิดใช้งานอินเตอร์คอม
+DisableIntercom,Disable Intercom,停用,無効,Deshabilitar el intercomunicador,Désactiver l'interphone,ปิดการใช้งานอินเตอร์คอม
+FaceVerifySettings,Recognition Parameters,辨識參數,顔認識パラメータ,Parámetros de reconocimiento,Paramètres de reconnaissance,พารามิเตอร์การจดจำ
+VerifyThreshold,Recognition Threshold,辨識閥值,認識閾値,Umbral de reconocimiento,Seuil de reconnaissance,เกณฑ์การรับรู้
+AntiSpoofingThreshold,Anti Spoofing Threshold,防偽閥值,なりすまし防止閾値,Umbral contra la falsificación,Seuil anti-usurpation,เกณฑ์ต่อต้านการปลอมแปลง
+FaceMaskDetection,Masks are required to pass,需要戴口罩才能通過,通過にはマスク必須,Se requieren máscaras para pasar,Les masques sont nécessaires pour passer,ต้องใช้หน้ากากในการผ่าน
+Yes,Yes,是,はい,Sí,Oui,ใช่
+No,No,否,いいえ,No,Non,เลขที่
+TabletDisplaySettings,Recognition Result Display Settings (Tablet),平板顯示設定,認識結果表示設定（タブレット）,Configuración de visualización de resultados de reconocimiento (tableta),Paramètres d'affichage des résultats de reconnaissance (tablette),การตั้งค่าการรับรู้ผลการแสดงผล (แท็บเล็ต)
+VerifyResultPhoto,Shown Photo,顯示的照片,示された写真,Foto mostrada,Photo montrée,ภาพที่แสดง
+ShowVerifyIndication,Show Result Prompt,顯示結果提示,結果プロンプトを表示,Mostrar Mensaje de Resultado,Afficher l'invite des résultats,แสดงผลที่ตามมา
+VerifyResultDisplayDuration,Result Display Duration (milliseconds),辨識結果顯示時間(毫秒),識別結果表示時間(ミリ秒),Duración de la visualización de resultados (milisegundos),Durée d'affichage des résultats (millisecondes),ระยะเวลาแสดงผล (มิลลิวินาที)
+TemperatureDisplayingUnit,Temperature Unit,溫度顯示單位,温度単位,Unidad de temperatura,Unité de température,อุณหภูมิ
+Celsius,(°C),(°C),摂氏 (°C),(° C),(° C),(° C)
+Fahrenheit,(°F),(°F),華氏 (°F),(° F),(° F),(° F)
+AlarmVolume,Alarm Volume,警示音量,アラーム音量,Volumen de alarma,Volume d'alarme,ปริมาณการเตือนภัย
+AlarmSettings,Alarm Settings,警示設定,アラーム設定,Configuración de alarma,Paramètres d'alarme,การตั้งค่าการเตือนภัย
+AccountManagement,Account,帳號管理,アカウント,Cuenta,Compte,บัญชี
+SaveChanges,Save Changes,儲存變更,保存,Guardar cambios,Sauvegarder les modifications,บันทึกการเปลี่ยนแปลง
+Permission,Permission,權限,権限,Permiso,Autorisation,การอนุญาต
+AccessControl,Access Control,門禁,アクセスレベル,Control de acceso,Contrôle d'accès,การควบคุมการเข้าถึง
+AccessControlManagement,Settings Management,門禁管理,設定,Gestión de configuraciones,Gestion des paramètres,การจัดการการตั้งค่า
+AccessControlSettingsList,Access Control Settings List,門禁設定列表,アクセスレベル設定リスト,Lista de configuración de control de acceso,Liste des paramètres de contrôle d'accès,รายการการตั้งค่าการควบคุมการเข้าถึง
+AccessControlDeviceSettings,Device Settings,門禁裝置設定,デバイス,Configuración de dispositivo,Réglages de l'appareil,การตั้งค่าอุปกรณ์
+SettingName,Setting Name,設定名稱,設定名,Nombre de configuración,Nom de réglage,ชื่อการตั้งค่า
+EnableIdCard,Enable Card Reader Access,啟用讀卡通行,カードリーダーへのアクセスを有効にする,Habilitar el acceso al lector de tarjetas,Activer l'accès au lecteur de carte,เปิดใช้งานการเข้าถึงเครื่องอ่านการ์ด
+EnableTwoFactorAuthentication,Two Factor Authentication,啟用雙重認證,2ファクタ認証,Autenticación de dos factores,Authentification à deux facteurs,การรับรองความถูกต้องสองปัจจัย
+HighTemperatureThreshold,High Temperature Threshold,體溫過高閥值,温度閾値,Umbral de alta temperatura,Seuil de température élevée,เกณฑ์อุณหภูมิสูง
+CreateAccessControl,Create Access Control,新增門禁,アクセスレベル追加,Crear control de acceso,Créer un contrôle d'accès,สร้างการควบคุมการเข้าถึง
+ModifyAccessControl,Modify Access Control,編輯門禁,アクセスレベル編集,Modificar el control de acceso,Modifier le contrôle d'accès,ปรับเปลี่ยนการควบคุมการเข้าถึง
+InputAccessControlInfo,Access Control Info,輸入門禁資訊,アクセスレベル,Información de control de acceso,Informations sur le contrôle d'accès,ข้อมูลการควบคุมการเข้าถึง
+AccessControlName,Access Control Name,門禁名稱,名前,Nombre de control de acceso,Nom du contrôle d'accès,ชื่อการควบคุมการเข้าถึง
+AccessControlDeviceType,Type,門禁裝置類別,タイプ,Tipo,Taper,พิมพ์
+GroupToApply,Apply to Group,套用群組,グループ,Aplicar al grupo,Postuler au groupe,สมัครเป็นกลุ่ม
+Sun,Sun,日,日,Dom,Dim,ดวงอาทิตย์
+Mon,Mon,一,月,Lun,Lun,จอน
+Tue,Tue,二,火,Mar,Mar,อ.
+Wed,Wed,三,水,Mié,Mer,พุธ
+Thu,Thu,四,木,Jue,Jeu,พรี
+Fri,Fri,五,金,Vie,Ven,วันศุกร์
+Sat,Sat,六,土,Sáb,Sam,นั่ง
+Reset,Reset,重置,リセット,Restablecer,Réinitialiser,รีเซ็ต
+SelectedWeeklySchedule,Weekly Schedule,固定週間排程,スケジュール,Programación semanal,Horaire hebdomadaire,ตารางรายสัปดาห์
+SelectSchedule,Select Schedule,選擇排程,スケジュール,Seleccionar Horario,Sélectionner le calendrier,เลือกกำหนดการ
+SpecifiedDatetimeRange,Specified Date Range,指定日期範圍,指定された日付範囲,Rango de fecha especificado,Plage de dates spécifiée,ช่วงวันที่ระบุ
+SelectDatetimeRange,specify a date range,指定日期範圍,日付範囲を指定する,especificar un rango de fechas,Spécifiez une plage de dates,ระบุช่วงวันที่
+AM,AM,上午,AM,AM,AM,เช้า
+PM,PM,下午,PM,PM,PM,น.
+Time,TIME,時間,時間,TIEMPO,TEMPS,เวลา
+Day,DAY,日,日,DÍA,JOUR,วัน
+StartSignal,Start Signal,起始訊號,開始信号,Señal de inicio,Signal de démarrage,เริ่มสัญญาณ
+EndSignal,End Signal,結束訊號,終了信号,Señal final,Signal final,สัญญาณสิ้นสุด
+HoldingTime,Hold time (ms),維持時間（毫秒）,ホールド時間 (ミリ秒),Tiempo de retención (MS),Hold Time (MS),ค้างไว้เวลา (MS)
+WiegandFormat,Wiegand Format,韋根格式,フォーマット,Formato de wiegand,Format wiegand,รูปแบบ wiegand
+EnableStranger,Enable Stranger Card,啟用陌生人卡,見知らぬ人カードを有効にする,Habilitar tarjeta de extraña,Activer la carte Stranger,เปิดใช้งานการ์ด Stranger
+DisableStranger,Disable Stranger Card,停用陌生人卡,見知らぬ人カードを無効にする,Desactivar la tarjeta de extraña,Désactiver la carte Stranger,ปิดใช้งานการ์ด Stranger
+StrangerID,Stranger Card Number,陌生人卡號碼,見知らぬ人のカード番号,Número de tarjeta de extraña,Numéro de carte Stranger,หมายเลขบัตรแปลก ๆ
+IntercomUrl,Download,下載,ダウンロード,Descargar,Télécharger,การดาวน์โหลด
+Relay1,Relay 1,繼電器 1,リレー1,Relé 1,Relais 1,ถ่ายทอด 1
+Relay2,Relay 2,繼電器 2,リレー2,Relé 2,Relais 2,ถ่ายทอด 2
+Wiegand,Wiegand,韋根,ウィーガンド,Wiegand,Wiegand,wiegand
+Intercom,Intercom,門禁對講機,インターホン,Intercomunicador,Interphone,อินเตอร์คอม
+FaceDetectThreshold,Face Detection Threshold,人臉檢測閾值,顔検出のしきい値,Umbral de detección de la cara,Seuil de détection du visage,เกณฑ์การตรวจจับใบหน้า
+TabletInterfaceLangurage,Tablet Interface Language,平板介面語言,言語,Idioma de Interfaz de Tableta,Langue d'interface de tablette,ภาษาแท็บเล็ตอินเทอร์เฟซ
+TabletInterfaceLangurageList,Language,語言,言語,Idioma ,Langue,ภาษา
+TabletSystemPassword,Tablet Password,平板管理密碼,パスワード,Contraseña de tableta,Mot de passe de tablette,รหัสผ่านแท็บเล็ต
+AccountInfo,Account Info,帳號資訊,アカウント情報,Informacion de cuenta,Informations de compte,ข้อมูลบัญชี
+CreateAccount,Create Account,創建帳號,アカウント作成,Crear una cuenta,Créer un compte,สร้างบัญชี
+Events,Events,事件,イベント,Eventos,Événements,เหตุการณ์
+EventControlManagement,Event Management,事件管理,設定,Gestión de eventos,Gestion d'événements,การจัดการเหตุการณ์
+EventControlSettingsList,Settings List,事件管理列表,設定リスト,Lista de configuración,Liste des paramètres,รายการการตั้งค่า
+EventControlType,Event Type,事件類別,タイプ,Tipo de evento,Type d'événement,ประเภทเหตุการณ์
+CreateEventControl,Create Event,新增事件,イベント作成,Crear evento,Créer un évènement,สร้างเหตุการณ์
+InputEventControlInfo,Input Event Control Info,輸入事件資訊,イベント情報,Información de control de eventos de entrada,Informations sur le contrôle des événements d'entrée,ข้อมูลการควบคุมเหตุการณ์อินพุต
+InputEventControlNotify,Input Event Control Notify,輸入通知資訊,イベント通知,Notificar el control de eventos de entrada,Contrôle des événements d'entrée Rentifier,การควบคุมเหตุการณ์อินพุตแจ้งเตือน
+EventControlName,Event Control Name,事件名稱,イベント名,Nombre de control de eventos,Nom de contrôle des événements,ชื่อควบคุมเหตุการณ์
+LineNotify,LINE Notification,LINE 通知,LINE 通知,Notificación por LINE,Notification de ligne,การแจ้งเตือนสาย
+HttpCommand,HTTP Command,HTTP 命令,HTTP コマンド,Comando HTTP,Commande http,คำสั่ง http
+SendMail,E-Mail Notification,電子郵件通知,Email通知,Notificación de correo electrónico,Notification par e-mail,การแจ้งเตือนทางอีเมล
+Temperature,Temperature,體溫,温度,Temperatura,Température,อุณหภูมิ
+FieldKey,Field Key,欄位代碼,フィールドキー,Llave de campo,Clé de terrain,คีย์ฟิลด์
+FieldName,Field Name,欄位名稱,フィールド名,Nombre del campo,Nom de domaine,ชื่อฟิลด์
+FieldData,Field Data,欄位值,フィールド値,Datos de campo,Données sur le terrain,ข้อมูลภาคสนาม
+RepeatResult,Key cannot be repeated!,欄位不能重複!,フィールド 繰り返し不可,¡La clave no se puede repetir!,La clé ne peut pas être répétée!,คีย์ไม่สามารถทำซ้ำได้!
+RepeatFieldKey,Field Key cannot be repeated!,欄位代碼不能重複!,フィールドキー繰り返し不可,¡La tecla de campo no se puede repetir!,La clé de champ ne peut pas être répétée!,คีย์ฟิลด์ไม่สามารถทำซ้ำได้!
+LineAccessToken,LINE Channel access token,LINE 聊天室權杖,LINE チャネルアクセストークン,Token de Acceso a LINE,Jeton d'accès à canal de ligne,โทเค็นการเข้าถึงช่องทางสาย
+ContentField,Content,內容欄位,コンテンツ,Contenido,Contenu,เนื้อหา
+Body,Body,正文,本文,Cuerpo,Corps,ร่างกาย
+QueryString,URL parameter,URL 參數,URL パラメータ,Parámetro de URL,Paramètre URL,พารามิเตอร์ URL
+HostAddress,Host Address,主機位址,ホストアドレス,Dirección del servidor,Adresse de l'hôte,ที่อยู่โฮสต์
+HttpEnabledSSL,Enable SSL,啟用 SSL,Http SSL有効,Habilitar SSL,Activer SSL,เปิดใช้งาน SSL
+Port,Port,埠,ポート,Puerto,Port,ท่าเรือ
+HttpUrl,URL,URL,URL,Url,URL,url
+ShowCompleteUrl,Display URL,顯示URL,URL表示,Mostrar URL,URL d'affichage,แสดง URL
+SMTPMethod,SMTP Method,SMTP 方法,SMTPメソッド,Método SMTP,Méthode SMTP,วิธี SMTP
+SMTPEnabledSecure,Enable SMTPS,啟用 SMTPS,SMTPSを有効にする,Habilitar SMTPS,Activer SMTPS,เปิดใช้งาน SMTPS
+SMTPSender,Sender,寄件者,送信者,Remitente,Expéditeur,ผู้ส่ง
+SMTPSubject,Subject,主旨,主題,Sujeto,Sujet,เรื่อง
+SMTPTo,To,收件者,受信者,A,À,ถึง
+SMTPCC,CC,副本,コピー,CC,CC,ซีซี
+SMTPBCC,BCC,密件副本,秘密のコピー,BCC,BCC,BCC
+SystemLog,System Log,系統日誌,システムログ,Registro del sistema,Journal du système,บันทึกระบบ
+Level,Level,等級,レベル,Nivel,Niveau,ระดับ
+Info,Info,資訊,情報,Información,Info,ข้อมูล
+Displays,Boards,看板,ボード,Paneles,Planches,บอร์ด
+Welcome,Welcome Board,迎賓看板,ウェルカムボード,Panel de Bienvenida,Panneau de bienvenue,บอร์ดต้อนรับ
+Occupancy,Attendance Board,點名看板,出席ボード,Panel de Ocupación,Comité de fréquentation,คณะกรรมการเข้าร่วม
+Capacity,Occupancy Board,容留看板,占有ボード,Junta de ocupación,Comité d'occupation,บอร์ด
+ModifyWelcomeControl,Welcome Board Settings,迎賓看板設定,ウェルカムボードの設定,Configuración de Panel de Bienvenida,Paramètres de la carte de bienvenue,การตั้งค่าคณะกรรมการต้อนรับ
+ModifyOccupancyControl,Occupancy Board Settings,容留看板設定,占有ボードの設定,Configuración de Panel de Ocupación,Paramètres du conseil d'occupation,การตั้งค่าคณะกรรมการ
+ModifyCapacityControl,Attendance Board Settings,設定登記出勤,出席ボードの設定,Configuración de Panel de Asistencia,Paramètres du conseil d'assistance,การตั้งค่าคณะกรรมการเข้าร่วม
+CompanyInfo,Company Info,公司信息,会社情報,nformación de la Empresa,Information d'entreprise,ข้อมูล บริษัท
+Announcement,Announcement,公告,表示,Anuncio,Annonce,ประกาศ
+DigitalSignage,Digital Signage,數位看板,サイネージ,Señalización digital,Signalisation numérique,ป้ายดิจิตอล
+PersonnelInfo,Personnel Info,人員信息,パーソン情報,Información del personal,Informations sur le personnel,ข้อมูลบุคลากร
+BackgroundImage,Background Image,背景圖片,背景イメージ,Imagen de fondo,Image de fond,ภาพพื้นหลัง
+ChooseFile,Choose File,選擇檔案,選択,Elija el archivo,Choisir le fichier,เลือกไฟล์
+ChooseAnotherFile,Reselect,重新選擇,再選択,Volver a seleccionar,Sélectionner de nouveau,เลือกอีกครั้ง
+FileName,File Name :,檔案名稱 :,ファイル名 :,Nombre del archivo :,Nom de fichier :,ชื่อไฟล์ :
+Logo,Logo,商標,ロゴ,Logotipo,Logo,โลโก้
+CompanyName,Company Name,公司名稱,会社名,nombre de empresa,Nom de l'entreprise,ชื่อ บริษัท
+Color,Color,字體顏色,カラー,Color,Couleur,สี
+Font,Font,字體,フォント,Fuente,Police de caractère,แบบอักษร
+FontSize,Font Size,字體大小,フォントサイズ,Tamaño de fuente,Taille de police,ขนาดตัวอักษร
+GreetingMode,Greeting Mode,問候語模式,固定モード,Modo de saludo,Mode d'accueil,โหมดอวยพร
+AdvertisingMode,Advertising Mode,形象廣告模式,広告モード,Modo de publicidad,Mode publicitaire,โหมดโฆษณา
+Caption,Caption,標題,テキスト1,Subtítulo,Légende,คำบรรยาย
+Greeting,Greeting,問候語,テキスト2,Saludo,Salutation,การทักทาย
+Duration,Patrol time (second),輪巡時間 (秒),時間,Tiempo de patrulla (segundo),Temps de patrouille (deuxième),เวลาลาดตระเวน (วินาที)
+DeletePhoto,Delete Photo,刪除照片,削除,Borrar foto,Supprimer la photo,ลบรูปภาพ
+EnabledMask,Enabled Info Mask,人員資訊遮蔽,非表示,Máscara de información habilitada,Masque d'informations activé,เปิดใช้งานหน้ากากข้อมูล
+PersonInfo,Person Info,人員資訊,パーソン情報,Información de la persona,Informations sur la personne,ข้อมูลบุคคล
+DisplayGroup,Display Group,顯示群組,グループ,Grupo de visualización,Groupe d'affichage,กลุ่มแสดง
+OccupancySize,Occupancy Size,每頁人數,表示,Tamaño de ocupación,Taille d'occupation,ขนาดการเข้าพัก
+EntryChannel,Entered,已進入,入室,Ingresó,Entré,เข้าสู่
+ExitChannel,Exited,已離開,退室,Salido,Quitté,ทางออก
+ResetTime,Daily reset (hour),每日重置 (時),リセット時間,Restablecimiento diario (hora),Réinitialisation quotidienne (heure),รีเซ็ตรายวัน (ชั่วโมง)
+AbnormalColor,Abnormal Color,異常,異常,Color anormal,Couleur anormale,สีผิดปกติ
+EnteredColor,Entered Color,已進入,入室,Color entrado,Entré en couleur,ใส่สี
+ExitedColor,Exited Color,已離開,退室,Color salido,Couleur,สีออก
+None,None,不顯示,なし,Ninguno,Aucun,ไม่มี
+StayDuration,Stay Max Duration (minute),最長持續時間 (分),滞在時間 (分),Duración máxima de estadía (minuto),Rester max durée (minute),พักระยะเวลาสูงสุด (นาที)
+SortBy,Sort By,排序依據,並び替え,Ordenar por,Trier par,เรียงตาม
+Present,Present,實到,在室,Presente,Présent,ปัจจุบัน
+Expected,Expected,應到,該当,Esperado,Attendu,ที่คาดหวัง
+People,People,人,人,Gente,Personnes,ประชากร
+NumberOfEntry,Number Of Entry,今日進場人數,入室数,Número de entrada,Nombre de saisies,จำนวนรายการ
+AverageResidenceTime,Average Dwell Time,平均停留時間,平均滞在時間,Tiempo promedio de permanencia,Temps de séjour moyen,เวลาอยู่อาศัยโดยเฉลี่ย
+AbnormalPerson,Abnormal Person,異常人員,異常者,Persona anormal,Personne anormale,คนผิดปกติ
+PeopleInTheVenue,Occupancy Count,場內人數,人々の数,Recuento de ocupación,Chef d'occupation,จำนวนการเข้าพัก
+HasLeft,Left,已離場,去りました,Izquierda,Gauche,ซ้าย
+Investigation,Investigation,調查,履歴,Investigación,Enquête,การสืบสวน
+DateTime,Date Time,日期/時間,日時,Fecha y hora,Date,วันเวลา
+Keyword,Keyword,關鍵字,フィルター,Palabra clave,Mot-clé,คำสำคัญ
+ResultType,Result Type,類別,タイプ,Tipo de resultado,Type de résultat,ประเภทผลลัพธ์
+ExportExcel,Export as Excel,匯出為 Excel,Excelとしてエクスポート,Exportar como Excel,Exporter comme Excel,ส่งออกเป็น Excel
+WithPhoto,With Photo,含照片,写真あり,Con foto,Avec photo,พร้อมรูปถ่าย
+WithoutPhoto,Without Photo,不含照片,写真なし,Sin foto,Sans photo,ไม่มีรูปถ่าย
+Stranger,Stranger,陌生人,未登録,Extraño,Étranger,คนแปลกหน้า
+IsStranger,Stranger,陌生人,未登録,Extraño,Étranger,คนแปลกหน้า
+PersonMonthlyReport,Person Monthly Report,人員月出勤報表,月次レポート,Informe mensual de la persona,Rapport mensuel de la personne,รายงานรายเดือนบุคคล
+ClockTime,Clock Time,打卡時間,時間,Hora del reloj,Temps d'horloge,เวลานาฬิกา
+ClockingMode,Clocking Mode,打卡模式,モード,Modo de margen,Mode de tracture,โหมดตอกบัตร
+ClockModeNono,None,None,なし,Ninguno,Aucun,ไม่มี
+ClockModeCard,Card Mode,刷卡,カード,Modo de tarjeta,Mode carte,โหมดการ์ด
+ClockModePass,Passing Mode,通行模式,通過,Modo de paso,Mode de passage,โหมดผ่าน
+ClockModeClockIn,Clock In,上班卡,出社,Reloj en,S'accélérer,นาฬิกาใน
+ClockModeClockOut,Clock Out,下班卡,退社,Retirarse,S'allumer,นาฬิกาออก
+ForheadTemperature,Forhead Temperature,額溫,額の温度,Temperatura de la frente,Température pour la tête,อุณหภูมิ
+ReturnToAll,Return To All,返回全部,戻る,Volver a todos,Retour à tous,กลับไปทั้งหมด
+ThisMonth,This Month,本月,今月,Este mes,Ce mois-ci,เดือนนี้
+LastMonth,Last Month,上月,先月,El mes pasado,Le mois dernier,เดือนที่แล้ว
+AllPerson,All Person,全部,全パーソン,Todas las personas,Tous,คนทุกคน
+LatePerson,Late,遲到,遅れる,Tarde,En retard,ช้า
+LeaveEarly,Leave Early,早退,早退,Irse temprano,Partir tôt,ออกก่อน
+NoRecord,No Records,無打卡紀錄,記録なし,No hay registros,Pas d'enregistrements,ไม่มีบันทึก
+GoodRecords,Normal,正常,通常,Normal,Normale,ปกติ
+Attendance,Attendance,出勤,出退勤,Asistencia,Présence,การเข้าร่วม
+AttendanceSettings,Attendance Settings,出勤設定,出席設定,Configuración de asistencia,Paramètres de fréquentation,การตั้งค่าการเข้าร่วม
+PersonMonthlyAttendanceReport,Monthly Report,月出勤,月例報告,Reporte mensual,Rapport mensuel,รายงานประจำเดือน
+MonthlyAttendanceStatus,Monthly Status,當月出勤狀態,月次ステータス,Estado mensual,Statut mensuel,สถานะรายเดือน
+PersonDailyAttendanceReport,Daily Report,日出勤,日報,Reporte diario,Rapport journalier,รายงานประจำวัน
+DailyAttendanceStatus,Daily Status,當日出勤狀態,日次ステータス,Estado diario,Statut quotidien,สถานะประจำวัน
+Today,Today,今日,今日,Hoy,Aujourd'hui,วันนี้
+Yesterday,Yesterday,昨日,昨日,Ayer,Hier,เมื่อวาน
+ClockInTime,Clock-in Time,上班時間,出勤時間,Tiempo de reloj,Temps d'horloge,เวลานาฬิกา
+ClockOutTime,Clock-out Time,下班時間,退勤時間,Tiempo de relojería,Temps de sortie,เวลานาฬิกา
+ClockInTimeBuffer,Clock-in Flexibility (minute),上班時間緩衝 (分),出社バッファー（分）,Flexibilidad de reloj (minuto),Flexibilité d'horloge (minute),ความยืดหยุ่นในนาฬิกา (นาที)
+ClockOutTimeBuffer,Clock-out Flexibility (minute),下班時間緩衝 (分),退社バッファー（分）,Flexibilidad de relojería (minuto),Flexibilité de l'horloge (minute),ความยืดหยุ่นในการออกนาฬิกา (นาที)
+SepcifiedHolidays,Designated Holidays,指定假日,指定休日,Vacaciones designadas,Vacances désignées,วันหยุดที่กำหนด
+SepcifiedNonHolidays,Designated Non-Holidays,指定非假日,祝日2,No holides designados,Non-Holidays désigné,ไม่ใช่วันหยุดที่ได้รับมอบหมาย
+Score,Score,分數,スコア,Puntaje,Score,คะแนน
+All,All,全部,全て,Todo,Tous,ทั้งหมด
+Normal,Normal,正常,通常,Normal,Normale,ปกติ
+OverTemperature,Too high,過高,異常,Demasiado alto,Trop haut,สูงเกินไป
+IsHighTemperature,IsHighTemperature,温度過高,温度異常,Temperatura alto,IshightHeterture,ishightemperature
+LoginTitle,Login,登入,ログイン,Iniciar sesión,Se connecter,เข้าสู่ระบบ
+LoginSubtitle,Sign in to your account,登入您的使用者帳號,アカウント情報入力,Iniciar sesión en su cuenta,Connectez-vous à votre compte,ลงชื่อเข้าใช้บัญชีของคุณ
+LoginUsername,Username,使用者,ユーザー名,Nombre de usuario,Nom d'utilisateur,ชื่อผู้ใช้
+LoginPassword,Password,密碼,パスワード,Contraseña,Mot de passe,รหัสผ่าน
+Login,Login,登入,ログイン,Iniciar sesión,Se connecter,เข้าสู่ระบบ
+Setup_Mode,Setup Mode,系統設定模式,設定モード,Modo de configuración,Mode de configuration,โหมดการตั้งค่า
+Welcome_Mode,Welcome Board,迎賓看板,ウェルカム ボード,Tablero de bienvenida,Panneau de bienvenue,บอร์ดต้อนรับ
+Occupancy_Mode,Occupancy Board,容留看板,在室ステータス,Tablero de ocupación,Comité d'occupation,บอร์ด
+Capacity_Mode,Checkin Attendance,登記出勤,出退勤ステータス,Asistencia de registro,Vérifier la fréquentation,ตรวจสอบการเข้าร่วม
+Hyperthermia,Temperature is too high,溫度過高,温度異常,La temperatura es demasiado alta,La température est trop élevée,อุณหภูมิสูงเกินไป
+StayTimeout,Max Duration (minutes),停留時間過久,最大時間（分）,Duración máxima (minutos),Durée maximale (minutes),ระยะเวลาสูงสุด (นาที)
+Acknowledge,Acknowledge,確認,認める,Reconocer,Reconnaître,รับทราบ
+FalseAlarm,False Alarm,誤報,誤報,Falsa alarma,Fausse alarme,สัญญาณเตือนที่ผิดพลาด
+PersonInfoFile,Person Info File,人員資料,パーソン情報ファイル,Archivo de información de la persona,Fichier d'informations sur la personne,ไฟล์ข้อมูลบุคคล
+UploadFile,Upload File,上傳照片,アップロードファイル,Subir archivo,Téléverser un fichier,อัปโหลดไฟล์
+SuccessRecords,Success Records,成功筆數,成功履歴,Registros de éxito,Records de réussite,บันทึกความสำเร็จ
+FailRecords,Faild Records,失敗筆數,失敗履歴,Registros de faild,Enregistrements FAILD,บันทึกความล้มเหลว
+TotalRecords,Total Records,總筆數,履歴合計,Total de registros,Records totaux,บันทึกทั้งหมด
+MaxFileSize,Max File Size,大於限制大小,最大サイズ,Tamaño máximo de archivo,Taille du fichier maximum,ขนาดไฟล์สูงสุด
+RememberMe,Remember Me,記住帳號密碼,設定保存,Acuérdate de mí,Souviens-toi de moi,จดจำฉัน
+Version,Version,版本,バージョン,Versión,Version,รุ่น
+VersionNumber,Version Number,版號,バージョン,Número de versión,Numéro de version,หมายเลขเวอร์ชัน
+CurrentVersionNumber,Current Version Number,目前版號,現在のバージョン,Número de versión actual,Numéro de version actuelle,หมายเลขเวอร์ชันปัจจุบัน
+AsAdmin,As Admin,指定為 Admin,管理者,Como administrador,En tant qu'administrateur,ในฐานะผู้ดูแลระบบ
+ImportFailure,Import Failure:,匯入失敗的資料 :,インポート失敗:,Falla de importación:,Échec d'importation:,ความล้มเหลวในการนำเข้า:
+RemoteTrigger,Remote Trigger,遠端觸發,リモート トリガー,Disparador remoto,Déclencheur à distance,ทริกเกอร์ระยะไกล
+DbBackupTime,Database Backup Time :,資料庫備份時間 :,バックアップ時間,Tiempo de copia de seguridad de la base de datos:,Temps de sauvegarde de la base de données:,เวลาสำรองฐานข้อมูล:
+GenerateBackup,Generate Backup,產生備份檔,生成,Generar copias de seguridad,Générer une sauvegarde,สร้างการสำรองข้อมูล
+TemperatureTriggerRule,Temperature Trigger Rules,溫度觸發條件,温度トリガールール,Reglas de activación de temperatura,Règles de déclenchement de la température,กฎทริกเกอร์อุณหภูมิ
+AllTemperature,All Temperature,全部,全部で,Toda temperatura,Toute température,อุณหภูมิทั้งหมด
+NormalTemperatureOnly,Normal Temperature Only,僅有溫度正常時,溫度正常時時のみ,Temperatura normal solamente,Température normale uniquement,อุณหภูมิปกติเท่านั้น
+HighTemperatureOnly,Over Temperature Only,僅有溫度異常時,温度異常時のみ,Solo temperatura alta,Sur la température seulement,อุณหภูมิสูงกว่าเท่านั้น
+IndicationSettings,Result Prompts,結果提示,結果プロンプト,Indicaciones de resultados,Invites de résultat,พรอมต์ผลลัพธ์
+VerifiedIndication,Recognition success prompt,辨識成功提示,認識成功プロンプト,Aviso de éxito de reconocimiento,Invite de succès de reconnaissance,พรอมต์ความสำเร็จในการรับรู้
+UnverifiedIndication,Recognition failure prompt,辨識失敗提示,認識失敗プロンプト,Información de falla de reconocimiento,Invite de défaillance de reconnaissance,พรอมต์การรับรู้ล้มเหลว
+TopMessage,Message On Top,上部資訊,上のメッセージ,Mensaje en la parte superior,Message sur le dessus,ข้อความด้านบน
+BottomMessage,Message On Bottom,底部資訊,下部のメッセージ,Mensaje en el fondo,Message en bas,ข้อความด้านล่าง
+TextColor,Text Color,文字顏色,テキストの色,Color de texto,Couleur de texte,สีข้อความ
+BackgroundColor,Background Color,背景顏色,背景色,Color de fondo,Couleur de l'arrière plan,สีพื้นหลัง
+DefaultValue,Default Value,預設值,デフォルト値,Valor por defecto,Valeur par défaut,ค่าเริ่มต้น
+DisplayImage,Display Image,顯示圖片,画像,Mostrar imagen,Afficher l'image,แสดงภาพ
+FetchViaHttp, , ,,,,
+StaticSettings, , ,,,,
+ConnectTimetoutMs,Connect Timetout (ms),連線逾時 (毫秒),接続タイムアウト(ms),Tiempo de conexión (ms),Connection périmé (MS),เชื่อมต่อ timetout (MS)
+StaticPicture,Picture,圖片,画像,Imagen,Image,รูปภาพ
+GeneratedQrcode,QR Code,二維碼,QRコード,Código QR,QR Code,คิวอาร์โค้ด
+HostName,Host Name,主機名稱,ホスト名,Nombre de host,Nom d'hôte,ชื่อโฮสต์
+CentralManagement,Central Management,中央管理,中央管理,Gestión central,Gestion centrale,ผู้บริหารส่วนกลาง
+WillLossAllPersonData,"Will Loss All Person Data, Continue ?","將遺失所有人員資料, 要繼續?","すべてのパーソンデータが失われます, 継続する?","¿Continuarán todos los datos de la persona, continuarán?",La perte de toutes les données de la personne se poursuivra-t-elle?,จะสูญเสียข้อมูลบุคคลทั้งหมดดำเนินการต่อหรือไม่?
+CustomButton,Custom Function Button,自定義功能按鈕,カスタム機能ボタン,Botón de función personalizada,Bouton de fonction personnalisé,ปุ่มฟังก์ชั่นที่กำหนดเอง
+EnableIdCardPassMode,Bypass Mode,自由通行模式,バイパスモード,Modo de derivación,Mode de contournement,โหมดบายพาส
+NumbersOnlyIn20Bytes,Up to 20 digits,最多 20 位數字,20桁まで,Hasta 20 dígitos,Jusqu'à 20 chiffres,สูงสุด 20 หลัก
+CheckInfo,Check,檢視,見る,Comprobar,Vérifier,ตรวจสอบ
+GroupPersonList,Group Person List,群組人員,グループパーソンリスト,Lista de personas grupales,Liste des personnes de groupe,รายชื่อบุคคลกลุ่ม
+FaceMaskEnhancement,Face Mask Enhancement,增強口罩辨識,マスク認識強化,Mejora de la mascarilla,Amélioration du masque de visage,การปรับปรุงหน้ากากใบหน้า
+DefinedClockInTime,Scheduled Clock-in Time,表定上班時間,予定出勤時間,Tiempo de reloj programado,Temps d'horloge planifié,เวลานาฬิกาตามกำหนดเวลา
+DefinedClockOutTime,Scheduled Clock-out Time,表定下班時間,予定退勤時間,Tiempo programado de tiempo,Temps d'horloge planifié,เวลานาฬิกาตามกำหนดเวลา
+ClockInUpperBound,Count as late when arrive after:,判定遲到，晚於：,以降に到着した場合は遅刻としてカウントされます,Cuente tan tarde cuando llegue después:,Comptez aussi tard à l'arrivée après:,นับสายเมื่อมาถึงหลังจาก:
+ClockOutLowerBound,Count as early leaving when leave before:,判定早退，早於：,より前の退勤は早退としてカウントされます,Cuente tan temprano que salga cuando salga antes:,Comptez comme partant tôt lorsque vous partez avant:,นับตั้งแต่ออกไปก่อนเมื่อออกไปก่อน:
+AdjustClockInEnabled,record with the scheduled clock-in time when arrive before the scheduled clock-in time.,若表定上班時間之前到達，以表定上班時間記錄。,予定勤務時間より早く到着した場合は、予定勤務時間に従って記録します。,Registre con la hora de reloj programada cuando llegue antes de la hora programada de reloj.,Enregistrez avec l'heure d'horloge prévue à l'arrivée avant l'heure prévue.,บันทึกด้วยเวลานาฬิกาที่กำหนดเมื่อมาถึงก่อนเวลานาฬิกาที่กำหนด
+AdjustClockOutEnabled,record with the scheduled clock-out time when leave after the scheduled clock-out time.,若表定下班時間之後離開，以表定下班時間記錄。,予定退勤時刻を過ぎて退勤する場合は、予定退勤時刻で記録します。,Registre con la hora programada de tiempo para obtener cuando se vaya después de la hora programada de tiempo.,Enregistrez avec l'heure d'horlogerie prévue lorsque vous contetez après l'heure d'horlogerie prévue.,บันทึกด้วยเวลานาฬิกาตามกำหนดเวลาเมื่อออกหลังจากเวลานาฬิกาตามกำหนดเวลา
+Holidays,Holidays,假日,休日,Días festivos,Vacances,วันหยุด
+NonHolidays,Non-holidays,非假日,非休日,Días no festivos,Non-vacances,ไม่ใช่วันหยุด
+BreakTimeTitle,Break Time,休息時間,休憩時間,Descanso,Pause,เวลาพัก
+OvertimeTitle,Work Overtime,加班,残業する,Trabajar horas extra,Faire des heures supplémentaires,ทำงานเกินเวลา
+BreakTimeMins,Break Time (minutes): ,休息時間 (分)：,休憩時間 (分):,Tiempo de descanso (minutos):,Temps de pause (minutes):,เวลาพัก (นาที):
+EnableOvertime,Count as overtime,計算加班,残業をカウントする,Cuenta como tiempo extra,Compte comme des heures supplémentaires,นับเป็นล่วงเวลา
+OvertimeStartTime,Overwork time starting time:,加班起算時間：,時間外労働の開始時刻：,Tiempo de exceso de trabajo Tiempo de inicio:,Heure de début du travail:,เวลาเริ่มต้นทำงานมากเกินไป:
+OvertimeGuide,"Daily overtime hours are calculated until 00:00 of the next day. If there is no record before 00:00, it will be deemed as no off-duty record",日加班時間計算至隔日 00:00 為止。若 00:00 前無紀錄，視為無下班紀錄,1日の残業時間は翌日の00:00まで計算されます。 0時までに記録がない場合は非番記録なしとみなします,"Las horas de tiempo extra diario se calculan hasta las 00:00 del día siguiente. Si no hay registro antes de las 00:00, se considerará como un registro fuera de servicio","Les heures supplémentaires quotidiennes sont calculées jusqu'à 00h00 du lendemain. S'il n'y a pas d'enregistrement avant 00:00, il sera considéré comme aucun enregistrement en congé",ชั่วโมงการทำงานล่วงเวลาทุกวันจะถูกคำนวณจนถึง 00:00 ของวันถัดไป หากไม่มีการบันทึกก่อน 00:00 จะถือว่าเป็นบันทึกที่ไม่ปฏิบัติหน้าที่
+OvertimeMinimum,Minimum overtime duration (minutes):,最短加班時間 (分)：,残業時間は少なくとも (分) でなければなりません:,Duración mínima de tiempo extra (minutos):,Durée minimale des heures supplémentaires (minutes):,ระยะเวลาการทำงานล่วงเวลาขั้นต่ำ (นาที):
+AttendanceChange,Attendance operations,出勤操作,勤怠管理,Operaciones de asistencia,Opérations de fréquentation,การดำเนินงานการเข้าร่วม
+ChangeAttendanceRecords,Change attendance record,變更出勤紀錄,出席記録を変更する,Registro de asistencia de cambio,Changer le dossier de fréquentation,เปลี่ยนบันทึกการเข้าร่วมประชุม
+Employee,Employee:,員工：,職員：,Empleado:,Employé:,พนักงาน:
+WorkShift,Clock-in time type:,打卡時間類型：,出勤時間のタイプ:,Tipo de tiempo de reloj:,Type de temps d'horloge:,ประเภทนาฬิกาในเวลา:
+DateTitle,Date:,日期：,日にち：,Fecha:,Date:,วันที่:
+TimeTitle,Time:,時間：,時間：,Tiempo:,Temps:,เวลา:
+ChangeReason,"Reason (required, less than 50 characters):",原因 (必填，少於 50 字)：,理由 (必須、50 文字未満):,"Razón (requerido, menos de 50 caracteres):","Raison (requise, moins de 50 caractères):",เหตุผล (จำเป็นน้อยกว่า 50 อักขระ):
+DateDepiction,Date must not be greater than today,日期不得大於今天,日付は今日より大きくてはなりません,La fecha no debe ser mayor que hoy,La date ne doit pas être plus grande qu'aujourd'hui,วันที่จะต้องไม่มากกว่าวันนี้
+InvalidWorkDuration,Scheduled clock-out time must be later than scheduled clock-in time,表定下班時間需晚於表定上班時間,予定退勤時間は予定出勤時間より遅くする必要があります,La hora de salida programada debe ser posterior a la hora de entrada programada,L'heure d'horloge prévue doit être plus tard que l'heure prévue de l'horloge,เวลานาฬิกาที่กำหนดเวลาจะต้องช้ากว่าเวลานาฬิกาที่กำหนด
+InvalidOvertime,The overtime start time cannot be earlier than the scheduled clock-out time,加班開始時間不能早於表定下班時間,残業の開始時刻は、予定された退勤時刻より早くすることはできません,La hora de inicio de tiempo extra no puede ser anterior a la hora programada de tiempo.,L'heure de début des heures supplémentaires ne peut pas être plus tôt que l'heure d'horloge prévue,เวลาเริ่มต้นการทำงานล่วงเวลาไม่สามารถเร็วกว่าเวลาปิดนาฬิกาที่กำหนด
+InvalidBreakTime,The working time must be greater than 0 (scheduled clock-out time - scheduled clock-in time - break time),上班時間必須大於0（表定下班時間 - 表定上班時間 - 休息時間）,労働時間は 0 より大きくなければなりません (予定退勤時間 - 予定出勤時間 - 休憩時間),El tiempo de trabajo debe ser mayor que 0 (hora de salida programada - hora de entrada programada - tiempo de descanso),Le temps de travail doit être supérieur à 0 (temps d'horloge prévu - temps d'horloge prévu - temps de pause),เวลาทำงานจะต้องมากกว่า 0 (เวลานาฬิกาตามกำหนดเวลา - เวลานาฬิกาที่กำหนดเวลา - เวลาพัก)
+WorkingHousCalculatingTip,The working hours of the day will be calculated after the scheduled clock-out time,當天的工作時間將在預定的下班時間後計算,その日の労働時間は、予定された退勤時刻の後に計算されます。,Las horas de trabajo del día se calcularán después de la hora programada de tiempo.,Les heures de travail de la journée seront calculées après l'heure d'horlogerie prévue,เวลาทำงานของวันจะถูกคำนวณหลังจากเวลานาฬิกาตามกำหนดเวลา
+AttendanceOperations,Attendance Operations,出勤操作,勤怠管理,Operaciones de asistencia,Opérations de fréquentation,การดำเนินงานการเข้าร่วม
+ForgotPunchInDateTime,Select the date,請選擇日期,日付を選択してください,Seleccione la fecha,Sélectionnez la date,เลือกวันที่
+KeywordName,Name,姓名,キーワード,Nombre,Nom,ชื่อ
+AttendanceLogChange,Change Attendance Record,變更出勤紀錄,出席記録を編集します,Registro de asistencia de cambio,Changer le dossier de fréquentation,เปลี่ยนบันทึกการเข้าร่วมประชุม
+SubjectName,Clock-in time type:,打卡時間類型：,出勤時間のタイプ:,Tipo de tiempo de reloj:,Type de temps d'horloge:,ประเภทนาฬิกาในเวลา:
+ChangeAttendanceTime,Corrected Time,補打卡時間,修正された時間,Tiempo corregido,Temps corrigé,เวลาแก้ไข
+ReasonDepiction,"Reason (required, less than 50 characters):",原因 (必填，少於 50 字)：,理由 (必須、50 文字未満):,"Razón (requerido, menos de 50 caracteres):","Raison (requise, moins de 50 caractères):",เหตุผล (จำเป็นน้อยกว่า 50 อักขระ):
+Modifier,Modified by,修改者,編集者,Modificado por,Modifié par,ดัดแปลงโดย
+ChangeAttendanceRecord,Change Logs,變更日誌,変更ログ,Cambiar registros,Modifier les journaux,เปลี่ยนบันทึก
+Save,Save,儲存,保存,Ahorrar,Sauvegarder,บันทึก
+GoBack,Back,返回,戻る,Volver,Dos,กลับ
+Staff,Staff,職員,職員,Personal,Personnel,พนักงาน
+ForgetPunchDate,Date,日期,日にち,Fecha,Date,วันที่
+CurrentRecords,Current Records,當前紀錄,現在の記録,Registros actuales,Enregistrements actuels,บันทึกปัจจุบัน
+reason,Reason,事由,理由,Razón,Raison,เหตุผล
+ForgotAttendanceRecord,Forgot to clock in/clock out,忘記簽到/簽退,出退勤の打刻を忘れた,Olvidé registrar/registrar fuera,J'ai oublié de s'allonger / horloger,ลืมนาฬิกาใน/นาฬิกาออก
+Other,Other,其它,他の,Otro,Autre,อื่น
+lessThan50words,Up to 50 words,最多50字,最大50文字まで,Hasta 50 palabras,Jusqu'à 50 mots,มากถึง 50 คำ
+ExportSetting,Export Settings,匯出設定,エクスポート設定,Configuración de exportación,Paramètres d'exportation,การตั้งค่าการส่งออก
+WiegandBox,Wiegand converter,韋根轉換器,ウィーガンドコンバーター,Convertidor de wiegand,Convertisseur Wiegand,Wiegand Converter
+Date,Date,日期,日にち,Fecha,Date,วันที่
+NoEntryRecord,no clock-in record,缺上班紀錄,出勤記録がない,Sin registro de reloj,Pas d'enregistrement d'horloge,ไม่มีบันทึกนาฬิกา
+NoLeaveRecord,no clock-out record,缺下班紀錄,退勤記録なし,Sin registro de REPAYOS,Pas d'enregistrement d'horloge,ไม่มีบันทึกนาฬิกาออก
+OvertimeDays,Overtime Days,加班天數,残業日数,Días de tiempo extra,Journées des heures supplémentaires,วันทำงานล่วงเวลา
+EntireFacility,All people,總人數,総人数,Todas las personas,Tout le monde,ทุกคน
+Now,Now,現在,今,Ahora,Maintenant,ตอนนี้
+personUnit,people,人員,人員,personas,personnes,ประชากร
+Absent,Absent,缺席,欠席,Ausente,Absent,ไม่มา
+FileType,File type,文件類型,ファイルの種類,Tipo de archivo,Type de fichier,ประเภทไฟล์
+txtSeparator,Separator,分隔符號,セパレーター,Separador,Séparateur,เครื่องแยก
+SortByGroupName,Sort by group name,依群組名稱排序,グループ名で並べ替える,Ordenar por nombre de grupo,Trier par nom de groupe,เรียงลำดับตามชื่อกลุ่ม
+HourlyNumberOfEntry,Number of people entering,進場人數,入場人数,Número de personas que ingresan,Nombre de personnes entrant,จำนวนคนที่เข้ามา
+HourlyNumberOfLeave,Number of people leaving,離場人數,退出者数,Número de personas que se van,Nombre de personnes quittent,จำนวนคนออกไป
+HourlyNumberOfAdmission,Present,場內人數,人々の数,Presente,Présent,ปัจจุบัน
+PleaseEnterName,Please enter a name,請輸入人名,名前を入力してください,Por favor ingrese un nombre,Veuillez saisir un nom,กรุณากรอกชื่อ
+DisplayAttribute,Displayed Information,顯示資訊,表示する情報,Información mostrada,Informations affichées,ข้อมูลที่แสดง
+PersonalDisplay,Personal Display,人員顯示,人事ディスプレイ,Visualización personal,Affichage personnel,การแสดงส่วนตัว
+PageDisplay,Page Display,頁面顯示,ページディスプレイ,Visualización de la página,Affichage de la page,หน้าจอ
+WelcomeGreeting,Welcome,歡迎詞,いらっしゃいませ,Bienvenido,Accueillir,ยินดีต้อนรับ
+Maintitle,Main Title,主標題,メインタイトル,Titulo principal,Titre principal,ชื่อหลัก
+Subtitle,Subtitle,副標題,副題,Subtitular,Sous-titre,คำบรรยาย
+NumberOfDisplayPersons,Number of people,顯示人數,人数を表示,Número de personas,Nombre de personnes,จำนวนคน
+Standard,Standard,標準,標準,Estándar,Standard,มาตรฐาน
+Compact,Compact,緊湊,コンパクト,Compacto,Compact,กะทัดรัด
+DisplayMode,Display Mode,顯示模式,ディスプレイモード,Modo de visualización,Mode d'affichage,โหมดแสดงผล
+PageLayout,Page Layout,頁面排版,ページレイアウト,Diseño de página,Mise en page,เค้าโครงหน้า
+DisplayChart,Display chart,顯示圖表,チャートを表示する,Gráfico de visualización,Graphique d'affichage,แสดงแผนภูมิ
+SummaryDisplay,Group display,依群組顯示,グループごとに表示,Visualización grupal,Affichage de groupe,การแสดงกลุ่ม
+SummaryView,Group mode,群組模式,グループ表示,Modo de grupo,Mode de groupe,โหมดกลุ่ม
+SummaryBy,Grouping criteria,分組依據,グループ化,Criterios de agrupación,Critères de regroupement,เกณฑ์การจัดกลุ่ม
+IdleTime,Auto return home page (seconds),自動回主頁 (秒),最初のページに自動的に戻る,Página de inicio de regreso automático (segundos),Page d'accueil de retour automatique (secondes),หน้าแรกกลับอัตโนมัติ (วินาที)
+ForgotPassword,Forget password,忘記密碼,パスワードを忘れる,Contraseña olvidada,Mot de passe oublié,ลืมรหัสผ่าน
+Target,Target,目標,目標,Objetivo,Cible,เป้า
+Case,Case,案件,場合,Caso,Cas,กรณี
+PartialName,Partial Name,部分姓名,名前の一部,Nombre parcial,Nom partiel,ชื่อบางส่วน
+ClockModeManualClockIn,Clock-in manually,補打上班卡,手動での出勤,Marcar entrada manualmente,Horloge manuellement,นาฬิกาด้วยตนเอง
+ClockModeManualClockOut,Clock-out manually,補打下班卡,手動で退勤する,Marcar salida manualmente,Clock-Out manuellement,นาฬิกาด้วยตนเอง
+MonthlyAttendanceRemark,The working hours of the day will be calculated after the scheduled clock-out time of the day,當日工時會在當日下班時間後計算,一日の労働時間はその日の非番時間を過ぎて計算されます,Las horas de trabajo del día se calcularán después de la hora programada del día del día.,Les heures de travail de la journée seront calculées après l'heure prévue de la journée,เวลาทำงานของวันจะถูกคำนวณหลังจากเวลานาฬิกาตามกำหนดเวลาของวัน
+DailyAttendanceRemark,The working hours of the day will be calculated after the scheduled clock-out time of the day,當日工時會在當日下班時間後計算,一日の労働時間はその日の非番時間を過ぎて計算されます,Las horas de trabajo del día se calcularán después de la hora programada del día del día.,Les heures de travail de la journée seront calculées après l'heure prévue de la journée,เวลาทำงานของวันจะถูกคำนวณหลังจากเวลานาฬิกาตามกำหนดเวลาของวัน
+ForgotClockInDateTime,Forgot ClockIn DateTime,忘記打卡日期/時間,パンチカードの日付/時刻を忘れてください,Olvidé ClockOn DateTeTime,Clockin oublié Datetime,ลืมนาฬิกา dateTime
+LARGE,Large (1080p),大 (1080p),大 (1080p),Grande (1080p),Grand (1080p),ใหญ่ (1080p)
+SMALL,Small (720p),小 (720p),小 (720p),Pequeño (720p),Petit (720p),เล็ก (720p)
+ModifyEventControl,Modify Event,修改事件,イベントを変更する,Modificar evento,Modifier l'événement,แก้ไขเหตุการณ์
+ChangeLogsTitle,Change logs,變更日誌,変更ログ,Cambiar registros,Modifier les journaux,เปลี่ยนบันทึก
+ChangeLogsTimeRange,Time range ,時間區間,時間範囲,Intervalo de tiempo,Intervalle de temps,ช่วงเวลา
+ChangeLogsTargetPerson,Target,目標對象,目標,Objetivo,Cible,เป้า
+CorrectAttendance,Change Attendance record,變更出勤紀錄,出席記録を変更する,Registro de asistencia de cambio,Changer le dossier de fréquentation,เปลี่ยนบันทึกการเข้าร่วมประชุม
+ChangeLogsType,Type,類型,類型,Tipo,Taper,พิมพ์
+ChangeLogsPerson,Person,人員,人員,Persona,Personne,บุคคล
+ChangeLogsNewTime,Corrected Time,修正時間,修正時刻,Tiempo corregido,Temps corrigé,เวลาแก้ไข
+ChangeLogsReason,Reason,原因,理由,Razón,Raison,เหตุผล
+ChangeLogsModifier,Change Logs Modifier,紀錄修改人,レコードエディター,Cambiar modificador de registros,Modificateur de journaux de modification,เปลี่ยนบันทึกตัวดัดแปลง
+UsernameorPasswordError,Incorrect account or password,帳號或密碼錯誤,アカウントまたはパスワードが間違っています,Cuenta o contraseña incorrecta,Compte ou mot de passe incorrect,บัญชีหรือรหัสผ่านไม่ถูกต้อง
+StartTime,Start time,開始時間,始まる時間,Hora de inicio,Heure de début,เวลาเริ่มต้น
+EndTime,End time,結束時間,終了時間,Hora de finalización,Heure de fin,เวลาสิ้นสุด
+Start,Start,起始,始める,Comenzar,Commencer,เริ่ม
+End,End ,結束,終わり,Fin,Fin,จบ
+Detail,View,檢視,ビュー,Vista,Voir,ดู
+ClearSelection,Clear selection,取消選擇,明確な選択,Selección clara,Sélection claire,การเลือกที่ชัดเจน
+TaskName,Task,任務,タスク,Tarea,Tâche,งาน
+Faces,Faces,人臉牆,顔,Caras,Visages,ใบหน้า
+Album,Albums,相簿,アルバム,Álbumes,Albums,อัลบั้ม
+AddInvestigation,Build task,建立任務,タスクを構築します,Tarea de construcción,Construire une tâche,สร้างงาน
+SelectTargetPrompt,"Please select one face from the left face wall. Then, select one of the similar faces listed in this panel to start the investigation.",請從左邊的人臉牆選擇一張臉，再從本面板列出相近的人臉中選取一張，以展開調查,左の顔の壁から1つの顔を選択してください。次に、このパネルにリストされている同様の顔のいずれかを選択して、調査を開始します。,"Seleccione una cara de la pared de la cara izquierda. Luego, seleccione una de las caras similares enumeradas en este panel para comenzar la investigación.","Veuillez sélectionner un visage sur le mur de la face gauche. Ensuite, sélectionnez l'un des faces similaires énumérées dans ce panel pour démarrer l'enquête.",โปรดเลือกใบหน้าหนึ่งหน้าจากผนังด้านซ้าย จากนั้นเลือกหนึ่งในใบหน้าที่คล้ายกันที่ระบุไว้ในแผงนี้เพื่อเริ่มการสอบสวน
+SaveToAlbum,Add to album,加到相簿,アルバムに追加します,Agregar al álbum,Ajouter à l'album,เพิ่มในอัลบั้ม
+Init,New,新增,新しい,Nuevo,Nouveau,ใหม่
+Pending,Pending,等待中,保留中,Pendiente,En attente,รอดำเนินการ
+Processing,Processing,處理中,処理,Procesando,Traitement,กำลังประมวลผล
+Paused,Paused,已暫停,一時停止,Detenido,Interrompu,หยุดชั่วคราว
+Cancelled,Cancelled,已取消,キャンセル,Cancelado,Annulé,ยกเลิก
+Stopped,Stopped,已停止,停止,Interrumpido,Arrêté,หยุด
+Completed,Completed,已完成,完了しました,Terminado,Complété,สมบูรณ์
+RunningTime,Execution time,執行時間,実行時間,Tiempo de ejecución,Temps d'exécution,เวลาดำเนินการ
+LiveChannel,Cameras,攝影機,カメラ,Cámaras,Appareils photo,กล้องถ่ายรูป
+NxVideoArchive,Video archives,視頻錄像,ビデオアーカイブ,Archivo de video,Archives vidéo,คลังเก็บวิดีโอ
+PdfExport,Export as PDF,匯出 PDF,PDFとしてエクスポート,Exportar como PDF,Exporter comme PDF,ส่งออกเป็น PDF
+AddToCase,Add to case,加到案件,ケースに追加します,Agregar al caso,Ajouter au cas,เพิ่มเป็นกรณี
+VmsBookmark,VMS bookmark,VMS 書籤,VMSブックマーク,VMS Bookmark,Bookmark VMS,บุ๊คมาร์ค VMS
+Title,Title,標題,タイトル,Título,Titre,ชื่อ
+SelectAll,Select all,全選,すべて選択,Seleccionar todo,Tout sélectionner,เลือกทั้งหมด
+GeneratePdfReport,Export as PDF,匯出 PDF,PDFとしてエクスポート,Exportar como PDF,Exporter comme PDF,ส่งออกเป็น PDF
+Subject,Subject,主題,主題,Sujeto,Sujet,เรื่อง
+Remark,Comment,說明,コメント,Comentario,Commentaire,การแสดงความคิดเห็น
+TargetScore,Score,分數,スコア,Puntaje,Score,คะแนน
+Extend,Expand,展開,拡大する,Expandir,Développer,ขยาย
+PleaseSelectBeforePresent,Time-travel to future moments feature coming soon!,穿越到未來的功能即將上線！,将来の瞬間へのタイムトラベルは、近日公開予定です！,¡Los momentos de viaje en el tiempo para futuros se presentan pronto!,Voyage dans le futur fonction bientot disponible,เวลาเดินทางไปสู่ช่วงเวลาในอนาคตจะเร็ว ๆ นี้!
+TimeRange,Time range,搜尋時段,時間範囲,Intervalo de tiempo,Intervalle de temps,ช่วงเวลา
+Description,Comment,說明,コメント,Comentario,Commentaire,การแสดงความคิดเห็น
+GenerateVmsBookmark,Create bookmark,產生書籤,ブックマークを作成します,Crear marcador,Créer des signets,สร้างบุ๊คมาร์ค
+AndMore,and {number} more,及另外 {number} 項,および{number}詳細,y {number} más,et {nombre} plus,และ {number} เพิ่มเติม
+Edit,Edit,編輯,編集,Editar,Modifier,แก้ไข
+AlbumName,Album name,相簿名稱,アルバム名,Nombre del álbum,Nom de l'album,ชื่ออัลบั้ม
+RequiredMessage,Required,必填,必須,Requerido,Requis,ที่จำเป็น
+HtmlVideoArchive,HTML video archive,HTML 視頻存檔,HTMLビデオアーカイブ,Archivo de video HTML,Archive vidéo HTML,HTML Video Archive
+GeneralMode,Main console,主控台,メインコンソール,Consola principal,Console principale,คอนโซลหลัก
+UploadMode,Photo upload tool,照片上傳工具,写真アップロードツール,Herramienta de carga de fotos,Outil de téléchargement de photos,เครื่องมืออัปโหลดรูปภาพ
+NoEmptyNumbericOnly,Must be numeric,不能為空，必須是數字,数値でなければなりません,Debe ser numérico,Doit être numérique,ต้องเป็นตัวเลข
+NoEmptyPortOnly,Should range from 0 to 65565,必須介於 0 到 65535,0〜65565の範囲です,Debe variar de 0 a 65565,Devrait varier de 0 à 65565,ควรอยู่ในช่วงตั้งแต่ 0 ถึง 65565
+NoEmptyInRange,"Cannot be empty, must be in range ($1)",不能為空，必須在範圍內 ($1),空にすることはできません、範囲内でなければなりません（$1）,"No puede estar vacío, debe estar en el rango ($1)","Ne peut pas être vide, doit être à portée ($1)",ไม่สามารถว่างเปล่าต้องอยู่ในช่วง ($1)
+AutoLightSettings,Auto fill light,自動補光設置,オートフィルライト,Luz de relleno automático,Lumière de remplissage automatique,ไฟเติมอัตโนมัติ
+AutoLightEnable,Auto fill light enabled,啟用自動補光,自動充填ライトが有効になっています,Luz de relleno automático habilitado,Lumière de remplissage automatique activé,เปิดใช้งานไฟเติมอัตโนมัติ
+AutoLightThreshole,Auto light Threshold,補光閾值,オートライトのしきい値,Umbral de luz automática,Seuil de lumière automatique,เกณฑ์แสงอัตโนมัติ
+AutoLightScheduleStart,Auto light schedule starts,補光排程開始,オートライトスケジュールが開始されます,Comienza el horario de luz automática,L'horaire de lumière automatique commence,กำหนดเวลาไฟอัตโนมัติเริ่มต้นขึ้น
+AutoLightScheduleEnd,Auto light schedule ended,補光排程結束,オートライトスケジュールが終了しました,El horario de luz automática terminó,Le calendrier de lumière automatique terminée,กำหนดเวลาไฟอัตโนมัติ
+VideoDevice,Video Devices,影像設備,ビデオデバイス,Dispositivos de video,Périphériques,อุปกรณ์วิดีโอ
+Cameras,Cameras,攝影機,カメラ,Cámaras,Caméra IP,กล้องถ่ายรูป
+Tablets,Tablets,平板,タブレット,Tabletas,Tablette,เม็ด
+DeviceGroup,Video Device Groups,影像設備群組,ビデオデバイスグループ,Grupos de dispositivos de video,Groupes d'appareils vidéo,กลุ่มอุปกรณ์วิดีโอ
+OutputDevice,Output Devices,輸出設備,出力デバイス,Dispositivos de salida,Des dispositifs de sortie,อุปกรณ์เอาต์พุต
+IOboxes,I/O boxes,輸入/輸出接點裝置,I/Oボックス,Cajas de E/S,Boîtes d'E / S,กล่อง I/O
+Wiegandboxs,Wiegand Converters,韋根轉換器,ウィーガンドコンバーター,Convertidores de Wiegand,Convertisseurs Wiegand,ตัวแปลง Wiegand
+OutputDeviceGroup,Output Device Groups,輸出設備群組,出力デバイスグループ,Grupos de dispositivos de salida,Groupes de périphériques de sortie,กลุ่มอุปกรณ์เอาท์พุท
+VideoDeviceCameras,Cameras,攝影機,カメラ,Cámaras,Appareils photo,กล้องถ่ายรูป
+VideoDeviceTablets,Tablets,平板,タブレット,Tabletas,Comprimés,เม็ด
+OutputDeviceRelaysWG,Wiegand converters,韋根轉換器,ウィーガンドコンバーター,Convertidores de Wiegand,Convertisseurs Wiegand,ตัวแปลง Wiegand
+DeviceName,Device Name,設備名稱,装置名,Nombre del dispositivo,Nom de l'appareil,ชื่ออุปกรณ์
+DeviceStatus,Device Status,設備狀態,デバイスステータス,Estado del dispositivo,Statut du périphérique,สถานะอุปกรณ์
+EnableIn,In,In,で,En,Dans,ใน
+EnableOut,Out,Out,外,Afuera,Dehors,ออก
+DevicesGroupTitle,Devices,Devices,デバイス,Dispositivos,Dispositifs,อุปกรณ์
+VideoDevicesGroup,Video Device Group,影像設備群組,ビデオデバイスグループ,Grupo de dispositivos de video,Groupe d'appareils vidéo,กลุ่มอุปกรณ์วิดีโอ
+VideoDevices,# Video Devices,影音設備數量,＃ビデオデバイス,# Dispositivos de video,# Appareils vidéo,# อุปกรณ์วิดีโอ
+OutputDevices,# Output Devices,輸出設備數量,＃ 出力デバイス,# Dispositivos de salida,# Des dispositifs de sortie,# อุปกรณ์เอาต์พุต
+Rules,Access Rules,門禁規則數量,アクセスルール,Reglas de acceso,Règles d'accès,การเข้าถึงกฎ
+VideoDeviceBasic,Basic settings,基本設定,基本設定,Ajustes básicos,Paramètres de base,การตั้งค่าพื้นฐาน
+BasicDeviceName,Device Name,設備名稱,装置名,Nombre del dispositivo,Nom de l'appareil,ชื่ออุปกรณ์
+BasicDeviceGroups,Device Groups,設備群組,デバイスグループ,Grupos de dispositivos,Groupes d'appareils,กลุ่มอุปกรณ์
+VideoDeviceVideoSource,Video Source,影像來源,ビデオソース,Fuente de vídeo,Source vidéo,แหล่งวิดีโอ
+VideoSourceType,Type,類型,タイプ,Tipo,Taper,พิมพ์
+VideoSourceIpAddress,Ip Address,IP 位址,IPアドレス,Dirección IP,Adresse IP,ที่อยู่ IP
+VideoSourcePort,Port,埠,ポート,Puerto,Port,ท่าเรือ
+VideoSourceUsername,Username,帳號,ユーザー名,Nombre de usuario,Nom d'utilisateur,ชื่อผู้ใช้
+VideoSourcePassword,Password,密碼,パスワード,Contraseña,Mot de passe,รหัสผ่าน
+VideoSourceParameters,Parameters,參數,パラメーター,Parámetros,Paramètres,พารามิเตอร์
+VideoSourceConnectionString,Connection String,連接資訊,接続文字列,Cadena de conexión,Chaîne de connexion,สตริงการเชื่อมต่อ
+VideoFaceCapture,Face capture rate,人臉擷取閥值,フェイスキャプチャ率,Tasa de captura de la cara,Taux de capture du visage,อัตราการจับภาพใบหน้า
+VideoBasicCOlNameFaceMinimumSize,Minimum face size (0: umlimited),最小人臉寬高 (0:不限制),最小面は幅と高さです（0：無制限）,Tamaño mínimo de la cara (0: Umlimited),Taille minimale du visage (0: umlimited),ขนาดใบหน้าขั้นต่ำ (0: umlimited)
+VideoBasicCOlNameTargetScore,Face recognition score threshold (0~1),辨識分數閥值 (0~1),顔認識スコアのしきい値（0〜1）,Umbral de puntaje de reconocimiento facial (0 ~ 1),Seuil de score de reconnaissance face (0 ~ 1),เกณฑ์คะแนนการจดจำใบหน้า (0 ~ 1)
+VideoBasicCOlNameCaptureInterval,Face capture interval (milliseconds),人臉擷取間隔 (毫秒),フェイスキャプチャ間隔（ミリ秒）,Intervalo de captura de cara (milisegundos),Intervalle de capture du visage (millisecondes),ช่วงเวลาการจับภาพใบหน้า (มิลลิวินาที)
+VideoBasicCOlNameFaceMinimumWidth,Minimum face width,最小人臉寬度,最小面幅,Ancho de cara mínimo,Largeur du visage minimum,ความกว้างของใบหน้าขั้นต่ำ
+VideoBasicCOlNameFaceMinimumHeight,Minimum face height,最小人臉高度,最小顔の高さ,Altura mínima de la cara,Hauteur du visage minimum,ความสูงของใบหน้าขั้นต่ำ
+VideoBasicCOlNameFrontalFaceFilter,Frontal face filter,Frontal face filter,前面フィルター,Filtro de cara frontal,Filtre à face frontale,ตัวกรองใบหน้าด้านหน้า
+VideoBasicCOlNameAntiSpoofingScore,Anti-spoofing score threshold (0~1),防偽分數閥值 (0~1),スプーフィングスコアのしきい値（0〜1）,Umbral de puntaje anti-spoofing (0 ~ 1),Seuil de score anti-usurage (0 ~ 1),เกณฑ์คะแนนป้องกันการปิด (0 ~ 1)
+VideoROIInfo,Video ROI Info,視頻ROI信息,ビデオROI情報,Información de ROI de video,Informations sur le ROI vidéo,ข้อมูลวิดีโอ ROI
+TabletsBasicName,Basic settings,基本設定,基本設定,Ajustes básicos,Paramètres de base,การตั้งค่าพื้นฐาน
+TabletsBasicCOlNameDeviceType,Device type,設備類型,デバイスタイプ,Tipo de dispositivo,Type d'appareil,ประเภทอุปกรณ์
+TabletsBasicCOlNameDeviceName,Device Name,設備名稱,装置名,Nombre del dispositivo,Nom de l'appareil,ชื่ออุปกรณ์
+TabletsBasicCOlNameDeviceUUID,UUID,UUID,UUID,UUID,UUID,UUID
+TabletsBasicCOlNameDeviceGroups,Video device groups,影像設備群組,ビデオデバイスグループ,Grupos de dispositivos de video,Groupes d'appareils vidéo,กลุ่มอุปกรณ์วิดีโอ
+TabletsBasicTitleNameFaceAccess,Face recognition settings,人臉驗證設定,顔認識設定,Configuración de reconocimiento facial,Paramètres de reconnaissance du visage,การตั้งค่าการจดจำใบหน้า
+TabletsBasicCOlNameRecognitionThreshold,Face recognition score threshold (0~1),辨識分數閥值 (0~1),顔認識スコアのしきい値（0〜1）,Umbral de puntaje de reconocimiento facial (0 ~ 1),Seuil de score de reconnaissance face (0 ~ 1),เกณฑ์คะแนนการจดจำใบหน้า (0 ~ 1)
+TabletsBasicCOlNameFaceCaptureInternal,Face capture interval (milliseconds),人臉擷取間隔 (毫秒),フェイスキャプチャ間隔（ミリ秒）,Intervalo de captura de cara (milisegundos),Intervalle de capture du visage (millisecondes),ช่วงเวลาการจับภาพใบหน้า (มิลลิวินาที)
+TabletsBasicCOlNameFaceOverlapRatio,Face Overlap ratio (0~1),人臉重疊比例 (0~1),フェイスオーバーラップ比（0〜1）,Relación de superposición de la cara (0 ~ 1),Ratio de chevauchement de la face (0 ~ 1),อัตราส่วนซ้อนทับหน้า (0 ~ 1)
+TabletsBasicCOlNameTargetFaceSizeLength,Minimum face size (0: umlimited),最小人臉寬高 (0:不限制),最小面は幅と高さです（0：無制限）,Tamaño mínimo de la cara (0: Umlimited),Taille minimale du visage (0: umlimited),ขนาดใบหน้าขั้นต่ำ (0: umlimited)
+TabletsBasicTitleNameCardAccess,Card identification settings,卡片驗證設定,カード識別設定,Configuración de identificación de tarjeta,Paramètres d'identification de la carte,การตั้งค่าการระบุบัตร
+TabletsAccessControlEnableCardAccess,Enable card identification,啟用卡片驗證,カード識別を有効にします,Habilitar la identificación de la tarjeta,Activer l'identification de la carte,เปิดใช้งานการระบุการ์ด
+TabletsAccessControlSupportWiegandBits,Card format,卡片規格,カード形式,Formato de tarjeta,Format de carte,รูปแบบการ์ด
+TabletsAccessControlCOlNameAllowedPersonnelGroups,Personnel groups,人員群組,人事グループ,Grupos de personal,Groupes de personnel,กลุ่มบุคลากร
+TabletsBasicTitleNameEnrollmentInfo,Enrollment info,註冊資訊,登録情報,Información de inscripción,Informations sur l'inscription,ข้อมูลการลงทะเบียน
+TabletsBasicCOlNameServerAddress,Server address,主機位址,サーバーアドレス,Dirección del servidor,Adresse du serveur,ที่อยู่เซิฟเวอร์
+TabletsBasicCOlNameDeviceID,Enrollment ID,註冊ID,登録ID,ID de inscripción,ID d'inscription,รหัสการลงทะเบียน
+TabletsBasicCOlNameHint,Input the server address and enrollment ID on the tablet to complete enrollment.,在平板電腦上輸入主機位址和註冊ID以完成註冊。,タブレットにサーバーアドレスと登録IDを入力して、登録を完了します。,Ingrese la dirección del servidor y la ID de inscripción en la tableta para completar la inscripción.,Entrez l'adresse du serveur et l'ID d'inscription sur la tablette pour terminer l'inscription.,ป้อนที่อยู่เซิร์ฟเวอร์และ ID การลงทะเบียนบนแท็บเล็ตเพื่อลงทะเบียนให้เสร็จสมบูรณ์
+TabletsAccessName,Advanced settings,進階設定,高度な設定,Ajustes avanzados,Réglages avancés,ตั้งค่าขั้นสูง
+TabletsAccessCOlNameTwoFactor,Two-Factor Authentication (Requires Face and Card),雙因子認證（需要人臉和卡片）,二因子認証（顔とカードが必要）,Autenticación de dos factores (requiere cara y tarjeta),Authentification à deux facteurs (nécessite le visage et la carte),การรับรองความถูกต้องสองปัจจัย (ต้องใช้ใบหน้าและการ์ด)
+TabletsAccessTitleNameRelay,Relay,繼電器,リレー,Relé,Relais,ถ่ายทอด
+TabletsAccessCOlNameDuration,Duration (milliseconds),持續時間 (毫秒),期間（ミリ秒）,Duración (milisegundos),Durée (millisecondes),ระยะเวลา (มิลลิวินาที)
+TabletsAccessTitleNameTemperatureMask,Temperature & mask settings,溫度與口罩設定,温度とマスクの設定,Configuración de temperatura y máscara,Paramètres de température et de masque,การตั้งค่าอุณหภูมิและหน้ากาก
+TabletsAccessSubTitleName,Temperature settings,溫度設定,温度設定,Configuración de temperatura,Réglages de température,การตั้งค่าอุณหภูมิ
+TabletsAccessColNameTemperatureUnit,Temperature unit,溫度單位,温度ユニット,Unidad de temperatura,Unité de température,อุณหภูมิ
+TabletsAccessColNameThreshold,Threshold,溫度門檻值,しきい値,Límite,Seuil,เกณฑ์
+TabletsAccessColNameFaceMasks,Face masks,口罩,フェイスマスク,Máscaras faciales,Masques faciaux,มาสก์ใบหน้า
+TabletsAccessColNameEnforceFaceMaskCheck,Mandatory Face Mask Verification,強制配戴口罩檢查,必須のフェイスマスク検証,Verificación obligatoria de máscara facial,Vérification obligatoire du masque de visage,การตรวจสอบหน้ากากใบหน้าบังคับ
+TabletsAccessColNameDisplayName,Name display format,人名顯示方式,名前表示形式,Formato de visualización de nombre,Format d'affichage de noms,รูปแบบการแสดงชื่อ
+TabletsAccessTitleNameResultDisplay,Recognition result display settings,辨識結果顯示設定,認識結果表示設定,Configuración de visualización de resultados de reconocimiento,Paramètres d'affichage des résultats de reconnaissance,การตั้งค่าการรับรู้ผลการแสดงผล
+TabletsAccessColNameDisplayProfilePhoto,Display profile photo,顯示照片,プロファイル写真を表示します,Pantalla Foto de perfil,Afficher la photo du profil,แสดงรูปโปรไฟล์
+TabletsAccessColNameShownProfilePhoto,Shown profile photo,顯示照片,表示されているプロフィール写真,Foto de perfil mostrado,Photo de profil affiché,แสดงรูปโปรไฟล์
+TabletsAccessColNameStrangerDisplayMessage,Greeting message,歡迎訊息,挨拶メッセージ,Mensaje de saludo,Message d'accueil,ข้อความอวยพร
+TabletsAccessColNameDisplayVerifyDuration,Result display duration (milliseconds),結果顯示時長 (毫秒),結果表示期間（ミリ秒）,Duración de la visualización de resultados (milisegundos),Durée d'affichage des résultats (millisecondes),ระยะเวลาแสดงผล (มิลลิวินาที)
+TabletsAccessColNameShowVerifyResult,Show identification result,顯示驗證結果,識別結果を表示します,Mostrar resultado de identificación,Afficher le résultat d'identification,แสดงผลการระบุตัวตน
+TabletsAccessColNameVerifyIndicationSuccessText,Successful Identification Message,驗證成功顯示,成功した識別メッセージ,Mensaje de identificación exitoso,Message d'identification réussi,ข้อความระบุตัวตนที่ประสบความสำเร็จ
+TabletsAccessColNameVerifyIndicationSuccessMessageText,Successful Identification Indicator Message,驗證成功指示,成功した識別インジケーターメッセージ,Mensaje indicador de identificación exitoso,Message d'indicateur d'identification réussi,ข้อความบ่งชี้การระบุตัวตนที่ประสบความสำเร็จ
+TabletsAccessColNameVerifyIndicationFailText,Identification Failure Message,驗證失敗顯示,識別障害メッセージ,Mensaje de falla de identificación,Message d'échec d'identification,ข้อความความล้มเหลวประจำตัว
+TabletsAccessColNameVerifyIndicationFailMessageText,Identification Failure Indicator Message,驗證失敗指示,識別障害インジケーターメッセージ,Mensaje del indicador de falla de identificación,Message de l'indicateur de défaillance d'identification,ข้อความตัวบ่งชี้ความล้มเหลวของการระบุตัวตน
+TabletsAccessColNameEnableClockMode,Enable time clock mode,啟用打卡鐘模式,タイムクロックモードを有効にします,Habilitar el modo de reloj de tiempo,Activer le mode horloge de temps,เปิดใช้งานโหมดนาฬิกาเวลา
+TabletsAccessColNameClockInfoData(Up),Clock-in Message 1 (Header),打卡提示訊息 1 (Header),クロックインメッセージ1（ヘッダー）,Mensaje de reloj 1 (encabezado),Message d'horloge 1 (en-tête),ข้อความนาฬิกา 1 (ส่วนหัว)
+TabletsAccessColNameClockInfoData(Down),Clock-in Message 2 (Footer),打卡提示訊息 2 (Footer),クロックインメッセージ2（フッター）,Mensaje de reloj 2 (pie de página),Message d'horloge 2 (pied de page),ข้อความนาฬิกา 2 (ส่วนท้าย)
+TabletsAccessColNameClockInfoData3,Clock-in Message 3,打卡提示訊息 3,クロックインメッセージ3,Mensaje de reloj 3,Message d'horloge 3,ข้อความนาฬิกา 3
+TabletsAccessColNameEnableClockFunction1,Enable Clock-in Option 1,啟用打卡選項1,クロックインオプション1を有効にします,Habilitar la opción de reloj-in 1,Activer l'option d'horloge 1,เปิดใช้งานตัวเลือกนาฬิกาใน 1
+TabletsAccessColNameEnableClockFunction2,Enable Clock-in Option 2,啟用打卡選項2,クロックインオプション2を有効にします,Habilitar la opción de reloj-in 2,Activer l'option de l'horloge 2,เปิดใช้งานตัวเลือกนาฬิกาใน 2
+TabletsAccessColNameEnableClockFunction3,Enable Clock-in Option 3,啟用打卡選項3,クロックインオプション3を有効にします,Habilitar la opción 3,Activer l'option HORK-IN 3,เปิดใช้งานตัวเลือกนาฬิกาใน 3
+TabletsAccessColNameEnableClockFunction4,Enable Clock-in Option 4,啟用打卡選項4,クロックインオプション4を有効にします,Habilitar la opción de reloj 4,Activer l'option 4 de l'horloge 4,เปิดใช้งานตัวเลือกนาฬิกาใน 4
+TabletsAccessColNameClockIndicationSuccessText,Successful Clock-in Indicator Message,打卡成功指示,成功したクロックインインジケーターメッセージ,Mensaje indicador de reloj exitoso,Message d'indicateur d'horloge réussi,ข้อความตัวบ่งชี้นาฬิกาที่ประสบความสำเร็จ
+TabletsAccessColNameClockSuccessMessageText,Successful Clock-in Message,打卡成功顯示訊息,成功したクロックインメッセージ,Mensaje de reloj exitoso,Message d'horloge réussi,ข้อความนาฬิกาที่ประสบความสำเร็จ
+TabletsAccessColNameClockIndicationFailText,Clock-in Failure Indicator Message,打卡失敗指示,クロックイン障害インジケーターメッセージ,Mensaje del indicador de falla de reloj,Message de l'indicateur de défaillance de l'horloge,ข้อความตัวบ่งชี้ความล้มเหลวของนาฬิกา
+TabletsAccessColNameClockFailMessageText,Clock-in Failure Message,打卡失敗顯示訊息,クロックイン失敗メッセージ,Mensaje de falla de reloj,Message d'échec de l'horloge,ข้อความล้มเหลวนาฬิกา
+TabletsAccessTitleNameRTSPSetting,Video Output (RTSP) Settings,視訊輸出 (RTSP) 設定,ビデオ出力（RTSP）設定,Configuración de salida de video (RTSP),Paramètres de sortie vidéo (RTSP),การตั้งค่าเอาท์พุทวิดีโอ (RTSP)
+TabletsAccessColNameEnableRTSPCamera,Enable video output (RTSP),啟用視訊輸出 (RTSP),ビデオ出力（RTSP）を有効にする,Habilitar la salida de video (RTSP),Activer la sortie vidéo (RTSP),เปิดใช้งานเอาต์พุตวิดีโอ (RTSP)
+TabletsAccessColNameIpAddress,IP address,IP 位址,IPアドレス,dirección IP,adresse IP,ที่อยู่ IP
+TabletsAccessColNameRTSPUserName,Username,帳號,ユーザー名,Nombre de usuario,Nom d'utilisateur,ชื่อผู้ใช้
+TabletsAccessColNameRTSPPassWord,Password,密碼,パスワード,Contraseña,Mot de passe,รหัสผ่าน
+TabletsAccessDefaultYes,Yes,Yes,はい,Sí,Oui,ใช่
+TabletsAccessDefaultNo,No,No,いいえ,No,Non,เลขที่
+TabletsAccessDefaultWelcome,Welcome,歡迎光臨,いらっしゃいませ,Bienvenido,Accueillir,ยินดีต้อนรับ
+TabletsAccessDefaultIdentifyS,Successful identification,辨識成功,成功した識別,Identificación exitosa,Identification réussie,บัตรประจำตัวที่ประสบความสำเร็จ
+TabletsAccessDefaultIdentifySM,please pass,請通行,合格してください,por favor pase,Veuillez passer,กรุณาผ่าน
+TabletsAccessDefaultIdentifyF,Identification failed,辨識失敗,識別に失敗しました,Falló de identificación,Échec de l'identification,การระบุตัวตนล้มเหลว
+TabletsAccessDefaultIdentifyFM,Please contact the service staff,請洽服務人員,サービススタッフに連絡してください,Póngase en contacto con el personal de servicio,Veuillez contacter le personnel du service,กรุณาติดต่อเจ้าหน้าที่บริการ
+TabletsAccessDefaultClockInfoDataUp,good day,美好的一天,良い一日,buen día,bonne journée,ขอให้เป็นวันที่ดี
+TabletsAccessDefaultClockInfoDataDown,Hello,你好,こんにちは,Hola,Bonjour,สวัสดี
+TabletsAccessDefaultClockInfoData3n,Please select the punch function,請選擇打卡功能,パンチ関数を選択してください,Seleccione la función de perforación,Veuillez sélectionner la fonction Punch,โปรดเลือกฟังก์ชั่น Punch
+TabletsAccessDefaultClockText1,Clock In,上班,クロックイン,Reloj en,S'accélérer,นาฬิกาใน
+TabletsAccessDefaultClockText2,Clock Out,下班,クロックアウト,Retirarse,S'allumer,นาฬิกาออก
+TabletsAccessDefaultClockText3,Break Begins,休息開始,休憩が始まります,Comienza la ruptura,La pause commence,เริ่มต้น
+TabletsAccessDefaultClockText4,Break Ends,休息結束,ブレークエンド,Desgarrar los extremos,Break se termine,หยุดพัก
+TabletsAccessDefaultClockText5,Please check in again,請重新打卡,もう一度チェックインしてください,Por favor registre de nuevo,Veuillez vérifier à nouveau,กรุณาเช็คอินอีกครั้ง
+TabletsAccessColNameAccessPassed,Access Passed,辨識成功提示,アクセスが渡されました,Se aprobó el acceso,L'accès est passé,เข้าถึงผ่าน
+TabletsAccessColNameAccessDenied,Access Denied,辨識失敗提示,アクセスが拒否されました,Acceso denegado,Accès refusé,ปฏิเสธการเข้าใช้
+TabletsAccessColNameAccessMessageOnTop,Message On Top,上部資訊,上にメッセージ,Mensaje en la parte superior,Message sur le dessus,ข้อความด้านบน
+TabletsAccessColNameAccessTextColor,Text Color,文字顏色,テキストの色,Color de texto,Couleur de texte,สีข้อความ
+TabletsAccessColNameAccessBgColor,Background Color,背景顏色,背景色,Color de fondo,Couleur de l'arrière plan,สีพื้นหลัง
+TabletsAccessColNameAccessDisplayImage,Display Image,顯示圖片,画像を表示します,Mostrar imagen,Afficher l'image,แสดงภาพ
+I/OBoxesBasicName,Basic settings,基本設定,基本設定,Ajustes básicos,Paramètres de base,การตั้งค่าพื้นฐาน
+I/OBoxesBasicCOlNameBrand,Brand,品牌,ブランド,Marca,Marque,ยี่ห้อ
+I/OBoxesBasicCOlNameModel,Model,模型,モデル,Modelo,Modèle,แบบอย่าง
+I/OBoxesBasicCOlNameDeviceName,Device name,設備名稱,装置名,Nombre del dispositivo,Nom de l'appareil,ชื่ออุปกรณ์
+I/OBoxesBasicCOlNameDeviceGroups,Device groups,設備組,デバイスグループ,Grupos de dispositivos,Groupes d'appareils,กลุ่มอุปกรณ์
+I/OBoxesBasicTitleNameConnection,Connection,連線,繋がり,Conexión,Connexion,การเชื่อมต่อ
+I/OBoxesBasicCOlNameIP,IP address,IP 位址,IPアドレス,dirección IP,adresse IP,ที่อยู่ IP
+I/OBoxesBasicCOlNamePort,Port,埠,ポート,Puerto,Port,ท่าเรือ
+I/OBoxesBasicCOlNameUserName,Username,帳號,ユーザー名,Nombre de usuario,Nom d'utilisateur,ชื่อผู้ใช้
+I/OBoxesBasicCOlNamePassword,Password,密碼,パスワード,Contraseña,Mot de passe,รหัสผ่าน
+I/OBoxesBasicTitleNameDigitalOutPut1,Digital output #1,輸出 #1,デジタル出力＃1,Salida digital #1,Sortie numérique # 1,เอาต์พุตดิจิตอล #1
+I/OBoxesBasicCOlNameEnable,Enable,啟用,有効にする,Permitir,Activer,เปิดใช้งาน
+I/OBoxesBasicCOlNameDefaultValue,Default value,默認值,デフォルト値,Valor por defecto,Valeur par défaut,ค่าเริ่มต้น
+I/OBoxesBasicCOlNameValueWhenTriggered,Value when triggered,觸發時的值,トリガーされたときの値,Valor cuando se activa,Valeur lorsqu'elle est déclenchée,ค่าเมื่อถูกทริกเกอร์
+I/OBoxesBasicCOlNameDurationWhenTriggered,Duration when triggered (seconds),觸發時的持續時間 (秒),トリガーされた時間（秒）,Duración cuando se activa (segundos),Durée lorsqu'elle est déclenchée (secondes),ระยะเวลาเมื่อทริกเกอร์ (วินาที)
+I/OBoxesBasicTitleNameDigitalOutPut2,Digital output #2,輸出 #2,デジタル出力＃2,Salida digital #2,Sortie numérique # 2,เอาต์พุตดิจิตอล #2
+WiegandBasicName,Basic settings,基本設定,基本設定,Ajustes básicos,Paramètres de base,การตั้งค่าพื้นฐาน
+WiegandBasicCOlNameDeviceName,Device name,設備名稱,装置名,Nombre del dispositivo,Nom de l'appareil,ชื่ออุปกรณ์
+WiegandBasicCOlNameDeviceGroups,Device groups,設備群組,デバイスグループ,Grupos de dispositivos,Groupes d'appareils,กลุ่มอุปกรณ์
+WiegandBasicTitleNameConnection,Connection Info,連線資訊,接続情報,Información de conexión,Informations sur la connexion,ข้อมูลการเชื่อมต่อ
+WiegandBasicCOlNameIP,IP address,IP 位址,IPアドレス,dirección IP,adresse IP,ที่อยู่ IP
+WiegandBasicCOlNamePort,Port,埠,ポート,Puerto,Port,ท่าเรือ
+WiegandBasicTitleNameSettings,Settings,設定,設定,Ajustes,Paramètres,การตั้งค่า
+WiegandBasicCOlNameIndex,Index,索引,索引,Índice,Indice,ดัชนี
+WiegandBasicCOlNameSystemCode,System code,系統代碼,システムコード,Código del sistema,Code système,รหัสระบบ
+WiegandBasicCOlNameDataFormat,Data format,資料格式,データ形式,Formato de datos,Format de données,รูปแบบข้อมูล
+VideoDeviceGroupsBasicName,Add image group,新增影像群組,画像グループを追加します,Agregar grupo de imágenes,Ajouter un groupe d'images,เพิ่มกลุ่มภาพ
+VideoDeviceGroupsBasicCOlNameDeviceName,video group name,影像群組名稱,ビデオグループ名,Nombre del grupo de video,Nom du groupe de vidéos,ชื่อกลุ่มวิดีโอ
+OutputDeviceGroupBasicName,Add device group,影像群組名稱,デバイスグループを追加します,Agregar grupo de dispositivos,Ajouter un groupe de périphériques,เพิ่มกลุ่มอุปกรณ์
+OutputDeviceGroupsBasicCOlNameDeviceName,device group name,設備群組名稱,デバイスグループ名,Nombre del grupo de dispositivos,Nom du groupe de périphériques,ชื่อกลุ่มอุปกรณ์
+ModifyCameras,modify device,修改設備,デバイスを変更します,modificar el dispositivo,modifier l'appareil,แก้ไขอุปกรณ์
+limitNumber0to1,Should range from 0 to 1,限制輸入0~1,0〜1の範囲です,Debe variar de 0 a 1,Devrait varier de 0 à 1,ควรอยู่ในช่วงตั้งแต่ 0 ถึง 1
+limitNumbers,Must be numeric,限制輸入數字,数値でなければなりません,Debe ser numérico,Doit être numérique,ต้องเป็นตัวเลข
+limitNumbers100up,Should range from 100 to 1000,限制輸入數字100~1000,100〜1000の範囲です,Debe variar de 100 a 1000,Devrait varier de 100 à 1000,"ควรอยู่ในช่วงตั้งแต่ 100 ถึง 1,000"
+VideoDeviceConnection,Connection Info,連線,接続情報,Información de conexión,Informations sur la connexion,ข้อมูลการเชื่อมต่อ
+VideoDeviceDigitalOutPut1,Digital Output #1,數位輸出 #1,デジタル出力＃1,Salida digital #1,Sortie numérique # 1,เอาต์พุตดิจิตอล #1
+VideoDeviceDigitalOutPut2,Digital Output #2,數位輸出 #2,デジタル出力＃2,Salida digital #2,Sortie numérique # 2,เอาต์พุตดิจิตอล #2
+NewDeviceGroups,Add output device group,新增輸出設備群組,出力デバイスグループを追加します,Agregar grupo de dispositivos de salida,Ajouter un groupe de périphériques de sortie,เพิ่มกลุ่มอุปกรณ์เอาต์พุต
+NewVideoDeviceGroups,Video device groups,影像設備群組,ビデオデバイスグループ,Grupos de dispositivos de video,Groupes d'appareils vidéo,กลุ่มอุปกรณ์วิดีโอ
+placeholder,please choose,請選擇,選んでください,por favor elija,Choisissez s'il vous plaît,โปรดเลือก
+SpecialCardNumber,visitor card number,訪客卡號,訪問者カード番号,número de tarjeta de visitante,numéro de carte de visiteur,หมายเลขบัตรผู้เยี่ยมชม
+SpecialCardHint,"Generally, when the identification is successful, we will provide the card number of the identified person. However, you can also choose to use a specific card number. To do so, specify the card number here, then go to the Access Rules page to complete the settings",一般情況下，當識別成功時，我們會提供被識別者的卡號。不過，您也可以選擇使用指定的卡號。若要這樣做，請在這裡指定該卡號，然後前往存取規則頁面以完成相關設定。,一般に、識別が成功した場合、識別された人のカード番号を提供します。ただし、特定のカード番号を使用することもできます。これを行うには、ここでカード番号を指定し、アクセスルールページに移動して設定を完了します,"En general, cuando la identificación sea exitosa, proporcionaremos el número de tarjeta de la persona identificada. Sin embargo, también puede elegir usar un número de tarjeta específico. Para hacerlo, especifique el número de tarjeta aquí, luego vaya a la página de reglas de acceso para completar la configuración","Généralement, lorsque l'identification est réussie, nous fournirons le numéro de carte de la personne identifiée. Cependant, vous pouvez également choisir d'utiliser un numéro de carte spécifique. Pour ce faire, spécifiez le numéro de carte ici, puis accédez à la page des règles d'accès pour compléter les paramètres",โดยทั่วไปเมื่อการระบุตัวตนสำเร็จเราจะให้หมายเลขบัตรของบุคคลที่ระบุ อย่างไรก็ตามคุณยังสามารถเลือกใช้หมายเลขบัตรเฉพาะ หากต้องการทำเช่นนั้นให้ระบุหมายเลขบัตรที่นี่จากนั้นไปที่หน้ากฎการเข้าถึงเพื่อทำการตั้งค่าให้เสร็จสมบูรณ์
+Notifications,Notifications,通知,通知,Notificaciones,Notifications,การแจ้งเตือน
+LineNotifyManagement,Line Notification,Line 通知管理,ライン通知,Notificación de línea,Notification de ligne,การแจ้งเตือนสาย
+NotificationLine,Line Notification,Line 通知,ライン通知,Notificación de línea,Notification de ligne,การแจ้งเตือนสาย
+NotificationInfo,Notification Info,通知信息,通知情報,Información de notificación,Informations sur la notification,ข้อมูลการแจ้งเตือน
+Fields,Fields,欄位,田畑,Campos,Des champs,ทุ่งนา
+person_id,Person ID,人員編號,個人ID,ID de persona,ID de personne,รหัสบุคคล
+timestamp,Timestamp,時間,タイムスタンプ,Marca de tiempo,Horodatage,การประทับเวลา
+person_name,Person Name,人員姓名,人の名前,Nombre de la persona,Nom d'une personne,ชื่อบุคคล
+card_number,Card Number,卡號,カード番号,Número de tarjeta,Numéro de carte,หมายเลขบัตร
+title,Title,職稱,タイトル,Título,Titre,ชื่อ
+department,Department,部門,部門,Departamento,Département,แผนก
+email,Email,電子郵件,Eメール,Correo electrónico,E-mail,อีเมล
+extension_number,Extension Number,分機號,拡張番号,Número de extensión,Numéro de poste,หมายเลขส่วนขยาย
+remarks,Remarks,備註,備考,Observaciones,Remarques,หมายเหตุ
+foreHead_temperature,Temperature,溫度,温度,Temperatura,Température,อุณหภูมิ
+face_image,Captured Face,抓拍到的人臉,キャプチャされた顔,Cara capturada,Visage capturé,ใบหน้าที่ถูกจับ
+register_image,Registered Face,註冊的人臉,登録面,Cara registrada,Visage enregistré,ใบหน้าที่ลงทะเบียน
+display_image,Image for Display,顯示用的照片,表示用の画像,Imagen para visualización,Image pour l'affichage,รูปภาพสำหรับการแสดงผล
+Note,Note,備註,注記,Nota,Note,บันทึก
+NotifyName,Notify Name,通知名稱,名前を通知します,Notificar el nombre,Informer le nom,แจ้งชื่อ
+MailNotify,Mail Notification,郵件通知,メール通知,Notificación de correo,Notification par courrier,การแจ้งเตือนทางไปรษณีย์
+MailNotifyManagement,Mail Notification,郵件通知,メール通知,Notificación de correo,Notification par courrier,การแจ้งเตือนทางไปรษณีย์
+NotificationMail,Mail Notification,郵件通知,メール通知,Notificación de correo,Notification par courrier,การแจ้งเตือนทางไปรษณีย์
+HttpNotifyManagement,HTTP Commands,HTTP 指令,HTTPコマンド,Comandos HTTP,Commandes HTTP,คำสั่ง http
+NotificationHttp,HTTP Command,HTTP 指令,HTTPコマンド,Comando http,Commande http,คำสั่ง http
+Method,Method,方法,方法,Método,Méthode,วิธี
+HttpNotify,HTTP Command,HTTP 指令,HTTPコマンド,Comando http,Commande http,คำสั่ง http
+AccessRules,Access Rules,事件規則,アクセスルール,Reglas de acceso,Règles d'accès,การเข้าถึงกฎ
+ActionRuleManagement,Access Rules,事件規則管理,アクセスルール,Reglas de acceso,Règles d'accès,การเข้าถึงกฎ
+ActionRule,Access Rule,事件規則,アクセスルール,Regla de acceso,Règle d'accès,กฎการเข้าถึง
+What,What,何事,何,Qué,Quoi,อะไร
+Who,Who,何人,誰が,OMS,OMS,WHO
+When,When,何時,いつ,Cuando,Quand,เมื่อไร
+ActionRuleInfo,Access Rule Info,規則信息,アクセスルール情報,Información de la regla de acceso,Informations sur les règles d'accès,ข้อมูลกฎการเข้าถึง
+Condition,Condition,規則條件,状態,Condición,Condition,เงื่อนไข
+Action,Action,採取動作,アクション,Acción,Action,การกระทำ
+ActionRuleName,Acess Rule Name,規則名稱,acessルール名,Nombre de la regla de la acción,Nom de la règle d'access,ชื่อกฎ ACESS
+AccessType,Access Type,類型,アクセスタイプ,Tipo de acceso,Type d'accès,ประเภทการเข้าถึง
+VideoGroup,Video Group,影像來源設備(群組),ビデオグループ,Grupo de videos,Groupe de vidéos,กลุ่มวิดีโอ
+PersonGroup,Person Group,人員(群組),人グループ,Grupo de personas,Groupe de personnes,กลุ่มบุคคล
+I/O boxes,I/O boxes,輸入/輸出接點裝置,I/Oボックス,Cajas de E/S,Boîtes d'E / S,กล่อง I/O
+Wiegand Converters,Wiegand Converters,韋根轉換器,ウィーガンドコンバーター,Convertidores de Wiegand,Convertisseurs Wiegand,ตัวแปลง Wiegand
+Schedules,Schedules,排程,スケジュール,Horario,Des horaires,ตารางเวลา
+ScheduleManagement,Schedules,排程,スケジュール,Horario,Des horaires,ตารางเวลา
+Schedule,Schedule,排程,スケジュール,Cronograma,Calendrier,กำหนดการ
+ScheduleInfo,Schedule Info,排程資訊,情報をスケジュールします,Información de programación,Planifier les informations,ข้อมูลกำหนดเวลา
+ScheduleName,Schedule Name,排程名稱,名前をスケジュールします,Nombre de programación,Nom de planification,ชื่อกำหนดเวลา
+Recurrent,Recurrent,重複性的,再発,Recurrente,Récurrent,กำเริบ
+AddROI,Create,新增,作成する,Crear,Créer,สร้าง
+RemoveROI,Remove,移除,取り除く,Eliminar,Retirer,ลบ
+VideoDeviceROI,ROIs,ROIs,ロワ,Roce,Ruissellement,Rois
+ClockInChannel,Devices for clock-in,識別簽到的設備(群組),クロックイン用のデバイス,Dispositivos para el reloj,Appareils pour l'horloge,อุปกรณ์สำหรับนาฬิกา
+ClockOutChannel,Devices for clock-out,識別簽退的設備(群組),クロックアウト用のデバイス,Dispositivos para obtener relojes,Appareils pour l'horloge,อุปกรณ์สำหรับนาฬิกาออก
+MenuAttendanceBoard,Attendance Board,點名看板,出席ボード,Concentración de asistencia,Comité de fréquentation,คณะกรรมการเข้าร่วม
+MenuAttendanceBoardSettings,Attendance Board,點名看板,出席ボード,Concentración de asistencia,Comité de fréquentation,คณะกรรมการเข้าร่วม
+PageTitleAttendanceBoardSettings,Attendance Board Settings,點名看板設定,出席ボードの設定,Configuración de la junta de asistencia,Paramètres du conseil d'assistance,การตั้งค่าคณะกรรมการเข้าร่วม
+MenuOccupancyBoard,Occupancy Board,容留看板,占有ボード,Junta de ocupación,Comité d'occupation,บอร์ด
+MenuOccupancyBoardSettings,Occupancy Board,容留看板,占有ボード,Junta de ocupación,Comité d'occupation,บอร์ด
+PageTitleOccupancyBoardSettings,Occupancy Board Settings,容留看板設定,占有ボードの設定,Configuración de la junta de ocupación,Paramètres du conseil d'occupation,การตั้งค่าคณะกรรมการ
+InvalidEmailFormat,Invalid format,格式不正確,無効な形式,Formato inválido,Format invalide,รูปแบบไม่ถูกต้อง
+InvalidIPAddressFormat,Invalid format,格式不正確,無効な形式,Formato inválido,Format invalide,รูปแบบไม่ถูกต้อง
+TabletsAccessControlTitleNameCardAccess,Card identification settings,卡片驗證設定,カード識別設定,Configuración de identificación de tarjeta,Paramètres d'identification de la carte,การตั้งค่าการระบุบัตร
+TabletsBasicCOlNameTriggerRelay,Trigger relay (door open),觸發繼電器 (開門),リレーをトリガー（ドア開けて）,Relé del gatillo (puerta abierta),Relais de déclenchement (porte ouverte),รีเลย์ทริกเกอร์ (เปิดประตู)
+TabletsBasicCOlNameRelayInternal,Duration (milliseconds),持續時間 (毫秒),期間（ミリ秒）,Duración (milisegundos),Durée (millisecondes),ระยะเวลา (มิลลิวินาที)
+TabletsAccessClockSettingTitle,Time clock mode settings,打卡鐘模式設定,タイムクロックモードの設定,Configuración del modo de reloj de tiempo,Paramètres du mode horloge,การตั้งค่าโหมดนาฬิกาเวลา
+TabletsAccessDefaultClockSuccess,Please pass,請通行,合格してください,Por favor pase,Veuillez passer,กรุณาผ่าน
+ScheduleType,Schedule Type,排程類型,スケジュールタイプ,Tipo de horario,Type de planification,ประเภทกำหนดเวลา
+ScheduleRecurrent,Recurrent,週期性,再発,Recurrente,Récurrent,กำเริบ
+ScheduleNonrecurrent,Nonrecurrent,非週期性,非再生,No recurrente,Non récurrente,ไม่เกิดขึ้นอีก
+RuleIdentificationResult,Identification result,辨識結果,識別結果,Resultado de identificación,Résultat d'identification,ผลการระบุตัวตน
+RuleIdentificationResultPass,Identification passed,辨識成功,識別が合格しました,Identificación aprobada,L'identification est passée,บัตรประจำตัวผ่าน
+RuleIdentificationResultFailed,Identification failed,辨識失敗,識別に失敗しました,Falló de identificación,Échec de l'identification,การระบุตัวตนล้มเหลว
+License,License,授權,ライセンス,Licencia,Licence,ใบอนุญาต
+LicenseManagement,License management,授權管理,ライセンス管理,Gestión de licencias,Gestion des licences,การจัดการใบอนุญาต
+TitleActivateLicense,License activation,授權啟用,ライセンスのアクティブ化,Activación de la licencia,Activation de licence,การเปิดใช้งานใบอนุญาต
+TitleLicenses,Activated licenses,已啟用的授權,アクティブ化されたライセンス,Licencias activadas,Licences activées,ใบอนุญาตเปิดใช้งาน
+Seq,#,#,＃,#,#,#
+LicenseKey,License key,授權碼,ライセンスキー,Clave de licencia,Clé de licence,รหัสใบอนุญาต
+TrialDays,Validaty (days),有效期 (天),validaty（日）,Validaty (días),Validaty (jours),ถูกต้อง (วัน)
+ExpireDays,Expiry date,到期日,有効期限,Fecha de caducidad,Date d'expiration,วันหมดอายุ
+FaceDBSize,Number of faces,人臉數,顔数,Número de caras,Nombre de visages,จำนวนใบหน้า
+Amounts,Video devices,影像設備數,ビデオデバイス,Dispositivos de video,Dispositifs vidéo,อุปกรณ์วิดีโอ
+BtnActivate,Activate,啟用,活性化,Activar,Activer,เปิดใช้งาน
+BtnTrial,Start trial,開始試用,試用を開始します,Prueba de inicio,Commencer procès,เริ่มทดลองใช้
+AvailableLicense ,Total license,可使用總數,合計ライセンス,Licencia total,Licence totale,ใบอนุญาตทั้งหมด
+CameraUsed,Taken by camera,攝影機已使用,カメラで撮影,Tomado por la cámara,Pris par la caméra,ถ่ายโดยกล้อง
+TabletUsed,Taken by tablet,平板已使用,タブレットで撮影,Tomado por tableta,Pris par tablette,ถ่ายโดยแท็บเล็ต
+MsgVideoDeviceLicenseUsage,{0} of {1} video device (camera and tablet) licenses in use.,正在使用 {0} 個影像設備 (攝影機及平板) 授權 (共 {1} 個),{1}ビデオデバイス（カメラとタブレット）の使用中のライセンスの{0}。,{0} de {1} dispositivo de video (cámara y tableta) licencias en uso.,{0} de {1} dispositif vidéo (caméra et tablette) licences utilisées.,{0} ของใบอนุญาตวิดีโอ {1} (กล้องและแท็บเล็ต) ที่ใช้งานอยู่
+RTSP,RTSP,RTSP,RTSP,RTSP,RTSP,RTSP
+RTP,RTP,RTP,RTP,RTP,RTP,RTP
+ContentLanguage,Language,語言,言語,Idioma,Langue,ภาษา
+ExpansionField,Expansion field,擴充欄位,拡張フィールド,Campo de expansión,Champ d'expansion,สนามขยาย
+WiegandStep1Name,Basic settings,基本設定,基本設定,Ajustes básicos,Paramètres de base,การตั้งค่าพื้นฐาน
+WiegandStep3Name,Output settings,輸出設定,出力設定,Ajustes de salida,Paramètres de sortie,การตั้งค่าเอาต์พุต
+TitleWiegandConverter,Wiegand Converter,韋根轉換器,Wiegand Converter,Convertidor de wiegand,Convertisseur Wiegand,Wiegand Converter
+TitleIOBox,IO Box,輸入/輸出接點裝置,IOボックス,IO Box,IO Box,กล่อง io
+VideoDeviceDigitalOutPut ,Output settings,輸出設定,出力設定,Ajustes de salida,Paramètres de sortie,การตั้งค่าเอาต์พุต
+DigitalOutput,Digital Output,輸出接點,デジタル出力,Salida digital,Sortie numérique,เอาต์พุตดิจิตอล
+TabletStepAccessControl,Access control settings,門禁設定,アクセス制御設定,Configuración de control de acceso,Paramètres de contrôle d'accès,การตั้งค่าการควบคุมการเข้าถึง
+Language,English,繁體中文,日本語,español,Français,แบบไทย
+msgLoadingVideo,Loading...,讀取中...,読み込み...,Cargando...,Chargement...,กำลังโหลด ...
+SpoofingLevelNone,Disabled,關閉,無効,Desactivado,Désactivé,พิการ
+SpoofingLevelLow,Low,低,低い,Bajo,Faible,ต่ำ
+SpoofingLevelHigh,High,高,高い,Alto,Elevé,สูง
+SpoofingLevelExtremeHigh,Very high,極高,すごく高い,Muy alto,Très élevé,สูงมาก
+ImageHaveClearFace,Contains a clear frontal face,影像含清楚的正臉,明確な前頭面が含まれています,Contiene una cara frontal clara,Contient une face frontale claire,มีใบหน้าหน้าผากที่ชัดเจน
+FaceMinimumResolution,Minimum face resolution: 500x500 px,最小臉部尺寸: 500 x 500px,最小顔解像度：500x500 px,Resolución mínima de la cara: 500x500 PX,Résolution minimum de la face : 500 x 500 PX,ความละเอียดใบหน้าขั้นต่ำ: 500x500 px
+ImageMaximumFileSize,Maximum file size: 10MB,最大檔案大小: 10MB,最大ファイルサイズ：10MB,Tamaño máximo del archivo: 10 MB,Taille maximale du fichier: 10 Mo,ขนาดไฟล์สูงสุด: 10MB
+NoEmptyNoSpaceNoSpecialRepeat,"Cannot be empty nor included spaces, special characters, cannot be duplicated",不能空白、特殊字元或留空。不能重複。,空にも含まれたり、スペース、特殊文字を含めたりすることはできません。,"No puede estar vacío ni espacios incluidos, caracteres especiales, no se pueden duplicar","Ne peut pas être vide ni inclus des espaces, des caractères spéciaux, ne peuvent pas être dupliqués",ไม่สามารถว่างเปล่าหรือรวมถึงช่องว่างอักขระพิเศษไม่สามารถทำซ้ำได้
+NoSpaceNeigherRepeat,Cannot be duplicated,不能重複,複製することはできません,No se puede duplicar,Ne peut pas être dupliqué,ไม่สามารถทำซ้ำได้
+Logout,Logout,登出,サインアウト,Cerrar sesión,Se déconnecter,ออกจากระบบ
+Identified,Identified,辨識為,認識する,Identificado,Identifié,ระบุ
+Unidentified,Cannot be identified,無法辨識,不十分です,No se puede identificar,Ne peut pas être identifié,ไม่สามารถระบุได้
+phone_number,Phone number,電話,電話,Número de teléfono,Numéro de téléphone,หมายเลขโทรศัพท์
+Excluded,Excluded,不列入,除外,Excluido,Exclu,ไม่รวม
+Embedded,Embedded,內嵌,埋め込み,Incorporado,Intégré,ที่ฝังอยู่
+Files,Files,檔案,ファイル,Archivos,Des dossiers,ไฟล์

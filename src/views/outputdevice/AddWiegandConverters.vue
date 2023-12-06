@@ -1,7 +1,9 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t("TitleWiegandConverter") }}</div>
+      <div class="h1">
+        {{ $t("TitleWiegandConverter") }}
+      </div>
 
       <stepprogress
         class="w-step-progress-3"
@@ -13,33 +15,38 @@
         :line-thickness="param_lineThickness"
         :steps="[disp_step1, disp_step3, disp_complete]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard v-if="isOnStep(0)" style="height: 35rem">
+      <CCard
+        v-if="isOnStep(0)"
+        style="height: 35rem"
+      >
         <CCardBody>
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
 
       <!-- Settings Form-->
-      <CCard v-else-if="isOnStep(1)" style="height: 35rem">
+      <CCard
+        v-else-if="isOnStep(1)"
+        style="height: 35rem"
+      >
         <CCardBody>
           <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -52,7 +59,8 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div
@@ -63,11 +71,12 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
 
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
 
         <div>
           <CButton
@@ -75,9 +84,9 @@
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
-
         </div>
       </div>
     </CCol>
@@ -169,8 +178,8 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        ip_address: '192.168.1.100',
-        port: 1001,
+        ip_address: '',
+        port: -1,
         bits: 26,
       };
 

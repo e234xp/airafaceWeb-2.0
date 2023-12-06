@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+
 function getIsFieldPassedFunction({ customValidators, rules }) {
   const validators = {
     nonEmpty: (value) => value.length > 0,
@@ -23,4 +25,26 @@ function getIsFieldPassedFunction({ customValidators, rules }) {
   };
 }
 
-export { getIsFieldPassedFunction };
+function checkDomainName(str) {
+  if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
+  const re = /^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/;
+  return re.test(str) ? '' : i18n.formatter.format('InvalidEmailFormat');
+}
+
+function checkPort(str) {
+  if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
+  const re = /^\d+$/;
+  if (!re.test(str)) return i18n.formatter.format('InvalidEmailFormat');
+  if (str < 1 || str > 65535) return i18n.formatter.format('InvalidEmailFormat');
+  return '';
+}
+
+function checkEmail(str) {
+  if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
+  const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return re.test(str) ? '' : i18n.formatter.format('InvalidEmailFormat');
+}
+
+export {
+  getIsFieldPassedFunction, checkDomainName, checkPort, checkEmail,
+};

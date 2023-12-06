@@ -2,15 +2,23 @@
   <div id="wrapper">
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ disp_headertitle }}
+      </div>
 
-      <stepprogress class="w-step-progress-3" :active-thickness="param_activeThickness"
-        :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
-        :passive-color="param_passiveColor" :current-step="flag_currentSetp" :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step2, disp_complete]" icon-class="fa fa-check">
-      </stepprogress>
+      <stepprogress
+        class="w-step-progress-3"
+        :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness"
+        :active-color="param_activeColor"
+        :passive-color="param_passiveColor"
+        :current-step="flag_currentSetp"
+        :line-thickness="param_lineThickness"
+        :steps="[disp_step1, disp_step2, disp_complete]"
+        icon-class="fa fa-check"
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -18,16 +26,24 @@
       <!-- Basic Form-->
       <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form" :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues" />
+          <Step1Form
+            :step1form="step1form"
+            @updateStep1form="updateStep1form"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
+          />
         </CCardBody>
       </CCard>
 
       <!-- Connection Form-->
       <CCard v-else-if="isOnStep(1)">
         <CCardBody>
-          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form" :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues" />
+          <Step2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
+          />
         </CCardBody>
       </CCard>
     </CCol>
@@ -36,17 +52,30 @@
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">{{ value_returnRouteName }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">{{ disp_previous }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="handleNext()"
-            :disabled="!isStepPassed(flag_currentSetp)">{{ nextButtonName(flag_currentSetp) }}
+          <CButton
+            class="btn btn-primary mb-3"
+            size="lg"
+            @click="handleNext()"
+            :disabled="!isStepPassed(flag_currentSetp)"
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -159,10 +188,10 @@ export default {
         brand: 'aira IO Box',
         model: 'TCP-KP-C2',
 
-        ip_address: '192.168.1.102',
-        port: 12345,
-        username: 'admin',
-        password: '123456',
+        ip_address: '',
+        port: -1,
+        username: '',
+        password: '',
 
         default: false,
         trigger: true,
