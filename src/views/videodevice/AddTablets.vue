@@ -1,7 +1,9 @@
 <template>
   <div id="wrapper">
     <div class="tablet">
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ $t('VideoDeviceBasic') }}
+      </div>
 
       <stepprogress
         class="w-step-progress-3"
@@ -12,15 +14,14 @@
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
         :steps="[
-          disp_step1,
-          disp_step2,
-          disp_complete,
+          $t('VideoDeviceBasic'),
+          $t('TabletStepAccessControl'),
+          $t('Complete'),
         ]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -31,8 +32,8 @@
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -43,8 +44,8 @@
           <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -69,24 +70,27 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ $t('Previous') }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -109,8 +113,6 @@ export default {
   name: 'AddTablets',
   data() {
     return {
-      param_cardStyle: 'height: 35rem;',
-
       value_returnRoutePath: this.$route.params.value_returnRoutePath
         ? this.$route.params.value_returnRoutePath
         : '',
@@ -118,39 +120,12 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
-
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
-
-      disp_step1: i18n.formatter.format('VideoDeviceBasic'),
-      disp_step2: i18n.formatter.format('TabletStepAccessControl'),
-      disp_complete: i18n.formatter.format('Complete'),
-
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
-
-      // default value i18n
-      i18nYes: i18n.formatter.format('TabletsAccessDefaultYes'),
-      i18nNo: i18n.formatter.format('TabletsAccessDefaultNo'),
-      i18nWelcome: i18n.formatter.format('TabletsAccessDefaultWelcome'),
-      i18nIdentifyS: i18n.formatter.format('TabletsAccessDefaultIdentifyS'),
-      i18nIdentifySM: i18n.formatter.format('TabletsAccessDefaultIdentifySM'),
-      i18nIdentifyF: i18n.formatter.format('TabletsAccessDefaultIdentifyF'),
-      i18nIdentifyFM: i18n.formatter.format('TabletsAccessDefaultIdentifyFM'),
-      i18nClockInfoDataUp: i18n.formatter.format('TabletsAccessDefaultClockInfoDataUp'),
-      i18nClockInfoDataDown: i18n.formatter.format('TabletsAccessDefaultClockInfoDataDown'),
-      i18nClockInfoData3n: i18n.formatter.format('TabletsAccessDefaultClockInfoData3n'),
-      i18nClockText1: i18n.formatter.format('TabletsAccessDefaultClockText1'),
-      i18nClockText2: i18n.formatter.format('TabletsAccessDefaultClockText2'),
-      i18nClockText3: i18n.formatter.format('TabletsAccessDefaultClockText3'),
-      i18nClockText4: i18n.formatter.format('TabletsAccessDefaultClockText4'),
-      i18nClockText5: i18n.formatter.format('TabletsAccessDefaultClockSuccess'),
-      i18nClockText6: i18n.formatter.format('TabletsAccessDefaultClockText5'),
 
       uuid: '',
       step1form: {
@@ -214,7 +189,7 @@ export default {
         clock_fail_message_text: '',
 
         // RTSP data
-        enable_rtsp_camera: true,
+        enable_rtsp_camera: false,
         ip_address: '',
         rtsp_username: '',
         rtsp_password: '',
@@ -255,34 +230,34 @@ export default {
         identity: ident,
 
         // result display
-        stranger_display_name: this.i18nWelcome,
+        stranger_display_name: i18n.formatter.format('TabletsAccessDefaultWelcome'),
 
-        verify_indication_success_text: this.i18nIdentifyS,
-        verify_indication_success_message_text: this.i18nIdentifySM,
-        verify_indication_fail_text: this.i18nIdentifyF,
-        verify_indication_fail_message_text: this.i18nIdentifyFM,
+        verify_indication_success_text: i18n.formatter.format('TabletsAccessDefaultIdentifyS'),
+        verify_indication_success_message_text: i18n.formatter.format('TabletsAccessDefaultIdentifySM'),
+        verify_indication_fail_text: i18n.formatter.format('TabletsAccessDefaultIdentifyF'),
+        verify_indication_fail_message_text: i18n.formatter.format('TabletsAccessDefaultIdentifyFM'),
 
         // clock df
         enable_clock_mode: false,
-        clock_info_data_1: this.i18nClockInfoDataUp,
-        clock_info_data_2: this.i18nClockInfoDataDown,
-        clock_info_data_3: this.i18nClockInfoData3n,
+        clock_info_data_1: i18n.formatter.format('TabletsAccessDefaultClockInfoDataUp'),
+        clock_info_data_2: i18n.formatter.format('TabletsAccessDefaultClockInfoDataDown'),
+        clock_info_data_3: i18n.formatter.format('TabletsAccessDefaultClockInfoData3n'),
         enable_clock_function_1: true,
         enable_clock_function_2: true,
         enable_clock_function_3: false,
         enable_clock_function_4: false,
-        clock_function_name_1: this.i18nClockText1,
-        clock_function_name_2: this.i18nClockText2,
-        clock_function_name_3: this.i18nClockText3,
-        clock_function_name_4: this.i18nClockText4,
-        clock_indication_success_text: this.i18nIdentifyS,
-        clock_success_message_text: this.i18nClockText5,
-        clock_indication_fail_text: this.i18nIdentifyF,
-        clock_fail_message_text: this.i18nClockText6,
+        clock_function_name_1: i18n.formatter.format('TabletsAccessDefaultClockText1'),
+        clock_function_name_2: i18n.formatter.format('TabletsAccessDefaultClockText2'),
+        clock_function_name_3: i18n.formatter.format('TabletsAccessDefaultClockText3'),
+        clock_function_name_4: i18n.formatter.format('TabletsAccessDefaultClockText4'),
+        clock_indication_success_text: i18n.formatter.format('TabletsAccessDefaultIdentifyS'),
+        clock_success_message_text: i18n.formatter.format('TabletsAccessDefaultClockSuccess'),
+        clock_indication_fail_text: i18n.formatter.format('TabletsAccessDefaultIdentifyF'),
+        clock_fail_message_text: i18n.formatter.format('TabletsAccessDefaultClockText5'),
 
-        ip_address: '192.168.10.48:8554',
-        rtsp_username: 'root',
-        rtsp_password: '12345',
+        ip_address: '',
+        rtsp_username: '',
+        rtsp_password: '',
       };
 
       console.log('GO!,', form);
@@ -548,13 +523,11 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
         case 1:
-          return this.disp_next;
-        case 2:
-          return this.disp_complete;
         default:
-          return this.disp_next;
+          return i18n.formatter.format('Next');
+        case 2:
+          return i18n.formatter.format('Complete');
       }
     },
   },

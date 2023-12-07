@@ -21,6 +21,7 @@ const ChangeAttendance = () => import('@/views/attendance/ChangeAttendance.vue')
 const WelcomeDashboard = () => import('@/views/dashboards/WelcomeDashboard.vue');
 const OccupancyDashboard = () => import('@/views/dashboards/OccupancyDashboard.vue');
 const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue');
+const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboard.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -62,6 +63,7 @@ const CheckGroup = () => import('@/views/personsmanagement/CheckGroup.vue');
 const ModifyWelcomeControlSetting = () => import('@/views/displays/ModifyWelcomeControlSetting.vue');
 const ModifyOccupancyControlSetting = () => import('@/views/displays/ModifyOccupancyControlSetting.vue');
 const ModifyCapacityControlSetting = () => import('@/views/displays/ModifyCapacityControlSetting.vue');
+const ModifySelfCheckinControlSetting = () => import('@/views/displays/ModifySelfCheckinControlSetting.vue');
 
 /// ////////////////////////////////////////
 /// /////    System settings    ////////////
@@ -186,6 +188,11 @@ function configRoutes() {
           path: 'capacitymode',
           name: 'DashboardCapacity',
           component: CapacityDashboard,
+        },
+        {
+          path: 'selfcheckinmode',
+          name: 'DashboardSelfCheckin',
+          component: SelfCheckinDashboard,
         },
         {
           path: 'reports',
@@ -389,6 +396,11 @@ function configRoutes() {
               path: 'modifycapacitycontrolsetting',
               name: 'ModifyCapacityControlSetting',
               component: ModifyCapacityControlSetting,
+            },
+            {
+              path: 'modifyselfcheckincontrolsetting',
+              name: 'ModifySelfCheckinControlSetting',
+              component: ModifySelfCheckinControlSetting,
             },
             // {
             //   path: 'welcomeDashboardSettings',

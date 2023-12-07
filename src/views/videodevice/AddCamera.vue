@@ -1,7 +1,9 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ disp_headertitle }}
+      </div>
       <stepprogress
         class="w-step-progress-4"
         :active-thickness="param_activeThickness"
@@ -17,10 +19,9 @@
           disp_complete,
         ]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -31,8 +32,8 @@
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -43,8 +44,8 @@
             :step1form="step1form"
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -55,8 +56,8 @@
           <Step3Form
             :step3form="step3form"
             @updateStep3form="updateStep3form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -69,24 +70,27 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ $t('Previous') }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -132,10 +136,6 @@ export default {
       disp_step2: i18n.formatter.format('VideoDeviceROI'),
       disp_step3: i18n.formatter.format('VideoFaceCapture'),
       disp_complete: i18n.formatter.format('Complete'),
-
-      // btn
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
 
       step1form: {
         name: '',
@@ -183,6 +183,8 @@ export default {
       if (!this.step1form.user) {
         this.step1form.user = '0';
       }
+      console.log('updateStep1form');
+      console.log(this.step1form);
     },
     updateStep2form(newValue) {
       this.step2form = { ...newValue };
@@ -195,9 +197,10 @@ export default {
       const form = {
         name: await this.getDefaultName(),
         stream_type: 'rtsp',
-        user: 'admin',
-        pass: '123456',
-        port: 554,
+        ip_address: '',
+        user: '',
+        pass: '',
+        port: -1,
         connection_info: '/media/video1',
         roi: [{}, {}, {}, {}, {}],
         face_min_length: 0,
@@ -370,15 +373,12 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
         case 1:
-          return this.disp_next;
         case 2:
-          return this.disp_next;
-        case 3:
-          return this.disp_complete;
         default:
-          return this.disp_next;
+          return i18n.formatter.format('Next');
+        case 3:
+          return i18n.formatter.format('Complete');
       }
     },
   },

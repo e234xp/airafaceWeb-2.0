@@ -12,29 +12,71 @@
       </CCardHeader>
       <CCardBody v-show="flag_basicBrandVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicBrand }}</h5>
-            <CSelect size="lg" v-model="localStep1form.brand" :options="value_brandList" :filterable="true" class="font-control mt-2"/>
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicBrand }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep1form.brand"
+              :options="value_brandList"
+              :filterable="true"
+              class="font-control mt-2"
+            />
           </CCol>
-          <CCol sm="6" class="h5"  >
-            <h5 class="ml-2">{{ disp_IOBoxesBasicModel }}</h5>
-            <CSelect size="lg" v-model="localStep1form.model" :options="value_modelList" :filterable="true" class="font-control mt-2"/>
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicModel }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep1form.model"
+              :options="value_modelList"
+              :filterable="true"
+              class="font-control mt-2"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDeviceName }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep1form.name"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDeviceName }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.name"
               :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
               :is-valid="isFieldPassed('name', localStep1form.name)"
-              required/>
+              required
+            />
           </CCol>
 
-          <CCol sm="6" class="h5 d-none" >
-            <h5 class="ml-2">{{ disp_IOBoxesBasicDeviceGroups }}</h5>
-            <multiselect class="mt-2"  v-model="localStep1form.divice_groups" placeholder="" :options="value_deviceGroupsList" :multiple="true"
-              :taggable="true" :hideSelected="true"
+          <CCol
+            sm="6"
+            class="h5 d-none"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicDeviceGroups }}
+            </h5>
+            <multiselect
+              class="mt-2"
+              v-model="localStep1form.divice_groups"
+              placeholder=""
+              :options="value_deviceGroupsList"
+              :multiple="true"
+              :taggable="true"
+              :hide-selected="true"
               :show-no-options="false"
             />
           </CCol>
@@ -54,39 +96,85 @@
       </CCardHeader>
       <CCardBody v-show="flag_connectionVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5"  >
-            <h5 class="ml-2">{{ disp_IOBoxesBasicIP }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep1form.ip_address"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicIP }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.ip_address"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
-              required/>
+              required
+            />
           </CCol>
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_IOBoxesBasicPort }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep1form.port"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicPort }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.port"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('port', localStep1form.port)"
-              required/>
+              required
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5"  >
-            <h5 class="ml-2">{{ disp_IOBoxesBasicUserName }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep1form.username"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicUserName }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.username"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('user', localStep1form.username)"
-              required/>
+              required
+            />
           </CCol>
-          <CCol sm="6" class="h5"  >
-            <h5 class="ml-2">{{ disp_IOBoxesBasicPassword }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep1form.password" :type="flag_view_password ? 'text' : 'password'"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_IOBoxesBasicPassword }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep1form.password"
+              :type="flag_view_password ? 'text' : 'password'"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('pass', localStep1form.password)"
-              required>
+              required
+            >
               <template #append-content>
-                <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                  <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                  <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                <CButton
+                  @click="viewPassword"
+                  style="padding: 0.375rem 0.375rem;"
+                >
+                  <CIcon
+                    v-show="flag_view_password"
+                    src="/img/eye-slash.png"
+                  />
+                  <CIcon
+                    v-show="!flag_view_password"
+                    src="/img/eye.png"
+                  />
                 </CButton>
               </template>
             </CInput>
@@ -106,9 +194,18 @@ import '@/airacss/vue-multiselect.css';
 export default {
   name: 'Step1Form',
   props: {
-    step1form: Object,
-    defaultValues: Object,
-    isFieldPassed: Function,
+    step1form: {
+      type: Object,
+      default: () => ({}),
+    },
+    defaultValues: {
+      type: Object,
+      default: () => ({}),
+    },
+    isFieldPassed: {
+      type: Function,
+      default: () => () => true,
+    },
   },
   data() {
     return {
@@ -132,7 +229,7 @@ export default {
       disp_IOBoxesBasicPassword: i18n.formatter.format('I/OBoxesBasicCOlNamePassword'),
 
       value_deviceGroupsList: ['A', 'B'],
-      value_brandList: ['airo IO Box'],
+      value_brandList: ['aira IO box'],
       value_modelList: ['TCP-KP-C2'],
       value_deviceGroups: '',
       // value_deviceGroupsList: [1, 2, 3],

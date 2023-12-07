@@ -3,9 +3,9 @@
     <CRow>
       <CCol sm="12">
         <CMailNotifyForm
-          :formData="$data"
-          :modifyMode="true"
-          :onFinish="onFinish"
+          :form-data="$data"
+          :modify-mode="true"
+          :on-finish="onFinish"
         />
       </CCol>
     </CRow>
