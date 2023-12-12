@@ -403,8 +403,8 @@ export default {
         groupList = groupList.join('\n');
 
         const timestamp = new Date(sourceData[i].timestamp);
-        const formattedDateTime = timestamp.toLocaleString();
-        const [dateString, timeString] = formattedDateTime.split(' ');
+        const dateString = timestamp.toLocaleDateString();
+        const timeString = timestamp.toLocaleTimeString();
 
         const modifierDT = sourceData[i].modifier_time;
 
