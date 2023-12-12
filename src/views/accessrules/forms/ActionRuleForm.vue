@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-4" icon-class="fa fa-check"
+    <div class="h1 mb-5">
+      {{ disp_header }}
+    </div>
+    <stepprogress
+      class="w-step-progress-4"
+      icon-class="fa fa-check"
       :active-thickness="param_activeThickness"
       :passive-thickness="param_passiveThickness"
       :active-color="param_activeColor"
@@ -9,149 +13,241 @@
       :line-thickness="param_lineThickness"
       :steps="[disp_inputActionRuleInfo, disp_condition, disp_action, disp_complete]"
       :current-step="flag_currentSetp"
-    >
-    </stepprogress>
+    />
 
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_actionruleName }}</th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_actionruleName }}
+              </th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_actionruleName" required
+                <CInput
+                  size="lg"
+                  v-model="value_actionruleName"
+                  required
                   :invalid-feedback="disp_noEmptyNorSpaceOnly"
                   :is-valid="actionruleNameValidator"
-                  />
+                />
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(1)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_accessType }}</th>
-              <th class="h5 w-25 table-th">{{ disp_personGroup }}</th>
-              <th class="h5 w-25 table-th">{{ disp_videoGroup }}</th>
-              <th class="h5 w-25 table-th">{{ disp_timeRange }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_accessType }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_personGroup }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_videoGroup }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_timeRange }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_accessType" :options="[
+                <CSelect
+                  size="lg"
+                  :value.sync="value_accessType"
+                  :options="[
                     { label: $t('Identified'), value: 'Identified' },
                     { label: $t('Unidentified'), value: 'Unidentified' },
                   ]"
-                  @change="accessTypeChanged($event)"/>
+                  @change="accessTypeChanged($event)"
+                />
               </td>
               <td class="table-td">
-                <multiselect :class="flag_personGroupPass ? 'is-valid' : 'is-invalid'" placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  :class="flag_personGroupPass ? 'is-valid' : 'is-invalid'"
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedPersonGroupList"
-                  :options="param_personGroupList"  @input="personGroupListOnInput"
+                  :options="param_personGroupList"
+                  @input="personGroupListOnInput"
                   :disabled="value_accessType=='Unidentified'"
+                />
+                <div
+                  v-if="!flag_personGroupPass"
+                  class="invalid-feedback"
                 >
-                </multiselect>
-                <div v-if="!flag_personGroupPass" class="invalid-feedback">{{disp_noEmptyNorSpaceOnly}}</div>
+                  {{ disp_noEmptyNorSpaceOnly }}
+                </div>
               </td>
               <td class="table-td">
-                <multiselect :class="flag_videoGroupPass ? 'is-valid' : 'is-invalid'" placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  :class="flag_videoGroupPass ? 'is-valid' : 'is-invalid'"
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedVideoGroupList"
-                  :options="param_vedioGroupList" @input="videoGroupListOnInput"
+                  :options="param_vedioGroupList"
+                  @input="videoGroupListOnInput"
+                />
+                <div
+                  v-if="!flag_videoGroupPass"
+                  class="invalid-feedback"
                 >
-                </multiselect>
-                <div v-if="!flag_videoGroupPass" class="invalid-feedback">{{disp_noEmptyNorSpaceOnly}}</div>
+                  {{ disp_noEmptyNorSpaceOnly }}
+                </div>
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_timeRange" :options="param_timeRangeList" required
-                :invalid-feedback="disp_noEmptyNorSpaceOnly"
-                :isValid="timeRangeValidator" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_timeRange"
+                  :options="param_timeRangeList"
+                  required
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :is-valid="timeRangeValidator"
+                />
               </td>
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_ioBoxGroup }}</th>
-              <th class="h5 w-25 table-th">{{ disp_weigandGroup }}</th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_ioBoxGroup }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_weigandGroup }}
+              </th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedIoBoxList"
                   :options="param_ioBoxList"
-                >
-                </multiselect>
+                />
               </td>
               <td class="table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedWiegandList"
                   :options="param_wiegandList"
-                >
-                </multiselect>
+                />
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_lineNotify }}</th>
-              <th class="h5 w-25 table-th">{{ disp_mailNotify }}</th>
-              <th class="h5 w-25 table-th">{{ disp_httpNotify }}</th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_lineNotify }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_mailNotify }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_httpNotify }}
+              </th>
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedLineNotifyList"
                   :options="param_lineNotifyList"
-                >
-                </multiselect>
+                />
               </td>
               <td class="table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedMailNotifyList"
                   :options="param_mailNotifyList"
-                >
-                </multiselect>
+                />
               </td>
               <td class="table-td">
-                <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-                  :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
+                <multiselect
+                  placeholder=""
+                  :multiple="true"
+                  :hide-selected="true"
+                  :searchable="false"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
                   v-model="value_selectedHttpNotifyList"
                   :options="param_httpNotifyList"
-                >
-                </multiselect>
+                />
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(3)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(3)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
@@ -167,25 +263,34 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary fz-lg btn-w-normal" @click="clickOnNext"
+          <CButton
+            class="btn btn-primary fz-lg btn-w-normal"
+            @click="clickOnNext"
             :disabled="
-            flag_currentSetp == 0 ?
-              !(flag_actionruleNamePass) :
-              flag_currentSetp == 1 ?
-                !(flag_personGroupPass && flag_videoGroupPass && flag_timeRangePass) :
-                false
-              ">
+              flag_currentSetp == 0 ?
+                !(flag_actionruleNamePass) :
+                flag_currentSetp == 1 ?
+                  !(flag_personGroupPass && flag_videoGroupPass && flag_timeRangePass) :
+                  false
+            "
+          >
             {{ nextButtonName() }}
           </CButton>
         </div>
@@ -421,7 +526,6 @@ export default {
     accessTypeChanged(evt) {
       const self = this;
       const type = evt.target.value;
-      console.log('accessTypeChanged', type);
 
       if (type === 'Identified') {
         self.personGroupListOnInput(self.value_selectedPersonGroupList);
@@ -467,11 +571,12 @@ export default {
           const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
           return uuid.label;
         });
-        self.personGroupListOnInput(self.value_selectedPersonGroupList);
+        if (self.value_accessType === 'Identified') self.personGroupListOnInput(self.value_selectedPersonGroupList);
+        else self.flag_personGroupPass = true;
 
         // Schedule
         const ret = self.param_timeRangeListValue.find((ii) => ii.value === self.value_settingitem.condition.schedule);
-        self.value_timeRange = ret.label;
+        if (ret) self.value_timeRange = ret.label;
       }
 
       if (self.value_settingitem.actions) {
@@ -656,6 +761,7 @@ export default {
     },
 
     timeRangeValidator(val) {
+      console.log('timeRangeValidator', val);
       if (!val) {
         this.flag_timeRangePass = false;
       } else {

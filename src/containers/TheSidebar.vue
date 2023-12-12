@@ -224,11 +224,11 @@ const nav = [
             name: i18n.formatter.format('Capacity'),
             to: '/displays/modifycapacitycontrolsetting',
           },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: 'Self Checkin',
-            to: '/displays/modifyselfcheckincontrolsetting',
-          },
+          // {
+          //   permission: ['Admin', 'PowerUser'],
+          //   name: 'Self Checkin',
+          //   to: '/displays/modifyselfcheckincontrolsetting',
+          // },
         ],
       },
 

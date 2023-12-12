@@ -1,110 +1,136 @@
 <template>
-  <div class="ratio-wrap ratio-wrap-16x9 selfcheckin-dashboard" style="margin: auto">
-    <img
-      :src="backgroud"
-      style="width: 100%; height: 100%; object-fit: cover;"
-      v-if="backgroud !== ''"
+  <div
+    class="ratio-wrap ratio-wrap-16x9"
+  >
+    <div
+      class="ratio-content selfcheckin-dashboard"
     >
-    <template v-if="currentStep === 1">
-      <div class="section-step-1">
-        <!-- <CSelect
+      <img
+        :src="backgroud"
+        style="width: 100%; height: 100%; object-fit: cover;"
+        v-if="backgroud !== ''"
+      >
+      <template v-if="currentStep === 1">
+        <div
+          class="section-step-1"
+          :style="{ zoom: `${zoomRatio}!important` }"
+        >
+          <!-- <CSelect
           v-model="selectedCamera"
           :options="cameraList"
           :placeholder="$t('Select')"
         /> -->
-        <div style="padding-top: 100%; position: relative;">
           <QrcodeStream
             @decode="onDecode"
             :camera="selectedCamera"
             class="mirror qrcodeReader"
           />
         </div>
-      </div>
-    </template>
-    <template v-if="currentStep === 2">
+      </template>
+      <template v-if="currentStep === 2">
+        <div
+          class="section-step-2"
+          :style="{ width: `calc(100% - ${paddingX}px)`, zoom: `${zoomRatio}!important` }"
+        >
+          <div class="info">
+            <div>
+              <div>編號</div>
+              <div>{{ visitor.id }}</div>
+            </div>
+            <div>
+              <div>姓名</div>
+              <div>{{ visitor.name }}</div>
+            </div>
+            <div>
+              <div>時段</div>
+              <div>12/07 12:00 - 12/07 17:00</div>
+            </div>
+          </div>
+          <div class="webcam-list">
+            <div
+              class="btn type-1"
+              @click="onReTake"
+            >
+              Re-Take
+            </div>
+            <div
+              class="webcam"
+              style="margin-right: 2rem;"
+            >
+              <WebCam
+                ref="webcam"
+                :device-id="selectedDeviceId"
+                @cameras="onCameras"
+                class="mirror"
+                style="width: 100%; height: 100%; "
+              />
+            </div>
+            <div
+              class="webcam"
+              style="margin-left: 2rem;"
+            >
+              <img
+                :src="imageList[0]"
+                class="mirror"
+                style="width: 100%; height: 100%;"
+                v-show="imageList[0] && imageList[0] !== ''"
+              >
+            </div>
+            <div
+              class="btn type-2"
+              @click="onRegister(0)"
+            >
+              Capture
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-if="currentStep === 3">
+        <div
+          class="section-step-3"
+          :style="{ zoom: `${zoomRatio}!important` }"
+        >
+          <div class="image">
+            <img
+              class="mirror"
+              :src="selectedImage"
+              style="width: 100%; height: 100%; object-fit: contain;"
+              v-if="selectedImage !== ''"
+            >
+          </div>
+          <div class="info">
+            <div>
+              <div>編號</div>
+              <div>{{ visitor.id }}</div>
+            </div>
+            <div>
+              <div>姓名</div>
+              <div>{{ visitor.name }}</div>
+            </div>
+            <div>
+              <div>時段</div>
+              <div>12/07 12:00 - 12/07 17:00</div>
+            </div>
+          </div>
+          <div
+            class="back-btn"
+            @click="onBack"
+          >
+            返回 ({{ cdCount }})
+          </div>
+        </div>
+      </template>
       <div
-        class="section-step-2"
-        :style="{ width: `calc(100% - ${paddingX}px)` }"
+        class="house-icon"
+        @click="onBack"
+        :style="{ right: `${(paddingX / 2) + 16}px` }"
+        v-if="currentStep === 2"
       >
-        <div class="info">
-          <div>{{ visitor.name }}</div>
-          <div>{{ visitor.extra_info.department }}</div>
-        </div>
-        <div class="webcam">
-          <div style="width: 100%; padding-top: 76%; position: relative;">
-            <WebCam
-              ref="webcam"
-              :device-id="selectedDeviceId"
-              @cameras="onCameras"
-              class="mirror"
-              style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"
-            />
-          </div>
-          <div
-            class="btn type-1"
-            @click="onReTake"
-          >
-            Re-Take
-          </div>
-        </div>
-        <div class="webcam">
-          <div style="width: 100%; padding-top: 76%; position: relative;">
-            <img
-              :src="imageList[0]"
-              class="mirror"
-              style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"
-              v-show="imageList[0] && imageList[0] !== ''"
-            >
-          </div>
-          <div
-            class="btn type-2"
-            @click="onRegister(0)"
-          >
-            Capture
-          </div>
-        </div>
-        <div class="webcam">
-          <div style="width: 100%; padding-top: 76%; position: relative;">
-            <img
-              :src="imageList[1]"
-              class="mirror"
-              style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"
-              v-show="imageList[1] && imageList[1] !== ''"
-            >
-          </div>
-          <div
-            class="btn type-2"
-            @click="onRegister(1)"
-          >
-            Capture
-          </div>
-        </div>
+        <CIcon
+          name="cil-house"
+          style="width: 100%; height: 100%; color: rgba(255, 255, 255, 0.8)"
+        />
       </div>
-    </template>
-    <template v-if="currentStep === 3">
-      <div class="section-step-3">
-        <div class="image">
-          <img
-            :src="selectedImage"
-            style="width: 100%; height: 100%; object-fit: contain;"
-            v-if="selectedImage !== ''"
-          >
-        </div>
-        <div class="info">
-          <div>{{ visitor.name }}</div>
-          <div>{{ visitor.extra_info.department }}</div>
-        </div>
-      </div>
-    </template>
-    <div
-      class="house-icon"
-      @click="onBack"
-      v-if="currentStep > 1"
-    >
-      <CIcon
-        name="cil-house"
-        style="width: 100%; height: 100%; color: rgba(255, 255, 255, 0.8)"
-      />
     </div>
   </div>
 </template>
@@ -132,7 +158,9 @@ export default {
       imageTaked: 0,
       imageList: [],
       selectedImage: '',
+      cdCount: 10,
       timer: null,
+      cdTimer: null,
     };
   },
   computed: {
@@ -169,38 +197,40 @@ export default {
           const rH = height / 1080;
           this.zoomRatio = Math.min(rW, rH);
 
-          // const dW = width - (1920 * this.zoomRatio);
-          // const dH = height - (1080 * this.zoomRatio);
+          const dW = width - (1920 * this.zoomRatio);
+          const dH = height - (1080 * this.zoomRatio);
 
-          dashboard.style.width = `${Math.floor(1920 * this.zoomRatio)}px`;
-          dashboard.style.height = `${Math.floor(1080 * this.zoomRatio)}px`;
+          // dashboard.style.width = `${Math.floor(1920 * this.zoomRatio)}px`;
+          // dashboard.style.height = `${Math.floor(1080 * this.zoomRatio)}px`;
 
-          // dashboard.style.paddingTop = `${Math.floor(dH / 2)}px`;
-          // dashboard.style.paddingBottom = `${Math.floor(dH / 2)}px`;
-          // dashboard.style.paddingLeft = `${Math.floor(dW / 2)}px`;
-          // dashboard.style.paddingRight = `${Math.floor(dW / 2)}px`;
+          dashboard.style.paddingTop = `${Math.floor(dH / 2)}px`;
+          dashboard.style.paddingBottom = `${Math.floor(dH / 2)}px`;
+          dashboard.style.paddingLeft = `${Math.floor(dW / 2)}px`;
+          dashboard.style.paddingRight = `${Math.floor(dW / 2)}px`;
 
-          // this.paddingX = dW;
+          this.paddingX = dW;
         }
       }
     },
     async onCameras(cameras) {
-      console.log('onCameras');
-      console.log(cameras);
       this.selectedDeviceId = cameras[0].deviceId;
-      this.startTimer();
+      this.startTimer(1500);
     },
-    async startTimer() {
-      this.timer = setInterval(() => {
-        if (this.imageTaked === 2) clearInterval(this.timer);
-        else {
-          const image = this.$refs.webcam.capture();
-          if (image) {
-            this.imageTaked += 1;
-            this.imageList.push(image);
-          }
-        }
-      }, 1000);
+    async startTimer(t) {
+      setTimeout(() => {
+        const image = this.$refs.webcam.capture();
+        if (image) this.imageList.push(image);
+      }, t || 500);
+      // this.timer = setInterval(() => {
+      //   if (this.imageTaked === 1) clearInterval(this.timer);
+      //   else {
+      //     const image = this.$refs.webcam.capture();
+      //     if (image) {
+      //       this.imageTaked += 1;
+      //       this.imageList.push(image);
+      //     }
+      //   }
+      // }, 1000);
     },
     async onDecode(decode) {
       const { uuid } = JSON.parse(decode);
@@ -209,6 +239,7 @@ export default {
         if (data.message === 'ok') {
           const [item] = data.visitor_list;
           this.visitor = item;
+          console.log(this.visitor);
           this.currentStep = 2;
         } else {
           // this.currentStep = 3;
@@ -226,8 +257,6 @@ export default {
       this.visitor.register_image = this.imageList[idx].replaceAll('data:image/jpeg;base64,', '');
       this.visitor.display_image = this.imageList[idx].replaceAll('data:image/jpeg;base64,', '');
       this.$globalModifyVisitor({ uuid: this.visitor.uuid, data: this.visitor }, (error, result) => {
-        console.log(error);
-        console.log(result);
         if (!error && result.message === 'ok') {
           this.$globalVerifyCard({
             client_id: this.display.entryChannel.label,
@@ -237,15 +266,23 @@ export default {
           }, (err, res) => {
             if (!err && res.message === 'ok') {
               this.currentStep = 3;
-              setTimeout(() => {
-                if (this.currentStep === 3) this.onBack();
-              }, 5000);
+              this.onCountDown();
             }
           });
         }
       });
     },
+    onCountDown() {
+      this.cdCount = 10;
+      this.cdTimer = setInterval(() => {
+        if (this.cdCount <= 0 && this.currentStep === 3) {
+          this.onBack();
+        }
+        this.cdCount -= 1;
+      }, 1000);
+    },
     onBack() {
+      clearInterval(this.cdTimer);
       this.imageList = [];
       this.imageList.length = 0;
       this.imageTaked = 0;
@@ -276,11 +313,13 @@ export default {
     this.zoomViews();
 
     window.addEventListener('resize', () => {
+      console.log('zoomViews');
       this.zoomViews();
     });
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    clearInterval(this.cdTimer);
 
     const mainElement = document.querySelector('.c-main');
     const headerElement = document.querySelector('.c-header');
@@ -295,13 +334,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 /* Add your component styles here */
 .section-step-1 {
   position: absolute;
-  right: 8.5%;
-  bottom: 15%;
-  width: 23%;
+  left: 50%;
+  top: 45%;
+  width: 440px;
+  height: 440px;
+  transform: translate(-50%, 0);
 }
 
 .mirror {
@@ -309,48 +350,70 @@ export default {
 }
 
 .qrcodeReader {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
 }
 
 .section-step-2 {
   position: absolute;
-  bottom: 9%;
-  height: 40%;
+  top: 40%;
+  height: 540px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 0 2rem;
   gap: 2rem;
 
   .info {
-    width: 40%;
-    color: #ff0;
-    font-size: 3.5rem;
+    width: 90%;
+    background: #E2E2E2;
+    border-radius: 1rem;
+    color: #323232;
+    font-size: 3rem;
+    display: flex;
+    justify-content: space-around;
+
+    > div {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      > div:first-child {
+        font-size: 1.5rem;
+      }
+    }
   }
 
-  .webcam {
-    width: calc(20% - 2rem);
+  .webcam-list {
+    width: 80%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
+
+    .webcam {
+      width: 22rem;
+      height: 16rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     .btn {
-      margin-top: 8px;
       padding: 8px 16px;
-      width: 70%;
-      font-size: 2.2rem;
+      width: 10.25rem;
+      height: 4.1875rem;
+      font-size: 2rem;
+      border-radius: 0.375rem;
       color: rgba(255, 255, 255, 0.8);
 
       &.type-1 {
-        background-color: #EB780D;
+        background-color: #FFA114;
       }
 
       &.type-2 {
-        background-color: #AF245F;
+        background-color: #30BF36;
       }
     }
   }
@@ -364,25 +427,55 @@ export default {
   height: 40%;
   transform: translate(-50%, 0);
   display: flex;
+  align-items: center;
 
   .image {
     width: 40%;
   }
 
   .info {
+    height: 18rem;
     width: 60%;
     padding: 1rem;
-    color: #ff0;
-    font-size: 3.5rem;
+    color: #323232;
+    font-size: 3rem;
+    border-radius: 0 0.9375rem 0.9375rem 0;
+    background: #E2E2E2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    > div {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      > div:first-child {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .back-btn {
+    position: absolute;
+    bottom: -3rem;
+    right: 0;
+    text-align: center;
+    padding: 8px 16px;
+    width: 10.25rem;
+    height: 4.1875rem;
+    font-size: 2rem;
+    border-radius: 0.375rem;
+    color: rgba(255, 255, 255, 0.8);
+    background-color: #30BF36;
   }
 }
 
 .house-icon {
   position: absolute;
-  right: 1rem;
   bottom: 1rem;
-  width: 5rem;
-  height: 5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   background: #20a8d8;
   border-radius: 50%;
   display: flex;

@@ -208,6 +208,44 @@ export default {
         } else thereIsMoreData = false;
       }
 
+      // shitf = 0;
+      // thereIsMoreData = true;
+
+      // while (thereIsMoreData) {
+      //   const query = {
+      //     start_time: startTS,
+      //     end_time: endTS,
+      //     slice_length: 2,
+      //     slice_shift: shitf,
+      //     uuid_list: [],
+      //     with_image: false,
+      //   };
+
+      //   const retResult = await self.$globalGetVisitorResult(query);
+
+      //   const err = retResult.error;
+      //   if (err == null && retResult.data) {
+      //     const { result } = retResult.data;
+      //     if (result.data) {
+      //       if (result.data.length >= 1) {
+      //         result.data.sort((a, b) => a.timestamp - b.timestamp);
+
+      //         self.lastRecordTimestamp = result.data[result.data.length - 1].timestamp;
+      //         console.log('self.lastRecordTimestamp', self.lastRecordTimestamp);
+
+      //         // self.normalizationData(result.data);
+
+      //         self.verifyData = self.verifyData.concat(result.data);
+      //       }
+      //     }
+
+      //     if (result.slice_shift + result.data.length < result.total_length) {
+      //       thereIsMoreData = true;
+      //       shitf = result.slice_shift + result.data.length;
+      //     } else thereIsMoreData = false;
+      //   } else thereIsMoreData = false;
+      // }
+
       try {
         if (cb) {
           cb(self.verifyData, self.lastRecordTimestamp);
