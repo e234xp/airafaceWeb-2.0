@@ -185,7 +185,7 @@ export default {
     async getDefaultValues() {
       const form = {
         name: await this.getDefaultName(),
-        brand: 'aira IO Box',
+        brand: 'airaIO Box',
         model: 'TCP-KP-C2',
 
         ip_address: '',

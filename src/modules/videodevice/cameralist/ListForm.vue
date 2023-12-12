@@ -266,7 +266,7 @@ export default {
     ...mapState(['ellipsisMode']),
   },
   watch: {
-    value_searchingFilter: () => {
+    value_searchingFilter() {
       const self = this;
       self.value_tablePage.currentPage = 1;
       this.value_dataItemsToShow = this.generateFilteredData(
@@ -309,10 +309,6 @@ export default {
 
       self.value_cameraUsed = sourceData.length || 0;
       localStorage.setItem('cameraUsed', self.value_cameraUsed);
-
-      console.log('self.value_cameraUsed', self.value_cameraUsed);
-      console.log('self.value_tabletUsed', self.value_tabletUsed);
-      console.log('self.value_availableLicenseAmount', self.value_availableLicenseAmount);
 
       self.disp_MsgVideoDeviceLicenseUsage = self.disp_MsgVideoDeviceLicenseUsage.replace('{0}', (self.value_cameraUsed + self.value_tabletUsed));
       self.disp_MsgVideoDeviceLicenseUsage = self.disp_MsgVideoDeviceLicenseUsage.replace('{1}', self.value_availableLicenseAmount);

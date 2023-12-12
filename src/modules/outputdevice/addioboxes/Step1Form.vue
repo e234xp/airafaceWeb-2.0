@@ -229,7 +229,7 @@ export default {
       disp_IOBoxesBasicPassword: i18n.formatter.format('I/OBoxesBasicCOlNamePassword'),
 
       value_deviceGroupsList: ['A', 'B'],
-      value_brandList: ['aira IO box'],
+      value_brandList: ['airaIO box'],
       value_modelList: ['TCP-KP-C2'],
       value_deviceGroups: '',
       // value_deviceGroupsList: [1, 2, 3],

@@ -230,6 +230,7 @@
                       class="form-check-input me-1"
                       type="checkbox"
                       value="item"
+                      :disabled="filterImage.length === 2 && filterImage.indexOf(item) >= 0"
                       :checked="value_selectedFields.indexOf(item) >= 0"
                       @change="fieldChanged(item, $event)"
                     >
@@ -443,6 +444,11 @@ export default {
     Object.assign(cloneObject, defaultlState(), this.formData);
 
     return cloneObject;
+  },
+  computed: {
+    filterImage() {
+      return ['face_image', 'register_image', 'display_image'].filter((key) => this.value_selectedFields.indexOf(key) < 0);
+    },
   },
   async created() {
     const self = this;

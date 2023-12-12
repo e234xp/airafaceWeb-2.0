@@ -35,6 +35,12 @@ $btn-in-cell-height: 30px;
 .btn-primary,
 .btn-danger {
     min-width: $theme-btn-width;
+
+    &:disabled {
+        background-color: $secondary !important;
+        border-color: $secondary !important;
+        opacity: 0.3;
+    }
 }
 
 .btn-w-md {
