@@ -136,7 +136,7 @@
               </vxe-table-column> -->
 
                <!-- 顯示 QR code -->
-               <vxe-table-column width="170" field="qrCode" :title="'QR code'" type="html" v-if="formData.type === 'Visitor'">
+               <vxe-table-column width="170" field="qrCodeDisplay" :title="'QR code'" type="html" v-if="formData.type === 'Visitor'">
               </vxe-table-column>
 
               <!-- 編輯和刪除按鈕 -->
@@ -992,10 +992,12 @@ export default {
 
       salf.flag_downloadingExecl = true;
       let snapshotFolder = null;
+      let qrcodeFolder = null;
 
       const zip = new JsZip();
 
       if (withPhoto) snapshotFolder = zip.folder('snapshot');
+      if (this.formData.type === 'Visitor') qrcodeFolder = zip.folder('qrcode');
 
       const workbook = new Excel.Workbook();
       let worksheet = null;
@@ -1069,6 +1071,13 @@ export default {
                 base64: true,
               });
             }
+          }
+
+          if (this.formData.type === 'Visitor') {
+            const fileNameR = salf.value_allTableItems[idx].id;
+            qrcodeFolder.file(`${fileNameR}.jpeg`, salf.value_allTableItems[idx].qrCode, {
+              base64: true,
+            });
           }
         }
 

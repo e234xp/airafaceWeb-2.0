@@ -178,7 +178,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
-        { value: 'SelfCheckin', label: 'SelfCheckin' },
+        // { value: 'SelfCheckin', label: 'SelfCheckin' },
       ],
     };
   },
@@ -291,7 +291,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
-        { value: 'SelfCheckin', label: 'SelfCheckin' },
+        // { value: 'SelfCheckin', label: 'SelfCheckin' },
       ];
     },
     clickOnLogin() {

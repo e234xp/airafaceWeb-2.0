@@ -1,45 +1,83 @@
 <template>
-  <div class="ratio-wrap ratio-wrap-16x9" v-show="!isLoadSetting">
-    <div class="ratio-content dashboard" style="position: absolute; z-index: 50;"
-      :style="{backgroundImage:'url('+displaySettings.background_image+')'}">
-
-      <div class="dashboard-header d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
+  <div
+    class="ratio-wrap ratio-wrap-16x9"
+    v-show="!isLoadSetting"
+  >
+    <div
+      class="ratio-content dashboard"
+      style="position: absolute; z-index: 50;"
+      :style="{backgroundImage:'url('+displaySettings.background_image+')'}"
+    >
+      <div
+        class="dashboard-header d-flex justify-content-between"
+        style="margin-left: 20px; margin-right: 20px;"
+      >
         <div class="d-flex align-items-center">
-          <div class="dashboard-attendance-logo" @click="toLoginPage"
-            :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"></div>
-          <div class="attendance-title"></div>
+          <div
+            class="dashboard-attendance-logo"
+            @click="toLoginPage"
+            :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"
+          />
+          <div class="attendance-title" />
         </div>
         <div class="current-date-time text-white ff-noto-sans fw-200">
-          <div class="fz-xxxl current-date">{{ currentDate }}</div>
-          <div class="fz-super-large lh-6">{{ currentTime }}</div>
+          <div class="fz-xxxl current-date">
+            {{ currentDate }}
+          </div>
+          <div class="fz-super-large lh-6">
+            {{ currentTime }}
+          </div>
         </div>
       </div>
 
       <!-------------------  Occupancy ------------------>
-      <div class="dashboard-divider" style="margin-left: 20px; margin-right: 20px;"></div>
+      <div
+        class="dashboard-divider"
+        style="margin-left: 20px; margin-right: 20px;"
+      />
 
       <!-------------------  Attendance - BEGIN ------------------>
-      <div class="attendance-top-box" style="margin-left: 20px; margin-right: 20px;"
-        v-show="displaySettings.displayChart">
+      <div
+        class="attendance-top-box"
+        style="margin-left: 20px; margin-right: 20px;"
+        v-show="displaySettings.displayChart"
+      >
         <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
         <div class="attendance-statistics-box">
           <!-- 第 1 列：標籤 -->
           <div class="attendance-header-tag">
-            <button v-if="displaySettings.enableSummaryView" class="btn-return" @click="returnToAllGroups">
-              <img v-if="!isShowGroup" src="@/assets/img/attendance_return_arrow.svg" class="attendance-return-arrow" />
+            <button
+              v-if="displaySettings.enableSummaryView"
+              class="btn-return"
+              @click="returnToAllGroups"
+            >
+              <img
+                v-if="!isShowGroup"
+                src="@/assets/img/attendance_return_arrow.svg"
+                class="attendance-return-arrow"
+              >
             </button>
-            <div v-show="!isShowGroup">{{ attendanceGroupTitle }}</div>
+            <div v-show="!isShowGroup">
+              {{ attendanceGroupTitle }}
+            </div>
           </div>
 
           <!-- 第 2 列： 甜甜圈圖表 + 人數的數值-->
           <div class="attendance-statistics-data-box">
             <div class="doughnut-chart-canvas-wrap">
               <!-- Attendance 甜甜圈圖表 -->
-              <canvas id="doughnut-chart-canvas" class=""></canvas>
+              <canvas
+                id="doughnut-chart-canvas"
+                class=""
+              />
             </div>
             <div class="d-flex align-items-end">
-              <div class="attendance-header-present">{{ attendancePresent }}</div>
-              <div class="attendance-header-total">/ {{ attendanceTotal }}</div>
+              <div class="attendance-header-present">
+                {{ attendancePresent }}
+              </div>
+              <div class="attendance-header-total">
+                / {{ attendanceTotal }}
+              </div>
             </div>
           </div>
 
@@ -47,12 +85,18 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center">
-                <CIcon name="cilSortDescending" class="attendance-sort-icon text-white" />
+                <CIcon
+                  name="cilSortDescending"
+                  class="attendance-sort-icon text-white"
+                />
                 <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ $t("SortByGroupName") }}</span>
               </div>
               <button class="btn-reset">
-                <img class="attendance-dropdown-arrow" src="@/assets/img/dropdown_arrow_down.svg"
-                  alt="dropdown_arrow_down" />
+                <img
+                  class="attendance-dropdown-arrow"
+                  src="@/assets/img/dropdown_arrow_down.svg"
+                  alt="dropdown_arrow_down"
+                >
               </button>
             </div>
           </div>
@@ -60,14 +104,15 @@
 
         <!-- Attendance 柱狀圖統計圖表 -->
         <div class="attendance-chart-canvas-wrap">
-          <canvas id="attendance-chart-canvas"></canvas>
+          <canvas id="attendance-chart-canvas" />
         </div>
       </div>
 
       <!-------------------  Attendance - END ------------------>
 
       <!-- Occupancy/Attendance 顯示人員資料列表 -->
-      <div v-if="!isShowGroup"
+      <div
+        v-if="!isShowGroup"
         style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
         :class="[
           getGridStyleByAmount(),
@@ -75,31 +120,50 @@
           'd-flex',
           'flex-wrap',
           'person-list-container',
-        ]">
-        <div v-for="(person, index) in currentPersons" :key="index" :class="[
+        ]"
+      >
+        <div
+          v-for="(person, index) in currentPersons"
+          :key="index"
+          :class="[
             'person-card',
             'inline-block',
             person.status === 0 ? 'normal-person-card' : '',
             person.status === 2 ? 'abnormal-person-card' : '',
             person.status === 1 ? 'absent-person-card' : '',
             getStyleByAmount(),
-          ]" :style="'zoom: ' + zoomRatio + ' !important;'">
+          ]"
+          :style="'zoom: ' + zoomRatio + ' !important;'"
+        >
           <div class="d-flex justify-content-between align-items-center person-image-box">
-            <img v-show="displaySettings.displayPhoto!='NONE'"
+            <img
+              v-show="displaySettings.displayPhoto!='NONE'"
               :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
-              :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`" />
+              :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`"
+            >
 
             <div class="person-info-box text-white">
-              <div :class="[
+              <div
+                :class="[
                   person.status === 1 ? 'absent-person-name' : 'person-name',
                   'fz-xxxl',
                   'fw-600',
-                ]" :style="'zoom: ' + zoomRatio + ' !important;'">
+                ]"
+                :style="'zoom: ' + zoomRatio + ' !important;'"
+              >
                 {{ getDisplayName(person) }}
               </div>
-              <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-xl">{{showField(person,
-                displaySettings.line2)}} &nbsp;</div>
-              <div v-if="person.status !== 1" class="d-flex align-items-end temperature-info">
+              <div
+                v-show="displaySettings.displayCardMode=='STANDARD'"
+                class="fz-xl"
+              >
+                {{ showField(person,
+                             displaySettings.line2) }} &nbsp;
+              </div>
+              <div
+                v-if="person.status !== 1"
+                class="d-flex align-items-end temperature-info"
+              >
                 <!-- <div :class="[
                     'fz-xxxl',
                     'fw-700',
@@ -110,23 +174,26 @@
                 </div>
                 <span class="temperature-unit fz-sm">°{{ displaySettings.temperatureUnit }}</span> -->
               </div>
-              <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-sm fw-300">
+              <div
+                v-show="displaySettings.displayCardMode=='STANDARD'"
+                class="fz-sm fw-300"
+              >
                 <span style="margin-right: 20px;">
                   {{
-                  person.clockinRecord ?
-                  person.clockinRecord.timestamp ?
-                  formatEpochTime(person.clockinRecord.timestamp)
-                  : "&nbsp;"
-                  : "&nbsp;" }}
+                    person.clockinRecord ?
+                      person.clockinRecord.timestamp ?
+                        formatEpochTime(person.clockinRecord.timestamp)
+                        : "&nbsp;"
+                      : "&nbsp;" }}
                 </span>
 
                 <span>
                   {{
-                  person.clockoutRecord ?
-                  person.clockoutRecord.timestamp ?
-                  formatEpochTime(person.clockoutRecord.timestamp)
-                  : "&nbsp;"
-                  : "&nbsp;" }}
+                    person.clockoutRecord ?
+                      person.clockoutRecord.timestamp ?
+                        formatEpochTime(person.clockoutRecord.timestamp)
+                        : "&nbsp;"
+                      : "&nbsp;" }}
                 </span>
               </div>
             </div>
@@ -135,7 +202,8 @@
       </div>
 
       <!-- Attendance 顯示群組資料列表 -->
-      <div v-if="isShowGroup"
+      <div
+        v-if="isShowGroup"
         style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
         :class="[
           getGridStyleByAmount(),
@@ -143,13 +211,20 @@
           'd-flex',
           'flex-wrap',
           'person-list-container',
-        ]">
-
-        <button v-for="(group, index) in currentGroups" class="btn-reset item" @click="(evt)=>onClickGroup(evt, group)"
-          :key="index">
+        ]"
+      >
+        <button
+          v-for="(group, index) in currentGroups"
+          class="btn-reset item"
+          @click="(evt)=>onClickGroup(evt, group)"
+          :key="index"
+        >
           <transition name="list">
-            <div name="groupCards" :class="['group-card', 'btn-reset', getGroupStyleByAmount()]"
-              :style="'zoom: ' + zoomRatio + ' !important;'">
+            <div
+              name="groupCards"
+              :class="['group-card', 'btn-reset', getGroupStyleByAmount()]"
+              :style="'zoom: ' + zoomRatio + ' !important;'"
+            >
               <div class="attendace-group-card-name">
                 {{ group.groupName }}
               </div>
@@ -164,42 +239,88 @@
       </div>
 
       <!-- footer -->
-      <div class="footer-box d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
-        <div v-show="isLoadSetting" class="align-items-center" style="color:white">
+      <div
+        class="footer-box d-flex justify-content-between"
+        style="margin-left: 20px; margin-right: 20px;"
+      >
+        <div
+          v-show="isLoadSetting"
+          class="align-items-center"
+          style="color:white"
+        >
           Loading...
         </div>
 
         <!-- 分頁按鈕和滑桿 -->
         <div class="pager d-flex align-items-center justify-content-center">
-          <button class="btn-reset" :disabled="currentPageIndex === 0" @click="onClickPrev">
-            <img v-if="currentPageIndex === 0" class="pager-left-arrow"
-              src="@/assets/img/pager_left_arrow_disabled.svg" />
-            <img v-else class="pager-left-arrow" src="@/assets/img/pager_left_arrow.svg" />
+          <button
+            class="btn-reset"
+            :disabled="currentPageIndex === 0"
+            @click="onClickPrev"
+          >
+            <img
+              v-if="currentPageIndex === 0"
+              class="pager-left-arrow"
+              src="@/assets/img/pager_left_arrow_disabled.svg"
+            >
+            <img
+              v-else
+              class="pager-left-arrow"
+              src="@/assets/img/pager_left_arrow.svg"
+            >
           </button>
           <!-- <button v-for="(item, i) in currentPageIndex" class="pager-left-dots btn-reset"
             @click="onClickPagerDot(i)"></button> -->
-          <button v-for="(item, i) in range(dispPageIndexStart, currentPageIndex - 1)" :key="i"
-            class="pager-left-dots btn-reset" @click="onClickPagerDot(i)"></button>
+          <button
+            v-for="(item, i) in range(dispPageIndexStart, currentPageIndex - 1)"
+            :key="i"
+            class="pager-left-dots btn-reset"
+            @click="onClickPagerDot(i)"
+          />
 
           <div class="pager-progressbar-box">
-            <div class="pager-progressbar-track"></div>
-            <div class="pager-progressbar-thumb" :style="{ width: pageProgressPercentage }"></div>
+            <div class="pager-progressbar-track" />
+            <div
+              class="pager-progressbar-thumb"
+              :style="{ width: pageProgressPercentage }"
+            />
           </div>
           <!-- <button v-for="(item, i) in totalPageIndex - currentPageIndex" class="pager-right-dots btn-reset"
             @click="onClickPagerDot(i + currentPageIndex + 1)"></button> -->
-          <button v-for="(item, i) in range(currentPageIndex + 1, dispPageIndexEnd)" :key="i"
-            class="pager-right-dots btn-reset" @click="onClickPagerDot(i + currentPageIndex + 1)"></button>
+          <button
+            v-for="(item, i) in range(currentPageIndex + 1, dispPageIndexEnd)"
+            :key="i"
+            class="pager-right-dots btn-reset"
+            @click="onClickPagerDot(i + currentPageIndex + 1)"
+          />
 
-          <button class="btn-reset" :disabled="currentPageIndex === totalPageIndex" @click="onClickNext">
-            <img v-if="currentPageIndex === totalPageIndex" class="pager-right-arrow"
-              src="@/assets/img/pager_right_arrow_disabled.svg" />
-            <img v-else class="pager-right-arrow" src="@/assets/img/pager_right_arrow.svg" />
+          <button
+            class="btn-reset"
+            :disabled="currentPageIndex === totalPageIndex"
+            @click="onClickNext"
+          >
+            <img
+              v-if="currentPageIndex === totalPageIndex"
+              class="pager-right-arrow"
+              src="@/assets/img/pager_right_arrow_disabled.svg"
+            >
+            <img
+              v-else
+              class="pager-right-arrow"
+              src="@/assets/img/pager_right_arrow.svg"
+            >
           </button>
         </div>
         <!-- 右下角 powered by aira 字樣 -->
         <div class="footer-detail-box">
-          <div class="footer-detail-text">powered by</div>
-          <img src="@/assets/img/aira-logo-white.svg" alt="" class="footer-logo" />
+          <div class="footer-detail-text">
+            powered by
+          </div>
+          <img
+            src="@/assets/img/aira-logo-white.svg"
+            alt=""
+            class="footer-logo"
+          >
         </div>
       </div>
     </div>
@@ -235,6 +356,7 @@ export default {
 
   data() {
     return {
+      unSuscribe: null,
       obj_loading: null,
 
       isLoadSetting: true,
@@ -422,15 +544,13 @@ export default {
                 if (err == null && data) {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
-                  }
-                  else {
+                  } else {
                     person.display_image = emptyFace;
                   }
 
                   if (data.register_image !== '') {
                     person.register_image = data.register_image;
-                  }
-                  else {
+                  } else {
                     person.register_image = emptyFace;
                   }
                 }
@@ -452,15 +572,13 @@ export default {
               if (err == null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
-                }
-                else {
+                } else {
                   person.display_image = emptyFace;
                 }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
-                }
-                else {
+                } else {
                   person.register_image = emptyFace;
                 }
               }
@@ -594,23 +712,17 @@ export default {
     self.isLoadSetting = true;
 
     // 1.0 Load Display Config
-    let setting = await self.$globalGetDisplaySetting();
-
-    let valueSetting = setting.data || {};
-    const occupancy = valueSetting.OCCUPANCY;
-    self.displaySettings = { ...self.displaySettings, ...occupancy };
+    const { data: display } = await self.$globalGetDisplaySetting();
+    self.displaySettings = { ...self.displaySettings, ...display.OCCUPANCY };
 
     if (self.displaySettings.dailyResetTime.length === 2) {
       self.displaySettings.dailyResetTime += ':00';
     }
 
     // 1.5 Load Attendance Config
-    setting = await self.$globalGetAttendanceSettings();
-    console.log(setting);
-    valueSetting = setting || {};
-
-    const videoDeviceGroupIn = valueSetting.data.video_device_group_in;
-    const videoDeviceGroupOut = valueSetting.data.video_device_group_out;
+    const setting = await self.$globalGetAttendanceSettings();
+    const videoDeviceGroupIn = setting.data.video_device_group_in;
+    const videoDeviceGroupOut = setting.data.video_device_group_out;
 
     self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
       let result = [];
@@ -635,13 +747,13 @@ export default {
       self.params_entryChannels = Array.from(new Set(entryChannels));
       self.params_leaveChannels = Array.from(new Set(leaveChannels));
 
-      console.log('Channels', self.params_entryChannels, self.params_leaveChannels);
+      console.log('Channels', JSON.stringify(self.params_entryChannels), JSON.stringify(self.params_leaveChannels));
     });
 
     // 2.0 modify setting
     self.isShowGroup = self.displaySettings.enableSummaryView;
 
-    // 3.0 initiao Group Person
+    // 3.0 initial Group Person
     await self.initialGroupPerson();
 
     // 4.0 initial Views
@@ -717,6 +829,8 @@ export default {
       clearInterval(self.currentTimeLooper);
       self.currentTimeLooper = null;
     }
+
+    this.unSuscribe();
   },
   methods: {
     range(start, end) {
@@ -757,22 +871,21 @@ export default {
     async initialGroupPerson() {
       const self = this;
 
-      self.persons = [...await self.setupPersonData(), ...await self.setupVisitorData()];
+      self.persons = await self.setupPersonData();
       console.log(self.persons);
 
       for (let i = self.persons.length - 1; i >= 0; i -= 1) {
         const r = self.persons[i];
         let inDisplayGroup = false;
 
-        if (r.group_list) {
-          if (Array.isArray(r.group_list)) {
-            inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
+        // 檢查人員的群組是否在顯示設定中的群組中
+        if (r.group_list && Array.isArray(r.group_list)) {
+          inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
 
-            if (inDisplayGroup) {
-              console.log(r);
-              console.log(r.group_list, self.displaySettings.displayGroup, inDisplayGroup);
-            }
-          }
+          // if (inDisplayGroup) {
+          //   console.log(r);
+          //   console.log(r.group_list, self.displaySettings.displayGroup, inDisplayGroup);
+          // }
         }
 
         if (!inDisplayGroup) {
@@ -780,6 +893,7 @@ export default {
         }
       }
 
+      // sort person by name
       self.persons.sort((a, b) => {
         let ret = 0;
 
@@ -853,12 +967,10 @@ export default {
               if (gp) {
                 gp.persons.push(person);
                 gp.total += 1;
-              } else {
-                if ((self.displaySettings.displayGroup.indexOf(group) >= 0)) {
-                  self.groupPersons.push({
-                    groupName: group, persons: [person], present: 0, total: 1,
-                  });
-                }
+              } else if ((self.displaySettings.displayGroup.indexOf(group) >= 0)) {
+                self.groupPersons.push({
+                  groupName: group, persons: [person], present: 0, total: 1,
+                });
               }
             }
           });
@@ -999,15 +1111,13 @@ export default {
                 if (err == null && data) {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
-                  }
-                  else {
+                  } else {
                     person.display_image = emptyFace;
                   }
 
                   if (data.register_image !== '') {
                     person.register_image = data.register_image;
-                  }
-                  else {
+                  } else {
                     person.register_image = emptyFace;
                   }
                 }
@@ -1032,15 +1142,13 @@ export default {
               if (err == null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
-                }
-                else {
+                } else {
                   person.display_image = emptyFace;
                 }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
-                }
-                else {
+                } else {
                   person.register_image = emptyFace;
                 }
               }
@@ -1175,6 +1283,11 @@ export default {
             const hour = new Date(record.timestamp).getHours();
 
             const person = self.persons.find((r) => r.uuid === uuid);
+
+            if (record.group_list.indexOf('All Visitor') >= 0) {
+              person.display_image = record.face_image_id;
+            }
+
             switch (mode) {
               case 3:
                 {
@@ -1310,6 +1423,10 @@ export default {
 
             const hour = new Date(record.timestamp).getHours();
             const person = self.persons.find((r) => r.uuid === uuid);
+
+            if (record.group_list.indexOf('All Visitor') >= 0) {
+              person.display_image = record.face_image_id;
+            }
 
             if (person) person.clockinRecord = record;
 
@@ -1588,15 +1705,13 @@ export default {
             if (err === null && data) {
               if (data.display_image !== '') {
                 person.display_image = data.display_image;
-              }
-              else {
+              } else {
                 person.display_image = emptyFace;
               }
 
               if (data.register_image !== '') {
                 person.register_image = data.register_image;
-              }
-              else {
+              } else {
                 person.register_image = emptyFace;
               }
             }

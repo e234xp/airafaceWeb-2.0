@@ -19,6 +19,7 @@ const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
 const TEST_HOST = '192.168.10.122'; // airaFace2
+// const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = '443'; // 測試mini的PORT
 const HOST = TEST_MODE ? TEST_HOST : window.location.hostname;
@@ -628,6 +629,7 @@ Vue.prototype.$globalGotoRootPage = (page, cb) => {
       case 'Welcome': router.push({ name: 'DashboardWelcome' }); break;
       case 'Occupancy': router.push({ name: 'DashboardOccupancy' }); break;
       case 'Capacity': router.push({ name: 'DashboardCapacity' }); break;
+      // case 'SelfCheckin': router.push({ name: 'DashboardSelfCheckin' }); break;
       case 'Setting':
       default:
         router.push({ name: 'PersonDailyAttendanceReport' }); break;
@@ -845,15 +847,15 @@ Vue.prototype.$globalManualClockinResult = (
     });
 });
 
-Vue.prototype.$globalGetVisitorResult = (
-  query, cb,
-) => new Promise((resolve) => {
-  postJson('/airafacelite/queryvisitorverifyresult', query,
-    (err, data) => {
-      if (cb) cb(err, err ? null : data);
-      resolve({ error: err, data: err ? null : data });
-    });
-});
+// Vue.prototype.$globalGetVisitorResult = (
+//   query, cb,
+// ) => new Promise((resolve) => {
+//   postJson('/airafacelite/queryvisitorverifyresult', query,
+//     (err, data) => {
+//       if (cb) cb(err, err ? null : data);
+//       resolve({ error: err, data: err ? null : data });
+//     });
+// });
 
 Vue.prototype.$globalGetStrangerResult = (
   query, cb,
@@ -1575,6 +1577,16 @@ Vue.prototype.$globalDefaultLicense = (
   uuid, cb,
 ) => new Promise((resolve) => {
   postJson('/airafacelite/defaultlicense', { uuid },
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalVerifyCard = (
+  payload, cb,
+) => new Promise((resolve) => {
+  postJson('/airaface/verifycardnoservice', payload,
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
