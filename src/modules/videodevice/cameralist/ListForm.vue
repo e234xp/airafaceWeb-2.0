@@ -18,7 +18,7 @@
               size="lg"
               class="btn btn-primary mr-3 mb-3"
               @click="handleOnAdd()"
-              :disabled="value_tabletUsed + value_cameraUsed >= value_availableLicenseAmount && false"
+              :disabled="value_tabletUsed + value_cameraUsed >= value_availableLicenseAmount"
             >
               {{ disp_add }}
             </CButton>

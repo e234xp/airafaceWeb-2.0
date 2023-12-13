@@ -634,20 +634,20 @@ export default {
     },
 
     senderValidator(val) {
-      this.flag_senderPass = checkEmail(val);
-      return this.flag_senderPass === '';
-    },
-
-    accountValidator(val) {
       const self = this;
 
       if (val.replace(/\s/g, '').length === 0) {
-        self.flag_accountPass = false;
+        self.flag_senderPass = false;
       } else {
-        self.flag_accountPass = val.length > 0;
+        self.flag_senderPass = val.length > 0;
       }
 
-      return self.flag_accountPass;
+      return self.flag_senderPass;
+    },
+
+    accountValidator(val) {
+      this.flag_accountPass = checkEmail(val);
+      return this.flag_accountPass === '';
     },
 
     passwordValidator(val) {
