@@ -127,7 +127,7 @@
                 <CSelect
                   size="lg"
                   :value.sync="value_timeRange"
-                  :options="param_timeRangeList"
+                  :options="param_timeRangeListValue"
                   required
                   :invalid-feedback="disp_noEmptyNorSpaceOnly"
                   :is-valid="timeRangeValidator"
@@ -321,7 +321,9 @@ const defaultlState = () => ({
 
   param_personGroupListValue: [],
   param_personGroupList: [],
-  param_timeRangeListValue: [],
+  param_timeRangeListValue: [
+    { value: '', label: '-- please select --' },
+  ],
   param_timeRangeList: [],
   param_ioBoxListValue: [],
   param_ioBoxList: [],
@@ -452,12 +454,12 @@ export default {
     // Schedule
     ret = await self.$globalGetScheduleList();
     if (!ret.error) {
-      self.param_timeRangeList = [];
+      // self.param_timeRangeList = [];
       for (let i = 0; i < ret.data.data_list.length; i += 1) {
         self.param_timeRangeListValue.push({ value: ret.data.data_list[i].uuid, label: ret.data.data_list[i].name });
-        self.param_timeRangeList.push(ret.data.data_list[i].name);
+        // self.param_timeRangeList.push(ret.data.data_list[i].name);
 
-        if (i === 0) self.value_timeRange = ret.data.data_list[i].name;
+        // if (i === 0) self.value_timeRange = ret.data.data_list[i].name;
       }
     }
 
@@ -576,7 +578,7 @@ export default {
 
         // Schedule
         const ret = self.param_timeRangeListValue.find((ii) => ii.value === self.value_settingitem.condition.schedule);
-        if (ret) self.value_timeRange = ret.label;
+        if (ret) self.value_timeRange = ret.value;
       }
 
       if (self.value_settingitem.actions) {
@@ -662,7 +664,7 @@ export default {
         });
 
         // Schedule
-        const ret = self.param_timeRangeListValue.find((ii) => ii.label === self.value_timeRange);
+        const ret = self.param_timeRangeListValue.find((ii) => ii.value === self.value_timeRange);
         const localTimeRange = ret.value;
 
         // IO Box
@@ -761,7 +763,6 @@ export default {
     },
 
     timeRangeValidator(val) {
-      console.log('timeRangeValidator', val);
       if (!val) {
         this.flag_timeRangePass = false;
       } else {
