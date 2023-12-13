@@ -34,8 +34,8 @@ function checkDomainName(str) {
 function checkPort(str) {
   if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
   const re = /^\d+$/;
-  if (!re.test(str)) return i18n.formatter.format('InvalidEmailFormat');
-  if (str < 1 || str > 65535) return i18n.formatter.format('InvalidEmailFormat');
+  if (!re.test(str)) return i18n.formatter.format('NoEmptyPortOnly');
+  if (str < 1 || str > 65535) return i18n.formatter.format('NoEmptyPortOnly');
   return '';
 }
 
@@ -45,6 +45,12 @@ function checkEmail(str) {
   return re.test(str) ? '' : i18n.formatter.format('InvalidEmailFormat');
 }
 
+function checkIpAddr(str) {
+  if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
+  const re = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
+  return re.test(str) ? '' : i18n.formatter.format('InvalidIPAddressFormat');
+}
+
 export {
-  getIsFieldPassedFunction, checkDomainName, checkPort, checkEmail,
+  getIsFieldPassedFunction, checkDomainName, checkPort, checkEmail, checkIpAddr,
 };

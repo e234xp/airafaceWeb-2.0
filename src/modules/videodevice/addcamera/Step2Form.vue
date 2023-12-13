@@ -231,7 +231,6 @@ export default {
 
     self.flag_snapshotReadly = false;
 
-    console.log('mounted', self.localStep1form);
     // {
     //   connection_info: "/media/video1"
     //   ip_address: "asdfasfd"
@@ -288,7 +287,6 @@ export default {
       url: valueUrl,
     };
 
-    console.log('params', params);
     self.$globalCameraSnapshot(params, (err, data) => {
       if (!err) {
         self.image.src = `data:image/jpg;base64,${data.base64}`;

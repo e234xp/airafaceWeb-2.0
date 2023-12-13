@@ -141,8 +141,8 @@
               class="mt-2"
               style="width: 100%"
               v-model="localStep1form.ip_address"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
+              :invalid-feedback="flag_ipAddrPass"
+              :is-valid="ipAddrValidator"
               required
             />
           </CCol>
@@ -157,8 +157,8 @@
               class="mt-2"
               style="width: 100%"
               v-model.number="localStep1form.port"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('port', localStep1form.port)"
+              :invalid-feedback="flag_portPass"
+              :is-valid="portValidator"
               required
             />
           </CCol>
@@ -177,8 +177,8 @@
               class="mt-2"
               style="width: 100%"
               v-model="localStep1form.user"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('user', localStep1form.user)"
+              :invalid-feedback="flag_userPass"
+              :is-valid="userValidator"
               required
             />
           </CCol>
@@ -194,8 +194,6 @@
               class="mt-2"
               style="width: 100%"
               v-model="localStep1form.pass"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('pass', localStep1form.pass)"
               required
             >
               <template #append-content>
@@ -271,6 +269,8 @@ import i18n from '@/i18n';
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
+import { checkPort, checkIpAddr } from '@/utils';
+
 export default {
   name: 'ModifyCamerasStep1Form',
   props: {
@@ -332,6 +332,10 @@ export default {
         { value: 'rtsp', label: i18n.formatter.format('RTSP') },
         { value: 'sdp', label: i18n.formatter.format('RTP') },
       ],
+
+      flag_portPass: '',
+      flag_ipAddrPass: '',
+      flag_userPass: '',
     };
   },
   components: {
@@ -340,19 +344,17 @@ export default {
   computed: {
     isShowConnectionString() {
       // 判断輸入框是否都不為空
-      return (
-        this.localStep1form.ip_address !== ''
-        && this.localStep1form.port !== ''
-        && this.localStep1form.user !== ''
-        && this.localStep1form.pass !== ''
-        && this.localStep1form.connection_info !== ''
-      );
+      return this.flag_portPass === ''
+        && this.flag_ipAddrPass === ''
+        && this.flag_userPass === ''
+        && this.localStep1form.connection_info !== '';
     },
     // 連接資訊   let testString = 'rtsp://admin:12345@192.168.10.171:554/media/video1';
     connectionString() {
-      return `${this.localStep1form.stream_type}://${this.localStep1form.user
-      }:${this.localStep1form.pass.replace(/./g, '*')}@${this.localStep1form.ip_address
-      }:${this.localStep1form.port}${this.localStep1form.connection_info}`;
+      return `${this.localStep1form.stream_type}://${this.localStep1form.user}`
+        + `${this.localStep1form.pass !== '' ? ':' : ''}${this.localStep1form.pass.replace(/./g, '*')}`
+        + `${this.localStep1form.user !== '' ? '@' : ''}${this.localStep1form.ip_address}`
+        + `:${this.localStep1form.port}${this.localStep1form.connection_info}`;
     },
   },
   // 拿資料 寫入資料
@@ -438,6 +440,21 @@ export default {
           }
         }
       }
+    },
+
+    portValidator(val) {
+      this.flag_portPass = checkPort(val);
+      return this.flag_portPass === '';
+    },
+
+    ipAddrValidator(val) {
+      this.flag_ipAddrPass = checkIpAddr(val);
+      return this.flag_ipAddrPass === '';
+    },
+
+    userValidator(val) {
+      this.flag_userPass = val === '' && this.localStep1form.pass !== '' ? this.$t('NoEmptyNoSpace') : '';
+      return this.flag_userPass === '';
     },
   },
 };

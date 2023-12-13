@@ -223,7 +223,7 @@ export default {
 
   created() {
     this.localStep1form = { ...this.step1form };
-    this.localStep2form = { ...this.step2form };
+    this.localStep2form = { ...this.step2form, ...this.localStep2form };
   },
 
   mounted() {
@@ -231,7 +231,6 @@ export default {
 
     self.flag_snapshotReadly = false;
 
-    console.log('mounted', self.localStep1form);
     // {
     //   connection_info: "/media/video1"
     //   ip_address: "asdfasfd"

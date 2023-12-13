@@ -630,7 +630,7 @@ export default {
 
     portValidator(val) {
       this.flag_portPass = checkPort(val);
-      return this.flag_hostPass === '';
+      return this.flag_portPass === '';
     },
 
     senderValidator(val) {

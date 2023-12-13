@@ -183,8 +183,6 @@ export default {
       if (!this.step1form.user) {
         this.step1form.user = '0';
       }
-      console.log('updateStep1form');
-      console.log(this.step1form);
     },
     updateStep2form(newValue) {
       this.step2form = { ...newValue };
@@ -200,7 +198,7 @@ export default {
         ip_address: '',
         user: '',
         pass: '',
-        port: -1,
+        port: 554,
         connection_info: '/media/video1',
         roi: [{}, {}, {}, {}, {}],
         face_min_length: 0,
@@ -265,11 +263,9 @@ export default {
             else if (key === 'port') ret = true;
             else {
               ret = this.isFieldPassed(key, value);
-              console.log('1', key, value, ret);
             }
           } else {
             ret = this.isFieldPassed(key, value);
-            console.log('2', key, value, ret);
           }
 
           return ret;

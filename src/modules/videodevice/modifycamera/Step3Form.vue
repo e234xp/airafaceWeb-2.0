@@ -98,7 +98,7 @@ export default {
       default: () => ({}),
     },
     isFieldPassed: {
-      type: Object,
+      type: Function,
       default: () => () => true,
     },
   },
@@ -140,7 +140,7 @@ export default {
     },
   },
   created() {
-    this.localStep3form = { ...this.step3form };
+    this.localStep3form = { ...this.step3form, ...this.localStep3form };
   },
 };
 </script>
