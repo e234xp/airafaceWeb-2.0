@@ -2,26 +2,44 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ disp_header }}
+        </td>
       </CCol>
     </CRow>
-    <div style="height: 20px"></div>
+    <div style="height: 20px" />
 
     <CRow>
-      <CCol sm="12" class='d-flex'>
+      <CCol
+        sm="12"
+        class="d-flex"
+      >
         <div>
-          <CButton size="lg" class="btn btn-primary btn-w-sm mr-3 mb-3" @click="clickOnAdd()">
+          <CButton
+            size="lg"
+            class="btn btn-primary btn-w-sm mr-3 mb-3"
+            @click="clickOnAdd()"
+          >
             {{ disp_add }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-danger btn-w-sm mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()">
+          <CButton
+            class="btn btn-danger btn-w-sm mr-3 mb-3"
+            size="lg"
+            @click="clickOnMultipleDelete()"
+          >
             {{ disp_delete }}
           </CButton>
         </div>
         <div style="margin-left: auto">
-          <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+          <CInput
+            v-model.lazy="value_searchingFilter"
+            style="width: 400px"
+            size="lg"
+            :placeholder="disp_search"
+          >
             <template #prepend-content>
               <CIcon name="cil-search" />
             </template>
@@ -34,36 +52,85 @@
       <CCardBody>
         <div>
           <div>
-            <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" ref="mainTable" @edit-closed="dataHasBeenChangedFun"
-              :auto-resize="true" keep-source highlight-current-row
-              :edit-config="{ trigger: 'dblclick', mode: 'row', showStatus: true }" column-config.useKey=false
-              column-key=false :checkbox-config="{ checkMethod: checkboxFixed }">
+            <vxe-table
+              :data="value_dataItemsToShow"
+              stripe
+              align="center"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              ref="mainTable"
+              @edit-closed="dataHasBeenChangedFun"
+              :auto-resize="true"
+              keep-source
+              highlight-current-row
+              :edit-config="{ trigger: 'dblclick', mode: 'row', showStatus: true }"
+              column-config-use-key="false"
+              column-key="false"
+              :checkbox-config="{ checkMethod: checkboxFixed }"
+            >
               <!-- @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent" -->
 
-              <vxe-table-column type="checkbox" width="10%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="username" :title="disp_account" width="16%"
-                align="left"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="maskpassword" :title="disp_password" width="16%"
-                :edit-render="{ type: 'default' }" align="left">
+              <vxe-table-column
+                type="checkbox"
+                width="10%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="username"
+                :title="disp_account"
+                width="16%"
+                align="left"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="maskpassword"
+                :title="disp_password"
+                width="16%"
+                :edit-render="{ type: 'default' }"
+                align="left"
+              >
                 <template #edit="{ row }">
-                  <vxe-input v-model="row.password" type="password"></vxe-input>
+                  <vxe-input
+                    v-model="row.password"
+                    type="password"
+                  />
                 </template>
               </vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="permission" :title="disp_permission" width="14%"
-                align="left"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="remarks" :title="disp_remarks" width="18%"
-                align="left"></vxe-table-column>
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="permission"
+                :title="disp_permission"
+                width="14%"
+                align="left"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="remarks"
+                :title="disp_remarks"
+                width="18%"
+                align="left"
+              />
               <vxe-table-column width="10%">
                 <template #default="{ row }">
-                  <vxe-button class="btn-remove-vxe btn-in-cell" @click="onClickEdit(row)">{{ disp_edit }}</vxe-button>
+                  <vxe-button
+                    class="btn-remove-vxe btn-in-cell"
+                    @click="onClickEdit(row)"
+                  >
+                    {{ disp_edit }}
+                  </vxe-button>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="actionButton" title="" type="html" />
+              <vxe-table-column
+                field="actionButton"
+                title=""
+                type="html"
+              />
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -71,9 +138,12 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange">
-          </vxe-pager>
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
       </CCardBody>
     </CCard>

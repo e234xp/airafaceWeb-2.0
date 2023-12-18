@@ -45,6 +45,12 @@ function checkEmail(str) {
   return re.test(str) ? '' : i18n.formatter.format('InvalidEmailFormat');
 }
 
+function checkMultiEmail(str) {
+  if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
+  const re = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}(?:,[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,})*$/;
+  return re.test(str) ? '' : i18n.formatter.format('InvalidEmailFormat');
+}
+
 function checkIpAddr(str) {
   if (str === '') return i18n.formatter.format('NoEmptyNoSpace');
   const re = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
@@ -52,5 +58,5 @@ function checkIpAddr(str) {
 }
 
 export {
-  getIsFieldPassedFunction, checkDomainName, checkPort, checkEmail, checkIpAddr,
+  getIsFieldPassedFunction, checkDomainName, checkPort, checkEmail, checkMultiEmail, checkIpAddr,
 };

@@ -245,7 +245,6 @@ export default {
 
               break;
             }
-            default:
             case 'display_image': {
               let idx = self.param_Fields.findIndex((obj) => obj.label === 'face_image') || -1;
               if (idx !== -1) self.param_Fields[idx].enabled = false;
@@ -255,6 +254,8 @@ export default {
 
               break;
             }
+            default:
+              break;
           }
         }
       }

@@ -36,7 +36,7 @@
               <CCol sm="2">
                 <div class="h5">&nbsp;</div>
                 <CButton style="width: 200px; background-color:#20a8d8;color: white;" @click="clickOnActiveTrialLicense"
-                  :disabled="!flag_defaultLicense">
+                  :disabled="!flag_defaultLicense && false">
                   <div style="font-size:20px">{{disp_trial}}</div>
                 </CButton>
               </CCol>

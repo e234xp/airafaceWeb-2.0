@@ -12,35 +12,75 @@
       </CCardHeader>
       <CCardBody v-show="flag_faceAccessVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_recognitionThreshold }}</h5>
-            <CInput size="lg" class="h5" v-model="localStep2form.verify_target_score"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_recognitionThreshold }}
+            </h5>
+            <CInput
+              size="lg"
+              class="h5"
+              v-model="localStep2form.verify_target_score"
               :invalid-feedback="disp_noEmptyInRange0to1"
-              :is-valid="isFieldPassed('verify_target_score', localStep2form.verify_target_score)" required />
+              :is-valid="isFieldPassed('verify_target_score', localStep2form.verify_target_score)"
+              required
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_faceCaptureInternal }}</h5>
-            <CInput size="lg" class="h5" v-model="localStep2form.face_capture_interval"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_faceCaptureInternal }}
+            </h5>
+            <CInput
+              size="lg"
+              class="h5"
+              v-model="localStep2form.face_capture_interval"
               :invalid-feedback="disp_noEmptyInRange100to1000"
-              :is-valid="isFieldPassed('face_capture_interval', localStep2form.face_capture_interval)" required />
+              :is-valid="isFieldPassed('face_capture_interval', localStep2form.face_capture_interval)"
+              required
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_faceOverlapRatio }}</h5>
-            <CInput size="lg" class="h5" v-model="localStep2form.face_overlap_ratio"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_faceOverlapRatio }}
+            </h5>
+            <CInput
+              size="lg"
+              class="h5"
+              v-model="localStep2form.face_overlap_ratio"
               :invalid-feedback="disp_noEmptyInRange0to1"
-              :is-valid="isFieldPassed('face_overlap_ratio', localStep2form.face_overlap_ratio)" required />
+              :is-valid="isFieldPassed('face_overlap_ratio', localStep2form.face_overlap_ratio)"
+              required
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_targetFaceSizeLength }}</h5>
-            <CInput size="lg" class="h5" v-model="localStep2form.target_face_size_width"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_targetFaceSizeLength }}
+            </h5>
+            <CInput
+              size="lg"
+              class="h5"
+              v-model="localStep2form.target_face_size_width"
               :invalid-feedback="disp_noEmptyInRange0to1000"
-              :is-valid="isFieldPassed('target_face_size_width', localStep2form.target_face_size_width)" required />
+              :is-valid="isFieldPassed('target_face_size_width', localStep2form.target_face_size_width)"
+              required
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -58,50 +98,113 @@
       </CCardHeader>
       <CCardBody v-show="flag_cardAccessVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableCardAccess }}</h5>
-            <CSwitch size="lg" class="ml-0 mb-16" color="success" shape="pill"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableCardAccess }}
+            </h5>
+            <CSwitch
+              size="lg"
+              class="ml-0 mb-16"
+              color="success"
+              shape="pill"
               @update:checked="localStep2form.enable_id_card = !localStep2form.enable_id_card"
-              :checked="localStep2form.enable_id_card">
-            </CSwitch>
+              :checked="localStep2form.enable_id_card"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_supportWiegandBits }}</h5>
-            <CSelect size="lg" v-model="localStep2form.support_wiegand_bits" :placeholder="disp_placeholder"
-              :options="param_cardAccessOptions" :disabled="!localStep2form.enable_id_card" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_supportWiegandBits }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form.support_wiegand_bits"
+              :placeholder="disp_placeholder"
+              :options="param_cardAccessOptions"
+              :disabled="!localStep2form.enable_id_card"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_allowedPersonnelGroups }}</h5>
-            <multiselect placeholder="" :multiple="true" :hideSelected="true" :searchable="false"
-              :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-              v-model="localStep2form.group_list_to_pass" :options="param_personnGroupsList"
-              :disabled="!localStep2form.enable_id_card">
-            </multiselect>
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_allowedPersonnelGroups }}
+            </h5>
+            <multiselect
+              placeholder=""
+              :multiple="true"
+              :hide-selected="true"
+              :searchable="false"
+              :select-label="disp_select"
+              :selected-label="disp_selected"
+              :deselect-label="disp_deselect"
+              v-model="localStep2form.group_list_to_pass"
+              :options="param_personnGroupsList"
+              :disabled="!localStep2form.enable_id_card"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_twoFactor }}</h5>
-            <CSelect size="lg" v-model="localStep2form.enable_two_factor_authentication" :placeholder="disp_placeholder"
-              :options="param_showOptions" :disabled="!localStep2form.enable_id_card" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_twoFactor }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form.enable_two_factor_authentication"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+              :disabled="!localStep2form.enable_id_card"
+            />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_triggerRelay }}</h5>
-            <CSelect class="mt-2" size="lg" v-model="localStep2form.enable_trigger_relay"
-              :placeholder="disp_placeholder" :options="param_showOptions" :disabled="!localStep2form.enable_id_card" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_triggerRelay }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              v-model="localStep2form.enable_trigger_relay"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+              :disabled="!localStep2form.enable_id_card"
+            />
           </CCol>
 
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_relayInternal }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.relay_delay"
-              :disabled="!localStep2form.enable_id_card" :invalid-feedback="disp_noEmptyInRange0to5000"
-              :is-valid="isFieldPassed('relay_delay', localStep2form.relay_delay)" required />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_relayInternal }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.relay_delay"
+              :disabled="!localStep2form.enable_id_card"
+              :invalid-feedback="disp_noEmptyInRange0to5000"
+              :is-valid="isFieldPassed('relay_delay', localStep2form.relay_delay)"
+              required
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -119,29 +222,57 @@
       </CCardHeader>
       <CCardBody v-show="flag_temperatureMaskVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_temperatureUnit }}</h5>
-            <CSelect size="lg" v-model="localStep2form.temperature_unit_celsius" :placeholder="disp_placeholder"
-              :options="param_temperatureOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_temperatureUnit }}
+            </h5>
+            <CSelect
+              size="lg"
+              v-model="localStep2form.temperature_unit_celsius"
+              :placeholder="disp_placeholder"
+              :options="param_temperatureOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_threshold }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.high_temperature"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_threshold }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.high_temperature"
               :invalid-feedback="disp_noEmptyInRange30to50"
-              :is-valid="isFieldPassed('high_temperature', localStep2form.high_temperature)" required />
+              :is-valid="isFieldPassed('high_temperature', localStep2form.high_temperature)"
+              required
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enforceFaceMaskCheck }}</h5>
-            <CSwitch size="lg" class="ml-0" color="success" shape="pill"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enforceFaceMaskCheck }}
+            </h5>
+            <CSwitch
+              size="lg"
+              class="ml-0"
+              color="success"
+              shape="pill"
               @update:checked="localStep2form.have_to_wear_face_mask = !localStep2form.have_to_wear_face_mask"
-              :checked="localStep2form.have_to_wear_face_mask">
-            </CSwitch>
+              :checked="localStep2form.have_to_wear_face_mask"
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -159,71 +290,155 @@
       </CCardHeader>
       <CCardBody v-show="flag_resultDisplayVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_displayName }}</h5>
-            <CSelect class="mt-2" size="lg" v-model="localStep2form.enable_name_mask" :placeholder="disp_placeholder"
-              :options="param_displayNameOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_displayName }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              v-model="localStep2form.enable_name_mask"
+              :placeholder="disp_placeholder"
+              :options="param_displayNameOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_displayProfilePhoto }}</h5>
-            <CSelect class="mt-2" size="lg" v-model="localStep2form.show_profile_photo" :placeholder="disp_placeholder"
-              :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_displayProfilePhoto }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              v-model="localStep2form.show_profile_photo"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_strangerDisplayMessage }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.stranger_display_name" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_strangerDisplayMessage }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.stranger_display_name"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_displayVerifyDuration }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.display_verify_result_time"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_displayVerifyDuration }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.display_verify_result_time"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('display_verify_result_time', localStep2form.display_verify_result_time)"
-              required />
+              required
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_showVerifyResult }}</h5>
-            <CSelect class="mt-2" size="lg" v-model="localStep2form.show_verify_indication"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_showVerifyResult }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              v-model="localStep2form.show_verify_indication"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.verify_indication_success_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.verify_indication_success_text"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessMessageText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.verify_indication_success_message_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessMessageText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.verify_indication_success_message_text"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationFailText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.verify_indication_fail_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationFailText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.verify_indication_fail_text"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationFailMessageText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.verify_indication_fail_message_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationFailMessageText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.verify_indication_fail_message_text"
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -241,115 +456,269 @@
       </CCardHeader>
       <CCardBody v-show="flag_clockSettingVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableClockMode }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_clock_mode"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableClockMode }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_clock_mode"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockInfoDataUp }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_1" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockInfoDataUp }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_info_data_1"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockInfoDataDown }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_2" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockInfoDataDown }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_info_data_2"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockInfoData3 }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_info_data_3" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockInfoData3 }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_info_data_3"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableClockFunction1 }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_clock_function_1"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableClockFunction1 }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_clock_function_1"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
 
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_1"
-              :disabled="!localStep2form.enable_clock_function_1" />
-          </CCol>
-        </CRow>
-
-        <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableClockFunction2 }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_clock_function_2"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
-          </CCol>
-
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_2"
-              :disabled="!localStep2form.enable_clock_function_2" />
-          </CCol>
-        </CRow>
-
-        <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableClockFunction3 }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_clock_function_3"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
-          </CCol>
-
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_3"
-              :disabled="!localStep2form.enable_clock_function_3" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_function_name_1"
+              :disabled="!localStep2form.enable_clock_function_1"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableClockFunction4 }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_clock_function_4"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableClockFunction2 }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_clock_function_2"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
 
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_verifyIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_function_name_4"
-              :disabled="!localStep2form.enable_clock_function_4" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_function_name_2"
+              :disabled="!localStep2form.enable_clock_function_2"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockIndicationSuccessText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_success_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableClockFunction3 }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_clock_function_3"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
+          </CCol>
+
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_function_name_3"
+              :disabled="!localStep2form.enable_clock_function_3"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockSuccessMessageText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_success_message_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableClockFunction4 }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_clock_function_4"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
+          </CCol>
+
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_verifyIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_function_name_4"
+              :disabled="!localStep2form.enable_clock_function_4"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockIndicationFailText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_indication_fail_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockIndicationSuccessText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_indication_success_text"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_clockFailMessageText }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.clock_fail_message_text" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockSuccessMessageText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_success_message_text"
+            />
+          </CCol>
+        </CRow>
+
+        <CRow sm="12">
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockIndicationFailText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_indication_fail_text"
+            />
+          </CCol>
+        </CRow>
+
+        <CRow sm="12">
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_clockFailMessageText }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.clock_fail_message_text"
+            />
           </CCol>
         </CRow>
       </CCardBody>
@@ -367,40 +736,88 @@
       </CCardHeader>
       <CCardBody v-show="flag_rtspSettingVisiable">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_enableRTSPCamera }}</h5>
-            <CSelect class="mt-2" size="lg" value="1" v-model="localStep2form.enable_rtsp_camera"
-              :placeholder="disp_placeholder" :options="param_showOptions" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_enableRTSPCamera }}
+            </h5>
+            <CSelect
+              class="mt-2"
+              size="lg"
+              value="1"
+              v-model="localStep2form.enable_rtsp_camera"
+              :placeholder="disp_placeholder"
+              :options="param_showOptions"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_ipAddress }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.ip_address" :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)" required
-              :disabled="!localStep2form.enable_rtsp_camera" />
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_ipAddress }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              readonly
+              v-model="localStep2form.ip_address"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_RTSPUserName }}</h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.rtsp_username"
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_RTSPUserName }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              v-model="localStep2form.rtsp_username"
               :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('rtsp_username', localStep2form.rtsp_username)" required
-              :disabled="!localStep2form.enable_rtsp_camera" />
+              :is-valid="checkRtspUsername"
+              :required="localStep2form.enable_rtsp_camera"
+              :disabled="!localStep2form.enable_rtsp_camera"
+            />
           </CCol>
         </CRow>
 
         <CRow sm="12">
-          <CCol sm="6" class="h5">
-            <h5 class="ml-2">{{ disp_RTSPPassWord }}</h5>
-            <CInput size="lg" class="mt-2" :type="flag_view_password ? 'text' : 'password'" v-model="localStep2form.rtsp_password">
+          <CCol
+            sm="6"
+            class="h5"
+          >
+            <h5 class="ml-2">
+              {{ disp_RTSPPassWord }}
+            </h5>
+            <CInput
+              size="lg"
+              class="mt-2"
+              :type="flag_view_password ? 'text' : 'password'"
+              v-model="localStep2form.rtsp_password"
+            >
               <template #append-content>
-                <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                  <CIcon v-show="flag_view_password"  src="/img/eye-slash.png" />
-                  <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                <CButton
+                  @click="viewPassword"
+                  style="padding: 0.375rem 0.375rem;"
+                >
+                  <CIcon
+                    v-show="flag_view_password"
+                    src="/img/eye-slash.png"
+                  />
+                  <CIcon
+                    v-show="!flag_view_password"
+                    src="/img/eye.png"
+                  />
                 </CButton>
               </template>
             </CInput>
@@ -434,16 +851,16 @@ export default {
       param_personnGroupsValue: [],
       param_cardAccessOptions: [{ label: '26-bit', value: 26 }, { label: '34-bit', value: 34 }, { label: '64-bit', value: 64 }],
       param_temperatureOptions: [
-      { label: i18n.formatter.format('Celsius'), value: true },
-        { label: i18n.formatter.format('Fahrenheit'), value: false }
+        { label: i18n.formatter.format('Celsius'), value: true },
+        { label: i18n.formatter.format('Fahrenheit'), value: false },
       ],
       param_showOptions: [
         { label: i18n.formatter.format('Yes'), value: true },
-        { label: i18n.formatter.format('No'), value: false }
-        ],
+        { label: i18n.formatter.format('No'), value: false },
+      ],
       param_displayNameOptions: [
         { label: i18n.formatter.format('PartialName'), value: true },
-        { label: i18n.formatter.format('PersonName'), value: false }
+        { label: i18n.formatter.format('PersonName'), value: false },
       ],
 
       flag_faceAccessVisiable: true,
@@ -589,6 +1006,10 @@ export default {
       const self = this;
 
       self.flag_view_password = !self.flag_view_password;
+    },
+    checkRtspUsername() {
+      if (!this.localStep2form.enable_rtsp_camera) return true;
+      return this.isFieldPassed('rtsp_username', this.localStep2form.rtsp_username);
     },
   },
 };

@@ -765,11 +765,8 @@
             <CInput
               size="lg"
               class="mt-2"
+              readonly
               v-model="localStep2form.ip_address"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('ip_address', localStep2form.ip_address)"
-              required
-              :disabled="!localStep2form.enable_rtsp_camera"
             />
           </CCol>
         </CRow>
@@ -787,8 +784,8 @@
               class="mt-2"
               v-model="localStep2form.rtsp_username"
               :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('rtsp_username', localStep2form.rtsp_username)"
-              required
+              :is-valid="checkRtspUsername"
+              :required="localStep2form.enable_rtsp_camera"
               :disabled="!localStep2form.enable_rtsp_camera"
             />
           </CCol>
@@ -1018,6 +1015,10 @@ export default {
       const self = this;
 
       self.flag_view_password = !self.flag_view_password;
+    },
+    checkRtspUsername() {
+      if (!this.localStep2form.enable_rtsp_camera) return true;
+      return this.isFieldPassed('rtsp_username', this.localStep2form.rtsp_username);
     },
   },
 };

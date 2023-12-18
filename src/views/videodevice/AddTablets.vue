@@ -373,7 +373,6 @@ export default {
         display_verify_result_time: 'display_verify_result_time',
         relay_delay: 'number0to5000',
         high_temperature: 'verify30to50',
-        ip_address: 'nonEmpty',
         rtsp_username: 'nonEmpty',
       },
     }),

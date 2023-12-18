@@ -155,7 +155,7 @@
             </tr>
             <tr class="table-tr">
               <td class="h5 table-td">
-                <multiselect
+                <!-- <multiselect
                   :class="flag_valueToPass ? 'is-valid' : 'is-invalid'"
                   placeholder=""
                   :multiple="true"
@@ -167,10 +167,17 @@
                   v-model="value_to"
                   :options="param_personGroupList"
                   @input="ccListOnInput"
+                /> -->
+                <CInput
+                  size="lg"
+                  v-model="value_to"
+                  required
+                  :invalid-feedback="flag_toPass"
+                  :is-valid="receiverValidator"
                 />
               </td>
               <td class="h5 table-td">
-                <multiselect
+                <!-- <multiselect
                   placeholder=""
                   :multiple="true"
                   :hide-selected="true"
@@ -180,10 +187,17 @@
                   :deselect-label="disp_deselect"
                   v-model="value_cc"
                   :options="param_personGroupList"
+                /> -->
+                <CInput
+                  size="lg"
+                  v-model="value_cc"
+                  required
+                  :invalid-feedback="flag_ccPass"
+                  :is-valid="ccValidator"
                 />
               </td>
               <td class="h5 table-td">
-                <multiselect
+                <!-- <multiselect
                   placeholder=""
                   :multiple="true"
                   :hide-selected="true"
@@ -193,6 +207,13 @@
                   :deselect-label="disp_deselect"
                   v-model="value_bcc"
                   :options="param_personGroupList"
+                /> -->
+                <CInput
+                  size="lg"
+                  v-model="value_bcc"
+                  required
+                  :invalid-feedback="value_bcc"
+                  :is-valid="bccValidator"
                 />
               </td>
               <td class="h5 table-td" />
@@ -318,6 +339,7 @@
             class="btn btn-primary fz-lg btn-w-normal"
             @click="clickOnNext"
             :disabled="!(flag_notifyNamePass && flag_hostPass === '' && flag_portPass === ''
+              && flag_toPass === '' && flag_ccPass === '' && flag_bccPass === ''
               && flag_senderPass === '' && flag_accountPass && flag_passwordPass && flag_subjectPass )"
           >
             {{ nextButtonName() }}
@@ -334,7 +356,7 @@ import '@/airacss/vue-step-progress.css';
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
-import { checkDomainName, checkPort, checkEmail } from '@/utils';
+import { checkDomainName, checkPort, checkEmail, checkMultiEmail } from '@/utils';
 
 const defaultlState = () => ({
   obj_loading: null,
@@ -406,9 +428,9 @@ const defaultlState = () => ({
   value_account: '',
   value_password: '',
   value_subject: '',
-  value_to: [],
-  value_cc: [],
-  value_bcc: [],
+  value_to: '',
+  value_cc: '',
+  value_bcc: '',
   value_language: 'zh',
   value_selectedFields: ['timestamp'],
   value_note: '',
@@ -421,6 +443,10 @@ const defaultlState = () => ({
   flag_passwordPass: false,
   flag_subjectPass: false,
   flag_valueToPass: false,
+
+  flag_toPass: '',
+  flag_ccPass: '',
+  flag_bccPass: '',
 });
 
 export default {
@@ -481,23 +507,14 @@ export default {
       self.value_subject = self.value_settingitem.subject || '';
 
       // self.value_to = self.value_settingitem.to || [];
-      self.value_to = self.value_settingitem.to.map((item) => {
-        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-        return uuid.label;
-      });
-      self.ccListOnInput(self.value_to);
+      self.value_to = self.value_settingitem.to.join(',');
+      // self.ccListOnInput(self.value_to);
 
       // self.value_cc = self.value_settingitem.cc || [];
-      self.value_cc = self.value_settingitem.cc.map((item) => {
-        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-        return uuid.label;
-      });
+      self.value_cc = self.value_settingitem.cc.join(',');
 
       // self.value_bcc = self.value_settingitem.bcc || [];
-      self.value_bcc = self.value_settingitem.bcc.map((item) => {
-        const uuid = self.param_personGroupListValue.find((ii) => ii.value === item);
-        return uuid.label;
-      });
+      self.value_bcc = self.value_settingitem.bcc.join(',');
 
       if (self.value_settingitem.fields) {
         self.value_selectedFields = self.value_settingitem.fields;
@@ -544,20 +561,9 @@ export default {
         self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
 
         if (self.onFinish) {
-          const localSelectedToList = self.value_to.map((item) => {
-            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-            return uuid.value;
-          });
-
-          const localSelectedCCList = self.value_cc.map((item) => {
-            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-            return uuid.value;
-          });
-
-          const localSelectedBccList = self.value_bcc.map((item) => {
-            const uuid = self.param_personGroupListValue.find((ii) => ii.label === item);
-            return uuid.value;
-          });
+          const localSelectedToList = self.value_to.split(',');
+          const localSelectedCCList = self.value_cc.split(',');
+          const localSelectedBccList = self.value_bcc.split(',');
 
           self.onFinish(
             {
@@ -672,6 +678,23 @@ export default {
       }
 
       return this.flag_subjectPass;
+    },
+
+    receiverValidator(val) {
+      this.flag_toPass = checkMultiEmail(val);
+      return this.flag_toPass === '';
+    },
+
+    ccValidator(val) {
+      if (val === '') this.flag_ccPass = '';
+      else this.flag_ccPass = checkMultiEmail(val);
+      return this.flag_ccPass === '';
+    },
+
+    bccValidator(val) {
+      if (val === '') this.flag_bccPass = '';
+      else this.flag_bccPass = checkMultiEmail(val);
+      return this.flag_bccPass === '';
     },
 
     ccListOnInput(value) {
