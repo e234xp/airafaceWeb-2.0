@@ -101,7 +101,7 @@
                   size="lg"
                   v-model="value_account"
                   required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :invalid-feedback="flag_accountPass"
                   :is-valid="accountValidator"
                 />
               </td>
@@ -154,7 +154,7 @@
               <th class="h5 table-th" />
             </tr>
             <tr class="table-tr">
-              <td class="h5 table-td">
+              <td class="table-td">
                 <!-- <multiselect
                   :class="flag_valueToPass ? 'is-valid' : 'is-invalid'"
                   placeholder=""
@@ -176,7 +176,7 @@
                   :is-valid="receiverValidator"
                 />
               </td>
-              <td class="h5 table-td">
+              <td class="table-td">
                 <!-- <multiselect
                   placeholder=""
                   :multiple="true"
@@ -196,7 +196,7 @@
                   :is-valid="ccValidator"
                 />
               </td>
-              <td class="h5 table-td">
+              <td class="table-td">
                 <!-- <multiselect
                   placeholder=""
                   :multiple="true"
@@ -340,7 +340,7 @@
             @click="clickOnNext"
             :disabled="!(flag_notifyNamePass && flag_hostPass === '' && flag_portPass === ''
               && flag_toPass === '' && flag_ccPass === '' && flag_bccPass === ''
-              && flag_senderPass === '' && flag_accountPass && flag_passwordPass && flag_subjectPass )"
+              && flag_senderPass === '' && flag_accountPass === '' && flag_passwordPass && flag_subjectPass )"
           >
             {{ nextButtonName() }}
           </CButton>
@@ -436,10 +436,10 @@ const defaultlState = () => ({
   value_note: '',
 
   flag_notifyNamePass: false,
-  flag_hostPass: false,
-  flag_portPass: false,
-  flag_senderPass: false,
-  flag_accountPass: false,
+  flag_hostPass: '',
+  flag_portPass: '',
+  flag_senderPass: '',
+  flag_accountPass: '',
   flag_passwordPass: false,
   flag_subjectPass: false,
   flag_valueToPass: false,
@@ -640,15 +640,8 @@ export default {
     },
 
     senderValidator(val) {
-      const self = this;
-
-      if (val.replace(/\s/g, '').length === 0) {
-        self.flag_senderPass = false;
-      } else {
-        self.flag_senderPass = val.length > 0;
-      }
-
-      return self.flag_senderPass;
+      this.flag_senderPass = val.length === 0 ? i18n.formatter.format('NoEmptyNoSpaceOnly') : '';
+      return this.flag_senderPass === '';
     },
 
     accountValidator(val) {
