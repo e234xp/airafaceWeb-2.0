@@ -91,11 +91,11 @@ export default {
   props: {
     step3form: {
       type: Object,
-      default: () => ({}),
+      default: () => {},
     },
     defaultValues: {
       type: Object,
-      default: () => ({}),
+      default: () => {},
     },
     isFieldPassed: {
       type: Function,
@@ -134,13 +134,12 @@ export default {
           if (!Object.keys(this.step3form).includes(key)) return;
           this.localStep3form[key] = value;
         });
+        this.$emit('updateStep3form', { ...this.localStep3form });
       },
       deep: true,
       immediate: true,
     },
   },
-  created() {
-    this.localStep3form = { ...this.step3form };
-  },
+  created() {},
 };
 </script>

@@ -120,7 +120,6 @@ export default {
           }
           break;
         case 'changeNotifications':
-        default:
           if (mutation.payload.statusCode === '200') {
             console.log('created subscribe', 'mutation payload statusCode == 200');
             return;
@@ -135,6 +134,8 @@ export default {
 
           self.checkRecord(person);
           break;
+        default:
+          break;
       }
     });
 
@@ -145,7 +146,6 @@ export default {
   async mounted() {
     const self = this;
 
-    console.log('mounted start');
     self.isLoadSetting = true;
 
     const data = await self.$globalGetDisplaySetting();
@@ -167,7 +167,6 @@ export default {
     self.initLooper();
 
     self.isLoadSetting = false;
-    console.log('mounted end');
   },
 
   destroyed() {

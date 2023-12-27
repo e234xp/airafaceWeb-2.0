@@ -401,7 +401,6 @@ export default {
           if (!Object.keys(this.step1form).includes(key)) return;
           this.localStep1form[key] = value;
         });
-        console.log(JSON.stringify(this.localStep1form));
       },
       deep: true,
       immediate: true,

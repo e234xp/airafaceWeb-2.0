@@ -356,7 +356,9 @@ import '@/airacss/vue-step-progress.css';
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
-import { checkDomainName, checkPort, checkEmail, checkMultiEmail } from '@/utils';
+import {
+  checkDomainName, checkPort, checkEmail, checkMultiEmail,
+} from '@/utils';
 
 const defaultlState = () => ({
   obj_loading: null,

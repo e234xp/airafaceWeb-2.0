@@ -3,32 +3,49 @@
     <!-- 標題 -->
     <div>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ disp_header }}
+        </td>
       </CCol>
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
     <!-- 搜尋欄跟按鈕 -->
     <div>
       <CCol sm="12">
         <CRow>
           <div>
-            <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="handleOnAdd()"
-              >
+            <CButton
+              size="lg"
+              class="btn btn-primary mr-3 mb-3"
+              @click="handleOnAdd()"
+            >
               {{ disp_add }}
             </CButton>
           </div>
           <div>
-            <CButton class="btn btn-danger mb-3" size="lg" @click="handleOnMultipleDelete()">
+            <CButton
+              class="btn btn-danger mb-3"
+              size="lg"
+              @click="handleOnMultipleDelete()"
+            >
               {{ disp_delete }}
             </CButton>
           </div>
 
-          <div style="margin-left: auto; align-items: last baseline; padding-right: 15px; font-size: larger;" class="d-flex">
+          <div
+            style="margin-left: auto; align-items: last baseline; padding-right: 15px; font-size: larger;"
+            class="d-flex"
+          >
             <div style="padding-right: 15px;">
               {{ disp_MsgVideoDeviceLicenseUsage }}
             </div>
             <div>
-              <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+              <CInput
+                v-model.lazy="value_searchingFilter"
+                style="width: 400px"
+                size="lg"
+                :placeholder="disp_search"
+              >
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>
@@ -43,17 +60,31 @@
     <CCard>
       <CCardBody>
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="
               () => {
                 return 'fontSize:18px;';
               }
-            " :header-cell-style="
+            "
+            :header-cell-style="
               () => {
                 return 'fontSize:18px;';
               }
-            " ref="mainTable" :auto-resize="true" keep-source highlight-current-row
-            :edit-config="{ trigger: 'manual', mode: 'row' }">
-            <vxe-table-column type="checkbox" align="center" width="5%"></vxe-table-column>
+            "
+            ref="mainTable"
+            :auto-resize="true"
+            keep-source
+            highlight-current-row
+            :edit-config="{ trigger: 'manual', mode: 'row' }"
+          >
+            <vxe-table-column
+              type="checkbox"
+              align="center"
+              width="5%"
+            />
 
             <!-- <vxe-table-column field="enable" :title="disp_enable" width="auto">
               <template #default="{ row }">
@@ -64,31 +95,58 @@
               </template>
             </vxe-table-column> -->
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center"
-              width="10%"></vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="name"
+              :title="disp_deviceName"
+              align="center"
+              width="10%"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="status" :title="disp_status" width="10%"
-              align="center">
-            </vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="status"
+              :title="disp_status"
+              width="10%"
+              align="center"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" width="auto">
-            </vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="ip_address"
+              :title="disp_ipAddress"
+              width="auto"
+            />
 
-            <vxe-table-column min-width="5%" width="auto">
+            <vxe-table-column
+              min-width="5%"
+              width="auto"
+            >
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-end">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="handleOnModify(row)">{{ disp_modify
-                    }}</vxe-button>
+                  <vxe-button
+                    class="btn-in-cell-primary btn-in-cell"
+                    @click="handleOnModify(row)"
+                  >
+                    {{ disp_modify
+                    }}
+                  </vxe-button>
 
-                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="handleOnSingleDelete(row)">{{ disp_delete
-                    }}</vxe-button>
+                  <vxe-button
+                    class="btn-in-cell-danger btn-in-cell"
+                    @click="handleOnSingleDelete(row)"
+                  >
+                    {{ disp_delete
+                    }}
+                  </vxe-button>
                 </div>
               </template>
             </vxe-table-column>
           </vxe-table>
         </div>
 
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -96,9 +154,12 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" @page-change="handlePageChange">
-        </vxe-pager>
+          ]"
+          :current-page="value_tablePage.currentPage"
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        />
       </CCardBody>
     </CCard>
   </div>
@@ -200,7 +261,7 @@ export default {
     ...mapState(['ellipsisMode']),
   },
   watch: {
-    value_searchingFilter: () => {
+    value_searchingFilter() {
       const self = this;
       self.value_tablePage.currentPage = 1;
       this.value_dataItemsToShow = this.generateFilteredData(

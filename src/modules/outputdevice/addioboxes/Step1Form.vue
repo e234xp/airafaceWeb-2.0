@@ -107,8 +107,8 @@
               size="lg"
               class="mt-2"
               v-model="localStep1form.ip_address"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('ip_address', localStep1form.ip_address)"
+              :invalid-feedback="flag_ipAddrPass"
+              :is-valid="ipAddrValidator"
               required
             />
           </CCol>
@@ -122,9 +122,9 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="localStep1form.port"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('port', localStep1form.port)"
+              v-model.number="localStep1form.port"
+              :invalid-feedback="flag_portPass"
+              :is-valid="portValidator"
               required
             />
           </CCol>
@@ -191,6 +191,8 @@ import i18n from '@/i18n';
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
+import { checkPort, checkIpAddr } from '@/utils';
+
 export default {
   name: 'Step1Form',
   props: {
@@ -235,6 +237,8 @@ export default {
       // value_deviceGroupsList: [1, 2, 3],
 
       flag_view_password: false,
+      flag_portPass: '',
+      flag_ipAddrPass: '',
     };
   },
   components: {
@@ -244,7 +248,6 @@ export default {
   watch: {
     localStep1form: {
       handler(newValue) {
-        console.log('emit updateStep1form');
         this.$emit('updateStep1form', { ...newValue });
       },
       deep: true,
@@ -265,6 +268,16 @@ export default {
       const self = this;
 
       self.flag_view_password = !self.flag_view_password;
+    },
+
+    portValidator(val) {
+      this.flag_portPass = checkPort(val);
+      return this.flag_portPass === '';
+    },
+
+    ipAddrValidator(val) {
+      this.flag_ipAddrPass = checkIpAddr(val);
+      return this.flag_ipAddrPass === '';
     },
   },
 };
