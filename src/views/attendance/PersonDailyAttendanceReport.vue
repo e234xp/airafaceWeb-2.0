@@ -2,8 +2,11 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CDailyAttendanceReportForm :formData="$data" :onFetchPersonDataCallback="onFetchPersonDataCallback"
-          :onFetchPersonAttendanceDataCallback="onFetchPersonAttendanceDataCallback" />
+        <CDailyAttendanceReportForm
+          :form-data="$data"
+          :on-fetch-person-data-callback="onFetchPersonDataCallback"
+          :on-fetch-person-attendance-data-callback="onFetchPersonAttendanceDataCallback"
+        />
       </CCol>
     </CRow>
   </div>

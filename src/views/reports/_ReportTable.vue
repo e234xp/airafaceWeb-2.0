@@ -1,7 +1,5 @@
 <template>
-<div>
-
-  </div>
+  <div />
 </template>
 
 <script>
@@ -11,22 +9,22 @@ export default {
     items: Array,
     fields: {
       type: Array,
-      default () {
-        return [ { label : "ID", key:'id' }, 'timestamp', 'name', 'status']
-      }
+      default() {
+        return [{ label: 'ID', key: 'id' }, 'timestamp', 'name', 'status'];
+      },
     },
     caption: {
       type: String,
-      default: 'Table'
+      default: 'Table',
     },
     hover: Boolean,
     striped: Boolean,
     border: Boolean,
     fixed: Boolean,
-    itemsPerPage : Number,
-    itemsPerPageSelect : Object
+    itemsPerPage: Number,
+    itemsPerPageSelect: Object,
   },
   methods: {
-  }
-}
+  },
+};
 </script>
