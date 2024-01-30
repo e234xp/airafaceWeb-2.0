@@ -1,33 +1,63 @@
 <template>
   <div>
     <CRow class="flex align-items-start">
-      <CButton class="mx-3 btn btn-outline-primary btn-w-normal" size="lg" @click="changeAttendance()">
-        {{ disp_change }}
+      <CButton
+        class="mx-3 btn btn-outline-primary btn-w-normal"
+        size="lg"
+        @click="changeAttendance()"
+      >
+        {{ $t('CorrectAttendance') }}
       </CButton>
-      <div class="h1 border-left pl-3">{{ disp_header }}</div>
+      <div class="h1 border-left pl-3">
+        {{ $t('ChangeLogsTitle') }}
+      </div>
     </CRow>
 
-    <div style="height: 20px"></div>
+    <div style="height: 20px" />
 
     <CCard>
       <CCardBody>
         <CRow>
-          <CCol sm="2" class="h5">{{ disp_selectDatetimeRange }}</CCol>
-          <CCol sm="4">
-            <date-picker style="width: 100%" :lang="this.$globalDatePickerLanguage" v-model="value_searchDatetimeRange"
-              type="datetime" range :placeholder="disp_selectDatetimeRange" @change="datePickerDataChange()">
-            </date-picker>
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ $t('ChangeLogsTimeRange') }}
           </CCol>
-          <CCol sm="2" class="h5">{{ disp_name }}</CCol>
           <CCol sm="4">
-            <CInput size="lg" v-model="value_keyword" style="width: 100%" />
+            <date-picker
+              style="width: 100%"
+              :lang="this.$globalDatePickerLanguage"
+              v-model="value_searchDatetimeRange"
+              type="datetime"
+              range
+              :placeholder="$t('ChangeLogsTimeRange')"
+              @change="datePickerDataChange()"
+            />
+          </CCol>
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ $t('ChangeLogsTargetPerson') }}
+          </CCol>
+          <CCol sm="4">
+            <CInput
+              size="lg"
+              v-model="value_keyword"
+              style="width: 100%"
+            />
           </CCol>
         </CRow>
         <Col class="d-md-flex justify-content-md-end">
-        <CButton class="btn btn-outline-primary btn-w-normal mb-3" size="lg" :disabled="!flag_enableSearchButton"
-          @click="clickOnSearch()">
-          {{ disp_search }}
-        </CButton>
+          <CButton
+            class="btn btn-outline-primary btn-w-normal mb-3"
+            size="lg"
+            :disabled="!flag_enableSearchButton"
+            @click="clickOnSearch()"
+          >
+            {{ $t('Search') }}
+          </CButton>
         </Col>
       </CCardBody>
     </CCard>
@@ -37,32 +67,61 @@
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div id="ChangeAttendanceClockIn">
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source highlight-current-row>
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle"
+            ref="mainTable"
+            :auto-resize="true"
+            keep-source
+            highlight-current-row
+          >
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="verify_mode_string"
+              :title="$t('ChangeLogsType')"
+              align="center"
+              width="auto"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="verify_mode_string" :title="disp_subject"
-              align="center" width="auto">
-            </vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="name"
+              :title="$t('ChangeLogsTargetPerson')"
+              align="center"
+              width="auto"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_name" align="center"
-              width="auto"></vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="timestamp"
+              :title="$t('ChangeLogsNewTime')"
+              width="auto"
+              align="center"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="disp_dateTime" width="auto"
-              align="center">
-            </vxe-table-column>
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="remark"
+              :title="$t('ChangeLogsReason')"
+              width="auto"
+              align="center"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="disp_reason" width="auto"
-              align="center">
-            </vxe-table-column>
-
-            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="disp_modifier" width="auto"
-              align="center">
-            </vxe-table-column>
-
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="modifier"
+              :title="$t('ChangeLogsModifier')"
+              width="auto"
+              align="center"
+            />
           </vxe-table>
         </div>
 
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -70,60 +129,43 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" @page-change="handlePageChange">
-        </vxe-pager>
+          ]"
+          :current-page="value_tablePage.currentPage"
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        />
       </CCardBody>
     </CCard>
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-
-  disp_header: i18n.formatter.format('ChangeLogsTitle'),
-  disp_selectDatetimeRange: i18n.formatter.format('ChangeLogsTimeRange'),
-  disp_name: i18n.formatter.format('ChangeLogsTargetPerson'),
-  disp_search: i18n.formatter.format('Search'),
-  disp_change: i18n.formatter.format('CorrectAttendance'),
-
-  disp_subject: i18n.formatter.format('ChangeLogsType'),
-  disp_dateTime: i18n.formatter.format('ChangeLogsNewTime'),
-  disp_reason: i18n.formatter.format('ChangeLogsReason'),
-  disp_modifier: i18n.formatter.format('ChangeLogsModifier'),
-
-  disp_clockIn: i18n.formatter.format('ClockIn'),
-  disp_clockOut: i18n.formatter.format('ClockOut'),
-  dis_manually_clock_in: i18n.formatter.format('ForgotAttendanceRecord'),
-
-  value_searchDatetimeRange: [],
-  value_keyword: '',
-  flag_enableSearchButton: false,
-
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 1,
-  },
-});
 
 export default {
   name: 'ChangeAttendanceClockIn',
   components: {
   },
   data() {
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
-    return cloneObject;
+    return {
+      sortDate: [],
+      obj_loading: null,
+
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+
+      value_searchDatetimeRange: [],
+      value_keyword: '',
+      flag_enableSearchButton: false,
+
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 1,
+      },
+    };
   },
   mixins: [TableObserver],
   created() {
@@ -148,22 +190,20 @@ export default {
   },
   methods: {
     handlePageChange({ currentPage, pageSize }) {
-      const self = this;
-      self.value_tablePage.currentPage = currentPage;
-      self.value_tablePage.pageSize = pageSize;
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
-      self.resizeOneTable();
+      this.value_tablePage.currentPage = currentPage;
+      this.value_tablePage.pageSize = pageSize;
+      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
+      this.resizeOneTable();
     },
 
     // 取得個人uuid
     async getPersonDetail() {
-      const self = this;
-      const personDatas = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
+      const personDatas = await this.$globalFindPersonWithoutPhoto('', 0, 3000);
 
       let ret = '';
       if (personDatas) {
         const personData = personDatas.data.person_list;
-        const selectMatch = personData.filter((item) => item.name === self.value_keyword);
+        const selectMatch = personData.filter((item) => item.name === this.value_keyword);
         if (selectMatch && selectMatch.length > 0) ret = selectMatch[0].uuid;
       }
 
@@ -171,10 +211,9 @@ export default {
     },
 
     async clickOnSearch() {
-      const self = this;
-      const startTime = self.value_searchDatetimeRange[0].getTime();
-      const endTime = self.value_searchDatetimeRange[1].getTime();
-      const uuid = await self.getPersonDetail();
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime = this.value_searchDatetimeRange[1].getTime();
+      const uuid = await this.getPersonDetail();
 
       const data = {
         uuid_list: uuid !== '' ? [uuid] : [],
@@ -184,22 +223,19 @@ export default {
         slice_length: 1000,
       };
 
-      const personResult = (await self.queryPersonResult(data.uuid_list, data.start_time, data.end_time, data.slice_shift, data.slice_length));
-      const sortDate = self.sortDateSourceData(personResult);
-      self.value_allTableItems = self.processFields(sortDate);
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
+      const personResult = (await this.queryPersonResult(data.uuid_list, data.start_time, data.end_time, data.slice_shift, data.slice_length));
+      this.sortDate = this.sortDateSourceData(personResult);
+      this.value_allTableItems = this.processFields(this.sortDate);
+      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
     },
 
     async queryPersonResult(uuidList, startTime, endTime, sliceShift, sliceLength) {
-      const self = this;
-
       let personResult = [];
       let ret = [];
       try {
-        ret = await self.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
+        ret = await this.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
 
-        if (ret.data.data.length >= 1)
-          personResult = personResult.concat(ret.data.data);
+        if (ret.data.data.length >= 1) personResult = personResult.concat(ret.data.data);
       } catch (err) {
         console.error(err);
       }
@@ -212,75 +248,66 @@ export default {
     },
 
     processFields(sourceData) {
-      let modifyFieldsData = [];
+      const modifyFieldsData = [];
 
-      let value_handleFields = [
+      const valueHandleFields = [
         'verify_mode_string',
         'name',
         'timestamp',
         'remark',
-        'modifier'
-      ]
+        'modifier',
+      ];
 
-      sourceData.forEach(item => {
-        let verifyModeString;  //第一個變數
-        switch (item[value_handleFields[0]]) {
+      sourceData.forEach((item, index) => {
+        let verifyModeString; // 第一個變數
+        switch (item[valueHandleFields[0]]) {
           case 'CLOCK_OUT_MODE':
           case 'MANUAL_CLOCK_OUT':
-            verifyModeString = item[value_handleFields[0]] = this.disp_clockOut;
+            verifyModeString = this.$t('ClockOut');
             break;
           case 'CLOCK_IN_MODE':
           case 'PASS_MODE':
           case 'CARD_MODE':
           case 'MANUAL_CLOCK_IN':
           default:
-            verifyModeString = item[value_handleFields[0]] = this.disp_clockIn;
+            verifyModeString = this.$t('ClockIn');
             break;
         }
+        this.sortDate[index][valueHandleFields[0]] = verifyModeString;
 
-        let userName = `${item.name}\n${item.id}`;
+        const userName = `${item.name}\n${item.id}`;
 
-        let timestamp = item.timestamp;
+        const { timestamp } = item;
 
         const date = new Date(timestamp);
-        let formattedDate
-        if (!isNaN(date)) {
-          formattedDate = date.toLocaleString();
-        } else {
-          formattedDate = timestamp;
-        }
+        const formattedDate = Number.isNaN(date) ? timestamp : date.toLocaleString();
 
-        const remark = item[value_handleFields[3]] || '';
+        const remark = item[valueHandleFields[3]] || '';
 
-        let modifier = '';
-        if (item['modifier'])
-          modifier += (`${item['modifier']}\n`);
+        let modifier = item.modifier ? `${item.modifier}\n` : '';
+        if (item.modifier_time) modifier += new Date(item.modifier_time);
 
-        if (item['modifier_time'])
-          modifier += new Date(item['modifier_time']);
-
-        modifyFieldsData.push({ verify_mode_string: verifyModeString, name: userName, timestamp: formattedDate, remark: remark, modifier: modifier })
+        modifyFieldsData.push({
+          verify_mode_string: verifyModeString, name: userName, timestamp: formattedDate, remark, modifier,
+        });
       });
       return modifyFieldsData;
     },
 
-    generateFilteredData(sourceData, filter) {
+    generateFilteredData(sourceData) {
       const self = this;
-      sourceData.forEach(element => {
-        let modifyDate = element.modifier.split('\n');
-      }
-      );
-      const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => {
-        return (
-          item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-        );
+      sourceData.forEach((element) => {
+        element.modifier.split('\n');
       });
+      const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => (
+        item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+      ));
 
       self.value_tablePage.totalResult = filteredItems.length;
 
       const sliceList = filteredItems.slice(
         (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
       );
       return Object.assign([], sliceList);
     },

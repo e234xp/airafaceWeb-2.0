@@ -1262,9 +1262,9 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
             }
           } catch (ex) {
             item.groups = '';
@@ -1894,9 +1894,9 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
             }
           } catch (ex) {
             item.groups = '';
@@ -2035,9 +2035,13 @@ export default {
 
           try {
             if (Array.isArray(self.value_attendanceDataListToReview[idx].group_list)) {
-              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || [])
+                .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
+                .join(', ');
             } else {
-              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || [])
+                .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
+                .join(', ');
             }
           } catch (ex) {
             self.value_attendanceDataListToReview[idx].groups = '';
@@ -2136,43 +2140,41 @@ export default {
         self.exportNo += 1;
         const item = self.value_attendanceDataListToReview[idx];
 
-        {
-          item.nameToShow = item.name;
-          item.clockTime = dayjs(item.timestamp).format('MM/DD HH:mm');
+        item.nameToShow = item.name;
+        item.clockTime = dayjs(item.timestamp).format('MM/DD HH:mm');
 
-          switch (item.verify_mode) {
-            case 1:
-              item.clockMode = i18n.formatter.format('ClockModeCard');
-              break;
-            case 2:
-              item.clockMode = i18n.formatter.format('ClockModePass');
-              break;
-            case 3:
-              item.clockMode = i18n.formatter.format('ClockModeClockIn');
-              break;
-            case 4:
-              item.clockMode = i18n.formatter.format('ClockModeClockOut');
-              break;
-            case 5:
-              item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
-              break;
-            case 6:
-              item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
-              break;
-            default:
-              item.clockMode = i18n.formatter.format('None');
-              break;
-          }
+        switch (item.verify_mode) {
+          case 1:
+            item.clockMode = i18n.formatter.format('ClockModeCard');
+            break;
+          case 2:
+            item.clockMode = i18n.formatter.format('ClockModePass');
+            break;
+          case 3:
+            item.clockMode = i18n.formatter.format('ClockModeClockIn');
+            break;
+          case 4:
+            item.clockMode = i18n.formatter.format('ClockModeClockOut');
+            break;
+          case 5:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
+            break;
+          case 6:
+            item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
+            break;
+          default:
+            item.clockMode = i18n.formatter.format('None');
+            break;
+        }
 
-          try {
-            if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
-            } else {
-              item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
-            }
-          } catch (ex) {
-            item.groups = '';
+        try {
+          if (Array.isArray(item.group_list)) {
+            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+          } else {
+            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
           }
+        } catch (ex) {
+          item.groups = '';
         }
 
         const ln = [`"${self.exportNo}"`];
@@ -2331,9 +2333,9 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join('<br>');
+            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join('<br>');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join('<br>');
+            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join('<br>');
           }
         } catch (ex) {
           item.groups = '';
@@ -2404,9 +2406,9 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((item) => !(item == 'All Person' || item == 'All Visitor')).join(', ');
+            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
           }
         } catch (ex) {
           item.groups = '';

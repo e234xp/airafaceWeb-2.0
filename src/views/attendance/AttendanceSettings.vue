@@ -10,62 +10,112 @@
           <table class="w-50">
             <thead>
               <tr>
-                <th class="fz-xxxl w-50 px-4 py-2 align-top">{{ disp_clockIn }}</th>
-                <th class="fz-xxxl w-50 px-4 py-2 align-top">{{ disp_clockOut }}</th>
+                <th class="fz-xxxl w-50 px-4 py-2 align-top">
+                  {{ disp_clockIn }}
+                </th>
+                <th class="fz-xxxl w-50 px-4 py-2 align-top">
+                  {{ disp_clockOut }}
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="fz-lg w-50 px-4 py-1 align-top">{{ disp_clockInChannel }}</td>
-                <td class="fz-lg w-50 px-4 py-1 align-top">{{ disp_clockOutChannel }}</td>
+                <td class="fz-lg w-50 px-4 py-1 align-top">
+                  {{ disp_clockInChannel }}
+                </td>
+                <td class="fz-lg w-50 px-4 py-1 align-top">
+                  {{ disp_clockOutChannel }}
+                </td>
               </tr>
               <tr>
                 <td class="fz-lg w-50 px-4 pt-1 pb-3 align-top">
-                  <multiselect placeholder="" :multiple="true" :hideSelected="true" :taggable="true"
-                    :show-no-options="false" :select-label="disp_select" :selected-label="disp_selected"
-                    :deselect-label="disp_deselect" v-model="default_attendance_setting.video_device_group_in"
-                    :options="param_videoDeviceGroupIn">
-                  </multiselect>
+                  <multiselect
+                    placeholder=""
+                    :multiple="true"
+                    :hide-selected="true"
+                    :taggable="true"
+                    :show-no-options="false"
+                    :select-label="disp_select"
+                    :selected-label="disp_selected"
+                    :deselect-label="disp_deselect"
+                    v-model="default_attendance_setting.video_device_group_in"
+                    :options="param_videoDeviceGroupIn"
+                  />
                 </td>
 
                 <td class="fz-lg w-50 px-4 pt-1 pb-3 align-top">
-                  <multiselect placeholder="" :multiple="true" :hideSelected="true" :taggable="true"
-                    :show-no-options="false" :select-label="disp_select" :selected-label="disp_selected"
-                    :deselect-label="disp_deselect" v-model="default_attendance_setting.video_device_group_out"
-                    :options="param_videoDeviceGroupOut">
-                  </multiselect>
+                  <multiselect
+                    placeholder=""
+                    :multiple="true"
+                    :hide-selected="true"
+                    :taggable="true"
+                    :show-no-options="false"
+                    :select-label="disp_select"
+                    :selected-label="disp_selected"
+                    :deselect-label="disp_deselect"
+                    v-model="default_attendance_setting.video_device_group_out"
+                    :options="param_videoDeviceGroupOut"
+                  />
                 </td>
               </tr>
               <tr>
-                <td class="fz-lg w-50 px-4 py-1 align-top">{{ disp_definedClockInTime }}</td>
-                <td class="fz-lg w-50 px-4 py-1 align-top">{{ disp_definedClockOutTime }}</td>
+                <td class="fz-lg w-50 px-4 py-1 align-top">
+                  {{ disp_definedClockInTime }}
+                </td>
+                <td class="fz-lg w-50 px-4 py-1 align-top">
+                  {{ disp_definedClockOutTime }}
+                </td>
               </tr>
               <tr>
                 <td class="px-4 pt-1 pb-3 align-top">
-                  <date-picker :lang="this.$globalDatePickerLanguage" class="w-100 gray-rounded-date-picker" type="time"
-                    format="HH:mm" v-model="value_clockInTimePicked" />
+                  <date-picker
+                    :lang="this.$globalDatePickerLanguage"
+                    class="w-100 gray-rounded-date-picker"
+                    type="time"
+                    format="HH:mm"
+                    v-model="value_clockInTimePicked"
+                  />
                 </td>
                 <td class="px-4 pt-1 pb-3 align-top">
-                  <date-picker :lang="this.$globalDatePickerLanguage" class="w-100 gray-rounded-date-picker" type="time"
-                    format="HH:mm" v-model="value_clockOutTimePicked" />
+                  <date-picker
+                    :lang="this.$globalDatePickerLanguage"
+                    class="w-100 gray-rounded-date-picker"
+                    type="time"
+                    format="HH:mm"
+                    v-model="value_clockOutTimePicked"
+                  />
                 </td>
               </tr>
               <tr>
                 <td class="w-25 px-4 pt-1 pb-1 align-top">
                   <div class="fz-lg d-flex align-items-start mt-2">
-                    <input type="checkbox" id="use-upperbound-checkbox" class="cursor-pointer mr-2 mt-1"
-                      v-model="default_attendance_setting.defined_clockin_time_late_enabled" />
+                    <input
+                      type="checkbox"
+                      id="use-upperbound-checkbox"
+                      class="cursor-pointer mr-2 mt-1"
+                      v-model="default_attendance_setting.defined_clockin_time_late_enabled"
+                    >
 
-                    <label for="use-upperbound-checkbox" class="form-check-label cursor-pointer">{{
+                    <label
+                      for="use-upperbound-checkbox"
+                      class="form-check-label cursor-pointer"
+                    >{{
                       disp_clockInTimeBuffer }}
                     </label>
                   </div>
                 </td>
                 <td class="w-25 px-4 pt-1 pb-1 align-top">
                   <div class="fz-lg d-flex align-items-start mt-2">
-                    <input type="checkbox" id="use-lowerbound-checkbox" class="cursor-pointer mr-2 mt-1"
-                      v-model="default_attendance_setting.defined_clockout_time_early_leave_enabled" />
-                    <label for="use-lowerbound-checkbox" class="form-check-label cursor-pointer">{{
+                    <input
+                      type="checkbox"
+                      id="use-lowerbound-checkbox"
+                      class="cursor-pointer mr-2 mt-1"
+                      v-model="default_attendance_setting.defined_clockout_time_early_leave_enabled"
+                    >
+                    <label
+                      for="use-lowerbound-checkbox"
+                      class="form-check-label cursor-pointer"
+                    >{{
                       disp_clockOutTimeBuffer }}
                     </label>
                   </div>
@@ -73,11 +123,15 @@
               </tr>
               <tr>
                 <td class="px-4 pt-1 pb-3 align-top">
-                  <select class="w-100 select-secondary"
-                    v-model="default_attendance_setting.defined_clockin_time_buffer_mins">
+                  <select
+                    class="w-100 select-secondary"
+                    v-model="default_attendance_setting.defined_clockin_time_buffer_mins"
+                  >
                     <option>0</option>
                     <option>15</option>
-                    <option selected>30</option>
+                    <option selected>
+                      30
+                    </option>
                     <option>45</option>
                     <option>60</option>
                     <option>75</option>
@@ -87,11 +141,15 @@
                   </select>
                 </td>
                 <td class="px-4 pt-1 pb-3 align-top">
-                  <select class="w-100 select-secondary"
-                    v-model="default_attendance_setting.defined_clockout_time_buffer_mins">
+                  <select
+                    class="w-100 select-secondary"
+                    v-model="default_attendance_setting.defined_clockout_time_buffer_mins"
+                  >
                     <option>0</option>
                     <option>15</option>
-                    <option selected>30</option>
+                    <option selected>
+                      30
+                    </option>
                     <option>45</option>
                     <option>60</option>
                     <option>75</option>
@@ -104,39 +162,60 @@
               <tr>
                 <td class="px-4 pt-1 pb-3 align-top">
                   <div class="fz-lg d-flex align-items-start mb-2">
-                    <input type="checkbox" id="use-specified-colckin-checkbox" class="cursor-pointer mr-2 mt-1"
-                      v-model="default_attendance_setting.defined_clockin_adjustment_enabled" />
-                    <label for="use-specified-colckin-checkbox" class="form-check-label cursor-pointer">{{
+                    <input
+                      type="checkbox"
+                      id="use-specified-colckin-checkbox"
+                      class="cursor-pointer mr-2 mt-1"
+                      v-model="default_attendance_setting.defined_clockin_adjustment_enabled"
+                    >
+                    <label
+                      for="use-specified-colckin-checkbox"
+                      class="form-check-label cursor-pointer"
+                    >{{
                       disp_adjustClockInEnabled }}</label>
                   </div>
-                  <div class="h-xxxxl"></div>
+                  <div class="h-xxxxl" />
                 </td>
                 <td class="px-4 pt-1 pb-3 align-top">
                   <div class="fz-lg d-flex align-items-start mb-2">
-                    <input type="checkbox" id="use-specified-colckout-checkbox" class="cursor-pointer mr-2 mt-1"
-                      v-model="default_attendance_setting.defined_clockout_adjustment_enabled" />
-                    <label for="use-specified-colckout-checkbox" class="form-check-label cursor-pointer">{{
+                    <input
+                      type="checkbox"
+                      id="use-specified-colckout-checkbox"
+                      class="cursor-pointer mr-2 mt-1"
+                      v-model="default_attendance_setting.defined_clockout_adjustment_enabled"
+                    >
+                    <label
+                      for="use-specified-colckout-checkbox"
+                      class="form-check-label cursor-pointer"
+                    >{{
                       disp_adjustClockOutEnabled }}</label>
                   </div>
                 </td>
               </tr>
               <tr>
                 <td class="fz-xxxl px-4 pt-1 pb-3 align-top font-weight-bold">
-                  <div class="border-top h-xl"></div>
+                  <div class="border-top h-xl" />
                   <div>{{ disp_break_time }}</div>
                 </td>
                 <td class="fz-xxxl px-4 pt-1 pb-3 align-top font-weight-bold">
-                  <div class="border-top h-xl"></div>
+                  <div class="border-top h-xl" />
                   <div>{{ disp_overtime }}</div>
                 </td>
               </tr>
               <tr>
-                <td class="px-4 pt-1 pb-3 align-top fz-lg"></td>
+                <td class="px-4 pt-1 pb-3 align-top fz-lg" />
                 <td class="px-4 pt-1 pb-3 align-top fz-lg">
-                  <input type="checkbox" id="calc-work-overtime-checkbox" class="cursor-pointer mr-2 mt-1"
-                    v-model="default_attendance_setting.defined_overtime_enabled" />
+                  <input
+                    type="checkbox"
+                    id="calc-work-overtime-checkbox"
+                    class="cursor-pointer mr-2 mt-1"
+                    v-model="default_attendance_setting.defined_overtime_enabled"
+                  >
 
-                  <label for="calc-work-overtime-checkbox" class="form-check-label cursor-pointer">{{
+                  <label
+                    for="calc-work-overtime-checkbox"
+                    class="form-check-label cursor-pointer"
+                  >{{
                     disp_enableOvertime }}
                   </label>
                 </td>
@@ -146,10 +225,15 @@
                   <div class="mb-3">
                     {{ disp_breakTimeMins }}
                   </div>
-                  <select class="w-100 select-secondary" v-model="default_attendance_setting.defined_break_time_mins">
+                  <select
+                    class="w-100 select-secondary"
+                    v-model="default_attendance_setting.defined_break_time_mins"
+                  >
                     <option>0</option>
                     <option>30</option>
-                    <option selected>60</option>
+                    <option selected>
+                      60
+                    </option>
                     <option>90</option>
                     <option>120</option>
                   </select>
@@ -158,12 +242,17 @@
                   <div class="mb-3">
                     {{ disp_overtimeStartTime }}
                   </div>
-                  <date-picker :lang="this.$globalDatePickerLanguage" class="w-100 gray-rounded-date-picker" type="time"
-                    format="HH:mm" v-model="value_overtimeStartTime" />
+                  <date-picker
+                    :lang="this.$globalDatePickerLanguage"
+                    class="w-100 gray-rounded-date-picker"
+                    type="time"
+                    format="HH:mm"
+                    v-model="value_overtimeStartTime"
+                  />
                 </td>
               </tr>
               <tr>
-                <td class="px-4 pt-1 pb-3 align-top fz-lg"></td>
+                <td class="px-4 pt-1 pb-3 align-top fz-lg" />
                 <td class="px-4 pt-1 pb-3 align-top fz-md">
                   <ul>
                     <li>{{ disp_overtimeGuide }}</li>
@@ -171,18 +260,22 @@
                 </td>
               </tr>
               <tr>
-                <td class="px-4 pt-1 pb-3 align-top fz-lg"></td>
+                <td class="px-4 pt-1 pb-3 align-top fz-lg" />
                 <td class="px-4 pt-1 pb-3 align-top fz-lg">
                   {{ disp_overtimeMinimum }}
                 </td>
               </tr>
               <tr>
-                <td class="px-4 pt-1 pb-3 align-top fz-lg"></td>
+                <td class="px-4 pt-1 pb-3 align-top fz-lg" />
 
                 <td class="px-4 pt-1 pb-3 align-top">
-                  <select class="w-100 select-secondary"
-                    v-model="default_attendance_setting.defined_overtime_minimum_min">
-                    <option selected>0</option>
+                  <select
+                    class="w-100 select-secondary"
+                    v-model="default_attendance_setting.defined_overtime_minimum_min"
+                  >
+                    <option selected>
+                      0
+                    </option>
                     <option>30</option>
                     <option>60</option>
                     <option>90</option>
@@ -195,8 +288,12 @@
 
           <table class="w-50">
             <tr>
-              <th class="fz-xxxl w-50 px-4 py-2 align-top">{{ disp_holidays }}</th>
-              <th class="fz-xxxl w-50 px-4 py-2 align-top">{{ disp_nonHolidays }}</th>
+              <th class="fz-xxxl w-50 px-4 py-2 align-top">
+                {{ disp_holidays }}
+              </th>
+              <th class="fz-xxxl w-50 px-4 py-2 align-top">
+                {{ disp_nonHolidays }}
+              </th>
             </tr>
             <tr>
               <td class="fz-lg w-50 px-4 py-1 align-top">
@@ -209,19 +306,35 @@
             <tr>
               <td class="px-4 pt-1 pb-3 align-top">
                 <div class="d-flex w-100 align-items-center">
-                  <date-picker :lang="this.$globalDatePickerLanguage" class="w-85-important gray-rounded-date-picker"
-                    type="date" :disabled-date="daysToDisable" v-model="value_holidaydatePicked" />
-                  <CButton class="btn btn-outline-primary btn-add ml-2" @click="clickOnInsertHoliday()">
+                  <date-picker
+                    :lang="this.$globalDatePickerLanguage"
+                    class="w-85-important gray-rounded-date-picker"
+                    type="date"
+                    :disabled-date="daysToDisable"
+                    v-model="value_holidaydatePicked"
+                  />
+                  <CButton
+                    class="btn btn-outline-primary btn-add ml-2"
+                    @click="clickOnInsertHoliday()"
+                  >
                     +
                   </CButton>
                 </div>
               </td>
               <td class="px-4 pt-1 pb-3 align-top">
                 <div class="d-flex w-100 align-items-center">
-                  <date-picker class="w-85-important gray-rounded-date-picker" :lang="this.$globalDatePickerLanguage"
-                    type="date" :disabled-date="daysToDisable" v-model="value_nonHolidaydatePicked" />
+                  <date-picker
+                    class="w-85-important gray-rounded-date-picker"
+                    :lang="this.$globalDatePickerLanguage"
+                    type="date"
+                    :disabled-date="daysToDisable"
+                    v-model="value_nonHolidaydatePicked"
+                  />
 
-                  <CButton class="btn btn-outline-primary btn-add ml-2" @click="clickOnInsertNonHoliday()">
+                  <CButton
+                    class="btn btn-outline-primary btn-add ml-2"
+                    @click="clickOnInsertNonHoliday()"
+                  >
                     +
                   </CButton>
                 </div>
@@ -229,18 +342,38 @@
             </tr>
             <tr>
               <td class="px-4 py-1 w-50">
-                <vxe-table id="holidayTable" :show-header="false" :data="value_holidaysDateToShow" style="height: 288px"
-                  stripe :cell-style="cellStyle" empty-text=" ">
-                  <vxe-table-column show-overflow width="50px">
+                <vxe-table
+                  id="holidayTable"
+                  :show-header="false"
+                  :data="value_holidaysDateToShow"
+                  style="height: 288px"
+                  stripe
+                  :cell-style="cellStyle"
+                  empty-text=" "
+                >
+                  <vxe-table-column
+                    show-overflow
+                    width="50px"
+                  >
                     <template #default="{ row }">
-                      <vxe-button type="text" icon="far fa-minus-square" @click="deleteHolidayEvent(row)"></vxe-button>
+                      <vxe-button
+                        type="text"
+                        icon="far fa-minus-square"
+                        @click="deleteHolidayEvent(row)"
+                      />
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column style="text-align: left" show-overflow field="display_string"
-                    width="auto"></vxe-table-column>
+                  <vxe-table-column
+                    style="text-align: left"
+                    show-overflow
+                    field="display_string"
+                    width="auto"
+                  />
                 </vxe-table>
 
-                <vxe-pager class="h-theme-pager" :layouts="[
+                <vxe-pager
+                  class="h-theme-pager"
+                  :layouts="[
                     'PrevJump',
                     'PrevPage',
                     'Number',
@@ -248,23 +381,45 @@
                     'NextJump',
                     'FullJump',
                     'Total',
-                  ]" :current-page="value_holidayTablePage.currentPage" :page-size="value_holidayTablePage.pageSize"
-                  :total="value_holidayTablePage.totalResult" @page-change="handleHolidayPageChange">
-                </vxe-pager>
+                  ]"
+                  :current-page="value_holidayTablePage.currentPage"
+                  :page-size="value_holidayTablePage.pageSize"
+                  :total="value_holidayTablePage.totalResult"
+                  @page-change="handleHolidayPageChange"
+                />
               </td>
               <td class="px-4 py-1 w-100">
-                <vxe-table id="nonHolidayTable" :show-header="false" :data="value_nonHolidaysDateToShow"
-                  style="height: 288px" stripe :cell-style="cellStyle" empty-text=" ">
-                  <vxe-table-column show-overflow width="50px">
+                <vxe-table
+                  id="nonHolidayTable"
+                  :show-header="false"
+                  :data="value_nonHolidaysDateToShow"
+                  style="height: 288px"
+                  stripe
+                  :cell-style="cellStyle"
+                  empty-text=" "
+                >
+                  <vxe-table-column
+                    show-overflow
+                    width="50px"
+                  >
                     <template #default="{ row }">
-                      <vxe-button type="text" icon="far fa-minus-square"
-                        @click="deleteNonHolidayEvent(row)"></vxe-button>
+                      <vxe-button
+                        type="text"
+                        icon="far fa-minus-square"
+                        @click="deleteNonHolidayEvent(row)"
+                      />
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column show-overflow field="display_string" width="auto"></vxe-table-column>
+                  <vxe-table-column
+                    show-overflow
+                    field="display_string"
+                    width="auto"
+                  />
                 </vxe-table>
 
-                <vxe-pager class="h-theme-pager" :layouts="[
+                <vxe-pager
+                  class="h-theme-pager"
+                  :layouts="[
                     'PrevJump',
                     'PrevPage',
                     'Number',
@@ -272,25 +427,32 @@
                     'NextJump',
                     'FullJump',
                     'Total',
-                  ]" :current-page="value_nonHolidayTablePage.currentPage"
-                  :page-size="value_nonHolidayTablePage.pageSize" :total="value_nonHolidayTablePage.totalResult"
-                  @page-change="handleNonHolidayPageChange">
-                </vxe-pager>
+                  ]"
+                  :current-page="value_nonHolidayTablePage.currentPage"
+                  :page-size="value_nonHolidayTablePage.pageSize"
+                  :total="value_nonHolidayTablePage.totalResult"
+                  @page-change="handleNonHolidayPageChange"
+                />
               </td>
             </tr>
           </table>
         </div>
 
         <CRow class="mt-4">
-          <CCol sm="3"> </CCol>
-          <CCol sm="3"> </CCol>
+          <CCol sm="3" />
+          <CCol sm="3" />
         </CRow>
 
         <CCol sm="12">
           <CRow>
             <CCol sm="3">
-              <CButton class="btn btn-primary" @click="ApplyAttendanceSettings">
-                <div style="font-size: 20px">{{ disp_apply }}</div>
+              <CButton
+                class="btn btn-primary"
+                @click="ApplyAttendanceSettings"
+              >
+                <div style="font-size: 20px">
+                  {{ disp_apply }}
+                </div>
               </CButton>
             </CCol>
           </CRow>
