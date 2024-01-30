@@ -2,7 +2,9 @@
   <div id="wrapper">
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ $t('VideoDeviceBasic') }}
+      </div>
 
       <stepprogress
         class="w-step-progress-4"
@@ -12,12 +14,11 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_complete]"
+        :steps="[$t('VideoDeviceBasic'), $t('Complete')]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -28,8 +29,8 @@
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -78,30 +79,33 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div
           v-if="
             flag_currentSetp == 1 ||
-            flag_currentSetp == 2 ||
-            flag_currentSetp == 3
+              flag_currentSetp == 2 ||
+              flag_currentSetp == 3
           "
         >
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ $t('Previous') }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
           <CButton
             class="btn btn-primary mb-3"
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -110,55 +114,35 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
+import StepProgress from 'vue-step-progress';
+import '@/airacss/vue-step-progress.css';
 
-import StepProgress from "vue-step-progress";
-import "@/airacss/vue-step-progress.css";
-
-import Step1Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step1Form.vue";
-import Step2Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step2Form.vue";
-import Step3Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step3Form.vue";
-import Step4Form from "@/modules/outputdevice/modifyoutputdevicegroups/Step4Form.vue";
+import Step1Form from '@/modules/outputdevice/modifyoutputdevicegroups/Step1Form.vue';
 
 export default {
-  name: "ModifyOutPutDeviceGroups",
+  name: 'ModifyOutPutDeviceGroups',
 
   data() {
     return {
-      param_cardStyle: "height: 35rem;",
+      param_cardStyle: 'height: 35rem;',
 
       value_returnRoutePath: this.$route.params.value_returnRoutePath
         ? this.$route.params.value_returnRoutePath
-        : "",
+        : '',
       value_returnRouteName: this.$route.params.value_returnRouteName
         ? this.$route.params.value_returnRouteName
-        : "",
-
-      /*Basic title  */
-      disp_headertitle: i18n.formatter.format("VideoDeviceBasic"),
+        : '',
 
       // step setting
-      param_activeColor: "#6baee3",
-      param_passiveColor: "#919bae",
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
 
-      /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format("VideoDeviceBasic"),
-      disp_step2: i18n.formatter.format("VideoDeviceConnection"),
-      disp_step3: i18n.formatter.format("VideoDeviceDigitalOutPut1"),
-      disp_step4: i18n.formatter.format("VideoDeviceDigitalOutPut2"),
-      disp_complete: i18n.formatter.format("Complete"),
-
-      /**btn */
-      disp_complete: i18n.formatter.format("Complete"),
-      disp_previous: i18n.formatter.format("Previous"),
-      disp_next: i18n.formatter.format("Next"),
-
       step1form: {
-        name: "",
+        name: '',
       },
 
       // step2form: {
@@ -188,7 +172,7 @@ export default {
     };
   },
   components: {
-    Step1Form: Step1Form,
+    Step1Form,
     // Step2Form: Step2Form,
     // Step3Form: Step3Form,
     // Step4Form: Step4Form,
@@ -219,14 +203,14 @@ export default {
 
     async getDefaultName() {
       const {
-        data: { totalLength: totalLength, result: deviceList },
-      } = await this.$globalFindOutputDeviceGroups("", 0, 3000);
+        data: { totalLength, result: deviceList },
+      } = await this.$globalFindOutputDeviceGroups('', 0, 3000);
 
       let number = totalLength + 1;
       let name = `OutputGroup-${number}`;
       // Check for duplicates, if found, increment the number and check again
       while (this.isDuplicateName(deviceList, name)) {
-        number++;
+        number += 1;
         name = `OutputGroup-${number}`;
       }
 
@@ -256,61 +240,65 @@ export default {
         case 1: {
           return true;
         }
+
+        default:
+          return false;
       }
     },
 
     isFormPassed(form) {
-      return Object.entries(form).every(([key, value]) => {
-        return this.isFieldPassed(key, value);
-      });
+      return Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value));
     },
 
     isFieldPassed(key, value) {
       const rules = {
-        name: "nonEmpty",
-        divice_groups: "nonEmpty",
-        stream_type: "nonEmpty",
-        ip_address: "nonEmpty",
-        port: "port",
-        user: "nonEmpty",
-        pass: "password",
-        connection_info: "nonEmpty",
-        target_score: "target_score",
-        face_min_length: "passitiveInt",
-        capture_interval: "captureInterval",
+        name: 'nonEmpty',
+        divice_groups: 'nonEmpty',
+        stream_type: 'nonEmpty',
+        ip_address: 'nonEmpty',
+        port: 'port',
+        user: 'nonEmpty',
+        pass: 'password',
+        connection_info: 'nonEmpty',
+        target_score: 'target_score',
+        face_min_length: 'passitiveInt',
+        capture_interval: 'captureInterval',
       };
       const rule = rules[key];
       if (!rule) return true;
       switch (rule) {
-        case "nonEmpty": {
+        case 'nonEmpty': {
           return !!value;
         }
 
-        case "port": {
+        case 'port': {
           const number = parseInt(value, 10);
 
           return Number.isInteger(number) && number >= 1 && number <= 65535;
         }
 
-        case "password": {
+        case 'password': {
           return !!value;
         }
 
-        case "passitiveInt": {
+        case 'passitiveInt': {
           return /^\d+$/.test(value);
         }
 
-        case "target_score": {
+        case 'target_score': {
           const number = parseInt(value, 10);
 
           return Number.isInteger(number) && value >= 0 && value <= 1;
         }
 
-        case "captureInterval": {
+        case 'captureInterval': {
           const number = parseInt(value, 10);
 
           return Number.isInteger(number) && value >= 100 && value <= 1000;
         }
+
+        default:
+          return false;
       }
     },
 
@@ -331,7 +319,7 @@ export default {
       this.$router.push({ name: this.value_returnRoutePath });
     },
 
-    //送api 完成
+    // 送api 完成
     handleParameter() {
       const form = {
         uuid: this.uuid,
@@ -339,7 +327,7 @@ export default {
         wiegand_converter_uuid_list: [],
         iobox_uuid_list: [],
       };
-      console.log(form, "form");
+      console.log(form, 'form');
       return form;
     },
 
@@ -359,19 +347,19 @@ export default {
           });
 
           const parameter = this.handleParameter();
-          console.log(parameter, "送的資料");
+          console.log(parameter, '送的資料');
 
           const { data } = await this.create(parameter);
 
           this.obj_loading.hide();
-          if (data && data.message == "ok") {
+          if (data && data.message == 'ok') {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format("Failed"),
-              type: "error",
+              text: this.$t('Failed'),
+              type: 'error',
               timer: 3000,
-              confirmButtonColor: "#20a8d8",
+              confirmButtonColor: '#20a8d8',
             });
           }
 
@@ -386,7 +374,7 @@ export default {
       }
     },
 
-    //送api 完成
+    // 送api 完成
     create(data) {
       return this.$globalModifyOutputDeviceGroups(data);
     },
@@ -394,11 +382,11 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
   },

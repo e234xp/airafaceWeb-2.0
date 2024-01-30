@@ -2,15 +2,18 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <ListForm :onAdd="onAdd" :onDelete="onDelete" :onModify="onModify" :onGetItems="onGetItems" />
+        <ListForm
+          :on-add="onAdd"
+          :on-delete="onDelete"
+          :on-modify="onModify"
+          :on-get-items="onGetItems"
+        />
       </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import ListForm from '@/modules/videodevice/videodevicegrouplist/ListForm.vue';
 import TableObserver from '@/utils/TableObserver.vue';
 
@@ -32,7 +35,7 @@ export default {
 
       if (error) {
         this.$fire({
-          title: i18n.formatter.format('NetworkLoss'),
+          title: this.$t('NetworkLoss'),
           text: '',
           type: 'error',
           timer: 3000,
@@ -49,7 +52,7 @@ export default {
         name: 'AddVideoDeviceGroups',
         params: {
           value_returnRoutePath: 'DeviceGroups',
-          value_returnRouteName: i18n.formatter.format('Return'),
+          value_returnRouteName: this.$t('Return'),
         },
       });
     },
@@ -60,7 +63,7 @@ export default {
         name: 'ModifyVideoDeviceGroups',
         params: {
           value_returnRoutePath: 'DeviceGroups',
-          value_returnRouteName: i18n.formatter.format('Return'),
+          value_returnRouteName: this.$t('Return'),
           item,
         },
       });
@@ -71,9 +74,9 @@ export default {
       if (!items || !Array.isArray(items)) return;
 
       const uuidListToDel = items.map(({ uuid }) => uuid);
-      this.$confirm('', i18n.formatter.format('ConfirmToDelete'), {
-        confirmButtonText: i18n.formatter.format('Confirm'),
-        cancelButtonText: i18n.formatter.format('Cancel'),
+      this.$confirm('', this.$t('ConfirmToDelete'), {
+        confirmButtonText: this.$t('Confirm'),
+        cancelButtonText: this.$t('Cancel'),
         confirmButtonColor: '#20a8d8',
         cancelButtonColor: '#f86c6b',
       })
@@ -92,11 +95,11 @@ export default {
       if (error) {
         if (cb) cb(false);
         this.$fire({
-          text: i18n.formatter.format('OperationFailed'),
+          text: this.$t('OperationFailed'),
           type: 'error',
           timer: 3000,
           confirmButtonColor: '#20a8d8',
-          confirmButtonText: i18n.formatter.format('OK'),
+          confirmButtonText: this.$t('OK'),
         });
       }
       if (cb) cb(true);

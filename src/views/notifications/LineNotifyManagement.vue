@@ -2,16 +2,19 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CLineNotifyManagementForm :formData="$data" :onAdd="onAdd"
-          :onModify="onModify" :onDelete="onDelete"
-          :onFetchDataCallback="onFetchDataCallback" />
+        <CLineNotifyManagementForm
+          :form-data="$data"
+          :on-add="onAdd"
+          :on-modify="onModify"
+          :on-delete="onDelete"
+          :on-fetch-data-callback="onFetchDataCallback"
+        />
       </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
 import CLineNotifyManagementForm from './forms/LineNotifyManagementForm.vue';
 
 export default {
@@ -35,19 +38,18 @@ export default {
   },
   methods: {
     async downloadTableItemsAsync(sliceSize, cb) {
-      const self = this;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
 
       // const getLineNotifyList = (q, f, s) => new Promise((resolve) => {
-      //   self.$globalGetLineNotifyList(q, f, s, (err, data) => {
+      //   this.$globalGetLineNotifyList(q, f, s, (err, data) => {
       //     resolve({ error: err, data });
       //   });
       // });
 
-      while (self.flag_keepingDownload && thereIsMoreData) {
-        const ret = await self.$globalGetLineNotifyList(
+      while (this.flag_keepingDownload && thereIsMoreData) {
+        const ret = await this.$globalGetLineNotifyList(
           '', shitf, sliceSize,
         );
         // const ret = getLineNotifyList('', shitf, sliceSize);
@@ -63,8 +65,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(rErr, true, false, []);
-          self.$fire({
-            title: i18n.formatter.format('NetworkLoss'),
+          this.$fire({
+            title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -75,9 +77,8 @@ export default {
     },
 
     onFetchDataCallback(cb) {
-      const self = this;
-      self.flag_keepingDownload = true;
-      self.downloadTableItemsAsync(/* sliceSize */ 3000, cb);
+      this.flag_keepingDownload = true;
+      this.downloadTableItemsAsync(/* sliceSize */ 3000, cb);
     },
 
     onAdd(allRecords) {
@@ -86,7 +87,7 @@ export default {
         params: {
           value_allRecords: allRecords,
           value_returnRoutePath: 'LineNotifyManagement',
-          value_returnRouteName: i18n.formatter.format('Return'),
+          value_returnRouteName: this.$t('Return'),
         },
       });
     },
@@ -96,26 +97,25 @@ export default {
         name: 'ModifyLineNotify',
         params: {
           value_returnRoutePath: 'LineNotifyManagement',
-          value_returnRouteName: i18n.formatter.format('Return'),
+          value_returnRouteName: this.$t('Return'),
           value_item: item,
         },
       });
     },
 
     onDelete(items, cb) {
-      const self = this;
       if (items && Array.isArray(items)) {
         const uuidListToDel = [];
         items.forEach((item) => {
           uuidListToDel.push(item.uuid);
         });
-        self.$confirm('', i18n.formatter.format('ConfirmToDelete'), {
-          confirmButtonText: i18n.formatter.format('Confirm'),
-          cancelButtonText: i18n.formatter.format('Cancel'),
+        this.$confirm('', this.$t('ConfirmToDelete'), {
+          confirmButtonText: this.$t('Confirm'),
+          cancelButtonText: this.$t('Cancel'),
           confirmButtonColor: '#20a8d8',
           cancelButtonColor: '#f86c6b',
         }).then(() => {
-          self.removeRecordAsync(uuidListToDel, cb);
+          this.removeRecordAsync(uuidListToDel, cb);
         }).catch(() => {
           if (cb) cb(false);
         });
@@ -123,17 +123,16 @@ export default {
     },
 
     async removeRecordAsync(uuid, cb) {
-      const self = this;
-      const ret = await self.$globalRemoveLineNotify(uuid);
+      const ret = await this.$globalRemoveLineNotify(uuid);
       const err = ret.error;
       if (err) {
         if (cb) cb(false);
-        self.$fire({
-          text: i18n.formatter.format('OperationFailed'),
+        this.$fire({
+          text: this.$t('OperationFailed'),
           type: 'error',
           timer: 3000,
           confirmButtonColor: '#20a8d8',
-          confirmButtonText: i18n.formatter.format('OK'),
+          confirmButtonText: this.$t('OK'),
         });
       } else if (cb) cb(true);
     },

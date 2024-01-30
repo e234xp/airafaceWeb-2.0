@@ -564,6 +564,8 @@ export default {
       value_photoToDisplay: '',
 
       value_allGroupsList: [],
+
+      ...this.formData,
     };
   },
   created() {

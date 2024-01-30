@@ -13,7 +13,7 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step3, disp_complete]"
+        :steps="[$t('WiegandStep1Name'), $t('WiegandStep3Name'), $t('Complete')]"
         icon-class="fa fa-check"
       />
 
@@ -72,7 +72,7 @@
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
           >
-            {{ disp_previous }}
+            {{ $t('Previous') }}
           </CButton>
         </div>
 
@@ -94,8 +94,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -122,9 +120,6 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      // /*Basic title  */
-      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
-
       // step setting
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
@@ -132,17 +127,6 @@ export default {
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
-
-      // /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format('WiegandStep1Name'),
-      disp_step2: i18n.formatter.format('WiegandStep2Name'),
-      disp_step3: i18n.formatter.format('WiegandStep3Name'),
-      disp_complete: i18n.formatter.format('Complete'),
-
-      // /**btn */
-      // disp_complete: i18n.formatter.format('Complete'),
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
 
       step1form: {
         name: '',
@@ -293,7 +277,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -319,13 +303,13 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_next;
+          return this.$t('Next');
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
   },

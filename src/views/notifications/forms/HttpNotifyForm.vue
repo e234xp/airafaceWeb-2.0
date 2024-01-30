@@ -1,110 +1,190 @@
 <template>
   <div>
-    <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-3" icon-class="fa fa-check"
+    <div class="h1 mb-5">
+      {{ $t('NotificationHttp') }}
+    </div>
+    <stepprogress
+      class="w-step-progress-3"
+      icon-class="fa fa-check"
       :active-thickness="param_activeThickness"
       :passive-thickness="param_passiveThickness"
       :active-color="param_activeColor"
       :passive-color="param_passiveColor"
       :line-thickness="param_lineThickness"
-      :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
+      :steps="[$t('NotificationInfo'), $t('ContentField'), $t('Complete')]"
       :current-step="flag_currentSetp"
-    >
-    </stepprogress>
+    />
 
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_notifyName }}</th>
-              <th class="h5 w-25 table-th">{{ disp_method }}</th>
-              <th class="h5 w-25 table-th">{{ disp_username }}</th>
-              <th class="h5 w-25 table-th">{{ disp_password }}</th>
+              <th class="h5 w-25 table-th">
+                {{ $t('NotifyName') }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ $t('Method') }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ $t('Username') }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ $t('Password') }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_notifyName" required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                <CInput
+                  size="lg"
+                  v-model="value_notifyName"
+                  required
+                  :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
                   :is-valid="notifyNameValidator"
-                  />
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_method" :options="['GET', 'POST']" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_method"
+                  :options="['GET', 'POST']"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_username" />
+                <CInput
+                  size="lg"
+                  v-model="value_username"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_password"
+                <CInput
+                  size="lg"
+                  v-model="value_password"
                   :type="flag_view_password ? 'text' : 'password'"
                 >
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                      <CIcon v-show="flag_view_password"  src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0.375rem 0.375rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
               </td>
             </tr>
             <tr class="table-tr">
-              <th class="h5 w-25 table-th" colspan="4">{{ disp_url }}
-                <span class="h6 table-td px-3 py-0" style="vertical-align: bottom;">ex: http://127.0.0.1:7001/api/createEvent</span>
+              <th
+                class="h5 w-25 table-th"
+                colspan="4"
+              >
+                {{ $t('HttpUrl') }}
+                <span
+                  class="h6 table-td px-3 py-0"
+                  style="vertical-align: bottom;"
+                >ex: http://127.0.0.1:7001/api/createEvent</span>
               </th>
             </tr>
             <tr class="table-tr">
-              <td class="table-td" colspan="4">
-                <CInput size="lg" v-model="value_url" required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+              <td
+                class="table-td"
+                colspan="4"
+              >
+                <CInput
+                  size="lg"
+                  v-model="value_url"
+                  required
+                  :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
                   :is-valid="urlValidator"
-                  />
+                />
               </td>
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(1)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-50 table-th">{{ disp_fields }}</th>
-              <th class="h5 w-50 table-th">{{ disp_note }}</th>
+              <th class="h5 w-50 table-th">
+                {{ $t('Fields') }}
+              </th>
+              <th class="h5 w-50 table-th">
+                {{ $t('Note') }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
                 <ul class="list-group">
-                  <li class="list-group-item"
-                    v-for="(item, index) in param_Fields" :key="index">
-                    <input class="form-check-input me-1" type="checkbox" value="item"
+                  <li
+                    class="list-group-item"
+                    v-for="(item, index) in param_Fields"
+                    :key="index"
+                  >
+                    <input
+                      class="form-check-input me-1"
+                      type="checkbox"
+                      value="item"
                       :checked="value_selectedFields.indexOf(item) >= 0"
-                      @change="fieldSelectedChanged(item, $event)" />
-                    <input size="lg" style="width: 260px;" :value="item.key" @input="fieldChanged(item, $event)" /> = {{ $t(item.field) }}
-                    <CButton style="float:right; width: 40px; min-width:unset;" @click="fieldMove(item, -1)">
+                      @change="fieldSelectedChanged(item, $event)"
+                    >
+                    <input
+                      size="lg"
+                      style="width: 260px;"
+                      :value="item.key"
+                      @input="fieldChanged(item, $event)"
+                    > = {{ $t(item.field) }}
+                    <CButton
+                      style="float:right; width: 40px; min-width:unset;"
+                      @click="fieldMove(item, -1)"
+                    >
                       <CIcon name="cil-arrow-thick-top" />
                     </CButton>
-                    <CButton style="float:right; width: 40px; min-width:unset;" @click="fieldMove(item, 1)">
+                    <CButton
+                      style="float:right; width: 40px; min-width:unset;"
+                      @click="fieldMove(item, 1)"
+                    >
                       <CIcon name="cil-arrow-thick-bottom" />
                     </CButton>
                   </li>
                 </ul>
               </td>
               <td class="table-td">
-                <CTextarea size="lg" rows="13" v-model="value_note" />
+                <CTextarea
+                  size="lg"
+                  rows="13"
+                  v-model="value_note"
+                />
               </td>
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
-                {{ disp_complete }}
+                {{ $t('Complete') }}
               </p>
             </CCol>
           </CRow>
@@ -116,19 +196,28 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
-            {{ disp_previous }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
+            {{ $t('Previous') }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary fz-lg btn-w-normal" @click="clickOnNext"
-            :disabled="!(flag_notifyNamePass && flag_urlPass)">
+          <CButton
+            class="btn btn-primary fz-lg btn-w-normal"
+            @click="clickOnNext"
+            :disabled="!(flag_notifyNamePass && flag_urlPass)"
+          >
             {{ nextButtonName() }}
           </CButton>
         </div>
@@ -137,70 +226,8 @@
   </div>
 </template>
 <script>
-import i18n from '@/i18n';
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  flag_view_password: false,
-
-  param_cardStyle: 'height: 29rem;',
-  param_activeColor: '#6baee3',
-  param_passiveColor: '#919bae',
-  param_lineThickness: 3,
-  param_activeThickness: 3,
-  param_passiveThickness: 3,
-  param_Fields: [
-    { key: 'timestamp', field: 'timestamp' },
-    { key: 'person_id', field: 'person_id' },
-    { key: 'person_name', field: 'person_name' },
-    { key: 'card_number', field: 'card_number' },
-    { key: 'title', field: 'title' },
-    { key: 'department', field: 'department' },
-    { key: 'email', field: 'email' },
-    { key: 'phone_number', field: 'phone_number' },
-    { key: 'extension_number', field: 'extension_number' },
-    { key: 'remarks', field: 'remarks' },
-    { key: 'foreHead_temperature', field: 'foreHead_temperature' },
-    { key: 'face_image', field: 'face_image' },
-    { key: 'register_image', field: 'register_image' },
-    { key: 'display_image', field: 'display_image' },
-  ],
-
-  disp_header: i18n.formatter.format('NotificationHttp'),
-  disp_inputNotificationInfo: i18n.formatter.format('NotificationInfo'),
-  disp_content: i18n.formatter.format('ContentField'),
-  disp_complete: i18n.formatter.format('Complete'),
-
-  disp_notifyName: i18n.formatter.format('NotifyName'),
-  disp_method: i18n.formatter.format('Method'),
-  disp_username: i18n.formatter.format('Username'),
-  disp_password: i18n.formatter.format('Password'),
-  disp_url: i18n.formatter.format('HttpUrl'),
-  disp_fields: i18n.formatter.format('Fields'),
-  disp_note: i18n.formatter.format('Note'),
-
-  disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
-
-  disp_previous: i18n.formatter.format('Previous'),
-  disp_next: i18n.formatter.format('Next'),
-
-  flag_currentSetp: 0,
-
-  value_uuid: '',
-  value_notifyName: '',
-  value_method: '',
-  value_url: '',
-  value_username: '',
-  value_password: '',
-  value_selectedFields: [{ key: 'timestamp', field: 'timestamp' }],
-  value_note: '',
-
-  flag_notifyNamePass: false,
-  flag_urlPass: false,
-});
 
 export default {
   name: 'HttpNotifyForm',
@@ -210,11 +237,50 @@ export default {
     onFinish: { type: Function, default: () => null },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
 
-    return cloneObject;
+      flag_view_password: false,
+
+      param_cardStyle: 'height: 29rem;',
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
+      param_lineThickness: 3,
+      param_activeThickness: 3,
+      param_passiveThickness: 3,
+      param_Fields: [
+        { key: 'timestamp', field: 'timestamp' },
+        { key: 'person_id', field: 'person_id' },
+        { key: 'person_name', field: 'person_name' },
+        { key: 'card_number', field: 'card_number' },
+        { key: 'title', field: 'title' },
+        { key: 'department', field: 'department' },
+        { key: 'email', field: 'email' },
+        { key: 'phone_number', field: 'phone_number' },
+        { key: 'extension_number', field: 'extension_number' },
+        { key: 'remarks', field: 'remarks' },
+        { key: 'foreHead_temperature', field: 'foreHead_temperature' },
+        { key: 'face_image', field: 'face_image' },
+        { key: 'register_image', field: 'register_image' },
+        { key: 'display_image', field: 'display_image' },
+      ],
+
+      flag_currentSetp: 0,
+
+      value_uuid: '',
+      value_notifyName: '',
+      value_method: '',
+      value_url: '',
+      value_username: '',
+      value_password: '',
+      value_selectedFields: [{ key: 'timestamp', field: 'timestamp' }],
+      value_note: '',
+
+      flag_notifyNamePass: false,
+      flag_urlPass: false,
+
+      ...this.formData,
+    };
   },
   created() {
     const self = this;
@@ -250,13 +316,13 @@ export default {
     nextButtonName() {
       switch (this.flag_currentSetp) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_next;
+          return this.$t('Next');
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
     clickOnPrev() {
@@ -318,7 +384,7 @@ export default {
                 self.flag_currentSetp = 2;
               } else {
                 self.$fire({
-                  text: i18n.formatter.format('Failed'),
+                  text: this.$t('Failed'),
                   type: 'error',
                   timer: 3000,
                   confirmButtonColor: '#20a8d8',

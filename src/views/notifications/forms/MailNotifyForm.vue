@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h1 mb-5">
-      {{ disp_header }}
+      {{ $t('NotificationMail') }}
     </div>
     <stepprogress
       class="w-step-progress-3"
@@ -11,7 +11,7 @@
       :active-color="param_activeColor"
       :passive-color="param_passiveColor"
       :line-thickness="param_lineThickness"
-      :steps="[disp_inputNotificationInfo, disp_content, disp_complete]"
+      :steps="[$t('NotificationInfo'), $t('ContentField'), $t('Complete')]"
       :current-step="flag_currentSetp"
     />
 
@@ -24,16 +24,16 @@
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_notifyName }}
+                {{ $t('NotifyName') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_host }}
+                {{ $t('HostAddress') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_security }}
+                {{ $t('SMTPEnabledSecure') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_port }}
+                {{ $t('Port') }}
               </th>
             </tr>
             <tr class="table-tr">
@@ -42,7 +42,7 @@
                   size="lg"
                   v-model="value_notifyName"
                   required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
                   :is-valid="notifyNameValidator"
                 />
               </td>
@@ -74,16 +74,16 @@
             </tr>
             <tr class="table-tr">
               <th class="h5 table-th">
-                {{ disp_sender }}
+                {{ $t('SMTPSender') }}
               </th>
               <th class="h5 table-th">
-                {{ disp_account }}
+                {{ $t('Username') }}
               </th>
               <th class="h5 table-th">
-                {{ disp_password }}
+                {{ $t('Password') }}
               </th>
               <th class="h5 table-th">
-                {{ disp_subject }}
+                {{ $t('SMTPSubject') }}
               </th>
             </tr>
             <tr class="table-tr">
@@ -106,12 +106,13 @@
                 />
               </td>
               <td class="table-td">
+                <!-- FIXME: no i18n -->
                 <CInput
                   size="lg"
                   v-model="value_password"
                   required
                   :type="flag_view_password ? 'text' : 'password'"
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :invalid-feedback="$t('noEmptyNoSpaceOnly')"
                   :is-valid="passwordValidator"
                 >
                   <template #append-content>
@@ -132,24 +133,25 @@
                 </CInput>
               </td>
               <td class="table-td">
+                <!-- FIXME: no i18n -->
                 <CInput
                   size="lg"
                   v-model="value_subject"
                   required
-                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  :invalid-feedback="$t('noEmptyNoSpaceOnly')"
                   :is-valid="subjectValidator"
                 />
               </td>
             </tr>
             <tr class="table-tr">
               <th class="h5 table-th">
-                {{ disp_to }}
+                {{ $t('SMTPTo') }}
               </th>
               <th class="h5 table-th">
-                {{ disp_cc }}
+                {{ $t('SMTPCC') }}
               </th>
               <th class="h5 table-th">
-                {{ disp_bcc }}
+                {{ $t('SMTPBCC') }}
               </th>
               <th class="h5 table-th" />
             </tr>
@@ -161,9 +163,9 @@
                   :multiple="true"
                   :hide-selected="true"
                   :searchable="false"
-                  :select-label="disp_select"
-                  :selected-label="disp_selected"
-                  :deselect-label="disp_deselect"
+                  :select-label="$t('Select')"
+                  :selected-label="$t('Selected')"
+                  :deselect-label="$t('Deselect')"
                   v-model="value_to"
                   :options="param_personGroupList"
                   @input="ccListOnInput"
@@ -182,9 +184,9 @@
                   :multiple="true"
                   :hide-selected="true"
                   :searchable="false"
-                  :select-label="disp_select"
-                  :selected-label="disp_selected"
-                  :deselect-label="disp_deselect"
+                  :select-label="isp_select"
+                  :selected-label="$t('Selected')"
+                  :deselect-label="$t('Deselect')"
                   v-model="value_cc"
                   :options="param_personGroupList"
                 /> -->
@@ -202,9 +204,9 @@
                   :multiple="true"
                   :hide-selected="true"
                   :searchable="false"
-                  :select-label="disp_select"
-                  :selected-label="disp_selected"
-                  :deselect-label="disp_deselect"
+                  :select-label="$t('Select')"
+                  :selected-label="$t('Selected')"
+                  :deselect-label="$t('Deselect')"
                   v-model="value_bcc"
                   :options="param_personGroupList"
                 /> -->
@@ -230,10 +232,10 @@
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-50 table-th">
-                {{ disp_fields }}
+                {{ $t('Fields') }}
               </th>
               <th class="h5 w-50 table-th">
-                {{ disp_language }}
+                {{ $t('ContentLanguage') }}
               </th>
             </tr>
             <tr class="table-tr">
@@ -281,7 +283,7 @@
             </tr>
             <tr class="table-tr">
               <th class="h5 w-50 table-th">
-                {{ disp_note }}
+                {{ $t('ExpansionField') }}
               </th>
             </tr>
             <tr>
@@ -306,7 +308,7 @@
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
-                {{ disp_complete }}
+                {{ $t('Complete') }}
               </p>
             </CCol>
           </CRow>
@@ -330,7 +332,7 @@
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="clickOnPrev"
           >
-            {{ disp_previous }}
+            {{ $t('Previous') }}
           </CButton>
         </div>
         <div style="width: 20px" />
@@ -350,7 +352,6 @@
   </div>
 </template>
 <script>
-import i18n from '@/i18n';
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 import Multiselect from 'vue-multiselect';
@@ -359,97 +360,6 @@ import '@/airacss/vue-multiselect.css';
 import {
   checkDomainName, checkPort, checkEmail, checkMultiEmail,
 } from '@/utils';
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  flag_view_password: false,
-
-  param_cardStyle: 'height: 29rem;',
-  param_activeColor: '#6baee3',
-  param_passiveColor: '#919bae',
-  param_lineThickness: 3,
-  param_activeThickness: 3,
-  param_passiveThickness: 3,
-  param_personGroupListValue: [],
-  param_personGroupList: [],
-  param_Fields: [
-    'timestamp',
-    'person_id',
-    'person_name',
-    'card_number',
-    'title',
-    'department',
-    'email',
-    'phone_number',
-    'extension_number',
-    'remarks',
-    'foreHead_temperature',
-    'face_image',
-    'register_image',
-    'display_image',
-  ],
-
-  disp_header: i18n.formatter.format('NotificationMail'),
-  disp_inputNotificationInfo: i18n.formatter.format('NotificationInfo'),
-  disp_content: i18n.formatter.format('ContentField'),
-  disp_complete: i18n.formatter.format('Complete'),
-
-  disp_notifyName: i18n.formatter.format('NotifyName'),
-  disp_host: i18n.formatter.format('HostAddress'),
-  disp_security: i18n.formatter.format('SMTPEnabledSecure'),
-  disp_port: i18n.formatter.format('Port'),
-  disp_sender: i18n.formatter.format('SMTPSender'),
-  disp_account: i18n.formatter.format('Username'),
-  disp_password: i18n.formatter.format('Password'),
-  disp_subject: i18n.formatter.format('SMTPSubject'),
-  disp_to: i18n.formatter.format('SMTPTo'),
-  disp_cc: i18n.formatter.format('SMTPCC'),
-  disp_bcc: i18n.formatter.format('SMTPBCC'),
-
-  disp_fields: i18n.formatter.format('Fields'),
-  disp_language: i18n.formatter.format('ContentLanguage'),
-  disp_note: i18n.formatter.format('ExpansionField'),
-  disp_select: i18n.formatter.format('Select'),
-  disp_selected: i18n.formatter.format('Selected'),
-  disp_deselect: i18n.formatter.format('Deselect'),
-
-  disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
-  disp_noEmptyPortOnly: i18n.formatter.format('NoEmptyPortOnly'),
-  disp_previous: i18n.formatter.format('Previous'),
-  disp_next: i18n.formatter.format('Next'),
-
-  flag_currentSetp: 0,
-
-  value_uuid: '',
-  value_notifyName: '',
-  value_host: '',
-  value_security: 'SSL',
-  value_port: 587,
-  value_sender: '',
-  value_account: '',
-  value_password: '',
-  value_subject: '',
-  value_to: '',
-  value_cc: '',
-  value_bcc: '',
-  value_language: 'zh',
-  value_selectedFields: ['timestamp'],
-  value_note: '',
-
-  flag_notifyNamePass: false,
-  flag_hostPass: '',
-  flag_portPass: '',
-  flag_senderPass: '',
-  flag_accountPass: '',
-  flag_passwordPass: false,
-  flag_subjectPass: false,
-  flag_valueToPass: false,
-
-  flag_toPass: '',
-  flag_ccPass: '',
-  flag_bccPass: '',
-});
 
 export default {
   name: 'MailNotifyForm',
@@ -467,11 +377,69 @@ export default {
     onFinish: { type: Function, default: () => null },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
 
-    return cloneObject;
+      flag_view_password: false,
+
+      param_cardStyle: 'height: 29rem;',
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
+      param_lineThickness: 3,
+      param_activeThickness: 3,
+      param_passiveThickness: 3,
+      param_personGroupListValue: [],
+      param_personGroupList: [],
+      param_Fields: [
+        'timestamp',
+        'person_id',
+        'person_name',
+        'card_number',
+        'title',
+        'department',
+        'email',
+        'phone_number',
+        'extension_number',
+        'remarks',
+        'foreHead_temperature',
+        'face_image',
+        'register_image',
+        'display_image',
+      ],
+
+      flag_currentSetp: 0,
+
+      value_uuid: '',
+      value_notifyName: '',
+      value_host: '',
+      value_security: 'SSL',
+      value_port: 587,
+      value_sender: '',
+      value_account: '',
+      value_password: '',
+      value_subject: '',
+      value_to: '',
+      value_cc: '',
+      value_bcc: '',
+      value_language: 'zh',
+      value_selectedFields: ['timestamp'],
+      value_note: '',
+
+      flag_notifyNamePass: false,
+      flag_hostPass: '',
+      flag_portPass: '',
+      flag_senderPass: '',
+      flag_accountPass: '',
+      flag_passwordPass: false,
+      flag_subjectPass: false,
+      flag_valueToPass: false,
+
+      flag_toPass: '',
+      flag_ccPass: '',
+      flag_bccPass: '',
+
+      ...this.formData,
+    };
   },
   computed: {
     filterImage() {
@@ -479,120 +447,112 @@ export default {
     },
   },
   async created() {
-    const self = this;
-
     // Person Group
-    const ret = await self.$globalGetGroupList();
+    const ret = await this.$globalGetGroupList();
     if (!ret.error) {
-      self.param_personGroupList = [];
+      this.param_personGroupList = [];
       for (let i = 0; i < ret.group_list.length; i += 1) {
-        self.param_personGroupListValue.push({ value: ret.group_list[i].uuid, label: ret.group_list[i].name });
-        self.param_personGroupList.push(ret.group_list[i].name);
+        this.param_personGroupListValue.push({ value: ret.group_list[i].uuid, label: ret.group_list[i].name });
+        this.param_personGroupList.push(ret.group_list[i].name);
       }
     }
 
-    self.updateSettings();
+    this.updateSettings();
   },
   updated() { },
   methods: {
     async updateSettings() {
-      const self = this;
+      this.value_uuid = this.value_settingitem.uuid || '';
+      this.value_notifyName = this.value_settingitem.name || `Mail Notify-${(this.value_allRecords.length + 1)}`;
+      this.value_host = this.value_settingitem.host || '';
+      this.value_security = this.value_settingitem.security || 'SSL';
+      this.value_port = +this.value_settingitem.port || 587;
+      this.value_sender = this.value_settingitem.sender || '';
+      this.value_account = this.value_settingitem.email || '';
+      this.value_password = this.value_settingitem.password || '';
+      this.value_subject = this.value_settingitem.subject || '';
 
-      self.value_uuid = self.value_settingitem.uuid || '';
-      self.value_notifyName = self.value_settingitem.name || `Mail Notify-${(self.value_allRecords.length + 1)}`;
-      self.value_host = self.value_settingitem.host || '';
-      self.value_security = self.value_settingitem.security || 'SSL';
-      self.value_port = +self.value_settingitem.port || 587;
-      self.value_sender = self.value_settingitem.sender || '';
-      self.value_account = self.value_settingitem.email || '';
-      self.value_password = self.value_settingitem.password || '';
-      self.value_subject = self.value_settingitem.subject || '';
+      // this.value_to = this.value_settingitem.to || [];
+      this.value_to = this.value_settingitem.to.join(',');
+      // this.ccListOnInput(this.value_to);
 
-      // self.value_to = self.value_settingitem.to || [];
-      self.value_to = self.value_settingitem.to.join(',');
-      // self.ccListOnInput(self.value_to);
+      // this.value_cc = this.value_settingitem.cc || [];
+      this.value_cc = this.value_settingitem.cc.join(',');
 
-      // self.value_cc = self.value_settingitem.cc || [];
-      self.value_cc = self.value_settingitem.cc.join(',');
+      // this.value_bcc = this.value_settingitem.bcc || [];
+      this.value_bcc = this.value_settingitem.bcc.join(',');
 
-      // self.value_bcc = self.value_settingitem.bcc || [];
-      self.value_bcc = self.value_settingitem.bcc.join(',');
-
-      if (self.value_settingitem.fields) {
-        self.value_selectedFields = self.value_settingitem.fields;
+      if (this.value_settingitem.fields) {
+        this.value_selectedFields = this.value_settingitem.fields;
       }
 
-      self.value_language = self.value_settingitem.language || 'zh';
-      self.value_note = self.value_settingitem.note || '';
+      this.value_language = this.value_settingitem.language || 'zh';
+      this.value_note = this.value_settingitem.note || '';
 
-      const fields = [].concat(self.value_selectedFields);
-      for (let i = 0; i < self.param_Fields.length; i += 1) {
-        if (self.value_selectedFields.indexOf(self.param_Fields[i]) < 0) {
-          fields.push(self.param_Fields[i]);
+      const fields = [].concat(this.value_selectedFields);
+      for (let i = 0; i < this.param_Fields.length; i += 1) {
+        if (this.value_selectedFields.indexOf(this.param_Fields[i]) < 0) {
+          fields.push(this.param_Fields[i]);
         }
       }
-      self.param_Fields = [].concat(fields);
+      this.param_Fields = [].concat(fields);
     },
     nextButtonName() {
       switch (this.flag_currentSetp) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_next;
+          return this.$t('Next');
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
     clickOnPrev() {
-      const self = this;
-
-      if (self.flag_currentSetp === 0) {
-        if (self.value_returnRoutePath.length > 0) {
-          self.$router.push({ name: self.value_returnRoutePath });
-        } else self.updateSettings();
-      } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
+      if (this.flag_currentSetp === 0) {
+        if (this.value_returnRoutePath.length > 0) {
+          this.$router.push({ name: this.value_returnRoutePath });
+        } else this.updateSettings();
+      } else if (this.flag_currentSetp > 0) this.flag_currentSetp -= 1;
     },
     clickOnNext() {
-      const self = this;
+      if (this.flag_currentSetp === 0) {
+        this.flag_currentSetp = 1;
+      } else if (this.flag_currentSetp === 1) {
+        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
-      if (self.flag_currentSetp === 0) {
-        self.flag_currentSetp = 1;
-      } else if (self.flag_currentSetp === 1) {
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        if (this.onFinish) {
+          const localSelectedToList = this.value_to.split(',');
+          const localSelectedCCList = this.value_cc.split(',');
+          const localSelectedBccList = this.value_bcc.split(',');
 
-        if (self.onFinish) {
-          const localSelectedToList = self.value_to.split(',');
-          const localSelectedCCList = self.value_cc.split(',');
-          const localSelectedBccList = self.value_bcc.split(',');
-
-          self.onFinish(
+          this.onFinish(
             {
-              uuid: self.value_uuid ? self.value_uuid : undefined,
-              name: self.value_notifyName,
+              uuid: this.value_uuid ? this.value_uuid : undefined,
+              name: this.value_notifyName,
               enable: true,
-              host: self.value_host,
-              security: self.value_security,
-              port: +self.value_port || 0,
-              sender: self.value_sender,
-              email: self.value_account,
-              password: self.value_password,
-              subject: self.value_subject,
+              host: this.value_host,
+              security: this.value_security,
+              port: +this.value_port || 0,
+              sender: this.value_sender,
+              email: this.value_account,
+              password: this.value_password,
+              subject: this.value_subject,
               to: localSelectedToList || [],
               cc: localSelectedCCList || [],
               bcc: localSelectedBccList || [],
-              language: self.value_language,
-              fields: self.value_selectedFields,
-              note: self.value_note,
+              language: this.value_language,
+              fields: this.value_selectedFields,
+              note: this.value_note,
             },
             (success, result) => {
-              if (self.obj_loading) self.obj_loading.hide();
+              if (this.obj_loading) this.obj_loading.hide();
               if (result && result.message === 'ok') {
-                self.flag_currentSetp = 2;
+                this.flag_currentSetp = 2;
               } else {
-                self.$fire({
-                  text: i18n.formatter.format('Failed'),
+                this.$fire({
+                  text: this.$t('Failed'),
                   type: 'error',
                   timer: 3000,
                   confirmButtonColor: '#20a8d8',
@@ -601,18 +561,16 @@ export default {
             },
           );
         } else {
-          if (self.obj_loading) self.obj_loading.hide();
-          self.flag_currentSetp = 1;
+          if (this.obj_loading) this.obj_loading.hide();
+          this.flag_currentSetp = 1;
         }
       } else {
-        self.$router.push({ name: self.value_returnRoutePath });
+        this.$router.push({ name: this.value_returnRoutePath });
       }
     },
 
     viewPassword() {
-      const self = this;
-
-      self.flag_view_password = !self.flag_view_password;
+      this.flag_view_password = !this.flag_view_password;
     },
 
     showOnStep(step) {
@@ -620,15 +578,13 @@ export default {
     },
 
     notifyNameValidator(val) {
-      const self = this;
-
       if (val.replace(/\s/g, '').length === 0) {
-        self.flag_notifyNamePass = false;
+        this.flag_notifyNamePass = false;
       } else {
-        self.flag_notifyNamePass = val.length > 0;
+        this.flag_notifyNamePass = val.length > 0;
       }
 
-      return self.flag_notifyNamePass;
+      return this.flag_notifyNamePass;
     },
 
     hostValidator(val) {
@@ -642,7 +598,7 @@ export default {
     },
 
     senderValidator(val) {
-      this.flag_senderPass = val.length === 0 ? i18n.formatter.format('NoEmptyNoSpaceOnly') : '';
+      this.flag_senderPass = val.length === 0 ? this.$t('NoEmptyNoSpaceOnly') : '';
       return this.flag_senderPass === '';
     },
 
@@ -652,24 +608,20 @@ export default {
     },
 
     passwordValidator(val) {
-      const self = this;
-
       if (val.replace(/\s/g, '').length === 0) {
-        self.flag_passwordPass = false;
+        this.flag_passwordPass = false;
       } else {
-        self.flag_passwordPass = val.length > 0;
+        this.flag_passwordPass = val.length > 0;
       }
 
-      return self.flag_passwordPass;
+      return this.flag_passwordPass;
     },
 
     subjectValidator(val) {
-      const self = this;
-
       if (val.replace(/\s/g, '').length === 0) {
-        self.flag_subjectPass = false;
+        this.flag_subjectPass = false;
       } else {
-        self.flag_subjectPass = val.length > 0;
+        this.flag_subjectPass = val.length > 0;
       }
 
       return this.flag_subjectPass;
@@ -701,44 +653,40 @@ export default {
     },
 
     fieldChanged(item, evt) {
-      const self = this;
-
       if (evt.target.checked) {
-        if (self.value_selectedFields.indexOf(item) < 0) {
-          self.value_selectedFields.push(item);
+        if (this.value_selectedFields.indexOf(item) < 0) {
+          this.value_selectedFields.push(item);
         }
       } else {
-        const idx = self.value_selectedFields.indexOf(item);
+        const idx = this.value_selectedFields.indexOf(item);
         if (idx >= 0) {
-          self.value_selectedFields.splice(idx, 1);
+          this.value_selectedFields.splice(idx, 1);
         }
       }
     },
 
     fieldMove(item, step) {
-      const self = this;
-
-      const idx = self.value_selectedFields.indexOf(item);
+      const idx = this.value_selectedFields.indexOf(item);
       if ((step === -1) && (idx === 0)) return;
-      if ((step === 1) && (idx === self.value_selectedFields.length - 1)) return;
+      if ((step === 1) && (idx === this.value_selectedFields.length - 1)) return;
 
-      let temp = self.param_Fields[idx];
-      self.param_Fields[idx] = self.param_Fields[idx + step];
-      self.param_Fields[idx + step] = temp;
+      let temp = this.param_Fields[idx];
+      this.param_Fields[idx] = this.param_Fields[idx + step];
+      this.param_Fields[idx + step] = temp;
 
-      if (self.param_Fields.length >= 1) {
-        const popped = self.param_Fields.pop();
-        self.param_Fields.push(popped);
+      if (this.param_Fields.length >= 1) {
+        const popped = this.param_Fields.pop();
+        this.param_Fields.push(popped);
       }
 
-      temp = self.value_selectedFields[idx];
-      self.value_selectedFields[idx] = self.value_selectedFields[idx + step];
-      self.value_selectedFields[idx + step] = temp;
+      temp = this.value_selectedFields[idx];
+      this.value_selectedFields[idx] = this.value_selectedFields[idx + step];
+      this.value_selectedFields[idx + step] = temp;
     },
   },
   components: {
     stepprogress: StepProgress,
-    multiselect: Multiselect,
+    // multiselect: Multiselect,
   },
 };
 </script>

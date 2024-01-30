@@ -114,8 +114,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -218,12 +216,10 @@ export default {
     Step2Form,
   },
   async created() {
-    const self = this;
+    this.defaultValues = await this.getDefaultValues();
+    this.defaultValues = { ...this.defaultValues, ...this.settingItem };
 
-    self.defaultValues = await self.getDefaultValues();
-    self.defaultValues = { ...self.defaultValues, ...self.settingItem };
-
-    self.isFormPassed(self.step1form);
+    this.isFormPassed(this.step1form);
   },
 
   methods: {
@@ -245,30 +241,30 @@ export default {
         identity: ident,
 
         // result display
-        stranger_display_name: i18n.formatter.format('TabletsAccessDefaultWelcome'),
+        stranger_display_name: this.$t('TabletsAccessDefaultWelcome'),
 
-        verify_indication_success_text: i18n.formatter.format('TabletsAccessDefaultIdentifyS'),
-        verify_indication_success_message_text: i18n.formatter.format('TabletsAccessDefaultIdentifySM'),
-        verify_indication_fail_text: i18n.formatter.format('TabletsAccessDefaultIdentifyF'),
-        verify_indication_fail_message_text: i18n.formatter.format('TabletsAccessDefaultIdentifyFM'),
+        verify_indication_success_text: this.$t('TabletsAccessDefaultIdentifyS'),
+        verify_indication_success_message_text: this.$t('TabletsAccessDefaultIdentifySM'),
+        verify_indication_fail_text: this.$t('TabletsAccessDefaultIdentifyF'),
+        verify_indication_fail_message_text: this.$t('TabletsAccessDefaultIdentifyFM'),
 
         // clock df
         enable_clock_mode: false,
-        clock_info_data_1: i18n.formatter.format('TabletsAccessDefaultClockInfoDataUp'),
-        clock_info_data_2: i18n.formatter.format('TabletsAccessDefaultClockInfoDataDown'),
-        clock_info_data_3: i18n.formatter.format('TabletsAccessDefaultClockInfoData3n'),
+        clock_info_data_1: this.$t('TabletsAccessDefaultClockInfoDataUp'),
+        clock_info_data_2: this.$t('TabletsAccessDefaultClockInfoDataDown'),
+        clock_info_data_3: this.$t('TabletsAccessDefaultClockInfoData3n'),
         enable_clock_function_1: true,
         enable_clock_function_2: true,
         enable_clock_function_3: false,
         enable_clock_function_4: false,
-        clock_function_name_1: i18n.formatter.format('TabletsAccessDefaultClockText1'),
-        clock_function_name_2: i18n.formatter.format('TabletsAccessDefaultClockText2'),
-        clock_function_name_3: i18n.formatter.format('TabletsAccessDefaultClockText3'),
-        clock_function_name_4: i18n.formatter.format('TabletsAccessDefaultClockText4'),
-        clock_indication_success_text: i18n.formatter.format('TabletsAccessDefaultIdentifyS'),
-        clock_success_message_text: i18n.formatter.format('TabletsAccessDefaultClockSuccess'),
-        clock_indication_fail_text: i18n.formatter.format('TabletsAccessDefaultIdentifyF'),
-        clock_fail_message_text: i18n.formatter.format('TabletsAccessDefaultClockText5'),
+        clock_function_name_1: this.$t('TabletsAccessDefaultClockText1'),
+        clock_function_name_2: this.$t('TabletsAccessDefaultClockText2'),
+        clock_function_name_3: this.$t('TabletsAccessDefaultClockText3'),
+        clock_function_name_4: this.$t('TabletsAccessDefaultClockText4'),
+        clock_indication_success_text: this.$t('TabletsAccessDefaultIdentifyS'),
+        clock_success_message_text: this.$t('TabletsAccessDefaultClockSuccess'),
+        clock_indication_fail_text: this.$t('TabletsAccessDefaultIdentifyF'),
+        clock_fail_message_text: this.$t('TabletsAccessDefaultClockText5'),
 
         ip_address: '',
         rtsp_username: '',
@@ -511,7 +507,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -539,9 +535,9 @@ export default {
         case 0:
         case 1:
         default:
-          return i18n.formatter.format('Next');
+          return this.$t('Next');
         case 2:
-          return i18n.formatter.format('Complete');
+          return this.$t('Complete');
       }
     },
   },

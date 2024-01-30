@@ -315,39 +315,6 @@ import * as LoadImage from 'blueimp-load-image';
 
 const dayjs = require('dayjs');
 
-const defaultlState = () => ({
-  obj_loading: null,
-  flag_collapse: false,
-
-  flag_downloadingExecl: false,
-  excelExecutionAmounts: 0,
-  excelCounter: 0,
-
-  value_successRecords: 0,
-  value_failRecords: 0,
-  value_totalRecords: 0,
-
-  value_excelFileImpport: [],
-  value_fileImporting: false,
-  value_personGroupList: [],
-
-  value_emptyPhoto:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQA'
-    + 'AAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_searchingFilter: '',
-
-  disp_header: 'none', // this.$t('CreatePerson'),
-
-  flag_enableAiraManager: false,
-});
-
 export default {
   name: 'ManagementForm',
   props: {
@@ -360,11 +327,40 @@ export default {
     onImport: { type: Function },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
+      flag_collapse: false,
 
-    return cloneObject;
+      flag_downloadingExecl: false,
+      excelExecutionAmounts: 0,
+      excelCounter: 0,
+
+      value_successRecords: 0,
+      value_failRecords: 0,
+      value_totalRecords: 0,
+
+      value_excelFileImpport: [],
+      value_fileImporting: false,
+      value_personGroupList: [],
+
+      value_emptyPhoto:
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQA'
+    + 'AAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_searchingFilter: '',
+
+      disp_header: 'none', // this.$t('CreatePerson'),
+
+      flag_enableAiraManager: false,
+
+      ...this.formData,
+    };
   },
   computed: {
     ...mapState(['ellipsisMode']),

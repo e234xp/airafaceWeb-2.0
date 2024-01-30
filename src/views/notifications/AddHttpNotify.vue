@@ -3,9 +3,9 @@
     <CRow>
       <CCol sm="12">
         <CHttpNotifyForm
-          :formData="$data"
-          :modifyMode="false"
-          :onFinish="onFinish"
+          :form-data="$data"
+          :modify-mode="false"
+          :on-finish="onFinish"
         />
       </CCol>
     </CRow>
@@ -37,9 +37,7 @@ export default {
   },
   methods: {
     onFinish(data, cb) {
-      const self = this;
-
-      self.$globalCreateHttpNotify(data, (error, result) => {
+      this.$globalCreateHttpNotify(data, (error, result) => {
         if (cb) cb(error == null, result);
       });
     },

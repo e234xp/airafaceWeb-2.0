@@ -367,6 +367,8 @@ export default {
       flag_keepingDownload: false,
       value_allPersonList: [],
       value_allVisitorList: [],
+
+      ...this.formData,
     };
   },
   mixins: [TableObserver],

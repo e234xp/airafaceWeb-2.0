@@ -2,7 +2,7 @@
   <div id="wrapper">
     <div>
       <div class="h1">
-        {{ disp_headertitle }}
+        {{ $t('VideoDeviceBasic') }}
       </div>
       <stepprogress
         class="w-step-progress-4"
@@ -13,11 +13,11 @@
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
         :steps="[
-          disp_step1,
-          disp_step2,
-          disp_step3,
-          disp_step4,
-          disp_complete,
+          $t('VideoDeviceBasic'),
+          $t('VideoDeviceROI'),
+          $t('VideoFaceCapture'),
+          $t('VideoFaceMerge'),
+          $t('Complete'),
         ]"
         icon-class="fa fa-check"
       />
@@ -127,8 +127,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -151,21 +149,12 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
-
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
-
-      // Step 1 2 3
-      disp_step1: i18n.formatter.format('VideoDeviceBasic'),
-      disp_step2: i18n.formatter.format('VideoDeviceROI'),
-      disp_step3: i18n.formatter.format('VideoFaceCapture'),
-      disp_step4: i18n.formatter.format('VideoFaceMerge'),
-      disp_complete: i18n.formatter.format('Complete'),
 
       step1form: {
         name: '',
@@ -211,9 +200,7 @@ export default {
     Step4Form,
   },
   async created() {
-    const self = this;
-
-    self.defaultValues = await self.getDefaultValues();
+    this.defaultValues = await this.getDefaultValues();
   },
 
   methods: {
@@ -410,7 +397,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -440,9 +427,9 @@ export default {
         case 2:
         case 3:
         default:
-          return i18n.formatter.format('Next');
+          return this.$t('Next');
         case 4:
-          return i18n.formatter.format('Complete');
+          return this.$t('Complete');
       }
     },
   },
