@@ -236,7 +236,7 @@ export default {
     },
     generateFilteredData(sourceData, filter) {
       const self = this;
-      console.log(sourceData);
+      // console.log(sourceData);
 
       const filteredItems = filter.length === 0
         ? sourceData

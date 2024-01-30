@@ -11,14 +11,21 @@
     <CRow
       sm="12"
       class="h5 ml-2 mb-3"
+      v-if="!flag_snapshotReadly"
     >
       <CCol
         sm="1"
         style="display: flex; justify-content: right; align-items: right;"
       >
-        <img src="/img/notify.png">
+        <CSpinner
+          color="primary"
+        />
+        <!-- <img src="/img/notify.png"> -->
       </CCol>
-      <CCol sm="10">
+      <CCol 
+        sm="10"
+        style="line-height: 32px;"
+      >
         {{ disp_msgLoadingVideo }}
       </CCol>
       <CCol sm="1" />
@@ -32,10 +39,10 @@
       <CCol sm="2">
         <span
           style="background-color: #FF6C6C;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        padding-left: 10px; padding-right: 10px; margin-right: 6px; display: inline-block; line-height: 28px;"
         >1</span>
         <CButton
-          class="btn btn-primary btn-roi mr-3"
+          class="btn btn-primary btn-roi mr-1"
           size="sm"
           @click="addROI(0)"
         >
@@ -52,10 +59,10 @@
       <CCol sm="2">
         <span
           style="background-color: #FFC93E;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        padding-left: 10px; padding-right: 10px; margin-right: 6px; display: inline-block; line-height: 28px;"
         >2</span>
         <CButton
-          class="btn btn-primary btn-roi mr-3"
+          class="btn btn-primary btn-roi mr-1"
           size="sm"
           @click="addROI(1)"
         >
@@ -72,7 +79,7 @@
       <CCol sm="2">
         <span
           style="background-color: #DC79FF;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        padding-left: 10px; padding-right: 10px; margin-right: 6px; display: inline-block; line-height: 28px;"
         >3</span>
         <CButton
           class="btn btn-primary btn-roi mr-3"
@@ -92,7 +99,7 @@
       <CCol sm="2">
         <span
           style="background-color: #90D678;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        padding-left: 10px; padding-right: 10px; margin-right: 6px; display: inline-block; line-height: 28px;"
         >4</span>
         <CButton
           class="btn btn-primary btn-roi mr-3"
@@ -112,7 +119,7 @@
       <CCol sm="2">
         <span
           style="background-color: #7DD2FF;
-        padding-left: 10px; padding-right: 10px; padding-bottom: 3px; margin-right: 5px; display: inline-block; line-height: 1.5;"
+        padding-left: 10px; padding-right: 10px; margin-right: 6px; display: inline-block; line-height: 28px;"
         >5</span>
         <CButton
           class="btn btn-primary btn-roi mr-3"

@@ -1,80 +1,188 @@
 <template>
   <div class="investigation">
     <CCol sm="12">
-      <div class="h1">{{ disp_header }}</div>
-      <div style="height: 30px"></div>
+      <div class="h1">
+        {{ disp_header }}
+      </div>
+      <div style="height: 30px" />
     </CCol>
 
     <CCard>
       <CCardBody>
         <CRow>
-          <CCol sm="2" class="h5">{{ disp_selectDatetimeRange }}</CCol>
-          <CCol sm="4">
-            <date-picker style="width: 100%" :lang="this.$globalDatePickerLanguage" v-model="value_searchDatetimeRange"
-              type="datetime" range :placeholder="disp_selectDatetimeRange" @change="datePickerDatachange()">
-            </date-picker>
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_selectDatetimeRange }}
           </CCol>
-          <CCol sm="2" class="h5">{{ disp_resultType }}</CCol>
           <CCol sm="4">
-            <CSelect size="lg" :value.sync="value_searchTypes" :options="value_displayResultTypeList"
-              @change="selectTypeChange($event)" />
+            <date-picker
+              style="width: 100%"
+              :lang="this.$globalDatePickerLanguage"
+              v-model="value_searchDatetimeRange"
+              type="datetime"
+              range
+              :placeholder="disp_selectDatetimeRange"
+              @change="datePickerDatachange()"
+            />
+          </CCol>
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_resultType }}
+          </CCol>
+          <CCol sm="4">
+            <CSelect
+              size="lg"
+              :value.sync="value_searchTypes"
+              :options="value_displayResultTypeList"
+              @change="selectTypeChange($event)"
+            />
           </CCol>
         </CRow>
         <CRow>
-          <CCol sm="2" class="h5">{{ disp_groups }}</CCol>
-          <CCol sm="4">
-            <multiselect v-model="value_searchGroups" placeholder="" :options="value_displayPersonGroupList"
-              :multiple="true" :taggable="true" :hideSelected="true" :select-label="disp_select"
-              :selected-label="disp_selected" :deselect-label="disp_deselect" :show-no-options="false" />
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_groups }}
           </CCol>
-          <CCol sm="2" class="h5">{{ disp_keyword }}</CCol>
           <CCol sm="4">
-            <CInput class="mb-form-row" size="lg" v-model="value_keyword" style="width: 100%" />
+            <multiselect
+              v-model="value_searchGroups"
+              placeholder=""
+              :options="value_displayPersonGroupList"
+              :multiple="true"
+              :taggable="true"
+              :hide-selected="true"
+              :select-label="disp_select"
+              :selected-label="disp_selected"
+              :deselect-label="disp_deselect"
+              :show-no-options="false"
+            />
+          </CCol>
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_keyword }}
+          </CCol>
+          <CCol sm="4">
+            <CInput
+              class="mb-form-row"
+              size="lg"
+              v-model="value_keyword"
+              style="width: 100%"
+            />
           </CCol>
         </CRow>
         <CRow>
-          <CCol sm="2" class="h5">{{ disp_temperature }}</CCol>
-          <CCol sm="4" class="form-inline">
-            <div class="form-check" style="padding-right: 40px">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="All"
-                v-model="value_Temperature" />
-              <label class="form-check-label h5" for="flexRadioDefault1">{{
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_temperature }}
+          </CCol>
+          <CCol
+            sm="4"
+            class="form-inline"
+          >
+            <div
+              class="form-check"
+              style="padding-right: 40px"
+            >
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault1"
+                value="All"
+                v-model="value_Temperature"
+              >
+              <label
+                class="form-check-label h5"
+                for="flexRadioDefault1"
+              >{{
                 disp_temperature_ALL
-                }}</label>
+              }}</label>
             </div>
-            <div class="form-check" style="padding-right: 40px">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Normal"
-                v-model="value_Temperature" />
-              <label class="form-check-label h5" for="flexRadioDefault2">{{
+            <div
+              class="form-check"
+              style="padding-right: 40px"
+            >
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault2"
+                value="Normal"
+                v-model="value_Temperature"
+              >
+              <label
+                class="form-check-label h5"
+                for="flexRadioDefault2"
+              >{{
                 disp_temperature_Normal
-                }}</label>
+              }}</label>
             </div>
-            <div class="form-check" style="padding-right: 40px">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
-                value="OverTemperature" v-model="value_Temperature" />
-              <label class="form-check-label h5" for="flexRadioDefault3">{{
+            <div
+              class="form-check"
+              style="padding-right: 40px"
+            >
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault3"
+                value="OverTemperature"
+                v-model="value_Temperature"
+              >
+              <label
+                class="form-check-label h5"
+                for="flexRadioDefault3"
+              >{{
                 disp_temperature_OverTemperature
-                }}</label>
+              }}</label>
             </div>
           </CCol>
           <!-- <CCol sm="6"></CCol> -->
-          <CCol sm="6" class="d-flex flex-wrap justify-content-end">
-            <span v-if="exportNo >= 1" class="h5" style="
+          <CCol
+            sm="6"
+            class="d-flex flex-wrap justify-content-end"
+          >
+            <span
+              v-if="exportNo >= 1"
+              class="h5"
+              style="
               float: right;
               height: 90%;
               display: flex;
               align-items: flex-end;
               margin-right: 20px;
-            ">{{ exportNo }} / {{ excelExecutionAmounts }}</span>
+            "
+            >{{ exportNo }} / {{ excelExecutionAmounts }}</span>
 
-            <CButton class="btn btn-primary btn-w-normal ml-3" size="lg" @click="clickOnSearch()"
-              :disabled="!flag_enableSearchButton">
-              {{disp_search}}
+            <CButton
+              class="btn btn-primary btn-w-normal ml-3"
+              size="lg"
+              @click="clickOnSearch()"
+              :disabled="!flag_enableSearchButton"
+            >
+              {{ disp_search }}
             </CButton>
-            <CDropdown :togglerText="toggleText()" class="btn btn-primary btn-w-normal ml-3 p-0 dropdown-theme"
-              size="lg" :disabled="!flag_enableSearchButton">
-              <CDropdownItem @click="exportExcel(true)">{{ disp_exportExcel }} ({{ disp_withPhoto }})</CDropdownItem>
-              <CDropdownItem @click="exportExcel(false)">{{ disp_exportExcel }} ({{ disp_withoutPhoto }})
+            <CDropdown
+              :toggler-text="toggleText()"
+              class="btn btn-primary btn-w-normal ml-3 p-0 dropdown-theme"
+              size="lg"
+              :disabled="!flag_enableSearchButton"
+            >
+              <CDropdownItem @click="exportExcel(true)">
+                {{ disp_exportExcel }} ({{ disp_withPhoto }})
+              </CDropdownItem>
+              <CDropdownItem @click="exportExcel(false)">
+                {{ disp_exportExcel }} ({{ disp_withoutPhoto }})
               </CDropdownItem>
             </CDropdown>
           </CCol>
@@ -85,27 +193,77 @@
     <CCard>
       <CCardBody>
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
-            @checkbox-change="selectChangeEvent">
-            <vxe-table-column field="dateTime" :title="disp_dateTime" width="14%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="id" :title="disp_id" width="10%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="name" :title="disp_name" align="center" width="10%"></vxe-table-column>
-            <vxe-table-column field="card_number" :title="disp_cardnumber" align="center" width="8%">
-            </vxe-table-column>
-            <vxe-table-column field="groups" :title="disp_group_list" width="14%" align="center">
-            </vxe-table-column>
-            <vxe-table-column v-if="$deviceProfile.supportTemperature" field="temperature" :title="disp_temperature"
-              width="9%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="clockMode" :title="disp_verify_mode" width="8%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="score" :title="disp_verify_score" width="10%" align="center">
-            </vxe-table-column>
-            <vxe-table-column min-width="10%" field="showimage" :title="disp_face_image" type="html">
-            </vxe-table-column>
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle"
+            ref="mainTable"
+            @checkbox-all="selectAllEvent"
+            @checkbox-change="selectChangeEvent"
+          >
+            <vxe-table-column
+              field="dateTime"
+              :title="disp_dateTime"
+              width="14%"
+              align="center"
+            />
+            <vxe-table-column
+              field="id"
+              :title="disp_id"
+              width="10%"
+              align="center"
+            />
+            <vxe-table-column
+              field="name"
+              :title="disp_name"
+              align="center"
+              width="10%"
+            />
+            <vxe-table-column
+              field="card_number"
+              :title="disp_cardnumber"
+              align="center"
+              width="8%"
+            />
+            <vxe-table-column
+              field="groups"
+              :title="disp_group_list"
+              width="14%"
+              align="center"
+            />
+            <vxe-table-column
+              v-if="$deviceProfile.supportTemperature"
+              field="temperature"
+              :title="disp_temperature"
+              width="9%"
+              align="center"
+            />
+            <vxe-table-column
+              field="clockMode"
+              :title="disp_verify_mode"
+              width="8%"
+              align="center"
+            />
+            <vxe-table-column
+              field="score"
+              :title="disp_verify_score"
+              width="10%"
+              align="center"
+            />
+            <vxe-table-column
+              min-width="10%"
+              field="showimage"
+              :title="disp_face_image"
+              type="html"
+            />
+            <vxe-table-column
+              min-width="15%"
+              field="commands"
+              :title="$t('Remarks')"
+              align="center"
+            />
 
             <!-- <vxe-table-column :title="disp_face_image" min-width="10%">
               <template #default="{ row }">
@@ -115,7 +273,8 @@
           </vxe-table>
         </div>
 
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -123,9 +282,12 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" @page-change="handlePageChange">
-        </vxe-pager>
+          ]"
+          :current-page="value_tablePage.currentPage"
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        />
       </CCardBody>
     </CCard>
   </div>
@@ -285,19 +447,18 @@ export default {
         start_time: startTime,
         end_time: endTime,
         slice_shift: 0,
-        slice_length: 10000,
+        slice_length: 20000,
         with_image: false,
         uuid_list: [],
       };
-
-      console.log(data);
 
       switch (this.value_searchTypes) {
         case 'Visitor':
           this.queryVisitorResult(data);
           break;
         case 'Stranger':
-          this.queryStrangerResult(data);
+          // this.queryStrangerResult(data);
+          this.setupStrangerData(startTime, endTime);
           break;
         case 'Person':
         default:
@@ -313,8 +474,9 @@ export default {
         if (self.obj_loading) self.obj_loading.hide();
 
         if (!error) {
-          self.value_allTableItems = data.result.data;
-          self.value_dataTotalLength = data.result.total_length;
+          const filter = data.result.data.filter((item) => !item.merged);
+          self.value_allTableItems = filter;
+          self.value_dataTotalLength = filter.length;
           self.value_allTableItems.sort((a, b) => {
             if (a.timestamp < b.timestamp) return 1;
             if (a.timestamp > b.timestamp) return -1;
@@ -377,8 +539,9 @@ export default {
         if (self.obj_loading) self.obj_loading.hide();
 
         if (!error) {
-          self.value_allTableItems = data.result.data;
-          self.value_dataTotalLength = data.result.total_length;
+          const filter = data.result.data.filter((item) => !item.merged);
+          self.value_allTableItems = filter;
+          self.value_dataTotalLength = filter.length;
           self.value_allTableItems.sort((a, b) => {
             if (a.timestamp < b.timestamp) return 1;
             if (a.timestamp > b.timestamp) return -1;
@@ -408,6 +571,81 @@ export default {
         }
       });
     },
+
+    async setupStrangerData(startTS, endTS) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.value_allTableItems = [];
+      self.value_dataTotalLength = 0;
+      let shitf = 0;
+      let thereIsMoreData = true;
+
+      while (thereIsMoreData) {
+        const query = {
+          start_time: startTS,
+          end_time: endTS,
+          slice_length: 10000,
+          slice_shift: shitf,
+          uuid_list: [],
+          with_image: false,
+        };
+
+        const retResult = await self.$globalGetStrangerResult(query);
+
+        const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              self.value_allTableItems.push(...filter);
+              self.value_dataTotalLength += filter.length;
+              self.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }
+
+          if (result.slice_shift + result.data.length < result.total_length) {
+            thereIsMoreData = true;
+            shitf = result.slice_shift + result.data.length;
+          } else thereIsMoreData = false;
+        } else thereIsMoreData = false;
+      }
+
+      try {
+        self.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+            item.id = '';
+            item.name = '';
+            item.card_number = '';
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            item.groups = '';
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfF`
+              + 'cSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQA'
+              + 'AAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        self.value_dataItemsToShow = self.generateFilteredData(
+          self.value_allTableItems,
+        );
+        self.value_tablePage.currentPage = 1;
+        self.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
+
     queryStrangerResult(_data) {
       const self = this;
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
@@ -415,8 +653,9 @@ export default {
         if (self.obj_loading) self.obj_loading.hide();
 
         if (!error) {
-          self.value_allTableItems = data.result.data;
-          self.value_dataTotalLength = data.result.total_length;
+          const filter = data.result.data.filter((item) => !item.merged);
+          self.value_allTableItems = filter;
+          self.value_dataTotalLength = filter.length;
           self.value_allTableItems.sort((a, b) => {
             if (a.timestamp < b.timestamp) return 1;
             if (a.timestamp > b.timestamp) return -1;
@@ -428,6 +667,7 @@ export default {
               item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
               item.id = '';
               item.name = '';
+              item.card_number = '';
               item.score = `${(item.verify_score * 100).toFixed(2)}%`;
               item.groups = '';
               const showimageId = item.face_image_id

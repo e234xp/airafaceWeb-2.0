@@ -387,7 +387,7 @@ const defaultlState = () => ({
     background_image: backgroundImage,
     logo: airalogo,
 
-    displayGroup: [],
+    displayGroup: ['All Person'],
     displayCardMode: 'STANDARD', // STANDARD, COMPACT
     displayPhoto: 'REGISTER', // NONE, REGISTER, SNAPSHOT, DISPLAY
     line1: 'NAME', // NONE, NAME, PARTIALNAME

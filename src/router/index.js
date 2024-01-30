@@ -7,6 +7,7 @@ const TheContainer = () => import('@/containers/TheContainer.vue');
 // Views - Pages
 const Login = () => import('@/views/Login.vue');
 const Mobile = () => import('@/views/Mobile.vue');
+const ForgetPassword = () => import('@/views/ForgetPassword.vue');
 
 /// ////////////////////////////////////////
 /// /////    Attendance    /////////////////
@@ -22,6 +23,7 @@ const WelcomeDashboard = () => import('@/views/dashboards/WelcomeDashboard.vue')
 const OccupancyDashboard = () => import('@/views/dashboards/OccupancyDashboard.vue');
 const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue');
 const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboard.vue');
+const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -64,6 +66,7 @@ const ModifyWelcomeControlSetting = () => import('@/views/displays/ModifyWelcome
 const ModifyOccupancyControlSetting = () => import('@/views/displays/ModifyOccupancyControlSetting.vue');
 const ModifyCapacityControlSetting = () => import('@/views/displays/ModifyCapacityControlSetting.vue');
 const ModifySelfCheckinControlSetting = () => import('@/views/displays/ModifySelfCheckinControlSetting.vue');
+const ModifyGuardControlSetting = () => import('@/views/displays/ModifyGuardControlSetting.vue');
 
 /// ////////////////////////////////////////
 /// /////    System settings    ////////////
@@ -170,6 +173,11 @@ function configRoutes() {
           component: Login,
         },
         {
+          path: 'forgetpassword',
+          name: 'ForgetPassword',
+          component: ForgetPassword,
+        },
+        {
           path: 'm',
           name: 'm',
           component: Mobile,
@@ -193,6 +201,11 @@ function configRoutes() {
           path: 'selfcheckinmode',
           name: 'DashboardSelfCheckin',
           component: SelfCheckinDashboard,
+        },
+        {
+          path: 'guardmode',
+          name: 'DashboardGuard',
+          component: GuardDashboard,
         },
         {
           path: 'reports',
@@ -401,6 +414,11 @@ function configRoutes() {
               path: 'modifyselfcheckincontrolsetting',
               name: 'ModifySelfCheckinControlSetting',
               component: ModifySelfCheckinControlSetting,
+            },
+            {
+              path: 'modifyguardcontrolsetting',
+              name: 'ModifyGuardControlSetting',
+              component: ModifyGuardControlSetting,
             },
             // {
             //   path: 'welcomeDashboardSettings',

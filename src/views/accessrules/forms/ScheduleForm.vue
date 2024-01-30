@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-3" icon-class="fa fa-check"
+    <div class="h1 mb-5">
+      {{ disp_header }}
+    </div>
+    <stepprogress
+      class="w-step-progress-3"
+      icon-class="fa fa-check"
       :active-thickness="param_activeThickness"
       :passive-thickness="param_passiveThickness"
       :active-color="param_activeColor"
@@ -9,47 +13,68 @@
       :line-thickness="param_lineThickness"
       :steps="[disp_inputScheduleInfo, disp_timerange, disp_complete]"
       :current-step="flag_currentSetp"
-    >
-    </stepprogress>
+    />
 
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_scheduleName }}</th>
-              <th class="h5 w-25 table-th">{{ disp_recurrent }}</th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{
+                  disp_scheduleName }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_recurrent }}
+              </th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_scheduleName" required
+                <CInput
+                  size="lg"
+                  v-model="value_scheduleName"
+                  required
                   :invalid-feedback="disp_noEmptyNorSpaceOnly"
                   :is-valid="scheduleNameValidator"
-                  />
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_type"
+                <CSelect
+                  size="lg"
+                  :value.sync="value_type"
                   :options="[
                     { value: 'recurrent', label: $t('ScheduleRecurrent') },
                     { value: 'non-recurrent', label: $t('ScheduleNonrecurrent') }
-                  ]" />
+                  ]"
+                />
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(1)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(1)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-100 table-th">{{ disp_timerange }}</th>
+              <th class="h5 w-100 table-th">
+                {{ disp_timerange }}
+              </th>
             </tr>
-            <tr class="table-tr" v-show="value_type=='recurrent'">
+            <tr
+              class="table-tr"
+              v-show="value_type=='recurrent'"
+            >
               <td class="table-td">
                 <scheduler
                   v-model="value_recurrentSchedule"
@@ -59,30 +84,35 @@
               </td>
             </tr>
 
-            <tr class="table-tr" v-show="value_type=='non-recurrent'">
+            <tr
+              class="table-tr"
+              v-show="value_type=='non-recurrent'"
+            >
               <td class="table-td">
                 <date-picker
-                    :lang="this.$globalDatePickerLanguage"
-                    v-model="value_specifiedDate"
-                    type="date"
-                    range
-                  ></date-picker><p></p>
+                  :lang="this.$globalDatePickerLanguage"
+                  v-model="value_specifiedDate"
+                  type="date"
+                  range
+                /><p />
                 <scheduler
                   v-model="value_nonrecurrentSchedule"
                   :multiple="true"
                   :footer="false"
-                  :ignoreWeekend="true"
+                  :ignore-weekend="true"
                 />
               </td>
             </tr>
-
           </table>
         </CCardBody>
       </CCard>
 
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
@@ -98,19 +128,28 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
             {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary fz-lg btn-w-normal" @click="clickOnNext"
-            :disabled="!(flag_scheduleNamePass)">
+          <CButton
+            class="btn btn-primary fz-lg btn-w-normal"
+            @click="clickOnNext"
+            :disabled="!(flag_scheduleNamePass)"
+          >
             {{ nextButtonName() }}
           </CButton>
         </div>
@@ -215,7 +254,7 @@ export default {
       TIME_TITLE: self.disp_timeTitle,
       WEEK_TITLE: self.disp_weekTitle,
       WEEK_DAYS: self.disp_weekDays,
-      HOURS: self.disp_hours,
+      // HOURS: self.disp_hours,
       // DRAG_TIP: self.disp_dragTips,
       // RESET: self.disp_reset,
     });
@@ -235,7 +274,7 @@ export default {
       if (times) {
         if (self.value_type === 'recurrent') {
           Object.entries(times).forEach((key) => {
-            self.value_recurrentSchedule[key[0]] = self.parameterToSchedule(key[1]);
+            self.value_recurrentSchedule[key[0]] = self.parameterFilter(key[1]);
           });
         } else {
           const startDate = self.value_settingitem.start_date;
@@ -245,7 +284,7 @@ export default {
             self.value_specifiedDate = [new Date(startDate), new Date(endDate)];
           }
 
-          self.value_nonrecurrentSchedule[1] = self.parameterToSchedule(times);
+          self.value_nonrecurrentSchedule[1] = self.parameterFilter(times);
         }
       }
     },
@@ -295,6 +334,10 @@ export default {
       return sche;
     },
 
+    parameterFilter(sch) {
+      return sch.filter((d) => d.toString().indexOf('.5') < 0);
+    },
+
     clickOnNext() {
       const self = this;
 
@@ -309,8 +352,9 @@ export default {
           let schedule = [];
           const sch = self.value_nonrecurrentSchedule['1'];
           if (sch != null) {
-            schedule = self.scheduleToParameter(sch);
+            schedule = sch; // self.scheduleToParameter(sch);
           }
+          console.log(schedule);
 
           if (self.value_specifiedDate.length === 2) {
             let idx = 0;
@@ -334,7 +378,7 @@ export default {
             const sch = self.value_recurrentSchedule[i.toString()];
             let sche = [];
             if (sch != null) {
-              sche = self.scheduleToParameter(sch);
+              sche = sch; // self.scheduleToParameter(sch);
               weeklySchedule[i] = sche;
             }
           }

@@ -157,7 +157,7 @@
           <CButton
             class="btn btn-primary fz-lg"
             @click="clickOnNext"
-            :disabled="!flag_accountNamePass || !flag_passwordConfirmPass"
+            :disabled="flag_accountNamePass !== '' || !flag_passwordConfirmPass"
           >
             {{ nextButtonName() }}
           </CButton>

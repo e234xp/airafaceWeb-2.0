@@ -329,7 +329,7 @@ export default {
     },
 
     autoSearch() {
-      console.log(1, this.selectedName);
+      // console.log(1, this.selectedName);
       if (this.selectedName === '' || this.selectedName === null) return;
 
       const startTime = new Date(`${this.value_searchDate} 00:00:00`).getTime();

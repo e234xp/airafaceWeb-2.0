@@ -2,50 +2,80 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ disp_header }}
+        </td>
       </CCol>
     </CRow>
-    <div style="height: 35px"></div>
+    <div style="height: 35px" />
     <div>
       <CCol sm="12">
         <CRow>
           <div>
-            <CButton class="btn btn-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnAdd()"
-              :disabled="!canDelete()">
-              {{ disp_add }}
+            <CButton
+              class="btn btn-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnAdd()"
+              :disabled="!canDelete()"
+            >
+              {{ $t('Add') }}
             </CButton>
           </div>
 
           <div>
-            <CButton class="btn btn-outline-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnTemplate()"
-              :disabled="!canDelete()">
-              {{ disp_Template }}
+            <CButton
+              class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnTemplate()"
+              :disabled="!canDelete()"
+            >
+              {{ $t('Template') }}
             </CButton>
           </div>
 
           <div>
-            <CButton class="btn btn-outline-primary btn-w-sm mr-3 mb-3" size="lg"
-              @click="flag_collapse = !flag_collapse" :disabled="!canDelete()">
+            <CButton
+              class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="flag_collapse = !flag_collapse"
+              :disabled="!canDelete()"
+            >
               <!-- @click="clickOnImport()"> -->
-              {{ disp_import }}
+              {{ $t('Import') }}
             </CButton>
           </div>
 
           <div>
-            <CButton class="btn btn-outline-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnExport(true)"
-              :disabled="!canDelete()">
-              {{ disp_export }}
+            <CButton
+              class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnExport(true)"
+              :disabled="!canDelete()"
+            >
+              {{ $t('Export') }}
             </CButton>
           </div>
 
           <div>
-            <CButton class="btn btn-danger btn-w-sm mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()"
-              :disabled="!canDelete()">
-              {{ disp_delete }}
+            <CButton
+              class="btn btn-danger btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnMultipleDelete()"
+              :disabled="!canDelete()"
+            >
+              {{ $t('Delete') }}
             </CButton>
           </div>
-          <div class="d-flex" style="margin-left: auto">
-            <CInput v-model.lazy="value_searchingFilter" style="width: 280px" size="lg" :placeholder="disp_search">
+          <div
+            class="d-flex"
+            style="margin-left: auto"
+          >
+            <CInput
+              v-model.lazy="value_searchingFilter"
+              style="width: 280px"
+              size="lg"
+              :placeholder="$t('Search')"
+            >
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -53,42 +83,82 @@
           </div>
         </CRow>
         <CRow>
-          <CCol col="12" style="padding-right: 0px !important; padding-left: 0px !important">
+          <CCol
+            col="12"
+            style="padding-right: 0px !important; padding-left: 0px !important"
+          >
             <CCollapse :show="flag_collapse">
               <CCard>
                 <CCardBody>
                   <CRow>
-                    <CCol col="1" class="pt-2 label">{{ disp_infoExcelFile }}</CCol>
+                    <CCol
+                      col="1"
+                      class="pt-2 label"
+                    >
+                      {{ $t('PersonInfoFile') }}
+                    </CCol>
                     <CCol col="11">
-                      <CInputFile :lazy="false" @change="personInfoListener" :disabled="isLocal()"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                      <CInputFile
+                        :lazy="false"
+                        @change="personInfoListener"
+                        :disabled="isLocal()"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      />
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol col="1" class="pt-2 label">{{ disp_uploadFile }}</CCol>
+                    <CCol
+                      col="1"
+                      class="pt-2 label"
+                    >
+                      {{ $t('UploadFile') }}
+                    </CCol>
                     <CCol col="11">
-                      <CInputFile :lazy="false" :multiple="true" @change="photoListener" :disabled="isLocal()" />
+                      <CInputFile
+                        :lazy="false"
+                        :multiple="true"
+                        @change="photoListener"
+                        :disabled="isLocal()"
+                      />
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol col="2" class="pt-2 label">
-                      <CButton style="width: 150px; background-color: #20a8d8; color: white" size="lg"
-                        @click="clickOnImport()">
-                        {{ disp_import }}
+                    <CCol
+                      col="2"
+                      class="pt-2 label"
+                    >
+                      <CButton
+                        style="width: 150px; background-color: #20a8d8; color: white"
+                        size="lg"
+                        :disabled="value_failRecords + value_successRecords >= value_totalRecords"
+                        @click="clickOnImport()"
+                      >
+                        {{ $t('Import') }}
                       </CButton>
                     </CCol>
 
-                    <CCol col="10" class="pt-2 label">
+                    <CCol
+                      col="10"
+                      class="pt-2 label"
+                    >
                       <div style="float: left; font-size: 20px; padding-top: inherit">
-                        {{ disp_successRecords }} : {{ value_successRecords }} /
-                        {{ disp_failRecords }} : {{ value_failRecords }} /
-                        {{ disp_totalRecords }} : {{ value_totalRecords }}
+                        {{ $t('SuccessRecords') }} : {{ value_successRecords }} /
+                        {{ $t('FailRecords') }} : {{ value_failRecords }} /
+                        {{ $t('TotalRecords') }} : {{ value_totalRecords }}
                       </div>
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol col="4" class="pt-2 label">{{ disp_importFailure }}</CCol>
-                    <CCol col="12" ref="importFailure"> </CCol>
+                    <CCol
+                      col="4"
+                      class="pt-2 label"
+                    >
+                      {{ $t('ImportFailure') }}
+                    </CCol>
+                    <CCol
+                      col="12"
+                      ref="importFailure"
+                    />
                   </CRow>
                 </CCardBody>
               </CCard>
@@ -96,30 +166,61 @@
           </CCol>
         </CRow>
       </CCol>
-      <div style="height: 15px"></div>
+      <div style="height: 15px" />
     </div>
     <CCard>
       <CCardBody>
         <div>
           <div id="personManagementFrom">
-            <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
-              @checkbox-change="selectChangeEvent" :edit-config="{ trigger: 'manual', mode: 'row' }">
-              <vxe-table-column type="checkbox" width="4%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="disp_id" width="120px"
-                style="font: 10px">
-              </vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="disp_name"
-                width="14%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="extra_info.department" :title="disp_department"
-                width="14%">
-              </vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="groupToShow" :title="disp_group" width="14%">
-              </vxe-table-column>
+            <vxe-table
+              :data="value_dataItemsToShow"
+              stripe
+              align="center"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              ref="mainTable"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
+              :edit-config="{ trigger: 'manual', mode: 'row' }"
+            >
+              <vxe-table-column
+                type="checkbox"
+                width="4%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="id"
+                :title="$t('PersonId')"
+                width="120px"
+                style="font: 10px"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="nameToShow"
+                :title="$t('PersonName')"
+                width="14%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="extra_info.department"
+                :title="$t('Department')"
+                width="14%"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="groupToShow"
+                :title="$t('Group')"
+                width="14%"
+              />
 
               <!-- 註冊照片 -->
-              <vxe-table-column width="170" field="imgRegisterPhoto" :title="disp_registerPhoto" type="html">
-              </vxe-table-column>
+              <vxe-table-column
+                width="170"
+                field="imgRegisterPhoto"
+                :title="$t('RegisterPhoto')"
+                type="html"
+              />
               <!-- <vxe-table-column :title="disp_registerPhoto" width="170">
                 <template #default="{ row }">
                   <img :id="getRegisterImgId(row.uuid)" />
@@ -127,35 +228,55 @@
               </vxe-table-column> -->
 
               <!-- 顯示照片 -->
-              <vxe-table-column width="170" field="imgDisplayPhoto" :title="disp_displayPhoto" type="html">
-              </vxe-table-column>
+              <vxe-table-column
+                width="170"
+                field="imgDisplayPhoto"
+                :title="$t('DisplayPhoto')"
+                type="html"
+              />
               <!--  <vxe-table-column :title="disp_displayPhoto" width="170">
                 <template #default="{ row }">
                   <img :id="getDisplayImgId(row.uuid)" />
                 </template>
               </vxe-table-column> -->
 
-               <!-- 顯示 QR code -->
-               <vxe-table-column width="170" field="qrCodeDisplay" :title="'QR code'" type="html" v-if="formData.type === 'Visitor'">
-              </vxe-table-column>
+              <!-- 顯示 QR code -->
+              <vxe-table-column
+                width="170"
+                field="qrCodeDisplay"
+                :title="'QR code'"
+                type="html"
+                v-if="formData.type === 'Visitor'"
+              />
 
               <!-- 編輯和刪除按鈕 -->
               <!-- <vxe-table-column field="actionButton" title="" width="12%" type="html" /> -->
               <vxe-table-column min-width="13%">
                 <template #default="{ row }">
                   <div class="d-flex flex-column align-items-center">
-                    <vxe-button class="btn btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)"
-                      :class="[!canDelete() ? 'btn.disabled' : '']" :disabled="!canDelete()">{{ disp_modify
-                      }}</vxe-button>
-                    <vxe-button class="btn btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)"
-                      :class="[!canDelete() ? 'btn.disabled' : '']" :disabled="!canDelete()">{{ disp_delete
-                      }}</vxe-button>
+                    <vxe-button
+                      class="btn btn-in-cell-primary btn-in-cell"
+                      @click="clickOnModify(row)"
+                      :class="[!canDelete() ? 'btn.disabled' : '']"
+                      :disabled="!canDelete()"
+                    >
+                      {{ $t('Modify') }}
+                    </vxe-button>
+                    <vxe-button
+                      class="btn btn-in-cell-danger btn-in-cell"
+                      @click="clickOnSingleDelete(row)"
+                      :class="[!canDelete() ? 'btn.disabled' : '']"
+                      :disabled="!canDelete()"
+                    >
+                      {{ $t('Delete') }}
+                    </vxe-button>
                   </div>
                 </template>
               </vxe-table-column>
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -163,17 +284,22 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange">
-          </vxe-pager>
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
       </CCardBody>
     </CCard>
+    <canvas ref="qrcode" id="qrcode" style="display: none;"></canvas>
   </div>
 </template>
 
 <script>
 import i18n from '@/i18n';
+import QrCodeWithLogo from 'qr-code-with-logo';
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
 
@@ -214,31 +340,7 @@ const defaultlState = () => ({
   },
   value_searchingFilter: '',
 
-  disp_id: i18n.formatter.format('PersonId'),
-  disp_name: i18n.formatter.format('PersonName'),
-
-  disp_department: i18n.formatter.format('Department'),
-  disp_group: i18n.formatter.format('Group'),
-  disp_registerPhoto: i18n.formatter.format('RegisterPhoto'),
-  disp_displayPhoto: i18n.formatter.format('DisplayPhoto'),
-  disp_search: i18n.formatter.format('Search'),
-  disp_add: i18n.formatter.format('Add'),
-  disp_Template: i18n.formatter.format('Template'),
-  disp_import: i18n.formatter.format('Import'),
-  disp_export: i18n.formatter.format('Export'),
-  disp_delete: i18n.formatter.format('Delete'),
-  disp_modify: i18n.formatter.format('Modify'),
   disp_header: 'none', // i18n.formatter.format('CreatePerson'),
-
-  disp_infoExcelFile: i18n.formatter.format('PersonInfoFile'),
-  disp_uploadFile: i18n.formatter.format('UploadFile'),
-  disp_successRecords: i18n.formatter.format('SuccessRecords'),
-  disp_failRecords: i18n.formatter.format('FailRecords'),
-  disp_totalRecords: i18n.formatter.format('TotalRecords'),
-
-  disp_maxFileSize: i18n.formatter.format('MaxFileSize'),
-  disp_importFailure: i18n.formatter.format('ImportFailure'),
-  // disp_maxPeople : i18n.formatter.format('MaxPeople')
 
   flag_enableAiraManager: false,
 });
@@ -428,6 +530,24 @@ export default {
           const oldDisplayPhotoImg = document.getElementById(`imgDisplayPhoto${item.uuid}`);
           oldDisplayPhotoImg.parentNode.replaceChild(imgDisplay, oldDisplayPhotoImg);
         }
+
+        const qrCanvas = this.$refs.qrcode;
+        const num = { uuid: item.uuid };
+        const jstr = JSON.stringify(num);
+
+        await QrCodeWithLogo.toCanvas({
+          canvas: qrCanvas,
+          content: jstr,
+          width: 220,
+          height: 220,
+          logo: {
+            src: '/img/logo/airaLogo.png',
+            radius: 1,
+          },
+        });
+        const qrCode = await qrCanvas.toDataURL();
+        self.value_dataItemsToShow[ii].qrCodeDisplay = `<img src='${qrCode}' width='100' height='100'>`;
+        self.value_dataItemsToShow[ii].qrCode = qrCode.replace('data:image/png;base64,', '');
       }
     },
     refreshTableItems(cb) {
@@ -699,7 +819,7 @@ export default {
 
       if (this.xlsxFile == null) return;
       if (this.xlsxFile.size > 1024000 * 5) {
-        alert(me.disp_maxFileSize);
+        alert(i18n.formatter.format('MaxFileSize'));
         return;
       }
 
@@ -720,7 +840,9 @@ export default {
           workbook.Sheets[workbook.SheetNames[0]],
         );
 
-        me.totalRecords = me.value_excelFileImpport.length;
+        me.value_totalRecords = me.value_excelFileImpport.length;
+        me.value_successRecords = 0;
+        me.value_failRecords = 0;
       };
       myReader.readAsArrayBuffer(this.xlsxFile);
     },
@@ -731,7 +853,7 @@ export default {
       for (let i = 0; i < event.length; i += 1) {
         const e = event[i];
 
-        if (e.size < 1024000 * 5) {
+        if (e.size < 1024000 * 10) {
           const fn = e.name.split('.')[0];
           const isDisp = fn.toLowerCase().indexOf('_d');
           const id = fn.replace('_d', '').replace('_D', '');
@@ -740,7 +862,7 @@ export default {
             if (isDisp >= 0) item.dispfile = e;
             else item.regfile = e;
           }
-        }
+        } else console.log('====== photoListener =====> file size is too large', e.size);
       }
     },
 
@@ -760,7 +882,14 @@ export default {
             imgFile,
             (canvas) => {
               if (canvas.type === 'error') return resolve(file);
-              imgBase64 = canvas.toDataURL(imgFile.type);
+              const tempCanvas = document.createElement('canvas');
+              const tempCtx = tempCanvas.getContext('2d');
+
+              tempCanvas.width = 240;
+              tempCanvas.height = 240;
+
+              tempCtx.drawImage(canvas, 0, 0, 240, 240);
+              imgBase64 = tempCanvas.toDataURL(imgFile.type);
               return resolve(imgBase64);
             },
             options,
@@ -807,11 +936,12 @@ export default {
             ? new Date(localItem['Expire Date'].replaceAll('-', '/')).getTime()
             : 0;
 
+          const idx = me.value_allTableItems.findIndex((x) => x.id === localItem.Id);
           const data = {
-            id: `${localItem.Id}` || '',
-            name: `${localItem.Fullname}` || '',
+            id: localItem.Id || '',
+            name: localItem.Fullname || '',
             card_facility_code: '',
-            card_number: `${localItem['Card Number']}` || '',
+            card_number: `${localItem['Card Number'] || ''}`,
             begin_date: beginDate || 0,
             expire_date: expireDate || 0,
             group_list: localItem.Group ? localItem.Group.split('|') : [],
@@ -819,70 +949,175 @@ export default {
             display_image: localItem.dispImage ? localItem.dispImage : '',
             register_image: localItem.photoImage ? localItem.photoImage : '',
             extra_info: {
-              title: `${localItem.Title}` || '',
-              department: `${localItem.Department}` || '',
-              email: `${localItem.Email}` || '',
-              phone_number: `${localItem['Phone Number']}` || '',
-              extension_number: `${localItem['Extension Number']}` || '',
-              remarks: `${localItem.Remarks}` || '',
+              title: `${localItem.Title || ''}`,
+              department: `${localItem.Department || ''}`,
+              email: `${localItem.Email || ''}`,
+              phone_number: `${localItem['Phone Number'] || ''}`,
+              extension_number: `${localItem['Extension Number'] || ''}`,
+              remarks: `${localItem.Remarks || ''}`,
             },
           };
 
           if (me.formData.type === 'Person') {
-            me.$globalCreatePerson(data, async (error, result) => {
-              if (error === null) {
-                me.value_successRecords += 1;
-                delete localItem.photoImage;
-                delete localItem.dispImage;
+            if (idx < 0) {
+              me.$globalCreatePerson(data, async (error, result) => {
+                if (error === null) {
+                  me.value_successRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
 
-                if (localItem.Group) {
-                  const groups = localItem.Group.split('|') || [];
-                  for (let i = 0; i < groups.length; i += 1) {
-                    const g = groups[i];
+                  if (localItem.Group) {
+                    const groups = localItem.Group.split('|') || [];
+                    for (let i = 0; i < groups.length; i += 1) {
+                      const g = groups[i];
 
-                    if (me.value_personGroupList.indexOf(g) < 0) {
-                      const data1 = {
-                        name: g,
-                        person_uuid_list: [result.uuid],
-                        remarks: '',
-                        visitor_uuid_list: [],
-                      };
+                      if (me.value_personGroupList.indexOf(g) < 0) {
+                        const data1 = {
+                          name: g,
+                          person_uuid_list: [result.uuid],
+                          remarks: '',
+                          visitor_uuid_list: [],
+                        };
 
-                      await me.$globalCreateGroup(data1);
+                        await me.$globalCreateGroup(data1);
 
-                      me.value_personGroupList.push(g);
+                        me.value_personGroupList.push(g);
+                      }
                     }
                   }
+                } else {
+                  me.$refs.importFailure.innerHTML
+                    += (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
+
+                  me.value_failRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
                 }
-              } else {
-                me.$refs.importFailure.innerHTML
-                  += (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
 
-                me.value_failRecords += 1;
-                delete localItem.photoImage;
-                delete localItem.dispImage;
-              }
+                resolve(true);
+              });
+            } else {
+              const person = me.value_allTableItems[idx];
+              const dataForModify = {
+                uuid: person.uuid,
+                data: {
+                  id: data.id === '' ? person.id : data.id,
+                  name: data.name === '' ? person.name : data.name,
+                  card_number: data.card_number === '' ? person.card_number : data.card_number,
+                  begin_date: beginDate === 0 ? person.begin_date : beginDate,
+                  expire_date: expireDate === 0 ? person.expire_date : expireDate,
+                  group_list: data.group_list.length === 0 ? person.group_list : data.group_list,
+                  card_facility_code: '',
+                  display_image: data.display_image,
+                  register_image: data.register_image,
+                  as_admin: !data.as_admin ? person.as_admin : data.as_admin,
+                  extra_info: {
+                    title: data.extra_info.title === '' ? person.extra_info.title : data.extra_info.title,
+                    department: data.extra_info.department === '' ? person.extra_info.department : data.extra_info.department,
+                    email: data.extra_info.email === '' ? person.extra_info.email : data.extra_info.email,
+                    phone_number: data.extra_info.phone_number === '' ? person.extra_info.phone_number : data.extra_info.phone_number,
+                    extension_number: data.extra_info.extension_number === '' ? person.extra_info.extension_number : data.extra_info.extension_number,
+                    remarks: data.extra_info.remarks === '' ? person.extra_info.remarks : data.extra_info.remarks,
+                  },
+                },
+              };
+              me.$globalModifyPerson(dataForModify, async (error) => {
+                if (error === null) {
+                  me.value_successRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
 
-              resolve(true);
-            });
+                  if (localItem.Group) {
+                    const groups = localItem.Group.split('|') || [];
+                    for (let i = 0; i < groups.length; i += 1) {
+                      const g = groups[i];
+
+                      if (me.value_personGroupList.indexOf(g) < 0) {
+                        const data1 = {
+                          name: g,
+                          person_uuid_list: [result.uuid],
+                          remarks: '',
+                          visitor_uuid_list: [],
+                        };
+
+                        await me.$globalCreateGroup(data1);
+
+                        me.value_personGroupList.push(g);
+                      }
+                    }
+                  }
+                } else {
+                  me.$refs.importFailure.innerHTML
+                    += (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
+
+                  me.value_failRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
+                }
+
+                resolve(true);
+              });
+            }
           } else if (me.formData.type === 'Visitor') {
-            me.$globalCreateVisitor(data, (error) => {
-              if (error === null) {
-                me.value_successRecords += 1;
-                delete localItem.photoImage;
-                delete localItem.dispImage;
-              } else {
-                let t = me.$refs.importFailure.innerHTML === '' ? '' : ', ';
-                t += `${localItem.Id} ${i18n.formatter.format('ImportFailure')}`;
-                me.$refs.importFailure.innerHTML = t;
+            if (idx < 0) {
+              me.$globalCreateVisitor(data, (error) => {
+                if (error === null) {
+                  me.value_successRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
+                } else {
+                  me.$refs.importFailure.innerHTML
+                    += (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
 
-                me.value_failRecords += 1;
-                delete localItem.photoImage;
-                delete localItem.dispImage;
-              }
+                  me.value_failRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
+                }
 
-              resolve(true);
-            });
+                resolve(true);
+              });
+            } else {
+              const person = me.value_allTableItems[idx];
+              const dataForModify = {
+                uuid: person.uuid,
+                data: {
+                  id: data.id === '' ? person.id : data.id,
+                  name: data.name === '' ? person.name : data.name,
+                  card_number: data.card_number === '' ? person.card_number : data.card_number,
+                  begin_date: beginDate === 0 ? person.begin_date : beginDate,
+                  expire_date: expireDate === 0 ? person.expire_date : expireDate,
+                  group_list: data.group_list.length === 0 ? person.group_list : data.group_list,
+                  card_facility_code: '',
+                  display_image: data.display_image,
+                  register_image: data.register_image,
+                  as_admin: !data.as_admin ? person.as_admin : data.as_admin,
+                  extra_info: {
+                    title: data.extra_info.title === '' ? person.extra_info.title : data.extra_info.title,
+                    department: data.extra_info.department === '' ? person.extra_info.department : data.extra_info.department,
+                    email: data.extra_info.email === '' ? person.extra_info.email : data.extra_info.email,
+                    phone_number: data.extra_info.phone_number === '' ? person.extra_info.phone_number : data.extra_info.phone_number,
+                    extension_number: data.extra_info.extension_number === '' ? person.extra_info.extension_number : data.extra_info.extension_number,
+                    remarks: data.extra_info.remarks === '' ? person.extra_info.remarks : data.extra_info.remarks,
+                  },
+                },
+              };
+              me.$globalModifyVisitor(dataForModify, (error) => {
+                if (error === null) {
+                  me.value_successRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
+                } else {
+                  me.$refs.importFailure.innerHTML
+                    += (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
+
+                  me.value_failRecords += 1;
+                  delete localItem.photoImage;
+                  delete localItem.dispImage;
+                }
+
+                resolve(true);
+              });
+            }
           }
         };
 
@@ -893,7 +1128,7 @@ export default {
           const pos = result.indexOf(';base64,');
           if (pos >= 0) {
             localItem.photoImage = result.substring(pos + 8);
-          }
+          } else console.log('====== onloadend =====> result.indexOf(base64)', pos);
 
           proformEnroll();
         };
@@ -976,8 +1211,6 @@ export default {
         for (let i = 0; i < throttle; i += 1) takeOne();
       });
 
-      this.value_totalRecords = this.value_excelFileImpport.length;
-
       await doJobWithThrottle(this.value_excelFileImpport);
 
       me.value_fileImporting = false;
@@ -1029,7 +1262,7 @@ export default {
           salf.exportNo += 1;
           salf.excelCounter += 1;
 
-          console.log('clickOnExport', salf.value_allTableItems[idx].group_list);
+          // console.log('clickOnExport', salf.value_allTableItems[idx].group_list);
 
           worksheet.addRow({
             No: salf.exportNo,

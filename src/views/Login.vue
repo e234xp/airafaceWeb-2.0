@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; align-items: center; margin-top: calc( (100vh - 600px) / 2);">
+  <div style="display: flex; align-items: center; margin-top: calc( (100vh - 650px) / 2);">
     <CContainer>
       <CRow class="justify-content-center">
         <CCol class="login-container">
@@ -96,8 +96,8 @@
 
                     <CRow>
                       <CCol
-                        col="6"
-                        class="text-left"
+                        col="12"
+                        class="text-center"
                       >
                         <CButton
                           style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8"
@@ -112,6 +112,12 @@
                         style="padding-top: 8px;"
                       />
                     </CRow>
+                    <div
+                      class="forget-password"
+                      @click="onForget"
+                    >
+                      {{ $t('ForgotPassword') }}?
+                    </div>
                   </CCol>
                 </CRow>
               </CForm>
@@ -178,6 +184,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
+        { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         // { value: 'SelfCheckin', label: 'SelfCheckin' },
       ],
     };
@@ -291,6 +298,7 @@ export default {
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
+        { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         // { value: 'SelfCheckin', label: 'SelfCheckin' },
       ];
     },
@@ -326,18 +334,15 @@ export default {
               if (lic.data.data_list) {
                 let availableLicenseAmount = 0;
                 localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-                console.log('clickOnLogin 1', 'availableLicenseAmount', availableLicenseAmount);
                 lic.data.data_list.forEach((item) => {
                   if (item.trial_days >= 0) {
                     if (new Date(item.trial_end_time) > new Date()) {
                       availableLicenseAmount += +item.channel_amount;
                       localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-                      console.log('clickOnLogin 2', availableLicenseAmount);
                     }
                   } else {
                     availableLicenseAmount += +item.channel_amount;
                     localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-                    console.log('clickOnLogin 3', availableLicenseAmount);
                   }
                 });
               }
@@ -370,6 +375,24 @@ export default {
         },
       );
     },
+    onForget() {
+      this.$router.push('/forgetpassword');
+    },
   },
 };
 </script>
+
+<style lang="scss">
+@import '@/assets/scss/variables.scss';
+
+  .forget-password {
+    cursor: pointer;
+    text-align: right;
+    font-size: 15px;
+    color: gray;
+
+    &:hover {
+      color: $dashboard-danger-light;
+    }
+  }
+</style>

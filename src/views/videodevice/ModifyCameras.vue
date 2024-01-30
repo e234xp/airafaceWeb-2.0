@@ -16,6 +16,7 @@
           disp_step1,
           disp_step2,
           disp_step3,
+          disp_step4,
           disp_complete,
         ]"
         icon-class="fa fa-check"
@@ -61,6 +62,32 @@
           />
         </CCardBody>
       </CCard>
+      <!-- FaceMerge Form -->
+      <CCard v-else-if="isOnStep(3)">
+        <CCardBody>
+          <Step4Form
+            :step4form="step4form"
+            @updateStep4form="updateStep4form"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
+          />
+        </CCardBody>
+      </CCard>
+
+      <CCard
+        style="height: 34rem;"
+        v-else-if="isOnStep(4)"
+      >
+        <CCardBody style="display: flex; justify-content: center; align-items: center;">
+          <CRow>
+            <CCol sm="12">
+              <p class="display-4 row justify-content-center">
+                {{ $t('Complete') }}
+              </p>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
     </CCol>
 
     <!-- 按鈕的Col -->
@@ -74,7 +101,7 @@
             {{ value_returnRouteName }}
           </CButton>
         </div>
-        <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
+        <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2 || flag_currentSetp == 3">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
@@ -107,6 +134,7 @@ import '@/airacss/vue-step-progress.css';
 import Step1Form from '@/modules/videodevice/modifycamera/Step1Form.vue';
 import Step2Form from '@/modules/videodevice/modifycamera/Step2Form.vue';
 import Step3Form from '@/modules/videodevice/modifycamera/Step3Form.vue';
+import Step4Form from '@/modules/videodevice/modifycamera/Step4Form.vue';
 import { getIsFieldPassedFunction } from '@/utils';
 
 export default {
@@ -133,10 +161,11 @@ export default {
       param_passiveThickness: 3,
       flag_currentSetp: 0,
 
-      // Step 1 2 3
+      // Step 1 2 3 4
       disp_step1: i18n.formatter.format('VideoDeviceBasic'),
       disp_step2: i18n.formatter.format('VideoDeviceROI'),
       disp_step3: i18n.formatter.format('VideoFaceCapture'),
+      disp_step4: i18n.formatter.format('VideoFaceMerge'),
       disp_complete: i18n.formatter.format('Complete'),
 
       // btn
@@ -162,6 +191,20 @@ export default {
         capture_interval: null,
         target_score: null,
         face_min_length: null,
+        antispoofing_score: 0,
+      },
+      step4form: {
+        verified_merge_setting: {
+          enable: false,
+          merge_duration: 5000,
+          non_action: true,
+        },
+        non_verified_merge_setting: {
+          enable: false,
+          merge_score: 0.6,
+          merge_duration: 5000,
+          non_action: true,
+        },
       },
       defaultValues: {},
     };
@@ -171,6 +214,7 @@ export default {
     Step1Form,
     Step2Form,
     Step3Form,
+    Step4Form,
   },
   async created() {
     const self = this;
@@ -206,6 +250,9 @@ export default {
     },
     updateStep3form(newValue) {
       this.step3form = { ...newValue };
+    },
+    updateStep4form(newValue) {
+      this.step4form = { ...newValue };
     },
 
     async getDefaultValues() {
@@ -263,6 +310,11 @@ export default {
 
           return Number.isInteger(number) && value >= 100 && value <= 1000;
         },
+        antispoofing_score: (value) => {
+          const number = parseInt(value, 10);
+
+          return Number.isInteger(number) && value >= 0 && value <= 1;
+        },
       },
       rules: {
         name: 'nonEmpty',
@@ -299,11 +351,12 @@ export default {
     async handleNext() {
       switch (this.flag_currentSetp) {
         case 0:
-        case 1: {
+        case 1:
+        case 2: {
           this.flag_currentSetp += 1;
           break;
         }
-        case 2: {
+        case 3: {
           this.obj_loading = this.$loading.show({
             container: this.$refs.formContainer,
           });
@@ -313,6 +366,7 @@ export default {
               ...this.step1form,
               ...this.step2form,
               ...this.step3form,
+              ...this.step4form,
             },
           };
           parameter.data.divice_groups = this.step1form.divice_group_uuids;
@@ -349,12 +403,11 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
         case 1:
-          return this.disp_next;
         case 2:
-          return this.disp_next;
         case 3:
+          return this.disp_next;
+        case 4:
           return this.disp_complete;
         default:
           return this.disp_next;

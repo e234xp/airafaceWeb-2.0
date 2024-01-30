@@ -4,7 +4,7 @@
       <div class="h1">
         {{ disp_header }}
       </div>
-      <div style="height: 30px"></div>
+      <div style="height: 30px" />
       <!-- 辨識設定 -->
       <CCard v-show="false">
         <CCardHeader>
@@ -16,24 +16,42 @@
         <CCardBody>
           <table class="table-layout">
             <tr>
-              <th class="h5 w-25 table-th">{{ disp_verifyThreshold }}</th>
-              <th class="h5 w-25 table-th">{{ disp_antiSpoofingThreshold }}</th>
-              <th class="h5 w-25 table-th">{{ disp_faceDetectThreshold }}</th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_verifyThreshold }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_antiSpoofingThreshold }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_faceDetectThreshold }}
+              </th>
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr>
               <td class="table-td">
-                <CInput size="lg" v-model="value_verifyThreshold" :value="value_verifyThreshold"
-                  :is-valid="isValidThreshhole" />
+                <CInput
+                  size="lg"
+                  v-model="value_verifyThreshold"
+                  :value="value_verifyThreshold"
+                  :is-valid="isValidThreshhole"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_antiSpoofingThreshold" :value="value_antiSpoofingThreshold"
-                  :is-valid="isValidThreshhole" />
+                <CInput
+                  size="lg"
+                  v-model="value_antiSpoofingThreshold"
+                  :value="value_antiSpoofingThreshold"
+                  :is-valid="isValidThreshhole"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_faceDetectThreshold" :is-valid="isValidThreshhole" />
+                <CInput
+                  size="lg"
+                  v-model="value_faceDetectThreshold"
+                  :is-valid="isValidThreshhole"
+                />
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
               <!-- <td class="table-td">
                 <div v-if="flag_support_enhance_facemask">
                   <CSelect
@@ -46,31 +64,52 @@
               </td> -->
             </tr>
             <tr>
-              <th class="h5 w-25 table-th">{{ disp_faceMaskDetection }}</th>
-              <th class="h5 w-25 table-th">{{ disp_enableIdCard }}</th>
-              <th class="h5 w-25 table-th">{{ disp_enableTwoFactorAuthentication }}</th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_faceMaskDetection }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_enableIdCard }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_enableTwoFactorAuthentication }}
+              </th>
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_haveToWearFaceMask" :options="value_enableDisableListToShow"
-                  @change="selFaceMaskDetection($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_haveToWearFaceMask"
+                  :options="value_enableDisableListToShow"
+                  @change="selFaceMaskDetection($event)"
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_enableIdCard" :options="value_enableDisableListToShow"
-                  @change="selEnableIdCard($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_enableIdCard"
+                  :options="value_enableDisableListToShow"
+                  @change="selEnableIdCard($event)"
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_enableTwoFactorAuthentication"
-                  :options="value_enableDisableListToShow" @change="selEnableTwoFactorAuthentication($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_enableTwoFactorAuthentication"
+                  :options="value_enableDisableListToShow"
+                  @change="selEnableTwoFactorAuthentication($event)"
+                />
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary mb-16 fz-xl" @click="clickOnApplyVerifySettings"
-                  :disabled="flag_changingVerifySettings || !flag_verifySettingsOk">
+                <CButton
+                  class="btn btn-primary mb-16 fz-xl"
+                  @click="clickOnApplyVerifySettings"
+                  :disabled="flag_changingVerifySettings || !flag_verifySettingsOk"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -86,14 +125,21 @@
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_verifyResultPhoto }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_verifyResultPhoto }}
+              </th>
 
               <th class="h5 w-25 table-th">
-                <div class="h5" data-coreui-toggle="tooltip">
+                <div
+                  class="h5"
+                  data-coreui-toggle="tooltip"
+                >
                   {{ disp_displayVerifyResultTime }}
                 </div>
               </th>
-              <th class="h5 w-25 table-th">{{ disp_temperatureDisplayingUnit }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_temperatureDisplayingUnit }}
+              </th>
               <th class="h5 w-25 table-th">
                 <div v-if="flag_support_show_verify_indication">
                   {{ disp_showVerifyIndication }}
@@ -103,58 +149,94 @@
 
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_showProfilePhoto" :options="value_verifyResultPhotoList"
-                  @change="selVerifyDisplayPhoto($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_showProfilePhoto"
+                  :options="value_verifyResultPhotoList"
+                  @change="selVerifyDisplayPhoto($event)"
+                />
               </td>
 
               <td class="table-td">
-                <CInput size="lg" v-model="value_displayVerifyResultTime" :is-valid="isDisplayVerifyResultTimeNumber" />
+                <CInput
+                  size="lg"
+                  v-model="value_displayVerifyResultTime"
+                  :is-valid="isDisplayVerifyResultTimeNumber"
+                />
               </td>
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_temperatureUnitCelsius"
-                  :options="value_temperatureDisplayingUnitList" @change="selShowTemperatureUnit($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_temperatureUnitCelsius"
+                  :options="value_temperatureDisplayingUnitList"
+                  @change="selShowTemperatureUnit($event)"
+                />
               </td>
-              <td v-if="flag_support_show_verify_indication" class="table-td">
-                <CSelect size="lg" :value.sync="value_showVerifyIndication" :options="value_showVerifyIndicationList"
-                  @change="selShowVerifyIndication($event)" />
+              <td
+                v-if="flag_support_show_verify_indication"
+                class="table-td"
+              >
+                <CSelect
+                  size="lg"
+                  :value.sync="value_showVerifyIndication"
+                  :options="value_showVerifyIndicationList"
+                  @change="selShowVerifyIndication($event)"
+                />
               </td>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CButton class="btn btn-primary w-100 fz-xl" @click="clickOnApplyDisplaySettings"
-                  :disabled="flag_changingDisplaySettings || !flag_displaySettingsOk">
+                <CButton
+                  class="btn btn-primary w-100 fz-xl"
+                  @click="clickOnApplyDisplaySettings"
+                  :disabled="flag_changingDisplaySettings || !flag_displaySettingsOk"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
       </CCard>
       <!-- 成為網路攝影機 -->
-      <CCard v-if="deviceProfile.support_rtsp" v-show="false">
+      <CCard
+        v-if="deviceProfile.support_rtsp"
+        v-show="false"
+      >
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_turnsIpCamera }}</span>
             <span class="h6 ml-2">
-              <span v-if="value_rtspActivated" class="text-truncate text-black-50">
+              <span
+                v-if="value_rtspActivated"
+                class="text-truncate text-black-50"
+              >
                 Live streaming :
               </span>
-              <span v-if="value_rtspActivated" class="text-info">
+              <span
+                v-if="value_rtspActivated"
+                class="text-info"
+              >
                 {{ value_rtspPath }}
               </span>
             </span>
           </div>
         </CCardHeader>
         <CCardBody>
-          <div style="height: 15px"></div>
+          <div style="height: 15px" />
           <CCol sm="12">
             <CCol sm="12">
               <CRow>
-                <CSwitch size="lg" color="success" shape="pill" :checked="value_enableRtsp"
-                  @update:checked="value_enableRtsp = !value_enableRtsp" />
+                <CSwitch
+                  size="lg"
+                  color="success"
+                  shape="pill"
+                  :checked="value_enableRtsp"
+                  @update:checked="value_enableRtsp = !value_enableRtsp"
+                />
                 <div>
                   <span class="h4 ml-2">
                     <span v-if="value_enableRtsp">{{ disp_enable }}</span>
@@ -167,33 +249,61 @@
 
           <table class="table-layout mt-4">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_username }}</th>
-              <th class="h5 w-25 table-th">{{ disp_password }}</th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_username }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_password }}
+              </th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_rtspUsername" :value="value_rtspUsername"
-                  :disabled="!value_enableRtsp" />
+                <CInput
+                  size="lg"
+                  v-model="value_rtspUsername"
+                  :value="value_rtspUsername"
+                  :disabled="!value_enableRtsp"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" :type="flag_view_password ? 'text' : 'password'" v-model="value_rtspPassword"
-                  :value="value_rtspPassword" :disabled="!value_enableRtsp">
+                <CInput
+                  size="lg"
+                  :type="flag_view_password ? 'text' : 'password'"
+                  v-model="value_rtspPassword"
+                  :value="value_rtspPassword"
+                  :disabled="!value_enableRtsp"
+                >
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0.375rem 0.375rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl" @click="clickOnApplyRtsp" :disabled="flag_changingRtsp">
-                  <div style="font-size: 20px">{{ disp_apply }}</div>
+                <CButton
+                  class="btn btn-primary fz-xl"
+                  @click="clickOnApplyRtsp"
+                  :disabled="flag_changingRtsp"
+                >
+                  <div style="font-size: 20px">
+                    {{ disp_apply }}
+                  </div>
                 </CButton>
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -208,32 +318,54 @@
         <CCardBody>
           <CCol sm="12">
             <div class="d-flex align-items-center my-3">
-              <CSwitch size="lg" color="success" shape="pill" :checked="value_enableClockinMode"
-                @update:checked="value_enableClockinMode = !value_enableClockinMode" />
+              <CSwitch
+                size="lg"
+                color="success"
+                shape="pill"
+                :checked="value_enableClockinMode"
+                @update:checked="value_enableClockinMode = !value_enableClockinMode"
+              />
               <div>
                 <span class="h4 ml-2 p-0">
                   <span v-if="value_enableClockinMode">{{ disp_enable }}</span>
                   <span v-else>{{ disp_disable }}</span>
                 </span>
               </div>
-              <CButton class="btn btn-primary ml-5 btn-w-normal" @click="clickOnApplyClockInMode">
-                <div style="font-size: 20px">{{ disp_apply }}</div>
+              <CButton
+                class="btn btn-primary ml-5 btn-w-normal"
+                @click="clickOnApplyClockInMode"
+              >
+                <div style="font-size: 20px">
+                  {{ disp_apply }}
+                </div>
               </CButton>
             </div>
           </CCol>
         </CCardBody>
       </CCard>
       <!-- 門禁對講機 -->
-      <CCard v-if="deviceProfile.support_intercom" v-show="false">
+      <CCard
+        v-if="deviceProfile.support_intercom"
+        v-show="false"
+      >
         <CCardHeader>
           <div>
-            <span class="h3" style="display: inline-block; position: relative; margin-right: 33px">{{
+            <span
+              class="h3"
+              style="display: inline-block; position: relative; margin-right: 33px"
+            >{{
               disp_intercomSettings }}</span>
-            <span class="h6" style="display: inline-block; margin: 0; position: relative; bottom: 4px">
+            <span
+              class="h6"
+              style="display: inline-block; margin: 0; position: relative; bottom: 4px"
+            >
               <span style="background-color: white; color: gray">
                 Intercom client :
               </span>
-              <a :href="value_videoPath" download>{{ disp_download }}</a>
+              <a
+                :href="value_videoPath"
+                download
+              >{{ disp_download }}</a>
             </span>
           </div>
         </CCardHeader>
@@ -241,18 +373,28 @@
           <CCol sm="12">
             <div class="d-flex align-items-center my-3">
               <!-- <div class="h5">{{ disp_enableIntercom }}</div> -->
-              <CSwitch size="lg" class="ml-0" color="success" shape="pill"
-                @update:checked="value_enableIntercom = !value_enableIntercom" :checked="value_enableIntercom">
-              </CSwitch>
+              <CSwitch
+                size="lg"
+                class="ml-0"
+                color="success"
+                shape="pill"
+                @update:checked="value_enableIntercom = !value_enableIntercom"
+                :checked="value_enableIntercom"
+              />
               <div>
                 <span class="h4 ml-2">
                   <span v-if="value_enableIntercom">{{ disp_enableIntercom }}</span>
                   <span v-else>{{ disp_disableIntercom }}</span>
                 </span>
               </div>
-              <CButton @click="clickOnApplyIntercom" class="btn btn-primary ml-5 btn-w-normal"
-                :disabled="flag_changingIntercomSettings">
-                <div style="font-size: 20px">{{ disp_apply }}</div>
+              <CButton
+                @click="clickOnApplyIntercom"
+                class="btn btn-primary ml-5 btn-w-normal"
+                :disabled="flag_changingIntercomSettings"
+              >
+                <div style="font-size: 20px">
+                  {{ disp_apply }}
+                </div>
               </CButton>
             </div>
           </CCol>
@@ -268,29 +410,48 @@
         <CCardBody>
           <CCol sm="12">
             <div class="d-flex align-items-center my-3">
-              <CSwitch size="lg" color="success" shape="pill" :checked="value_enableCustomButton"
-                @update:checked="value_enableCustomButton = !value_enableCustomButton" />
+              <CSwitch
+                size="lg"
+                color="success"
+                shape="pill"
+                :checked="value_enableCustomButton"
+                @update:checked="value_enableCustomButton = !value_enableCustomButton"
+              />
               <div>
                 <span class="h4 ml-2">
                   <span v-if="value_enableCustomButton">{{ disp_enable }}</span>
                   <span v-else>{{ disp_disable }}</span>
                 </span>
               </div>
-              <CButton class="btn btn-primary ml-5 btn-w-normal" @click="clickOnApplyCustomButton">
-                <div style="font-size: 20px">{{ disp_apply }}</div>
+              <CButton
+                class="btn btn-primary ml-5 btn-w-normal"
+                @click="clickOnApplyCustomButton"
+              >
+                <div style="font-size: 20px">
+                  {{ disp_apply }}
+                </div>
               </CButton>
             </div>
           </CCol>
-          <div style="height: 30px"></div>
+          <div style="height: 30px" />
           <CCol sm="12">
-            <div class="h5">{{ disp_url }}</div>
-            <CInput size="lg" v-model="value_customFunctionUrl" :value="value_customFunctionUrl"
-              :disabled="!value_enableCustomButton" />
+            <div class="h5">
+              {{ disp_url }}
+            </div>
+            <CInput
+              size="lg"
+              v-model="value_customFunctionUrl"
+              :value="value_customFunctionUrl"
+              :disabled="!value_enableCustomButton"
+            />
           </CCol>
         </CCardBody>
       </CCard>
       <!-- 警示設定 -->
-      <CCard v-if="deviceProfile.support_high_temp_sound_alert" v-show="false">
+      <CCard
+        v-if="deviceProfile.support_high_temp_sound_alert"
+        v-show="false"
+      >
         <CCardHeader>
           <div>
             <span class="h3">{{ disp_alarmSettings }}</span>
@@ -305,25 +466,36 @@
               <th class="h5 w-25 table-th">
                 {{ disp_highTemperatureThreshold }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_alarmVolume" :options="value_alarmVolumeList"
-                  @change="selAlarmVolume($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_alarmVolume"
+                  :options="value_alarmVolumeList"
+                  @change="selAlarmVolume($event)"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" v-model="value_highTemperatureThreshold" :value="value_highTemperatureThreshold"
-                  :is-valid="isValidTempterature" />
+                <CInput
+                  size="lg"
+                  v-model="value_highTemperatureThreshold"
+                  :value="value_highTemperatureThreshold"
+                  :is-valid="isValidTempterature"
+                />
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl" @click="clickOnApplyAlarmSettings"
-                  :disabled="flag_changingAlarmSettings || !flag_verifyAlarmSettingsOk">
+                <CButton
+                  class="btn btn-primary fz-xl"
+                  @click="clickOnApplyAlarmSettings"
+                  :disabled="flag_changingAlarmSettings || !flag_verifyAlarmSettingsOk"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -341,23 +513,30 @@
               <th class="h5 w-25 table-th">
                 {{ disp_tabletInterfaceLangurageList }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_tabletInterfaceLangurage"
-                  :options="value_tabletInterfaceLangurageList" @change="selInterfaceLangurage($event)" />
+                <CSelect
+                  size="lg"
+                  :value.sync="value_tabletInterfaceLangurage"
+                  :options="value_tabletInterfaceLangurageList"
+                  @change="selInterfaceLangurage($event)"
+                />
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl" @click="clickOnApplyTabletInterfaceLangurage"
-                  :disabled="flag_changingTabletInterfaceLangurage">
+                <CButton
+                  class="btn btn-primary fz-xl"
+                  @click="clickOnApplyTabletInterfaceLangurage"
+                  :disabled="flag_changingTabletInterfaceLangurage"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -372,8 +551,13 @@
         <CCardBody>
           <CCol sm="12">
             <div class="d-flex align-items-center mt-3 mb-5">
-              <CSwitch size="lg" color="success" shape="pill" :checked="value_enableAiraManager"
-                @update:checked="value_enableAiraManager = !value_enableAiraManager" />
+              <CSwitch
+                size="lg"
+                color="success"
+                shape="pill"
+                :checked="value_enableAiraManager"
+                @update:checked="value_enableAiraManager = !value_enableAiraManager"
+              />
               <div>
                 <span class="h4 ml-2 p-0">
                   <span v-if="value_enableAiraManager">{{ disp_enable }}</span>
@@ -388,22 +572,29 @@
               <th class="h5 w-25 table-th">
                 {{ disp_hostname }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_airaManagerHostName" :value="value_airaManagerHostName"
-                  :disabled="!value_enableAiraManager" />
+                <CInput
+                  size="lg"
+                  v-model="value_airaManagerHostName"
+                  :value="value_airaManagerHostName"
+                  :disabled="!value_enableAiraManager"
+                />
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl" @click="clickOnApplyAiraManager">
+                <CButton
+                  class="btn btn-primary fz-xl"
+                  @click="clickOnApplyAiraManager"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -421,32 +612,103 @@
               <th class="h5 w-25 table-th">
                 {{ disp_tabletSystemPassword }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" v-model="value_tabletSystemPassword" :value="value_tabletSystemPassword"
-                  :type="flag_view_password ? 'text' : 'password'">
+                <CInput
+                  size="lg"
+                  v-model="value_tabletSystemPassword"
+                  :value="value_tabletSystemPassword"
+                  :type="flag_view_password ? 'text' : 'password'"
+                >
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0.375rem 0.375rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-lg" @click="clickOnApplyTabletSystemPassword"
-                  :disabled="flag_changingTabletSystemPassword">
+                <CButton
+                  class="btn btn-primary fz-lg"
+                  @click="clickOnApplyTabletSystemPassword"
+                  :disabled="flag_changingTabletSystemPassword"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
+        </CCardBody>
+      </CCard>
+      <!-- 資料保存 -->
+      <CCard>
+        <CCardHeader>
+          <div>
+            <span class="h3">{{ $t('DataRetention') }}</span>
+          </div>
+        </CCardHeader>
+        <CCardBody>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('VerifiedDuration') }}
+              </h5>
+              <CSelect
+                size="lg"
+                v-model="value_verified_maintain_duration"
+                :options="value_verifiedMaintainDurationList"
+              />
+            </CCol>
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('NonVerifiedDuration') }}
+              </h5>
+              <CSelect
+                size="lg"
+                v-model="value_non_verified_maintain_duration"
+                :options="value_nonVerifiedMaintainDurationList"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('MaintainDiskSpace') }}
+              </h5>
+              <CInput
+                size="lg"
+                v-model.number="value_maintain_disk_space_in_gb"
+                :invalid-feedback="$t('limitNumberRange').replace('#1', `${range_maintain_disk_space_in_gb[0]}GB`).replace('#2', `${range_maintain_disk_space_in_gb[1]}GB`)"
+                :is-valid="isFieldPassed"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <CButton
+                class="btn btn-primary fz-xl"
+                @click="clickOnApplySystemSetting"
+              >
+                {{ disp_apply }}
+              </CButton>
+            </CCol>
+          </CRow>
         </CCardBody>
       </CCard>
     </CCol>
@@ -456,7 +718,6 @@
 <script>
 import i18n from '@/i18n';
 // import { deviceTypes } from '@/globalParams.js';
-import { mapState } from 'vuex';
 
 export default {
   name: 'GeneralSettings',
@@ -494,16 +755,16 @@ export default {
       disp_alarmVolume: i18n.formatter.format('AlarmVolume'),
       disp_enableIdCard: i18n.formatter.format('EnableIdCard'),
       disp_enableTwoFactorAuthentication: i18n.formatter.format(
-        'EnableTwoFactorAuthentication'
+        'EnableTwoFactorAuthentication',
       ),
       disp_highTemperatureThreshold:
-        i18n.formatter.format('HighTemperatureThreshold') +
-        ' ' +
-        i18n.formatter.format('Celsius'),
+        `${i18n.formatter.format('HighTemperatureThreshold')
+        } ${
+          i18n.formatter.format('Celsius')}`,
 
       disp_tabletInterfaceLangurage: i18n.formatter.format('TabletInterfaceLangurage'),
       disp_tabletInterfaceLangurageList: i18n.formatter.format(
-        'TabletInterfaceLangurageList'
+        'TabletInterfaceLangurageList',
       ),
       disp_alarmSettings: i18n.formatter.format('AlarmSettings'),
       disp_tabletSystemPassword: i18n.formatter.format('TabletSystemPassword'),
@@ -600,16 +861,33 @@ export default {
       flag_support_invalid_result_show_switch: false,
 
       deviceProfile: {},
+
+      value_verified_maintain_duration: 30 * 24 * 60 * 60 * 1000,
+      value_non_verified_maintain_duration: 14 * 24 * 60 * 60 * 1000,
+      value_maintain_disk_space_in_gb: 50,
+
+      range_maintain_disk_space_in_gb: [1, 1024],
+
+      value_verifiedMaintainDurationList: [
+        { value: 30 * 24 * 60 * 60 * 1000, label: '30' },
+        { value: 60 * 24 * 60 * 60 * 1000, label: '60' },
+        { value: 120 * 24 * 60 * 60 * 1000, label: '120' },
+        { value: 365 * 24 * 60 * 60 * 1000, label: '365' },
+      ],
+
+      value_nonVerifiedMaintainDurationList: [
+        { value: 7 * 24 * 60 * 60 * 1000, label: '7' },
+        { value: 14 * 24 * 60 * 60 * 1000, label: '14' },
+        { value: 30 * 24 * 60 * 60 * 1000, label: '30' },
+      ],
     };
   },
   created() {
     const self = this;
-    //const HOST = window.location.host;
-    //self.value_rtspPath = 'https://' + HOST + '/exe/intercom.zip';
-    self.value_videoPath =
-      'https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip';
-    self.value_rtspPath =
-      'rtsp://[username]:[password]@' + window.location.hostname + ':8554/live.sdp';
+    // const HOST = window.location.host;
+    // self.value_rtspPath = 'https://' + HOST + '/exe/intercom.zip';
+    self.value_videoPath = 'https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip';
+    self.value_rtspPath = `rtsp://[username]:[password]@${window.location.hostname}:8554/live.sdp`;
 
     // self.$globalGetSystemInfo(function (err, data) {
     //   if (data != null) {
@@ -631,132 +909,129 @@ export default {
     //   }
     // });
 
-    self.$globalGetAiraManagerSetting(function (err, data) {
+    self.$globalGetAiraManagerSetting((err, data) => {
       if (!err) {
-        self.$globalAiraManagerSettings = Object.assign({}, data);
+        self.$globalAiraManagerSettings = { ...data };
         self.value_airaManagerHostName = data.manager_host;
         self.value_airaManagerPort = data.manager_port;
         self.value_enableAiraManager = data.manager_enable;
       }
     });
 
-    self.$globalGetTabletSetting(function (err, data) {
+    self.$globalGetTabletSetting((err, data) => {
       if (!err) {
         self.value_tabletSettings = data;
 
         self.value_rtspUsername = self.checkAndReturnValue(
           self.value_tabletSettings.rtsp_username,
-          ''
+          '',
         );
         self.value_rtspPassword = self.checkAndReturnValue(
           self.value_tabletSettings.rtsp_password,
-          ''
+          '',
         );
         self.value_enableRtsp = self.checkAndReturnValue(
           self.value_tabletSettings.enable_rtsp_camera,
-          false
+          false,
         );
         self.value_rtspActivated = self.checkAndReturnValue(
           self.value_tabletSettings.enable_rtsp_camera,
-          false
+          false,
         );
         self.value_enableClockinMode = self.checkAndReturnValue(
           self.value_tabletSettings.enable_clock_mode,
-          false
+          false,
         );
         self.value_haveToWearFaceMask = self.checkAndReturnValue(
           self.value_tabletSettings.have_to_wear_face_mask,
-          false
+          false,
         );
         self.value_faceMaskEnhancement = self.checkAndReturnValue(
           self.value_tabletSettings.face_mask_enhancement,
-          false
+          false,
         );
         self.value_showProfilePhoto = self.checkAndReturnValue(
           self.value_tabletSettings.show_profile_photo,
-          false
+          false,
         );
         self.value_showVerifyIndication = self.checkAndReturnValue(
           self.value_tabletSettings.show_verify_indication,
-          false
+          false,
         );
         self.value_displayVerifyResultTime = self.checkAndReturnValue(
           self.value_tabletSettings.display_verify_result_time,
-          false
+          false,
         );
         self.value_temperatureUnitCelsius = self.checkAndReturnValue(
           self.value_tabletSettings.temperature_unit_celsius,
-          false
+          false,
         );
         self.value_enableIdCard = self.checkAndReturnValue(
           self.value_tabletSettings.enable_id_card,
-          false
+          false,
         );
         self.value_enableTwoFactorAuthentication = self.checkAndReturnValue(
           self.value_tabletSettings.enable_two_factor_authentication,
-          false
+          false,
         );
 
         self.value_alarmVolume = self.checkAndReturnValue(
           self.value_tabletSettings.audio_alarm_volume,
-          0
+          0,
         );
         self.value_highTemperatureThreshold_Celsius = self.checkAndReturnValue(
           self.value_tabletSettings.high_temperature,
-          38
+          38,
         );
 
         self.value_tabletSystemPassword = self.checkAndReturnValue(
           self.value_tabletSettings.system_password,
-          '123456'
+          '123456',
         );
 
-        self.value_highTemperatureThreshold_Fahrenheit =
-          (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
-        self.value_highTemperatureThreshold =
+        self.value_highTemperatureThreshold_Fahrenheit = (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
+        self.value_highTemperatureThreshold = self.value_temperatureUnitCelsius === true
+          ? self.value_highTemperatureThreshold_Celsius
+          : self.value_highTemperatureThreshold_Fahrenheit;
+        self.disp_highTemperatureThreshold = `${i18n.formatter.format('HighTemperatureThreshold')
+        } ${
           self.value_temperatureUnitCelsius === true
-            ? self.value_highTemperatureThreshold_Celsius
-            : self.value_highTemperatureThreshold_Fahrenheit;
-        self.disp_highTemperatureThreshold =
-          i18n.formatter.format('HighTemperatureThreshold') +
-          ' ' +
-          (self.value_temperatureUnitCelsius === true
             ? i18n.formatter.format('Celsius')
-            : i18n.formatter.format('Fahrenheit'));
+            : i18n.formatter.format('Fahrenheit')}`;
 
         self.value_verifyThreshold = self.checkAndReturnValue(
           self.value_tabletSettings.score_for_valid_face,
-          0.9
+          0.9,
         );
         self.value_antiSpoofingThreshold = self.checkAndReturnValue(
           self.value_tabletSettings.anti_spoofing_score,
-          0
+          0,
         );
         self.value_faceDetectThreshold = self.checkAndReturnValue(
           self.value_tabletSettings.face_detection_threshold,
-          0.5
+          0.5,
         );
-        //intercom
+        // intercom
         self.value_enableIntercom = self.checkAndReturnValue(
           self.value_tabletSettings.enable_intercom,
-          false
+          false,
         );
 
         // custom button
         if (self.value_tabletSettings.custom_trigger_button_settings != null) {
           self.value_enableCustomButton = self.checkAndReturnValue(
             self.value_tabletSettings.custom_trigger_button_settings.enable,
-            false
+            false,
           );
           self.value_customFunctionUrl = self.checkAndReturnValue(
             self.value_tabletSettings.custom_trigger_button_settings.url,
-            ''
+            '',
           );
         }
       }
     });
 
-    self.$globalFetchSupportedlanguagelist(function (err, data) {
+    self.$globalFetchSupportedlanguagelist((err, data) => {
       if (!err) {
         self.value_tabletInterfaceLangurageList = [];
         data.list.forEach((lang) => {
@@ -765,12 +1040,19 @@ export default {
             label: lang.display_name,
           });
         });
-        const activeLang = data.list.filter((l) => {
-          return l.active;
-        });
+        const activeLang = data.list.filter((l) => l.active);
         if (activeLang.length > 0) {
           self.value_tabletInterfaceLangurage = activeLang[0].language;
         } else self.value_tabletInterfaceLangurage = 'zh';
+      }
+    });
+
+    self.$globalGetSystemSettings((err, data) => {
+      if (!err) {
+        const { settings: { db } } = data;
+        if (db.verified_maintain_duration) this.value_verified_maintain_duration = db.verified_maintain_duration;
+        if (db.non_verified_maintain_duration) this.value_non_verified_maintain_duration = db.non_verified_maintain_duration;
+        if (db.maintain_disk_space_in_gb) this.value_maintain_disk_space_in_gb = db.maintain_disk_space_in_gb;
       }
     });
   },
@@ -778,9 +1060,16 @@ export default {
     const self = this;
     self.deviceProfile = JSON.parse(localStorage.getItem('deviceProfile'));
   },
-  computed: { },
+  computed: {
+    isFieldPassed() {
+      const number = parseInt(this.value_maintain_disk_space_in_gb, 10);
+      return Number.isInteger(number)
+        && this.value_maintain_disk_space_in_gb >= this.range_maintain_disk_space_in_gb[0]
+        && this.value_maintain_disk_space_in_gb <= this.range_maintain_disk_space_in_gb[1];
+    },
+  },
   watch: {
-    value_highTemperatureThreshold: function (value) {
+    value_highTemperatureThreshold(value) {
       const self = this;
       if (self.value_temperatureUnitCelsius == true) {
         self.value_highTemperatureThreshold_Celsius = value;
@@ -808,7 +1097,7 @@ export default {
     isDisplayVerifyResultTimeNumber(n) {
       const self = this;
       let ok = false;
-      var numbers = /^[0-9]+$/;
+      const numbers = /^[0-9]+$/;
       if (numbers.test(n)) {
         ok = Number.isInteger(Number(n));
       }
@@ -817,42 +1106,40 @@ export default {
     },
     selEnableTwoFactorAuthentication(e) {
       const self = this;
-      self.value_enableTwoFactorAuthentication = e.target.value == 'true' ? true : false;
+      self.value_enableTwoFactorAuthentication = e.target.value == 'true';
     },
     selEnableIdCard(e) {
       const self = this;
-      self.value_enableIdCard = e.target.value == 'true' ? true : false;
+      self.value_enableIdCard = e.target.value == 'true';
     },
 
     selFaceMaskDetection(e) {
       const self = this;
-      self.value_haveToWearFaceMask = e.target.value == 'true' ? true : false;
+      self.value_haveToWearFaceMask = e.target.value == 'true';
     },
     selFaceMaskEnhancement(e) {
       const self = this;
-      self.value_faceMaskEnhancement = e.target.value == 'true' ? true : false;
+      self.value_faceMaskEnhancement = e.target.value == 'true';
     },
     selVerifyDisplayPhoto(e) {
       const self = this;
-      self.value_showProfilePhoto = e.target.value == 'true' ? true : false;
+      self.value_showProfilePhoto = e.target.value == 'true';
     },
     selShowVerifyIndication(e) {
       const self = this;
-      self.value_showVerifyIndication = e.target.value == 'true' ? true : false;
+      self.value_showVerifyIndication = e.target.value == 'true';
     },
     selShowTemperatureUnit(e) {
       const self = this;
-      self.value_temperatureUnitCelsius = e.target.value == 'true' ? true : false;
-      self.disp_highTemperatureThreshold =
-        i18n.formatter.format('HighTemperatureThreshold') +
-        ' ' +
-        (self.value_temperatureUnitCelsius == true
-          ? i18n.formatter.format('Celsius')
-          : i18n.formatter.format('Fahrenheit'));
-      self.value_highTemperatureThreshold =
+      self.value_temperatureUnitCelsius = e.target.value == 'true';
+      self.disp_highTemperatureThreshold = `${i18n.formatter.format('HighTemperatureThreshold')
+      } ${
         self.value_temperatureUnitCelsius == true
-          ? self.value_highTemperatureThreshold_Celsius
-          : self.value_highTemperatureThreshold_Fahrenheit;
+          ? i18n.formatter.format('Celsius')
+          : i18n.formatter.format('Fahrenheit')}`;
+      self.value_highTemperatureThreshold = self.value_temperatureUnitCelsius == true
+        ? self.value_highTemperatureThreshold_Celsius
+        : self.value_highTemperatureThreshold_Fahrenheit;
     },
     selAlarmVolume(e) {
       const self = this;
@@ -867,16 +1154,15 @@ export default {
     },
     isValidThreshhole(n) {
       const self = this;
-      self.flag_verifySettingsOk =
-        self.isFloat(self.value_verifyThreshold) &&
-        self.isFloat(self.value_antiSpoofingThreshold) &&
-        self.isFloat(self.value_faceDetectThreshold);
+      self.flag_verifySettingsOk = self.isFloat(self.value_verifyThreshold)
+        && self.isFloat(self.value_antiSpoofingThreshold)
+        && self.isFloat(self.value_faceDetectThreshold);
       return self.isFloat(n);
     },
     isValidTempterature(n) {
       const self = this;
-      var numbers = /^[0-9]+$/;
-      var ok = false;
+      const numbers = /^[0-9]+$/;
+      let ok = false;
       if (numbers.test(n)) {
         ok = Number.isInteger(Number(n));
       } else {
@@ -890,13 +1176,13 @@ export default {
       let dataChange = false;
       self.flag_changingCustomButton = true;
       if (
-        self.value_tabletSettings.custom_trigger_button_settings == null ||
-        self.value_tabletSettings.custom_trigger_button_settings.enable !=
-        self.value_enableCustomButton ||
-        self.value_tabletSettings.custom_trigger_button_settings.url !=
-        self.value_customFunctionUrl
+        self.value_tabletSettings.custom_trigger_button_settings == null
+        || self.value_tabletSettings.custom_trigger_button_settings.enable
+        != self.value_enableCustomButton
+        || self.value_tabletSettings.custom_trigger_button_settings.url
+        != self.value_customFunctionUrl
       ) {
-        self.value_tabletSettings['custom_trigger_button_settings'] = {
+        self.value_tabletSettings.custom_trigger_button_settings = {
           enable: self.value_enableCustomButton,
           url: self.value_customFunctionUrl,
         };
@@ -916,18 +1202,16 @@ export default {
               self.value_enableIntercom = self.value_tabletSettings.enable_intercom;
               retry = false;
               pass = true;
-            } else {
-              if (counterRetry++ < 60) await self.sleep(2000);
-              else break;
-            }
+            } else if (counterRetry++ < 60) await self.sleep(2000);
+            else break;
           }
-          if (pass)
+          if (pass) {
             self.$fire({
               text: i18n.formatter.format('Successful'),
               type: 'success',
               timer: 3000,
             });
-          else self.$globalLogout();
+          } else self.$globalLogout();
         }
       }
       if (self.obj_loading) self.obj_loading.hide();
@@ -935,14 +1219,13 @@ export default {
     },
     async applyAiraManager() {
       const self = this;
-      var dataChange =
-        self.$globalAiraManagerSettings.manager_host != self.value_airaManagerHostName ||
-        self.$globalAiraManagerSettings.manager_port != self.value_airaManagerPort ||
-        self.$globalAiraManagerSettings.manager_enable != self.value_enableAiraManager;
+      const dataChange = self.$globalAiraManagerSettings.manager_host != self.value_airaManagerHostName
+        || self.$globalAiraManagerSettings.manager_port != self.value_airaManagerPort
+        || self.$globalAiraManagerSettings.manager_enable != self.value_enableAiraManager;
 
       if (dataChange) {
         self.$confirm(i18n.formatter.format('WillLossAllPersonData')).then(() => {
-          //if( confirm( self.disp_willLossAllPersonData ) ) {
+          // if( confirm( self.disp_willLossAllPersonData ) ) {
           self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
           self.$globalSetAiraManagerSetting(
             {
@@ -950,7 +1233,7 @@ export default {
               manager_host: self.value_airaManagerHostName,
               manager_port: self.value_airaManagerPort,
             },
-            function (error) {
+            (error) => {
               if (!error) {
                 self.$globalLogout();
                 self
@@ -958,14 +1241,14 @@ export default {
                     text: i18n.formatter.format('CompleteAndRestart'),
                     type: 'success',
                     showConfirmButton: false,
-                    //timerProgressBar : true,
+                    // timerProgressBar : true,
                     timer: 60000,
                     allowOutsideClick: () => { },
                   })
                   .then(() => { });
               }
               if (self.obj_loading) self.obj_loading.hide();
-            }
+            },
           );
         });
       }
@@ -993,18 +1276,16 @@ export default {
               self.value_enableIntercom = self.value_tabletSettings.enable_intercom;
               retry = false;
               pass = true;
-            } else {
-              if (counterRetry++ < 60) await self.sleep(2000);
-              else break;
-            }
+            } else if (counterRetry++ < 60) await self.sleep(2000);
+            else break;
           }
-          if (pass)
+          if (pass) {
             self.$fire({
               text: i18n.formatter.format('Successful'),
               type: 'success',
               timer: 3000,
             });
-          else self.$globalLogout();
+          } else self.$globalLogout();
         }
       }
       if (self.obj_loading) self.obj_loading.hide();
@@ -1016,9 +1297,9 @@ export default {
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
       self.flag_changingRtsp = true;
       if (
-        self.value_tabletSettings.rtsp_username != self.value_rtspUsername ||
-        self.value_tabletSettings.rtsp_password != self.value_rtspPassword ||
-        self.value_tabletSettings.enable_rtsp_camera != self.value_enableRtsp
+        self.value_tabletSettings.rtsp_username != self.value_rtspUsername
+        || self.value_tabletSettings.rtsp_password != self.value_rtspPassword
+        || self.value_tabletSettings.enable_rtsp_camera != self.value_enableRtsp
       ) {
         self.value_tabletSettings.rtsp_username = self.value_rtspUsername;
         self.value_tabletSettings.rtsp_password = self.value_rtspPassword;
@@ -1026,7 +1307,6 @@ export default {
         dataChange = true;
       }
       if (dataChange) {
-        let applyOk = false;
         const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
         if (!applyRet.error) {
           await self.sleep(15000);
@@ -1043,18 +1323,16 @@ export default {
               retry = false;
               pass = true;
               self.value_rtspActivated = self.value_enableRtsp;
-            } else {
-              if (counterRetry++ < 60) await self.sleep(2000);
-              else break;
-            }
+            } else if (counterRetry++ < 60) await self.sleep(2000);
+            else break;
           }
-          if (pass)
+          if (pass) {
             self.$fire({
               text: i18n.formatter.format('Successful'),
               type: 'success',
               timer: 3000,
             });
-          else self.$globalLogout();
+          } else self.$globalLogout();
         }
       }
       if (self.obj_loading) self.obj_loading.hide();
@@ -1104,35 +1382,32 @@ export default {
       self.flag_changingVerifySettings = true;
 
       if (
-        self.value_tabletSettings.score_for_valid_face != self.value_verifyThreshold ||
-        self.value_tabletSettings.anti_spoofing_score !=
-        self.value_antiSpoofingThreshold ||
-        self.value_tabletSettings.have_to_wear_face_mask !=
-        self.value_haveToWearFaceMask ||
-        self.value_tabletSettings.face_mask_enhancement !=
-        self.value_faceMaskEnhancement ||
-        self.value_tabletSettings.enable_id_card != self.value_enableIdCard ||
-        self.value_tabletSettings.enable_two_factor_authentication !=
-        self.value_enableTwoFactorAuthentication ||
-        self.value_tabletSettings.face_detection_threshold !=
-        self.value_faceDetectThreshold
+        self.value_tabletSettings.score_for_valid_face != self.value_verifyThreshold
+        || self.value_tabletSettings.anti_spoofing_score
+        != self.value_antiSpoofingThreshold
+        || self.value_tabletSettings.have_to_wear_face_mask
+        != self.value_haveToWearFaceMask
+        || self.value_tabletSettings.face_mask_enhancement
+        != self.value_faceMaskEnhancement
+        || self.value_tabletSettings.enable_id_card != self.value_enableIdCard
+        || self.value_tabletSettings.enable_two_factor_authentication
+        != self.value_enableTwoFactorAuthentication
+        || self.value_tabletSettings.face_detection_threshold
+        != self.value_faceDetectThreshold
       ) {
-        self.value_tabletSettings['score_for_valid_face'] = parseFloat(
-          self.value_verifyThreshold
+        self.value_tabletSettings.score_for_valid_face = parseFloat(
+          self.value_verifyThreshold,
         );
-        self.value_tabletSettings['anti_spoofing_score'] = parseFloat(
-          self.value_antiSpoofingThreshold
+        self.value_tabletSettings.anti_spoofing_score = parseFloat(
+          self.value_antiSpoofingThreshold,
         );
-        self.value_tabletSettings['face_detection_threshold'] = parseFloat(
-          self.value_faceDetectThreshold
+        self.value_tabletSettings.face_detection_threshold = parseFloat(
+          self.value_faceDetectThreshold,
         );
-        self.value_tabletSettings['have_to_wear_face_mask'] =
-          self.value_haveToWearFaceMask;
-        self.value_tabletSettings['face_mask_enhancement'] =
-          self.value_faceMaskEnhancement;
-        self.value_tabletSettings['enable_id_card'] = self.value_enableIdCard;
-        self.value_tabletSettings['enable_two_factor_authentication'] =
-          self.value_enableTwoFactorAuthentication;
+        self.value_tabletSettings.have_to_wear_face_mask = self.value_haveToWearFaceMask;
+        self.value_tabletSettings.face_mask_enhancement = self.value_faceMaskEnhancement;
+        self.value_tabletSettings.enable_id_card = self.value_enableIdCard;
+        self.value_tabletSettings.enable_two_factor_authentication = self.value_enableTwoFactorAuthentication;
 
         dataChange = true;
       }
@@ -1145,20 +1420,14 @@ export default {
           while (retry) {
             const ret = await self.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self['value_tabletSettings'] = ret.data;
-              self['value_verifyThreshold'] =
-                self.value_tabletSettings.score_for_valid_face;
-              self['value_faceDetectThreshold'] =
-                self.value_tabletSettings.face_detection_threshold;
-              self['value_antiSpoofingThreshold'] =
-                self.value_tabletSettings.anti_spoofing_score;
-              self['value_haveToWearFaceMask'] =
-                self.value_tabletSettings.have_to_wear_face_mask;
-              self['value_faceMaskEnhancement'] =
-                self.value_tabletSettings.face_mask_enhancement;
-              self['value_enableIdCard'] = self.value_tabletSettings.enable_id_card;
-              self['value_enableTwoFactorAuthentication'] =
-                self.value_tabletSettings.enable_two_factor_authentication;
+              self.value_tabletSettings = ret.data;
+              self.value_verifyThreshold = self.value_tabletSettings.score_for_valid_face;
+              self.value_faceDetectThreshold = self.value_tabletSettings.face_detection_threshold;
+              self.value_antiSpoofingThreshold = self.value_tabletSettings.anti_spoofing_score;
+              self.value_haveToWearFaceMask = self.value_tabletSettings.have_to_wear_face_mask;
+              self.value_faceMaskEnhancement = self.value_tabletSettings.face_mask_enhancement;
+              self.value_enableIdCard = self.value_tabletSettings.enable_id_card;
+              self.value_enableTwoFactorAuthentication = self.value_tabletSettings.enable_two_factor_authentication;
 
               retry = false;
               pass = true;
@@ -1183,22 +1452,20 @@ export default {
       self.flag_changingDisplaySettings = true;
 
       if (
-        self.value_tabletSettings.show_profile_photo != self.value_showProfilePhoto ||
-        self.value_tabletSettings.show_verify_indication !=
-        self.value_showVerifyIndication ||
-        self.value_tabletSettings.display_verify_result_time !=
-        Number(self.value_displayVerifyResultTime) ||
-        self.value_tabletSettings.temperature_unit_celsius !=
-        self.value_temperatureUnitCelsius
+        self.value_tabletSettings.show_profile_photo != self.value_showProfilePhoto
+        || self.value_tabletSettings.show_verify_indication
+        != self.value_showVerifyIndication
+        || self.value_tabletSettings.display_verify_result_time
+        != Number(self.value_displayVerifyResultTime)
+        || self.value_tabletSettings.temperature_unit_celsius
+        != self.value_temperatureUnitCelsius
       ) {
         self.value_tabletSettings.show_profile_photo = self.value_showProfilePhoto;
-        self.value_tabletSettings.show_verify_indication =
-          self.value_showVerifyIndication;
+        self.value_tabletSettings.show_verify_indication = self.value_showVerifyIndication;
         self.value_tabletSettings.display_verify_result_time = Number(
-          self.value_displayVerifyResultTime
+          self.value_displayVerifyResultTime,
         );
-        self.value_tabletSettings.temperature_unit_celsius =
-          self.value_temperatureUnitCelsius;
+        self.value_tabletSettings.temperature_unit_celsius = self.value_temperatureUnitCelsius;
 
         dataChange = true;
       }
@@ -1213,12 +1480,9 @@ export default {
             if (!ret.error && ret.data) {
               self.value_tabletSettings = ret.data;
               self.value_showProfilePhoto = self.value_tabletSettings.show_profile_photo;
-              self.value_showVerifyIndication =
-                self.value_tabletSettings.show_verify_indication;
-              self.value_displayVerifyResultTime =
-                self.value_tabletSettings.display_verify_result_time;
-              self.value_temperatureUnitCelsius =
-                self.value_tabletSettings.temperature_unit_celsius;
+              self.value_showVerifyIndication = self.value_tabletSettings.show_verify_indication;
+              self.value_displayVerifyResultTime = self.value_tabletSettings.display_verify_result_time;
+              self.value_temperatureUnitCelsius = self.value_tabletSettings.temperature_unit_celsius;
 
               retry = false;
               pass = true;
@@ -1243,13 +1507,12 @@ export default {
       self.flag_changingAlarmSettings = true;
 
       if (
-        self.value_tabletSettings.audio_alarm_volume != self.value_alarmVolume ||
-        self.value_tabletSettings.high_temperature !=
-        self.value_highTemperatureThreshold_Celsius
+        self.value_tabletSettings.audio_alarm_volume != self.value_alarmVolume
+        || self.value_tabletSettings.high_temperature
+        != self.value_highTemperatureThreshold_Celsius
       ) {
         self.value_tabletSettings.audio_alarm_volume = self.value_alarmVolume;
-        self.value_tabletSettings.high_temperature =
-          self.value_highTemperatureThreshold_Celsius;
+        self.value_tabletSettings.high_temperature = self.value_highTemperatureThreshold_Celsius;
 
         dataChange = true;
       }
@@ -1264,10 +1527,8 @@ export default {
             if (!ret.error && ret.data) {
               self.value_tabletSettings = ret.data;
               self.value_alarmVolume = self.value_tabletSettings.audio_alarm_volume;
-              self.value_highTemperatureThreshold_Celsius =
-                self.value_tabletSettings.high_temperature;
-              self.value_highTemperatureThreshold_Fahrenheit =
-                (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
+              self.value_highTemperatureThreshold_Celsius = self.value_tabletSettings.high_temperature;
+              self.value_highTemperatureThreshold_Fahrenheit = (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
               retry = false;
               pass = true;
             } else if (counterRetry++ < 10) await self.sleep(2000);
@@ -1298,9 +1559,7 @@ export default {
         while (retry) {
           const ret = await self.$globalFetchSupportedlanguagelist();
           if (!ret.error && ret.data) {
-            const activeLang = ret.data.list.filter((l) => {
-              return l.active;
-            });
+            const activeLang = ret.data.list.filter((l) => l.active);
             if (activeLang.length > 0) {
               self.value_tabletInterfaceLangurage = activeLang[0].language;
             } else self.value_tabletInterfaceLangurage = 'zh';
@@ -1356,6 +1615,24 @@ export default {
       if (self.obj_loading) self.obj_loading.hide();
       self.flag_changingTabletSystemPassword = false;
     },
+    async applySystemSetting() {
+      const payload = {
+        db: {
+          verified_maintain_duration: this.value_verified_maintain_duration,
+          non_verified_maintain_duration: this.value_non_verified_maintain_duration,
+          maintain_disk_space_in_gb: this.value_maintain_disk_space_in_gb,
+        },
+      };
+      this.$globalSetSystemSettings(payload, (err, data) => {
+        if (!err) {
+          this.$fire({
+            text: i18n.formatter.format('Successful'),
+            type: 'success',
+            timer: 3000,
+          });
+        }
+      });
+    },
     clickOnApplyAlarmSettings() {
       this.ApplyAlarmSettings();
     },
@@ -1385,6 +1662,9 @@ export default {
     },
     clickOnApplyCustomButton() {
       this.applyCustomButton();
+    },
+    clickOnApplySystemSetting() {
+      this.applySystemSetting();
     },
   },
 };

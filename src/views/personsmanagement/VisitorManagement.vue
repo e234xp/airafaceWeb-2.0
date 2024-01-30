@@ -6,13 +6,11 @@
           :onDelete="onDelete" :onImport="onImport" :onFetchDataCallback="onFetchDataCallback" />
       </CCol>
     </CRow>
-    <canvas ref="qrcode" id="qrcode" style="display: none;"></canvas>
   </div>
 </template>
 
 <script>
 import i18n from '@/i18n';
-import QrCodeWithLogo from 'qr-code-with-logo';
 import CPersonManagementForm from './forms/PersonManagementForm.vue';
 
 export default {
@@ -51,6 +49,7 @@ export default {
   methods: {
     async downloadTableItemsAsync(sliceSize, cb) {
       const self = this;
+      const loading = self.$loading.show({ container: self.$refs.formContainer });
       let shitf = 0;
       // let reset = true;
       let thereIsMoreData = true;
@@ -65,79 +64,31 @@ export default {
             shitf += sliceSize;
           } else thereIsMoreData = false;
           if (cb) {
-            // const vList = [];
-            // const tempReset = !!reset;
+            const vList = [];
             const tempMore = !!thereIsMoreData;
-            // const asyncOperation = (item) => {
-            //   return new Promise(async (resolve) => {
-            //     const qrCanvas = this.$refs.qrcode;
-            //     const num = { uuid: item.uuid };
-            //     const jstr = JSON.stringify(num);
 
-            //     await QrCodeWithLogo.toCanvas({
-            //       canvas: qrCanvas,
-            //       content: jstr,
-            //       width: 220,
-            //       height: 220,
-            //       logo: {
-            //         src: '/img/logo/airaLogo.png',
-            //         radius: 1,
-            //       },
-            //     });
-            //     const qrCode = await qrCanvas.toDataURL();
-            //     console.log(qrCode);
-
-            //     // vList.push({ ...item, qrCode: `<img src='${qrCode}' width='100' height='100'>` });
-            //     cb(error, false, tempMore, [{ ...item, qrCodeDisplay: `<img src='${qrCode}' width='100' height='100'>`, qrCode: qrCode.replace('data:image/png;base64,', '') }]);
-            //     resolve();
-            //   });
-            // };
             for (let i = 0; i < data.visitor_list.length; i += 1) {
-              const qrCanvas = this.$refs.qrcode;
-              const num = { uuid: data.visitor_list[i].uuid };
-              const jstr = JSON.stringify(num);
+              // const qrCanvas = this.$refs.qrcode;
+              // const num = { uuid: data.visitor_list[i].uuid };
+              // const jstr = JSON.stringify(num);
 
-              await QrCodeWithLogo.toCanvas({
-                canvas: qrCanvas,
-                content: jstr,
-                width: 220,
-                height: 220,
-                logo: {
-                  src: '/img/logo/airaLogo.png',
-                  radius: 1,
-                },
-              });
-              const qrCode = await qrCanvas.toDataURL();
-
-              // vList.push({ ...item, qrCode: `<img src='${qrCode}' width='100' height='100'>` });
-              cb(error, false, tempMore, [{ ...data.visitor_list[i], qrCodeDisplay: `<img src='${qrCode}' width='100' height='100'>`, qrCode: qrCode.replace('data:image/png;base64,', '') }]);
+              // await QrCodeWithLogo.toCanvas({
+              //   canvas: qrCanvas,
+              //   content: jstr,
+              //   width: 220,
+              //   height: 220,
+              //   logo: {
+              //     src: '/img/logo/airaLogo.png',
+              //     radius: 1,
+              //   },
+              // });
+              // const qrCode = await qrCanvas.toDataURL();
+              // vList.push({ ...data.visitor_list[i], qrCodeDisplay: `<img src='${qrCode}' width='100' height='100'>`, qrCode: qrCode.replace('data:image/png;base64,', '') });
+              vList.push({ ...data.visitor_list[i], qrCodeDisplay: '', qrCode: '' });
             }
-            // data.visitor_list.forEach(async (item) => {
-            //   // await asyncOperation(item);
-            //   const qrCanvas = this.$refs.qrcode;
-            //   const num = { uuid: item.uuid };
-            //   const jstr = JSON.stringify(num);
-
-            //   await QrCodeWithLogo.toCanvas({
-            //     canvas: qrCanvas,
-            //     content: jstr,
-            //     width: 220,
-            //     height: 220,
-            //     logo: {
-            //       src: '/img/logo/airaLogo.png',
-            //       radius: 1,
-            //     },
-            //   });
-            //   const qrCode = await qrCanvas.toDataURL();
-            //   console.log(qrCode);
-
-            //   // vList.push({ ...item, qrCode: `<img src='${qrCode}' width='100' height='100'>` });
-            //   cb(error, false, tempMore, [{ ...item, qrCodeDisplay: `<img src='${qrCode}' width='100' height='100'>`, qrCode: qrCode.replace('data:image/png;base64,', '') }]);
-            // });
-            // console.log(vList);
-            // cb(error, reset, thereIsMoreData, vList);
+            if (!this.thereIsMoreData) loading.hide();
+            cb(error, false, tempMore, vList);
           }
-          // reset = false;
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
@@ -169,7 +120,7 @@ export default {
     onFetchDataCallback(cb) {
       const self = this;
       self.flag_keepingDownload = true;
-      self.downloadTableItemsAsync(2500, cb);
+      self.downloadTableItemsAsync(20000, cb);
     },
     canDelete() {
       return !(this.$globalAiraManagerSettings.manager_enable === true);

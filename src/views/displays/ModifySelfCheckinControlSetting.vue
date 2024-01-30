@@ -40,11 +40,11 @@ export default {
           ...this.form,
           ...data.SELFCHECKIN,
         };
-        console.log(this.form);
+        // console.log(this.form);
       }
     });
     const { data } = await this.$globalGetTabletList('', 0, 3000);
-    console.log(data);
+    // console.log(data);
     this.list = data.data_list.map((item) => ({ label: item.identity, value: item.code }));
   },
   methods: {

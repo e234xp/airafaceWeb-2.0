@@ -49,6 +49,7 @@ export default {
   methods: {
     async downloadTableItemsAsync(sliceSize, cb) {
       const self = this;
+      const loading = self.$loading.show({ container: self.$refs.formContainer });
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
@@ -60,7 +61,10 @@ export default {
           if (data.total_length && data.total_length > (sliceSize + shitf)) {
             thereIsMoreData = true;
             shitf += sliceSize;
-          } else thereIsMoreData = false;
+          } else {
+            loading.hide();
+            thereIsMoreData = false;
+          }
           if (cb) cb(error, reset, thereIsMoreData, data.person_list);
           reset = false;
         } else {
@@ -94,7 +98,7 @@ export default {
     onFetchDataCallback(cb) {
       const self = this;
       self.flag_keepingDownload = true;
-      self.downloadTableItemsAsync(2500, cb);
+      self.downloadTableItemsAsync(20000, cb);
     },
     canDelete() {
       return !(this.$globalAiraManagerSettings.manager_enable === true);

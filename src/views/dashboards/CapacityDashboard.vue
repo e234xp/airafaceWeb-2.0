@@ -1,25 +1,45 @@
 <template>
-  <div class="ratio-wrap ratio-wrap-16x9" v-show="!isLoadSetting">
-    <div class="ratio-content capacity-dashboard"
-      :style="{backgroundImage:'url('+displaySettings.background_image+')'}">
-
-      <div class="dashboard-header d-flex justify-content-between" style="margin-left: 20px; margin-right: 20px;">
+  <div
+    class="ratio-wrap ratio-wrap-16x9"
+    v-show="!isLoadSetting"
+  >
+    <div
+      class="ratio-content capacity-dashboard"
+      :style="{backgroundImage:'url('+displaySettings.background_image+')'}"
+    >
+      <div
+        class="dashboard-header d-flex justify-content-between"
+        style="margin-left: 20px; margin-right: 20px;"
+      >
         <div class="d-flex align-items-center">
-          <div class="dashboard-attendance-logo" @click="toLoginPage"
-            :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"></div>
-          <div class="attendance-title"></div>
+          <div
+            class="dashboard-attendance-logo"
+            @click="toLoginPage"
+            :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"
+          />
+          <div class="attendance-title" />
         </div>
         <div class="current-date-time text-white ff-noto-sans fw-200">
-          <div class="fz-xxxl current-date">{{ currentDate }}</div>
-          <div class="fz-super-large lh-6">{{ currentTime }}</div>
+          <div class="fz-xxxl current-date">
+            {{ currentDate }}
+          </div>
+          <div class="fz-super-large lh-6">
+            {{ currentTime }}
+          </div>
         </div>
       </div>
 
       <!-------------------  Occupancy ------------------>
-      <div class="dashboard-divider" style="margin-left: 20px; margin-right: 20px;"></div>
+      <div
+        class="dashboard-divider"
+        style="margin-left: 20px; margin-right: 20px;"
+      />
 
       <!-------------------  Attendance - BEGIN ------------------>
-      <div class="attendance-top-box" v-show="displaySettings.displayChart">
+      <div
+        class="attendance-top-box"
+        v-show="displaySettings.displayChart"
+      >
         <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
         <div class="attendance-statistics-box">
           <!-- 第 1 列：標籤 -->
@@ -31,11 +51,18 @@
           <div class="attendance-statistics-data-box">
             <div class="doughnut-chart-canvas-wrap">
               <!-- Attendance 甜甜圈圖表 -->
-              <canvas id="doughnut-chart-canvas" class=""></canvas>
+              <canvas
+                id="doughnut-chart-canvas"
+                class=""
+              />
             </div>
             <div class="d-flex align-items-end">
-              <div class="attendance-header-present">{{ attendancePresent }}</div>
-              <div class="attendance-header-total">/ {{ attendanceTotal }}</div>
+              <div class="attendance-header-present">
+                {{ attendancePresent }}
+              </div>
+              <div class="attendance-header-total">
+                / {{ attendanceTotal }}
+              </div>
             </div>
           </div>
 
@@ -43,12 +70,18 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center">
-                <CIcon name="cilSortDescending" class="attendance-sort-icon text-white" />
+                <CIcon
+                  name="cilSortDescending"
+                  class="attendance-sort-icon text-white"
+                />
                 <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ $t("SortByGroupName") }}</span>
               </div>
               <button class="btn-reset">
-                <img class="attendance-dropdown-arrow" src="@/assets/img/dropdown_arrow_down.svg"
-                  alt="dropdown_arrow_down" />
+                <img
+                  class="attendance-dropdown-arrow"
+                  src="@/assets/img/dropdown_arrow_down.svg"
+                  alt="dropdown_arrow_down"
+                >
               </button>
             </div>
           </div>
@@ -56,7 +89,7 @@
 
         <!-- Attendance 柱狀圖統計圖表 -->
         <div class="attendance-chart-canvas-wrap">
-          <canvas id="attendance-chart-canvas"></canvas>
+          <canvas id="attendance-chart-canvas" />
         </div>
       </div>
 
@@ -66,36 +99,65 @@
       <div style="display: grid !important; gap: 0.7%; grid-template-columns: 66% 33%;">
         <!-- getGridStyleByAmount(), -->
         <div style="padding-left: 10px;">
-          <div :class="[
-            'grid-4x4',
-            'd-flex',
-            'flex-wrap',
-            'person-list-container',
-          ]">
-            <div v-for="(person, index) in currentEntryPersons" :key="index" :class="[
-              'person-card',
-              'inline-block',
-              person.status === 0 ? 'normal-person-card' : '',
-              person.status === 2 ? 'abnormal-person-card' : '',
-              person.status === 1 ? 'absent-person-card' : '',
-              'person-card-4x4',
-            ]" :style="'zoom: ' + zoomRatio + ' !important;'">
-              <div class="d-flex justify-content-between align-items-center person-image-box">
-                <img v-show="displaySettings.displayPhoto!='NONE'"
+          <div
+            :class="[
+              'grid-4x4',
+              'd-flex',
+              'flex-wrap',
+              'person-list-container',
+            ]"
+          >
+            <div
+              v-for="(person, index) in currentEntryPersons"
+              :key="index"
+              :class="[
+                'person-card',
+                'inline-block',
+                person.status === 0 ? 'normal-person-card' : '',
+                person.status === 2 ? 'abnormal-person-card' : '',
+                person.status === 1 ? 'absent-person-card' : '',
+                'person-card-4x4',
+              ]"
+              :style="'zoom: ' + zoomRatio + ' !important;'"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center person-image-box"
+                style="height: 100%;"
+              >
+                <img
+                  v-show="displaySettings.displayPhoto !== 'NONE'"
                   :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
-                  :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`" />
+                  :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
+                >
+                <img
+                  :src="`data:image/png;base64,${emptyFace}`"
+                  v-show="displaySettings.displayPhoto === 'NONE'"
+                >
 
-                <div class="person-info-box text-white">
-                  <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-xxl">{{showField(person,
-                    displaySettings.line1)}} &nbsp;</div>
-                  <div :class="[
-                    person.status === 1 ? 'absent-person-name' : 'person-name',
-                    'fz-l',
-                    'fw-600',
-                  ]" :style="'zoom: ' + zoomRatio + ' !important;'">
+                <div
+                  class="person-info-box text-white d-flex flex-column justify-content-center"
+                >
+                  <div
+                    v-show="displaySettings.displayCardMode=='STANDARD'"
+                    class="fz-xxl"
+                  >
+                    {{ showField(person,
+                                 displaySettings.line1) }} &nbsp;
+                  </div>
+                  <div
+                    :class="[
+                      person.status === 1 ? 'absent-person-name' : 'person-name',
+                      'fz-l',
+                      'fw-600',
+                    ]"
+                    :style="'zoom: ' + zoomRatio + ' !important;'"
+                  >
                     {{ getDisplayName(person) }}
                   </div>
-                  <div v-if="person.status !== 1" class="d-flex align-items-end temperature-info">
+                  <div
+                    v-if="person.status !== 1"
+                    class="d-flex align-items-end temperature-info"
+                  >
                     <!-- <div :class="[
                       'fz-xxxl',
                       'fw-700',
@@ -106,73 +168,102 @@
                   </div>
                   <span class="temperature-unit fz-sm">°{{ displaySettings.temperatureUnit }}</span> -->
                   </div>
-                  <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-sm fw-300">
+                  <div
+                    v-show="displaySettings.displayCardMode=='STANDARD'"
+                    class="fz-sm fw-300"
+                  >
                     {{
-                    person.clockinRecord ?
-                    person.clockinRecord.timestamp ?
-                    formatEpochTime(person.clockinRecord.timestamp)
-                    : "&nbsp;"
-                    : "&nbsp;" }}
+                      person.clockinRecord ?
+                        person.clockinRecord.timestamp ?
+                          formatEpochTime(person.clockinRecord.timestamp)
+                          : "&nbsp;"
+                        : "&nbsp;" }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-show="isLoadSetting" class="align-items-center" style="color:white">
+          <div
+            v-show="isLoadSetting"
+            class="align-items-center"
+            style="color:white"
+          >
             Loading...
           </div>
         </div>
         <div>
           <!-- getGridStyleByAmount(), -->
-          <div :class="[
-          'grid-2x4',
-          'd-flex',
-          'flex-wrap',
-          'person-list-container',
-        ]">
-            <div v-for="(person, index) in currentLeavePersons" :key="index" :class="[
-            'person-card',
-            'inline-block',
-            person.status === 0 ? 'normal-person-card' : '',
-            person.status === 2 ? 'abnormal-person-card' : '',
-            person.status === 1 ? 'absent-person-card' : '',
-            'person-card-2x4',
-          ]" :style="'zoom: ' + zoomRatio + ' !important;'">
+          <div
+            :class="[
+              'grid-2x4',
+              'd-flex',
+              'flex-wrap',
+              'person-list-container',
+            ]"
+          >
+            <div
+              v-for="(person, index) in currentLeavePersons"
+              :key="index"
+              :class="[
+                'person-card',
+                'inline-block',
+                person.status === 0 ? 'normal-person-card' : '',
+                person.status === 2 ? 'abnormal-person-card' : '',
+                person.status === 1 ? 'absent-person-card' : '',
+                'person-card-2x4',
+              ]"
+              :style="'zoom: ' + zoomRatio + ' !important;'"
+            >
               <div class="d-flex justify-content-between align-items-center person-image-box">
-                <img v-show="displaySettings.displayPhoto!='NONE'"
+                <img
+                  v-show="displaySettings.displayPhoto!='NONE'"
                   :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
-                  :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`" />
+                  :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`"
+                >
 
                 <div class="person-info-box text-white">
-                  <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-xxl">{{showField(person,
-                    displaySettings.line1)}} &nbsp;</div>
-                  <div :class="[
-                  person.status === 1 ? 'absent-person-name' : 'person-name',
-                  'fz-l',
-                  'fw-600',
-                ]" :style="'zoom: ' + zoomRatio + ' !important;'">
+                  <div
+                    v-show="displaySettings.displayCardMode=='STANDARD'"
+                    class="fz-xxl"
+                  >
+                    {{ showField(person,
+                                 displaySettings.line1) }} &nbsp;
+                  </div>
+                  <div
+                    :class="[
+                      person.status === 1 ? 'absent-person-name' : 'person-name',
+                      'fz-l',
+                      'fw-600',
+                    ]"
+                    :style="'zoom: ' + zoomRatio + ' !important;'"
+                  >
                     {{ getDisplayName(person) }}
                   </div>
-                  <div v-if="person.status !== 1" class="d-flex align-items-end temperature-info">
-                  </div>
-                  <div v-show="displaySettings.displayCardMode=='STANDARD'" class="fz-sm fw-300">
+                  <div
+                    v-if="person.status !== 1"
+                    class="d-flex align-items-end temperature-info"
+                  />
+                  <div
+                    v-show="displaySettings.displayCardMode=='STANDARD'"
+                    class="fz-sm fw-300"
+                  >
                     <span style="margin-right: 20px;">
                       {{
-                      person.clockinRecord ?
-                      person.clockinRecord.timestamp ?
-                      formatEpochTime(person.clockinRecord.timestamp)
-                      : "&nbsp;"
-                      : "&nbsp;" }}
+                        person.clockinRecord ?
+                          person.clockinRecord.timestamp ?
+                            formatEpochTime(person.clockinRecord.timestamp)
+                            : "&nbsp;"
+                          : "&nbsp;" }}
                     </span>
 
                     <span>
                       {{
-                      person.clockoutRecord ?
-                      person.clockoutRecord.timestamp ?
-                      formatEpochTime(person.clockoutRecord.timestamp)
-                      : "&nbsp;"
-                      : "&nbsp;" }}
+                        person.clockoutRecord ?
+                          person.clockoutRecord.timestamp ?
+                            formatEpochTime(person.clockoutRecord.timestamp)
+                            : "&nbsp;"
+                          : "&nbsp;" }}
                     </span>
                   </div>
                 </div>
@@ -336,7 +427,7 @@ export default {
         patrolidleTime: 60,
 
         // Personal View
-        displayGroup: [],
+        displayGroup: ['All Person'],
         displayCardMode: 'STANDARD',
         displayPhoto: 'REGISTER',
         line1: 'NONE',
@@ -360,6 +451,7 @@ export default {
       currentGroup: '',
 
       refreshKey: 1,
+      emptyFace,
     };
   },
   mixins: [capacityModel, chartHelper],
@@ -382,9 +474,7 @@ export default {
     currentPageIndex: {
       deep: true,
       immediate: true,
-      handler(newIndex, oldIndex) {
-        console.log('currentPageIndex', newIndex, oldIndex);
-
+      handler(newIndex) {
         const self = this;
 
         self.displayAmount = self.setupPageLayoutAmount();
@@ -412,15 +502,13 @@ export default {
               if (err === null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
-                }
-                else {
+                } else {
                   person.display_image = emptyFace;
                 }
 
                 if (data.register_image !== '') {
                   person.register_image = data.register_image;
-                }
-                else {
+                } else {
                   person.register_image = emptyFace;
                 }
               }
@@ -806,6 +894,7 @@ export default {
           ret = person.snapshot_image;
           break;
         case 'NONE':
+          break;
         default:
           ret = emptyFace;
           break;
@@ -815,9 +904,11 @@ export default {
 
     // Tulip
     refreshData() {
+      console.log('========= refreshData');
       const self = this;
 
       self.displayAmount = self.setupPageLayoutAmount();
+      console.log(self.entryPersons);
 
       self.entryPersons.sort((a, b) => b.clockinRecord.timestamp - a.clockinRecord.timestamp);
       self.currentEntryPersons = self.entryPersons.slice(
@@ -825,7 +916,9 @@ export default {
         self.displayAmount[0],
       );
       self.totalPageIndex[0] = Math.ceil(self.entryPersons.length / self.displayAmount[0]) - 1;
+      console.log(self.entryPersons);
 
+      console.log(self.leavePersons);
       self.leavePersons.sort((a, b) => b.clockoutRecord.timestamp - a.clockoutRecord.timestamp);
       self.currentLeavePersons = self.leavePersons.slice(
         self.currentPageIndex[1],
@@ -835,6 +928,7 @@ export default {
 
       self.currentEntryPersons.forEach((pPerson) => {
         const person = pPerson;
+        console.log(person);
 
         if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALE'
           + 'gHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
@@ -861,15 +955,13 @@ export default {
             if (err == null && data) {
               if (data.display_image !== '') {
                 person.display_image = data.display_image;
-              }
-              else {
+              } else {
                 person.display_image = emptyFace;
               }
 
               if (data.register_image !== '') {
                 person.register_image = data.register_image;
-              }
-              else {
+              } else {
                 person.register_image = emptyFace;
               }
             }
@@ -922,7 +1014,7 @@ export default {
       const self = this;
 
       self.currentTimeLooper = setInterval(async () => {
-        console.log('dashboards self.currentTimeLooper');
+        // console.log('dashboards self.currentTimeLooper');
 
         const now = new Date();
         // let month = now.getMonth() + 1;
@@ -944,7 +1036,7 @@ export default {
 
     //  merge Person and Verify Date
     applyVerifyToPerson(data) {
-      // console.log('============  applyVerifyToPerson');
+      console.log('============  applyVerifyToPerson');
       const self = this;
 
       let passModeRecord = [];
@@ -1090,12 +1182,12 @@ export default {
             }
           }
 
-          self.entryPersons = self.persons.filter((p) => p.status === 0);
-          self.leavePersons = self.persons.filter((p) => p.status === 1);
+          self.entryPersons = self.persons.filter((p) => p.status === 0 && p.punchMode !== undefined);
+          self.leavePersons = self.persons.filter((p) => p.status === 1 && p.punchMode !== undefined);
 
-          console.log('c persons', self.persons);
-          console.log('c entryPersons', self.entryPersons);
-          console.log('c leavePersons', self.leavePersons);
+          // console.log('c persons', self.persons);
+          // console.log('c entryPersons', self.entryPersons);
+          // console.log('c leavePersons', self.leavePersons);
           // console.log('c hourlyPresentData', self.hourlyPresentData);
           // console.log('c hourlyPersonInData', self.hourlyPersonInData);
           // console.log('c hourlyPersonOutData', self.hourlyPersonOutData);
@@ -1157,10 +1249,10 @@ export default {
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
 
-          console.log('p persons', self.persons);
-          console.log('P hourlyPresentData', self.hourlyPresentData);
-          console.log('p hourlyPersonInData', self.hourlyPersonInData);
-          console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
+          // console.log('p persons', self.persons);
+          // console.log('P hourlyPresentData', self.hourlyPresentData);
+          // console.log('p hourlyPersonInData', self.hourlyPersonInData);
+          // console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
         }
       }
     },

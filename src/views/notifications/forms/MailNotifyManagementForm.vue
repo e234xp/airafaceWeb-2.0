@@ -188,11 +188,11 @@ export default {
     displayFields(row) {
       let { fields } = row;
       if (fields) {
-        console.log('111', fields);
+        // console.log('111', fields);
         fields = fields.slice(0, 3).map(
           (item) => i18n.formatter.format(item),
         );
-        console.log('222', fields);
+        // console.log('222', fields);
 
         return fields.join(', ');
       }

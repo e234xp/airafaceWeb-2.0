@@ -5,7 +5,10 @@
         {{ disp_header }}
       </div>
 
-      <CCard class="mt-5" v-if="deviceProfile.support_wifi">
+      <CCard
+        class="mt-5"
+        v-if="deviceProfile.support_wifi"
+      >
         <CCardHeader>
           <td>
             <span class="h3">{{ disp_wifiSettings }}</span>
@@ -16,10 +19,15 @@
           <CCol sm="12">
             <CCol sm="12">
               <CRow class="align-items-center mb-3">
-                <CSwitch size="lg" class="ml-0" color="success" shape="pill"
-                  @update:checked="value_wifiActivate = !value_wifiActivate" :checked="value_wifiActivate"
-                  :disabled="flag_wifiCannotBeDisabled">
-                </CSwitch>
+                <CSwitch
+                  size="lg"
+                  class="ml-0"
+                  color="success"
+                  shape="pill"
+                  @update:checked="value_wifiActivate = !value_wifiActivate"
+                  :checked="value_wifiActivate"
+                  :disabled="flag_wifiCannotBeDisabled"
+                />
                 <div>
                   <span class="h4 ml-2">
                     <span v-if="value_wifiActivate">{{ disp_enable }}</span>
@@ -28,12 +36,21 @@
                 </div>
                 <div v-if="flag_connectionOk">
                   <span class="h4 ml-4">
-                    <span v-if="value_wifiConnected" style="color: #00c861">
+                    <span
+                      v-if="value_wifiConnected"
+                      style="color: #00c861"
+                    >
                       {{ disp_linked }}
                     </span>
-                    <span v-else style="color: #c86100">
+                    <span
+                      v-else
+                      style="color: #c86100"
+                    >
                       {{ disp_notLinked }}
-                      <span v-if="value_ethernetConnected" style="color: #c86100">
+                      <span
+                        v-if="value_ethernetConnected"
+                        style="color: #c86100"
+                      >
                         {{ disp_priorityIsEthernet }}
                       </span>
                     </span>
@@ -51,35 +68,55 @@
               <th class="h5 w-25 table-th">
                 {{ disp_currentIpAddress }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput size="lg" :value="value_wifiActiveSsid" disabled />
+                <CInput
+                  size="lg"
+                  :value="value_wifiActiveSsid"
+                  disabled
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" :value="value_wifiActiveIpaddress" disabled />
+                <CInput
+                  size="lg"
+                  :value="value_wifiActiveIpaddress"
+                  disabled
+                />
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
 
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_availableWifi }}</th>
-              <th class="h5 w-25 table-th">{{ disp_wifiPassword }}</th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th">
+                {{ disp_availableWifi }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_wifiPassword }}
+              </th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :options="value_avaiableWifiSsidList" @change="selWifiSsid($event)"
-                  :disabled="flag_refreshingWifiList">
+                <CSelect
+                  size="lg"
+                  :options="value_avaiableWifiSsidList"
+                  @change="selWifiSsid($event)"
+                  :disabled="flag_refreshingWifiList"
+                >
                   <template #prepend>
-                    <CButton size="sm" color="light" @click="refreshAvailableWifiSsidList()"
-                      :disabled="flag_refreshingWifiList">
+                    <CButton
+                      size="sm"
+                      color="light"
+                      @click="refreshAvailableWifiSsidList()"
+                      :disabled="flag_refreshingWifiList"
+                    >
                       <!-- <i class="fa fa-sync fa-spin"/> -->
                       <i class="fa fa-sync" />
                     </CButton>
@@ -87,22 +124,39 @@
                 </CSelect>
               </td>
               <td class="table-td">
-                <CInput size="lg" :type="flag_view_password ? 'text' : 'password'" v-model="value_wifiPassword"
-                  :disabled="!flag_wifiNeedPassword">
+                <CInput
+                  size="lg"
+                  :type="flag_view_password ? 'text' : 'password'"
+                  v-model="value_wifiPassword"
+                  :disabled="!flag_wifiNeedPassword"
+                >
                   <template #append-content>
-                    <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                    <CButton
+                      @click="viewPassword"
+                      style="padding: 0.375rem 0.375rem;"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
                     </CButton>
                   </template>
                 </CInput>
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl" @click="clickOnChangeWifi" :disabled="flag_refreshingWifiList">
+                <CButton
+                  class="btn btn-primary fz-xl"
+                  @click="clickOnChangeWifi"
+                  :disabled="flag_refreshingWifiList"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>
@@ -117,23 +171,40 @@
           <CCol sm="12">
             <CCol sm="12">
               <CRow class="align-items-center mb-3">
-                <CSwitch size="lg" class="mr-1" color="success" shape="pill"
-                  @update:checked="value_ethernetActivate = !value_ethernetActivate" :checked="value_ethernetActivate"
-                  :disabled="flag_lanCannotBeDisabled">
-                </CSwitch>
+                <CSwitch
+                  size="lg"
+                  class="mr-1"
+                  color="success"
+                  shape="pill"
+                  @update:checked="value_ethernetActivate = !value_ethernetActivate"
+                  :checked="value_ethernetActivate"
+                  :disabled="flag_lanCannotBeDisabled"
+                />
 
                 <div>
-                  <span class="h4 ml-2" v-if="value_ethernetActivate">{{
+                  <span
+                    class="h4 ml-2"
+                    v-if="value_ethernetActivate"
+                  >{{
                     disp_enable
-                    }}</span>
-                  <span class="h4 ml-2" v-else>{{ disp_disable }}</span>
+                  }}</span>
+                  <span
+                    class="h4 ml-2"
+                    v-else
+                  >{{ disp_disable }}</span>
                 </div>
                 <div v-if="flag_connectionOk">
                   <span class="h4 ml-4">
-                    <span v-if="value_ethernetConnected" style="color: #00c861">
+                    <span
+                      v-if="value_ethernetConnected"
+                      style="color: #00c861"
+                    >
                       {{ disp_linked }}
                     </span>
-                    <span v-else style="color: #c86100">
+                    <span
+                      v-else
+                      style="color: #c86100"
+                    >
                       {{ disp_notLinked }}
                     </span>
                   </span>
@@ -143,49 +214,85 @@
           </CCol>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_ipAddress }}</th>
-              <th class="h5 w-25 table-th">{{ disp_netmask }}</th>
-              <th class="h5 w-25 table-th">{{ disp_gateway }}</th>
-              <th class="h5 w-25 table-th">{{ disp_dns }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_ipAddress }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_netmask }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_gateway }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_dns }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
                 <div>
                   <span v-if="flag_ethernetModeIsDhcp">
-                    <CInput size="lg" v-model="value_dhcpEthernetIp" disabled />
+                    <CInput
+                      size="lg"
+                      v-model="value_dhcpEthernetIp"
+                      disabled
+                    />
                   </span>
                   <span v-else>
-                    <CInput size="lg" v-model="value_staticEthernetIp" />
+                    <CInput
+                      size="lg"
+                      v-model="value_staticEthernetIp"
+                    />
                   </span>
                 </div>
               </td>
               <td class="table-td">
                 <div>
                   <span v-if="flag_ethernetModeIsDhcp">
-                    <CInput size="lg" v-model="value_dhcpEthernetMask" disabled />
+                    <CInput
+                      size="lg"
+                      v-model="value_dhcpEthernetMask"
+                      disabled
+                    />
                   </span>
                   <span v-else>
-                    <CInput size="lg" v-model="value_staticEthernetMask" />
+                    <CInput
+                      size="lg"
+                      v-model="value_staticEthernetMask"
+                    />
                   </span>
                 </div>
               </td>
               <td class="table-td">
                 <div>
                   <span v-if="flag_ethernetModeIsDhcp">
-                    <CInput size="lg" v-model="value_dhcpEthernetGateway" disabled />
+                    <CInput
+                      size="lg"
+                      v-model="value_dhcpEthernetGateway"
+                      disabled
+                    />
                   </span>
                   <span v-else>
-                    <CInput size="lg" v-model="value_staticEthernetGateway" />
+                    <CInput
+                      size="lg"
+                      v-model="value_staticEthernetGateway"
+                    />
                   </span>
                 </div>
               </td>
               <td class="table-td">
                 <div>
                   <span v-if="flag_ethernetModeIsDhcp">
-                    <CInput size="lg" v-model="value_dhcpEthernetDns" disabled />
+                    <CInput
+                      size="lg"
+                      v-model="value_dhcpEthernetDns"
+                      disabled
+                    />
                   </span>
                   <span v-else>
-                    <CInput size="lg" v-model="value_staticEthernetDns" />
+                    <CInput
+                      size="lg"
+                      v-model="value_staticEthernetDns"
+                    />
                   </span>
                 </div>
               </td>
@@ -197,23 +304,29 @@
               <th class="h5 w-25 table-th">
                 {{ disp_ethernetMode }}
               </th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
-              <th class="h5 w-25 table-th"></th>
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
+              <th class="h5 w-25 table-th" />
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" :value.sync="value_selectedEthernetMode" :options="value_ethernetModeOptions"
-                  @change="selEthernetMode($event)">
-                </CSelect>
+                <CSelect
+                  size="lg"
+                  :value.sync="value_selectedEthernetMode"
+                  :options="value_ethernetModeOptions"
+                  @change="selEthernetMode($event)"
+                />
               </td>
               <td class="table-td">
-                <CButton class="btn btn-primary fz-xl w-100" @click="clickOnChangeEthernet">
+                <CButton
+                  class="btn btn-primary fz-xl w-100"
+                  @click="clickOnChangeEthernet"
+                >
                   {{ disp_apply }}
                 </CButton>
               </td>
-              <td class="table-td"></td>
-              <td class="table-td"></td>
+              <td class="table-td" />
+              <td class="table-td" />
             </tr>
           </table>
         </CCardBody>

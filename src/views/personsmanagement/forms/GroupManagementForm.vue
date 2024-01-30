@@ -2,27 +2,42 @@
   <div>
     <div>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ disp_header }}
+        </td>
       </CCol>
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
     <div>
       <CCol sm="12">
         <CCol sm="12">
           <CRow>
             <div>
-              <CButton class="btn btn-primary mb-3 mr-3" size="lg" @click="clickOnAdd()">
+              <CButton
+                class="btn btn-primary mb-3 mr-3"
+                size="lg"
+                @click="clickOnAdd()"
+              >
                 {{ disp_add }}
               </CButton>
             </div>
 
             <div>
-              <CButton class="btn btn-danger mb-3" size="lg" @click="clickOnMultipleDelete()">
+              <CButton
+                class="btn btn-danger mb-3"
+                size="lg"
+                @click="clickOnMultipleDelete()"
+              >
                 {{ disp_delete }}
               </CButton>
             </div>
             <div style="margin-left: auto">
-              <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+              <CInput
+                v-model.lazy="value_searchingFilter"
+                style="width: 400px"
+                size="lg"
+                :placeholder="disp_search"
+              >
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>
@@ -31,32 +46,73 @@
           </CRow>
         </CCol>
       </CCol>
-      <div style="height: 15px"></div>
+      <div style="height: 15px" />
     </div>
     <CCard>
       <CCardBody>
         <div>
           <div>
-            <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" ref="mainTable" :checkbox-config="{ checkMethod: checkboxFixed }">
+            <vxe-table
+              :data="value_dataItemsToShow"
+              stripe
+              align="center"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              ref="mainTable"
+              :checkbox-config="{ checkMethod: checkboxFixed }"
+            >
               <!-- @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent" -->
 
-              <vxe-table-column type="checkbox" width="10%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="disp_name" width="16%"
-                align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="numberOfPersonInGroup"
-                :title="disp_numberOfPersonInGroup" width="12%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="numberOfVisitorInGroup"
-                :title="disp_numberOfVisitorInGroup" width="12%" align="center"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="remarks" width="14%" :title="disp_remarks"
-                align="left"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="createDate" :title="disp_createDate" width="20%"
-                align="center"></vxe-table-column>
-              <vxe-table-column field="actionButton" title="" type="html" />
+              <vxe-table-column
+                type="checkbox"
+                width="10%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="nameToShow"
+                :title="disp_name"
+                width="16%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="numberOfPersonInGroup"
+                :title="disp_numberOfPersonInGroup"
+                width="12%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="numberOfVisitorInGroup"
+                :title="disp_numberOfVisitorInGroup"
+                width="12%"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="remarks"
+                width="14%"
+                :title="disp_remarks"
+                align="left"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="createDate"
+                :title="disp_createDate"
+                width="20%"
+                align="center"
+              />
+              <vxe-table-column
+                field="actionButton"
+                title=""
+                type="html"
+              />
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -64,9 +120,12 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange">
-          </vxe-pager>
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
       </CCardBody>
     </CCard>

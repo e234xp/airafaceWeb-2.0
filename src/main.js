@@ -65,8 +65,9 @@ const mainVue = new Vue({
     App,
   },
   watch: {
-    $route() {
-      if (!this.$globalServerTokenIsEffective()) { router.push('/login'); }
+    $route(param) {
+      if (param.path === '/forgetpassword') router.push(param.path);
+      else if (!this.$globalServerTokenIsEffective()) { router.push('/login'); }
     },
   },
   beforeCreate() {

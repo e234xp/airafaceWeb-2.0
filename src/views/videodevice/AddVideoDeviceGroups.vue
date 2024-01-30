@@ -20,6 +20,21 @@
         </CCardBody>
       </CCard>
 
+      <CCard
+        style="height: 34rem;"
+        v-else-if="isOnStep(1)"
+      >
+        <CCardBody style="display: flex; justify-content: center; align-items: center;">
+          <CRow>
+            <CCol sm="12">
+              <p class="display-4 row justify-content-center">
+                {{ $t('Complete') }}
+              </p>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
+
     </CCol>
 
     <CCol sm="12">

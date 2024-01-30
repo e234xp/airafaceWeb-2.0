@@ -79,6 +79,23 @@
           />
         </CCol>
       </CRow>
+
+      <CRow
+        sm="6"
+        class="h5 ml-2 mb-3"
+        style="padding-top: 10px; text-align: right"
+      >
+        {{ $t('VideoBasicCOlNameAntiSpoofingScore') }}
+      </CRow>
+      <CRow>
+        <CCol sm="6">
+          <CSelect
+            size="lg"
+            v-model="localStep3form.antispoofing_score"
+            :options="param_antiSpoofingOptions"
+          />
+        </CCol>
+      </CRow>
     </div>
   </div>
 </template>
@@ -119,6 +136,13 @@ export default {
       disp_limitNumbers: i18n.formatter.format('limitNumbers'),
       disp_limitNumber0to1: i18n.formatter.format('limitNumber0to1'),
       disp_limitNumber100up: i18n.formatter.format('limitNumbers100up'),
+
+      param_antiSpoofingOptions: [
+        { label: i18n.formatter.format('SpoofingLevelNone'), value: 0 },
+        { label: i18n.formatter.format('SpoofingLevelLow'), value: 0.1 },
+        { label: i18n.formatter.format('SpoofingLevelHigh'), value: 0.3 },
+        { label: i18n.formatter.format('SpoofingLevelExtremeHigh'), value: 0.6 },
+      ],
     };
   },
   watch: {

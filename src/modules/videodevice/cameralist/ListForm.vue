@@ -106,11 +106,14 @@
 
             <vxe-table-column
               :show-overflow="ellipsisMode"
-              field="status"
               :title="disp_status"
-              width="10%"
+              width="15%"
               align="center"
-            />
+            >
+              <template #default="{ row }">
+                {{ row.alive ? $t('Enable') : $t('Disable') }}
+              </template>
+            </vxe-table-column>
 
             <vxe-table-column
               :show-overflow="ellipsisMode"

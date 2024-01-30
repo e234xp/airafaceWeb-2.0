@@ -83,7 +83,7 @@ export default {
       // console.log('onFetchDataCallback' )
       const self = this;
       self.flag_keepingDownloadPersonData = true;
-      self.downloadPersonDataAsync(250, cb);
+      self.downloadPersonDataAsync(20000, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnDay, uuidList, sliceSize, cb) {

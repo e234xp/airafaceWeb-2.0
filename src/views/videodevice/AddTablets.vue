@@ -50,6 +50,21 @@
         </CCardBody>
       </CCard>
 
+      <CCard
+        style="height: 34rem;"
+        v-else-if="isOnStep(2)"
+      >
+        <CCardBody style="display: flex; justify-content: center; align-items: center;">
+          <CRow>
+            <CCol sm="12">
+              <p class="display-4 row justify-content-center">
+                {{ $t('Complete') }}
+              </p>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
+
       <!-- FaceCapture Form -->
       <!-- <CCard v-else-if="isOnStep(2)">
         <CCardBody>
@@ -260,7 +275,7 @@ export default {
         rtsp_password: '',
       };
 
-      console.log('GO!,', form);
+      // console.log('GO!,', form);
 
       return form;
     },
@@ -487,7 +502,7 @@ export default {
             temperature_detection_is_must: true,
           };
 
-          console.log('postData', postData);
+          // console.log('postData', postData);
 
           const { data } = await this.create(postData);
 

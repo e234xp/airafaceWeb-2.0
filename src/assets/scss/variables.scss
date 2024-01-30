@@ -20,9 +20,15 @@ $dashboard-gray-disabled: #2F3032;
 $dashboard-progressbar-track: #616468;
 $dashboard-present: #7FB97A;
 $dashboard-absent: #647E9D;
+$dashboard-unknown: #CC6666;
 $dashboard-danger: #E0694C;
 $dashboard-danger-light: #FF9E87;
 $dashboard-danger-bg: #3F3330;
 $dashboard-white-disabled: #A0A3A9;
 $attendance-present-blue: #8DCDFF;
 $attendance-total-gray: #737578;
+
+$guard-btn-bg: linear-gradient(180deg, #404040 0%, #232323 44.79%, #000 47.4%, #232323 100%);
+$guard-btn-bg-hover: radial-gradient(50% 31.25% at 50% 100%, #67CAFF 0%, rgba(103, 202, 255, 0.00) 100%), linear-gradient(180deg, #404040 0%, #232323 44.79%, #000 47.4%, #232323 100%);
+$guard-primary-btn-bg: linear-gradient(180deg, #4FADDF 0%, #3186B4 44.79%, #2475A0 47.4%, #3186B4 100%);
+$guard-primary-btn-bg-hover: radial-gradient(50% 31.25% at 50% 100%, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(180deg, #4FADDF 0%, #3186B4 44.79%, #2475A0 47.4%, #3186B4 100%);

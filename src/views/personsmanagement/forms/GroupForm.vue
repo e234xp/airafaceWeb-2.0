@@ -1,31 +1,63 @@
 <template>
   <div>
     <CCol sm="12">
-      <div class="h1 mb-5">{{ disp_header }}</div>
-      <stepprogress class="w-step-progress-3" :active-thickness="param_activeThickness"
-        :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
-        :passive-color="param_passiveColor" :steps="[disp_inputGroupInfo, disp_selectGroupPerson, disp_complete]"
-        :current-step="flag_currentSetp" :line-thickness="param_lineThickness" icon-class="fa fa-check">
-      </stepprogress>
+      <div class="h1 mb-5">
+        {{ disp_header }}
+      </div>
+      <stepprogress
+        class="w-step-progress-3"
+        :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness"
+        :active-color="param_activeColor"
+        :passive-color="param_passiveColor"
+        :steps="[disp_inputGroupInfo, disp_selectGroupPerson, disp_complete]"
+        :current-step="flag_currentSetp"
+        :line-thickness="param_lineThickness"
+        icon-class="fa fa-check"
+      />
     </CCol>
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
           <!-- <div style="height:50px;"></div> -->
           <CCol sm="12">
             <table class="table-layout">
               <tr class="table-tr">
-                <th class="h5 w-25 table-th">{{ disp_groupName }}</th>
-                <th class="h5 table-th" colspan="3">{{ disp_remarks }}</th>
+                <th class="h5 w-25 table-th">
+                  {{ disp_groupName }}
+                </th>
+                <th
+                  class="h5 table-th"
+                  colspan="3"
+                >
+                  {{ disp_remarks }}
+                </th>
               </tr>
               <tr class="table-tr">
                 <td class="table-td">
-                  <CInput size="lg" :invalid-feedback="disp_noEmptyNoSpaceNoSpecialRepeat" value=""
-                    v-model="value_groupName" placeholder="" :is-valid="groupNameValidator" required
-                    :disabled="flag_modifyMode" />
+                  <CInput
+                    size="lg"
+                    :invalid-feedback="disp_noEmptyNoSpaceNoSpecialRepeat"
+                    value=""
+                    v-model="value_groupName"
+                    placeholder=""
+                    :is-valid="groupNameValidator"
+                    required
+                    :disabled="flag_modifyMode"
+                  />
                 </td>
-                <td class="table-td" colspan="3">
-                  <CInput class="mb-form-row" size="lg" v-model="value_remarks" />
+                <td
+                  class="table-td"
+                  colspan="3"
+                >
+                  <CInput
+                    class="mb-form-row"
+                    size="lg"
+                    v-model="value_remarks"
+                  />
                 </td>
               </tr>
             </table>
@@ -35,39 +67,79 @@
       <CCard :class="showOnStep(1)">
         <CCardBody>
           <CRow>
-            <CCol sm="1"> </CCol>
+            <CCol sm="1" />
             <!-- 左欄 -->
             <CCol sm="4">
               <CRow class="mt-4">
                 <CCol sm="6">
-                  <div class="h3" style="font-weight: 800">
+                  <div
+                    class="h3"
+                    style="font-weight: 800"
+                  >
                     {{ disp_allPerson }}
                   </div>
                 </CCol>
 
                 <!-- 人員列表 人員、訪客切換 -->
                 <CCol sm="6">
-                  <segmented-control :options="segmetionOptions" :defaultSelectedOptionIdx="0" label="name"
-                    value="value" color="#fff" active-color="#20a8d8" :multiple="false" @select="onSelectType" />
+                  <segmented-control
+                    :options="segmetionOptions"
+                    :default-selected-option-idx="0"
+                    label="name"
+                    value="value"
+                    color="#fff"
+                    active-color="#20a8d8"
+                    :multiple="false"
+                    @select="onSelectType"
+                  />
                 </CCol>
               </CRow>
 
               <div class="mt-4">
-                <CInput v-model.lazy="value_searchingFilterForAll" class="w-100" size="lg" :placeholder="disp_search">
+                <CInput
+                  v-model.lazy="value_searchingFilterForAll"
+                  class="w-100"
+                  size="lg"
+                  :placeholder="disp_search"
+                >
                   <template #prepend-content>
                     <CIcon name="cil-search" />
                   </template>
                 </CInput>
               </div>
-              <vxe-table id="AllTable" :data="value_allItemsToShow" stripe :cell-style="cellStyle"
-                :header-cell-style="headerCellStyle" ref="allTable" show-header-overflow empty-text=" ">
-                <vxe-table-column type="checkbox" min-width="20%" align="center"></vxe-table-column>
-                <vxe-table-column show-overflow field="id" :title="disp_id" min-width="40%"
-                  align="left"></vxe-table-column>
-                <vxe-table-column show-overflow field="name" :title="disp_name" min-width="40%"
-                  align="left"></vxe-table-column>
+              <vxe-table
+                id="AllTable"
+                :data="value_allItemsToShow"
+                stripe
+                :cell-style="cellStyle"
+                :header-cell-style="headerCellStyle"
+                ref="allTable"
+                show-header-overflow
+                empty-text=" "
+              >
+                <vxe-table-column
+                  type="checkbox"
+                  min-width="20%"
+                  align="center"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="id"
+                  :title="disp_id"
+                  min-width="40%"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="name"
+                  :title="disp_name"
+                  min-width="40%"
+                  align="left"
+                />
               </vxe-table>
-              <vxe-pager class="h-theme-pager" :layouts="[
+              <vxe-pager
+                class="h-theme-pager"
+                :layouts="[
                   'PrevJump',
                   'PrevPage',
                   'Number',
@@ -75,47 +147,89 @@
                   'NextJump',
                   'FullJump',
                   'Total',
-                ]" :current-page="value_allTablePage.currentPage" :page-size="value_allTablePage.pageSize"
-                :total="value_allTablePage.totalResult" @page-change="handleAllPageChange">
-              </vxe-pager>
+                ]"
+                :current-page="value_allTablePage.currentPage"
+                :page-size="value_allTablePage.pageSize"
+                :total="value_allTablePage.totalResult"
+                @page-change="handleAllPageChange"
+              />
             </CCol>
             <!-- 中間欄 -->
-            <CCol sm="2" class="d-flex flex-column justify-content-center">
-              <CButton class="btn btn-outline-primary w-100 mb-4" @click="clickOnInsert()">
+            <CCol
+              sm="2"
+              class="d-flex flex-column justify-content-center"
+            >
+              <CButton
+                class="btn btn-outline-primary w-100 mb-4"
+                @click="clickOnInsert()"
+              >
                 <span class="mr-3">{{ disp_insert }}</span>
                 <span>{{ disp_addmark }}</span>
               </CButton>
 
-              <CButton class="btn btn-outline-danger w-100" @click="clickOnRemove()">
+              <CButton
+                class="btn btn-outline-danger w-100"
+                @click="clickOnRemove()"
+              >
                 <span class="mr-3">{{ disp_removemark }}</span>
                 <span>{{ disp_remove }}</span>
               </CButton>
             </CCol>
             <!-- 右欄 -->
             <CCol sm="4">
-              <div class="h3 mt-4 mb-3" style="font-weight: 800">
+              <div
+                class="h3 mt-4 mb-3"
+                style="font-weight: 800"
+              >
                 {{ disp_selectedPerson }}
               </div>
-              <div style="height: 23px"></div>
+              <div style="height: 23px" />
               <div style="margin-left: auto">
-                <CInput v-model.lazy="value_searchingFilterForSelected" style="width: 100%" size="lg"
-                  :placeholder="disp_search">
+                <CInput
+                  v-model.lazy="value_searchingFilterForSelected"
+                  style="width: 100%"
+                  size="lg"
+                  :placeholder="disp_search"
+                >
                   <template #prepend-content>
                     <CIcon name="cil-search" />
                   </template>
                 </CInput>
               </div>
 
-              <vxe-table :data="value_selectedItemsToShow" stripe show-header-overflow :cell-style="cellStyle"
-                :header-cell-style="headerCellStyle" ref="selectedTable" empty-text=" ">
-                <vxe-table-column type="checkbox" min-width="20%" align="center"></vxe-table-column>
-                <vxe-table-column min-width="40%" show-overflow field="id" :title="disp_id"
-                  align="left"></vxe-table-column>
-                <vxe-table-column show-overflow min-width="40%" field="name" :title="disp_name"
-                  align="left"></vxe-table-column>
+              <vxe-table
+                :data="value_selectedItemsToShow"
+                stripe
+                show-header-overflow
+                :cell-style="cellStyle"
+                :header-cell-style="headerCellStyle"
+                ref="selectedTable"
+                empty-text=" "
+              >
+                <vxe-table-column
+                  type="checkbox"
+                  min-width="20%"
+                  align="center"
+                />
+                <vxe-table-column
+                  min-width="40%"
+                  show-overflow
+                  field="id"
+                  :title="disp_id"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  min-width="40%"
+                  field="name"
+                  :title="disp_name"
+                  align="left"
+                />
               </vxe-table>
 
-              <vxe-pager class="h-theme-pager" :layouts="[
+              <vxe-pager
+                class="h-theme-pager"
+                :layouts="[
                   'PrevJump',
                   'PrevPage',
                   'Number',
@@ -123,20 +237,28 @@
                   'NextJump',
                   'FullJump',
                   'Total',
-                ]" :current-page="value_selectedTablePage.currentPage" :page-size="value_selectedTablePage.pageSize"
-                :total="value_selectedTablePage.totalResult" @page-change="handleSelectedPageChange">
-              </vxe-pager>
+                ]"
+                :current-page="value_selectedTablePage.currentPage"
+                :page-size="value_selectedTablePage.pageSize"
+                :total="value_selectedTablePage.totalResult"
+                @page-change="handleSelectedPageChange"
+              />
             </CCol>
-            <CCol sm="1"> </CCol>
+            <CCol sm="1" />
           </CRow>
         </CCardBody>
       </CCard>
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
-              <p class="display-4 row justify-content-center">{{ disp_complete }}</p>
+              <p class="display-4 row justify-content-center">
+                {{ disp_complete }}
+              </p>
             </CCol>
           </CRow>
         </CCardBody>
@@ -146,18 +268,32 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton variant="outline" class="btn btn-outline-primary btn-w-normal fz-lg" @click="clickOnPrev">{{
-            value_returnRouteName }}
+          <CButton
+            variant="outline"
+            class="btn btn-outline-primary btn-w-normal fz-lg"
+            @click="clickOnPrev"
+          >
+            {{
+              value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary btn-w-normal fz-lg" @click="clickOnPrev">{{ disp_previous }}
+          <CButton
+            class="btn btn-outline-primary btn-w-normal fz-lg"
+            @click="clickOnPrev"
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary btn-w-normal fz-lg" @click="clickOnNext" :disabled="!flag_groupNamePass">{{
-            nextButtonName() }}
+          <CButton
+            class="btn btn-primary btn-w-normal fz-lg"
+            @click="clickOnNext"
+            :disabled="!flag_groupNamePass"
+          >
+            {{
+              nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -267,7 +403,7 @@ export default {
     let personDownloadOk = false;
     let visitorDownloadOk = false;
     self.flag_keepingDownload = true;
-    self.downloadPersonAsync(1000, (error, reset, more, tableItems) => {
+    self.downloadPersonAsync(20000, (error, reset, more, tableItems) => {
       if (!error) {
         if (reset) {
           self.value_allPersonList = [];

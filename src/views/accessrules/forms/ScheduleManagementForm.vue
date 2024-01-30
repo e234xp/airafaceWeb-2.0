@@ -2,27 +2,45 @@
   <div>
     <div>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ disp_header }}
+        </td>
       </CCol>
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
     <div>
       <CCol sm="12">
         <CCol sm="12">
           <CRow>
             <div>
-              <CButton class="btn btn-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnAdd()">
+              <CButton
+                class="btn btn-primary btn-w-sm mr-3 mb-3"
+                size="lg"
+                @click="clickOnAdd()"
+              >
                 {{ disp_add }}
               </CButton>
             </div>
 
             <div>
-              <CButton class="btn btn-danger btn-w-sm mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()">
+              <CButton
+                class="btn btn-danger btn-w-sm mr-3 mb-3"
+                size="lg"
+                @click="clickOnMultipleDelete()"
+              >
                 {{ disp_delete }}
               </CButton>
             </div>
-            <div class="d-flex" style="margin-left: auto">
-              <CInput v-model.lazy="value_searchingFilter" style="width: 280px" size="lg" :placeholder="disp_search">
+            <div
+              class="d-flex"
+              style="margin-left: auto"
+            >
+              <CInput
+                v-model.lazy="value_searchingFilter"
+                style="width: 280px"
+                size="lg"
+                :placeholder="disp_search"
+              >
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>
@@ -37,10 +55,20 @@
       <CCardBody>
         <div>
           <div id="LineNotifyManagementFrom">
-            <vxe-table stripe ref="mainTable" align="left" :data="value_dataItemsToShow" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" :edit-config="{ trigger: 'manual', mode: 'row' }">
-
-              <vxe-table-column type="checkbox" width="5%" align="center" />
+            <vxe-table
+              stripe
+              ref="mainTable"
+              align="left"
+              :data="value_dataItemsToShow"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              :edit-config="{ trigger: 'manual', mode: 'row' }"
+            >
+              <vxe-table-column
+                type="checkbox"
+                width="5%"
+                align="center"
+              />
               <!-- <vxe-table-column field="enable" width="10%" :show-overflow="ellipsisMode" :title="disp_enable">
                 <template #default="{ row }">
                   <label class="switch">
@@ -49,19 +77,40 @@
                   </label>
                 </template>
               </vxe-table-column> -->
-              <vxe-table-column field="name" width="25%" :show-overflow="ellipsisMode" :title="disp_name" />
-              <vxe-table-column field="type" width="40%" :show-overflow="ellipsisMode" :title="disp_recurrent">
+              <vxe-table-column
+                field="name"
+                width="25%"
+                :show-overflow="ellipsisMode"
+                :title="disp_name"
+              />
+              <vxe-table-column
+                field="type"
+                width="40%"
+                :show-overflow="ellipsisMode"
+                :title="disp_recurrent"
+              >
                 <template #default="{ row }">
                   {{ row.type == 'recurrent' ? $t('ScheduleRecurrent'): $t('ScheduleNonrecurrent') }}
                 </template>
               </vxe-table-column>
-              <vxe-table-column min-width="15%" align="center">
+              <vxe-table-column
+                min-width="15%"
+                align="center"
+              >
                 <template #default="{ row }">
                   <div class="d-flex flex-column align-items-center">
-                    <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">
+                    <vxe-button
+                      class="btn-in-cell-primary btn-in-cell"
+                      @click="clickOnModify(row)"
+                    >
                       {{ disp_modify }}
                     </vxe-button>
-                    <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">
+                    <vxe-button
+                      class="btn-in-cell"
+                      :class="[usedList.indexOf(row.uuid) >= 0 ? 'btn-in-cell-disabled' : 'btn-in-cell-danger']"
+                      :disabled="usedList.indexOf(row.uuid) >= 0"
+                      @click="clickOnSingleDelete(row)"
+                    >
                       {{ disp_delete }}
                     </vxe-button>
                   </div>
@@ -69,7 +118,8 @@
               </vxe-table-column>
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -77,8 +127,12 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange" />
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
       </CCardBody>
     </CCard>
@@ -121,10 +175,13 @@ export default {
     onDelete: { type: Function, default: () => null },
     onModify: { type: Function, default: () => null },
     onFetchDataCallback: { type: Function, default: () => null },
+    onFetchActionCallback: { type: Function, default: () => null },
   },
   data() {
     // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
+    const cloneObject = {
+      usedList: [],
+    };
     Object.assign(cloneObject, defaultlState(), this.formData);
 
     return cloneObject;
@@ -138,6 +195,7 @@ export default {
     const self = this;
 
     self.refreshTableItems();
+    self.refreshActionItems();
   },
 
   updated() { },
@@ -176,7 +234,6 @@ export default {
       // });
       self.value_dataItemsToShow = Object.assign([], sliceList);
     },
-
     refreshTableItems(cb) {
       const self = this;
       if (self.onFetchDataCallback) {
@@ -200,6 +257,13 @@ export default {
           } else if (cb) cb();
         });
       } else if (cb) cb();
+    },
+    refreshActionItems() {
+      if (this.onFetchActionCallback) {
+        this.onFetchActionCallback((error, reset, more, tableItems) => {
+          if (!error) this.usedList.push(...tableItems.map((item) => item.condition.schedule));
+        });
+      }
     },
     handlePageChange({ currentPage, pageSize }) {
       this.value_tablePage.currentPage = currentPage;
@@ -247,6 +311,17 @@ export default {
 
     deleteItem(listToDel) {
       const self = this;
+      const canDelete = listToDel.every((item) => self.usedList.indexOf(item.uuid) < 0);
+      if (!canDelete) {
+        self.$fire({
+          title: i18n.formatter.format('ScheduleUsed'),
+          text: '',
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+        });
+        return;
+      }
       if (self.onDelete) {
         self.onDelete(listToDel, (success) => {
           if (success) {

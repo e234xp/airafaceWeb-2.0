@@ -104,7 +104,8 @@ $btn-in-cell-height: 30px;
 
 .btn-in-cell-primary,
 .btn-in-cell-danger,
-.btn-in-cell-warning {
+.btn-in-cell-warning,
+.btn-in-cell-disabled {
     background: transparent !important;
     height: $btn-in-cell-height;
     -webkit-transition-duration: 0.3s !important;

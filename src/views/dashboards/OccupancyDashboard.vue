@@ -356,7 +356,7 @@ export default {
 
   data() {
     return {
-      unSuscribe: null,
+      unSubscribe: null,
       obj_loading: null,
 
       isLoadSetting: true,
@@ -424,7 +424,7 @@ export default {
         patrolidleTime: 60,
 
         // Personal View
-        displayGroup: [],
+        displayGroup: ['All Person'],
         displayCardMode: 'STANDARD',
         displayPhoto: 'REGISTER',
         line1: 'NAME',
@@ -627,7 +627,6 @@ export default {
     // console.log('created start');
 
     this.unSubscribe = this.$store.subscribe(async (mutation) => {
-      console.log(mutation);
       let payload = {};
       let person = {};
       switch (mutation.type) {
@@ -830,7 +829,7 @@ export default {
       self.currentTimeLooper = null;
     }
 
-    this.unSuscribe();
+    this.unSubscribe();
   },
   methods: {
     range(start, end) {
@@ -872,7 +871,7 @@ export default {
       const self = this;
 
       self.persons = await self.setupPersonData();
-      console.log(self.persons);
+      // console.log(self.persons);
 
       for (let i = self.persons.length - 1; i >= 0; i -= 1) {
         const r = self.persons[i];
@@ -1062,6 +1061,7 @@ export default {
           ret = person.snapshot_image;
           break;
         case 'NONE':
+          break;
         default:
           ret = emptyFace;
           break;
@@ -1251,8 +1251,6 @@ export default {
       if (data.length >= 1) {
         passModeRecord = data.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
-        console.log(passModeRecord);
-        console.log(clockModeRecord);
 
         // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
@@ -1410,9 +1408,9 @@ export default {
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
 
-          console.log('c persons', self.persons);
-          console.log('c entryPersons', self.entryPersons);
-          console.log('c leavePersons', self.leavePersons);
+          // console.log('c persons', self.persons);
+          // console.log('c entryPersons', self.entryPersons);
+          // console.log('c leavePersons', self.leavePersons);
         } else if (passModeRecord.length >= 1) {
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
 
@@ -1475,10 +1473,10 @@ export default {
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
 
-          console.log('p persons', self.persons);
-          console.log('P hourlyPresentData', self.hourlyPresentData);
-          console.log('p hourlyPersonInData', self.hourlyPersonInData);
-          console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
+          // console.log('p persons', self.persons);
+          // console.log('P hourlyPresentData', self.hourlyPresentData);
+          // console.log('p hourlyPersonInData', self.hourlyPersonInData);
+          // console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
         }
       }
     },
@@ -1553,7 +1551,7 @@ export default {
       if (containerElement) containerElement.classList.add('container-fluid-reset');
 
       setTimeout(() => {
-        console.log('initViews setTimeout');
+        // console.log('initViews setTimeout');
 
         self.zoomViews();
       }, 168);

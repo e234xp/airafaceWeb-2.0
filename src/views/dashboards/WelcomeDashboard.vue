@@ -64,6 +64,7 @@ export default {
 
   data() {
     return {
+      unSubscribe: null,
       obj_loading: null,
 
       isLoadSetting: true,
@@ -106,10 +107,6 @@ export default {
       const { payload } = mutation;
 
       let person = null;
-      if (payload !== undefined) {
-        person = payload.person;
-      }
-
       switch (mutation.type) {
         case 'changeWebSocket':
           if (mutation.payload === 0) {
@@ -125,14 +122,22 @@ export default {
             return;
           }
 
+          if (mutation.payload.type === 0) {
+            return;
+          }
+
+          if (payload !== undefined) {
+            person = payload.person || payload.person_info;
+          }
+
           if (person === undefined) {
             console.log('created subscribe', 'payload.person === undefined');
             return;
           }
 
-          person.snapshot_image = payload.face_image;
+          person.snapshot_image = payload.snapshot || payload.face_image;
 
-          self.checkRecord(person);
+          self.checkRecord({ ...person, uuid: payload.person_id, groups: payload.groups });
           break;
         default:
           break;
@@ -140,7 +145,6 @@ export default {
     });
 
     self.isLoadSetting = false;
-    console.log('created end');
   },
 
   async mounted() {
@@ -181,6 +185,8 @@ export default {
     if (headerElement) headerElement.classList.remove('c-header-reset');
     if (footerElement) footerElement.classList.remove('c-footer-reset');
     if (containerElement) containerElement.classList.remove('container-fluid-reset');
+
+    this.unSubscribe();
 
     if (self.looper) {
       clearInterval(self.looper);
@@ -299,10 +305,10 @@ export default {
 
       let inDisplayGroup = false;
 
-      if (r.group_list) {
-        if (Array.isArray(r.group_list)) {
-          inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
-          r.PriorityGroup = r.group_list.some((value) => self.displaySettings.priorityGroup.indexOf(value) >= 0);
+      if (r.groups) {
+        if (Array.isArray(r.groups)) {
+          inDisplayGroup = r.groups.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
+          r.PriorityGroup = r.groups.some((value) => self.displaySettings.priorityGroup.indexOf(value) >= 0);
         }
       }
 
@@ -336,7 +342,7 @@ export default {
         if (p) {
           r.register_image = p.register_image;
           r.display_image = p.display_image;
-          r.group_list = p.group_list;
+          r.group_list = p.groups;
           r.title = p.extra_info.title;
           r.department = p.extra_info.department;
         }
@@ -458,12 +464,16 @@ export default {
           g = g.filter((item) => !(item === 'All Person' || item === 'All Visitor'));
           ret = g.join(', ');
           break;
-        case 'JOBTITLE': ret = person.title; break;
-        case 'DEPARTMENT': ret = person.department; break;
+        case 'JOBTITLE': ret = person.title;
+          break;
+        case 'DEPARTMENT': ret = person.department;
+          break;
         case 'REGISTER': ret = person.register_image === '' ? emptyFace : person.register_image; break;
         case 'DISPLAY': ret = person.display_image === '' ? emptyFace : person.display_image; break;
         case 'SNAPSHOT': ret = person.snapshot_image; break;
         case 'NONE':
+          if (line === 'displayPhoto') ret = emptyFace;
+          break;
         default: ret = emptyFace; break;
       }
       return ret;

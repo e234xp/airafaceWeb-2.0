@@ -4,7 +4,8 @@
       <CCol sm="12">
         <CScheduleManagementForm :formData="$data" :onAdd="onAdd"
           :onModify="onModify" :onDelete="onDelete"
-          :onFetchDataCallback="onFetchDataCallback" />
+          :onFetchDataCallback="onFetchDataCallback"
+          :onFetchActionCallback="onFetchActionCallback" />
       </CCol>
     </CRow>
   </div>
@@ -21,6 +22,7 @@ export default {
     return {
       type: 'Schedule',
       flag_keepingDownload: false,
+      flag_keepingActionDownload: false,
     };
   },
   created() { },
@@ -35,6 +37,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     console.log('ScheduleManagement', to, from, next);
     this.flag_keepingDownload = false;
+    this.flag_keepingActionDownload = false;
     next();
   },
   methods: {
@@ -78,10 +81,48 @@ export default {
       }
     },
 
+    async downloadActionItemsAsync(sliceSize, cb) {
+      let shitf = 0;
+      let reset = true;
+      let thereIsMoreData = true;
+
+      while (this.flag_keepingActionDownload && thereIsMoreData) {
+        const ret = await this.$globalGetActionRuleList(
+          '', shitf, sliceSize,
+        );
+        // const ret = getLineNotifyList('', shitf, sliceSize);
+        const rData = ret.data;
+        const rErr = ret.error;
+        if (rErr == null) {
+          if (rData.total_length && rData.total_length > (sliceSize + shitf)) {
+            thereIsMoreData = true;
+            shitf += sliceSize;
+          } else thereIsMoreData = false;
+          if (cb) cb(rErr, reset, thereIsMoreData, rData.data_list);
+          reset = false;
+        } else {
+          thereIsMoreData = false;
+          if (cb) cb(rErr, true, false, []);
+          this.$fire({
+            title: i18n.formatter.format('NetworkLoss'),
+            text: '',
+            type: 'error',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+          });
+        }
+      }
+    },
+
     onFetchDataCallback(cb) {
       const self = this;
       self.flag_keepingDownload = true;
       self.downloadTableItemsAsync(/* sliceSize */ 3000, cb);
+    },
+
+    onFetchActionCallback(cb) {
+      this.flag_keepingActionDownload = true;
+      this.downloadActionItemsAsync(/* sliceSize */ 3000, cb);
     },
 
     onAdd(allRecords) {

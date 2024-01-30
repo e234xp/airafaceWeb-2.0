@@ -396,7 +396,7 @@
           />
         </CCol>
       </CRow>
-      <CRow>
+      <!-- <CRow>
         <CCol
           col="3"
           class="pt-2 label"
@@ -411,7 +411,7 @@
             :options="[$t('Excluded'), $t('Embedded'), $t('Files')]"
           />
         </CCol>
-      </CRow>
+      </CRow> -->
 
       <CRow>
         <CCol
@@ -550,7 +550,11 @@
             size="lg"
             :value.sync="value_snapshotFileType"
             :disabled="value_fileType != '.xlsx'"
-            :options="[$t('Excluded'), $t('Embedded'), $t('Files')]"
+            :options="[
+              { label: $t('Excluded'), value: 'Excluded' },
+              { label: $t('Embedded'), value: 'Embedded' },
+              { label: $t('Files'), value: 'Files' }
+            ]"
           />
         </CCol>
       </CRow>
@@ -710,7 +714,7 @@ const defaultlState = () => ({
   value_fileType: '.xlsx',
   value_txtSeparator: ',',
   value_separator: '',
-  value_snapshotFileType: '',
+  value_snapshotFileType: 'Excluded',
 
   value_masterfieldsforExport: [
     { key: 'id', value: i18n.formatter.format('PersonId') },
@@ -2051,23 +2055,23 @@ export default {
           clockTime: self.value_attendanceDataListToReview[idx].clockTime,
         });
 
-        const pos = self.value_masterexportFields.indexOf('face_image');
+        const pos = self.value_detailexportFields.indexOf('face_image');
         if (pos >= 0) {
-          if (self.value_snapshotFileType === 'Embaded' || self.value_snapshotFileType === 'Files') {
+          if (self.value_snapshotFileType === 'Embedded' || self.value_snapshotFileType === 'Files') {
             if (self.value_attendanceDataListToReview[idx].face_image_id) {
               const imageRet = await self.$globalFetchVerifyPhoto(self.value_attendanceDataListToReview[idx].face_image_id);
 
               if (imageRet && imageRet.data) {
-                if (self.value_snapshotFileType === 'Embaded') {
+                if (self.value_snapshotFileType === 'Embedded') {
                   const photoId = workbook.addImage({
                     base64: imageRet.data.face_image,
                     extension: 'jpeg',
                   });
+                  worksheet.lastRow.height = 60;
                   worksheet.addImage(
                     photoId,
-                    `${String.fromCharCode(64 + pos)}${worksheet.rowCount}:${String.fromCharCode(64 + pos)}${worksheet.rowCount}`,
+                    `${String.fromCharCode(66 + pos)}${worksheet.rowCount}:${String.fromCharCode(66 + pos)}${worksheet.rowCount}`,
                   );
-                  worksheet.lastRow.height = 60;
                 }
 
                 if (self.value_snapshotFileType === 'Files') {

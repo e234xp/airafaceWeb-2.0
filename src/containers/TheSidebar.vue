@@ -224,6 +224,11 @@ const nav = [
             name: i18n.formatter.format('Capacity'),
             to: '/displays/modifycapacitycontrolsetting',
           },
+          {
+            permission: ['Admin', 'PowerUser'],
+            name: i18n.formatter.format('GuardBoard'),
+            to: '/displays/modifyguardcontrolsetting',
+          },
           // {
           //   permission: ['Admin', 'PowerUser'],
           //   name: 'Self Checkin',

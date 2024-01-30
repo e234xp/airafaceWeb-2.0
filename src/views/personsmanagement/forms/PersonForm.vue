@@ -54,7 +54,7 @@
               <td class="table-td">
                 <CInput class="input-no-spin" :disabled="!canModify()" size="lg" v-model="value_cardNumber"
                   placeholder="" :invalid-feedback="disp_noRepeat" :is-valid="cardNumberValidator"
-                  oninput="if (this.value.length > 20) this.value = this.value.slice(0, 20);" type="number" />
+                  oninput="if (this.value.length > 20) this.value = this.value.slice(0, 20);" />
               </td>
               <td class="table-td">
                 <CInput :disabled="!canModify()" size="lg" v-model="value_emailAddress" type="email" />
@@ -461,14 +461,14 @@ export default {
     async detectFaceAndGetHeadBox(img, cb) {
       const detection = await faceapi.detectSingleFace(
         img,
-        new faceapi.TinyFaceDetectorOptions(),
+        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.2 }),
       );
       return new Promise((resolve) => {
         let box = null;
         if (detection) {
           const rangeRatio = 2;
           let headWidthToHunt = (detection.box.width < detection.box.height ? detection.box.width : detection.box.height) * rangeRatio;
-          let headX = detection.box.x - detection.box.height / 2;
+          let headX = detection.box.x - detection.box.width / 2;
           let headY = detection.box.y - detection.box.height / 1.2;
           if (headX < 0) headX = 0;
           if (headY < 0) headY = 0;
@@ -630,8 +630,7 @@ export default {
           } else {
             self.flag_maxDisplayFileSize = false;
           }
-        }
-        else {
+        } else {
           self.flag_maxRegisterFileSize = true;
           self.flag_maxDisplayFileSize = true;
         }
@@ -645,8 +644,7 @@ export default {
 
             if (cb) cb(img);
           };
-        }
-        else {
+        } else {
           if (cb) cb(null);
         }
       };
@@ -662,25 +660,31 @@ export default {
             if (box) {
               self.flag_imageHaveClearFace = true;
 
-              if (box.width < 500 || box.height < 500) {
+              if (box.width < 200 || box.height < 200) {
                 self.flag_minFaceResolution = false;
-              }
-              else {
+              } else {
                 self.flag_minFaceResolution = true;
               }
 
               if (self.flag_minFaceResolution) {
                 try {
                   const canvas = document.createElement('canvas');
-                  canvas.x = 0;
-                  canvas.y = 0;
-                  canvas.width = 500;
-                  canvas.height = 500;
+                  // canvas.x = 0;
+                  // canvas.y = 0;
+                  // canvas.width = 200;
+                  // canvas.height = 200;
                   // let ctx = canvas.getContext('2d');
                   // ctx.drawImage( img, box.x, box.y, box.width, box.height, 0, 0, 500, 500 );
+                  // canvas
+                  //   .getContext('2d')
+                  //   .drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 200, 200);
+                  canvas.x = 0;
+                  canvas.y = 0;
+                  canvas.width = 240;
+                  canvas.height = 240;
                   canvas
                     .getContext('2d')
-                    .drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 500, 500);
+                    .drawImage(img, 0, 0, img.width, img.height, 0, 0, 240, 240);
                   const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
                   self.value_photoToRegister = dataUrl.replace(
                     /^data:image\/[a-z]+;base64,/,
@@ -691,8 +695,7 @@ export default {
                   console.log('drawImage', e);
                 }
               }
-            }
-            else {
+            } else {
               self.flag_imageHaveClearFace = false;
             }
             // if( self.obj_loading ) self.obj_loading.hide();
@@ -726,10 +729,10 @@ export default {
                 const canvas = document.createElement('canvas');
                 canvas.x = 0;
                 canvas.y = 0;
-                canvas.width = 500;
-                canvas.height = 500;
+                canvas.width = 200;
+                canvas.height = 200;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 500, 500);
+                ctx.drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 200, 200);
                 const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
                 self.value_photoToRegister = dataUrl.replace(
                   /^data:image\/[a-z]+;base64,/,
@@ -759,7 +762,7 @@ export default {
       self.selectPhotoFromFile('DISPLAY', (img) => {
         if (img) {
           self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-          self.resizeImageFromDataURL(null, img.src, 500, 500, (basr64Img) => {
+          self.resizeImageFromDataURL(null, img.src, 200, 200, (basr64Img) => {
             const dataUrl = basr64Img;
             self.value_photoToDisplay = dataUrl.replace(
               /^data:image\/[a-z]+;base64,/,
@@ -808,7 +811,7 @@ export default {
       val += '';
 
       if (val.length !== 0) {
-        if (!/^[0-9]+$/.test(val)) {
+        if (!/^[a-zA-Z0-9]+$/.test(val)) {
           return false;
         }
 

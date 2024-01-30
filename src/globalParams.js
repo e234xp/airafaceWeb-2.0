@@ -13,7 +13,7 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '1205.1652';
+global.webVersion = '2.00.01.240124';
 
 const TEST_MODE = process.env.NODE_ENV === 'development'; 
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
@@ -173,6 +173,7 @@ function postJson(cgi, jsondata, cb) {
     && cgi !== '/airafacelite/maintaintoken'
     && cgi !== '/system/downloadsyslog'
     && cgi !== '/system/systeminfo'
+    && cgi !== '/airafacelite/resetpassword'
   ) {
     if (cb) cb('error', null);
     return;
@@ -243,6 +244,8 @@ function maintainToken(tokenInfo, cb) {
       if (cb) cb(err, data);
     });
 }
+
+Vue.prototype.$globalGetHost = () => 'http://192.168.10.119'; // http://${HOST}
 
 Vue.prototype.$globalFindPerson = (
   uuid, shift, sliceSize, cb,
@@ -630,6 +633,7 @@ Vue.prototype.$globalGotoRootPage = (page, cb) => {
       case 'Occupancy': router.push({ name: 'DashboardOccupancy' }); break;
       case 'Capacity': router.push({ name: 'DashboardCapacity' }); break;
       // case 'SelfCheckin': router.push({ name: 'DashboardSelfCheckin' }); break;
+      case 'Guard': router.push({ name: 'DashboardGuard' }); break;
       case 'Setting':
       default:
         router.push({ name: 'PersonDailyAttendanceReport' }); break;
@@ -1587,6 +1591,46 @@ Vue.prototype.$globalVerifyCard = (
   payload, cb,
 ) => new Promise((resolve) => {
   postJson('/airaface/verifycardnoservice', payload,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalAddCommand = (
+  payload, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/addcommands', payload,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalGetSystemSettings = (
+  cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/getsystemsettings', {},
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalSetSystemSettings = (
+  payload, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/setsystemsettings', payload,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalResetPassword = (
+  payload, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/resetpassword', payload,
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
