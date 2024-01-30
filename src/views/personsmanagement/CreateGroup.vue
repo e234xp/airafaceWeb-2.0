@@ -2,14 +2,16 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CGroupForm :formData="$data" :onFinish="onFinish" />
+        <CGroupForm
+          :form-data="$data"
+          :on-finish="onFinish"
+        />
       </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
 import CGroupForm from './forms/GroupForm.vue';
 
 export default {
@@ -21,7 +23,7 @@ export default {
       value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
       value_group_list: this.$route.params.value_group_list ? this.$route.params.value_group_list : [],
 
-      disp_header: i18n.formatter.format('CreateGroup'),
+      disp_header: this.$t('CreateGroup'),
       flag_modifyMode: false,
     };
   },
@@ -33,7 +35,6 @@ export default {
   },
   methods: {
     onFinish(data, cb) {
-      const self = this;
       const dataForModify = {
         name: data.name,
         remarks: data.remarks,
@@ -55,7 +56,7 @@ export default {
         });
         dataForModify.visitor_uuid_list = visitorUuidList;
       }
-      self.$globalCreateGroup(dataForModify, (error, result) => {
+      this.$globalCreateGroup(dataForModify, (error, result) => {
         if (cb) cb(error == null, result);
       });
     },

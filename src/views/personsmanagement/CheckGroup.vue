@@ -1,19 +1,36 @@
 <template>
   <div>
     <CCol sm="12">
-      <div class="h1" style="font-weight: 800;">{{ disp_groupPersonList }}</div>
+      <div
+        class="h1"
+        style="font-weight: 800;"
+      >
+        {{ $t('GroupPersonList') }}
+      </div>
     </CCol>
-    <div style="height:20px;"></div>
+    <div style="height:20px;" />
     <CCol sm="12">
       <CRow>
         <CCol sm="3">
-          <segmented-control :options="segmetionOptions" :selectedSegmentIndex="flag_currentSelection" label="name"
-            value="value" color="#fff" active-color="#20a8d8" :multiple="false" @select="onSelectType" />
+          <segmented-control
+            :options="segmetionOptions"
+            :selected-segment-index="flag_currentSelection"
+            label="name"
+            value="value"
+            color="#fff"
+            active-color="#20a8d8"
+            :multiple="false"
+            @select="onSelectType"
+          />
         </CCol>
         <CCol sm="9">
           <div style="margin-left:auto">
-            <CInput v-model.lazy="value_searchingFilterForAll" style="width: 100%;" size="lg"
-              :placeholder="disp_search">
+            <CInput
+              v-model.lazy="value_searchingFilterForAll"
+              style="width: 100%;"
+              size="lg"
+              :placeholder="$t('Search')"
+            >
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -27,18 +44,50 @@
         <CCardBody>
           <CRow>
             <CCol sm="12">
-              <div class="h3" style="font-weight: 800;">{{ disp_allPerson }}</div>
-              <div style="height:10px;"></div>
-              <vxe-table id="AllTable" :data="value_allItemsToShow" style="height:528px" stripe show-header-overflow
-                :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="allTable" empty-text=" ">
-                <vxe-table-column type="" width="60" align="center"></vxe-table-column>
-                <vxe-table-column show-overflow field="id" :title="disp_id" width="180" align="left"></vxe-table-column>
-                <vxe-table-column show-overflow field="name" :title="disp_name" align="left"></vxe-table-column>
+              <div
+                class="h3"
+                style="font-weight: 800;"
+              >
+                {{ $t('Person') }}
+              </div>
+              <div style="height:10px;" />
+              <vxe-table
+                id="AllTable"
+                :data="value_allItemsToShow"
+                style="height:528px"
+                stripe
+                show-header-overflow
+                :cell-style="cellStyle"
+                :header-cell-style="headerCellStyle"
+                ref="allTable"
+                empty-text=" "
+              >
+                <vxe-table-column
+                  type=""
+                  width="60"
+                  align="center"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="id"
+                  :title="$t('PersonId')"
+                  width="180"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="name"
+                  :title="$t('PersonName')"
+                  align="left"
+                />
               </vxe-table>
-              <vxe-pager :layouts="[ 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-                :current-page="value_allTablePage.currentPage" :page-size="value_allTablePage.pageSize"
-                :total="value_allTablePage.totalResult" @page-change="handleAllPageChange">
-              </vxe-pager>
+              <vxe-pager
+                :layouts="[ 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+                :current-page="value_allTablePage.currentPage"
+                :page-size="value_allTablePage.pageSize"
+                :total="value_allTablePage.totalResult"
+                @page-change="handleAllPageChange"
+              />
             </CCol>
           </CRow>
         </CCardBody>
@@ -46,8 +95,12 @@
 
       <CCol sm="12">
         <div class="row justify-content-center">
-          <CButton style="width: 150px; background-color:#20a8d8;color: white; " size="lg" @click="clickOnComplete">{{
-            disp_return }}
+          <CButton
+            style="width: 150px; background-color:#20a8d8;color: white; "
+            size="lg"
+            @click="clickOnComplete"
+          >
+            {{ $t('Return') }}
           </CButton>
         </div>
       </CCol>
@@ -56,7 +109,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 import SegmentedControl from 'vue-segmented-control';
 
 export default {
@@ -64,11 +116,7 @@ export default {
   components: { SegmentedControl },
   data() {
     return {
-      disp_groupPersonList: i18n.formatter.format('GroupPersonList'),
-      disp_id: i18n.formatter.format('PersonId'),
-      disp_name: i18n.formatter.format('PersonName'),
-      disp_return: i18n.formatter.format('Return'),
-      disp_allPerson: i18n.formatter.format('PersonList'),
+      disp_allPerson: this.$t('PersonList'),
       value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : '',
       value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
 
@@ -78,8 +126,6 @@ export default {
       value_allPersonList: this.$route.params.item && this.$route.params.item.person_list ? this.$route.params.item.person_list : [],
       value_allVisitorList: this.$route.params.item && this.$route.params.item.visitor_list ? this.$route.params.item.visitor_list : [],
 
-      disp_header: i18n.formatter.format('CheckGroup'),
-      disp_search: i18n.formatter.format('Search'),
       value_searchingFilterForAll: '',
       value_allItemsToShow: [],
       value_allTablePage: {
@@ -88,8 +134,8 @@ export default {
         totalResult: 0,
       },
       segmetionOptions: [
-        { name: i18n.formatter.format('Person'), value: 'PersonList', checked: false },
-        { name: i18n.formatter.format('Visitor'), value: 'VisitorList', checked: false },
+        { name: this.$t('Person'), value: 'PersonList', checked: false },
+        { name: this.$t('Visitor'), value: 'VisitorList', checked: false },
       ],
       flag_currentSelection: 0,
     };
@@ -132,38 +178,34 @@ export default {
       return 'fontSize: 16px;';
     },
     updateData() {
-      const self = this;
       let allItemsToShow = [];
 
-      if (self.flag_currentSelection === 0) {
-        allItemsToShow = self.value_allPersonList;
+      if (this.flag_currentSelection === 0) {
+        allItemsToShow = this.value_allPersonList;
       } else {
-        allItemsToShow = self.value_allVisitorList;
+        allItemsToShow = this.value_allVisitorList;
       }
 
       allItemsToShow.sort((a, b) => a.id.localeCompare(b.id));
 
-      self.value_allItemsToShow = self.generateAllFilteredData(allItemsToShow, self.value_searchingFilterForAll);
+      this.value_allItemsToShow = this.generateAllFilteredData(allItemsToShow, this.value_searchingFilterForAll);
     },
     generateAllFilteredData(sourceData, filter) {
-      const self = this;
-
       const filteredItems = filter.length === 0 ? sourceData : sourceData.filter((item) => (
         item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
         || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
       ));
 
-      self.value_allTablePage.totalResult = filteredItems.length;
+      this.value_allTablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_allTablePage.currentPage - 1) * self.value_allTablePage.pageSize,
-        self.value_allTablePage.currentPage * self.value_allTablePage.pageSize,
+        (this.value_allTablePage.currentPage - 1) * this.value_allTablePage.pageSize,
+        this.value_allTablePage.currentPage * this.value_allTablePage.pageSize,
       );
 
       return Object.assign([], sliceList);
     },
     clickOnComplete() {
-      const self = this;
-      self.$router.push({ name: self.value_returnRoutePath });
+      this.$router.push({ name: this.value_returnRoutePath });
     },
     handleAllPageChange({ currentPage, pageSize }) {
       this.value_allTablePage.currentPage = currentPage;
@@ -172,7 +214,7 @@ export default {
     },
     onSelectType(optionsSelected) {
       // console.log( optionsSelected );
-      this.disp_allPerson = i18n.formatter.format(optionsSelected[0].value);
+      this.disp_allPerson = this.$t(optionsSelected[0].value);
       if (optionsSelected[0].value === 'VisitorList') this.flag_currentSelection = 1;
       else this.flag_currentSelection = 0;
       this.value_allTablePage.currentPage = 1;

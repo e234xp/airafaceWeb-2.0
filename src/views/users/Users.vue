@@ -1,6 +1,9 @@
 <template>
   <CRow>
-    <CCol col="12" xl="8">
+    <CCol
+      col="12"
+      xl="8"
+    >
       <CCard>
         <CCardHeader>
           Users
@@ -21,7 +24,7 @@
             <template #status="data">
               <td>
                 <CBadge :color="getBadge(data.item.status)">
-                  {{data.item.status}}
+                  {{ data.item.status }}
                 </CBadge>
               </td>
             </template>
@@ -33,47 +36,48 @@
 </template>
 
 <script>
-import usersData from './UsersData'
+import usersData from './UsersData';
+
 export default {
   name: 'Users',
-  data () {
+  data() {
     return {
       items: usersData,
       fields: [
         { key: 'username', label: 'Name', _classes: 'font-weight-bold' },
         { key: 'registered' },
         { key: 'role' },
-        { key: 'status' }
+        { key: 'status' },
       ],
-      activePage: 1
-    }
+      activePage: 1,
+    };
   },
   watch: {
     $route: {
       immediate: true,
-      handler (route) {
+      handler(route) {
         if (route.query && route.query.page) {
-          this.activePage = Number(route.query.page)
+          this.activePage = Number(route.query.page);
         }
-      }
-    }
+      },
+    },
   },
   methods: {
-    getBadge (status) {
+    getBadge(status) {
       switch (status) {
-        case 'Active': return 'success'
-        case 'Inactive': return 'secondary'
-        case 'Pending': return 'warning'
-        case 'Banned': return 'danger'
-        default: 'primary'
+        case 'Active': return 'success';
+        case 'Inactive': return 'secondary';
+        case 'Pending': return 'warning';
+        case 'Banned': return 'danger';
+        default: return 'primary';
       }
     },
-    rowClicked (item, index) {
-      this.$router.push({path: `users/${index + 1}`})
+    rowClicked(item, index) {
+      this.$router.push({ path: `users/${index + 1}` });
     },
-    pageChange (val) {
-      this.$router.push({ query: { page: val }})
-    }
-  }
-}
+    pageChange(val) {
+      this.$router.push({ query: { page: val } });
+    },
+  },
+};
 </script>
