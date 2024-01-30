@@ -1,14 +1,25 @@
 <template>
   <div>
-    <div class="h1 mb-5">{{ disp_header }}</div>
-    <stepprogress class="w-step-progress-3" :active-thickness="param_activeThickness"
-      :passive-thickness="param_passiveThickness" :active-color="param_activeColor" :passive-color="param_passiveColor"
-      :steps="[disp_inputPersonInfo, disp_selectRegisterPhoto, disp_complete]" :current-step="flag_currentSetp"
-      :line-thickness="param_lineThickness" icon-class="fa fa-check">
-    </stepprogress>
+    <div class="h1 mb-5">
+      {{ disp_header }}
+    </div>
+    <stepprogress
+      class="w-step-progress-3"
+      :active-thickness="param_activeThickness"
+      :passive-thickness="param_passiveThickness"
+      :active-color="param_activeColor"
+      :passive-color="param_passiveColor"
+      :steps="[disp_inputPersonInfo, disp_selectRegisterPhoto, disp_complete]"
+      :current-step="flag_currentSetp"
+      :line-thickness="param_lineThickness"
+      icon-class="fa fa-check"
+    />
 
     <CCol sm="12">
-      <CCard :class="showOnStep(0)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(0)"
+        :style="param_cardStyle"
+      >
         <!-- <CCardHeader>
           <td>
             <span class="h3">{{ disp_inputPersonInfo }}</span>
@@ -17,26 +28,61 @@
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_personId }}</th>
-              <th class="h5 w-25 table-th">{{ disp_personName }}</th>
-              <th class="h5 w-25 table-th">{{ disp_department }}</th>
-              <th class="h5 w-25 table-th">{{ disp_jobTitle }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_personId }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_personName }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_department }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_jobTitle }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput :disabled="modifyMode || !canModify()" size="lg"
-                  :invalid-feedback="disp_moreThan4lettersAndNumbers" value="" v-model="value_personId" placeholder=""
-                  :is-valid="personIdValidator" required />
+                <CInput
+                  :disabled="modifyMode || !canModify()"
+                  size="lg"
+                  :invalid-feedback="disp_moreThan4lettersAndNumbers"
+                  value=""
+                  v-model="value_personId"
+                  placeholder=""
+                  :is-valid="personIdValidator"
+                  required
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" :invalid-feedback="disp_noEmptyNorSpaceOnly" value=""
-                  v-model="value_personName" placeholder="" :is-valid="personNameValidator" required />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  :invalid-feedback="disp_noEmptyNorSpaceOnly"
+                  value=""
+                  v-model="value_personName"
+                  placeholder=""
+                  :is-valid="personNameValidator"
+                  required
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" value="" v-model="value_department" placeholder="" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  value=""
+                  v-model="value_department"
+                  placeholder=""
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" value="" v-model="value_jobTitle" placeholder="" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  value=""
+                  v-model="value_jobTitle"
+                  placeholder=""
+                />
               </td>
             </tr>
           </table>
@@ -46,24 +92,54 @@
               <th class="h5 w-25 table-th">
                 {{ disp_cardNumber }}
               </th>
-              <th class="h5 w-25 table-th">{{ disp_emailAddress }}</th>
-              <th class="h5 w-25 table-th">{{ disp_extensionNumber }}</th>
-              <th class="h5 w-25 table-th">{{ disp_phoneNumber }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_emailAddress }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_extensionNumber }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_phoneNumber }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput class="input-no-spin" :disabled="!canModify()" size="lg" v-model="value_cardNumber"
-                  placeholder="" :invalid-feedback="disp_noRepeat" :is-valid="cardNumberValidator"
-                  oninput="if (this.value.length > 20) this.value = this.value.slice(0, 20);" />
+                <CInput
+                  class="input-no-spin"
+                  :disabled="!canModify()"
+                  size="lg"
+                  v-model="value_cardNumber"
+                  placeholder=""
+                  :invalid-feedback="disp_noRepeat"
+                  :is-valid="(val) => cardNumberValidator(val.toString())"
+                  oninput="if (this.value.length > 20) this.value = this.value.slice(0, 20);"
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" v-model="value_emailAddress" type="email" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  v-model="value_emailAddress"
+                  type="email"
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" value="" v-model="value_extensionNumber" placeholder="" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  value=""
+                  v-model="value_extensionNumber"
+                  placeholder=""
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" value="" v-model="value_phoneNumber" placeholder="" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  value=""
+                  v-model="value_phoneNumber"
+                  placeholder=""
+                />
               </td>
             </tr>
           </table>
@@ -71,43 +147,88 @@
           <CCol sm="12">
             <CRow class="mb-4">
               <CCol sm="6">
-                <div class="h5">{{ disp_group }}</div>
-                <multiselect v-model="value_selectedGroupList" placeholder="" :options="value_allGroupsList"
-                  :multiple="true" :hideSelected="true" :select-label="disp_select" :selected-label="disp_selected"
-                  :deselect-label="disp_deselect" :searchable="false">
-                </multiselect>
+                <div class="h5">
+                  {{ disp_group }}
+                </div>
+                <multiselect
+                  v-model="value_selectedGroupList"
+                  placeholder=""
+                  :options="value_allGroupsList"
+                  :multiple="true"
+                  :hide-selected="true"
+                  :select-label="disp_select"
+                  :selected-label="disp_selected"
+                  :deselect-label="disp_deselect"
+                  :searchable="false"
+                />
               </CCol>
-              <CCol sm="6" v-if="value_assignedGroupList">
-                <div class="h5">{{ disp_assignedGroup }}</div>
-                <multiselect v-model="value_assignedGroupList" placeholder="" :options="value_assignedGroupList"
-                  :multiple="true" disabled>
-                </multiselect>
+              <CCol
+                sm="6"
+                v-if="value_assignedGroupList"
+              >
+                <div class="h5">
+                  {{ disp_assignedGroup }}
+                </div>
+                <multiselect
+                  v-model="value_assignedGroupList"
+                  placeholder=""
+                  :options="value_assignedGroupList"
+                  :multiple="true"
+                  disabled
+                />
               </CCol>
             </CRow>
           </CCol>
 
           <table class="table-layout">
             <tr class="table-tr">
-              <th class="h5 w-25 table-th">{{ disp_effectiveDate }}</th>
-              <th class="h5 w-25 table-th">{{ disp_expireDate }}</th>
-              <th class="h5 w-25 table-th">{{ disp_asAdmin }}</th>
-              <th class="h5 w-25 table-th">{{ disp_remarks }}</th>
+              <th class="h5 w-25 table-th">
+                {{ disp_effectiveDate }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_expireDate }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_asAdmin }}
+              </th>
+              <th class="h5 w-25 table-th">
+                {{ disp_remarks }}
+              </th>
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" type="date" :value="value_effectiveDate"
-                  v-model="value_effectiveDate" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  type="date"
+                  :value="value_effectiveDate"
+                  v-model="value_effectiveDate"
+                />
               </td>
               <td class="table-td">
-                <CInput :disabled="!canModify()" size="lg" type="date" :value="value_expireDate"
-                  v-model="value_expireDate" />
+                <CInput
+                  :disabled="!canModify()"
+                  size="lg"
+                  type="date"
+                  :value="value_expireDate"
+                  v-model="value_expireDate"
+                />
               </td>
               <td class="table-td">
-                <CSelect :disabled="!enableAdminField" size="lg" :value.sync="value_asAdmin"
-                  :options="value_asAdminOptions" @change="selAsAdmin($event)" />
+                <CSelect
+                  :disabled="!enableAdminField"
+                  size="lg"
+                  :value.sync="value_asAdmin"
+                  :options="value_asAdminOptions"
+                  @change="selAsAdmin($event)"
+                />
               </td>
               <td class="table-td">
-                <CInput class="mb-form-row" size="lg" v-model="value_remarks" />
+                <CInput
+                  class="mb-form-row"
+                  size="lg"
+                  v-model="value_remarks"
+                />
               </td>
             </tr>
           </table>
@@ -122,57 +243,108 @@
         </CCardHeader> -->
         <CCardBody>
           <CRow class="flex">
-            <CCol sm="3" class="mt-5">
-              <div class="h5" :class="flag_maxRegisterFileSize ? '' : 'invalid-feedback'"
-                style="text-align: right; display: block !important;">
-                {{disp_maxPhotoFileSize}}
+            <CCol
+              sm="3"
+              class="mt-5"
+            >
+              <div
+                class="h5"
+                :class="flag_maxRegisterFileSize ? '' : 'invalid-feedback'"
+                style="text-align: right; display: block !important;"
+              >
+                {{ disp_maxPhotoFileSize }}
               </div>
 
-              <div class="h5" :class="flag_minFaceResolution ? '' : 'invalid-feedback'"
-                style="text-align: right; display: block !important;">
-                {{disp_minFaceResolution}}
+              <div
+                class="h5"
+                :class="flag_minFaceResolution ? '' : 'invalid-feedback'"
+                style="text-align: right; display: block !important;"
+              >
+                {{ disp_minFaceResolution }}
               </div>
 
-              <div class="h5" :class="flag_imageHaveClearFace ? '' : 'invalid-feedback'"
-                style="text-align: right; display: block !important;">
-                {{disp_imageHaveClearFace}}
+              <div
+                class="h5"
+                :class="flag_imageHaveClearFace ? '' : 'invalid-feedback'"
+                style="text-align: right; display: block !important;"
+              >
+                {{ disp_imageHaveClearFace }}
               </div>
             </CCol>
             <!-- 左欄 -->
-            <CCol sm="3" class="justify-content-center">
+            <CCol
+              sm="3"
+              class="justify-content-center"
+            >
               <CRow>
                 <CCol sm="12">
                   <div class="h3 row justify-content-center">
                     <div>{{ disp_registerPhoto }}</div>
                   </div>
                 </CCol>
-                <CCol sm="12" class="mb-2">
+                <CCol
+                  sm="12"
+                  class="mb-2"
+                >
                   <CRow class="justify-content-center">
-                    <div id="take_photo_camera" v-if="flag_takingPhoto" class="w-100" />
-                    <img id="register_photo" v-if="!flag_takingPhoto" :src="value_photoToRegisterToShow"
-                      class="w-100 w-img-col object-fit-contain" />
+                    <div
+                      id="take_photo_camera"
+                      v-if="flag_takingPhoto"
+                      class="w-100"
+                    />
+                    <img
+                      id="register_photo"
+                      v-if="!flag_takingPhoto"
+                      :src="value_photoToRegisterToShow"
+                      class="w-100 w-img-col object-fit-contain"
+                    >
                   </CRow>
                 </CCol>
-                <CCol sm="12" class="mb-2">
+                <CCol
+                  sm="12"
+                  class="mb-2"
+                >
                   <div class="row justify-content-center">
-                    <CButton class="btn-outline-primary fz-lg mx-1" style="width: 40%" @click="clickOnPickRegisterPhoto"
-                      :disabled="flag_isPickingRegisterPhoto || !canModify()"><span>{{ disp_selectPhoto }}</span>
+                    <CButton
+                      class="btn-outline-primary fz-lg mx-1"
+                      style="width: 40%"
+                      @click="clickOnPickRegisterPhoto"
+                      :disabled="flag_isPickingRegisterPhoto || !canModify()"
+                    >
+                      <span>{{ disp_selectPhoto }}</span>
                     </CButton>
 
-                    <CButton class="btn-outline-primary fz-lg mx-1" style="width: 40%" @click="clickOnTakeRegisterPhoto"
-                      :disabled="!flag_haveWebCam || !canModify()"><span v-if="flag_takingPhoto">{{ disp_useWebCamPhoto
-                        }}</span>
+                    <CButton
+                      class="btn-outline-primary fz-lg mx-1"
+                      style="width: 40%"
+                      @click="clickOnTakeRegisterPhoto"
+                      :disabled="!flag_haveWebCam || !canModify()"
+                    >
+                      <span v-if="flag_takingPhoto">{{ disp_useWebCamPhoto
+                      }}</span>
                       <span v-else>{{ disp_takePhoto }}</span>
                     </CButton>
                   </div>
                 </CCol>
                 <CCol sm="12">
                   <div class="row justify-content-center">
-                    <CSelect :disabled="!canModify()" style="width: 350px" :options="getWebcamList()"
-                      @change="selWebcam($event)">
+                    <CSelect
+                      :disabled="!canModify()"
+                      style="width: 350px"
+                      :options="getWebcamList()"
+                      @change="selWebcam($event)"
+                    >
                       <template #prepend>
-                        <CButton :disabled="!canModify()" size="sm" color="light" @click="refreshCamera()"><i
-                            class="fa fa-sync"></i></CButton>
+                        <CButton
+                          :disabled="!canModify()"
+                          size="sm"
+                          color="light"
+                          @click="refreshCamera()"
+                        >
+                          <i
+                            class="fa fa-sync"
+                          />
+                        </CButton>
                       </template>
                     </CSelect>
                   </div>
@@ -180,48 +352,77 @@
               </CRow>
             </CCol>
             <!-- 右欄 -->
-            <CCol sm="3" class="justify-content-center">
+            <CCol
+              sm="3"
+              class="justify-content-center"
+            >
               <CRow>
                 <CCol sm="12">
                   <div class="h3 row justify-content-center">
                     <div>{{ disp_displayPhoto }}</div>
                   </div>
                 </CCol>
-                <CCol sm="12" class="mb-2">
+                <CCol
+                  sm="12"
+                  class="mb-2"
+                >
                   <CRow class="justify-content-center">
-                    <img :src="value_photoToDisplayToShow" class="w-100 w-img-col object-fit-contain" />
+                    <img
+                      :src="value_photoToDisplayToShow"
+                      class="w-100 w-img-col object-fit-contain"
+                    >
                   </CRow>
                 </CCol>
 
-                <CCol sm="12" class="mb-2">
+                <CCol
+                  sm="12"
+                  class="mb-2"
+                >
                   <div class="row justify-content-center">
-                    <CButton class="btn-outline-primary fz-lg mx-1" style="width: 40%"
-                      :disabled="flag_isPickingDisplayPhoto" @click="clickOnPickDisplayPhoto">{{ disp_selectPhoto }}
+                    <CButton
+                      class="btn-outline-primary fz-lg mx-1"
+                      style="width: 40%"
+                      :disabled="flag_isPickingDisplayPhoto"
+                      @click="clickOnPickDisplayPhoto"
+                    >
+                      {{ disp_selectPhoto }}
                     </CButton>
 
-                    <CButton class=" fz-lg mx-1" style="width: 40%" :disabled="flag_isPickingDisplayPhoto"
-                      @click="clickOnPickDisplayPhoto"></CButton>
+                    <CButton
+                      class=" fz-lg mx-1"
+                      style="width: 40%"
+                      :disabled="flag_isPickingDisplayPhoto"
+                      @click="clickOnPickDisplayPhoto"
+                    />
                   </div>
                 </CCol>
 
                 <CCol sm="12">
-                  <div class="row justify-content-center">
-                  </div>
+                  <div class="row justify-content-center" />
                 </CCol>
               </CRow>
             </CCol>
-            <CCol sm="3" class="mt-5">
-              <div class="h5" :class="flag_maxDisplayFileSize ? '' : 'invalid-feedback'"
-                style="display: block !important;">
-                {{disp_maxPhotoFileSize}}
+            <CCol
+              sm="3"
+              class="mt-5"
+            >
+              <div
+                class="h5"
+                :class="flag_maxDisplayFileSize ? '' : 'invalid-feedback'"
+                style="display: block !important;"
+              >
+                {{ disp_maxPhotoFileSize }}
               </div>
             </CCol>
           </CRow>
         </CCardBody>
       </CCard>
-      <CCard :class="showOnStep(2)" :style="param_cardStyle">
+      <CCard
+        :class="showOnStep(2)"
+        :style="param_cardStyle"
+      >
         <CCardBody>
-          <div style="height: 220px"></div>
+          <div style="height: 220px" />
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
@@ -237,17 +438,29 @@
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">{{ value_returnRouteName }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="clickOnPrev">{{ disp_previous }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="clickOnPrev"
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary fz-lg btn-w-normal" @click="clickOnNext"
-            :disabled="!(flag_personNamePass && flag_personIdPass && flag_cardNumberPass)">{{ nextButtonName() }}
+          <CButton
+            class="btn btn-primary fz-lg btn-w-normal"
+            @click="clickOnNext"
+            :disabled="!(flag_personNamePass && flag_personIdPass && flag_cardNumberPass)"
+          >
+            {{ nextButtonName() }}
           </CButton>
         </div>
       </div>
@@ -622,7 +835,7 @@ export default {
       };
       input.onchange = function (e) {
         const file = e.target.files[0];
-        let mb = file.size / 1024 / 1024;
+        const mb = file.size / 1024 / 1024;
 
         if (mb >= 10) {
           if (from == 'REGISTER') {
@@ -644,9 +857,7 @@ export default {
 
             if (cb) cb(img);
           };
-        } else {
-          if (cb) cb(null);
-        }
+        } else if (cb) cb(null);
       };
       input.click();
     },
@@ -808,8 +1019,6 @@ export default {
     },
 
     cardNumberValidator(val) {
-      val += '';
-
       if (val.length !== 0) {
         if (!/^[a-zA-Z0-9]+$/.test(val)) {
           return false;
@@ -855,15 +1064,15 @@ export default {
               maxHeight,
             );
           } else {
-            let rW = img.width * 100 / maxWidth;
-            let rH = img.height * 100 / maxHeight;
+            let rW = (img.width * 100) / maxWidth;
+            let rH = (img.height * 100) / maxHeight;
 
-            let r = Math.max(rW, rH) / 100;
+            const r = Math.max(rW, rH) / 100;
 
             rW = Math.floor(img.width / r);
             rH = Math.floor(img.height / r);
-            let sx = Math.floor((maxWidth - rW) / 2);
-            let sy = Math.floor((maxHeight - rH) / 2);
+            const sx = Math.floor((maxWidth - rW) / 2);
+            const sy = Math.floor((maxHeight - rH) / 2);
             ctx.drawImage(img, sx, sy, rW, rH);
             // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, maxWidth, maxHeight);
           }

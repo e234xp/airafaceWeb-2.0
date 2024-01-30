@@ -2,8 +2,13 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <CPersonForm :formData="$data" :enableAdminField="false" :modifyMode="false" :canModify="canModify"
-          :onFinish="onFinish" />
+        <CPersonForm
+          :form-data="$data"
+          :enable-admin-field="false"
+          :modify-mode="false"
+          :can-modify="canModify"
+          :on-finish="onFinish"
+        />
       </CCol>
     </CRow>
   </div>
@@ -54,23 +59,23 @@ export default {
       }
 
       const dataForRegister = {
-        id: data.id + '',
-        name: data.name + '',
-        card_number: data.card_number + '',
+        id: `${data.id}`,
+        name: `${data.name}`,
+        card_number: `${data.card_number}`,
         begin_date: beginDate || 0,
         expire_date: expireDate || 0,
         group_list: data.group_list || [],
         card_facility_code: '',
-        display_image: data.display_image + '',
-        register_image: data.register_image + '',
+        display_image: `${data.display_image}`,
+        register_image: `${data.register_image}`,
         as_admin: false,
         extra_info: {
-          title: data.title + '',
-          department: data.department + '',
-          email: data.email + '',
-          phone_number: data.phone_number + '',
-          extension_number: data.extension_number + '',
-          remarks: data.remarks + '',
+          title: `${data.title}`,
+          department: `${data.department}`,
+          email: `${data.email}`,
+          phone_number: `${data.phone_number}`,
+          extension_number: `${data.extension_number}`,
+          remarks: `${data.remarks}`,
         },
       };
       // console.log( JSON.stringify(dataForRegister) );
