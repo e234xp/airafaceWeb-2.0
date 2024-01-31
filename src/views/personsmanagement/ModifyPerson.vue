@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 import CPersonForm from './forms/PersonForm.vue';
 
 const dayjs = require('dayjs');
@@ -88,13 +87,13 @@ export default {
       value_photoToDisplay: this.$route.params.item && this.$route.params.item.display_image ? this.$route.params.item.display_image : '',
       value_asAdmin: this.$route.params.item && this.$route.params.item.as_admin ? this.$route.params.item.as_admin : false,
       flag_currentSetp: 0,
-      disp_header: i18n.formatter.format('ModifyPerson'),
-      disp_inputPersonInfo: i18n.formatter.format('InputPersonInfo'),
-      disp_selectRegisterPhoto: i18n.formatter.format('SelectRegisterPhoto'),
-      disp_complete: i18n.formatter.format('Complete'),
+      disp_header: this.$t('ModifyPerson'),
+      disp_inputPersonInfo: this.$t('InputPersonInfo'),
+      disp_selectRegisterPhoto: this.$t('SelectRegisterPhoto'),
+      disp_complete: this.$t('Complete'),
 
-      disp_personId: i18n.formatter.format('PersonId'),
-      disp_personName: i18n.formatter.format('PersonName'),
+      disp_personId: this.$t('PersonId'),
+      disp_personName: this.$t('PersonName'),
     };
   },
   created() {
@@ -105,7 +104,6 @@ export default {
       return !(this.$globalAiraManagerSettings.manager_enable === true);
     },
     onFinish(data, cb) {
-      const self = this;
       const beginDate = (data.begin_date && data.begin_date.length > 0) ? new Date(`${data.begin_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
       const expireDate = (data.expir_date && data.expir_date.length > 0) ? new Date(`${data.expir_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
 
@@ -114,7 +112,7 @@ export default {
       }
 
       const dataForModify = {
-        uuid: self.value_personUuid,
+        uuid: this.value_personUuid,
         data: {
           id: `${data.id}`,
           name: `${data.name}`,
@@ -137,9 +135,9 @@ export default {
         },
       };
       // console.log( JSON.stringify(dataForRegister) );
-      self.$globalModifyPerson(dataForModify, (error, result) => {
+      this.$globalModifyPerson(dataForModify, (error, result) => {
         if (cb) cb(error == null, result);
-        // self.$router.push({ name: self.value_returnRoutePath })
+        // this.$router.push({ name: this.value_returnRoutePath })
       });
     },
   },

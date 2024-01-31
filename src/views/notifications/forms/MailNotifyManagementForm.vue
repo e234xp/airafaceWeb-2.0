@@ -2,27 +2,45 @@
   <div>
     <div>
       <CCol sm="12">
-        <td class="h1">{{ disp_header }}</td>
+        <td class="h1">
+          {{ $t('MailNotifyManagement') }}
+        </td>
       </CCol>
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
     <div>
       <CCol sm="12">
         <CCol sm="12">
           <CRow>
             <div>
-              <CButton class="btn btn-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnAdd()">
-                {{ disp_add }}
+              <CButton
+                class="btn btn-primary btn-w-sm mr-3 mb-3"
+                size="lg"
+                @click="clickOnAdd()"
+              >
+                {{ $t('Add') }}
               </CButton>
             </div>
 
             <div>
-              <CButton class="btn btn-danger btn-w-sm mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()">
-                {{ disp_delete }}
+              <CButton
+                class="btn btn-danger btn-w-sm mr-3 mb-3"
+                size="lg"
+                @click="clickOnMultipleDelete()"
+              >
+                {{ $t('Delete') }}
               </CButton>
             </div>
-            <div class="d-flex" style="margin-left: auto">
-              <CInput v-model.lazy="value_searchingFilter" style="width: 280px" size="lg" :placeholder="disp_search">
+            <div
+              class="d-flex"
+              style="margin-left: auto"
+            >
+              <CInput
+                v-model.lazy="value_searchingFilter"
+                style="width: 280px"
+                size="lg"
+                :placeholder="$t('Search')"
+              >
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>
@@ -37,10 +55,21 @@
       <CCardBody>
         <div>
           <div id="LineNotifyManagementFrom">
-            <vxe-table stripe ref="mainTable" align="center" :data="value_dataItemsToShow" :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle" :edit-config="{ trigger: 'manual', mode: 'row' }">
-              <vxe-table-column type="checkbox" width="5%" align="center" />
-              <!-- <vxe-table-column field="enable" width="10%" :show-overflow="ellipsisMode" :title="disp_enable">
+            <vxe-table
+              stripe
+              ref="mainTable"
+              align="center"
+              :data="value_dataItemsToShow"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
+              :edit-config="{ trigger: 'manual', mode: 'row' }"
+            >
+              <vxe-table-column
+                type="checkbox"
+                width="5%"
+                align="center"
+              />
+              <!-- <vxe-table-column field="enable" width="10%" :show-overflow="ellipsisMode" :title="$t('Enable')">
                 <template #default="{ row }">
                   <label class="switch">
                     <input type="checkbox" :checked="row.enable" @change="(event) => clickOnSwitch(event, row)">
@@ -48,11 +77,36 @@
                   </label>
                 </template>
               </vxe-table-column> -->
-              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="disp_name" />
-              <vxe-table-column field="host" width="10%" :show-overflow="ellipsisMode" :title="disp_host" />
-              <vxe-table-column field="sender" width="10%" :show-overflow="ellipsisMode" :title="disp_sender" />
-              <vxe-table-column field="subject" width="10%" :show-overflow="ellipsisMode" :title="disp_subject" />
-              <vxe-table-column field="fields" width="20%" :show-overflow="ellipsisMode" :title="disp_fields">
+              <vxe-table-column
+                field="name"
+                width="10%"
+                :show-overflow="ellipsisMode"
+                :title="$t('NotifyName')"
+              />
+              <vxe-table-column
+                field="host"
+                width="10%"
+                :show-overflow="ellipsisMode"
+                :title="$t('HostAddress')"
+              />
+              <vxe-table-column
+                field="sender"
+                width="10%"
+                :show-overflow="ellipsisMode"
+                :title="$t('SMTPSender')"
+              />
+              <vxe-table-column
+                field="subject"
+                width="10%"
+                :show-overflow="ellipsisMode"
+                :title="$t('SMTPSubject')"
+              />
+              <vxe-table-column
+                field="fields"
+                width="20%"
+                :show-overflow="ellipsisMode"
+                :title="$t('ContentField')"
+              >
                 <template #default="{ row }">
                   {{ displayFields(row) }}
                 </template>
@@ -61,18 +115,25 @@
               <vxe-table-column min-width="15%">
                 <template #default="{ row }">
                   <div class="d-flex flex-column align-items-center">
-                    <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">
-                      {{ disp_modify }}
+                    <vxe-button
+                      class="btn-in-cell-primary btn-in-cell"
+                      @click="clickOnModify(row)"
+                    >
+                      {{ $t('Modify') }}
                     </vxe-button>
-                    <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">
-                      {{ disp_delete }}
+                    <vxe-button
+                      class="btn-in-cell-danger btn-in-cell"
+                      @click="clickOnSingleDelete(row)"
+                    >
+                      {{ $t('Delete') }}
                     </vxe-button>
                   </div>
                 </template>
               </vxe-table-column>
             </vxe-table>
           </div>
-          <vxe-pager :layouts="[
+          <vxe-pager
+            :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -80,8 +141,12 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult" @page-change="handlePageChange" />
+            ]"
+            :current-page="value_tablePage.currentPage"
+            :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult"
+            @page-change="handlePageChange"
+          />
         </div>
       </CCardBody>
     </CCard>
@@ -90,33 +155,6 @@
 <script>
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
-import i18n from '@/i18n';
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 4,
-    totalResult: 0,
-  },
-  disp_header: i18n.formatter.format('MailNotifyManagement'),
-  disp_search: i18n.formatter.format('Search'),
-  disp_add: i18n.formatter.format('Add'),
-  disp_delete: i18n.formatter.format('Delete'),
-  disp_modify: i18n.formatter.format('Modify'),
-
-  disp_enable: i18n.formatter.format('Enable'),
-  disp_name: i18n.formatter.format('NotifyName'),
-  disp_host: i18n.formatter.format('HostAddress'),
-  disp_sender: i18n.formatter.format('SMTPSender'),
-  disp_subject: i18n.formatter.format('SMTPSubject'),
-  disp_fields: i18n.formatter.format('ContentField'),
-
-  value_searchingFilter: '',
-});
 
 export default {
   name: 'MailNotifyManagementForm',
@@ -128,11 +166,21 @@ export default {
     onFetchDataCallback: { type: Function, default: () => null },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
 
-    return cloneObject;
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 4,
+        totalResult: 0,
+      },
+
+      value_searchingFilter: '',
+
+      ...this.formData,
+    };
   },
   computed: {
     ...mapState(['ellipsisMode']),
@@ -140,9 +188,7 @@ export default {
   mixins: [TableObserver],
   created() { },
   async mounted() {
-    const self = this;
-
-    self.refreshTableItems();
+    this.refreshTableItems();
   },
 
   updated() { },
@@ -162,7 +208,6 @@ export default {
       return 'fontSize:18px;';
     },
     async generateFilteredData(sourceData, filter) {
-      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData
         : sourceData.filter((item) => (
@@ -172,17 +217,17 @@ export default {
           || (item.subject && item.subject.toLowerCase().indexOf(filter.toLowerCase()) > -1)
         ));
 
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
 
       // sliceList.forEach((pitem) => {
       //   const item = pitem;
       //   pitem['nameToShow'] = pitem.name;
       // });
-      self.value_dataItemsToShow = Object.assign([], sliceList);
+      this.value_dataItemsToShow = Object.assign([], sliceList);
     },
 
     displayFields(row) {
@@ -190,7 +235,7 @@ export default {
       if (fields) {
         // console.log('111', fields);
         fields = fields.slice(0, 3).map(
-          (item) => i18n.formatter.format(item),
+          (item) => this.$t(item),
         );
         // console.log('222', fields);
 
@@ -200,23 +245,22 @@ export default {
     },
 
     refreshTableItems(cb) {
-      const self = this;
-      if (self.onFetchDataCallback) {
-        self.onFetchDataCallback((error, reset, more, tableItems) => {
+      if (this.onFetchDataCallback) {
+        this.onFetchDataCallback((error, reset, more, tableItems) => {
           if (!error) {
             if (reset) {
-              self.value_allTableItems = [];
-              self.value_dataItemsToShow = [];
+              this.value_allTableItems = [];
+              this.value_dataItemsToShow = [];
             }
             if (tableItems) {
-              self.value_allTableItems = self.value_allTableItems.concat(
+              this.value_allTableItems = this.value_allTableItems.concat(
                 tableItems,
               );
-              self.generateFilteredData(
-                self.value_allTableItems,
-                self.value_searchingFilter,
+              this.generateFilteredData(
+                this.value_allTableItems,
+                this.value_searchingFilter,
               );
-              self.observeTableSize();
+              this.observeTableSize();
             }
             if (!more && cb) cb();
           } else if (cb) cb();
@@ -233,7 +277,6 @@ export default {
     },
 
     async clickOnSwitch(event, row) {
-      const self = this;
       const localItem = row;
 
       localItem.enable = event.srcElement.checked;
@@ -256,7 +299,7 @@ export default {
         note: localItem.note,
       };
 
-      await self.$globalModifyMailNotify(settingData);
+      await this.$globalModifyMailNotify(settingData);
     },
 
     clickOnAdd() {
@@ -268,18 +311,17 @@ export default {
     },
 
     deleteItem(listToDel) {
-      const self = this;
-      if (self.onDelete) {
-        self.onDelete(listToDel, (success) => {
+      if (this.onDelete) {
+        this.onDelete(listToDel, (success) => {
           if (success) {
             listToDel.forEach((deletedItem) => {
-              self.value_allTableItems = self.value_allTableItems.filter((
+              this.value_allTableItems = this.value_allTableItems.filter((
                 item,
               ) => item.uuid !== deletedItem.uuid);
             });
-            self.generateFilteredData(
-              self.value_allTableItems,
-              self.value_searchingFilter,
+            this.generateFilteredData(
+              this.value_allTableItems,
+              this.value_searchingFilter,
             );
           }
         });

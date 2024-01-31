@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 import CPersonForm from './forms/PersonForm.vue';
 
 export default {
@@ -28,13 +27,6 @@ export default {
       value_allPerson: this.$route.params.value_allPerson ? this.$route.params.value_allPerson : [],
 
       flag_currentSetp: 0,
-      disp_header: i18n.formatter.format('AddVisitor'),
-      disp_inputPersonInfo: i18n.formatter.format('InputVisitorInfo'),
-      disp_selectRegisterPhoto: i18n.formatter.format('SelectRegisterPhoto'),
-      disp_complete: i18n.formatter.format('Complete'),
-
-      disp_personId: i18n.formatter.format('VisitorId'),
-      disp_personName: i18n.formatter.format('VisitorName'),
 
       value_personId: '',
       value_personName: '',
@@ -50,7 +42,6 @@ export default {
       return !(this.$globalAiraManagerSettings.manager_enable === true);
     },
     onFinish(data, cb) {
-      const self = this;
       const beginDate = (data.begin_date && data.begin_date.length > 0) ? new Date(`${data.begin_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
       const expireDate = (data.expir_date && data.expir_date.length > 0) ? new Date(`${data.expir_date.replaceAll('-', '/')} 00:00:00`).getTime() : 0;
 
@@ -79,9 +70,9 @@ export default {
         },
       };
       // console.log( JSON.stringify(dataForRegister) );
-      self.$globalCreateVisitor(dataForRegister, (error, result) => {
+      this.$globalCreateVisitor(dataForRegister, (error, result) => {
         if (cb) cb(error == null, result);
-        // self.$router.push({ name: self.value_returnRoutePath })
+        // this.$router.push({ name: this.value_returnRoutePath })
       });
     },
   },

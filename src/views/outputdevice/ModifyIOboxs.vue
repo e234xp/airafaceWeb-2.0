@@ -2,15 +2,23 @@
   <div id="wrapper">
     <div>
       <!-- <div class="h1">{{ $t('VideoDeviceBasic') }}</div> -->
-      <div class="h1">{{ disp_headertitle }}</div>
+      <div class="h1">
+        {{ $t('TitleIOBox') }}
+      </div>
 
-      <stepprogress class="w-step-progress-3" :active-thickness="param_activeThickness"
-        :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
-        :passive-color="param_passiveColor" :current-step="flag_currentSetp" :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step2, disp_complete]" icon-class="fa fa-check">
-      </stepprogress>
+      <stepprogress
+        class="w-step-progress-3"
+        :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness"
+        :active-color="param_activeColor"
+        :passive-color="param_passiveColor"
+        :current-step="flag_currentSetp"
+        :line-thickness="param_lineThickness"
+        :steps="[$t('VideoDeviceBasic'), $t('VideoDeviceDigitalOutPut'), $t('Complete')]"
+        icon-class="fa fa-check"
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <!-- 項目 -->
@@ -18,16 +26,24 @@
       <!-- Basic Form-->
       <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form" :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues" />
+          <Step1Form
+            :step1form="step1form"
+            @updateStep1form="updateStep1form"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
+          />
         </CCardBody>
       </CCard>
 
       <!-- Connection Form-->
       <CCard v-else-if="isOnStep(1)">
         <CCardBody>
-          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form" :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues" />
+          <Step2Form
+            :step2form="step2form"
+            @updateStep2form="updateStep2form"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
+          />
         </CCardBody>
       </CCard>
     </CCol>
@@ -36,17 +52,30 @@
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">{{ value_returnRouteName }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div v-if="flag_currentSetp == 1">
-          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">{{ disp_previous }}
+          <CButton
+            class="btn btn-outline-primary fz-lg btn-w-normal"
+            @click="handlePrev"
+          >
+            {{ $t('Previous') }}
           </CButton>
         </div>
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
         <div>
-          <CButton class="btn btn-primary mb-3" size="lg" @click="handleNext()"
-            :disabled="!isStepPassed(flag_currentSetp)">{{ nextButtonName(flag_currentSetp) }}
+          <CButton
+            class="btn btn-primary mb-3"
+            size="lg"
+            @click="handleNext()"
+            :disabled="!isStepPassed(flag_currentSetp)"
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
       </div>
@@ -55,8 +84,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -78,9 +105,6 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      // /*Basic title  */
-      disp_headertitle: i18n.formatter.format('TitleIOBox'),
-
       // step setting
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
@@ -88,18 +112,6 @@ export default {
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
-
-      // /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format('VideoDeviceBasic'),
-      // disp_step2: i18n.formatter.format('VideoDeviceConnection'),
-      disp_step2: `${i18n.formatter.format('VideoDeviceDigitalOutPut')}`,
-      // disp_step4: `${i18n.formatter.format('VideoDeviceDigitalOutPut')} #2`,
-      disp_complete: i18n.formatter.format('Complete'),
-
-      // /**btn */
-      // disp_complete: i18n.formatter.format('Complete'),
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
 
       step1form: {
         brand: '',
@@ -259,7 +271,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -283,13 +295,13 @@ export default {
     nextButtonName(step) {
       switch (step) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_next;
+          return this.$t('Next');
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
   },

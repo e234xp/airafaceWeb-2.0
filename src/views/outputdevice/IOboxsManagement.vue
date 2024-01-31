@@ -3,10 +3,10 @@
     <CRow>
       <CCol sm="12">
         <ListForm
-          :onAdd="onAdd"
-          :onDelete="onDelete"
-          :onModify="onModify"
-          :onGetItems="onGetItems"
+          :on-add="onAdd"
+          :on-delete="onDelete"
+          :on-modify="onModify"
+          :on-get-items="onGetItems"
         />
       </CCol>
     </CRow>
@@ -14,13 +14,12 @@
 </template>
 
 <script>
-import ListForm from "@/modules/outputdevice/IOboxlist/ListForm.vue";
+import ListForm from '@/modules/outputdevice/IOboxlist/ListForm.vue';
 
-import TableObserver from "@/utils/TableObserver.vue";
-import i18n from "@/i18n";
+import TableObserver from '@/utils/TableObserver.vue';
 
 export default {
-  name: "CameraList",
+  name: 'CameraList',
   mixins: [TableObserver],
   components: { ListForm },
   methods: {
@@ -29,7 +28,7 @@ export default {
     },
 
     async getItems(shift, sliceSize) {
-      const ret = await this.$globalFindIoBoxes("", shift, sliceSize);
+      const ret = await this.$globalFindIoBoxes('', shift, sliceSize);
       const {
         data: { list: dataList },
         error,
@@ -37,11 +36,11 @@ export default {
 
       if (error) {
         this.$fire({
-          title: i18n.formatter.format("NetworkLoss"),
-          text: "",
-          type: "error",
+          title: this.$t('NetworkLoss'),
+          text: '',
+          type: 'error',
           timer: 3000,
-          confirmButtonColor: "#20a8d8",
+          confirmButtonColor: '#20a8d8',
         });
       }
 
@@ -51,22 +50,22 @@ export default {
     // 新增
     onAdd() {
       this.$router.push({
-        name: "AddIOboxs",
+        name: 'AddIOboxs',
         params: {
-          value_returnRoutePath: "IOboxsManagement",
-          value_returnRouteName: i18n.formatter.format("Return"),
+          value_returnRoutePath: 'IOboxsManagement',
+          value_returnRouteName: this.$t('Return'),
         },
       });
     },
 
-    //修改
+    // 修改
     async onModify(item) {
       this.$router.push({
-        name: "ModifyIOboxs",
+        name: 'ModifyIOboxs',
         params: {
-          value_returnRoutePath: "IOboxsManagement",
-          value_returnRouteName: i18n.formatter.format("Return"),
-          item: item,
+          value_returnRoutePath: 'IOboxsManagement',
+          value_returnRouteName: this.$t('Return'),
+          item,
         },
       });
     },
@@ -76,11 +75,11 @@ export default {
       if (!items || !Array.isArray(items)) return;
 
       const uuidListToDel = items.map(({ uuid }) => uuid);
-      this.$confirm("", i18n.formatter.format("ConfirmToDelete"), {
-        confirmButtonText: i18n.formatter.format("Confirm"),
-        cancelButtonText: i18n.formatter.format("Cancel"),
-        confirmButtonColor: "#20a8d8",
-        cancelButtonColor: "#f86c6b",
+      this.$confirm('', this.$t('ConfirmToDelete'), {
+        confirmButtonText: this.$t('Confirm'),
+        cancelButtonText: this.$t('Cancel'),
+        confirmButtonColor: '#20a8d8',
+        cancelButtonColor: '#f86c6b',
       })
         .then(() => {
           this.deleteIoBoxes(uuidListToDel, cb);
@@ -97,11 +96,11 @@ export default {
       if (error) {
         if (cb) cb(false);
         this.$fire({
-          text: i18n.formatter.format("OperationFailed"),
-          type: "error",
+          text: this.$t('OperationFailed'),
+          type: 'error',
           timer: 3000,
-          confirmButtonColor: "#20a8d8",
-          confirmButtonText: i18n.formatter.format("OK"),
+          confirmButtonColor: '#20a8d8',
+          confirmButtonText: this.$t('OK'),
         });
       }
       if (cb) cb(true);

@@ -2,7 +2,7 @@
   <div id="wrapper">
     <div>
       <div class="h1">
-        {{ disp_headertitle }}
+        {{ $t('VideoDeviceBasic') }}
       </div>
       <stepprogress
         class="w-step-progress-4"
@@ -13,11 +13,11 @@
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
         :steps="[
-          disp_step1,
-          disp_step2,
-          disp_step3,
-          disp_step4,
-          disp_complete,
+          $t('VideoDeviceBasic'),
+          $t('VideoDeviceROI'),
+          $t('VideoFaceCapture'),
+          $t('VideoFaceMerge'),
+          $t('Complete'),
         ]"
         icon-class="fa fa-check"
       />
@@ -106,7 +106,7 @@
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
           >
-            {{ disp_previous }}
+            {{ $t('Previous') }}
           </CButton>
         </div>
         <div style="width: 20px" />
@@ -126,8 +126,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -150,27 +148,12 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      disp_header: i18n.formatter.format('ModifyCameras'),
-
-      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
-
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
       param_lineThickness: 3,
       param_activeThickness: 3,
       param_passiveThickness: 3,
       flag_currentSetp: 0,
-
-      // Step 1 2 3 4
-      disp_step1: i18n.formatter.format('VideoDeviceBasic'),
-      disp_step2: i18n.formatter.format('VideoDeviceROI'),
-      disp_step3: i18n.formatter.format('VideoFaceCapture'),
-      disp_step4: i18n.formatter.format('VideoFaceMerge'),
-      disp_complete: i18n.formatter.format('Complete'),
-
-      // btn
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
 
       uuid: '',
       step1form: {
@@ -217,19 +200,17 @@ export default {
     Step4Form,
   },
   async created() {
-    const self = this;
+    this.defaultValues = await this.getDefaultValues();
+    this.defaultValues = { ...this.defaultValues, ...this.settingItem };
 
-    self.defaultValues = await self.getDefaultValues();
-    self.defaultValues = { ...self.defaultValues, ...self.settingItem };
+    this.uuid = this.defaultValues.uuid;
+    this.defaultValues.divice_group_uuids = this.defaultValues.divice_groups;
+    this.defaultValues.divice_groups = [];
 
-    self.uuid = this.defaultValues.uuid;
-    self.defaultValues.divice_group_uuids = self.defaultValues.divice_groups;
-    self.defaultValues.divice_groups = [];
+    this.defaultValues.group_list_to_pass_uuids = this.defaultValues.group_list_to_pass;
+    this.defaultValues.group_list_to_pass = [];
 
-    self.defaultValues.group_list_to_pass_uuids = self.defaultValues.group_list_to_pass;
-    self.defaultValues.group_list_to_pass = [];
-
-    self.isFormPassed(self.step1form);
+    this.isFormPassed(this.step1form);
   },
 
   methods: {
@@ -378,7 +359,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -395,7 +376,7 @@ export default {
       }
     },
 
-    // 送api 完成
+    // 送 api 完成
     modify(data) {
       return this.$globalModifyCameras(data);
     },
@@ -406,11 +387,11 @@ export default {
         case 1:
         case 2:
         case 3:
-          return this.disp_next;
+          return this.$t('Next');
         case 4:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
   },

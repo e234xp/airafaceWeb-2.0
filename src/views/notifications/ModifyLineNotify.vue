@@ -3,9 +3,9 @@
     <CRow>
       <CCol sm="12">
         <CLineNotifyForm
-          :formData="$data"
-          :modifyMode="true"
-          :onFinish="onFinish"
+          :form-data="$data"
+          :modify-mode="true"
+          :on-finish="onFinish"
         />
       </CCol>
     </CRow>
@@ -37,8 +37,7 @@ export default {
   },
   methods: {
     onFinish(data, cb) {
-      const self = this;
-      self.$globalModifyLineNotify(data, (error, result) => {
+      this.$globalModifyLineNotify(data, (error, result) => {
         if (cb) cb(error == null, result);
       });
     },

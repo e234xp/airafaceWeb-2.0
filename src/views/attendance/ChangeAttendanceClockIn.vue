@@ -165,6 +165,7 @@ export default {
         pageSize: 10,
         totalResult: 1,
       },
+
     };
   },
   mixins: [TableObserver],

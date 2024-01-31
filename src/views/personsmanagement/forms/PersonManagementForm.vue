@@ -293,12 +293,15 @@
         </div>
       </CCardBody>
     </CCard>
-    <canvas ref="qrcode" id="qrcode" style="display: none;"></canvas>
+    <canvas
+      ref="qrcode"
+      id="qrcode"
+      style="display: none;"
+    />
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
 import QrCodeWithLogo from 'qr-code-with-logo';
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
@@ -312,39 +315,6 @@ import * as LoadImage from 'blueimp-load-image';
 
 const dayjs = require('dayjs');
 
-const defaultlState = () => ({
-  obj_loading: null,
-  flag_collapse: false,
-
-  flag_downloadingExecl: false,
-  excelExecutionAmounts: 0,
-  excelCounter: 0,
-
-  value_successRecords: 0,
-  value_failRecords: 0,
-  value_totalRecords: 0,
-
-  value_excelFileImpport: [],
-  value_fileImporting: false,
-  value_personGroupList: [],
-
-  value_emptyPhoto:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQA'
-    + 'AAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_searchingFilter: '',
-
-  disp_header: 'none', // i18n.formatter.format('CreatePerson'),
-
-  flag_enableAiraManager: false,
-});
-
 export default {
   name: 'ManagementForm',
   props: {
@@ -357,11 +327,40 @@ export default {
     onImport: { type: Function },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
+      flag_collapse: false,
 
-    return cloneObject;
+      flag_downloadingExecl: false,
+      excelExecutionAmounts: 0,
+      excelCounter: 0,
+
+      value_successRecords: 0,
+      value_failRecords: 0,
+      value_totalRecords: 0,
+
+      value_excelFileImpport: [],
+      value_fileImporting: false,
+      value_personGroupList: [],
+
+      value_emptyPhoto:
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQA'
+    + 'AAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_searchingFilter: '',
+
+      disp_header: 'none', // this.$t('CreatePerson'),
+
+      flag_enableAiraManager: false,
+
+      ...this.formData,
+    };
   },
   computed: {
     ...mapState(['ellipsisMode']),
@@ -369,27 +368,24 @@ export default {
   mixins: [TableObserver],
   created() { },
   async mounted() {
-    const self = this;
-
-    const ret1 = await self.$globalGetAiraManagerSetting();
+    const ret1 = await this.$globalGetAiraManagerSetting();
     if (!ret1.error) {
       const data = { ...ret1.data };
-      self.flag_enableAiraManager = data.manager_enable;
+      this.flag_enableAiraManager = data.manager_enable;
     }
 
-    const ret2 = await self.$globalGetGroupList();
+    const ret2 = await this.$globalGetGroupList();
     if (!ret2.error) {
       ret2.group_list.forEach((g) => {
-        self.value_personGroupList.push(g.name);
+        this.value_personGroupList.push(g.name);
       });
     }
 
-    self.refreshTableItems();
+    this.refreshTableItems();
   },
 
   updated() {
-    const self = this;
-    self.value_dataItemsToShow.forEach((item) => {
+    this.value_dataItemsToShow.forEach((item) => {
       const modifyButtonId = `actionOnModify_${item.uuid}`;
       const deleteButtonId = `actionOnDelete_${item.uuid}`;
 
@@ -409,12 +405,12 @@ export default {
 
       if (newDeleteButton) {
         newDeleteButton.addEventListener('click', () => {
-          self.clickOnSingleDelete(item);
+          this.clickOnSingleDelete(item);
         });
       }
       if (newModifyButton) {
         newModifyButton.addEventListener('click', () => {
-          self.clickOnModify(item);
+          this.clickOnModify(item);
         });
       }
     });
@@ -446,14 +442,12 @@ export default {
       return 'fontSize:18px;';
     },
     formatBase64ToImgTag(eleId, desireWidth, desireHeight, base64ImageString) {
-      const self = this;
       if (base64ImageString.length > 0) {
         return `<img id=${eleId} width='${desireWidth}' height='${desireHeight}' src='data:image/jpeg;base64,${base64ImageString}'>`;
       }
-      return `<img id=${eleId} width='${desireWidth}' height='${desireHeight}' src='${self.value_emptyPhoto}'>`;
+      return `<img id=${eleId} width='${desireWidth}' height='${desireHeight}' src='${this.value_emptyPhoto}'>`;
     },
     async generateFilteredData(sourceData, filter) {
-      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData
         : sourceData.filter((item) => (
@@ -463,22 +457,22 @@ export default {
           || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1)
         ));
 
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
 
       sliceList.forEach((item) => {
         const sliceItem = item;
 
-        sliceItem.imgRegisterPhoto = self.formatBase64ToImgTag(
+        sliceItem.imgRegisterPhoto = this.formatBase64ToImgTag(
           `imgRegisterPhoto${sliceItem.uuid}`,
           100,
           100,
           '',
         );
-        sliceItem.imgDisplayPhoto = self.formatBase64ToImgTag(
+        sliceItem.imgDisplayPhoto = this.formatBase64ToImgTag(
           `imgDisplayPhoto${sliceItem.uuid}`,
           100,
           100,
@@ -497,17 +491,17 @@ export default {
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
         if (sliceItem.begin_date > 0 && sliceItem.begin_date > startOfToday.getTime()) {
-          sliceItem.nameToShow += `\n${i18n.formatter.format('EffectivOn')} : ${dayjs(sliceItem.begin_date).format('YYYY-MM-DD')}`;
+          sliceItem.nameToShow += `\n${this.$t('EffectivOn')} : ${dayjs(sliceItem.begin_date).format('YYYY-MM-DD')}`;
         }
         if (sliceItem.expire_date > 0 && sliceItem.expire_date - 1 < startOfToday.getTime()) {
-          sliceItem.nameToShow += `\n${i18n.formatter.format('ExpireOn')} : ${dayjs(sliceItem.expire_date).format('YYYY-MM-DD')}`;
+          sliceItem.nameToShow += `\n${this.$t('ExpireOn')} : ${dayjs(sliceItem.expire_date).format('YYYY-MM-DD')}`;
         }
       });
 
-      self.value_dataItemsToShow = Object.assign([], sliceList);
-      for (let ii = 0; ii < self.value_dataItemsToShow.length; ii += 1) {
-        const item = self.value_dataItemsToShow[ii];
-        const photoRet = await self.$globalFetchPhoto(item.uuid);
+      this.value_dataItemsToShow = Object.assign([], sliceList);
+      for (let ii = 0; ii < this.value_dataItemsToShow.length; ii += 1) {
+        const item = this.value_dataItemsToShow[ii];
+        const photoRet = await this.$globalFetchPhoto(item.uuid);
 
         const oldRegisterPhotoImg = document.getElementById(`imgRegisterPhoto${item.uuid}`);
         if (oldRegisterPhotoImg && oldRegisterPhotoImg.parentNode) {
@@ -517,7 +511,7 @@ export default {
           imgRegister.src = photoRet.data
             && photoRet.data.register_image.length > 0
             ? `data:image/jpeg;base64,${photoRet.data.register_image}`
-            : self.value_emptyPhoto;
+            : this.value_emptyPhoto;
           oldRegisterPhotoImg.parentNode.replaceChild(imgRegister, oldRegisterPhotoImg);
 
           const imgDisplay = document.createElement('img');
@@ -526,7 +520,7 @@ export default {
           imgDisplay.src = photoRet.data
             && photoRet.data.display_image.length > 0
             ? `data:image/jpeg;base64,${photoRet.data.display_image}`
-            : self.value_emptyPhoto;
+            : this.value_emptyPhoto;
           const oldDisplayPhotoImg = document.getElementById(`imgDisplayPhoto${item.uuid}`);
           oldDisplayPhotoImg.parentNode.replaceChild(imgDisplay, oldDisplayPhotoImg);
         }
@@ -546,26 +540,25 @@ export default {
           },
         });
         const qrCode = await qrCanvas.toDataURL();
-        self.value_dataItemsToShow[ii].qrCodeDisplay = `<img src='${qrCode}' width='100' height='100'>`;
-        self.value_dataItemsToShow[ii].qrCode = qrCode.replace('data:image/png;base64,', '');
+        this.value_dataItemsToShow[ii].qrCodeDisplay = `<img src='${qrCode}' width='100' height='100'>`;
+        this.value_dataItemsToShow[ii].qrCode = qrCode.replace('data:image/png;base64,', '');
       }
     },
     refreshTableItems(cb) {
-      const self = this;
-      if (self.onFetchDataCallback) {
-        self.onFetchDataCallback((error, reset, more, tableItems) => {
+      if (this.onFetchDataCallback) {
+        this.onFetchDataCallback((error, reset, more, tableItems) => {
           if (!error) {
             if (reset) {
-              self.value_allTableItems = [];
-              self.value_dataItemsToShow = [];
+              this.value_allTableItems = [];
+              this.value_dataItemsToShow = [];
             }
             if (tableItems) {
-              self.value_allTableItems = self.value_allTableItems.concat(tableItems);
-              self.generateFilteredData(
-                self.value_allTableItems,
-                self.value_searchingFilter,
+              this.value_allTableItems = this.value_allTableItems.concat(tableItems);
+              this.generateFilteredData(
+                this.value_allTableItems,
+                this.value_searchingFilter,
               );
-              self.observeTableSize();
+              this.observeTableSize();
             }
             if (!more && cb) cb();
           } else if (cb) cb();
@@ -819,7 +812,7 @@ export default {
 
       if (this.xlsxFile == null) return;
       if (this.xlsxFile.size > 1024000 * 5) {
-        alert(i18n.formatter.format('MaxFileSize'));
+        alert(this.$t('MaxFileSize'));
         return;
       }
 
@@ -1331,16 +1324,15 @@ export default {
       if (salf.obj_loading) salf.obj_loading.hide();
     },
     deleteItem(listToDel) {
-      const self = this;
-      if (self.onDelete) {
-        self.onDelete(listToDel, (success) => {
+      if (this.onDelete) {
+        this.onDelete(listToDel, (success) => {
           if (success) {
             listToDel.forEach((deletedItem) => {
-              self.value_allTableItems = self.value_allTableItems.filter((item) => item.uuid !== deletedItem.uuid);
+              this.value_allTableItems = this.value_allTableItems.filter((item) => item.uuid !== deletedItem.uuid);
             });
-            self.generateFilteredData(
-              self.value_allTableItems,
-              self.value_searchingFilter,
+            this.generateFilteredData(
+              this.value_allTableItems,
+              this.value_searchingFilter,
             );
           }
         });

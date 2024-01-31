@@ -37,8 +37,7 @@ export default {
   },
   methods: {
     onFinish(data, cb) {
-      const self = this;
-      self.$globalModifyMailNotify(data, (error, result) => {
+      this.$globalModifyMailNotify(data, (error, result) => {
         if (cb) cb(error == null, result);
       });
     },

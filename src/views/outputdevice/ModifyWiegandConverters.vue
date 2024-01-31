@@ -1,7 +1,9 @@
 <template>
   <div id="wrapper">
     <div>
-      <div class="h1">{{ $t("TitleWiegandConverter") }}</div>
+      <div class="h1">
+        {{ $t("TitleWiegandConverter") }}
+      </div>
 
       <stepprogress
         class="w-step-progress-3"
@@ -11,35 +13,40 @@
         :passive-color="param_passiveColor"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
-        :steps="[disp_step1, disp_step3, disp_complete]"
+        :steps="[$t('WiegandStep1Name'), $t('WiegandStep2Name'), $t('Complete')]"
         icon-class="fa fa-check"
-      >
-      </stepprogress>
+      />
 
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
 
     <CCol sm="12">
       <!-- Basic Form-->
-      <CCard v-if="isOnStep(0)" style="height: 35rem">
+      <CCard
+        v-if="isOnStep(0)"
+        style="height: 35rem"
+      >
         <CCardBody>
           <Step1Form
             :step1form="step1form"
             @updateStep1form="updateStep1form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
 
       <!-- Settings Form-->
-      <CCard v-else-if="isOnStep(1)" style="height: 35rem">
+      <CCard
+        v-else-if="isOnStep(1)"
+        style="height: 35rem"
+      >
         <CCardBody>
           <Step2Form
             :step2form="step2form"
             @updateStep2form="updateStep2form"
-            :isFieldPassed="isFieldPassed"
-            :defaultValues="defaultValues"
+            :is-field-passed="isFieldPassed"
+            :default-values="defaultValues"
           />
         </CCardBody>
       </CCard>
@@ -52,7 +59,8 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ value_returnRouteName }}
+          >
+            {{ value_returnRouteName }}
           </CButton>
         </div>
         <div
@@ -63,11 +71,12 @@
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
-            >{{ disp_previous }}
+          >
+            {{ disp_previous }}
           </CButton>
         </div>
 
-        <div style="width: 20px"></div>
+        <div style="width: 20px" />
 
         <div>
           <CButton
@@ -75,9 +84,9 @@
             size="lg"
             @click="handleNext()"
             :disabled="!isStepPassed(flag_currentSetp)"
-            >{{ nextButtonName(flag_currentSetp) }}
+          >
+            {{ nextButtonName(flag_currentSetp) }}
           </CButton>
-
         </div>
       </div>
     </CCol>
@@ -113,9 +122,6 @@ export default {
         ? this.$route.params.value_returnRouteName
         : '',
 
-      // /*Basic title  */
-      disp_headertitle: i18n.formatter.format('VideoDeviceBasic'),
-
       // step setting
       param_activeColor: '#6baee3',
       param_passiveColor: '#919bae',
@@ -124,16 +130,10 @@ export default {
       param_passiveThickness: 3,
       flag_currentSetp: 0,
 
-      // /**Step 1 2 3 */
-      disp_step1: i18n.formatter.format('WiegandStep1Name'),
-      disp_step2: i18n.formatter.format('WiegandStep2Name'),
-      disp_step3: i18n.formatter.format('WiegandStep3Name'),
-      disp_complete: i18n.formatter.format('Complete'),
+      disp_complete: this.$t('Complete'),
 
-      // /**btn */
-      // disp_complete: i18n.formatter.format('Complete'),
-      disp_previous: i18n.formatter.format('Previous'),
-      disp_next: i18n.formatter.format('Next'),
+      disp_previous: this.$t('Previous'),
+      disp_next: this.$t('Next'),
 
       step1form: {
         name: '',
@@ -262,7 +262,7 @@ export default {
             this.flag_currentSetp += 1;
           } else {
             this.$fire({
-              text: i18n.formatter.format('Failed'),
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
@@ -292,7 +292,7 @@ export default {
         case 1:
           return this.disp_next;
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
           return this.disp_next;
       }

@@ -10,7 +10,7 @@
         :passive-thickness="param_passiveThickness"
         :active-color="param_activeColor"
         :passive-color="param_passiveColor"
-        :steps="[disp_inputGroupInfo, disp_selectGroupPerson, disp_complete]"
+        :steps="[$t('InputGroupInfo'), $t('SelectGroupPerson'), $t('Complete')]"
         :current-step="flag_currentSetp"
         :line-thickness="param_lineThickness"
         icon-class="fa fa-check"
@@ -27,20 +27,20 @@
             <table class="table-layout">
               <tr class="table-tr">
                 <th class="h5 w-25 table-th">
-                  {{ disp_groupName }}
+                  {{ $t('GroupName') }}
                 </th>
                 <th
                   class="h5 table-th"
                   colspan="3"
                 >
-                  {{ disp_remarks }}
+                  {{ $t('Remarks') }}
                 </th>
               </tr>
               <tr class="table-tr">
                 <td class="table-td">
                   <CInput
                     size="lg"
-                    :invalid-feedback="disp_noEmptyNoSpaceNoSpecialRepeat"
+                    :invalid-feedback="$t('NoEmptyNoSpaceNoSpecialRepeat')"
                     value=""
                     v-model="value_groupName"
                     placeholder=""
@@ -100,7 +100,7 @@
                   v-model.lazy="value_searchingFilterForAll"
                   class="w-100"
                   size="lg"
-                  :placeholder="disp_search"
+                  :placeholder="$t('Search')"
                 >
                   <template #prepend-content>
                     <CIcon name="cil-search" />
@@ -125,14 +125,14 @@
                 <vxe-table-column
                   show-overflow
                   field="id"
-                  :title="disp_id"
+                  :title="$t('PersonId')"
                   min-width="40%"
                   align="left"
                 />
                 <vxe-table-column
                   show-overflow
                   field="name"
-                  :title="disp_name"
+                  :title="$t('PersonName')"
                   min-width="40%"
                   align="left"
                 />
@@ -163,7 +163,7 @@
                 class="btn btn-outline-primary w-100 mb-4"
                 @click="clickOnInsert()"
               >
-                <span class="mr-3">{{ disp_insert }}</span>
+                <span class="mr-3">{{ $t('Insert') }}</span>
                 <span>{{ disp_addmark }}</span>
               </CButton>
 
@@ -172,7 +172,7 @@
                 @click="clickOnRemove()"
               >
                 <span class="mr-3">{{ disp_removemark }}</span>
-                <span>{{ disp_remove }}</span>
+                <span>{{ $t('Remove') }}</span>
               </CButton>
             </CCol>
             <!-- 右欄 -->
@@ -181,7 +181,7 @@
                 class="h3 mt-4 mb-3"
                 style="font-weight: 800"
               >
-                {{ disp_selectedPerson }}
+                {{ $t('Selected') }}
               </div>
               <div style="height: 23px" />
               <div style="margin-left: auto">
@@ -189,7 +189,7 @@
                   v-model.lazy="value_searchingFilterForSelected"
                   style="width: 100%"
                   size="lg"
-                  :placeholder="disp_search"
+                  :placeholder="$t('Search')"
                 >
                   <template #prepend-content>
                     <CIcon name="cil-search" />
@@ -215,14 +215,14 @@
                   min-width="40%"
                   show-overflow
                   field="id"
-                  :title="disp_id"
+                  :title="$t('PersonId')"
                   align="left"
                 />
                 <vxe-table-column
                   show-overflow
                   min-width="40%"
                   field="name"
-                  :title="disp_name"
+                  :title="$t('PersonName')"
                   align="left"
                 />
               </vxe-table>
@@ -257,7 +257,7 @@
           <CRow>
             <CCol sm="12">
               <p class="display-4 row justify-content-center">
-                {{ disp_complete }}
+                {{ $t('Complete') }}
               </p>
             </CCol>
           </CRow>
@@ -282,7 +282,7 @@
             class="btn btn-outline-primary btn-w-normal fz-lg"
             @click="clickOnPrev"
           >
-            {{ disp_previous }}
+            {{ $t('Previous') }}
           </CButton>
         </div>
         <div style="width: 20px" />
@@ -301,87 +301,10 @@
   </div>
 </template>
 <script>
-import i18n from '@/i18n';
 import TableObserver from '@/utils/TableObserver.vue';
 import SegmentedControl from 'vue-segmented-control';
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
-
-const defaultlState = () => ({
-  obj_loading: null,
-  value_allTablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_selectedTablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  segmetionOptions: [
-    { name: i18n.formatter.format('Person'), value: 'PersonList' },
-    { name: i18n.formatter.format('Visitor'), value: 'VisitorList' },
-  ],
-  param_cardStyle: 'height: 35rem;',
-  param_activeColor: '#6baee3',
-  param_passiveColor: '#919bae',
-  param_lineThickness: 3,
-  param_activeThickness: 3,
-  param_passiveThickness: 3,
-
-  disp_noEmptyNoSpaceNoSpecialRepeat: i18n.formatter.format('NoEmptyNoSpaceNoSpecialRepeat'),
-  disp_inputGroupInfo: i18n.formatter.format('InputGroupInfo'),
-  disp_selectGroupPerson: i18n.formatter.format('SelectGroupPerson'),
-  disp_create: i18n.formatter.format('Create'),
-  disp_modify: i18n.formatter.format('Modify'),
-  disp_saveChanges: i18n.formatter.format('SaveChanges'),
-  disp_complete: i18n.formatter.format('Complete'),
-  disp_registerCompleted: i18n.formatter.format('RegisterCompleted'),
-  disp_previous: i18n.formatter.format('Previous'),
-  disp_next: i18n.formatter.format('Next'),
-  disp_select: i18n.formatter.format('Select'),
-  disp_insert: i18n.formatter.format('Insert'),
-  disp_remove: i18n.formatter.format('Remove'),
-  disp_addmark: '>',
-  disp_removemark: '<',
-  disp_search: i18n.formatter.format('Search'),
-  disp_allPerson: i18n.formatter.format('PersonList'),
-  disp_selectedPerson: i18n.formatter.format('Selected'),
-
-  flag_modifyMode: false,
-  flag_currentSelection: 0,
-
-  value_returnRoutePath: '',
-  value_returnRouteName: '',
-  value_group_list: [],
-
-  flag_currentSetp: 0,
-
-  value_groupUuid: '',
-  disp_groupName: i18n.formatter.format('GroupName'),
-  value_groupName: '',
-  flag_groupNamePass: false,
-
-  disp_remarks: i18n.formatter.format('Remarks'),
-  value_remarks: '',
-  disp_header: 'none',
-
-  disp_id: i18n.formatter.format('PersonId'),
-  disp_name: i18n.formatter.format('PersonName'),
-
-  value_searchingFilterForAll: '',
-  value_searchingFilterForSelected: '',
-  value_selectedPersonList: [],
-  value_selectedVisitorList: [],
-  value_selectedItems: [],
-  value_allItemsToShow: [],
-  value_selectedItemsToShow: [],
-
-  flag_keepingDownload: false,
-  value_allPersonList: [],
-  value_allVisitorList: [],
-});
 
 export default {
   name: 'GroupForm',
@@ -390,49 +313,100 @@ export default {
     onFinish: { type: Function },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
+      value_allTablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_selectedTablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      segmetionOptions: [
+        { name: this.$t('Person'), value: 'PersonList' },
+        { name: this.$t('Visitor'), value: 'VisitorList' },
+      ],
+      param_cardStyle: 'height: 35rem;',
+      param_activeColor: '#6baee3',
+      param_passiveColor: '#919bae',
+      param_lineThickness: 3,
+      param_activeThickness: 3,
+      param_passiveThickness: 3,
 
-    return cloneObject;
+      disp_addmark: '>',
+      disp_removemark: '<',
+      disp_allPerson: this.$t('PersonList'),
+
+      flag_modifyMode: false,
+      flag_currentSelection: 0,
+
+      value_returnRoutePath: '',
+      value_returnRouteName: '',
+      value_group_list: [],
+
+      flag_currentSetp: 0,
+
+      value_groupUuid: '',
+      value_groupName: '',
+      flag_groupNamePass: false,
+
+      value_remarks: '',
+      disp_header: 'none',
+
+      value_searchingFilterForAll: '',
+      value_searchingFilterForSelected: '',
+      value_selectedPersonList: [],
+      value_selectedVisitorList: [],
+      value_selectedItems: [],
+      value_allItemsToShow: [],
+      value_selectedItemsToShow: [],
+
+      flag_keepingDownload: false,
+      value_allPersonList: [],
+      value_allVisitorList: [],
+
+      ...this.formData,
+    };
   },
   mixins: [TableObserver],
   created() { },
   mounted() {
-    const self = this;
     let personDownloadOk = false;
     let visitorDownloadOk = false;
-    self.flag_keepingDownload = true;
-    self.downloadPersonAsync(20000, (error, reset, more, tableItems) => {
+    this.flag_keepingDownload = true;
+    this.downloadPersonAsync(20000, (error, reset, more, tableItems) => {
       if (!error) {
         if (reset) {
-          self.value_allPersonList = [];
+          this.value_allPersonList = [];
         }
         if (tableItems) {
-          self.value_allPersonList = self.value_allPersonList.concat(tableItems);
+          this.value_allPersonList = this.value_allPersonList.concat(tableItems);
         }
         if (!more) {
           personDownloadOk = true;
-          if (visitorDownloadOk) self.updateData();
+          if (visitorDownloadOk) this.updateData();
         }
       } else {
-        self.updateData();
+        this.updateData();
       }
     });
-    self.downloadVisitorAsync(1000, (error, reset, more, tableItems) => {
+    this.downloadVisitorAsync(1000, (error, reset, more, tableItems) => {
       if (!error) {
         if (reset) {
-          self.value_allVisitorList = [];
+          this.value_allVisitorList = [];
         }
         if (tableItems) {
-          self.value_allVisitorList = self.value_allVisitorList.concat(tableItems);
+          this.value_allVisitorList = this.value_allVisitorList.concat(tableItems);
         }
         if (!more) {
           visitorDownloadOk = true;
-          if (personDownloadOk) self.updateData();
+          if (personDownloadOk) this.updateData();
         }
       } else {
-        self.updateData();
+        this.updateData();
       }
     });
     this.observeTableSize(false);
@@ -448,12 +422,11 @@ export default {
   },
   methods: {
     async downloadPersonAsync(sliceSize, cb) {
-      const self = this;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
-      while (self.flag_keepingDownload && thereIsMoreData) {
-        const ret = await self.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
+      while (this.flag_keepingDownload && thereIsMoreData) {
+        const ret = await this.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
         const { data, error } = ret;
 
         if (error == null) {
@@ -466,8 +439,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          self.$fire({
-            title: i18n.formatter.format('NetworkLoss'),
+          this.$fire({
+            title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -477,12 +450,11 @@ export default {
       }
     },
     async downloadVisitorAsync(sliceSize, cb) {
-      const self = this;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
-      while (self.flag_keepingDownload && thereIsMoreData) {
-        const ret = await self.$globalFindVisitorWithoutPhoto('', shitf, sliceSize);
+      while (this.flag_keepingDownload && thereIsMoreData) {
+        const ret = await this.$globalFindVisitorWithoutPhoto('', shitf, sliceSize);
         const { data, error } = ret;
         if (error == null) {
           if (data.total_length && data.total_length > sliceSize + shitf) {
@@ -494,8 +466,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          self.$fire({
-            title: i18n.formatter.format('NetworkLoss'),
+          this.$fire({
+            title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -506,7 +478,7 @@ export default {
     },
     onSelectType(optionsSelected) {
       // console.log( optionsSelected ); 抓value if訪客列表
-      this.disp_allPerson = i18n.formatter.format(optionsSelected[0].value);
+      this.disp_allPerson = this.$t(optionsSelected[0].value);
       if (optionsSelected[0].value === 'VisitorList') this.flag_currentSelection = 1;
       else this.flag_currentSelection = 0;
       this.value_allTablePage.currentPage = 1;
@@ -519,46 +491,45 @@ export default {
       return 'fontSize: 16px;';
     },
     updateData() {
-      const self = this;
       let allItemsToShow = [];
 
       const selectedItems = this.value_selectedPersonList.concat(this.value_selectedVisitorList);
 
-      if (self.flag_currentSelection === 0) {
-        allItemsToShow = self.value_allPersonList;
+      if (this.flag_currentSelection === 0) {
+        allItemsToShow = this.value_allPersonList;
         selectedItems.forEach((seletedItem) => {
           allItemsToShow = allItemsToShow.filter((item) => item.uuid !== seletedItem.uuid);
         });
       } else {
-        allItemsToShow = self.value_allVisitorList;
+        allItemsToShow = this.value_allVisitorList;
         selectedItems.forEach((seletedItem) => {
           allItemsToShow = allItemsToShow.filter((item) => item.uuid !== seletedItem.uuid);
         });
       }
 
       allItemsToShow.sort((a, b) => a.id.localeCompare(b.id));
-      self.value_allItemsToShow = self.generateAllFilteredData(
+      this.value_allItemsToShow = this.generateAllFilteredData(
         allItemsToShow,
-        self.value_searchingFilterForAll,
+        this.value_searchingFilterForAll,
       );
 
-      self.value_selectedItems = selectedItems;
+      this.value_selectedItems = selectedItems;
       selectedItems.sort((a, b) => a.id.localeCompare(b.id));
-      self.value_selectedItemsToShow = self.generateSelectedFilteredData(
+      this.value_selectedItemsToShow = this.generateSelectedFilteredData(
         selectedItems,
-        self.value_searchingFilterForSelected,
+        this.value_searchingFilterForSelected,
       );
     },
     nextButtonName() {
       switch (this.flag_currentSetp) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.flag_modifyMode ? this.disp_saveChanges : this.disp_create;
+          return this.flag_modifyMode ? this.$t('SaveChanges') : this.$t('Create');
         case 2:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_next;
+          return this.$t('Next');
       }
     },
     clickOnInsert() {
@@ -572,47 +543,44 @@ export default {
       this.updateData();
     },
     clickOnRemove() {
-      const self = this;
       const selectedRecords = this.$refs.selectedTable.getCheckboxRecords();
       selectedRecords.forEach((seletedItem) => {
-        self.value_selectedPersonList = self.value_selectedPersonList.filter((item) => item.uuid !== seletedItem.uuid);
-        self.value_selectedVisitorList = self.value_selectedVisitorList.filter((item) => item.uuid !== seletedItem.uuid);
+        this.value_selectedPersonList = this.value_selectedPersonList.filter((item) => item.uuid !== seletedItem.uuid);
+        this.value_selectedVisitorList = this.value_selectedVisitorList.filter((item) => item.uuid !== seletedItem.uuid);
       });
       this.updateData();
     },
     clickOnPrev() {
-      const self = this;
-      if (self.flag_currentSetp === 0) {
-        if (self.value_returnRoutePath.length > 0) {
-          self.$router.push({ name: self.value_returnRoutePath });
-          self.flag_keepingDownload = false;
+      if (this.flag_currentSetp === 0) {
+        if (this.value_returnRoutePath.length > 0) {
+          this.$router.push({ name: this.value_returnRoutePath });
+          this.flag_keepingDownload = false;
         }
-      } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
+      } else if (this.flag_currentSetp > 0) this.flag_currentSetp -= 1;
     },
     clickOnNext() {
-      const self = this;
-      if (self.flag_currentSetp === 0) {
+      if (this.flag_currentSetp === 0) {
         this.observeTableSize(true);
-        self.flag_currentSetp = 1;
-      } else if (self.flag_currentSetp === 1) {
-        self.flag_keepingDownload = false;
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        if (self.onFinish) {
-          self.onFinish(
+        this.flag_currentSetp = 1;
+      } else if (this.flag_currentSetp === 1) {
+        this.flag_keepingDownload = false;
+        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+        if (this.onFinish) {
+          this.onFinish(
             {
-              uuid: self.value_groupUuid,
-              name: self.value_groupName,
-              remarks: self.value_remarks,
-              person_list: self.value_selectedPersonList,
-              visitor_list: self.value_selectedVisitorList,
+              uuid: this.value_groupUuid,
+              name: this.value_groupName,
+              remarks: this.value_remarks,
+              person_list: this.value_selectedPersonList,
+              visitor_list: this.value_selectedVisitorList,
             },
             (success, result) => {
-              if (self.obj_loading) self.obj_loading.hide();
+              if (this.obj_loading) this.obj_loading.hide();
               if (result && result.message === 'ok') {
-                self.flag_currentSetp = 2;
+                this.flag_currentSetp = 2;
               } else {
-                self.$fire({
-                  text: i18n.formatter.format('Failed'),
+                this.$fire({
+                  text: this.$t('Failed'),
                   type: 'error',
                   timer: 3000,
                   confirmButtonColor: '#20a8d8',
@@ -621,32 +589,31 @@ export default {
             },
           );
         } else {
-          if (self.obj_loading) self.obj_loading.hide();
-          self.flag_currentSetp = 2;
+          if (this.obj_loading) this.obj_loading.hide();
+          this.flag_currentSetp = 2;
         }
       } else {
-        self.$router.push({ name: self.value_returnRoutePath });
+        this.$router.push({ name: this.value_returnRoutePath });
       }
     },
     groupNameValidator(val) {
-      const self = this;
       if (val.replace(/\s/g, '').length === 0) {
-        self.flag_groupNamePass = false;
+        this.flag_groupNamePass = false;
         // } else if (val.replace(/[a-zA-Z0-9\s]/g, '').length === 0) {
         // } else if (val.replace(/[^\.\+\*\?\^\$\(\)\[\]\{\}\|\'\"\/\,]/g, '').length === 0) {
       } else if (val.replace(/[^+)(*&^%$#@!~|}{":?><,./';\][=`]/g, '').length === 0) {
-        self.flag_groupNamePass = true;
+        this.flag_groupNamePass = true;
       } else {
-        self.flag_groupNamePass = false;
+        this.flag_groupNamePass = false;
       }
-      if (self.flag_groupNamePass) {
-        self.value_group_list.forEach((group) => {
+      if (this.flag_groupNamePass) {
+        this.value_group_list.forEach((group) => {
           if (group.name.trim().toLowerCase() === val.trim().toLowerCase()) {
-            self.flag_groupNamePass = false;
+            this.flag_groupNamePass = false;
           }
         });
       }
-      return self.flag_groupNamePass;
+      return this.flag_groupNamePass;
     },
 
     showOnStep(step) {
@@ -656,31 +623,28 @@ export default {
       return step === this.flag_currentSetp ? 'display:block' : 'height:15px;display:none';
     },
     generateAllFilteredData(sourceData, filter) {
-      const self = this;
-
       const filteredItems = filter.length === 0 ? sourceData : sourceData.filter((item) => (
         item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
         || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
       ));
 
-      self.value_allTablePage.totalResult = filteredItems.length;
+      this.value_allTablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_allTablePage.currentPage - 1) * self.value_allTablePage.pageSize,
-        self.value_allTablePage.currentPage * self.value_allTablePage.pageSize,
+        (this.value_allTablePage.currentPage - 1) * this.value_allTablePage.pageSize,
+        this.value_allTablePage.currentPage * this.value_allTablePage.pageSize,
       );
       return Object.assign([], sliceList);
     },
     generateSelectedFilteredData(sourceData, filter) {
-      const self = this;
       const filteredItems = filter.length === 0 ? sourceData : sourceData.filter((item) => (
         item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
         || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
       ));
 
-      self.value_selectedTablePage.totalResult = filteredItems.length;
+      this.value_selectedTablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_selectedTablePage.currentPage - 1) * self.value_selectedTablePage.pageSize,
-        self.value_selectedTablePage.currentPage * self.value_selectedTablePage.pageSize,
+        (this.value_selectedTablePage.currentPage - 1) * this.value_selectedTablePage.pageSize,
+        this.value_selectedTablePage.currentPage * this.value_selectedTablePage.pageSize,
       );
       return Object.assign([], sliceList);
     },
