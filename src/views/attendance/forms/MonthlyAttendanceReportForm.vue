@@ -15,7 +15,7 @@
               v-model.lazy="value_searchingFilter"
               style="width: 300px"
               size="lg"
-              :placeholder="disp_search"
+              :placeholder="$t('Search')"
             >
               <template #prepend-content>
                 <CIcon name="cil-search" />
@@ -39,7 +39,7 @@
                     <i class="bi bi-reply" />
                   </div>
                   <div class="btn-rwd-text btn-p-md">
-                    {{ disp_return }}
+                    {{ $t('ReturnToAll') }}
                   </div>
                 </CButton>
               </div>
@@ -169,7 +169,7 @@
                   class="btn btn-outline-primary fz-md ml-2 nowrap-hidden"
                   @click="value_attendanceDataListToReview == null ? flag_masterCollapse = !flag_masterCollapse : flag_detailCollapse = !flag_detailCollapse"
                 >
-                  {{ disp_export }}
+                  {{ $t('Export') }}
                 </CButton>
               </div>
             </div>
@@ -196,7 +196,7 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="person"
-                :title="disp_person"
+                :title="$t('Person')"
                 width="10%"
                 align="left"
                 type="html"
@@ -205,7 +205,7 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="groups"
-                :title="disp_group_list"
+                :title="$t('Group')"
                 align="left"
                 type="html"
                 width="10%"
@@ -213,13 +213,13 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockDate"
-                :title="disp_clockDate"
+                :title="$t('Date')"
                 width="10%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="workingTimeToShow"
-                :title="disp_working_time"
+                :title="$t('WorkingTime')"
                 align="left"
                 type="html"
                 width="15%"
@@ -227,14 +227,14 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="attendanceStatusText"
-                :title="disp_attendanceStatus"
+                :title="$t('MonthlyAttendanceStatus')"
                 align="left"
                 type="html"
                 width="15%"
               />
               <vxe-table-column
                 field="attendanceStatus"
-                :title="disp_monthlyAttendanceStatus"
+                :title="$t('MonthlyAttendanceStatus')"
                 min-width="400"
                 type="html"
               />
@@ -263,7 +263,7 @@
             @page-change="handlePageChange"
           />
         </div>
-        <div>{{ disp_monthlyAttendanceRemark }}</div>
+        <div>{{ $t('WorkingHousCalculatingTip') }}</div>
       </CCardBody>
     </CCard>
 
@@ -281,49 +281,49 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="id"
-                :title="disp_id"
+                :title="$t('PersonId')"
                 width="12%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="nameToShow"
-                :title="disp_name"
+                :title="$t('PersonName')"
                 width="12%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="groups"
-                :title="disp_group_list"
+                :title="$t('Group')"
                 width="15%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockMode"
-                :title="disp_clockingMode"
+                :title="$t('ClockingMode')"
                 width="12%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockTime"
-                :title="disp_clockTime"
+                :title="$t('ClockTime')"
                 width="12%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="temperature"
                 v-if="$deviceProfile.supportTemperature"
-                :title="disp_temperature"
+                :title="$t('Temperature')"
                 width="12%"
               />
               <vxe-table-column
                 field="showimage"
-                :title="disp_face_image"
+                :title="$t('CapturedPhoto')"
                 type="html"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="card_number"
-                :title="disp_cardnumber"
+                :title="$t('CardNumber')"
                 width="12%"
               />
             </vxe-table>
@@ -350,7 +350,7 @@
     <CModal :show.sync="flag_masterCollapse">
       <template #header>
         <div class="alertModal_Title">
-          {{ disp_ExportSetting }}
+          {{ $t('ExportSetting') }}
         </div>
       </template>
       <CRow>
@@ -358,7 +358,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_FileType }}
+          {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -373,7 +373,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_txtSeparator }}
+          {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -401,7 +401,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_Snapshot }}
+          {{ $t('CapturedPhoto') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -418,7 +418,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_Fields }}
+          {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
@@ -475,7 +475,7 @@
             color="secondary"
             @click="flag_masterCollapse=false"
           >
-            {{ disp_Cancel }}
+            {{ $t('Cancel') }}
           </CButton>
           <CButton
             class="ml-1 btn-temp"
@@ -483,7 +483,7 @@
             @click="clickOnExport"
             style="min-width: unset;"
           >
-            {{ disp_Apply }}
+            {{ $t('Apply') }}
           </CButton>
         </footer>
       </template>
@@ -492,7 +492,7 @@
     <CModal :show.sync="flag_detailCollapse">
       <template #header>
         <div class="alertModal_Title">
-          {{ disp_ExportSetting }}
+          {{ $t('ExportSetting') }}
         </div>
       </template>
       <CRow>
@@ -500,7 +500,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_FileType }}
+          {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -515,7 +515,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_txtSeparator }}
+          {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -543,7 +543,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_Snapshot }}
+          {{ $t('CapturedPhoto') }}
         </CCol>
         <CCol col="9">
           <CSelect
@@ -564,7 +564,7 @@
           col="3"
           class="pt-2 label"
         >
-          {{ disp_Fields }}
+          {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
@@ -621,7 +621,7 @@
             color="secondary"
             @click="flag_detailCollapse=false"
           >
-            {{ disp_Cancel }}
+            {{ $t('Cancel') }}
           </CButton>
           <CButton
             class="ml-1 btn-temp"
@@ -629,7 +629,7 @@
             @click="clickOnExport"
             style="min-width: unset;"
           >
-            {{ disp_Apply }}
+            {{ $t('Apply') }}
           </CButton>
         </footer>
       </template>
@@ -640,7 +640,6 @@
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
 // import * as coreui from '@coreui/coreui';
-import i18n from '@/i18n';
 import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
 
@@ -648,176 +647,6 @@ import JsZip from 'jszip';
 
 const dayjs = require('dayjs');
 
-const defaultlState = () => ({
-  obj_loading: null,
-
-  flag_downloadingExecl: false,
-  flag_masterCollapse: false,
-  flag_detailCollapse: false,
-  excelExecutionAmounts: 0,
-  excelCounter: 0,
-  exportNo: 0,
-
-  value_emptyPhoto: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAA'
-    + 'QAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_tablePageForDetailData: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_searchingFilter: '',
-
-  disp_id: i18n.formatter.format('PersonId'),
-  disp_name: i18n.formatter.format('PersonName'),
-  disp_person: i18n.formatter.format('Person'),
-
-  disp_department: i18n.formatter.format('Department'),
-  disp_clockDate: i18n.formatter.format('Date'),
-  disp_clockin: i18n.formatter.format('ClockInTime'),
-  disp_clockin_temperature: i18n.formatter.format('Temperature'),
-  disp_clockout: i18n.formatter.format('ClockOutTime'),
-  disp_clockout_temperature: i18n.formatter.format('Temperature'),
-  disp_working_time: i18n.formatter.format('WorkingTime'),
-  disp_over_time: i18n.formatter.format('Overtime'),
-  disp_cardnumber: i18n.formatter.format('CardNumber'),
-  disp_group_list: i18n.formatter.format('Group'),
-  disp_face_image: i18n.formatter.format('CapturedPhoto'),
-  disp_attendanceStatus: i18n.formatter.format('MonthlyAttendanceStatus'),
-  disp_monthlyAttendanceRemark: i18n.formatter.format('WorkingHousCalculatingTip'),
-
-  disp_search: i18n.formatter.format('Search'),
-  disp_export: i18n.formatter.format('Export'),
-  disp_clockTime: i18n.formatter.format('ClockTime'),
-  disp_clockingMode: i18n.formatter.format('ClockingMode'),
-  disp_temperature: i18n.formatter.format('Temperature'),
-  disp_return: i18n.formatter.format('ReturnToAll'),
-  disp_header: 'none',
-  disp_monthlyAttendanceStatus: i18n.formatter.format('MonthlyAttendanceStatus'),
-
-  disp_ExportSetting: i18n.formatter.format('ExportSetting'),
-
-  disp_FileType: i18n.formatter.format('FileType'),
-  disp_txtSeparator: i18n.formatter.format('txtSeparator'),
-  disp_Snapshot: i18n.formatter.format('CapturedPhoto'),
-  disp_Fields: i18n.formatter.format('FieldName'),
-
-  disp_Cancel: i18n.formatter.format('Cancel'),
-  disp_Apply: i18n.formatter.format('Apply'),
-
-  value_fileType: '.xlsx',
-  value_txtSeparator: ',',
-  value_separator: '',
-  value_snapshotFileType: 'Excluded',
-
-  value_masterfieldsforExport: [
-    { key: 'id', value: i18n.formatter.format('PersonId') },
-    { key: 'name', value: i18n.formatter.format('PersonName') },
-    { key: 'group_list', value: i18n.formatter.format('Group') },
-    { key: 'workingTime', value: i18n.formatter.format('WorkingTime') },
-    { key: 'overTime', value: i18n.formatter.format('Overtime') },
-    { key: 'norecord', value: i18n.formatter.format('NoRecord') },
-    { key: 'arrivallate', value: i18n.formatter.format('LatePerson') },
-    { key: 'leaveearly', value: i18n.formatter.format('LeaveEarly') },
-    { key: 'noentryrecord', value: i18n.formatter.format('NoEntryRecord') },
-    { key: 'noleaverecord', value: i18n.formatter.format('NoLeaveRecord') },
-  ],
-
-  value_masterexportFields: [
-    'id',
-    'name',
-    'group_list',
-    'workingTime',
-    'overTime',
-    'norecord',
-    'arrivallate',
-    'leaveearly',
-    'noentryrecord',
-    'noleaverecord',
-  ],
-
-  value_masternotinExportList: [
-
-  ],
-
-  value_detailfieldsforExport: [
-    { key: 'id', value: i18n.formatter.format('PersonId') },
-    { key: 'name', value: i18n.formatter.format('PersonName') },
-    { key: 'group_list', value: i18n.formatter.format('Group') },
-    { key: 'mode', value: i18n.formatter.format('ClockingMode') },
-    { key: 'clockTime', value: i18n.formatter.format('ClockTime') },
-    // { key: 'temperature', value: i18n.formatter.format('Temperature') },
-    { key: 'face_image', value: i18n.formatter.format('CapturedPhoto') },
-    { key: 'cardno', value: i18n.formatter.format('CardNumber') },
-  ],
-
-  value_detailexportFields: [
-    'id',
-    'name',
-    'group_list',
-    'mode',
-    'clockTime',
-    // 'temperature',
-    'face_image',
-    'cardno',
-  ],
-
-  value_detailnotinExportList: [
-
-  ],
-
-  // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show // e74d7c
-  value_attendanceStatusColor: [
-    '#fff',
-    '#57bd37',
-    '#57bd37',
-    '#ee7447',
-    '#ee7447',
-    '#d8cde3',
-  ],
-
-  value_specifiedMonth: new Date(),
-  value_attendanceDataListToReview: null,
-  value_dataItemsToShowDetailData: [],
-  value_selectedMonth: 0,
-  value_selectedMonthNameType2: i18n.formatter.format('Select'),
-  value_selectedMonthName: [
-    i18n.formatter.format('ThisMonth'),
-    i18n.formatter.format('LastMonth'),
-    i18n.formatter.format('Select'),
-  ],
-  value_monthPicked: null,
-  value_showAllPerson: `${i18n.formatter.format('AllPerson')}: 0`,
-  value_showLatePerson: `${i18n.formatter.format('LatePerson')}: 0`,
-  value_showLeaveEarlyPerson: `${i18n.formatter.format('LeaveEarly')}: 0`,
-  value_showNoRecordPerson: `${i18n.formatter.format('NoRecord')}: 0`,
-  value_showGoodRecordsPerson: `${i18n.formatter.format('GoodRecords')}: 0`,
-  value_workingHourSettings: {
-    definedClockinTimeHour: 9,
-    definedClockinTimeMin: 0,
-    definedClockinTimeLateEnabled: true, //
-    definedClockinTimeBufferMins: 15,
-    definedClockinAdjustmentEnabled: true, //
-    definedClockoutTimeHour: 18,
-    definedClockoutTimeMin: 0,
-    definedClockoutTimeEarlyLeaveEnabled: true, //
-    definedClockoutTimeBufferMins: 15,
-    definedClockoutAdjustmentEnabled: true, //
-    definedOvertimeEnabled: true, //
-    definedOvertimeTimeHour: 18, //
-    definedOvertimeTimeMin: 30, //
-    definedOvertimeMinimumMin: 30, //
-    definedBreakTimeMins: 60, //
-    specifiedHolidays: [{ date_time: 0 }],
-    specifiedNonHolidays: [{ date_time: 0 }],
-  },
-});
 export default {
   name: 'MonthlyAttendanceReportForm',
   props: {
@@ -826,23 +655,154 @@ export default {
     onFetchPersonAttendanceDataCallback: { type: Function },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
 
-    return cloneObject;
+      obj_loading: null,
+
+      flag_downloadingExecl: false,
+      flag_masterCollapse: false,
+      flag_detailCollapse: false,
+      excelExecutionAmounts: 0,
+      excelCounter: 0,
+      exportNo: 0,
+
+      value_emptyPhoto: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAA'
+    + 'QAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_tablePageForDetailData: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_searchingFilter: '',
+
+      disp_header: 'none',
+
+      value_fileType: '.xlsx',
+      value_txtSeparator: ',',
+      value_separator: '',
+      value_snapshotFileType: 'Excluded',
+
+      value_masterfieldsforExport: [
+        { key: 'id', value: this.$t('PersonId') },
+        { key: 'name', value: this.$t('PersonName') },
+        { key: 'group_list', value: this.$t('Group') },
+        { key: 'workingTime', value: this.$t('WorkingTime') },
+        { key: 'overTime', value: this.$t('Overtime') },
+        { key: 'norecord', value: this.$t('NoRecord') },
+        { key: 'arrivallate', value: this.$t('LatePerson') },
+        { key: 'leaveearly', value: this.$t('LeaveEarly') },
+        { key: 'noentryrecord', value: this.$t('NoEntryRecord') },
+        { key: 'noleaverecord', value: this.$t('NoLeaveRecord') },
+      ],
+
+      value_masterexportFields: [
+        'id',
+        'name',
+        'group_list',
+        'workingTime',
+        'overTime',
+        'norecord',
+        'arrivallate',
+        'leaveearly',
+        'noentryrecord',
+        'noleaverecord',
+      ],
+
+      value_masternotinExportList: [
+
+      ],
+
+      value_detailfieldsforExport: [
+        { key: 'id', value: this.$t('PersonId') },
+        { key: 'name', value: this.$t('PersonName') },
+        { key: 'group_list', value: this.$t('Group') },
+        { key: 'mode', value: this.$t('ClockingMode') },
+        { key: 'clockTime', value: this.$t('ClockTime') },
+        // { key: 'temperature', value: this.$t('Temperature') },
+        { key: 'face_image', value: this.$t('CapturedPhoto') },
+        { key: 'cardno', value: this.$t('CardNumber') },
+      ],
+
+      value_detailexportFields: [
+        'id',
+        'name',
+        'group_list',
+        'mode',
+        'clockTime',
+        // 'temperature',
+        'face_image',
+        'cardno',
+      ],
+
+      value_detailnotinExportList: [
+
+      ],
+
+      // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show // e74d7c
+      value_attendanceStatusColor: [
+        '#fff',
+        '#57bd37',
+        '#57bd37',
+        '#ee7447',
+        '#ee7447',
+        '#d8cde3',
+      ],
+
+      value_specifiedMonth: new Date(),
+      value_attendanceDataListToReview: null,
+      value_dataItemsToShowDetailData: [],
+      value_selectedMonth: 0,
+      value_selectedMonthName: [
+        this.$t('ThisMonth'),
+        this.$t('LastMonth'),
+        this.$t('Select'),
+      ],
+      value_monthPicked: null,
+      value_showAllPerson: `${this.$t('AllPerson')}: 0`,
+      value_showLatePerson: `${this.$t('LatePerson')}: 0`,
+      value_showLeaveEarlyPerson: `${this.$t('LeaveEarly')}: 0`,
+      value_showNoRecordPerson: `${this.$t('NoRecord')}: 0`,
+      value_showGoodRecordsPerson: `${this.$t('GoodRecords')}: 0`,
+      value_workingHourSettings: {
+        definedClockinTimeHour: 9,
+        definedClockinTimeMin: 0,
+        definedClockinTimeLateEnabled: true, //
+        definedClockinTimeBufferMins: 15,
+        definedClockinAdjustmentEnabled: true, //
+        definedClockoutTimeHour: 18,
+        definedClockoutTimeMin: 0,
+        definedClockoutTimeEarlyLeaveEnabled: true, //
+        definedClockoutTimeBufferMins: 15,
+        definedClockoutAdjustmentEnabled: true, //
+        definedOvertimeEnabled: true, //
+        definedOvertimeTimeHour: 18, //
+        definedOvertimeTimeMin: 30, //
+        definedOvertimeMinimumMin: 30, //
+        definedBreakTimeMins: 60, //
+        specifiedHolidays: [{ date_time: 0 }],
+        specifiedNonHolidays: [{ date_time: 0 }],
+      },
+
+      ...this.formData,
+    };
   },
   created() { },
   mixins: [TableObserver],
   mounted() {
-    const self = this;
-    self.$globalGetAttendanceSettings((err, data) => {
+    this.$globalGetAttendanceSettings((err, data) => {
       if (!err) {
-        self.value_workingHourSettings = data;
+        this.value_workingHourSettings = data;
       }
 
-      if (self.value_workingHourSettings == null) {
-        self.value_workingHourSettings = {
+      if (this.value_workingHourSettings == null) {
+        this.value_workingHourSettings = {
           definedClockinTimeHour: 9,
           definedClockinTimeMin: 0,
           definedClockinTimeLateEnabled: true,
@@ -862,14 +822,14 @@ export default {
           specifiedNonHolidays: [{ date_time: 0 }],
         };
       }
-      self.refreshTableItems();
+      this.refreshTableItems();
     });
 
     // this.initToggles();
 
-    if (self.$deviceProfile.supportTemperature) {
-      self.value_detailfieldsforExport.push({ key: 'temperature', value: i18n.formatter.format('Temperature') });
-      self.value_detailexportFields.push('temperature');
+    if (this.$deviceProfile.supportTemperature) {
+      this.value_detailfieldsforExport.push({ key: 'temperature', value: this.$t('Temperature') });
+      this.value_detailexportFields.push('temperature');
     }
   },
   computed: {
@@ -877,14 +837,13 @@ export default {
   },
 
   updated() {
-    const self = this;
-    if (self.showAllData()) {
-      self.value_dataItemsToShow.forEach((item) => {
+    if (this.showAllData()) {
+      this.value_dataItemsToShow.forEach((item) => {
         const btn = document.getElementById(`actionOnDetails_${item.uuid}`);
 
         if (btn) {
           btn.addEventListener('click', () => {
-            self.clickOnDetails(item);
+            this.clickOnDetails(item);
           });
         }
 
@@ -894,7 +853,7 @@ export default {
           const ele = document.getElementById(dayDetailsButtonId);
           if (ele) {
             ele.addEventListener('click', () => {
-              self.clickOnDatDetails(item, i);
+              this.clickOnDatDetails(item, i);
             });
           }
         }
@@ -904,9 +863,8 @@ export default {
 
   watch: {
     value_searchingFilter() {
-      const self = this;
-      self.value_tablePage.currentPage = 1;
-      self.value_tablePageForDetailData.currentPage = 1;
+      this.value_tablePage.currentPage = 1;
+      this.value_tablePageForDetailData.currentPage = 1;
       if (this.showAllData()) {
         this.value_dataItemsToShow = this.generateFilteredData(
           this.value_allTableItems, this.value_searchingFilter,
@@ -920,158 +878,152 @@ export default {
   },
   methods: {
     datePickerDatachange() {
-      const self = this;
-      self.value_specifiedMonth = self.value_monthPicked;
-      self.value_selectedMonthName[2] = dayjs(self.value_specifiedMonth).format('YYYY-MM');
-      self.refreshTableItems();
+      this.value_specifiedMonth = this.value_monthPicked;
+      this.value_selectedMonthName[2] = dayjs(this.value_specifiedMonth).format('YYYY-MM');
+      this.refreshTableItems();
     },
     selectMonthType(type) {
-      const self = this;
-      self.value_selectedMonth = type;
+      this.value_selectedMonth = type;
 
       const m = new Date();
       switch (type) {
         case 0:
           m.setDate(1); // 1 will result in the first day of the month
-          self.value_specifiedMonth = m;
-          self.value_selectedMonthName[2] = self.value_selectedMonthNameType2;
+          this.value_specifiedMonth = m;
+          this.value_selectedMonthName[2] = this.$t('Select');
 
-          self.refreshTableItems();
+          this.refreshTableItems();
           break;
         case 1:
           m.setDate(0); // 0 will result in the last day of the previous month
           m.setDate(1); // 1 will result in the first day of the month
-          self.value_specifiedMonth = m;
-          self.value_selectedMonthName[2] = self.value_selectedMonthNameType2;
+          this.value_specifiedMonth = m;
+          this.value_selectedMonthName[2] = this.$t('Select');
 
-          self.refreshTableItems();
+          this.refreshTableItems();
           break;
         case 2:
-          self.$refs.datePicker.openPopup();
+          this.$refs.datePicker.openPopup();
           break;
         default: break;
       }
     },
     fieldChanged(mode, item, evt) {
-      const self = this;
-
       if ((evt.target.checked) && (mode === 'MASTER')) {
-        const idx1 = self.value_masterexportFields.indexOf(item);
-        const idx2 = self.value_masternotinExportList.indexOf(item);
+        const idx1 = this.value_masterexportFields.indexOf(item);
+        const idx2 = this.value_masternotinExportList.indexOf(item);
 
         if (idx1 < 0) {
-          self.value_masterexportFields.push(item);
+          this.value_masterexportFields.push(item);
         }
 
         if (idx2 >= 0) {
-          self.value_masternotinExportList.splice(idx2, 1);
+          this.value_masternotinExportList.splice(idx2, 1);
         }
 
-        if (self.value_masterexportFields.length >= 1) {
-          const popped = self.value_masterexportFields.pop();
-          self.value_masterexportFields.push(popped);
+        if (this.value_masterexportFields.length >= 1) {
+          const popped = this.value_masterexportFields.pop();
+          this.value_masterexportFields.push(popped);
         }
 
-        if (self.value_masternotinExportList.length >= 1) {
-          const popped = self.value_masternotinExportList.pop();
-          self.value_masternotinExportList.push(popped);
+        if (this.value_masternotinExportList.length >= 1) {
+          const popped = this.value_masternotinExportList.pop();
+          this.value_masternotinExportList.push(popped);
         }
       } else if ((evt.target.checked) && (mode === 'DETAIL')) {
-        const idx1 = self.value_detailexportFields.indexOf(item);
-        const idx2 = self.value_detailnotinExportList.indexOf(item);
+        const idx1 = this.value_detailexportFields.indexOf(item);
+        const idx2 = this.value_detailnotinExportList.indexOf(item);
 
         if (idx1 < 0) {
-          self.value_detailexportFields.push(item);
+          this.value_detailexportFields.push(item);
         }
 
         if (idx2 >= 0) {
-          self.value_detailnotinExportList.splice(idx2, 1);
+          this.value_detailnotinExportList.splice(idx2, 1);
         }
 
-        if (self.value_detailexportFields.length >= 1) {
-          const popped = self.value_detailexportFields.pop();
-          self.value_detailexportFields.push(popped);
+        if (this.value_detailexportFields.length >= 1) {
+          const popped = this.value_detailexportFields.pop();
+          this.value_detailexportFields.push(popped);
         }
 
-        if (self.value_detailnotinExportList.length >= 1) {
-          const popped = self.value_detailnotinExportList.pop();
-          self.value_detailnotinExportList.push(popped);
+        if (this.value_detailnotinExportList.length >= 1) {
+          const popped = this.value_detailnotinExportList.pop();
+          this.value_detailnotinExportList.push(popped);
         }
       } else if ((!evt.target.checked) && (mode === 'MASTER')) {
-        const idx1 = self.value_masterexportFields.indexOf(item);
-        const idx2 = self.value_masternotinExportList.indexOf(item);
+        const idx1 = this.value_masterexportFields.indexOf(item);
+        const idx2 = this.value_masternotinExportList.indexOf(item);
 
         if (idx2 < 0) {
-          self.value_masternotinExportList.push(item);
+          this.value_masternotinExportList.push(item);
         }
 
         if (idx1 >= 0) {
-          self.value_masterexportFields.splice(idx1, 1);
+          this.value_masterexportFields.splice(idx1, 1);
         }
 
-        if (self.value_masterexportFields.length >= 1) {
-          const popped = self.value_masterexportFields.pop();
-          self.value_masterexportFields.push(popped);
+        if (this.value_masterexportFields.length >= 1) {
+          const popped = this.value_masterexportFields.pop();
+          this.value_masterexportFields.push(popped);
         }
 
-        if (self.value_masternotinExportList.length >= 1) {
-          const popped = self.value_masternotinExportList.pop();
-          self.value_masternotinExportList.push(popped);
+        if (this.value_masternotinExportList.length >= 1) {
+          const popped = this.value_masternotinExportList.pop();
+          this.value_masternotinExportList.push(popped);
         }
       } else if ((!evt.target.checked) && (mode === 'DETAIL')) {
-        const idx1 = self.value_detailexportFields.indexOf(item);
-        const idx2 = self.value_detailnotinExportList.indexOf(item);
+        const idx1 = this.value_detailexportFields.indexOf(item);
+        const idx2 = this.value_detailnotinExportList.indexOf(item);
 
         if (idx2 < 0) {
-          self.value_detailnotinExportList.push(item);
+          this.value_detailnotinExportList.push(item);
         }
 
         if (idx1 >= 0) {
-          self.value_detailexportFields.splice(idx1, 1);
+          this.value_detailexportFields.splice(idx1, 1);
         }
 
-        if (self.value_detailexportFields.length >= 1) {
-          const popped = self.value_detailexportFields.pop();
-          self.value_detailexportFields.push(popped);
+        if (this.value_detailexportFields.length >= 1) {
+          const popped = this.value_detailexportFields.pop();
+          this.value_detailexportFields.push(popped);
         }
 
-        if (self.value_detailnotinExportList.length >= 1) {
-          const popped = self.value_detailnotinExportList.pop();
-          self.value_detailnotinExportList.push(popped);
+        if (this.value_detailnotinExportList.length >= 1) {
+          const popped = this.value_detailnotinExportList.pop();
+          this.value_detailnotinExportList.push(popped);
         }
       }
     },
 
     fieldMove(mode, item, step) {
-      const self = this;
-
       if (mode === 'MASTER') {
-        const idx = self.value_masterexportFields.indexOf(item);
+        const idx = this.value_masterexportFields.indexOf(item);
 
         if ((step === -1) && (idx === 0)) return;
-        if ((step === 1) && (idx === self.value_masterexportFields.length - 1)) return;
+        if ((step === 1) && (idx === this.value_masterexportFields.length - 1)) return;
 
-        const temp = self.value_masterexportFields[idx];
-        self.value_masterexportFields[idx] = self.value_masterexportFields[idx + step];
-        self.value_masterexportFields[idx + step] = temp;
+        const temp = this.value_masterexportFields[idx];
+        this.value_masterexportFields[idx] = this.value_masterexportFields[idx + step];
+        this.value_masterexportFields[idx + step] = temp;
 
-        if (self.value_masterexportFields.length >= 1) {
-          const popped = self.value_masterexportFields.pop();
-          self.value_masterexportFields.push(popped);
+        if (this.value_masterexportFields.length >= 1) {
+          const popped = this.value_masterexportFields.pop();
+          this.value_masterexportFields.push(popped);
         }
       } else if (mode === 'DETAIL') {
-        const idx = self.value_detailexportFields.indexOf(item);
+        const idx = this.value_detailexportFields.indexOf(item);
 
         if ((step === -1) && (idx === 0)) return;
-        if ((step === 1) && (idx === self.value_detailexportFields.length - 1)) return;
+        if ((step === 1) && (idx === this.value_detailexportFields.length - 1)) return;
 
-        const temp = self.value_detailexportFields[idx];
-        self.value_detailexportFields[idx] = self.value_detailexportFields[idx + step];
-        self.value_detailexportFields[idx + step] = temp;
+        const temp = this.value_detailexportFields[idx];
+        this.value_detailexportFields[idx] = this.value_detailexportFields[idx + step];
+        this.value_detailexportFields[idx + step] = temp;
 
-        if (self.value_detailexportFields.length >= 1) {
-          const popped = self.value_detailexportFields.pop();
-          self.value_detailexportFields.push(popped);
+        if (this.value_detailexportFields.length >= 1) {
+          const popped = this.value_detailexportFields.pop();
+          this.value_detailexportFields.push(popped);
         }
       }
     },
@@ -1083,70 +1035,65 @@ export default {
       return this.value_attendanceDataListToReview != null;
     },
     clickOnReturnToAll() {
-      const self = this;
-      self.value_searchingFilter = '';
-      self.value_attendanceDataListToReview = null;
-      self.value_dataItemsToShowDetailData = [];
-      self.value_tablePage = {
+      this.value_searchingFilter = '';
+      this.value_attendanceDataListToReview = null;
+      this.value_dataItemsToShowDetailData = [];
+      this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems, self.value_searchingFilter);
+      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems, this.value_searchingFilter);
       setTimeout(() => {
-        self.observeTableSize();
+        this.observeTableSize();
       }, 500);
     },
     clickOnShowLatePerson() {
-      const self = this;
-      self.value_searchingFilter = '';
-      self.value_tablePage = {
+      this.value_searchingFilter = '';
+      this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      if (self.value_allTableItems.length > 0) {
-        const ss = self.value_allTableItems.filter((a) => a.late > 0);
-        self.value_dataItemsToShow = self.generateFilteredData(ss, self.value_searchingFilter);
+      if (this.value_allTableItems.length > 0) {
+        const ss = this.value_allTableItems.filter((a) => a.late > 0);
+        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
       }
     },
     clickOnShowLeaveEarlyPerson() {
-      const self = this;
-      self.value_searchingFilter = '';
-      self.value_tablePage = {
+      this.value_searchingFilter = '';
+      this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      if (self.value_allTableItems.length > 0) {
-        const ss = self.value_allTableItems.filter((a) => a.early > 0);
-        self.value_dataItemsToShow = self.generateFilteredData(ss, self.value_searchingFilter);
+      if (this.value_allTableItems.length > 0) {
+        const ss = this.value_allTableItems.filter((a) => a.early > 0);
+        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
       }
     },
     clickOnShowNoRecordPerson() {
-      const self = this;
-      self.value_searchingFilter = '';
-      self.value_tablePage = {
+      this.value_searchingFilter = '';
+      this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      if (self.value_allTableItems.length > 0) {
-        const ss = self.value_allTableItems.filter((a) => a.no_record > 0);
-        self.value_dataItemsToShow = self.generateFilteredData(ss, self.value_searchingFilter);
+      if (this.value_allTableItems.length > 0) {
+        const ss = this.value_allTableItems.filter((a) => a.no_record > 0);
+        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
       }
     },
     clickOnShowGoodRecordsPerson() {
-      const self = this;
-      self.value_searchingFilter = '';
-      self.value_tablePage = {
+      this.value_searchingFilter = '';
+      this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      if (self.value_allTableItems.length > 0) {
-        const ss = self.value_allTableItems.filter((a) => a.late === 0 && a.early === 0 && a.no_record === 0);
-        self.value_dataItemsToShow = self.generateFilteredData(ss, self.value_searchingFilter);
+      if (this.value_allTableItems.length > 0) {
+        const ss = this.value_allTableItems.filter((a) => a.late === 0 && a.early === 0 && a.no_record === 0);
+        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
       }
     },
     clickOnDetails(item) {
@@ -1165,8 +1112,7 @@ export default {
       }
     },
     clickOnDatDetails(item, dayIdx) {
-      const self = this;
-      const startTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth(), 1,
+      const startTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth(), 1,
         0, 0, 0, 0);
       const startTimeOfSelectedDay = startTimeOfMonth.getTime() + dayIdx * 86400000;
       const endTimeOfSelectedDay = startTimeOfSelectedDay + 86399999;
@@ -1190,28 +1136,25 @@ export default {
       }
     },
     async clickOnExport() {
-      const self = this;
+      this.flag_downloadingExecl = true;
 
-      self.flag_downloadingExecl = true;
-
-      if (self.showDetailData()) {
-        self.clickOnExportDetail();
+      if (this.showDetailData()) {
+        this.clickOnExportDetail();
         return;
       }
 
-      switch (self.value_fileType) {
-        case '.txt': self.exportMasterToTXTCSV(); break;
-        case '.csv': self.exportMasterToTXTCSV(); break;
+      switch (this.value_fileType) {
+        case '.txt': this.exportMasterToTXTCSV(); break;
+        case '.csv': this.exportMasterToTXTCSV(); break;
         case '.xlsx':
         default:
-          self.exportMaterToExcel(); break;
+          this.exportMaterToExcel(); break;
       }
 
-      self.flag_downloadingExecl = false;
+      this.flag_downloadingExecl = false;
     },
 
     exportMaterToExcel() {
-      const self = this;
       const zip = new JsZip();
 
       // const snapshotFolder = zip.folder('snapshot');
@@ -1219,38 +1162,38 @@ export default {
       const workbook = new Excel.Workbook();
       let worksheet = null;
 
-      self.exportNo = 0;
-      self.excelCounter = 0;
+      this.exportNo = 0;
+      this.excelCounter = 0;
 
       // Summary
       worksheet = workbook.addWorksheet('Summary');
 
       const columns = [{ header: 'No', key: 'No', width: 10 }];
 
-      for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
-        switch (self.value_masterexportFields[i]) {
-          case 'id': columns.push({ header: self.disp_id, key: 'id', width: 10 }); break;
-          case 'name': columns.push({ header: self.disp_name, key: 'nameToShow', width: 10 }); break;
-          case 'group_list': columns.push({ header: self.disp_group_list, key: 'groups', width: 10 }); break;
-          case 'workingTime': columns.push({ header: self.disp_working_time, key: 'working_time', width: 10 }); break;
-          case 'overTime': columns.push({ header: self.disp_over_time, key: 'over_time', width: 10 }); break;
-          case 'norecord': columns.push({ header: i18n.formatter.format('NoRecord'), key: 'norecord', width: 10 }); break;
-          case 'arrivallate': columns.push({ header: i18n.formatter.format('LatePerson'), key: 'lateperson', width: 10 }); break;
-          case 'leaveearly': columns.push({ header: i18n.formatter.format('LeaveEarly'), key: 'leaveearly', width: 10 }); break;
-          case 'noentryrecord': columns.push({ header: i18n.formatter.format('NoEntryRecord'), key: 'noentryrecord', width: 10 }); break;
-          case 'noleaverecord': columns.push({ header: i18n.formatter.format('NoLeaveRecord'), key: 'noleaverecord', width: 10 }); break;
+      for (let i = 0; i < this.value_masterexportFields.length; i += 1) {
+        switch (this.value_masterexportFields[i]) {
+          case 'id': columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 }); break;
+          case 'name': columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 }); break;
+          case 'group_list': columns.push({ header: this.$t('Group'), key: 'groups', width: 10 }); break;
+          case 'workingTime': columns.push({ header: this.$t('WorkingTime'), key: 'working_time', width: 10 }); break;
+          case 'overTime': columns.push({ header: this.$t('Overtime'), key: 'over_time', width: 10 }); break;
+          case 'norecord': columns.push({ header: this.$t('NoRecord'), key: 'norecord', width: 10 }); break;
+          case 'arrivallate': columns.push({ header: this.$t('LatePerson'), key: 'lateperson', width: 10 }); break;
+          case 'leaveearly': columns.push({ header: this.$t('LeaveEarly'), key: 'leaveearly', width: 10 }); break;
+          case 'noentryrecord': columns.push({ header: this.$t('NoEntryRecord'), key: 'noentryrecord', width: 10 }); break;
+          case 'noleaverecord': columns.push({ header: this.$t('NoLeaveRecord'), key: 'noleaverecord', width: 10 }); break;
           default: break;
         }
       }
 
       worksheet.columns = columns;
-      self.excelExecutionAmounts = self.value_allTableItems.length;
+      this.excelExecutionAmounts = this.value_allTableItems.length;
 
-      for (let idx2 = 0; idx2 < self.value_allTableItems.length; idx2 += 1) {
-        self.exportNo += 1;
-        self.excelCounter += 1;
+      for (let idx2 = 0; idx2 < this.value_allTableItems.length; idx2 += 1) {
+        this.exportNo += 1;
+        this.excelCounter += 1;
 
-        const item = self.value_allTableItems[idx2];
+        const item = this.value_allTableItems[idx2];
 
         {
           item.nameToShow = item.name;
@@ -1270,13 +1213,13 @@ export default {
             item.groups = '';
           }
 
-          const attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item);
+          const attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, item);
 
           item.attendanceStatusData = attendanceStatusData;
         }
 
         worksheet.addRow({
-          No: self.exportNo,
+          No: this.exportNo,
           id: item.id,
           nameToShow: item.nameToShow,
           groups: item.groups,
@@ -1291,12 +1234,12 @@ export default {
       }
 
       // WorkingTime
-      worksheet = workbook.addWorksheet(i18n.formatter.format('WorkingTime'));
+      worksheet = workbook.addWorksheet(this.$t('WorkingTime'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1331,8 +1274,8 @@ export default {
         { header: 'Total', key: 'Total', width: 10 },
       ];
 
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item1 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item1 = this.value_allTableItems[idx];
         const obj = {
           No: idx + 1,
           id: item1.id,
@@ -1342,22 +1285,22 @@ export default {
         let total = 0;
         for (let j = 0; j < item1.attendanceStatusData.attendance_data.working_time.length; j += 1) {
           if (item1.attendanceStatusData.attendance_data.working_time[j] > 0) {
-            obj[`D${j + 1}`] = self.formatDurationTime(item1.attendanceStatusData.attendance_data.working_time[j]);
+            obj[`D${j + 1}`] = this.formatDurationTime(item1.attendanceStatusData.attendance_data.working_time[j]);
             total += +item1.attendanceStatusData.attendance_data.working_time[j];
           }
         }
-        obj.Total = self.formatDurationTime(total);
+        obj.Total = this.formatDurationTime(total);
 
         worksheet.addRow(obj);
       }
 
       // OverTime
-      worksheet = workbook.addWorksheet(i18n.formatter.format('Overtime'));
+      worksheet = workbook.addWorksheet(this.$t('Overtime'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1392,8 +1335,8 @@ export default {
         { header: 'Total', key: 'Total', width: 10 },
       ];
 
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item2 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item2 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1404,22 +1347,22 @@ export default {
         let total = 0;
         for (let j = 0; j < item2.attendanceStatusData.attendance_data.over_time.length; j += 1) {
           if (item2.attendanceStatusData.attendance_data.over_time[j] > 0) {
-            obj[`D${j + 1}`] = self.formatDurationTime(item2.attendanceStatusData.attendance_data.over_time[j]);
+            obj[`D${j + 1}`] = this.formatDurationTime(item2.attendanceStatusData.attendance_data.over_time[j]);
             total += +item2.attendanceStatusData.attendance_data.over_time[j];
           }
         }
-        obj.Total = self.formatDurationTime(total);
+        obj.Total = this.formatDurationTime(total);
 
         worksheet.addRow(obj);
       }
 
       // No Record
-      worksheet = workbook.addWorksheet(i18n.formatter.format('NoRecord'));
+      worksheet = workbook.addWorksheet(this.$t('NoRecord'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1454,8 +1397,8 @@ export default {
         { header: 'Total', key: 'Total', width: 10 },
       ];
 
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item3 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item3 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1479,12 +1422,12 @@ export default {
       }
 
       // Late Person
-      worksheet = workbook.addWorksheet(i18n.formatter.format('LatePerson'));
+      worksheet = workbook.addWorksheet(this.$t('LatePerson'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1518,8 +1461,8 @@ export default {
         { header: '31', key: 'D31', width: 10 },
         { header: 'Total', key: 'Total', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item4 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item4 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1544,12 +1487,12 @@ export default {
       }
 
       // Leave Early
-      worksheet = workbook.addWorksheet(i18n.formatter.format('LeaveEarly'));
+      worksheet = workbook.addWorksheet(this.$t('LeaveEarly'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1583,8 +1526,8 @@ export default {
         { header: '31', key: 'D31', width: 10 },
         { header: 'Total', key: 'Total', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item5 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item5 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1609,12 +1552,12 @@ export default {
       }
 
       // No Entry Record
-      worksheet = workbook.addWorksheet(i18n.formatter.format('NoEntryRecord'));
+      worksheet = workbook.addWorksheet(this.$t('NoEntryRecord'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1648,8 +1591,8 @@ export default {
         { header: '31', key: 'D31', width: 10 },
         { header: 'Total', key: 'Total', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item6 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item6 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1670,12 +1613,12 @@ export default {
       }
 
       // No Leave Record
-      worksheet = workbook.addWorksheet(i18n.formatter.format('NoLeaveRecord'));
+      worksheet = workbook.addWorksheet(this.$t('NoLeaveRecord'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1709,8 +1652,8 @@ export default {
         { header: '31', key: 'D31', width: 10 },
         { header: 'Total', key: 'Total', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item7 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item7 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1731,12 +1674,12 @@ export default {
       }
 
       // ClockIn Time
-      worksheet = workbook.addWorksheet(i18n.formatter.format('ClockInTime'));
+      worksheet = workbook.addWorksheet(this.$t('ClockInTime'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1769,8 +1712,8 @@ export default {
         { header: '30', key: 'D30', width: 10 },
         { header: '31', key: 'D31', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item8 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item8 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1791,12 +1734,12 @@ export default {
       }
 
       // ClockOut Time
-      worksheet = workbook.addWorksheet(i18n.formatter.format('ClockOutTime'));
+      worksheet = workbook.addWorksheet(this.$t('ClockOutTime'));
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
-        { header: self.disp_name, key: 'nameToShow', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
+        { header: this.$t('PersonId'), key: 'id', width: 10 },
+        { header: this.$t('PersonName'), key: 'nameToShow', width: 10 },
+        { header: this.$t('Group'), key: 'groups', width: 10 },
         { header: '1', key: 'D1', width: 10 },
         { header: '2', key: 'D2', width: 10 },
         { header: '3', key: 'D3', width: 10 },
@@ -1829,8 +1772,8 @@ export default {
         { header: '30', key: 'D30', width: 10 },
         { header: '31', key: 'D31', width: 10 },
       ];
-      for (let idx = 0; idx < self.value_allTableItems.length; idx += 1) {
-        const item9 = self.value_allTableItems[idx];
+      for (let idx = 0; idx < this.value_allTableItems.length; idx += 1) {
+        const item9 = this.value_allTableItems[idx];
 
         const obj = {
           No: idx + 1,
@@ -1851,37 +1794,36 @@ export default {
 
       if (workbook != null) {
         workbook.xlsx.writeBuffer().then((data) => {
-          const filename = `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.xlsx`;
+          const filename = `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.xlsx`;
 
           const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
           zip.file(filename, blob);
 
           zip.generateAsync({ type: 'blob' }).then((content) => {
-            FileSaver.saveAs(content, `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.zip`);
+            FileSaver.saveAs(content, `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.zip`);
           });
         });
       }
 
-      self.flag_downloadingExecl = false;
+      this.flag_downloadingExecl = false;
     },
 
     exportMasterToTXTCSV() {
-      const self = this;
       const zip = new JsZip();
 
-      let separator = self.value_txtSeparator === '' ? self.value_separator : self.value_txtSeparator;
+      let separator = this.value_txtSeparator === '' ? this.value_separator : this.value_txtSeparator;
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      let data = `"No"${separator}"${self.value_masterexportFields.join(`"${separator}"`)}"\r\n`;
+      let data = `"No"${separator}"${this.value_masterexportFields.join(`"${separator}"`)}"\r\n`;
 
-      self.exportNo = 0;
+      this.exportNo = 0;
 
-      for (let idx2 = 0; idx2 < self.value_allTableItems.length; idx2 += 1) {
-        self.exportNo += 1;
+      for (let idx2 = 0; idx2 < this.value_allTableItems.length; idx2 += 1) {
+        this.exportNo += 1;
 
-        const item = self.value_allTableItems[idx2];
+        const item = this.value_allTableItems[idx2];
         {
           item.nameToShow = item.name;
           item.late = 0;
@@ -1890,7 +1832,7 @@ export default {
           item.no_entry = 0;
           item.no_leave = 0;
 
-          const attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item);
+          const attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, item);
 
           try {
             if (Array.isArray(item.group_list)) {
@@ -1905,9 +1847,9 @@ export default {
           item.attendanceStatusData = attendanceStatusData;
         }
 
-        const ln = [`"${self.exportNo}"`];
-        for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
-          switch (self.value_masterexportFields[i]) {
+        const ln = [`"${this.exportNo}"`];
+        for (let i = 0; i < this.value_masterexportFields.length; i += 1) {
+          switch (this.value_masterexportFields[i]) {
             case 'id': ln.push(`"${item.id}"`); break;
             case 'name': ln.push(`"${item.nameToShow}"`); break;
             case 'group_list': ln.push(`"${item.groups}"`); break;
@@ -1927,11 +1869,11 @@ export default {
       let filename = '';
       let blob = null;
 
-      if (self.value_fileType === '.txt') {
-        filename = `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.txt`;
+      if (this.value_fileType === '.txt') {
+        filename = `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.txt`;
         blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
-      } else if (self.value_fileType === '.csv') {
-        filename = `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}.csv`;
+      } else if (this.value_fileType === '.csv') {
+        filename = `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}.csv`;
         blob = new Blob([`\uFEFF${data}`], { type: 'text/csv;charset=utf-8' });
       }
 
@@ -1940,26 +1882,22 @@ export default {
       zip.generateAsync({ type: 'blob' }).then((content) => {
         FileSaver.saveAs(
           content,
-          `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.zip`,
+          `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.zip`,
         );
       });
     },
 
     clickOnExportDetail() {
-      const self = this;
-
-      switch (self.value_fileType) {
-        case '.txt': self.exportDetailToTXTCSV(); break;
-        case '.csv': self.exportDetailToTXTCSV(); break;
+      switch (this.value_fileType) {
+        case '.txt': this.exportDetailToTXTCSV(); break;
+        case '.csv': this.exportDetailToTXTCSV(); break;
         case '.xlsx':
         default:
-          self.exportDetailToExcel(); break;
+          this.exportDetailToExcel(); break;
       }
     },
 
     async exportDetailToExcel() {
-      const self = this;
-
       const zip = new JsZip();
 
       const snapshotFolder = zip.folder('snapshot');
@@ -1967,106 +1905,106 @@ export default {
       const workbook = new Excel.Workbook();
       let worksheet = null;
 
-      self.exportNo = 0;
-      self.excelCounter = 0;
+      this.exportNo = 0;
+      this.excelCounter = 0;
 
       // const company = '';
       // let personId = '';
       let personName = '';
 
-      if (self.value_attendanceDataListToReview.length >= 1) {
-        // personId = self.value_attendanceDataListToReview[0].id;
-        personName = self.value_attendanceDataListToReview[0].name;
+      if (this.value_attendanceDataListToReview.length >= 1) {
+        // personId = this.value_attendanceDataListToReview[0].id;
+        personName = this.value_attendanceDataListToReview[0].name;
       }
 
-      worksheet = workbook.addWorksheet(dayjs(self.value_specifiedMonth).format('YYYY-MM'));
+      worksheet = workbook.addWorksheet(dayjs(this.value_specifiedMonth).format('YYYY-MM'));
 
       const columns = [{ header: 'No', key: 'No', width: 10 }];
 
-      for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
-        switch (self.value_detailexportFields[i]) {
-          case 'id': columns.push({ header: self.disp_id, key: 'id', width: 10 }); break;
-          case 'name': columns.push({ header: self.disp_name, key: 'nameToShow', width: 10 }); break;
-          case 'group_list': columns.push({ header: self.disp_group_list, key: 'groups', width: 10 }); break;
-          case 'mode': columns.push({ header: self.disp_clockingMode, key: 'clockMode', width: 10 }); break;
-          case 'clockTime': columns.push({ header: self.disp_clockTime, key: 'clockTime', width: 10 }); break;
-          case 'temperature': columns.push({ header: self.disp_temperature, key: 'temperature', width: 10 }); break;
-          case 'face_image': columns.push({ header: self.disp_face_image, key: 'face_image', width: 10 }); break;
-          case 'cardno': columns.push({ header: self.disp_cardnumber, key: 'card_number', width: 10 }); break;
+      for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
+        switch (this.value_detailexportFields[i]) {
+          case 'id': columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 }); break;
+          case 'name': columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 }); break;
+          case 'group_list': columns.push({ header: this.$t('Group'), key: 'groups', width: 10 }); break;
+          case 'mode': columns.push({ header: this.$t('ClockingMode'), key: 'clockMode', width: 10 }); break;
+          case 'clockTime': columns.push({ header: this.$t('ClockTime'), key: 'clockTime', width: 10 }); break;
+          case 'temperature': columns.push({ header: this.$t('Temperature'), key: 'temperature', width: 10 }); break;
+          case 'face_image': columns.push({ header: this.$t('CapturedPhoto'), key: 'face_image', width: 10 }); break;
+          case 'cardno': columns.push({ header: this.$t('CardNumber'), key: 'card_number', width: 10 }); break;
           default: break;
         }
       }
 
       worksheet.columns = columns;
-      self.excelExecutionAmounts = self.value_attendanceDataListToReview.length;
+      this.excelExecutionAmounts = this.value_attendanceDataListToReview.length;
 
-      for (let idx = 0; idx < self.value_attendanceDataListToReview.length; idx += 1) {
-        self.exportNo += 1;
-        self.excelCounter += 1;
+      for (let idx = 0; idx < this.value_attendanceDataListToReview.length; idx += 1) {
+        this.exportNo += 1;
+        this.excelCounter += 1;
 
         {
-          self.value_attendanceDataListToReview[idx].nameToShow = self.value_attendanceDataListToReview[idx].name;
-          const d = new Date(self.value_attendanceDataListToReview[idx].timestamp);
-          self.value_attendanceDataListToReview[idx].clockTime = dayjs(d).format('MM/DD HH:mm');
+          this.value_attendanceDataListToReview[idx].nameToShow = this.value_attendanceDataListToReview[idx].name;
+          const d = new Date(this.value_attendanceDataListToReview[idx].timestamp);
+          this.value_attendanceDataListToReview[idx].clockTime = dayjs(d).format('MM/DD HH:mm');
 
-          switch (self.value_attendanceDataListToReview[idx].verify_mode) {
+          switch (this.value_attendanceDataListToReview[idx].verify_mode) {
             case 1:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModeCard');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModeCard');
               break;
             case 2:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModePass');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModePass');
               break;
             case 3:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModeClockIn');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModeClockIn');
               break;
             case 4:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModeClockOut');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModeClockOut');
               break;
             case 5:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModeManualClockIn');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModeManualClockIn');
               break;
             case 6:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('ClockModeManualClockOut');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('ClockModeManualClockOut');
               break;
             default:
-              self.value_attendanceDataListToReview[idx].clockMode = i18n.formatter.format('None');
+              this.value_attendanceDataListToReview[idx].clockMode = this.$t('None');
               break;
           }
 
           try {
-            if (Array.isArray(self.value_attendanceDataListToReview[idx].group_list)) {
-              self.value_attendanceDataListToReview[idx].groups = (self.value_attendanceDataListToReview[idx].group_list || [])
+            if (Array.isArray(this.value_attendanceDataListToReview[idx].group_list)) {
+              this.value_attendanceDataListToReview[idx].groups = (this.value_attendanceDataListToReview[idx].group_list || [])
                 .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
                 .join(', ');
             } else {
-              self.value_attendanceDataListToReview[idx].groups = (JSON.parse(self.value_attendanceDataListToReview[idx].group_list) || [])
+              this.value_attendanceDataListToReview[idx].groups = (JSON.parse(this.value_attendanceDataListToReview[idx].group_list) || [])
                 .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
                 .join(', ');
             }
           } catch (ex) {
-            self.value_attendanceDataListToReview[idx].groups = '';
+            this.value_attendanceDataListToReview[idx].groups = '';
           }
         }
 
         worksheet.addRow({
-          No: self.exportNo,
-          id: self.value_attendanceDataListToReview[idx].id,
-          nameToShow: self.value_attendanceDataListToReview[idx].nameToShow,
-          card_number: self.value_attendanceDataListToReview[idx].card_number,
-          groups: self.value_attendanceDataListToReview[idx].groups,
-          temperature: self.value_attendanceDataListToReview[idx].temperature,
-          clockMode: self.value_attendanceDataListToReview[idx].clockMode,
-          clockTime: self.value_attendanceDataListToReview[idx].clockTime,
+          No: this.exportNo,
+          id: this.value_attendanceDataListToReview[idx].id,
+          nameToShow: this.value_attendanceDataListToReview[idx].nameToShow,
+          card_number: this.value_attendanceDataListToReview[idx].card_number,
+          groups: this.value_attendanceDataListToReview[idx].groups,
+          temperature: this.value_attendanceDataListToReview[idx].temperature,
+          clockMode: this.value_attendanceDataListToReview[idx].clockMode,
+          clockTime: this.value_attendanceDataListToReview[idx].clockTime,
         });
 
-        const pos = self.value_detailexportFields.indexOf('face_image');
+        const pos = this.value_detailexportFields.indexOf('face_image');
         if (pos >= 0) {
-          if (self.value_snapshotFileType === 'Embedded' || self.value_snapshotFileType === 'Files') {
-            if (self.value_attendanceDataListToReview[idx].face_image_id) {
-              const imageRet = await self.$globalFetchVerifyPhoto(self.value_attendanceDataListToReview[idx].face_image_id);
+          if (this.value_snapshotFileType === 'Embedded' || this.value_snapshotFileType === 'Files') {
+            if (this.value_attendanceDataListToReview[idx].face_image_id) {
+              const imageRet = await this.$globalFetchVerifyPhoto(this.value_attendanceDataListToReview[idx].face_image_id);
 
               if (imageRet && imageRet.data) {
-                if (self.value_snapshotFileType === 'Embedded') {
+                if (this.value_snapshotFileType === 'Embedded') {
                   const photoId = workbook.addImage({
                     base64: imageRet.data.face_image,
                     extension: 'jpeg',
@@ -2078,13 +2016,13 @@ export default {
                   );
                 }
 
-                if (self.value_snapshotFileType === 'Files') {
-                  const fileTime = self.value_attendanceDataListToReview[idx].clockTime
+                if (this.value_snapshotFileType === 'Files') {
+                  const fileTime = this.value_attendanceDataListToReview[idx].clockTime
                     .replace('/', '_')
                     .replace(' ', '_')
                     .replace(':', '_');
                   snapshotFolder.file(
-                    `${self.exportNo}_${fileTime}.jpeg`,
+                    `${this.exportNo}_${fileTime}.jpeg`,
                     imageRet.data.face_image,
                     { base64: true },
                   );
@@ -2097,7 +2035,7 @@ export default {
 
       if (workbook != null) {
         workbook.xlsx.writeBuffer().then((data) => {
-          const filename = `Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}_${personName}.xlsx`;
+          const filename = `Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}_${personName}.xlsx`;
 
           const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
@@ -2106,21 +2044,19 @@ export default {
           zip.generateAsync({ type: 'blob' }).then((content) => {
             FileSaver.saveAs(
               content,
-              `Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}_${personName}.zip`,
+              `Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}_${personName}.zip`,
             );
           });
         });
       }
 
-      self.flag_downloadingExecl = false;
+      this.flag_downloadingExecl = false;
     },
 
     exportDetailToTXTCSV() {
-      const self = this;
-
       const zip = new JsZip();
 
-      let separator = self.value_txtSeparator === '' ? self.value_separator : self.value_txtSeparator;
+      let separator = this.value_txtSeparator === '' ? this.value_separator : this.value_txtSeparator;
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
@@ -2128,42 +2064,42 @@ export default {
       // let personId = '';
       let personName = '';
 
-      if (self.value_attendanceDataListToReview.length >= 1) {
-        personName = self.value_attendanceDataListToReview[0].name;
+      if (this.value_attendanceDataListToReview.length >= 1) {
+        personName = this.value_attendanceDataListToReview[0].name;
       }
 
-      let data = `"No"${separator}"${self.value_detailexportFields.join(`"${separator}"`)}"\r\n`;
+      let data = `"No"${separator}"${this.value_detailexportFields.join(`"${separator}"`)}"\r\n`;
 
-      self.exportNo = 0;
+      this.exportNo = 0;
 
-      for (let idx = 0; idx < self.value_attendanceDataListToReview.length; idx += 1) {
-        self.exportNo += 1;
-        const item = self.value_attendanceDataListToReview[idx];
+      for (let idx = 0; idx < this.value_attendanceDataListToReview.length; idx += 1) {
+        this.exportNo += 1;
+        const item = this.value_attendanceDataListToReview[idx];
 
         item.nameToShow = item.name;
         item.clockTime = dayjs(item.timestamp).format('MM/DD HH:mm');
 
         switch (item.verify_mode) {
           case 1:
-            item.clockMode = i18n.formatter.format('ClockModeCard');
+            item.clockMode = this.$t('ClockModeCard');
             break;
           case 2:
-            item.clockMode = i18n.formatter.format('ClockModePass');
+            item.clockMode = this.$t('ClockModePass');
             break;
           case 3:
-            item.clockMode = i18n.formatter.format('ClockModeClockIn');
+            item.clockMode = this.$t('ClockModeClockIn');
             break;
           case 4:
-            item.clockMode = i18n.formatter.format('ClockModeClockOut');
+            item.clockMode = this.$t('ClockModeClockOut');
             break;
           case 5:
-            item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
+            item.clockMode = this.$t('ClockModeManualClockIn');
             break;
           case 6:
-            item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
+            item.clockMode = this.$t('ClockModeManualClockOut');
             break;
           default:
-            item.clockMode = i18n.formatter.format('None');
+            item.clockMode = this.$t('None');
             break;
         }
 
@@ -2177,9 +2113,9 @@ export default {
           item.groups = '';
         }
 
-        const ln = [`"${self.exportNo}"`];
-        for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
-          switch (self.value_detailexportFields[i]) {
+        const ln = [`"${this.exportNo}"`];
+        for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
+          switch (this.value_detailexportFields[i]) {
             case 'id': ln.push(`"${item.id}"`); break;
             case 'name': ln.push(`"${item.nameToShow}"`); break;
             case 'group_list': ln.push(`"${item.groups}"`); break;
@@ -2197,13 +2133,13 @@ export default {
       let filename = '';
       let blob = null;
 
-      if (self.value_fileType === '.txt') {
-        filename = `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.txt`;
+      if (this.value_fileType === '.txt') {
+        filename = `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.txt`;
         blob = new Blob([data], {
           type: 'text/plain;charset=utf-8',
         });
-      } else if (self.value_fileType === '.csv') {
-        filename = `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.csv`;
+      } else if (this.value_fileType === '.csv') {
+        filename = `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.csv`;
         blob = new Blob([`\uFEFF${data}`], { type: 'text/csv;charset=utf-8' });
       }
 
@@ -2212,7 +2148,7 @@ export default {
       zip.generateAsync({ type: 'blob' }).then((content) => {
         FileSaver.saveAs(
           content,
-          `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.zip`,
+          `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.zip`,
         );
       });
     },
@@ -2224,13 +2160,12 @@ export default {
       return 'padding: 0 0 0 0;fontSize:18px;';
     },
     formatBase64ToImgTag(desireWidth, desireHeight, base64ImageString) {
-      const self = this;
       let ret = '';
 
       if (base64ImageString.length > 0) {
         ret = `<img width='${desireWidth}' height='${desireHeight}' src='data:image/jpeg;base64,${base64ImageString}'>`;
       } else {
-        ret = `<img width='${desireWidth}' height='${desireHeight}' src='${self.value_emptyPhoto}'>`;
+        ret = `<img width='${desireWidth}' height='${desireHeight}' src='${this.value_emptyPhoto}'>`;
       }
 
       return ret;
@@ -2261,14 +2196,13 @@ export default {
       return ret;
     },
     generateFilteredData(sourceData, filter) {
-      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData
         : sourceData.filter((item) => item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
           || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
           || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1));
 
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
 
       filteredItems.forEach((pItem) => {
         const item = pItem;
@@ -2276,8 +2210,8 @@ export default {
         item.working_time = '';
         item.over_time = '';
 
-        item.attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item);
-        item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, item.uuid);
+        item.attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, item);
+        item.attendanceStatus = this.generateAttendanceStatusTable(item.attendanceStatusData, item.uuid);
 
         let totalWorkingTime = 0;
         for (let i = 0; i < item.attendanceStatusData.attendance_data.working_time.length; i += 1) {
@@ -2289,28 +2223,28 @@ export default {
           totalOverTime += item.attendanceStatusData.attendance_data.over_time[i];
         }
 
-        item.working_time = self.formatDurationTime(totalWorkingTime);
-        item.over_time = self.formatDurationTime(totalOverTime);
+        item.working_time = this.formatDurationTime(totalWorkingTime);
+        item.over_time = this.formatDurationTime(totalOverTime);
 
         item.workingTimeToShow = '';
         if (totalWorkingTime > 0) {
-          item.workingTimeToShow += `${i18n.formatter.format('WorkingTime')} : ${self.formatDurationTime(totalWorkingTime)}`;
+          item.workingTimeToShow += `${this.$t('WorkingTime')} : ${this.formatDurationTime(totalWorkingTime)}`;
         }
 
         if (totalOverTime > 0) {
-          item.workingTimeToShow += `<br> ${i18n.formatter.format('Overtime')} : ${self.formatDurationTime(totalOverTime)}`;
+          item.workingTimeToShow += `<br> ${this.$t('Overtime')} : ${this.formatDurationTime(totalOverTime)}`;
         }
 
-        item.attendanceStatusText = `${i18n.formatter.format('NoRecord')} : ${item.no_record} <br>`
-          + `${i18n.formatter.format('LatePerson')} : ${item.late} <br>`
-          + `${i18n.formatter.format('LeaveEarly')} : ${item.early} <br>`
-          + `${i18n.formatter.format('NoEntryRecord')} : ${item.no_entry} <br>`
-          + `${i18n.formatter.format('NoLeaveRecord')} : ${item.no_leave} <br>`
-          + `${i18n.formatter.format('OvertimeDays')} : ${item.overtime} <br>`;
+        item.attendanceStatusText = `${this.$t('NoRecord')} : ${item.no_record} <br>`
+          + `${this.$t('LatePerson')} : ${item.late} <br>`
+          + `${this.$t('LeaveEarly')} : ${item.early} <br>`
+          + `${this.$t('NoEntryRecord')} : ${item.no_entry} <br>`
+          + `${this.$t('NoLeaveRecord')} : ${item.no_leave} <br>`
+          + `${this.$t('OvertimeDays')} : ${item.overtime} <br>`;
       });
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
       sliceList.forEach((pItem) => {
         const item = pItem;
@@ -2341,37 +2275,36 @@ export default {
           item.groups = '';
         }
 
-        item.clockDate = dayjs(self.value_specifiedMonth).format('MM/YYYY');
+        item.clockDate = dayjs(this.value_specifiedMonth).format('MM/YYYY');
       });
 
-      self.value_showAllPerson = `${i18n.formatter.format('AllPerson')}`
-        + ` : ${self.value_allTableItems.length}`;
+      this.value_showAllPerson = `${this.$t('AllPerson')}`
+        + ` : ${this.value_allTableItems.length}`;
 
-      self.value_showLatePerson = `${i18n.formatter.format('LatePerson')}`
-        + ` : ${self.value_allTableItems.filter((p) => p.late > 0).length}`;
+      this.value_showLatePerson = `${this.$t('LatePerson')}`
+        + ` : ${this.value_allTableItems.filter((p) => p.late > 0).length}`;
 
-      self.value_showLeaveEarlyPerson = `${i18n.formatter.format('LeaveEarly')}`
-        + ` : ${self.value_allTableItems.filter((p) => p.early > 0).length}`;
+      this.value_showLeaveEarlyPerson = `${this.$t('LeaveEarly')}`
+        + ` : ${this.value_allTableItems.filter((p) => p.early > 0).length}`;
 
-      self.value_showNoRecordPerson = `${i18n.formatter.format('NoRecord')}`
-        + ` : ${self.value_allTableItems.filter((p) => p.no_record > 0).length}`;
+      this.value_showNoRecordPerson = `${this.$t('NoRecord')}`
+        + ` : ${this.value_allTableItems.filter((p) => p.no_record > 0).length}`;
 
-      self.value_showGoodRecordsPerson = `${i18n.formatter.format('GoodRecords')}`
-        + ` : ${self.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
+      this.value_showGoodRecordsPerson = `${this.$t('GoodRecords')}`
+        + ` : ${this.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
 
       return Object.assign([], sliceList);
     },
 
     generateFilteredDataForDetailData(sourceData, filter) {
-      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData : sourceData.filter(
           (item) => (item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1),
         );
-      self.value_tablePageForDetailData.totalResult = filteredItems.length;
+      this.value_tablePageForDetailData.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_tablePageForDetailData.currentPage - 1) * self.value_tablePageForDetailData.pageSize,
-        self.value_tablePageForDetailData.currentPage * self.value_tablePageForDetailData.pageSize,
+        (this.value_tablePageForDetailData.currentPage - 1) * this.value_tablePageForDetailData.pageSize,
+        this.value_tablePageForDetailData.currentPage * this.value_tablePageForDetailData.pageSize,
       );
       sliceList.forEach((pItem) => {
         const item = pItem;
@@ -2382,25 +2315,25 @@ export default {
 
         switch (item.verify_mode) {
           case 1:
-            item.clockMode = i18n.formatter.format('ClockModeCard');
+            item.clockMode = this.$t('ClockModeCard');
             break;
           case 2:
-            item.clockMode = i18n.formatter.format('ClockModePass');
+            item.clockMode = this.$t('ClockModePass');
             break;
           case 3:
-            item.clockMode = i18n.formatter.format('ClockModeClockIn');
+            item.clockMode = this.$t('ClockModeClockIn');
             break;
           case 4:
-            item.clockMode = i18n.formatter.format('ClockModeClockOut');
+            item.clockMode = this.$t('ClockModeClockOut');
             break;
           case 5:
-            item.clockMode = i18n.formatter.format('ClockModeManualClockIn');
+            item.clockMode = this.$t('ClockModeManualClockIn');
             break;
           case 6:
-            item.clockMode = i18n.formatter.format('ClockModeManualClockOut');
+            item.clockMode = this.$t('ClockModeManualClockOut');
             break;
           default:
-            item.clockMode = i18n.formatter.format('None');
+            item.clockMode = this.$t('None');
             break;
         }
 
@@ -2420,7 +2353,7 @@ export default {
           item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs`
             + '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQI'
             + 'HWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
-          self.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
+          this.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
             if (error === null && data) {
               item.imageb64 = data.face_image;
 
@@ -2438,29 +2371,27 @@ export default {
       return Object.assign([], sliceList);
     },
     refreshTableItems(cb) {
-      const self = this;
-
-      if (self.onFetchPersonDataCallback) {
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.onFetchPersonDataCallback((errorOnPersonTable, resetPersonTable, morePersonItem, personTableItems) => {
+      if (this.onFetchPersonDataCallback) {
+        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+        this.onFetchPersonDataCallback((errorOnPersonTable, resetPersonTable, morePersonItem, personTableItems) => {
           if (!errorOnPersonTable) {
             if (resetPersonTable) {
-              self.value_allTableItems = [];
-              self.value_dataItemsToShow = [];
+              this.value_allTableItems = [];
+              this.value_dataItemsToShow = [];
             }
             if (personTableItems) {
-              self.value_allTableItems = self.value_allTableItems.concat(personTableItems);
+              this.value_allTableItems = this.value_allTableItems.concat(personTableItems);
             }
 
             if (personTableItems.length >= 1) {
               const uuidList = [];
 
-              self.onFetchPersonAttendanceDataCallback(
-                self.value_specifiedMonth,
+              this.onFetchPersonAttendanceDataCallback(
+                this.value_specifiedMonth,
                 uuidList,
                 (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
                   if (personVrItems && personVrItems.length > 0) {
-                    self.value_allTableItems.forEach((record) => {
+                    this.value_allTableItems.forEach((record) => {
                       const person = record;
                       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
                       dataListOnUuid.forEach((d) => {
@@ -2493,21 +2424,21 @@ export default {
                     });
                   }
                   if (!morePersonVr || errorOnPersonVr) {
-                    self.value_dataItemsToShow = self.generateFilteredData(
-                      self.value_allTableItems,
-                      self.value_searchingFilter,
+                    this.value_dataItemsToShow = this.generateFilteredData(
+                      this.value_allTableItems,
+                      this.value_searchingFilter,
                     );
-                    if (self.obj_loading) self.obj_loading.hide();
+                    if (this.obj_loading) this.obj_loading.hide();
                     if (cb) cb();
                   }
                 },
               );
             }
-            if (self.obj_loading) self.obj_loading.hide();
-            self.observeTableSize();
-            // self.generateFilteredData(self.value_allTableItems, []);
+            if (this.obj_loading) this.obj_loading.hide();
+            this.observeTableSize();
+            // this.generateFilteredData(this.value_allTableItems, []);
           } else {
-            if (self.obj_loading) self.obj_loading.hide();
+            if (this.obj_loading) this.obj_loading.hide();
             if (cb) cb();
           }
         });
@@ -2560,7 +2491,6 @@ export default {
       const specifiedHolidays = workingHourSettings.specified_holidays || [];
       const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
 
-      const self = this;
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
 
       item.no_record = 0;
@@ -2591,8 +2521,8 @@ export default {
       const overTime = definedOvertimeTimeHour * msHour + definedOvertimeTimeMin * msMin;
       const overTimeBuffer = definedOvertimeMinimumMin * msMin;
 
-      const startTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth(), 1, 0, 0, 0, 0);
-      const endTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth() + 1, 1, 0, 0, 0, 0);
+      const startTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth(), 1, 0, 0, 0, 0);
+      const endTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth() + 1, 1, 0, 0, 0, 0);
       const daysOnMonth = (endTimeOfMonth - startTimeOfMonth) / msDay;
 
       const returnData = {
@@ -2896,7 +2826,6 @@ export default {
       return returnData;
     },
     generateAttendanceStatusTable(attendanceData, personUuid) {
-      const self = this;
       const tableBordderSize = '1';
       const tableBordderColor = '#9799a1';
       const cellBgColor = '#fff';
@@ -2930,11 +2859,11 @@ export default {
 
         let clockInStatusColor = attendanceNoStatusColor; // no show
         if (!isHoliday) {
-          clockInStatusColor = self.value_attendanceStatusColor[
+          clockInStatusColor = this.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_in_status[i]
           ];
         } else if (attendanceData.attendance_data.clock_in_status[i] !== 5) {
-          clockInStatusColor = self.value_attendanceStatusColor[
+          clockInStatusColor = this.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_in_status[i]
           ];
         }
@@ -2942,11 +2871,11 @@ export default {
 
         let clockOutStatusColor = attendanceNoStatusColor;
         if (!isHoliday) {
-          clockOutStatusColor = self.value_attendanceStatusColor[
+          clockOutStatusColor = this.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_out_status[i]
           ];
         } else if (attendanceData.attendance_data.clock_out_status[i] !== 5) {
-          clockOutStatusColor = self.value_attendanceStatusColor[
+          clockOutStatusColor = this.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_out_status[i]
           ];
         }

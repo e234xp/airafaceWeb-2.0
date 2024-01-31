@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h1">
-      {{ disp_header }}
+      {{ $t('AttendanceSettings') }}
     </div>
 
     <CCard class="mt-3">
@@ -11,20 +11,20 @@
             <thead>
               <tr>
                 <th class="fz-xxxl w-50 px-4 py-2 align-top">
-                  {{ disp_clockIn }}
+                  {{ $t('ClockIn') }}
                 </th>
                 <th class="fz-xxxl w-50 px-4 py-2 align-top">
-                  {{ disp_clockOut }}
+                  {{ $t('ClockOut') }}
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td class="fz-lg w-50 px-4 py-1 align-top">
-                  {{ disp_clockInChannel }}
+                  {{ $t('ClockInChannel') }}
                 </td>
                 <td class="fz-lg w-50 px-4 py-1 align-top">
-                  {{ disp_clockOutChannel }}
+                  {{ $t('ClockOutChannel') }}
                 </td>
               </tr>
               <tr>
@@ -35,9 +35,9 @@
                     :hide-selected="true"
                     :taggable="true"
                     :show-no-options="false"
-                    :select-label="disp_select"
-                    :selected-label="disp_selected"
-                    :deselect-label="disp_deselect"
+                    :select-label="$t('Select')"
+                    :selected-label="$t('Selected')"
+                    :deselect-label="$t('Deselect')"
                     v-model="default_attendance_setting.video_device_group_in"
                     :options="param_videoDeviceGroupIn"
                   />
@@ -50,9 +50,9 @@
                     :hide-selected="true"
                     :taggable="true"
                     :show-no-options="false"
-                    :select-label="disp_select"
-                    :selected-label="disp_selected"
-                    :deselect-label="disp_deselect"
+                    :select-label="$t('Select')"
+                    :selected-label="$t('Selected')"
+                    :deselect-label="$t('Deselect')"
                     v-model="default_attendance_setting.video_device_group_out"
                     :options="param_videoDeviceGroupOut"
                   />
@@ -60,10 +60,10 @@
               </tr>
               <tr>
                 <td class="fz-lg w-50 px-4 py-1 align-top">
-                  {{ disp_definedClockInTime }}
+                  {{ $t('DefinedClockInTime') }}
                 </td>
                 <td class="fz-lg w-50 px-4 py-1 align-top">
-                  {{ disp_definedClockOutTime }}
+                  {{ $t('DefinedClockOutTime') }}
                 </td>
               </tr>
               <tr>
@@ -99,8 +99,8 @@
                     <label
                       for="use-upperbound-checkbox"
                       class="form-check-label cursor-pointer"
-                    >{{
-                      disp_clockInTimeBuffer }}
+                    >
+                      {{ $t('ClockInTimeBuffer') }}
                     </label>
                   </div>
                 </td>
@@ -115,8 +115,8 @@
                     <label
                       for="use-lowerbound-checkbox"
                       class="form-check-label cursor-pointer"
-                    >{{
-                      disp_clockOutTimeBuffer }}
+                    >
+                      {{ $t('ClockOutTimeBuffer') }}
                     </label>
                   </div>
                 </td>
@@ -171,8 +171,9 @@
                     <label
                       for="use-specified-colckin-checkbox"
                       class="form-check-label cursor-pointer"
-                    >{{
-                      disp_adjustClockInEnabled }}</label>
+                    >
+                      {{ $t('AdjustClockInEnabled') }}
+                    </label>
                   </div>
                   <div class="h-xxxxl" />
                 </td>
@@ -187,19 +188,20 @@
                     <label
                       for="use-specified-colckout-checkbox"
                       class="form-check-label cursor-pointer"
-                    >{{
-                      disp_adjustClockOutEnabled }}</label>
+                    >
+                      {{ $t('AdjustClockOutEnabled') }}
+                    </label>
                   </div>
                 </td>
               </tr>
               <tr>
                 <td class="fz-xxxl px-4 pt-1 pb-3 align-top font-weight-bold">
                   <div class="border-top h-xl" />
-                  <div>{{ disp_break_time }}</div>
+                  <div>{{ $t('BreakTimeTitle') }}</div>
                 </td>
                 <td class="fz-xxxl px-4 pt-1 pb-3 align-top font-weight-bold">
                   <div class="border-top h-xl" />
-                  <div>{{ disp_overtime }}</div>
+                  <div>{{ $t('OvertimeTitle') }}</div>
                 </td>
               </tr>
               <tr>
@@ -215,15 +217,15 @@
                   <label
                     for="calc-work-overtime-checkbox"
                     class="form-check-label cursor-pointer"
-                  >{{
-                    disp_enableOvertime }}
+                  >
+                    {{ $t('EnableOvertime') }}
                   </label>
                 </td>
               </tr>
               <tr>
                 <td class="px-4 pt-1 pb-3 align-top fz-lg">
                   <div class="mb-3">
-                    {{ disp_breakTimeMins }}
+                    {{ $t('BreakTimeMins') }}
                   </div>
                   <select
                     class="w-100 select-secondary"
@@ -240,7 +242,7 @@
                 </td>
                 <td class="px-4 pt-1 pb-3 align-top fz-lg">
                   <div class="mb-3">
-                    {{ disp_overtimeStartTime }}
+                    {{ $t('OvertimeStartTime') }}
                   </div>
                   <date-picker
                     :lang="this.$globalDatePickerLanguage"
@@ -255,14 +257,14 @@
                 <td class="px-4 pt-1 pb-3 align-top fz-lg" />
                 <td class="px-4 pt-1 pb-3 align-top fz-md">
                   <ul>
-                    <li>{{ disp_overtimeGuide }}</li>
+                    <li>{{ $t('OvertimeGuide') }}</li>
                   </ul>
                 </td>
               </tr>
               <tr>
                 <td class="px-4 pt-1 pb-3 align-top fz-lg" />
                 <td class="px-4 pt-1 pb-3 align-top fz-lg">
-                  {{ disp_overtimeMinimum }}
+                  {{ $t('OvertimeMinimum') }}
                 </td>
               </tr>
               <tr>
@@ -289,18 +291,18 @@
           <table class="w-50">
             <tr>
               <th class="fz-xxxl w-50 px-4 py-2 align-top">
-                {{ disp_holidays }}
+                {{ $t('Holidays') }}
               </th>
               <th class="fz-xxxl w-50 px-4 py-2 align-top">
-                {{ disp_nonHolidays }}
+                {{ $t('NonHolidays') }}
               </th>
             </tr>
             <tr>
               <td class="fz-lg w-50 px-4 py-1 align-top">
-                {{ disp_sepcifiedHolidays }}
+                {{ $t('SepcifiedHolidays') }}
               </td>
               <td class="fz-lg w-50 px-4 py-1 align-top">
-                {{ disp_sepcifiedNonHolidays }}
+                {{ $t('SepcifiedNonHolidays') }}
               </td>
             </tr>
             <tr>
@@ -451,7 +453,7 @@
                 @click="ApplyAttendanceSettings"
               >
                 <div style="font-size: 20px">
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </div>
               </CButton>
             </CCol>
@@ -463,8 +465,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
@@ -494,39 +494,6 @@ export default {
         pageSize: 10,
         totalResult: 0,
       },
-
-      disp_header: i18n.formatter.format('AttendanceSettings'),
-      disp_apply: i18n.formatter.format('Apply'),
-      disp_clockInChannel: i18n.formatter.format('ClockInChannel'),
-      disp_clockOutChannel: i18n.formatter.format('ClockOutChannel'),
-
-      disp_clockIn: i18n.formatter.format('ClockIn'),
-      disp_clockOut: i18n.formatter.format('ClockOut'),
-      disp_clockInTime: i18n.formatter.format('ClockInTime'),
-      disp_clockOutTime: i18n.formatter.format('ClockOutTime'),
-      disp_clockInTimeBuffer: i18n.formatter.format('ClockInTimeBuffer'),
-      disp_clockOutTimeBuffer: i18n.formatter.format('ClockOutTimeBuffer'),
-      disp_clockInUpperBound: i18n.formatter.format('ClockInUpperBound'),
-
-      disp_definedClockInTime: i18n.formatter.format('DefinedClockInTime'),
-      disp_definedClockOutTime: i18n.formatter.format('DefinedClockOutTime'),
-      disp_clockOutLowerBound: i18n.formatter.format('ClockOutLowerBound'),
-      disp_adjustClockInEnabled: i18n.formatter.format('AdjustClockInEnabled'),
-      disp_adjustClockOutEnabled: i18n.formatter.format('AdjustClockOutEnabled'),
-      disp_sepcifiedHolidays: i18n.formatter.format('SepcifiedHolidays'),
-      disp_sepcifiedNonHolidays: i18n.formatter.format('SepcifiedNonHolidays'),
-      disp_holidays: i18n.formatter.format('Holidays'),
-      disp_nonHolidays: i18n.formatter.format('NonHolidays'),
-      disp_break_time: i18n.formatter.format('BreakTimeTitle'),
-      disp_overtime: i18n.formatter.format('OvertimeTitle'),
-      disp_breakTimeMins: i18n.formatter.format('BreakTimeMins'),
-      disp_enableOvertime: i18n.formatter.format('EnableOvertime'),
-      disp_overtimeStartTime: i18n.formatter.format('OvertimeStartTime'),
-      disp_overtimeGuide: i18n.formatter.format('OvertimeGuide'),
-      disp_overtimeMinimum: i18n.formatter.format('OvertimeMinimum'),
-      disp_select: i18n.formatter.format('Select'),
-      disp_selected: i18n.formatter.format('Selected'),
-      disp_deselect: i18n.formatter.format('Deselect'),
 
       value_holidaydatePicked: null,
       value_nonHolidaydatePicked: null,
@@ -563,23 +530,21 @@ export default {
     };
   },
   created() {
-    const self = this;
-
-    self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
-      self.param_videoDeviceGroupIn = [];
-      self.param_videoDeviceGroupOut = [];
+    this.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
+      this.param_videoDeviceGroupIn = [];
+      this.param_videoDeviceGroupOut = [];
 
       if (!err) {
         if (data.result && data.result.length >= 1) {
           for (let o = 0; o < data.result.length; o += 1) {
-            self.param_videoDeviceGroupIn.push(data.result[o].name);
-            self.param_videoDeviceGroupOut.push(data.result[o].name);
+            this.param_videoDeviceGroupIn.push(data.result[o].name);
+            this.param_videoDeviceGroupOut.push(data.result[o].name);
           }
         }
       }
     });
 
-    self.getAttendanceSettings();
+    this.getAttendanceSettings();
   },
 
   watch: {},
@@ -591,28 +556,26 @@ export default {
     },
 
     getAttendanceSettings() {
-      const self = this;
-
-      self.$globalGetAttendanceSettings((err, pData) => {
+      this.$globalGetAttendanceSettings((err, pData) => {
         if (!err) {
-          // const data = { ...self.default_attendance_setting, ...pData };
-          self.default_attendance_setting = { ...self.default_attendance_setting, ...pData };
+          // const data = { ...this.default_attendance_setting, ...pData };
+          this.default_attendance_setting = { ...this.default_attendance_setting, ...pData };
 
-          self.value_clockInTimePicked = new Date();
-          self.value_clockOutTimePicked = new Date();
-          self.value_overtimeStartTime = new Date();
+          this.value_clockInTimePicked = new Date();
+          this.value_clockOutTimePicked = new Date();
+          this.value_overtimeStartTime = new Date();
 
-          self.value_clockInTimePicked.setHours(self.default_attendance_setting.defined_clockin_time_hour);
-          self.value_clockInTimePicked.setMinutes(self.default_attendance_setting.defined_clockin_time_min);
+          this.value_clockInTimePicked.setHours(this.default_attendance_setting.defined_clockin_time_hour);
+          this.value_clockInTimePicked.setMinutes(this.default_attendance_setting.defined_clockin_time_min);
 
-          self.value_clockOutTimePicked.setHours(self.default_attendance_setting.defined_clockout_time_hour);
-          self.value_clockOutTimePicked.setMinutes(self.default_attendance_setting.defined_clockout_time_min);
+          this.value_clockOutTimePicked.setHours(this.default_attendance_setting.defined_clockout_time_hour);
+          this.value_clockOutTimePicked.setMinutes(this.default_attendance_setting.defined_clockout_time_min);
 
-          self.value_overtimeStartTime.setHours(self.default_attendance_setting.defined_overtime_time_hour);
-          self.value_overtimeStartTime.setMinutes(self.default_attendance_setting.defined_overtime_time_min);
+          this.value_overtimeStartTime.setHours(this.default_attendance_setting.defined_overtime_time_hour);
+          this.value_overtimeStartTime.setMinutes(this.default_attendance_setting.defined_overtime_time_min);
 
-          self.calHoliday();
-          self.calNonHoliday();
+          this.calHoliday();
+          this.calNonHoliday();
         }
       });
     },
@@ -638,25 +601,25 @@ export default {
       let r = '';
       switch (index) {
         case 0:
-          r = i18n.formatter.format('Sun');
+          r = this.$t('Sun');
           break;
         case 1:
-          r = i18n.formatter.format('Mon');
+          r = this.$t('Mon');
           break;
         case 2:
-          r = i18n.formatter.format('Tue');
+          r = this.$t('Tue');
           break;
         case 3:
-          r = i18n.formatter.format('Wed');
+          r = this.$t('Wed');
           break;
         case 4:
-          r = i18n.formatter.format('Thu');
+          r = this.$t('Thu');
           break;
         case 5:
-          r = i18n.formatter.format('Fri');
+          r = this.$t('Fri');
           break;
         case 6:
-          r = i18n.formatter.format('Sat');
+          r = this.$t('Sat');
           break;
         default:
           r = '';
@@ -665,114 +628,105 @@ export default {
       return r;
     },
     calHoliday() {
-      const self = this;
-      self.default_attendance_setting.specified_holidays.sort((a, b) => a.date_time - b.date_time);
-      self.value_holidaysDateToShow = [];
-      self.default_attendance_setting.specified_holidays.forEach((h) => {
+      this.default_attendance_setting.specified_holidays.sort((a, b) => a.date_time - b.date_time);
+      this.value_holidaysDateToShow = [];
+      this.default_attendance_setting.specified_holidays.forEach((h) => {
         const t = new Date(h.date_time);
-        self.value_holidaysDateToShow.push({
-          display_string: `${self.formatYYYYMMDD(t)} (${self.getWeekString(t.getDay())})`,
+        this.value_holidaysDateToShow.push({
+          display_string: `${this.formatYYYYMMDD(t)} (${this.getWeekString(t.getDay())})`,
           date_time: t.getTime(),
         });
       });
-      self.value_holidaydatePicked = null;
-      self.value_nonHolidaydatePicked = null;
-      self.value_holidayTablePage.totalResult = self.default_attendance_setting.specified_holidays.length;
+      this.value_holidaydatePicked = null;
+      this.value_nonHolidaydatePicked = null;
+      this.value_holidayTablePage.totalResult = this.default_attendance_setting.specified_holidays.length;
       if (
-        self.value_holidayTablePage.totalResult < self.value_holidayTablePage.pageSize
+        this.value_holidayTablePage.totalResult < this.value_holidayTablePage.pageSize
       ) {
-        self.value_holidayTablePage.currentPage = 1;
+        this.value_holidayTablePage.currentPage = 1;
       }
-      self.value_holidaysDateToShow = self.value_holidaysDateToShow.slice(
-        (self.value_holidayTablePage.currentPage - 1) * self.value_holidayTablePage.pageSize,
-        self.value_holidayTablePage.currentPage * self.value_holidayTablePage.pageSize,
+      this.value_holidaysDateToShow = this.value_holidaysDateToShow.slice(
+        (this.value_holidayTablePage.currentPage - 1) * this.value_holidayTablePage.pageSize,
+        this.value_holidayTablePage.currentPage * this.value_holidayTablePage.pageSize,
       );
     },
     calNonHoliday() {
-      const self = this;
-      self.default_attendance_setting.specified_non_holidays.sort((a, b) => a.date_time - b.date_time);
-      self.value_nonHolidaysDateToShow = [];
-      self.default_attendance_setting.specified_non_holidays.forEach((h) => {
+      this.default_attendance_setting.specified_non_holidays.sort((a, b) => a.date_time - b.date_time);
+      this.value_nonHolidaysDateToShow = [];
+      this.default_attendance_setting.specified_non_holidays.forEach((h) => {
         const t = new Date(h.date_time);
-        self.value_nonHolidaysDateToShow.push({
-          display_string: `${self.formatYYYYMMDD(t)} (${self.getWeekString(t.getDay())})`,
+        this.value_nonHolidaysDateToShow.push({
+          display_string: `${this.formatYYYYMMDD(t)} (${this.getWeekString(t.getDay())})`,
           date_time: t.getTime(),
         });
       });
-      self.value_holidaydatePicked = null;
-      self.value_nonHolidaydatePicked = null;
-      self.value_nonHolidayTablePage.totalResult = self.default_attendance_setting.specified_non_holidays.length;
+      this.value_holidaydatePicked = null;
+      this.value_nonHolidaydatePicked = null;
+      this.value_nonHolidayTablePage.totalResult = this.default_attendance_setting.specified_non_holidays.length;
       if (
-        self.value_nonHolidayTablePage.totalResult < self.value_nonHolidayTablePage.pageSize
+        this.value_nonHolidayTablePage.totalResult < this.value_nonHolidayTablePage.pageSize
       ) {
-        self.value_nonHolidayTablePage.currentPage = 1;
+        this.value_nonHolidayTablePage.currentPage = 1;
       }
-      self.value_nonHolidaysDateToShow = self.value_nonHolidaysDateToShow.slice(
-        (self.value_nonHolidayTablePage.currentPage - 1) * self.value_nonHolidayTablePage.pageSize,
-        self.value_nonHolidayTablePage.currentPage * self.value_nonHolidayTablePage.pageSize,
+      this.value_nonHolidaysDateToShow = this.value_nonHolidaysDateToShow.slice(
+        (this.value_nonHolidayTablePage.currentPage - 1) * this.value_nonHolidayTablePage.pageSize,
+        this.value_nonHolidayTablePage.currentPage * this.value_nonHolidayTablePage.pageSize,
       );
     },
     clickOnInsertHoliday() {
-      const self = this;
-      if (self.value_holidaydatePicked) {
-        const pickedTs = self.value_holidaydatePicked.getTime();
+      if (this.value_holidaydatePicked) {
+        const pickedTs = this.value_holidaydatePicked.getTime();
         if (pickedTs) {
-          self.default_attendance_setting.specified_holidays.push({ date_time: pickedTs });
-          self.calHoliday();
+          this.default_attendance_setting.specified_holidays.push({ date_time: pickedTs });
+          this.calHoliday();
         }
       }
     },
     clickOnInsertNonHoliday() {
-      const self = this;
-      if (self.value_nonHolidaydatePicked) {
-        const pickedTs = self.value_nonHolidaydatePicked.getTime();
+      if (this.value_nonHolidaydatePicked) {
+        const pickedTs = this.value_nonHolidaydatePicked.getTime();
         if (pickedTs) {
-          self.default_attendance_setting.specified_non_holidays.push({ date_time: pickedTs });
-          self.calNonHoliday();
+          this.default_attendance_setting.specified_non_holidays.push({ date_time: pickedTs });
+          this.calNonHoliday();
         }
       }
     },
     deleteHolidayEvent(item) {
-      const self = this;
-      self.default_attendance_setting.specified_holidays = self.default_attendance_setting.specified_holidays.filter(
+      this.default_attendance_setting.specified_holidays = this.default_attendance_setting.specified_holidays.filter(
         (date) => date.date_time !== item.date_time,
       );
-      self.calHoliday();
+      this.calHoliday();
     },
 
     deleteNonHolidayEvent(item) {
-      const self = this;
-      self.default_attendance_setting.specified_non_holidays = self.default_attendance_setting.specified_non_holidays.filter(
+      this.default_attendance_setting.specified_non_holidays = this.default_attendance_setting.specified_non_holidays.filter(
         (date) => date.date_time !== item.date_time,
       );
-      self.calNonHoliday();
+      this.calNonHoliday();
     },
     handleHolidayPageChange({ currentPage }) {
-      const self = this;
-      self.value_holidayTablePage.currentPage = currentPage;
-      self.calHoliday();
+      this.value_holidayTablePage.currentPage = currentPage;
+      this.calHoliday();
     },
     handleNonHolidayPageChange({ currentPage }) {
-      const self = this;
-      self.value_nonHolidayTablePage.currentPage = currentPage;
-      self.calNonHoliday();
+      this.value_nonHolidayTablePage.currentPage = currentPage;
+      this.calNonHoliday();
     },
 
     checkDataOnSave() {
-      const self = this;
       let errMsg = '';
 
-      if (self.value_clockOutTimePicked - self.value_clockInTimePicked <= 0) {
+      if (this.value_clockOutTimePicked - this.value_clockInTimePicked <= 0) {
         errMsg += `${this.$t('InvalidWorkDuration')}; `;
         return [false, errMsg];
       }
 
-      if (self.value_overtimeStartTime - self.value_clockOutTimePicked <= 0) {
+      if (this.value_overtimeStartTime - this.value_clockOutTimePicked <= 0) {
         errMsg += `${this.$t('InvalidOvertime')}; `;
         return [false, errMsg];
       }
 
-      if (self.value_clockOutTimePicked - self.value_clockInTimePicked - (self.default_attendance_setting.defined_break_time_mins * 60000) <= 0) {
+      if (this.value_clockOutTimePicked - this.value_clockInTimePicked - (this.default_attendance_setting.defined_break_time_mins * 60000) <= 0) {
         errMsg += `${this.$t('InvalidBreakTime')}; `;
         return [false, errMsg];
       }
@@ -781,11 +735,10 @@ export default {
     },
 
     async ApplyAttendanceSettings() {
-      const self = this;
       const [isValid, errMsg] = this.checkDataOnSave();
 
       if (!isValid) {
-        self.$fire({
+        this.$fire({
           text: errMsg,
           type: 'error',
           timer: 5000,
@@ -794,45 +747,45 @@ export default {
         return;
       }
 
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
       const query = {
-        defined_clockin_time_hour: self.value_clockInTimePicked.getHours(),
-        defined_clockin_time_min: self.value_clockInTimePicked.getMinutes(),
-        defined_clockout_time_hour: self.value_clockOutTimePicked.getHours(),
-        defined_clockout_time_min: self.value_clockOutTimePicked.getMinutes(),
-        defined_clockin_time_buffer_mins: self.default_attendance_setting.defined_clockin_time_buffer_mins,
-        defined_clockout_time_buffer_mins: self.default_attendance_setting.defined_clockout_time_buffer_mins,
-        defined_clockin_time_late_enabled: self.default_attendance_setting.defined_clockin_time_late_enabled,
-        defined_clockout_time_early_leave_enabled: self.default_attendance_setting.defined_clockout_time_early_leave_enabled,
-        defined_clockin_adjustment_enabled: self.default_attendance_setting.defined_clockin_adjustment_enabled,
-        defined_clockout_adjustment_enabled: self.default_attendance_setting.defined_clockout_adjustment_enabled,
-        defined_break_time_mins: self.default_attendance_setting.defined_break_time_mins,
-        defined_overtime_enabled: self.default_attendance_setting.defined_overtime_enabled,
-        defined_overtime_time_hour: self.value_overtimeStartTime.getHours(),
-        defined_overtime_time_min: self.value_overtimeStartTime.getMinutes(),
-        defined_overtime_minimum_min: self.default_attendance_setting.defined_overtime_minimum_min,
-        specified_holidays: self.default_attendance_setting.specified_holidays,
-        specified_non_holidays: self.default_attendance_setting.specified_non_holidays,
-        video_device_group_in: self.default_attendance_setting.video_device_group_in,
-        video_device_group_out: self.default_attendance_setting.video_device_group_out,
+        defined_clockin_time_hour: this.value_clockInTimePicked.getHours(),
+        defined_clockin_time_min: this.value_clockInTimePicked.getMinutes(),
+        defined_clockout_time_hour: this.value_clockOutTimePicked.getHours(),
+        defined_clockout_time_min: this.value_clockOutTimePicked.getMinutes(),
+        defined_clockin_time_buffer_mins: this.default_attendance_setting.defined_clockin_time_buffer_mins,
+        defined_clockout_time_buffer_mins: this.default_attendance_setting.defined_clockout_time_buffer_mins,
+        defined_clockin_time_late_enabled: this.default_attendance_setting.defined_clockin_time_late_enabled,
+        defined_clockout_time_early_leave_enabled: this.default_attendance_setting.defined_clockout_time_early_leave_enabled,
+        defined_clockin_adjustment_enabled: this.default_attendance_setting.defined_clockin_adjustment_enabled,
+        defined_clockout_adjustment_enabled: this.default_attendance_setting.defined_clockout_adjustment_enabled,
+        defined_break_time_mins: this.default_attendance_setting.defined_break_time_mins,
+        defined_overtime_enabled: this.default_attendance_setting.defined_overtime_enabled,
+        defined_overtime_time_hour: this.value_overtimeStartTime.getHours(),
+        defined_overtime_time_min: this.value_overtimeStartTime.getMinutes(),
+        defined_overtime_minimum_min: this.default_attendance_setting.defined_overtime_minimum_min,
+        specified_holidays: this.default_attendance_setting.specified_holidays,
+        specified_non_holidays: this.default_attendance_setting.specified_non_holidays,
+        video_device_group_in: this.default_attendance_setting.video_device_group_in,
+        video_device_group_out: this.default_attendance_setting.video_device_group_out,
       };
 
-      const applyRet = await self.$globalSetAttendanceSettings(
+      const applyRet = await this.$globalSetAttendanceSettings(
         query,
       );
 
       const pass = !applyRet.error;
 
-      self.$fire({
+      this.$fire({
         text: pass
-          ? i18n.formatter.format('Successful')
-          : i18n.formatter.format('OperationFailed'),
+          ? this.$t('Successful')
+          : this.$t('OperationFailed'),
         type: pass ? 'success' : 'error',
         timer: 3000,
       });
 
-      if (self.obj_loading) self.obj_loading.hide();
+      if (this.obj_loading) this.obj_loading.hide();
     },
   },
 };

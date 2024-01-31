@@ -170,7 +170,6 @@ export default {
   },
   mixins: [TableObserver],
   created() {
-    const self = this;
     const endTime = new Date();
     endTime.setHours(23, 59, 59, 999);
 
@@ -178,10 +177,10 @@ export default {
     startTime.setDate(endTime.getDate() - 6);
     startTime.setHours(0, 0, 0, 0);
 
-    self.value_searchDatetimeRange[0] = startTime;
-    self.value_searchDatetimeRange[1] = endTime;
+    this.value_searchDatetimeRange[0] = startTime;
+    this.value_searchDatetimeRange[1] = endTime;
 
-    self.flag_enableSearchButton = true;
+    this.flag_enableSearchButton = true;
   },
   computed: {
     ...mapState(['ellipsisMode']),
@@ -296,19 +295,18 @@ export default {
     },
 
     generateFilteredData(sourceData) {
-      const self = this;
       sourceData.forEach((element) => {
         element.modifier.split('\n');
       });
-      const filteredItems = self.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => (
-        item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
+      const filteredItems = this.value_keyword.length == 0 ? sourceData : sourceData.filter((item) => (
+        item.name.toLowerCase().indexOf(this.value_keyword.toLowerCase()) > -1
       ));
 
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
 
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
       return Object.assign([], sliceList);
     },
@@ -322,8 +320,7 @@ export default {
       return 'fontSize:18px;';
     },
     datePickerDataChange() {
-      const self = this;
-      self.flag_enableSearchButton = true;
+      this.flag_enableSearchButton = true;
     },
     changeAttendance() {
       this.$router.push('ChangeAttendance');

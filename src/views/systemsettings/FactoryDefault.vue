@@ -1,17 +1,29 @@
 <template>
   <div>
     <div class="h1">
-      {{ disp_header }}
+      {{ $t('FactoryDefault') }}
     </div>
     <CCard class="mt-5">
       <CCardBody class="py-5">
         <CCol sm="12">
           <CRow class="justify-content-center">
-            <CButton class="btn btn-danger btn-w-md mr-5 my-2" @click="clickOnExcecute" :disabled="flag_applying">
-              <div style="font-size: 20px">{{ disp_excecute }}</div>
+            <CButton
+              class="btn btn-danger btn-w-md mr-5 my-2"
+              @click="clickOnExcecute"
+              :disabled="flag_applying"
+            >
+              <div style="font-size: 20px">
+                {{ $t('FactoryDefault') }}
+              </div>
             </CButton>
-            <CButton class="btn btn-primary btn-w-md mx-5 my-2" @click="clickOnReboot" :disabled="flag_applying">
-              <div style="font-size: 20px">{{ disp_reboot }}</div>
+            <CButton
+              class="btn btn-primary btn-w-md mx-5 my-2"
+              @click="clickOnReboot"
+              :disabled="flag_applying"
+            >
+              <div style="font-size: 20px">
+                {{ $t('Reboot') }}
+              </div>
             </CButton>
           </CRow>
         </CCol>
@@ -21,106 +33,99 @@
 </template>
 
 <script>
-  import i18n from '@/i18n';
+export default {
+  name: 'FactoryDefault',
 
-  export default {
-    name: 'FactoryDefault',
+  data() {
+    return {
+      param_cardStyle: 'height: 9rem;',
 
-    data() {
-      return {
-        param_cardStyle: 'height: 9rem;',
-        disp_header: i18n.formatter.format('FactoryDefault'),
-
-        disp_excecute: i18n.formatter.format('FactoryDefault'),
-        disp_reboot: i18n.formatter.format('Reboot'),
-        flag_applying: false,
-      };
-    },
-    methods: {
-      clickOnReboot() {
-        const self = this;
-        self.flag_applying = true;
-        self
-          .$confirm('', i18n.formatter.format('ConfirmToReboot'), {
-            confirmButtonText: i18n.formatter.format('Confirm'),
-            cancelButtonText: i18n.formatter.format('Cancel'),
-            confirmButtonColor: '#20a8d8',
-            cancelButtonColor: '#f86c6b',
-          })
-          .then(() => {
-            self.$globalRestartDevice((error, data) => {
-              if (error === null) {
-                if (data.message === 'ok') {
-                  self.$fire({
-                    text: i18n.formatter.format('CompleteAndRestart'),
-                    type: 'success',
-                    timer: 3000,
-                  });
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format('OperationFailed'),
-                    type: 'error',
-                    timer: 3000,
-                    confirmButtonColor: '#20a8d8',
-                  });
-                }
+      flag_applying: false,
+    };
+  },
+  methods: {
+    clickOnReboot() {
+      this.flag_applying = true;
+      this
+        .$confirm('', this.$t('ConfirmToReboot'), {
+          confirmButtonText: this.$t('Confirm'),
+          cancelButtonText: this.$t('Cancel'),
+          confirmButtonColor: '#20a8d8',
+          cancelButtonColor: '#f86c6b',
+        })
+        .then(() => {
+          this.$globalRestartDevice((error, data) => {
+            if (error === null) {
+              if (data.message === 'ok') {
+                this.$fire({
+                  text: this.$t('CompleteAndRestart'),
+                  type: 'success',
+                  timer: 3000,
+                });
               } else {
-                self.$fire({
-                  text: i18n.formatter.format('OperationFailed'),
+                this.$fire({
+                  text: this.$t('OperationFailed'),
                   type: 'error',
                   timer: 3000,
                   confirmButtonColor: '#20a8d8',
                 });
               }
-              self.flag_applying = false;
-            });
-          })
-          .catch(() => {
-            self.flag_applying = false;
+            } else {
+              this.$fire({
+                text: this.$t('OperationFailed'),
+                type: 'error',
+                timer: 3000,
+                confirmButtonColor: '#20a8d8',
+              });
+            }
+            this.flag_applying = false;
           });
-      },
-      clickOnExcecute() {
-        const self = this;
-        self.flag_applying = true;
-        self
-          .$confirm('', i18n.formatter.format('ConfirmToFactoryDefault'), {
-            confirmButtonText: i18n.formatter.format('Confirm'),
-            cancelButtonText: i18n.formatter.format('Cancel'),
-            confirmButtonColor: '#20a8d8',
-            cancelButtonColor: '#f86c6b',
-          })
-          .then(() => {
-            self.$globalFactoryDefault((error, data) => {
-              if (error === null) {
-                if (data.message === 'ok') {
-                  self.$fire({
-                    text: i18n.formatter.format('Successful'),
-                    type: 'success',
-                    timer: 3000,
-                  });
-                } else {
-                  self.$fire({
-                    text: i18n.formatter.format('OperationFailed'),
-                    type: 'error',
-                    timer: 3000,
-                    confirmButtonColor: '#20a8d8',
-                  });
-                }
+        })
+        .catch(() => {
+          this.flag_applying = false;
+        });
+    },
+    clickOnExcecute() {
+      this.flag_applying = true;
+      this
+        .$confirm('', this.$t('ConfirmToFactoryDefault'), {
+          confirmButtonText: this.$t('Confirm'),
+          cancelButtonText: this.$t('Cancel'),
+          confirmButtonColor: '#20a8d8',
+          cancelButtonColor: '#f86c6b',
+        })
+        .then(() => {
+          this.$globalFactoryDefault((error, data) => {
+            if (error === null) {
+              if (data.message === 'ok') {
+                this.$fire({
+                  text: this.$t('Successful'),
+                  type: 'success',
+                  timer: 3000,
+                });
               } else {
-                self.$fire({
-                  text: i18n.formatter.format('OperationFailed'),
+                this.$fire({
+                  text: this.$t('OperationFailed'),
                   type: 'error',
                   timer: 3000,
                   confirmButtonColor: '#20a8d8',
                 });
               }
-              self.flag_applying = false;
-            });
-          })
-          .catch(() => {
-            self.flag_applying = false;
+            } else {
+              this.$fire({
+                text: this.$t('OperationFailed'),
+                type: 'error',
+                timer: 3000,
+                confirmButtonColor: '#20a8d8',
+              });
+            }
+            this.flag_applying = false;
           });
-      },
+        })
+        .catch(() => {
+          this.flag_applying = false;
+        });
     },
-  };
+  },
+};
 </script>

@@ -2,8 +2,10 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <div class="h1">{{ disp_header }}</div>
-        <div style="height:10px;"></div>
+        <div class="h1">
+          {{ $t('LicenseManagement') }}
+        </div>
+        <div style="height:10px;" />
       </CCol>
     </CRow>
 
@@ -11,33 +13,60 @@
       <CCol sm="12">
         <CCard style="height:12rem;">
           <CCardHeader>
-            <div class="h3">{{disp_titleActivateLicense}}</div>
+            <div class="h3">
+              {{ $t('TitleActivateLicense') }}
+            </div>
           </CCardHeader>
           <CCardBody>
             <CRow>
+              <!-- FIXME: no i18n-->
               <!-- <CCol sm="5">
-                <div class="h5">{{disp_networkMac}}</div>
+                <div class="h5">{{$t('MAC')}}</div>
                 <CSelect size="lg" :value.sync="value_networkMac" :options="value_avaiableNetworkListToShow"
                   @change="selNetwork($event)" />
 
               </CCol> -->
               <CCol sm="8">
-                <div class="h5">{{disp_licenseKey}}</div>
-                <CInput size="lg" valid-feedback="ok" :invalid-feedback="disp_noEmptyNoSpaceNoSpecial" value=""
-                  v-model="value_licenseKey" placeholder="" :is-valid="isValidLicenseKey" required />
+                <div class="h5">
+                  {{ $t('LicenseKey') }}
+                </div>
+                <CInput
+                  size="lg"
+                  valid-feedback="ok"
+                  :invalid-feedback="$t('NoEmptyNoSpaceNoSpecial')"
+                  value=""
+                  v-model="value_licenseKey"
+                  placeholder=""
+                  :is-valid="isValidLicenseKey"
+                  required
+                />
               </CCol>
               <CCol sm="2">
-                <div class="h5">&nbsp;</div>
-                <CButton style="width: 200px; background-color:#20a8d8;color: white;" :disabled="!flag_licenseKeyPass"
-                  @click="clickOnApplyLicense">
-                  <div style="font-size:20px">{{disp_apply}}</div>
+                <div class="h5">
+&nbsp;
+                </div>
+                <CButton
+                  style="width: 200px; background-color:#20a8d8;color: white;"
+                  :disabled="!flag_licenseKeyPass"
+                  @click="clickOnApplyLicense"
+                >
+                  <div style="font-size:20px">
+                    {{ $t('BtnActivate') }}
+                  </div>
                 </CButton>
               </CCol>
               <CCol sm="2">
-                <div class="h5">&nbsp;</div>
-                <CButton style="width: 200px; background-color:#20a8d8;color: white;" @click="clickOnActiveTrialLicense"
-                  :disabled="!flag_defaultLicense && false">
-                  <div style="font-size:20px">{{disp_trial}}</div>
+                <div class="h5">
+&nbsp;
+                </div>
+                <CButton
+                  style="width: 200px; background-color:#20a8d8;color: white;"
+                  @click="clickOnActiveTrialLicense"
+                  :disabled="!flag_defaultLicense && false"
+                >
+                  <div style="font-size:20px">
+                    {{ $t('BtnTrial') }}
+                  </div>
                 </CButton>
               </CCol>
             </CRow>
@@ -47,26 +76,64 @@
       <CCol sm="12">
         <CCard>
           <CCardHeader>
-            <div class="h3">{{disp_titleLicenses}}</div>
+            <div class="h3">
+              {{ $t('TitleLicenses') }}
+            </div>
           </CCardHeader>
           <CCardBody>
             <div>
-              <vxe-table :data="value_dataItemsToShow" height="398" columns-height="100" stripe align="center"
-                :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="mainTable">
-                <vxe-table-column show-overflow field="no" :title="disp_seq" min-width="100" align="left">
-                </vxe-table-column>
-                <vxe-table-column show-overflow field="license_key" :title="disp_licenseKey" min-width="380"
-                  align="left">
-                </vxe-table-column>
-                <vxe-table-column show-overflow field="trial_days" :title="disp_trial_days" min-width="120"
-                  align="left">
-                </vxe-table-column>
-                <vxe-table-column show-overflow field="local_end_time" :title="disp_expire_days" min-width="250"
-                  align="left"></vxe-table-column>
-                <vxe-table-column show-overflow field="face_db_size" :title="disp_mac" min-width="160" align="left">
-                </vxe-table-column>
-                <vxe-table-column show-overflow field="channel_amount" :title="disp_channel_amount" min-width="100"
-                  align="left"></vxe-table-column>
+              <vxe-table
+                :data="value_dataItemsToShow"
+                height="398"
+                columns-height="100"
+                stripe
+                align="center"
+                :cell-style="cellStyle"
+                :header-cell-style="headerCellStyle"
+                ref="mainTable"
+              >
+                <vxe-table-column
+                  show-overflow
+                  field="no"
+                  :title="$t('Seq')"
+                  min-width="100"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="license_key"
+                  :title="$t('LicenseKey')"
+                  min-width="380"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="trial_days"
+                  :title="$t('TrialDays')"
+                  min-width="120"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="local_end_time"
+                  :title="$t('ExpireDays')"
+                  min-width="250"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="face_db_size"
+                  :title="$t('FaceDBSize')"
+                  min-width="160"
+                  align="left"
+                />
+                <vxe-table-column
+                  show-overflow
+                  field="channel_amount"
+                  :title="$t('Amounts')"
+                  min-width="100"
+                  align="left"
+                />
               </vxe-table>
             </div>
           </CCardBody>
@@ -77,8 +144,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 export default {
   name: 'LicenseSettings',
 
@@ -91,22 +156,6 @@ export default {
         totalResult: 0,
       },
       param_cardStyle: 'height: 26rem;',
-      disp_header: i18n.formatter.format('LicenseManagement'),
-
-      disp_titleActivateLicense: i18n.formatter.format('TitleActivateLicense'),
-      disp_titleLicenses: i18n.formatter.format('TitleLicenses'),
-      disp_networkMac: i18n.formatter.format('MAC'),
-      disp_licenseKey: i18n.formatter.format('LicenseKey'),
-      disp_apply: i18n.formatter.format('BtnActivate'),
-      disp_trial: i18n.formatter.format('BtnTrial'),
-      disp_noEmptyNoSpaceNoSpecial: i18n.formatter.format('NoEmptyNoSpaceNoSpecial'),
-
-      disp_seq: i18n.formatter.format('Seq'),
-      // disp_mac: i18n.formatter.format('MAC'),
-      disp_mac: i18n.formatter.format('FaceDBSize'),
-      disp_trial_days: i18n.formatter.format('TrialDays'),
-      disp_expire_days: i18n.formatter.format('ExpireDays'),
-      disp_channel_amount: i18n.formatter.format('Amounts'),
 
       // value_networkMac: '',
       value_licenseKey: '',
@@ -120,22 +169,20 @@ export default {
   },
   created() { },
   mounted() {
-    const self = this;
-
-    // self.$globalFetchEthernetList((error, result) => {
+    // this.$globalFetchEthernetList((error, result) => {
     //   if (!error && result) {
     //     let l = [];
     //     result.forEach((inter) => {
     //       l.push({ value: inter.ether, label: inter.interface + ' (' + inter.ether + ')' });
 
-    //       if (self.value_networkMac == '')
-    //         self.value_networkMac = inter.ether;
+    //       if (this.value_networkMac == '')
+    //         this.value_networkMac = inter.ether;
     //     });
-    //     self.value_avaiableNetworkListToShow = l;
+    //     this.value_avaiableNetworkListToShow = l;
     //   }
     // });
 
-    self.refreshTableItems();
+    this.refreshTableItems();
   },
   watch: {},
   methods: {
@@ -155,12 +202,11 @@ export default {
     },
 
     generateFilteredData(sourceData) {
-      const self = this;
       const filteredItems = sourceData;
 
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize, self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize, this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
 
       sliceList.forEach((item) => {
@@ -190,14 +236,12 @@ export default {
     },
 
     refreshTableItems() {
-      const self = this;
-
-      self.$globalGetLicenseList((error, result) => {
+      this.$globalGetLicenseList((error, result) => {
         if (result) {
-          self.value_allTableItems = result.data_list;
+          this.value_allTableItems = result.data_list;
 
           if (result.trial_avaiable_for_active) {
-            self.flag_defaultLicense = true;
+            this.flag_defaultLicense = true;
           } else {
             let no = 1;
 
@@ -205,7 +249,7 @@ export default {
             localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
             console.log('refreshTableItems 1', 'availableLicenseAmount', availableLicenseAmount);
 
-            self.value_allTableItems.forEach((item) => {
+            this.value_allTableItems.forEach((item) => {
               const localItem = item;
 
               localItem.no = no;
@@ -226,65 +270,59 @@ export default {
               return localItem;
             });
 
-            self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems, self.value_searchingFilter);
+            this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems, this.value_searchingFilter);
           }
         }
       });
     },
 
     isValidLicenseKey(val) {
-      const self = this;
-
-      self.flag_licenseKeyPass = false;
+      this.flag_licenseKeyPass = false;
       if (val.replace(/\s/g, '').length >= 1) {
-        self.flag_licenseKeyPass = true;
+        this.flag_licenseKeyPass = true;
       }
 
-      return self.flag_licenseKeyPass;
+      return this.flag_licenseKeyPass;
     },
 
     async clickOnApplyLicense() {
-      const self = this;
-
       const dataApply = {
         license_server_address: 'license.aira.com.tw',
         license_server_port: 5168,
-        license_key: self.value_licenseKey,
-        // mac_address: self.value_networkMac,
+        license_key: this.value_licenseKey,
+        // mac_address: this.value_networkMac,
       };
 
-      self.$globalCreateLicense(dataApply, (err) => {
+      this.$globalCreateLicense(dataApply, (err) => {
         if (err) {
-          self.$fire({
-            text: i18n.formatter.format('Failed'),
+          this.$fire({
+            text: this.$t('Failed'),
             type: 'error',
             timer: 3000,
             confirmButtonColor: '#20a8d8',
           });
         }
-        self.refreshTableItems();
+        this.refreshTableItems();
       });
     },
 
     async clickOnActiveTrialLicense() {
-      const self = this;
-
-      self.$confirm('', i18n.formatter.format('ConfirmToProcess'), {
-        confirmButtonText: i18n.formatter.format('Confirm'),
-        cancelButtonText: i18n.formatter.format('Cancel'),
+      this.$confirm('', this.$t('ConfirmToProcess'), {
+        confirmButtonText: this.$t('Confirm'),
+        cancelButtonText: this.$t('Cancel'),
         confirmButtonColor: '#20a8d8',
         cancelButtonColor: '#f86c6b',
       }).then(() => {
-        self.$globalDefaultLicense({}, (err) => {
+        this.$globalDefaultLicense({}, (err) => {
           if (err) {
-            self.$fire({
-              text: i18n.formatter.format('Failed'),
+            this.$fire({
+              text: this.$t('Failed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
             });
           }
-          self.refreshTableItems();
+          this.refreshTableItems();
         });
       }).catch(() => {
         // if (cb) cb(false);

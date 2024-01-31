@@ -2,14 +2,14 @@
   <div>
     <CCol sm="12">
       <div class="h1">
-        {{ disp_header }}
+        {{ $t('GeneralSettings') }}
       </div>
       <div style="height: 30px" />
       <!-- 辨識設定 -->
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_faceVerifySettings }}</span>
+            <span class="h3">{{ $t('FaceVerifySettings') }}</span>
           </div>
         </CCardHeader>
 
@@ -17,13 +17,13 @@
           <table class="table-layout">
             <tr>
               <th class="h5 w-25 table-th">
-                {{ disp_verifyThreshold }}
+                {{ $t('VerifyThreshold') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_antiSpoofingThreshold }}
+                {{ $t('AntiSpoofingThreshold') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_faceDetectThreshold }}
+                {{ $t('FaceDetectThreshold') }}
               </th>
               <th class="h5 w-25 table-th" />
             </tr>
@@ -65,13 +65,13 @@
             </tr>
             <tr>
               <th class="h5 w-25 table-th">
-                {{ disp_faceMaskDetection }}
+                {{ $t('FaceMaskDetection') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_enableIdCard }}
+                {{ $t('EnableIdCard') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_enableTwoFactorAuthentication }}
+                {{ $t('EnableTwoFactorAuthentication') }}
               </th>
               <th class="h5 w-25 table-th" />
             </tr>
@@ -106,7 +106,7 @@
                   @click="clickOnApplyVerifySettings"
                   :disabled="flag_changingVerifySettings || !flag_verifySettingsOk"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -118,7 +118,7 @@
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_tabletDisplaySettings }}</span>
+            <span class="h3">{{ $t('TabletDisplaySettings') }}</span>
           </div>
         </CCardHeader>
 
@@ -126,7 +126,7 @@
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_verifyResultPhoto }}
+                {{ $t('VerifyResultPhoto') }}
               </th>
 
               <th class="h5 w-25 table-th">
@@ -134,15 +134,15 @@
                   class="h5"
                   data-coreui-toggle="tooltip"
                 >
-                  {{ disp_displayVerifyResultTime }}
+                  {{ $t('VerifyResultDisplayDuration') }}
                 </div>
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_temperatureDisplayingUnit }}
+                {{ $t('TemperatureDisplayingUnit') }}
               </th>
               <th class="h5 w-25 table-th">
                 <div v-if="flag_support_show_verify_indication">
-                  {{ disp_showVerifyIndication }}
+                  {{ $t('ShowVerifyIndication') }}
                 </div>
               </th>
             </tr>
@@ -191,7 +191,7 @@
                   @click="clickOnApplyDisplaySettings"
                   :disabled="flag_changingDisplaySettings || !flag_displaySettingsOk"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -208,7 +208,7 @@
       >
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_turnsIpCamera }}</span>
+            <span class="h3">{{ $t('TurnsIpCamera') }}</span>
             <span class="h6 ml-2">
               <span
                 v-if="value_rtspActivated"
@@ -239,8 +239,8 @@
                 />
                 <div>
                   <span class="h4 ml-2">
-                    <span v-if="value_enableRtsp">{{ disp_enable }}</span>
-                    <span v-else>{{ disp_disable }}</span>
+                    <span v-if="value_enableRtsp">{{ $t('Enable') }}</span>
+                    <span v-else>{{ $t('Disable') }}</span>
                   </span>
                 </div>
               </CRow>
@@ -250,10 +250,10 @@
           <table class="table-layout mt-4">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_username }}
+                {{ $t('Username') }}
               </th>
               <th class="h5 w-25 table-th">
-                {{ disp_password }}
+                {{ $t('Password') }}
               </th>
               <th class="h5 w-25 table-th" />
               <th class="h5 w-25 table-th" />
@@ -299,7 +299,7 @@
                   :disabled="flag_changingRtsp"
                 >
                   <div style="font-size: 20px">
-                    {{ disp_apply }}
+                    {{ $t('Apply') }}
                   </div>
                 </CButton>
               </td>
@@ -312,7 +312,7 @@
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_clockinMode }}</span>
+            <span class="h3">{{ $t('ClockinMode') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
@@ -327,8 +327,8 @@
               />
               <div>
                 <span class="h4 ml-2 p-0">
-                  <span v-if="value_enableClockinMode">{{ disp_enable }}</span>
-                  <span v-else>{{ disp_disable }}</span>
+                  <span v-if="value_enableClockinMode">{{ $t('Enable') }}</span>
+                  <span v-else>{{ $t('Disable') }}</span>
                 </span>
               </div>
               <CButton
@@ -336,7 +336,7 @@
                 @click="clickOnApplyClockInMode"
               >
                 <div style="font-size: 20px">
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </div>
               </CButton>
             </div>
@@ -353,8 +353,9 @@
             <span
               class="h3"
               style="display: inline-block; position: relative; margin-right: 33px"
-            >{{
-              disp_intercomSettings }}</span>
+            >
+              {{ $t('Intercom') }}
+            </span>
             <span
               class="h6"
               style="display: inline-block; margin: 0; position: relative; bottom: 4px"
@@ -365,14 +366,16 @@
               <a
                 :href="value_videoPath"
                 download
-              >{{ disp_download }}</a>
+              >
+                {{ $t('Download') }}
+              </a>
             </span>
           </div>
         </CCardHeader>
         <CCardBody>
           <CCol sm="12">
             <div class="d-flex align-items-center my-3">
-              <!-- <div class="h5">{{ disp_enableIntercom }}</div> -->
+              <!-- <div class="h5">{{ $t('EnableIntercom') }}</div> -->
               <CSwitch
                 size="lg"
                 class="ml-0"
@@ -383,8 +386,8 @@
               />
               <div>
                 <span class="h4 ml-2">
-                  <span v-if="value_enableIntercom">{{ disp_enableIntercom }}</span>
-                  <span v-else>{{ disp_disableIntercom }}</span>
+                  <span v-if="value_enableIntercom">{{ $t('EnableIntercom') }}</span>
+                  <span v-else>{{ $t('DisableIntercom') }}</span>
                 </span>
               </div>
               <CButton
@@ -393,7 +396,7 @@
                 :disabled="flag_changingIntercomSettings"
               >
                 <div style="font-size: 20px">
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </div>
               </CButton>
             </div>
@@ -404,7 +407,7 @@
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_customButton }}</span>
+            <span class="h3">{{ $t('CustomButton') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
@@ -419,8 +422,8 @@
               />
               <div>
                 <span class="h4 ml-2">
-                  <span v-if="value_enableCustomButton">{{ disp_enable }}</span>
-                  <span v-else>{{ disp_disable }}</span>
+                  <span v-if="value_enableCustomButton">{{ $t('Enable') }}</span>
+                  <span v-else>{{ $t('Disable') }}</span>
                 </span>
               </div>
               <CButton
@@ -428,7 +431,7 @@
                 @click="clickOnApplyCustomButton"
               >
                 <div style="font-size: 20px">
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </div>
               </CButton>
             </div>
@@ -436,7 +439,7 @@
           <div style="height: 30px" />
           <CCol sm="12">
             <div class="h5">
-              {{ disp_url }}
+              {{ $t('URL') }}
             </div>
             <CInput
               size="lg"
@@ -454,14 +457,14 @@
       >
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_alarmSettings }}</span>
+            <span class="h3">{{ $t('AlarmSettings') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_alarmVolume }}
+                {{ $t('AlarmVolume') }}
               </th>
               <th class="h5 w-25 table-th">
                 {{ disp_highTemperatureThreshold }}
@@ -492,7 +495,7 @@
                   @click="clickOnApplyAlarmSettings"
                   :disabled="flag_changingAlarmSettings || !flag_verifyAlarmSettingsOk"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -504,14 +507,14 @@
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_tabletInterfaceLangurage }}</span>
+            <span class="h3">{{ $t('TabletInterfaceLangurage') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_tabletInterfaceLangurageList }}
+                {{ $t('TabletInterfaceLangurageList') }}
               </th>
               <th class="h5 w-25 table-th" />
               <th class="h5 w-25 table-th" />
@@ -532,7 +535,7 @@
                   @click="clickOnApplyTabletInterfaceLangurage"
                   :disabled="flag_changingTabletInterfaceLangurage"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -545,7 +548,7 @@
       <CCard>
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_centralManagement }}</span>
+            <span class="h3">{{ $t('CentralManagement') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
@@ -560,8 +563,8 @@
               />
               <div>
                 <span class="h4 ml-2 p-0">
-                  <span v-if="value_enableAiraManager">{{ disp_enable }}</span>
-                  <span v-else>{{ disp_disable }}</span>
+                  <span v-if="value_enableAiraManager">{{ $t('Enable') }}</span>
+                  <span v-else>{{ $t('Disable') }}</span>
                 </span>
               </div>
             </div>
@@ -570,7 +573,7 @@
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_hostname }}
+                {{ $t('HostName') }}
               </th>
               <th class="h5 w-25 table-th" />
               <th class="h5 w-25 table-th" />
@@ -590,7 +593,7 @@
                   class="btn btn-primary fz-xl"
                   @click="clickOnApplyAiraManager"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -603,14 +606,14 @@
       <CCard v-show="false">
         <CCardHeader>
           <div>
-            <span class="h3">{{ disp_tabletSystemPassword }}</span>
+            <span class="h3">{{ $t('TabletSystemPassword') }}</span>
           </div>
         </CCardHeader>
         <CCardBody>
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ disp_tabletSystemPassword }}
+                {{ $t('TabletSystemPassword') }}
               </th>
               <th class="h5 w-25 table-th" />
               <th class="h5 w-25 table-th" />
@@ -647,7 +650,7 @@
                   @click="clickOnApplyTabletSystemPassword"
                   :disabled="flag_changingTabletSystemPassword"
                 >
-                  {{ disp_apply }}
+                  {{ $t('Apply') }}
                 </CButton>
               </td>
               <td class="table-td" />
@@ -694,7 +697,7 @@
               <CInput
                 size="lg"
                 v-model.number="value_maintain_disk_space_in_gb"
-                :invalid-feedback="$t('limitNumberRange').replace('#1', `${range_maintain_disk_space_in_gb[0]}GB`).replace('#2', `${range_maintain_disk_space_in_gb[1]}GB`)"
+                :invalid-feedback="getInvalidFeedback"
                 :is-valid="isFieldPassed"
               />
             </CCol>
@@ -705,7 +708,7 @@
                 class="btn btn-primary fz-xl"
                 @click="clickOnApplySystemSetting"
               >
-                {{ disp_apply }}
+                {{ $t('Apply') }}
               </CButton>
             </CCol>
           </CRow>
@@ -716,7 +719,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 // import { deviceTypes } from '@/globalParams.js';
 
 export default {
@@ -728,78 +730,37 @@ export default {
 
       flag_view_password: false,
 
-      disp_header: i18n.formatter.format('GeneralSettings'),
-      disp_enable: i18n.formatter.format('Enable'),
-      disp_disable: i18n.formatter.format('Disable'),
-      disp_username: i18n.formatter.format('Username'),
-      disp_password: i18n.formatter.format('Password'),
-      disp_turnsIpCamera: i18n.formatter.format('TurnsIpCamera'),
-      disp_apply: i18n.formatter.format('Apply'),
-      disp_clockinMode: i18n.formatter.format('ClockinMode'),
-      disp_customButton: i18n.formatter.format('CustomButton'),
-      disp_clockIn: i18n.formatter.format('ClockIn'),
-      disp_clockOut: i18n.formatter.format('ClockOut'),
-      disp_enableIntercom: i18n.formatter.format('EnableIntercom'),
-      disp_disableIntercom: i18n.formatter.format('DisableIntercom'),
-      disp_intercomSettings: i18n.formatter.format('Intercom'),
-      disp_download: i18n.formatter.format('Download'),
-      disp_faceVerifySettings: i18n.formatter.format('FaceVerifySettings'),
-      disp_verifyResultPhoto: i18n.formatter.format('VerifyResultPhoto'),
-      disp_tabletDisplaySettings: i18n.formatter.format('TabletDisplaySettings'),
-      disp_verifyThreshold: i18n.formatter.format('VerifyThreshold'),
-      disp_antiSpoofingThreshold: i18n.formatter.format('AntiSpoofingThreshold'),
-      disp_faceDetectThreshold: i18n.formatter.format('FaceDetectThreshold'),
-      disp_faceMaskDetection: i18n.formatter.format('FaceMaskDetection'),
-      disp_showVerifyIndication: i18n.formatter.format('ShowVerifyIndication'),
-      disp_temperatureDisplayingUnit: i18n.formatter.format('TemperatureDisplayingUnit'),
-      disp_alarmVolume: i18n.formatter.format('AlarmVolume'),
-      disp_enableIdCard: i18n.formatter.format('EnableIdCard'),
-      disp_enableTwoFactorAuthentication: i18n.formatter.format(
-        'EnableTwoFactorAuthentication',
-      ),
       disp_highTemperatureThreshold:
-        `${i18n.formatter.format('HighTemperatureThreshold')
+        `${this.$t('HighTemperatureThreshold')
         } ${
-          i18n.formatter.format('Celsius')}`,
+          this.$t('Celsius')}`,
 
-      disp_tabletInterfaceLangurage: i18n.formatter.format('TabletInterfaceLangurage'),
-      disp_tabletInterfaceLangurageList: i18n.formatter.format(
-        'TabletInterfaceLangurageList',
-      ),
-      disp_alarmSettings: i18n.formatter.format('AlarmSettings'),
-      disp_tabletSystemPassword: i18n.formatter.format('TabletSystemPassword'),
-      disp_centralManagement: i18n.formatter.format('CentralManagement'),
-      disp_willLossAllPersonData: i18n.formatter.format('WillLossAllPersonData'),
-      disp_faceMaskEnhancement: i18n.formatter.format('FaceMaskEnhancement'),
-
-      disp_hostname: i18n.formatter.format('HostName'),
-      disp_url: 'URL',
       value_airaManagerHostName: '',
       value_airaManagerPort: 8443,
       value_enableAiraManager: false,
       value_customFunctionUrl: '',
 
       value_enableDisableListToShow: [
-        { value: true, label: i18n.formatter.format('Yes') },
-        { value: false, label: i18n.formatter.format('No') },
+        { value: true, label: this.$t('Yes') },
+        { value: false, label: this.$t('No') },
       ],
       value_haveToWearFaceMask: false,
       value_faceMaskEnhancement: false,
       value_enableIdCard: false,
       value_enableTwoFactorAuthentication: false,
       value_verifyResultPhotoList: [
-        { value: true, label: i18n.formatter.format('RegisterPhoto') },
-        { value: false, label: i18n.formatter.format('CapturedPhoto') },
+        { value: true, label: this.$t('RegisterPhoto') },
+        { value: false, label: this.$t('CapturedPhoto') },
       ],
       value_showVerifyIndication: false,
       value_showVerifyIndicationList: [
-        { value: true, label: i18n.formatter.format('Yes') },
-        { value: false, label: i18n.formatter.format('No') },
+        { value: true, label: this.$t('Yes') },
+        { value: false, label: this.$t('No') },
       ],
       value_showProfilePhoto: false,
       value_temperatureDisplayingUnitList: [
-        { value: true, label: i18n.formatter.format('Celsius') },
-        { value: false, label: i18n.formatter.format('Fahrenheit') },
+        { value: true, label: this.$t('Celsius') },
+        { value: false, label: this.$t('Fahrenheit') },
       ],
       value_temperatureUnitCelsius: true,
       value_highTemperatureThreshold: 37.5,
@@ -824,7 +785,6 @@ export default {
       value_tabletInterfaceLangurage: 'zh',
       value_tabletInterfaceLangurageList: [],
       value_tabletSystemPassword: '123456',
-      disp_displayVerifyResultTime: i18n.formatter.format('VerifyResultDisplayDuration'),
       flag_changingRtsp: false,
       flag_changingClockInMode: false,
       flag_changingDisplaySettings: false,
@@ -883,171 +843,170 @@ export default {
     };
   },
   created() {
-    const self = this;
     // const HOST = window.location.host;
-    // self.value_rtspPath = 'https://' + HOST + '/exe/intercom.zip';
-    self.value_videoPath = 'https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip';
-    self.value_rtspPath = `rtsp://[username]:[password]@${window.location.hostname}:8554/live.sdp`;
+    // this.value_rtspPath = 'https://' + HOST + '/exe/intercom.zip';
+    this.value_videoPath = 'https://www.aira.com.tw/app/application/airaIntercom_setup_20211217.zip';
+    this.value_rtspPath = `rtsp://[username]:[password]@${window.location.hostname}:8554/live.sdp`;
 
-    // self.$globalGetSystemInfo(function (err, data) {
+    // this.$globalGetSystemInfo(function (err, data) {
     //   if (data != null) {
     //     if (data.device_type == 'airaTablet_xs') {
-    //       self.flag_support_enhance_facemask = true;
-    //       self.flag_support_rtsp = false;
-    //       // self.flag_support_intercom = false;
-    //       self.flag_support_high_temp_sound_alert = false;
-    //       self.flag_support_invalid_result_show_switch = true;
-    //       self.flag_support_show_verify_indication = false;
+    //       this.flag_support_enhance_facemask = true;
+    //       this.flag_support_rtsp = false;
+    //       // this.flag_support_intercom = false;
+    //       this.flag_support_high_temp_sound_alert = false;
+    //       this.flag_support_invalid_result_show_switch = true;
+    //       this.flag_support_show_verify_indication = false;
     //     } else {
-    //       self.flag_support_enhance_facemask = true;
-    //       self.flag_support_rtsp = true;
-    //       // self.flag_support_intercom = true;
-    //       self.flag_support_high_temp_sound_alert = true;
-    //       self.flag_support_invalid_result_show_switch = false;
-    //       self.flag_support_show_verify_indication = true;
+    //       this.flag_support_enhance_facemask = true;
+    //       this.flag_support_rtsp = true;
+    //       // this.flag_support_intercom = true;
+    //       this.flag_support_high_temp_sound_alert = true;
+    //       this.flag_support_invalid_result_show_switch = false;
+    //       this.flag_support_show_verify_indication = true;
     //     }
     //   }
     // });
 
-    self.$globalGetAiraManagerSetting((err, data) => {
+    this.$globalGetAiraManagerSetting((err, data) => {
       if (!err) {
-        self.$globalAiraManagerSettings = { ...data };
-        self.value_airaManagerHostName = data.manager_host;
-        self.value_airaManagerPort = data.manager_port;
-        self.value_enableAiraManager = data.manager_enable;
+        this.$globalAiraManagerSettings = { ...data };
+        this.value_airaManagerHostName = data.manager_host;
+        this.value_airaManagerPort = data.manager_port;
+        this.value_enableAiraManager = data.manager_enable;
       }
     });
 
-    self.$globalGetTabletSetting((err, data) => {
+    this.$globalGetTabletSetting((err, data) => {
       if (!err) {
-        self.value_tabletSettings = data;
+        this.value_tabletSettings = data;
 
-        self.value_rtspUsername = self.checkAndReturnValue(
-          self.value_tabletSettings.rtsp_username,
+        this.value_rtspUsername = this.checkAndReturnValue(
+          this.value_tabletSettings.rtsp_username,
           '',
         );
-        self.value_rtspPassword = self.checkAndReturnValue(
-          self.value_tabletSettings.rtsp_password,
+        this.value_rtspPassword = this.checkAndReturnValue(
+          this.value_tabletSettings.rtsp_password,
           '',
         );
-        self.value_enableRtsp = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_rtsp_camera,
+        this.value_enableRtsp = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_rtsp_camera,
           false,
         );
-        self.value_rtspActivated = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_rtsp_camera,
+        this.value_rtspActivated = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_rtsp_camera,
           false,
         );
-        self.value_enableClockinMode = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_clock_mode,
+        this.value_enableClockinMode = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_clock_mode,
           false,
         );
-        self.value_haveToWearFaceMask = self.checkAndReturnValue(
-          self.value_tabletSettings.have_to_wear_face_mask,
+        this.value_haveToWearFaceMask = this.checkAndReturnValue(
+          this.value_tabletSettings.have_to_wear_face_mask,
           false,
         );
-        self.value_faceMaskEnhancement = self.checkAndReturnValue(
-          self.value_tabletSettings.face_mask_enhancement,
+        this.value_faceMaskEnhancement = this.checkAndReturnValue(
+          this.value_tabletSettings.face_mask_enhancement,
           false,
         );
-        self.value_showProfilePhoto = self.checkAndReturnValue(
-          self.value_tabletSettings.show_profile_photo,
+        this.value_showProfilePhoto = this.checkAndReturnValue(
+          this.value_tabletSettings.show_profile_photo,
           false,
         );
-        self.value_showVerifyIndication = self.checkAndReturnValue(
-          self.value_tabletSettings.show_verify_indication,
+        this.value_showVerifyIndication = this.checkAndReturnValue(
+          this.value_tabletSettings.show_verify_indication,
           false,
         );
-        self.value_displayVerifyResultTime = self.checkAndReturnValue(
-          self.value_tabletSettings.display_verify_result_time,
+        this.value_displayVerifyResultTime = this.checkAndReturnValue(
+          this.value_tabletSettings.display_verify_result_time,
           false,
         );
-        self.value_temperatureUnitCelsius = self.checkAndReturnValue(
-          self.value_tabletSettings.temperature_unit_celsius,
+        this.value_temperatureUnitCelsius = this.checkAndReturnValue(
+          this.value_tabletSettings.temperature_unit_celsius,
           false,
         );
-        self.value_enableIdCard = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_id_card,
+        this.value_enableIdCard = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_id_card,
           false,
         );
-        self.value_enableTwoFactorAuthentication = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_two_factor_authentication,
+        this.value_enableTwoFactorAuthentication = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_two_factor_authentication,
           false,
         );
 
-        self.value_alarmVolume = self.checkAndReturnValue(
-          self.value_tabletSettings.audio_alarm_volume,
+        this.value_alarmVolume = this.checkAndReturnValue(
+          this.value_tabletSettings.audio_alarm_volume,
           0,
         );
-        self.value_highTemperatureThreshold_Celsius = self.checkAndReturnValue(
-          self.value_tabletSettings.high_temperature,
+        this.value_highTemperatureThreshold_Celsius = this.checkAndReturnValue(
+          this.value_tabletSettings.high_temperature,
           38,
         );
 
-        self.value_tabletSystemPassword = self.checkAndReturnValue(
-          self.value_tabletSettings.system_password,
+        this.value_tabletSystemPassword = this.checkAndReturnValue(
+          this.value_tabletSettings.system_password,
           '123456',
         );
 
-        self.value_highTemperatureThreshold_Fahrenheit = (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
-        self.value_highTemperatureThreshold = self.value_temperatureUnitCelsius === true
-          ? self.value_highTemperatureThreshold_Celsius
-          : self.value_highTemperatureThreshold_Fahrenheit;
-        self.disp_highTemperatureThreshold = `${i18n.formatter.format('HighTemperatureThreshold')
+        this.value_highTemperatureThreshold_Fahrenheit = (this.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
+        this.value_highTemperatureThreshold = this.value_temperatureUnitCelsius === true
+          ? this.value_highTemperatureThreshold_Celsius
+          : this.value_highTemperatureThreshold_Fahrenheit;
+        this.disp_highTemperatureThreshold = `${this.$t('HighTemperatureThreshold')
         } ${
-          self.value_temperatureUnitCelsius === true
-            ? i18n.formatter.format('Celsius')
-            : i18n.formatter.format('Fahrenheit')}`;
+          this.value_temperatureUnitCelsius === true
+            ? this.$t('Celsius')
+            : this.$t('Fahrenheit')}`;
 
-        self.value_verifyThreshold = self.checkAndReturnValue(
-          self.value_tabletSettings.score_for_valid_face,
+        this.value_verifyThreshold = this.checkAndReturnValue(
+          this.value_tabletSettings.score_for_valid_face,
           0.9,
         );
-        self.value_antiSpoofingThreshold = self.checkAndReturnValue(
-          self.value_tabletSettings.anti_spoofing_score,
+        this.value_antiSpoofingThreshold = this.checkAndReturnValue(
+          this.value_tabletSettings.anti_spoofing_score,
           0,
         );
-        self.value_faceDetectThreshold = self.checkAndReturnValue(
-          self.value_tabletSettings.face_detection_threshold,
+        this.value_faceDetectThreshold = this.checkAndReturnValue(
+          this.value_tabletSettings.face_detection_threshold,
           0.5,
         );
         // intercom
-        self.value_enableIntercom = self.checkAndReturnValue(
-          self.value_tabletSettings.enable_intercom,
+        this.value_enableIntercom = this.checkAndReturnValue(
+          this.value_tabletSettings.enable_intercom,
           false,
         );
 
         // custom button
-        if (self.value_tabletSettings.custom_trigger_button_settings != null) {
-          self.value_enableCustomButton = self.checkAndReturnValue(
-            self.value_tabletSettings.custom_trigger_button_settings.enable,
+        if (this.value_tabletSettings.custom_trigger_button_settings != null) {
+          this.value_enableCustomButton = this.checkAndReturnValue(
+            this.value_tabletSettings.custom_trigger_button_settings.enable,
             false,
           );
-          self.value_customFunctionUrl = self.checkAndReturnValue(
-            self.value_tabletSettings.custom_trigger_button_settings.url,
+          this.value_customFunctionUrl = this.checkAndReturnValue(
+            this.value_tabletSettings.custom_trigger_button_settings.url,
             '',
           );
         }
       }
     });
 
-    self.$globalFetchSupportedlanguagelist((err, data) => {
+    this.$globalFetchSupportedlanguagelist((err, data) => {
       if (!err) {
-        self.value_tabletInterfaceLangurageList = [];
+        this.value_tabletInterfaceLangurageList = [];
         data.list.forEach((lang) => {
-          self.value_tabletInterfaceLangurageList.push({
+          this.value_tabletInterfaceLangurageList.push({
             value: lang.language,
             label: lang.display_name,
           });
         });
         const activeLang = data.list.filter((l) => l.active);
         if (activeLang.length > 0) {
-          self.value_tabletInterfaceLangurage = activeLang[0].language;
-        } else self.value_tabletInterfaceLangurage = 'zh';
+          this.value_tabletInterfaceLangurage = activeLang[0].language;
+        } else this.value_tabletInterfaceLangurage = 'zh';
       }
     });
 
-    self.$globalGetSystemSettings((err, data) => {
+    this.$globalGetSystemSettings((err, data) => {
       if (!err) {
         const { settings: { db } } = data;
         if (db.verified_maintain_duration) this.value_verified_maintain_duration = db.verified_maintain_duration;
@@ -1057,8 +1016,7 @@ export default {
     });
   },
   mounted() {
-    const self = this;
-    self.deviceProfile = JSON.parse(localStorage.getItem('deviceProfile'));
+    this.deviceProfile = JSON.parse(localStorage.getItem('deviceProfile'));
   },
   computed: {
     isFieldPassed() {
@@ -1067,24 +1025,26 @@ export default {
         && this.value_maintain_disk_space_in_gb >= this.range_maintain_disk_space_in_gb[0]
         && this.value_maintain_disk_space_in_gb <= this.range_maintain_disk_space_in_gb[1];
     },
+    getInvalidFeedback() {
+      return this.$t('limitNumberRange')
+        .replace('#1', `${this.range_maintain_disk_space_in_gb[0]}GB`)
+        .replace('#2', `${this.range_maintain_disk_space_in_gb[1]}GB`);
+    },
   },
   watch: {
     value_highTemperatureThreshold(value) {
-      const self = this;
-      if (self.value_temperatureUnitCelsius == true) {
-        self.value_highTemperatureThreshold_Celsius = value;
-        self.value_highTemperatureThreshold_Fahrenheit = (value * 9) / 5 + 32;
+      if (this.value_temperatureUnitCelsius == true) {
+        this.value_highTemperatureThreshold_Celsius = value;
+        this.value_highTemperatureThreshold_Fahrenheit = (value * 9) / 5 + 32;
       } else {
-        self.value_highTemperatureThreshold_Celsius = ((value - 32) * 5) / 9;
-        self.value_highTemperatureThreshold_Fahrenheit = value;
+        this.value_highTemperatureThreshold_Celsius = ((value - 32) * 5) / 9;
+        this.value_highTemperatureThreshold_Fahrenheit = value;
       }
     },
   },
   methods: {
     viewPassword() {
-      const self = this;
-
-      self.flag_view_password = !self.flag_view_password;
+      this.flag_view_password = !this.flag_view_password;
     },
 
     checkAndReturnValue(value, defaultValue) {
@@ -1095,72 +1055,60 @@ export default {
       return new Promise((r) => setTimeout(r, ms));
     },
     isDisplayVerifyResultTimeNumber(n) {
-      const self = this;
       let ok = false;
       const numbers = /^[0-9]+$/;
       if (numbers.test(n)) {
         ok = Number.isInteger(Number(n));
       }
-      self.flag_displaySettingsOk = ok;
+      this.flag_displaySettingsOk = ok;
       return ok;
     },
     selEnableTwoFactorAuthentication(e) {
-      const self = this;
-      self.value_enableTwoFactorAuthentication = e.target.value == 'true';
+      this.value_enableTwoFactorAuthentication = e.target.value == 'true';
     },
     selEnableIdCard(e) {
-      const self = this;
-      self.value_enableIdCard = e.target.value == 'true';
+      this.value_enableIdCard = e.target.value == 'true';
     },
 
-    selFaceMaskDetection(e) {
-      const self = this;
-      self.value_haveToWearFaceMask = e.target.value == 'true';
+    thisaceMaskDetection(e) {
+      this.value_haveToWearFaceMask = e.target.value == 'true';
     },
-    selFaceMaskEnhancement(e) {
-      const self = this;
-      self.value_faceMaskEnhancement = e.target.value == 'true';
+    thisaceMaskEnhancement(e) {
+      this.value_faceMaskEnhancement = e.target.value == 'true';
     },
     selVerifyDisplayPhoto(e) {
-      const self = this;
-      self.value_showProfilePhoto = e.target.value == 'true';
+      this.value_showProfilePhoto = e.target.value == 'true';
     },
     selShowVerifyIndication(e) {
-      const self = this;
-      self.value_showVerifyIndication = e.target.value == 'true';
+      this.value_showVerifyIndication = e.target.value == 'true';
     },
     selShowTemperatureUnit(e) {
-      const self = this;
-      self.value_temperatureUnitCelsius = e.target.value == 'true';
-      self.disp_highTemperatureThreshold = `${i18n.formatter.format('HighTemperatureThreshold')
+      this.value_temperatureUnitCelsius = e.target.value == 'true';
+      this.disp_highTemperatureThreshold = `${this.$t('HighTemperatureThreshold')
       } ${
-        self.value_temperatureUnitCelsius == true
-          ? i18n.formatter.format('Celsius')
-          : i18n.formatter.format('Fahrenheit')}`;
-      self.value_highTemperatureThreshold = self.value_temperatureUnitCelsius == true
-        ? self.value_highTemperatureThreshold_Celsius
-        : self.value_highTemperatureThreshold_Fahrenheit;
+        this.value_temperatureUnitCelsius == true
+          ? this.$t('Celsius')
+          : this.$t('Fahrenheit')}`;
+      this.value_highTemperatureThreshold = this.value_temperatureUnitCelsius == true
+        ? this.value_highTemperatureThreshold_Celsius
+        : this.value_highTemperatureThreshold_Fahrenheit;
     },
     selAlarmVolume(e) {
-      const self = this;
-      self.value_alarmVolume = Number(e.target.value);
+      this.value_alarmVolume = Number(e.target.value);
     },
     selInterfaceLangurage(e) {
-      const self = this;
-      self.value_tabletInterfaceLangurage = e.target.value;
+      this.value_tabletInterfaceLangurage = e.target.value;
     },
     isFloat(n) {
       return n == 0.0 || (n < 1.0 && !!(n % 1));
     },
     isValidThreshhole(n) {
-      const self = this;
-      self.flag_verifySettingsOk = self.isFloat(self.value_verifyThreshold)
-        && self.isFloat(self.value_antiSpoofingThreshold)
-        && self.isFloat(self.value_faceDetectThreshold);
-      return self.isFloat(n);
+      this.flag_verifySettingsOk = this.isFloat(this.value_verifyThreshold)
+        && this.isFloat(this.value_antiSpoofingThreshold)
+        && this.isFloat(this.value_faceDetectThreshold);
+      return this.isFloat(n);
     },
     isValidTempterature(n) {
-      const self = this;
       const numbers = /^[0-9]+$/;
       let ok = false;
       if (numbers.test(n)) {
@@ -1168,77 +1116,77 @@ export default {
       } else {
         ok = !!(n % 1);
       }
-      self.flag_verifyAlarmSettingsOk = ok;
+      this.flag_verifyAlarmSettingsOk = ok;
       return ok;
     },
     async applyCustomButton() {
-      const self = this;
       let dataChange = false;
-      self.flag_changingCustomButton = true;
+      this.flag_changingCustomButton = true;
       if (
-        self.value_tabletSettings.custom_trigger_button_settings == null
-        || self.value_tabletSettings.custom_trigger_button_settings.enable
-        != self.value_enableCustomButton
-        || self.value_tabletSettings.custom_trigger_button_settings.url
-        != self.value_customFunctionUrl
+        this.value_tabletSettings.custom_trigger_button_settings == null
+        || this.value_tabletSettings.custom_trigger_button_settings.enable
+        != this.value_enableCustomButton
+        || this.value_tabletSettings.custom_trigger_button_settings.url
+        != this.value_customFunctionUrl
       ) {
-        self.value_tabletSettings.custom_trigger_button_settings = {
-          enable: self.value_enableCustomButton,
-          url: self.value_customFunctionUrl,
+        this.value_tabletSettings.custom_trigger_button_settings = {
+          enable: this.value_enableCustomButton,
+          url: this.value_customFunctionUrl,
         };
         dataChange = true;
       }
 
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_enableIntercom = self.value_tabletSettings.enable_intercom;
+              this.value_tabletSettings = ret.data;
+              this.value_enableIntercom = this.value_tabletSettings.enable_intercom;
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 60) await self.sleep(2000);
-            else break;
+            } else if (counterRetry + 1 < 60) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            } else break;
           }
           if (pass) {
-            self.$fire({
-              text: i18n.formatter.format('Successful'),
+            this.$fire({
+              text: this.$t('Successful'),
               type: 'success',
               timer: 3000,
             });
-          } else self.$globalLogout();
+          } else this.$globalLogout();
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingCustomButton = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingCustomButton = false;
     },
     async applyAiraManager() {
-      const self = this;
-      const dataChange = self.$globalAiraManagerSettings.manager_host != self.value_airaManagerHostName
-        || self.$globalAiraManagerSettings.manager_port != self.value_airaManagerPort
-        || self.$globalAiraManagerSettings.manager_enable != self.value_enableAiraManager;
+      const dataChange = this.$globalAiraManagerSettings.manager_host != this.value_airaManagerHostName
+        || this.$globalAiraManagerSettings.manager_port != this.value_airaManagerPort
+        || this.$globalAiraManagerSettings.manager_enable != this.value_enableAiraManager;
 
       if (dataChange) {
-        self.$confirm(i18n.formatter.format('WillLossAllPersonData')).then(() => {
-          // if( confirm( self.disp_willLossAllPersonData ) ) {
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-          self.$globalSetAiraManagerSetting(
+        this.$confirm(this.$t('WillLossAllPersonData')).then(() => {
+          // if( confirm( this.$t('WillLossAllPersonData') ) ) {
+          this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+          this.$globalSetAiraManagerSetting(
             {
-              manager_enable: self.value_enableAiraManager,
-              manager_host: self.value_airaManagerHostName,
-              manager_port: self.value_airaManagerPort,
+              manager_enable: this.value_enableAiraManager,
+              manager_host: this.value_airaManagerHostName,
+              manager_port: this.value_airaManagerPort,
             },
             (error) => {
               if (!error) {
-                self.$globalLogout();
-                self
+                this.$globalLogout();
+                this
                   .$fire({
-                    text: i18n.formatter.format('CompleteAndRestart'),
+                    text: this.$t('CompleteAndRestart'),
                     type: 'success',
                     showConfirmButton: false,
                     // timerProgressBar : true,
@@ -1247,373 +1195,387 @@ export default {
                   })
                   .then(() => { });
               }
-              if (self.obj_loading) self.obj_loading.hide();
+              if (this.obj_loading) this.obj_loading.hide();
             },
           );
         });
       }
     },
     async applyIntercom() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingIntercomSettings = true;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingIntercomSettings = true;
 
-      if (self.value_tabletSettings.enable_intercom != self.value_enableIntercom) {
-        self.value_tabletSettings.enable_intercom = self.value_enableIntercom;
+      if (this.value_tabletSettings.enable_intercom != this.value_enableIntercom) {
+        this.value_tabletSettings.enable_intercom = this.value_enableIntercom;
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_enableIntercom = self.value_tabletSettings.enable_intercom;
+              this.value_tabletSettings = ret.data;
+              this.value_enableIntercom = this.value_tabletSettings.enable_intercom;
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 60) await self.sleep(2000);
-            else break;
+            } else if ((counterRetry + 1) < 60) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            } else break;
           }
           if (pass) {
-            self.$fire({
-              text: i18n.formatter.format('Successful'),
+            this.$fire({
+              text: this.$t('Successful'),
               type: 'success',
               timer: 3000,
             });
-          } else self.$globalLogout();
+          } else this.$globalLogout();
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingIntercomSettings = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingIntercomSettings = false;
     },
     async ApplyRtsp() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingRtsp = true;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingRtsp = true;
       if (
-        self.value_tabletSettings.rtsp_username != self.value_rtspUsername
-        || self.value_tabletSettings.rtsp_password != self.value_rtspPassword
-        || self.value_tabletSettings.enable_rtsp_camera != self.value_enableRtsp
+        this.value_tabletSettings.rtsp_username != this.value_rtspUsername
+        || this.value_tabletSettings.rtsp_password != this.value_rtspPassword
+        || this.value_tabletSettings.enable_rtsp_camera != this.value_enableRtsp
       ) {
-        self.value_tabletSettings.rtsp_username = self.value_rtspUsername;
-        self.value_tabletSettings.rtsp_password = self.value_rtspPassword;
-        self.value_tabletSettings.enable_rtsp_camera = self.value_enableRtsp;
+        this.value_tabletSettings.rtsp_username = this.value_rtspUsername;
+        this.value_tabletSettings.rtsp_password = this.value_rtspPassword;
+        this.value_tabletSettings.enable_rtsp_camera = this.value_enableRtsp;
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
-          await self.sleep(15000);
+          await this.sleep(15000);
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_rtspUsername = self.value_tabletSettings.rtsp_username;
-              self.value_rtspPassword = self.value_tabletSettings.rtsp_password;
-              self.value_enableRtsp = self.value_tabletSettings.enable_rtsp_camera;
+              this.value_tabletSettings = ret.data;
+              this.value_rtspUsername = this.value_tabletSettings.rtsp_username;
+              this.value_rtspPassword = this.value_tabletSettings.rtsp_password;
+              this.value_enableRtsp = this.value_tabletSettings.enable_rtsp_camera;
               retry = false;
               pass = true;
-              self.value_rtspActivated = self.value_enableRtsp;
-            } else if (counterRetry++ < 60) await self.sleep(2000);
-            else break;
+              this.value_rtspActivated = this.value_enableRtsp;
+            } else if ((counterRetry + 1) < 60) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            } else break;
           }
           if (pass) {
-            self.$fire({
-              text: i18n.formatter.format('Successful'),
+            this.$fire({
+              text: this.$t('Successful'),
               type: 'success',
               timer: 3000,
             });
-          } else self.$globalLogout();
+          } else this.$globalLogout();
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingRtsp = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingRtsp = false;
     },
     async ApplyClockInMode() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingClockInMode = true;
-      if (self.value_tabletSettings.enable_clock_mode != self.value_enableClockinMode) {
-        self.value_tabletSettings.enable_clock_mode = self.value_enableClockinMode;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingClockInMode = true;
+      if (this.value_tabletSettings.enable_clock_mode != this.value_enableClockinMode) {
+        this.value_tabletSettings.enable_clock_mode = this.value_enableClockinMode;
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_enableClockinMode = self.value_tabletSettings.enable_clock_mode;
+              this.value_tabletSettings = ret.data;
+              this.value_enableClockinMode = this.value_tabletSettings.enable_clock_mode;
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 10) await self.sleep(2000);
+            } else if (counterRetry + 1 < 10) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            }
           }
-          self.$fire({
+          this.$fire({
             text: pass
-              ? i18n.formatter.format('Successful')
-              : i18n.formatter.format('OperationFailed'),
+              ? this.$t('Successful')
+              : this.$t('OperationFailed'),
             type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingClockInMode = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingClockInMode = false;
     },
 
     async ApplyVerifySettings() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingVerifySettings = true;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingVerifySettings = true;
 
       if (
-        self.value_tabletSettings.score_for_valid_face != self.value_verifyThreshold
-        || self.value_tabletSettings.anti_spoofing_score
-        != self.value_antiSpoofingThreshold
-        || self.value_tabletSettings.have_to_wear_face_mask
-        != self.value_haveToWearFaceMask
-        || self.value_tabletSettings.face_mask_enhancement
-        != self.value_faceMaskEnhancement
-        || self.value_tabletSettings.enable_id_card != self.value_enableIdCard
-        || self.value_tabletSettings.enable_two_factor_authentication
-        != self.value_enableTwoFactorAuthentication
-        || self.value_tabletSettings.face_detection_threshold
-        != self.value_faceDetectThreshold
+        this.value_tabletSettings.score_for_valid_face != this.value_verifyThreshold
+        || this.value_tabletSettings.anti_spoofing_score
+        != this.value_antiSpoofingThreshold
+        || this.value_tabletSettings.have_to_wear_face_mask
+        != this.value_haveToWearFaceMask
+        || this.value_tabletSettings.face_mask_enhancement
+        != this.value_faceMaskEnhancement
+        || this.value_tabletSettings.enable_id_card != this.value_enableIdCard
+        || this.value_tabletSettings.enable_two_factor_authentication
+        != this.value_enableTwoFactorAuthentication
+        || this.value_tabletSettings.face_detection_threshold
+        != this.value_faceDetectThreshold
       ) {
-        self.value_tabletSettings.score_for_valid_face = parseFloat(
-          self.value_verifyThreshold,
+        this.value_tabletSettings.score_for_valid_face = parseFloat(
+          this.value_verifyThreshold,
         );
-        self.value_tabletSettings.anti_spoofing_score = parseFloat(
-          self.value_antiSpoofingThreshold,
+        this.value_tabletSettings.anti_spoofing_score = parseFloat(
+          this.value_antiSpoofingThreshold,
         );
-        self.value_tabletSettings.face_detection_threshold = parseFloat(
-          self.value_faceDetectThreshold,
+        this.value_tabletSettings.face_detection_threshold = parseFloat(
+          this.value_faceDetectThreshold,
         );
-        self.value_tabletSettings.have_to_wear_face_mask = self.value_haveToWearFaceMask;
-        self.value_tabletSettings.face_mask_enhancement = self.value_faceMaskEnhancement;
-        self.value_tabletSettings.enable_id_card = self.value_enableIdCard;
-        self.value_tabletSettings.enable_two_factor_authentication = self.value_enableTwoFactorAuthentication;
+        this.value_tabletSettings.have_to_wear_face_mask = this.value_haveToWearFaceMask;
+        this.value_tabletSettings.face_mask_enhancement = this.value_faceMaskEnhancement;
+        this.value_tabletSettings.enable_id_card = this.value_enableIdCard;
+        this.value_tabletSettings.enable_two_factor_authentication = this.value_enableTwoFactorAuthentication;
 
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_verifyThreshold = self.value_tabletSettings.score_for_valid_face;
-              self.value_faceDetectThreshold = self.value_tabletSettings.face_detection_threshold;
-              self.value_antiSpoofingThreshold = self.value_tabletSettings.anti_spoofing_score;
-              self.value_haveToWearFaceMask = self.value_tabletSettings.have_to_wear_face_mask;
-              self.value_faceMaskEnhancement = self.value_tabletSettings.face_mask_enhancement;
-              self.value_enableIdCard = self.value_tabletSettings.enable_id_card;
-              self.value_enableTwoFactorAuthentication = self.value_tabletSettings.enable_two_factor_authentication;
+              this.value_tabletSettings = ret.data;
+              this.value_verifyThreshold = this.value_tabletSettings.score_for_valid_face;
+              this.value_faceDetectThreshold = this.value_tabletSettings.face_detection_threshold;
+              this.value_antiSpoofingThreshold = this.value_tabletSettings.anti_spoofing_score;
+              this.value_haveToWearFaceMask = this.value_tabletSettings.have_to_wear_face_mask;
+              this.value_faceMaskEnhancement = this.value_tabletSettings.face_mask_enhancement;
+              this.value_enableIdCard = this.value_tabletSettings.enable_id_card;
+              this.value_enableTwoFactorAuthentication = this.value_tabletSettings.enable_two_factor_authentication;
 
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 10) await self.sleep(2000);
+            } else if (counterRetry + 1 < 10) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            }
           }
-          self.$fire({
+          this.$fire({
             text: pass
-              ? i18n.formatter.format('Successful')
-              : i18n.formatter.format('OperationFailed'),
+              ? this.$t('Successful')
+              : this.$t('OperationFailed'),
             type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingVerifySettings = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingVerifySettings = false;
     },
     async ApplyDisplaySettings() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingDisplaySettings = true;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingDisplaySettings = true;
 
       if (
-        self.value_tabletSettings.show_profile_photo != self.value_showProfilePhoto
-        || self.value_tabletSettings.show_verify_indication
-        != self.value_showVerifyIndication
-        || self.value_tabletSettings.display_verify_result_time
-        != Number(self.value_displayVerifyResultTime)
-        || self.value_tabletSettings.temperature_unit_celsius
-        != self.value_temperatureUnitCelsius
+        this.value_tabletSettings.show_profile_photo != this.value_showProfilePhoto
+        || this.value_tabletSettings.show_verify_indication
+        != this.value_showVerifyIndication
+        || this.value_tabletSettings.display_verify_result_time
+        != Number(this.value_displayVerifyResultTime)
+        || this.value_tabletSettings.temperature_unit_celsius
+        != this.value_temperatureUnitCelsius
       ) {
-        self.value_tabletSettings.show_profile_photo = self.value_showProfilePhoto;
-        self.value_tabletSettings.show_verify_indication = self.value_showVerifyIndication;
-        self.value_tabletSettings.display_verify_result_time = Number(
-          self.value_displayVerifyResultTime,
+        this.value_tabletSettings.show_profile_photo = this.value_showProfilePhoto;
+        this.value_tabletSettings.show_verify_indication = this.value_showVerifyIndication;
+        this.value_tabletSettings.display_verify_result_time = Number(
+          this.value_displayVerifyResultTime,
         );
-        self.value_tabletSettings.temperature_unit_celsius = self.value_temperatureUnitCelsius;
+        this.value_tabletSettings.temperature_unit_celsius = this.value_temperatureUnitCelsius;
 
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_showProfilePhoto = self.value_tabletSettings.show_profile_photo;
-              self.value_showVerifyIndication = self.value_tabletSettings.show_verify_indication;
-              self.value_displayVerifyResultTime = self.value_tabletSettings.display_verify_result_time;
-              self.value_temperatureUnitCelsius = self.value_tabletSettings.temperature_unit_celsius;
+              this.value_tabletSettings = ret.data;
+              this.value_showProfilePhoto = this.value_tabletSettings.show_profile_photo;
+              this.value_showVerifyIndication = this.value_tabletSettings.show_verify_indication;
+              this.value_displayVerifyResultTime = this.value_tabletSettings.display_verify_result_time;
+              this.value_temperatureUnitCelsius = this.value_tabletSettings.temperature_unit_celsius;
 
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 10) await self.sleep(2000);
+            } else if (counterRetry + 1 < 10) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            }
           }
-          self.$fire({
+          this.$fire({
             text: pass
-              ? i18n.formatter.format('Successful')
-              : i18n.formatter.format('OperationFailed'),
+              ? this.$t('Successful')
+              : this.$t('OperationFailed'),
             type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingDisplaySettings = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingDisplaySettings = false;
     },
     async ApplyAlarmSettings() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingAlarmSettings = true;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingAlarmSettings = true;
 
       if (
-        self.value_tabletSettings.audio_alarm_volume != self.value_alarmVolume
-        || self.value_tabletSettings.high_temperature
-        != self.value_highTemperatureThreshold_Celsius
+        this.value_tabletSettings.audio_alarm_volume != this.value_alarmVolume
+        || this.value_tabletSettings.high_temperature
+        != this.value_highTemperatureThreshold_Celsius
       ) {
-        self.value_tabletSettings.audio_alarm_volume = self.value_alarmVolume;
-        self.value_tabletSettings.high_temperature = self.value_highTemperatureThreshold_Celsius;
+        this.value_tabletSettings.audio_alarm_volume = this.value_alarmVolume;
+        this.value_tabletSettings.high_temperature = this.value_highTemperatureThreshold_Celsius;
 
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_alarmVolume = self.value_tabletSettings.audio_alarm_volume;
-              self.value_highTemperatureThreshold_Celsius = self.value_tabletSettings.high_temperature;
-              self.value_highTemperatureThreshold_Fahrenheit = (self.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
+              this.value_tabletSettings = ret.data;
+              this.value_alarmVolume = this.value_tabletSettings.audio_alarm_volume;
+              this.value_highTemperatureThreshold_Celsius = this.value_tabletSettings.high_temperature;
+              this.value_highTemperatureThreshold_Fahrenheit = (this.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 10) await self.sleep(2000);
+            } else if (counterRetry + 1 < 10) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            }
           }
-          self.$fire({
+          this.$fire({
             text: pass
-              ? i18n.formatter.format('Successful')
-              : i18n.formatter.format('OperationFailed'),
+              ? this.$t('Successful')
+              : this.$t('OperationFailed'),
             type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingAlarmSettings = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingAlarmSettings = false;
     },
     async ApplyTabletInterfaceLangurage() {
-      const self = this;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingTabletInterfaceLangurage = true;
-      const applyRet = await self.$globalChangeLanguage({
-        language: self.value_tabletInterfaceLangurage,
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingTabletInterfaceLangurage = true;
+      const applyRet = await this.$globalChangeLanguage({
+        language: this.value_tabletInterfaceLangurage,
       });
       if (!applyRet.error) {
         let counterRetry = 0;
         let retry = true;
         let pass = false;
         while (retry) {
-          const ret = await self.$globalFetchSupportedlanguagelist();
+          const ret = await this.$globalFetchSupportedlanguagelist();
           if (!ret.error && ret.data) {
             const activeLang = ret.data.list.filter((l) => l.active);
             if (activeLang.length > 0) {
-              self.value_tabletInterfaceLangurage = activeLang[0].language;
-            } else self.value_tabletInterfaceLangurage = 'zh';
+              this.value_tabletInterfaceLangurage = activeLang[0].language;
+            } else this.value_tabletInterfaceLangurage = 'zh';
 
             retry = false;
             pass = true;
-          } else if (counterRetry++ < 10) await self.sleep(2000);
+          } else if (counterRetry + 1 < 10) {
+            counterRetry += 1;
+            await this.sleep(2000);
+          }
         }
-        self.$fire({
+        this.$fire({
           text: pass
-            ? i18n.formatter.format('Successful')
-            : i18n.formatter.format('OperationFailed'),
+            ? this.$t('Successful')
+            : this.$t('OperationFailed'),
           type: pass ? 'success' : 'error',
           timer: 3000,
         });
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingTabletInterfaceLangurage = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingTabletInterfaceLangurage = false;
     },
     async ApplySystemPassword() {
-      const self = this;
       let dataChange = false;
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      self.flag_changingTabletSystemPassword = true;
-      if (self.value_tabletSettings.system_password != self.value_tabletSystemPassword) {
-        self.value_tabletSettings.system_password = self.value_tabletSystemPassword;
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.flag_changingTabletSystemPassword = true;
+      if (this.value_tabletSettings.system_password != this.value_tabletSystemPassword) {
+        this.value_tabletSettings.system_password = this.value_tabletSystemPassword;
         dataChange = true;
       }
       if (dataChange) {
-        const applyRet = await self.$globalSetTabletSetting(self.value_tabletSettings);
+        const applyRet = await this.$globalSetTabletSetting(this.value_tabletSettings);
         if (!applyRet.error) {
           let counterRetry = 0;
           let retry = true;
           let pass = false;
           while (retry) {
-            const ret = await self.$globalGetTabletSetting();
+            const ret = await this.$globalGetTabletSetting();
             if (!ret.error && ret.data) {
-              self.value_tabletSettings = ret.data;
-              self.value_tabletSystemPassword = self.value_tabletSettings.system_password;
+              this.value_tabletSettings = ret.data;
+              this.value_tabletSystemPassword = this.value_tabletSettings.system_password;
               retry = false;
               pass = true;
-            } else if (counterRetry++ < 10) await self.sleep(2000);
+            } else if (counterRetry + 1 < 10) {
+              counterRetry += 1;
+              await this.sleep(2000);
+            }
           }
-          self.$fire({
+          this.$fire({
             text: pass
-              ? i18n.formatter.format('Successful')
-              : i18n.formatter.format('OperationFailed'),
+              ? this.$t('Successful')
+              : this.$t('OperationFailed'),
             type: pass ? 'success' : 'error',
             timer: 3000,
           });
         }
       }
-      if (self.obj_loading) self.obj_loading.hide();
-      self.flag_changingTabletSystemPassword = false;
+      if (this.obj_loading) this.obj_loading.hide();
+      this.flag_changingTabletSystemPassword = false;
     },
     async applySystemSetting() {
       const payload = {
@@ -1623,10 +1585,10 @@ export default {
           maintain_disk_space_in_gb: this.value_maintain_disk_space_in_gb,
         },
       };
-      this.$globalSetSystemSettings(payload, (err, data) => {
+      this.$globalSetSystemSettings(payload, (err) => {
         if (!err) {
           this.$fire({
-            text: i18n.formatter.format('Successful'),
+            text: this.$t('Successful'),
             type: 'success',
             timer: 3000,
           });

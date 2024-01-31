@@ -2,33 +2,35 @@
   <div>
     <CCol sm="12">
       <div class="h1">
-        {{ disp_header }}
+        {{ $t('TimeSettings') }}
       </div>
-      <div style="height:30px;"></div>
+      <div style="height:30px;" />
       <CCard :style="param_cardStyle">
         <CCardBody>
           <CCol sm="12">
             <CCol sm="12">
               <CRow>
-                <span class="h2">{{disp_currentLocalTime}}</span>
-                <div style="width:20px;"></div>
+                <span class="h2">{{ $t('CurrentLocalTime') }}</span>
+                <div style="width:20px;" />
                 <span class="h2">:</span>
-                <div style="width:20px;"></div>
-                <span class="h2">{{value_currentLocalTimeString}}</span>
+                <div style="width:20px;" />
+                <span class="h2">{{ value_currentLocalTimeString }}</span>
               </CRow>
-              <div style="height:10px;"></div>
+              <div style="height:10px;" />
               <CRow>
-                <span class="h2">{{disp_currentDeviceTime}}</span>
-                <div style="width:20px;"></div>
+                <span class="h2">{{ $t('CurrentDeviceTime') }}</span>
+                <div style="width:20px;" />
                 <span class="h2">:</span>
-                <div style="width:20px;"></div>
-                <span class="h2">{{value_currentDeviceTimeString}}</span>
+                <div style="width:20px;" />
+                <span class="h2">{{ value_currentDeviceTimeString }}</span>
               </CRow>
             </CCol>
-            <div style="height:60px;"></div>
+            <div style="height:60px;" />
             <CRow>
               <CCol sm="3">
-                <div class="h5">{{disp_ntpServer}}</div>
+                <div class="h5">
+                  {{ $t('NtpServer') }}
+                </div>
                 <CInput
                   size="lg"
                   v-model="value_ntpServerIpAddress"
@@ -48,11 +50,13 @@
               </CCol>
             </CRow>
           </CCol>
-          <div style="height:30px;"></div>
+          <div style="height:30px;" />
           <CCol sm="12">
             <CRow>
               <CCol sm="3">
-                <div class="h5">{{disp_timezone}}</div>
+                <div class="h5">
+                  {{ $t('Timezone') }}
+                </div>
                 <CSelect
                   size="lg"
                   :value.sync="value_selectedTimezone"
@@ -61,14 +65,24 @@
                 />
               </CCol>
               <CCol sm="3">
-                <div style="height:30px;"></div>
+                <div style="height:30px;" />
                 <CButton
                   style="height:45px;width: 300px;background-color:#20a8d8;color: white;"
                   @click="clickOnApplyTimeSettings"
                   :disabled="flag_applying"
                 >
-                <div v-if="value_ntpServerActivate" style="font-size:20px">{{disp_synyMethodNtpServer}}</div>
-                <div v-else style="font-size:20px">{{disp_synyMethodLocalTime}}</div>
+                  <div
+                    v-if="value_ntpServerActivate"
+                    style="font-size:20px"
+                  >
+                    {{ $t('SynyMethodNtpServer') }}
+                  </div>
+                  <div
+                    v-else
+                    style="font-size:20px"
+                  >
+                    {{ $t('SynyMethodLocalTime') }}
+                  </div>
                 </CButton>
               </CCol>
             </CRow>
@@ -80,26 +94,14 @@
 </template>
 
 <script>
-import i18n from '@/i18n'
 export default {
   name: 'TimeSettings',
 
   data() {
     return {
       param_cardStyle: 'height: 25rem;',
-      disp_header: i18n.formatter.format('TimeSettings'),
-      disp_enable: i18n.formatter.format('Enable'),
-      disp_disable: i18n.formatter.format('Disable'),
-      disp_currentLocalTime: i18n.formatter.format('CurrentLocalTime'),
-      disp_currentDeviceTime: i18n.formatter.format('CurrentDeviceTime'),
-
-      disp_ntpServer: i18n.formatter.format('NtpServer'),
-      disp_synyMethodLocalTime: i18n.formatter.format('SynyMethodLocalTime'),
-      disp_synyMethodNtpServer: i18n.formatter.format('SynyMethodNtpServer'),
 
       value_ntpServerIpAddress: '',
-
-      disp_apply: i18n.formatter.format('Apply'),
 
       flag_applying: false,
       value_ntpServerActivate: false,
@@ -114,8 +116,7 @@ export default {
       value_deviceTimezone: '',
 
       value_timeoutID: null,
-      disp_timezone: i18n.formatter.format('Timezone'),
-      value_avaiableTimezoneListToShow: []
+      value_avaiableTimezoneListToShow: [],
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -126,58 +127,56 @@ export default {
     next();
   },
   created() {
-    const self = this;
-    self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-    self.$globalFetchSupportedTimezoneList((error, list) => {
+    this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+    this.$globalFetchSupportedTimezoneList((error, list) => {
       if (!error && list) {
-        let l = [];
+        const l = [];
         list.forEach((tz) => {
-          l.push({ value: tz.timezone_id, label: tz.timezone_id + ' (' + tz.timezone_offset_display + ')' });
+          l.push({ value: tz.timezone_id, label: `${tz.timezone_id} (${tz.timezone_offset_display})` });
         });
-        self.value_avaiableTimezoneListToShow = l;
-        self.refreshDeviceTimeInfo(function () {
-          if (self.obj_loading) self.obj_loading.hide();
+        this.value_avaiableTimezoneListToShow = l;
+        this.refreshDeviceTimeInfo(() => {
+          if (this.obj_loading) this.obj_loading.hide();
         });
-      }
-      else {
-        if (self.obj_loading) self.obj_loading.hide();
-        self.$fire({
-          text: i18n.formatter.format('NetworkLoss'),
+      } else {
+        if (this.obj_loading) this.obj_loading.hide();
+        this.$fire({
+          text: this.$t('NetworkLoss'),
           type: 'error',
           timer: 3000,
-          confirmButtonColor: '#20a8d8'
+          confirmButtonColor: '#20a8d8',
         });
       }
-
     });
 
-    if (self.value_timeoutID == null) self.value_timeoutID = window.setInterval(() => {
-      let localTime = new Date();
-      self.value_currentLocalTime = Date.now();
-      self.value_currentLocalTimeString = '( ' + window.Intl.DateTimeFormat().resolvedOptions().timeZone + ' ) ' +
-        localTime.getFullYear() + '-' +
-        (localTime.getMonth() + 1).toString().padStart(2, 0) + '-' +
-        localTime.getDate().toString().padStart(2, 0) + ' ' +
-        localTime.getHours().toString().padStart(2, 0) + ':' +
-        localTime.getMinutes().toString().padStart(2, 0) + ':' +
-        localTime.getSeconds().toString().padStart(2, 0);
+    if (this.value_timeoutID == null) {
+      this.value_timeoutID = window.setInterval(() => {
+        const localTime = new Date();
+        this.value_currentLocalTime = Date.now();
+        this.value_currentLocalTimeString = `( ${window.Intl.DateTimeFormat().resolvedOptions().timeZone} ) ${
+          localTime.getFullYear()}-${
+          (localTime.getMonth() + 1).toString().padStart(2, 0)}-${
+          localTime.getDate().toString().padStart(2, 0)} ${
+          localTime.getHours().toString().padStart(2, 0)}:${
+          localTime.getMinutes().toString().padStart(2, 0)}:${
+          localTime.getSeconds().toString().padStart(2, 0)}`;
 
-      if (self.value_deviceTimezone.length > 0) {
-        const deviceTime = new Date(new Date(self.value_currentDeviceTime).toLocaleString('en-US', { timeZone: self.value_deviceTimezone }));
-        self.value_currentDeviceTimeString = '( ' + self.value_deviceTimezone + ' ) ' +
-          deviceTime.getFullYear() + '-' +
-          (deviceTime.getMonth() + 1).toString().padStart(2, 0) + '-' +
-          deviceTime.getDate().toString().padStart(2, 0) + ' ' +
-          deviceTime.getHours().toString().padStart(2, 0) + ':' +
-          deviceTime.getMinutes().toString().padStart(2, 0) + ':' +
-          deviceTime.getSeconds().toString().padStart(2, 0);
-        self.value_currentDeviceTime = self.value_currentDeviceTime + 1000;
-      }
-    }, 1000);
+        if (this.value_deviceTimezone.length > 0) {
+          const deviceTime = new Date(new Date(this.value_currentDeviceTime).toLocaleString('en-US', { timeZone: this.value_deviceTimezone }));
+          this.value_currentDeviceTimeString = `( ${this.value_deviceTimezone} ) ${
+            deviceTime.getFullYear()}-${
+            (deviceTime.getMonth() + 1).toString().padStart(2, 0)}-${
+            deviceTime.getDate().toString().padStart(2, 0)} ${
+            deviceTime.getHours().toString().padStart(2, 0)}:${
+            deviceTime.getMinutes().toString().padStart(2, 0)}:${
+            deviceTime.getSeconds().toString().padStart(2, 0)}`;
+          this.value_currentDeviceTime += 1000;
+        }
+      }, 1000);
+    }
   },
   watch: {
     // value_ntpServerActivate : function ( enable ) {
-    //   const self = this;
     // }
   },
   methods: {
@@ -191,17 +190,15 @@ export default {
       return offset;
     },
     refreshDeviceTimeInfo(cb) {
-      const self = this;
-      self.$globalFetchTimeInfo((error, info) => {
+      this.$globalFetchTimeInfo((error, info) => {
         if (error) {
-          self.value_deviceTimezone = window.Intl.DateTimeFormat().resolvedOptions().timeZone;
-        }
-        else {
-          self.value_ntpServerIpAddress = info.ntp_server;
-          self.value_selectedTimezone = info.time_zone;
-          self.value_deviceTimezone = info.time_zone;
-          self.value_ntpServerActivate = info.enable_auto_time;
-          self.value_currentDeviceTime = info.timestamp;
+          this.value_deviceTimezone = window.Intl.DateTimeFormat().resolvedOptions().timeZone;
+        } else {
+          this.value_ntpServerIpAddress = info.ntp_server;
+          this.value_selectedTimezone = info.time_zone;
+          this.value_deviceTimezone = info.time_zone;
+          this.value_ntpServerActivate = info.enable_auto_time;
+          this.value_currentDeviceTime = info.timestamp;
         }
         if (cb) cb();
       });
@@ -210,79 +207,73 @@ export default {
       this.value_selectedTimezone = e.target.value;
     },
     clickOnApplyTimeSettings() {
-      const self = this;
-      self.flag_applying = true;
-      if (self.value_ntpServerActivate) {
-        self.$globalEnableNtp({
+      this.flag_applying = true;
+      if (this.value_ntpServerActivate) {
+        this.$globalEnableNtp({
           enable_auto_time: true,
           enable_auto_timezone: false,
-          specify_time_zone: self.value_selectedTimezone,
-          specify_ntp_server: self.value_ntpServerIpAddress
+          specify_time_zone: this.value_selectedTimezone,
+          specify_ntp_server: this.value_ntpServerIpAddress,
         }, (error, data) => {
           if (error == null) {
             if (data.message == 'ok') {
-              self.refreshDeviceTimeInfo();
-              self.$fire({
-                text: i18n.formatter.format('Successful'),
+              this.refreshDeviceTimeInfo();
+              this.$fire({
+                text: this.$t('Successful'),
                 type: 'success',
-                timer: 3000
+                timer: 3000,
               });
-            }
-            else {
-              self.$fire({
-                text: i18n.formatter.format('OperationFailed'),
+            } else {
+              this.$fire({
+                text: this.$t('OperationFailed'),
                 type: 'error',
                 timer: 3000,
-                confirmButtonColor: '#20a8d8'
+                confirmButtonColor: '#20a8d8',
               });
             }
-          }
-          else {
-            self.$fire({
-              text: i18n.formatter.format('OperationFailed'),
+          } else {
+            this.$fire({
+              text: this.$t('OperationFailed'),
               type: 'error',
               timer: 3000,
-              confirmButtonColor: '#20a8d8'
+              confirmButtonColor: '#20a8d8',
             });
           }
-          self.flag_applying = false;
+          this.flag_applying = false;
         });
-      }
-      else {
-        self.$globalSyncTime({
+      } else {
+        this.$globalSyncTime({
           timestamp: Date.now(),
-          time_zone: self.value_selectedTimezone
+          time_zone: this.value_selectedTimezone,
         }, (error, data) => {
           if (error == null) {
             if (data.message == 'ok') {
-              self.refreshDeviceTimeInfo();
-              self.$fire({
-                text: i18n.formatter.format('Successful'),
+              this.refreshDeviceTimeInfo();
+              this.$fire({
+                text: this.$t('Successful'),
                 type: 'success',
-                timer: 3000
+                timer: 3000,
               });
-            }
-            else {
-              self.$fire({
-                text: i18n.formatter.format('OperationFailed'),
+            } else {
+              this.$fire({
+                text: this.$t('OperationFailed'),
                 type: 'error',
                 timer: 3000,
-                confirmButtonColor: '#20a8d8'
+                confirmButtonColor: '#20a8d8',
               });
             }
-          }
-          else {
-            self.$fire({
-              text: i18n.formatter.format('OperationFailed'),
+          } else {
+            this.$fire({
+              text: this.$t('OperationFailed'),
               type: 'error',
               timer: 3000,
-              confirmButtonColor: '#20a8d8'
+              confirmButtonColor: '#20a8d8',
             });
           }
-          self.flag_applying = false;
+          this.flag_applying = false;
         });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

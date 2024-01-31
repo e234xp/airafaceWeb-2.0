@@ -2,57 +2,89 @@
   <div>
     <CRow>
       <CCol sm="12">
-        <div class="h1 mb-5">{{ disp_header }}</div>
-        <stepprogress class="w-step-progress-5" :active-thickness="param_activeThickness"
-          :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
-          :passive-color="param_passiveColor" :steps="[
-          disp_inputCompanyInfo,
-          disp_digitalSignage,
-          disp_personnelInfo,
-          disp_complete,
-        ]" :current-step="flag_currentSetp" :line-thickness="param_lineThickness" icon-class="fa fa-check">
-        </stepprogress>
+        <div class="h1 mb-5">
+          {{ $t('ModifyWelcomeControl') }}
+        </div>
+        <stepprogress
+          class="w-step-progress-5"
+          :active-thickness="param_activeThickness"
+          :passive-thickness="param_passiveThickness"
+          :active-color="param_activeColor"
+          :passive-color="param_passiveColor"
+          :steps="[
+            $t('CompanyInfo'),
+            $t('DigitalSignage'),
+            $t('PersonInfo'),
+            $t('Complete'),
+          ]"
+          :current-step="flag_currentSetp"
+          :line-thickness="param_lineThickness"
+          icon-class="fa fa-check"
+        />
       </CCol>
     </CRow>
     <CRow>
-      <CCol sm="6" v-show="flag_currentSetp==0||flag_currentSetp==1||flag_currentSetp==2">
+      <CCol
+        sm="6"
+        v-show="flag_currentSetp==0||flag_currentSetp==1||flag_currentSetp==2"
+      >
         <div :class="showOnStep(0)">
           <CCard>
-            <CCardHeader>{{ disp_backgroundimage }}</CCardHeader>
+            <CCardHeader>{{ $t('BackgroundImage') }}</CCardHeader>
             <CCardBody>
               <CRow>
                 <CCol sm="3">
                   <label class="btn btn-primary mt-3 fz-lg d-flex align-items-center justify-content-center">
-                    {{ disp_chooseFile }}
-                    <input ref="uploadBackgroundFile" type="file" :multiple="false" style="display: none"
-                      @change="onBackgroundUploadFiles" :disabled="flag_backgrounduploading" />
+                    {{ $t('ChooseFile') }}
+                    <input
+                      ref="uploadBackgroundFile"
+                      type="file"
+                      :multiple="false"
+                      style="display: none"
+                      @change="onBackgroundUploadFiles"
+                      :disabled="flag_backgrounduploading"
+                    >
                   </label>
                 </CCol>
                 <CCol sm="9">
-                  <img id="backgroundImage" :src="value_welcomeSetting.background_image"
-                    class="w-100 object-fit-contain background-size-cover img-default-bg h-col-lg" />
+                  <img
+                    id="backgroundImage"
+                    :src="value_welcomeSetting.background_image"
+                    class="w-100 object-fit-contain background-size-cover img-default-bg h-col-lg"
+                  >
                 </CCol>
               </CRow>
             </CCardBody>
           </CCard>
           <CCard>
-            <CCardHeader>{{ disp_companyLogo }}</CCardHeader>
+            <CCardHeader>{{ $t('Logo') }}</CCardHeader>
             <CCardBody>
               <CRow>
                 <CCol sm="3">
                   <label class="btn btn-primary mt-3 fz-lg d-flex align-items-center justify-content-center">
-                    {{ disp_chooseFile }}
-                    <input ref="uploadLogoFile" type="file" :multiple="false" style="display: none"
-                      @change="onLogoUploadFiles" :disabled="flag_logouploading" />
+                    {{ $t('ChooseFile') }}
+                    <input
+                      ref="uploadLogoFile"
+                      type="file"
+                      :multiple="false"
+                      style="display: none"
+                      @change="onLogoUploadFiles"
+                      :disabled="flag_logouploading"
+                    >
                   </label>
                 </CCol>
                 <CCol sm="9">
-                  <img id="logoImage" :src="value_welcomeSetting.logo" style="
+                  <img
+                    id="logoImage"
+                    :src="value_welcomeSetting.logo"
+                    style="
                     margin: auto;
                     height: 80px;
                     object-fit: contain;
                     background-color: #ebedef;
-                  " class="w-100" />
+                  "
+                    class="w-100"
+                  >
                 </CCol>
               </CRow>
             </CCardBody>
@@ -64,32 +96,32 @@
               <CSwitch size="lg" color="success" shape="pill" :checked="value_welcomeSetting.enabledGreetingMode"
                 @update:checked="value_welcomeSetting.enabledGreetingMode = !value_welcomeSetting.enabledGreetingMode;
                 value_welcomeSetting.enabledAdvertisingMode = !value_welcomeSetting.enabledGreetingMode;" />
-              <span class="h5 ml-2 my-0">{{ disp_greetingMode }}</span>
+              <span class="h5 ml-2 my-0">{{ $t('GreetingMode') }}</span>
             </CCardHeader>
             <CCardBody>
               <fieldset :disabled="!value_welcomeSetting.enabledGreetingMode">
                 <CRow>
                   <CCol sm="4">
                     <div class="column-space-between">
-                      <div class="h5">{{ disp_caption }}</div>
+                      <div class="h5">{{ $t('Caption') }}</div>
                       <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.caption" />
                     </div>
                   </CCol>
                   <CCol sm="2">
                     <div class="column-space-between">
-                      <div class="h5">{{ disp_captionSize }}</div>
+                      <div class="h5">{{ $t('FontSize') }}</div>
                       <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.captionSize" />
                     </div>
                   </CCol>
                   <CCol sm="4">
                     <div class="column-space-between">
-                      <div class="h5">{{ disp_greeting }}</div>
+                      <div class="h5">{{ $t('Greeting') }}</div>
                       <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.greeting" />
                     </div>
                   </CCol>
                   <CCol sm="2">
                     <div class="column-space-between">
-                      <div class="h5">{{ disp_greetingSize }}</div>
+                      <div class="h5">{{ $t('FontSize') }}</div>
                       <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.greetingSize" />
                     </div>
                   </CCol>
@@ -100,36 +132,61 @@
 
           <CCard>
             <CCardHeader>
-              <CSwitch size="lg" color="success" shape="pill" :checked="value_welcomeSetting.enabledAdvertisingMode"
+              <CSwitch
+                size="lg"
+                color="success"
+                shape="pill"
+                :checked="value_welcomeSetting.enabledAdvertisingMode"
                 @update:checked="
-          value_welcomeSetting.enabledAdvertisingMode = !value_welcomeSetting.enabledAdvertisingMode;
-          value_welcomeSetting.enabledGreetingMode = !value_welcomeSetting.enabledAdvertisingMode;
-            " />
-              <span class="h5 ml-2 my-0">{{ disp_advertisingMode }}</span>
+                  value_welcomeSetting.enabledAdvertisingMode = !value_welcomeSetting.enabledAdvertisingMode;
+                  value_welcomeSetting.enabledGreetingMode = !value_welcomeSetting.enabledAdvertisingMode;
+                "
+              />
+              <span class="h5 ml-2 my-0">{{ $t('AdvertisingMode') }}</span>
             </CCardHeader>
             <CCardBody>
               <fieldset :disabled="!value_welcomeSetting.enabledAdvertisingMode">
                 <CRow>
                   <CCol sm="3">
-                    <div class="h5">{{ disp_advertisingDuration }}</div>
-                    <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.advertisingDuration" />
+                    <div class="h5">
+                      {{ $t('Duration') }}
+                    </div>
+                    <CInput
+                      class="mb-form-row"
+                      size="lg"
+                      v-model="value_welcomeSetting.advertisingDuration"
+                    />
                   </CCol>
-                  <CCol sm="3" v-for="(value, idx) in value_welcomeSetting.advertising">
-                    <img :id="`advertisingimage${idx}`" :src="value" :key="componentKey"
-                      class="w-100 mb-2 d-block img-upload-block object-fit-contain" />
+                  <CCol
+                    sm="3"
+                    v-for="(value, idx) in value_welcomeSetting.advertising"
+                    :key="`${uuidv4() + idx}`"
+                  >
+                    <img
+                      :id="`advertisingimage${idx}`"
+                      :src="value"
+                      :key="componentKey"
+                      class="w-100 mb-2 d-block img-upload-block object-fit-contain"
+                    >
                     <div class="d-flex justify-content-between mb-3">
-                      <CButton variant="outline" class="btn btn-outline-primary mb-3"
-                        @click="clickOnPickAdvertisingImage(idx)" :disabled="flag_isPickingRegisterPhoto">
-                        <span>{{ disp_selectPhoto }}</span>
+                      <CButton
+                        variant="outline"
+                        class="btn btn-outline-primary mb-3"
+                        @click="clickOnPickAdvertisingImage(idx)"
+                        :disabled="flag_isPickingRegisterPhoto"
+                      >
+                        <span>{{ $t('SelectPhoto') }}</span>
                       </CButton>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                      <CButton variant="outline" class="btn btn-outline-primary mb-3"
-                        @click="clickOnRemoveAdvertisingImage(idx)">
-                        <span>{{ disp_deletePhoto }}</span>
+                      <CButton
+                        variant="outline"
+                        class="btn btn-outline-primary mb-3"
+                        @click="clickOnRemoveAdvertisingImage(idx)"
+                      >
+                        <span>{{ $t('DeletePhoto') }}</span>
                       </CButton>
                     </div>
                   </CCol>
-
                 </CRow>
               </fieldset>
             </CCardBody>
@@ -137,128 +194,253 @@
         </div>
         <div :class="showOnStep(2)">
           <CCard>
-            <CCardHeader>{{ disp_PersonalDisplay }}</CCardHeader>
+            <CCardHeader>{{ $t('PersonalDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_displayPhoto }}</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.displayPhoto"
-                    :options="value_displayPhotoList" />
+                  <div class="h5">
+                    {{ $t('DisplayPhoto') }}
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.displayPhoto"
+                    :options="value_displayPhotoList"
+                  />
                 </CCol>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_LineAttribute }} 1</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.line1" :options="value_displayAttributeList" />
+                  <div class="h5">
+                    {{ $t('DisplayAttribute') }} 1
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.line1"
+                    :options="value_displayAttributeList"
+                  />
                 </CCol>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_LineAttribute }} 2</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.line2" :options="value_displayPrimaryList" />
+                  <div class="h5">
+                    {{ $t('DisplayAttribute') }} 2
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.line2"
+                    :options="value_displayPrimaryList"
+                  />
                 </CCol>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_LineAttribute }} 3</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.line3" :options="value_displayAttributeList" />
+                  <div class="h5">
+                    {{ $t('DisplayAttribute') }} 3
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.line3"
+                    :options="value_displayAttributeList"
+                  />
                 </CCol>
               </CRow>
               <CRow>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_LineAttribute }} 4</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.line4" :options="value_displayAttributeList" />
+                  <div class="h5">
+                    {{ $t('DisplayAttribute') }} 4
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.line4"
+                    :options="value_displayAttributeList"
+                  />
                 </CCol>
               </CRow>
             </CCardBody>
           </CCard>
 
           <CCard>
-            <CCardHeader>{{ disp_PageDisplay }}</CCardHeader>
+            <CCardHeader>{{ $t('PageDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
                 <CCol sm="12">
-                  <div class="h5">{{ disp_displayGroup }}</div>
-                  <multiselect v-model="value_welcomeSetting.displayGroup" placeholder="" style="margin-bottom: 12px;"
-                    :options="value_displayGroupList" :multiple="true" :taggable="true" :hideSelected="true"
-                    :select-label="disp_select" :selected-label="disp_selected" :deselect-label="disp_deselect"
-                    :show-no-options="false">
-                  </multiselect>
+                  <div class="h5">
+                    {{ $t('DisplayGroup') }}
+                  </div>
+                  <multiselect
+                    v-model="value_welcomeSetting.displayGroup"
+                    placeholder=""
+                    style="margin-bottom: 12px;"
+                    :options="value_displayGroupList"
+                    :multiple="true"
+                    :taggable="true"
+                    :hide-selected="true"
+                    :select-label="$t('Select')"
+                    :selected-label="$t('Selected')"
+                    :deselect-label="$t('Deselect')"
+                    :show-no-options="false"
+                  />
                 </CCol>
               </CRow>
               <CRow>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_welcomeWord }}</div>
-                  <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.welcomeword" />
+                  <div class="h5">
+                    {{ $t('WelcomeGreeting') }}
+                  </div>
+                  <CInput
+                    class="mb-form-row"
+                    size="lg"
+                    v-model="value_welcomeSetting.welcomeword"
+                  />
                 </CCol>
                 <CCol sm="9">
-                  <div class="h5">{{ disp_mainTitle }}</div>
-                  <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.maintitle" />
+                  <div class="h5">
+                    {{ $t('Maintitle') }}
+                  </div>
+                  <CInput
+                    class="mb-form-row"
+                    size="lg"
+                    v-model="value_welcomeSetting.maintitle"
+                  />
                 </CCol>
               </CRow>
               <CRow>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_subTitle }}</div>
-                  <CInput class="mb-form-row" size="lg" v-model="value_welcomeSetting.subtitle" />
+                  <div class="h5">
+                    {{ $t('Subtitle') }}
+                  </div>
+                  <CInput
+                    class="mb-form-row"
+                    size="lg"
+                    v-model="value_welcomeSetting.subtitle"
+                  />
                 </CCol>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_NumberOfDisplayPersons }}</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.numberOfDisplayPersons" :options="[1,2,3,4]" />
+                  <div class="h5">
+                    {{ $t('NumberOfDisplayPersons') }}
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.numberOfDisplayPersons"
+                    :options="[1,2,3,4]"
+                  />
                 </CCol>
                 <CCol sm="3">
-                  <div class="h5">{{ disp_duration }}</div>
-                  <CSelect size="lg" :value.sync="value_welcomeSetting.showDuration" :options="[5,10,15,20,30]" />
+                  <div class="h5">
+                    {{ $t('Duration') }}
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_welcomeSetting.showDuration"
+                    :options="[5,10,15,20,30]"
+                  />
                 </CCol>
               </CRow>
             </CCardBody>
           </CCard>
         </div>
       </CCol>
-      <CCol sm="6" v-show="flag_currentSetp==0||flag_currentSetp==1||flag_currentSetp==2">
-        <table width="590" height="332" :style="`background-image: url('${value_welcomeSetting.background_image}')`"
-          style="background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+      <CCol
+        sm="6"
+        v-show="flag_currentSetp==0||flag_currentSetp==1||flag_currentSetp==2"
+      >
+        <table
+          width="590"
+          height="332"
+          :style="`background-image: url('${value_welcomeSetting.background_image}')`"
+          style="background-size: 100% 100%; background-repeat: no-repeat; background-position: center;"
+        >
           <tr>
-            <td height="46"><img :src="`${value_welcomeSetting.logo}`"
-                style="width:60px; height:25px; padding-left: 15px;" /></td>
+            <td height="46">
+              <img
+                :src="`${value_welcomeSetting.logo}`"
+                style="width:60px; height:25px; padding-left: 15px;"
+              >
+            </td>
           </tr>
           <tr>
-            <td align="center" valign="top" height="30" style="font-family: 'Noto Sans TC'; color: #FFBE5C;">
-              {{value_welcomeSetting.welcomeword }}</td>
+            <td
+              align="center"
+              valign="top"
+              height="30"
+              style="font-family: 'Noto Sans TC'; color: #FFBE5C;"
+            >
+              {{ value_welcomeSetting.welcomeword }}
+            </td>
           </tr>
           <tr>
-            <td align="center" valign="top" height="30" style="font-family: 'Noto Sans TC'; color: #FFFFFF;">
-              {{value_welcomeSetting.maintitle }}</td>
+            <td
+              align="center"
+              valign="top"
+              height="30"
+              style="font-family: 'Noto Sans TC'; color: #FFFFFF;"
+            >
+              {{ value_welcomeSetting.maintitle }}
+            </td>
           </tr>
           <tr>
-            <td align="center" height="100%">
+            <td
+              align="center"
+              height="100%"
+            >
               <div style="display: flex; justify-content: center;">
-                <span v-for="n in value_welcomeSetting.numberOfDisplayPersons"
-                  style="flex-direction: column; align-items: center; width: 135px;">
-                  <img v-show="value_welcomeSetting.displayPhoto!='NONE'" src="@/assets/img/welcomeSample.jpg"
-                    width="95px" height="95px" />
+                <span
+                  v-for="(n, index) in value_welcomeSetting.numberOfDisplayPersons"
+                  :key="`${uuidv4() + index}`"
+                  style="flex-direction: column; align-items: center; width: 135px;"
+                >
+                  <img
+                    v-show="value_welcomeSetting.displayPhoto!='NONE'"
+                    src="@/assets/img/welcomeSample.jpg"
+                    width="95px"
+                    height="95px"
+                  >
                   <div class="welcome-card-text-box1">
-                    <div v-show="value_welcomeSetting.line1!='NONE'" style="color: white;">
-                      {{value_welcomeSetting.line1}}</div>
-                    <div v-show="value_welcomeSetting.line2!='NONE'" style="color: white; font-size:16px">
-                      {{value_welcomeSetting.line2 }}</div>
-                    <div v-show="value_welcomeSetting.line3!='NONE'" style="color: white;">
-                      {{value_welcomeSetting.line3}}</div>
-                    <div v-show="value_welcomeSetting.line4!='NONE'" style="color: white; font-size:10px">
-                      {{value_welcomeSetting.line4 }}</div>
+                    <div
+                      v-show="value_welcomeSetting.line1!='NONE'"
+                      style="color: white;"
+                    >
+                      {{ value_welcomeSetting.line1 }}</div>
+                    <div
+                      v-show="value_welcomeSetting.line2!='NONE'"
+                      style="color: white; font-size:16px"
+                    >
+                      {{ value_welcomeSetting.line2 }}</div>
+                    <div
+                      v-show="value_welcomeSetting.line3!='NONE'"
+                      style="color: white;"
+                    >
+                      {{ value_welcomeSetting.line3 }}</div>
+                    <div
+                      v-show="value_welcomeSetting.line4!='NONE'"
+                      style="color: white; font-size:10px"
+                    >
+                      {{ value_welcomeSetting.line4 }}</div>
                   </div>
                 </span>
               </div>
             </td>
           </tr>
           <tr>
-            <td align="center" valign="bottom" style="font-family: 'Noto Sans TC';
-            color: #FFFFFF;">{{value_welcomeSetting.subtitle }}</td>
+            <td
+              align="center"
+              valign="bottom"
+              style="font-family: 'Noto Sans TC';
+            color: #FFFFFF;"
+            >
+              {{ value_welcomeSetting.subtitle }}
+            </td>
           </tr>
         </table>
       </CCol>
 
-      <CCol sm="12" v-show="flag_currentSetp==3">
+      <CCol
+        sm="12"
+        v-show="flag_currentSetp==3"
+      >
         <div :class="showOnStep(3)">
           <CCard :style="param_cardStyle">
             <CCardBody>
-              <div style="height: 220px"></div>
+              <div style="height: 220px" />
               <CRow>
                 <CCol sm="12">
-                  <p class="display-4 row justify-content-center">{{ disp_complete }}</p>
+                  <p class="display-4 row justify-content-center">
+                    {{ $t('Complete') }}
+                  </p>
                 </CCol>
               </CRow>
             </CCardBody>
@@ -271,18 +453,33 @@
         <!-- <div style="text-align: right"> -->
         <div class="row justify-content-center">
           <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-            <CButton variant="outline" style="width: 150px; color: #20a8d8; border: 1px solid #20a8d8" size="lg"
-              @click="clickOnPrev">{{ value_returnRouteName }}
+            <CButton
+              variant="outline"
+              style="width: 150px; color: #20a8d8; border: 1px solid #20a8d8"
+              size="lg"
+              @click="clickOnPrev"
+            >
+              {{ $t('Return') }}
             </CButton>
           </div>
           <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
-            <CButton variant="outline" style="width: 150px; color: #20a8d8; border: 1px solid #20a8d8" size="lg"
-              @click="clickOnPrev">{{ disp_previous }}
+            <CButton
+              variant="outline"
+              style="width: 150px; color: #20a8d8; border: 1px solid #20a8d8"
+              size="lg"
+              @click="clickOnPrev"
+            >
+              {{ $t('Previous') }}
             </CButton>
           </div>
-          <div style="width: 20px"></div>
+          <div style="width: 20px" />
           <div>
-            <CButton class="btn btn-primary mb-3" size="lg" @click="clickOnNext">{{ nextButtonName() }}
+            <CButton
+              class="btn btn-primary mb-3"
+              size="lg"
+              @click="clickOnNext"
+            >
+              {{ nextButtonName() }}
             </CButton>
           </div>
         </div>
@@ -292,165 +489,17 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
+import { v4 as uuidv4 } from 'uuid';
 
 // import VueScheduler from '@duoa/vue-scheduler';
 // import '@/airacss/vue-scheduler.css';
 
 import { backgroundImage, airalogo } from '@/utils/welcomeMode';
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  param_cardStyle: 'height: 35rem;', //
-  param_activeColor: '#6baee3', //
-  param_passiveColor: '#919bae', //
-  param_lineThickness: 3, //
-  param_activeThickness: 3, //
-  param_passiveThickness: 3, //
-
-  disp_header: i18n.formatter.format('ModifyWelcomeControl'),
-
-  disp_noEmptyNorSpaceNeigherRepeat: i18n.formatter.format(
-    'NoEmptyNorSpaceNeigherRepeat',
-  ), //
-  disp_select: i18n.formatter.format('Select'), //
-  disp_selected: i18n.formatter.format('Selected'), //
-  disp_deselect: i18n.formatter.format('Deselect'), //
-
-  disp_inputCompanyInfo: i18n.formatter.format('CompanyInfo'), //
-  // disp_inputAnnouncement: i18n.formatter.format('Announcement'), //
-  disp_digitalSignage: i18n.formatter.format('DigitalSignage'), //
-  disp_personnelInfo: i18n.formatter.format('PersonnelInfo'), //
-  disp_complete: i18n.formatter.format('Complete'), //
-
-  disp_backgroundimage: i18n.formatter.format('BackgroundImage'), //
-  disp_chooseFile: i18n.formatter.format('ChooseFile'), //
-  disp_companyLogo: i18n.formatter.format('Logo'), //
-  // disp_companyName: i18n.formatter.format('CompanyName'), //
-  // disp_companyColor: i18n.formatter.format('Color'), //
-  // disp_companyFont: i18n.formatter.format('Font'), //
-  // disp_companyFontSize: i18n.formatter.format('FontSize'), //
-
-  // disp_announcement: i18n.formatter.format('Announcement'), //
-
-  disp_greetingMode: i18n.formatter.format('GreetingMode'), //
-  disp_advertisingMode: i18n.formatter.format('AdvertisingMode'), //
-  disp_caption: i18n.formatter.format('Caption'), //
-  disp_captionSize: i18n.formatter.format('FontSize'), //
-  disp_greeting: i18n.formatter.format('Greeting'), //
-  disp_greetingSize: i18n.formatter.format('FontSize'), //
-
-  disp_advertisingDuration: i18n.formatter.format('Duration'), //
-
-  disp_PersonalDisplay: i18n.formatter.format('PersonalDisplay'), //
-
-  disp_selectPhoto: i18n.formatter.format('SelectPhoto'), //
-  disp_deletePhoto: i18n.formatter.format('DeletePhoto'), //
-
-  disp_LineAttribute: i18n.formatter.format('DisplayAttribute'), //
-
-  disp_PageDisplay: i18n.formatter.format('PageDisplay'), //
-  disp_welcomeWord: i18n.formatter.format('WelcomeGreeting'), //
-  disp_mainTitle: i18n.formatter.format('Maintitle'), //
-  disp_subTitle: i18n.formatter.format('Subtitle'), //
-  disp_NumberOfDisplayPersons: i18n.formatter.format('NumberOfDisplayPersons'), //
-  disp_duration: i18n.formatter.format('Duration'), //
-
-  disp_enabledMask: i18n.formatter.format('EnabledMask'), //
-  disp_displayPhoto: i18n.formatter.format('DisplayPhoto'), //
-  disp_displayGroup: i18n.formatter.format('DisplayGroup'), //
-  disp_personInfo: i18n.formatter.format('PersonInfo'), //
-  disp_messageDuration: i18n.formatter.format('Duration'), //
-
-  value_displayPhotoList: [
-    { value: 'NONE', label: i18n.formatter.format('None') },
-    { value: 'REGISTER', label: i18n.formatter.format('RegisterPhoto') },
-    { value: 'SNAPSHOT', label: i18n.formatter.format('CapturedPhoto') },
-    { value: 'DISPLAY', label: i18n.formatter.format('DisplayPhoto') },
-  ],
-
-  value_displayPrimaryList: [
-    { value: 'NONE', label: i18n.formatter.format('None') },
-    { value: 'NAME', label: i18n.formatter.format('PersonName') },
-    { value: 'PARTIALNAME', label: i18n.formatter.format('PartialName') },
-  ],
-
-  value_displayAttributeList: [
-    { value: 'NONE', label: i18n.formatter.format('None') },
-    { value: 'ID', label: i18n.formatter.format('PersonId') },
-    { value: 'DEPARTMENT', label: i18n.formatter.format('Department') },
-    { value: 'JOBTITLE', label: i18n.formatter.format('JobTitle') },
-    { value: 'GROUP', label: i18n.formatter.format('GroupName') },
-
-  ],
-
-  value_displayGroupList: [],
-
-  // value_displayGroupList: [],
-  // value_displayChannelList: [],
-
-  flag_backgrounduploading: false,
-  flag_logouploading: false,
-  flag_isPickingRegisterPhoto: false,
-
-  componentKey: 0,
-
-  value_Setting: {},
-  value_welcomeSetting: {
-    displayMode: 'WELCOME',
-    uuid: '',
-    background_image: backgroundImage,
-    logo: airalogo,
-
-    displayPhoto: 'REGISTER',
-    line1: 'JOBTITLE',
-    line2: 'NAME',
-    line3: 'GROUP',
-    line4: 'NONE',
-    welcomeword: 'Welcome',
-    maintitle: '2023 Product launch',
-    subtitle: 'aira Corporation',
-    numberOfDisplayPersons: 4,
-    showDuration: 10,
-
-    displayGroup: ['All Person'],
-    enabledGreetingMode: true,
-    caption: '人臉辨識影像解決方案',
-    captionSize: 125,
-    greeting: '歡迎您的蒞臨',
-    greetingSize: 110,
-    enabledAdvertisingMode: false,
-    advertisingDuration: 15,
-    advertising: [
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg=='],
-  },
-
-  disp_create: i18n.formatter.format('Create'),
-  disp_modify: i18n.formatter.format('Modify'),
-  disp_saveChanges: i18n.formatter.format('SaveChanges'),
-  disp_registerCompleted: i18n.formatter.format('RegisterCompleted'),
-  disp_previous: i18n.formatter.format('Previous'),
-  disp_next: i18n.formatter.format('Next'),
-
-  value_returnRoutePath: '',
-  value_returnRouteName: i18n.formatter.format('Return'),
-  value_group_list: [],
-
-  flag_currentSetp: 0,
-});
 
 export default {
   name: 'WelcomeControlSettingForm',
@@ -459,46 +508,126 @@ export default {
     onFinish: { type: Function },
   },
   data() {
-    // return Object.assign({}, defaultlState(), this.formData);
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      obj_loading: null,
 
-    return cloneObject;
+      param_cardStyle: 'height: 35rem;', //
+      param_activeColor: '#6baee3', //
+      param_passiveColor: '#919bae', //
+      param_lineThickness: 3, //
+      param_activeThickness: 3, //
+      param_passiveThickness: 3, //
+
+      value_displayPhotoList: [
+        { value: 'NONE', label: this.$t('None') },
+        { value: 'REGISTER', label: this.$t('RegisterPhoto') },
+        { value: 'SNAPSHOT', label: this.$t('CapturedPhoto') },
+        { value: 'DISPLAY', label: this.$t('DisplayPhoto') },
+      ],
+
+      value_displayPrimaryList: [
+        { value: 'NONE', label: this.$t('None') },
+        { value: 'NAME', label: this.$t('PersonName') },
+        { value: 'PARTIALNAME', label: this.$t('PartialName') },
+      ],
+
+      value_displayAttributeList: [
+        { value: 'NONE', label: this.$t('None') },
+        { value: 'ID', label: this.$t('PersonId') },
+        { value: 'DEPARTMENT', label: this.$t('Department') },
+        { value: 'JOBTITLE', label: this.$t('JobTitle') },
+        { value: 'GROUP', label: this.$t('GroupName') },
+
+      ],
+
+      value_displayGroupList: [],
+
+      // value_displayGroupList: [],
+      // value_displayChannelList: [],
+
+      flag_backgrounduploading: false,
+      flag_logouploading: false,
+      flag_isPickingRegisterPhoto: false,
+
+      componentKey: 0,
+
+      value_Setting: {},
+      value_welcomeSetting: {
+        displayMode: 'WELCOME',
+        uuid: '',
+        background_image: backgroundImage,
+        logo: airalogo,
+
+        displayPhoto: 'REGISTER',
+        line1: 'JOBTITLE',
+        line2: 'NAME',
+        line3: 'GROUP',
+        line4: 'NONE',
+        welcomeword: 'Welcome',
+        maintitle: '2023 Product launch',
+        subtitle: 'aira Corporation',
+        numberOfDisplayPersons: 4,
+        showDuration: 10,
+
+        displayGroup: ['All Person'],
+        enabledGreetingMode: true,
+        caption: '人臉辨識影像解決方案',
+        captionSize: 125,
+        greeting: '歡迎您的蒞臨',
+        greetingSize: 110,
+        enabledAdvertisingMode: false,
+        advertisingDuration: 15,
+        advertising: [
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg=='],
+      },
+
+      value_returnRoutePath: '',
+      value_group_list: [],
+
+      flag_currentSetp: 0,
+
+      ...this.formData,
+    };
   },
   created() { },
   async mounted() {
-    const self = this;
-    self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+    this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
-    self.$globalGetGroupList((err, data) => {
+    this.$globalGetGroupList((err, data) => {
       if (!err) {
-        self.value_displayGroupList = [];
+        this.value_displayGroupList = [];
         data.forEach((element) => {
-          self.value_displayGroupList.push(element.name);
+          this.value_displayGroupList.push(element.name);
         });
       }
     });
 
-    self.$globalGetDisplaySetting((err, data) => {
+    this.$globalGetDisplaySetting((err, data) => {
       if (!err) {
-        self.value_Setting = data || {};
+        this.value_Setting = data || {};
 
-        self.welcome = self.value_Setting.WELCOME;
-        self.value_welcomeSetting.uuid = self.makeid(32);
+        this.welcome = this.value_Setting.WELCOME;
+        this.value_welcomeSetting.uuid = this.makeid(32);
 
-        // self.value_welcomeSetting = Object.assign({}, self.value_welcomeSetting, self.welcome);
-        self.value_welcomeSetting = { ...self.value_welcomeSetting, ...self.welcome };
+        // this.value_welcomeSetting = Object.assign({}, this.value_welcomeSetting, this.welcome);
+        this.value_welcomeSetting = { ...this.value_welcomeSetting, ...this.welcome };
 
-        for (let i = 0; i < self.value_welcomeSetting.advertising.length; i += 1) {
-          const advertising = self.value_welcomeSetting.advertising[i];
+        for (let i = 0; i < this.value_welcomeSetting.advertising.length; i += 1) {
+          const advertising = this.value_welcomeSetting.advertising[i];
           if (advertising.length <= 0) {
-            self.value_welcomeSetting.advertising[i] = 'data:image/png;base64,'
+            this.value_welcomeSetting.advertising[i] = 'data:image/png;base64,'
               + 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
           }
         }
       }
 
-      if (self.obj_loading) self.obj_loading.hide();
+      if (this.obj_loading) this.obj_loading.hide();
     });
   },
   updated() { },
@@ -520,49 +649,41 @@ export default {
       return result;
     },
     onBackgroundUploadFiles() {
-      const self = this;
-
       const file = this.$refs.uploadBackgroundFile.files[0];
       if (file == null) return;
 
       const myReader = new FileReader();
       myReader.onloadend = async () => {
-        self.value_welcomeSetting.background_image = myReader.result;
+        this.value_welcomeSetting.background_image = myReader.result;
       };
       myReader.readAsDataURL(file);
     },
     onLogoUploadFiles() {
-      const self = this;
-
       const file = this.$refs.uploadLogoFile.files[0];
       if (file == null) return;
 
       const myReader = new FileReader();
       myReader.onloadend = async () => {
-        self.value_welcomeSetting.logo = myReader.result;
+        this.value_welcomeSetting.logo = myReader.result;
       };
       myReader.readAsDataURL(file);
     },
 
     clickOnPickAdvertisingImage(idx) {
-      const self = this;
-
-      self.flag_isPickingRegisterPhoto = true;
-      self.selectPhotoFromFile((img) => {
+      this.flag_isPickingRegisterPhoto = true;
+      this.selectPhotoFromFile((img) => {
         if (img) {
-          self.value_welcomeSetting.advertising[idx] = img.src;
-          self.componentKey += 1;
+          this.value_welcomeSetting.advertising[idx] = img.src;
+          this.componentKey += 1;
         }
       });
-      self.flag_isPickingRegisterPhoto = false;
+      this.flag_isPickingRegisterPhoto = false;
     },
 
     clickOnRemoveAdvertisingImage(idx) {
-      const self = this;
-
-      self.value_welcomeSetting.advertising[idx] = 'data:image/png;base64,'
+      this.value_welcomeSetting.advertising[idx] = 'data:image/png;base64,'
         + 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
-      self.componentKey -= 1;
+      this.componentKey -= 1;
     },
 
     selectPhotoFromFile(cb) {
@@ -591,83 +712,81 @@ export default {
     nextButtonName() {
       switch (this.flag_currentSetp) {
         case 0:
-          return this.disp_next;
+          return this.$t('Next');
         case 1:
-          return this.disp_next;
+          return this.$t('Next');
         case 2:
-          return this.disp_next;
+          return this.$t('Next');
         case 3:
-          return this.disp_complete;
+          return this.$t('Complete');
         default:
-          return this.disp_complete;
+          return this.$t('Complete');
       }
     },
     clickOnPrev() {
-      const self = this;
-      if (self.flag_currentSetp === 0) {
-        if (self.value_returnRoutePath.length > 0) {
-          self.$router.push({ name: self.value_returnRoutePath });
+      if (this.flag_currentSetp === 0) {
+        if (this.value_returnRoutePath.length > 0) {
+          this.$router.push({ name: this.value_returnRoutePath });
         }
-      } else if (self.flag_currentSetp > 0) self.flag_currentSetp -= 1;
+      } else if (this.flag_currentSetp > 0) this.flag_currentSetp -= 1;
     },
     clickOnNext() {
-      const self = this;
-      if (self.flag_currentSetp === 0) {
-        self.flag_currentSetp = 1;
-      } else if (self.flag_currentSetp === 1) {
-        self.flag_currentSetp = 2;
-      } else if (self.flag_currentSetp === 2) {
-        if (self.onFinish) {
-          self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      if (this.flag_currentSetp === 0) {
+        this.flag_currentSetp = 1;
+      } else if (this.flag_currentSetp === 1) {
+        this.flag_currentSetp = 2;
+      } else if (this.flag_currentSetp === 2) {
+        if (this.onFinish) {
+          this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
           const sendData = {
             displayMode: 'WELCOME',
-            uuid: self.value_welcomeSetting.uuid,
-            background_image: self.value_welcomeSetting.background_image,
-            logo: self.value_welcomeSetting.logo,
-            displayPhoto: self.value_welcomeSetting.displayPhoto,
-            line1: self.value_welcomeSetting.line1,
-            line2: self.value_welcomeSetting.line2,
-            line3: self.value_welcomeSetting.line3,
-            line4: self.value_welcomeSetting.line4,
+            uuid: this.value_welcomeSetting.uuid,
+            background_image: this.value_welcomeSetting.background_image,
+            logo: this.value_welcomeSetting.logo,
+            displayPhoto: this.value_welcomeSetting.displayPhoto,
+            line1: this.value_welcomeSetting.line1,
+            line2: this.value_welcomeSetting.line2,
+            line3: this.value_welcomeSetting.line3,
+            line4: this.value_welcomeSetting.line4,
 
-            displayGroup: self.value_welcomeSetting.displayGroup,
-            welcomeword: self.value_welcomeSetting.welcomeword,
-            maintitle: self.value_welcomeSetting.maintitle,
-            subtitle: self.value_welcomeSetting.subtitle,
-            numberOfDisplayPersons: self.value_welcomeSetting.numberOfDisplayPersons ? +self.value_welcomeSetting.numberOfDisplayPersons : 4,
-            showDuration: self.value_welcomeSetting.showDuration ? +self.value_welcomeSetting.showDuration : 10,
+            displayGroup: this.value_welcomeSetting.displayGroup,
+            welcomeword: this.value_welcomeSetting.welcomeword,
+            maintitle: this.value_welcomeSetting.maintitle,
+            subtitle: this.value_welcomeSetting.subtitle,
+            numberOfDisplayPersons: this.value_welcomeSetting.numberOfDisplayPersons ? +this.value_welcomeSetting.numberOfDisplayPersons : 4,
+            showDuration: this.value_welcomeSetting.showDuration ? +this.value_welcomeSetting.showDuration : 10,
 
-            enabledGreetingMode: self.value_welcomeSetting.enabledGreetingMode,
-            caption: self.value_welcomeSetting.caption,
-            captionSize: self.value_welcomeSetting.captionSize,
-            greeting: self.value_welcomeSetting.greeting,
-            greetingSize: self.value_welcomeSetting.greetingSize,
-            enabledAdvertisingMode: self.value_welcomeSetting.enabledAdvertisingMode,
-            advertisingDuration: self.value_welcomeSetting.advertisingDuration,
-            advertising: self.value_welcomeSetting.advertising,
+            enabledGreetingMode: this.value_welcomeSetting.enabledGreetingMode,
+            caption: this.value_welcomeSetting.caption,
+            captionSize: this.value_welcomeSetting.captionSize,
+            greeting: this.value_welcomeSetting.greeting,
+            greetingSize: this.value_welcomeSetting.greetingSize,
+            enabledAdvertisingMode: this.value_welcomeSetting.enabledAdvertisingMode,
+            advertisingDuration: this.value_welcomeSetting.advertisingDuration,
+            advertising: this.value_welcomeSetting.advertising,
           };
 
-          self.value_Setting.WELCOME = sendData;
+          this.value_Setting.WELCOME = sendData;
 
-          self.onFinish(self.value_Setting, (success) => {
-            if (self.obj_loading) self.obj_loading.hide();
+          this.onFinish(this.value_Setting, (success) => {
+            if (this.obj_loading) this.obj_loading.hide();
             if (success) {
-              self.flag_currentSetp = 3;
+              this.flag_currentSetp = 3;
             } else {
-              // self.$alert( self.disp_registerFailed + ' : ' + ( result && result.message ? result.message : 'network loss') );
-              self.$fire({
-                text: i18n.formatter.format('Failed'),
+              // this.$alert( this.disp_registerFailed + ' : ' + ( result && result.message ? result.message : 'network loss') );
+              this.$fire({
+                text: this.$t('Failed'),
                 type: 'error',
                 timer: 3000,
                 confirmButtonColor: '#20a8d8',
               });
             }
           });
-        } else self.flag_currentSetp = 0;
+        } else this.flag_currentSetp = 0;
       } else {
-        // self.$router.push({ name: self.value_returnRoutePath })
-        self.flag_currentSetp = 0;
+        // this.$router.push({ name: this.value_returnRoutePath })
+        this.flag_currentSetp = 0;
       }
     },
 
@@ -677,6 +796,7 @@ export default {
     redrawOnStep(step) {
       return step === this.flag_currentSetp ? 'display:block' : 'height:15px;display:none';
     },
+    uuidv4,
   },
   components: {
     stepprogress: StepProgress,

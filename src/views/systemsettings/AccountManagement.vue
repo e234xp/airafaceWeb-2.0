@@ -3,7 +3,7 @@
     <CRow>
       <CCol sm="12">
         <td class="h1">
-          {{ disp_header }}
+          {{ $t('AccountManagement') }}
         </td>
       </CCol>
     </CRow>
@@ -20,7 +20,7 @@
             class="btn btn-primary btn-w-sm mr-3 mb-3"
             @click="clickOnAdd()"
           >
-            {{ disp_add }}
+            {{ $t('Add') }}
           </CButton>
         </div>
         <div style="width: 20px" />
@@ -30,7 +30,7 @@
             size="lg"
             @click="clickOnMultipleDelete()"
           >
-            {{ disp_delete }}
+            {{ $t('Delete') }}
           </CButton>
         </div>
         <div style="margin-left: auto">
@@ -38,7 +38,7 @@
             v-model.lazy="value_searchingFilter"
             style="width: 400px"
             size="lg"
-            :placeholder="disp_search"
+            :placeholder="$t('Search')"
           >
             <template #prepend-content>
               <CIcon name="cil-search" />
@@ -79,14 +79,14 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="username"
-                :title="disp_account"
+                :title="$t('Account')"
                 width="16%"
                 align="left"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="maskpassword"
-                :title="disp_password"
+                :title="$t('Password')"
                 width="16%"
                 :edit-render="{ type: 'default' }"
                 align="left"
@@ -101,14 +101,14 @@
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="permission"
-                :title="disp_permission"
+                :title="$t('Permission')"
                 width="14%"
                 align="left"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="remarks"
-                :title="disp_remarks"
+                :title="$t('Remarks')"
                 width="18%"
                 align="left"
               />
@@ -118,7 +118,7 @@
                     class="btn-remove-vxe btn-in-cell"
                     @click="onClickEdit(row)"
                   >
-                    {{ disp_edit }}
+                    {{ $t('Modify') }}
                   </vxe-button>
                 </template>
               </vxe-table-column>
@@ -150,53 +150,37 @@
   </div>
 </template>
 <script>
-import i18n from '@/i18n';
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
 
-const defaultlState = () => ({
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_allTableItems_lastStatus: [],
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-  value_searchingFilter: '',
-  disp_header: i18n.formatter.format('AccountManagement'),
-  disp_account: i18n.formatter.format('Account'),
-  disp_password: i18n.formatter.format('Password'),
-  disp_permission: i18n.formatter.format('Permission'),
-  disp_search: i18n.formatter.format('Search'),
-  disp_add: i18n.formatter.format('Add'),
-  disp_delete: i18n.formatter.format('Delete'),
-  disp_saveChanges: i18n.formatter.format('SaveChanges'),
-  disp_remarks: i18n.formatter.format('Remarks'),
-  disp_edit: i18n.formatter.format('Modify'),
-});
 export default {
   name: 'AccountManagement',
   data() {
-    const cloneObject = {};
-    Object.assign(cloneObject, defaultlState(), this.formData);
+    return {
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_allTableItems_lastStatus: [],
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+      value_searchingFilter: '',
 
-    return cloneObject;
+      ...this.formData,
+    };
   },
   created() { },
   mixins: [TableObserver],
   mounted() {
-    const self = this;
-    self.refreshTableItems();
+    this.refreshTableItems();
     this.observeTableSize();
   },
   computed: {
     ...mapState(['ellipsisMode']),
   },
   updated() {
-    const self = this;
-
-    self.value_dataItemsToShow.forEach((item) => {
+    this.value_dataItemsToShow.forEach((item) => {
       const localItem = item;
       localItem.maskpassword = '********';
 
@@ -205,7 +189,7 @@ export default {
       const newModifyButton = oldModifyButton.cloneNode(true);
       oldModifyButton.parentNode.replaceChild(newModifyButton, oldModifyButton);
       newModifyButton.addEventListener('click', () => {
-        self.clickOnSave(localItem);
+        this.clickOnSave(localItem);
       });
     });
   },
@@ -239,40 +223,37 @@ export default {
       return 'fontSize:18px;';
     },
     generateFilteredData(sourceData, filter) {
-      const self = this;
-
       const filteredItems = filter.length === 0
         ? sourceData
         : sourceData.filter((item) => item.username.toLowerCase().indexOf(filter.toLowerCase()) > -1);
-      self.value_tablePage.totalResult = filteredItems.length;
+      this.value_tablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
       sliceList.forEach((pItem) => {
         const item = pItem;
 
         const modifyButtonId = `actionOnModify_${item.uuid}`;
         item.actionButton = `<input type='button' id='${modifyButtonId}'`
-          + ` value='${self.disp_saveChanges}' class='btn btn-outline-primary btn-in-cell p-0'/>`;
+          + ` value='${this.$t('SaveChanges')}' class='btn btn-outline-primary btn-in-cell p-0'/>`;
       });
       return Object.assign([], sliceList);
     },
     refreshTableItems() {
-      const self = this;
-      self.$globalFetchAccountList((error, data) => {
+      this.$globalFetchAccountList((error, data) => {
         if (data) {
-          self.value_allTableItems = data.account_list;
-          self.value_allTableItems_lastStatus = [];
-          self.value_allTableItems.forEach((i) => {
-            self.value_allTableItems_lastStatus.push({
+          this.value_allTableItems = data.account_list;
+          this.value_allTableItems_lastStatus = [];
+          this.value_allTableItems.forEach((i) => {
+            this.value_allTableItems_lastStatus.push({
               username: i.username,
               password: i.password,
             });
           });
-          self.value_dataItemsToShow = self.generateFilteredData(
-            self.value_allTableItems,
-            self.value_searchingFilter,
+          this.value_dataItemsToShow = this.generateFilteredData(
+            this.value_allTableItems,
+            this.value_searchingFilter,
           );
         }
       });
@@ -288,13 +269,12 @@ export default {
     },
 
     onAdd() {
-      const self = this;
-      self.$router.push({
+      this.$router.push({
         name: 'CreateAccount',
         params: {
           value_returnRoutePath: 'AccountManagement',
-          value_returnRouteName: i18n.formatter.format('Return'),
-          value_account_list: self.value_allTableItems,
+          value_returnRouteName: this.$t('Return'),
+          value_account_list: this.value_allTableItems,
         },
       });
     },
@@ -302,63 +282,60 @@ export default {
       if (this.onAdd) this.onAdd();
     },
     deleteItem(listToDel) {
-      const self = this;
       const accountUuidListToDel = [];
       listToDel.forEach((a) => {
         accountUuidListToDel.push(a.uuid);
       });
-      self.$globalRemoveAccount(
+      this.$globalRemoveAccount(
         { account_uuid_list: accountUuidListToDel },
         (err) => {
           if (!err) {
-            self.$fire({
-              text: i18n.formatter.format('Successful'),
+            this.$fire({
+              text: this.$t('Successful'),
               type: 'success',
               timer: 3000,
             });
             accountUuidListToDel.forEach((deletedItemUuid) => {
-              self.value_allTableItems = self.value_allTableItems.filter((item) => item.uuid !== deletedItemUuid);
+              this.value_allTableItems = this.value_allTableItems.filter((item) => item.uuid !== deletedItemUuid);
             });
           } else {
-            self.$fire({
-              text: i18n.formatter.format('OperationFailed'),
+            this.$fire({
+              text: this.$t('OperationFailed'),
               type: 'error',
               timer: 3000,
               confirmButtonColor: '#20a8d8',
             });
           }
-          self.value_dataItemsToShow = self.generateFilteredData(
-            self.value_allTableItems,
-            self.value_searchingFilter,
+          this.value_dataItemsToShow = this.generateFilteredData(
+            this.value_allTableItems,
+            this.value_searchingFilter,
           );
         },
       );
     },
     clickOnMultipleDelete() {
-      const self = this;
-      self
-        .$confirm('', i18n.formatter.format('ConfirmToDelete'), {
-          confirmButtonText: i18n.formatter.format('Confirm'),
-          cancelButtonText: i18n.formatter.format('Cancel'),
+      this
+        .$confirm('', this.$t('ConfirmToDelete'), {
+          confirmButtonText: this.$t('Confirm'),
+          cancelButtonText: this.$t('Cancel'),
           confirmButtonColor: '#20a8d8',
           cancelButtonColor: '#f86c6b',
         })
         .then(() => {
-          const list = self.$refs.mainTable.getCheckboxRecords();
+          const list = this.$refs.mainTable.getCheckboxRecords();
           const listToDel = list.filter((item) => !item.fixed);
-          self.deleteItem(listToDel);
+          this.deleteItem(listToDel);
         })
         .catch((e) => {
           console.log('clickOnMultipleDelete', e);
         });
     },
     clickOnSave(item) {
-      const self = this;
-      const row = self.$refs.mainTable.getRowById(item._XID);
-      const lastAccoutInfo = self.value_allTableItems_lastStatus.filter((i) => i.username === item.username && i.password !== item.password);
+      const row = this.$refs.mainTable.getRowById(item._XID);
+      const lastAccoutInfo = this.value_allTableItems_lastStatus.filter((i) => i.username === item.username && i.password !== item.password);
 
       if (lastAccoutInfo.length > 0) {
-        self.$globalModifyAccount(
+        this.$globalModifyAccount(
           {
             username: item.username,
             new_password: item.password,
@@ -366,21 +343,21 @@ export default {
           (err) => {
             if (!err) {
               lastAccoutInfo[0].password = item.password;
-              self.$fire({
-                text: i18n.formatter.format('Successful'),
+              this.$fire({
+                text: this.$t('Successful'),
                 type: 'success',
                 timer: 3000,
               });
             } else {
-              self.$fire({
-                text: i18n.formatter.format('OperationFailed'),
+              this.$fire({
+                text: this.$t('OperationFailed'),
                 type: 'error',
                 timer: 3000,
                 confirmButtonColor: '#20a8d8',
               });
             }
 
-            self.$refs.mainTable.reloadRow(row, {
+            this.$refs.mainTable.reloadRow(row, {
               uuid: item.uuid,
               username: item.username,
               password: lastAccoutInfo[0].password,

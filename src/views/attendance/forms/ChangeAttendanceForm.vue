@@ -2,55 +2,107 @@
   <div>
     <CCard>
       <CCardBody>
-        <CCol sm="2" class="h5">{{ disp_staff }}</CCol>
+        <CCol
+          sm="2"
+          class="h5"
+        >
+          {{ $t('Staff') }}
+        </CCol>
         <CRow>
           <CCol sm="4">
             <!-- {{ selectedName }} -->
-            <v-select v-model="selectedName" :options="finallyList" :text="'label'" :value="'value'" :filterable="true"
-              :placeholder="disp_pleaseEnterName" class="font-control">
-            </v-select>
+            <v-select
+              v-model="selectedName"
+              :options="finallyList"
+              :text="'label'"
+              :value="'value'"
+              :filterable="true"
+              :placeholder="$t('PleaseEnterName')"
+              class="font-control"
+            />
           </CCol>
         </CRow>
 
-        <div style="height: 35px"></div>
+        <div style="height: 35px" />
 
         <!-- 日期 -->
-        <CCol sm="2" class="h5">{{ disp_date }}</CCol>
+        <CCol
+          sm="2"
+          class="h5"
+        >
+          {{ $t('ForgetPunchDate') }}
+        </CCol>
         <CRow>
           <CCol sm="4">
-            <CInput class="mb-form-row" size="lg" type="date" :value="value_searchDate" v-model="value_searchDate"
-              :invalid-feedback="disp_dateDepiction" :is-valid="handleDate"
-              onfocus="this.max=new Date().toISOString().split('T')[0]" />
+            <CInput
+              class="mb-form-row"
+              size="lg"
+              type="date"
+              :value="value_searchDate"
+              v-model="value_searchDate"
+              :invalid-feedback="$t('DateDepiction')"
+              :is-valid="handleDate"
+              onfocus="this.max=new Date().toISOString().split('T')[0]"
+            />
           </CCol>
         </CRow>
-        <div style="height: 35px"></div>
-
+        <div style="height: 35px" />
       </CCardBody>
     </CCard>
 
-    <CCol sm="2" class="h5 font-weight-bold">{{ disp_currentRecords }}</CCol>
+    <CCol
+      sm="2"
+      class="h5 font-weight-bold"
+    >
+      {{ $t('CurrentRecords') }}
+    </CCol>
 
     <!-- 下方資料 -->
     <CCard>
       <CCardBody>
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable">
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle"
+            ref="mainTable"
+          >
+            <vxe-table-column
+              field="userName"
+              :title="$t('PersonName')"
+              align="center"
+              width="auto"
+            />
 
-            <vxe-table-column field="userName" :title="disp_name" align="center" width="auto">
-            </vxe-table-column>
+            <vxe-table-column
+              field="groupList"
+              :title="$t('Group')"
+              align="center"
+              width="auto"
+            />
 
-            <vxe-table-column field="groupList" :title="disp_group" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column
+              field="dateString"
+              :title="$t('ForgetPunchDate')"
+              width="auto"
+              align="center"
+            />
 
-            <vxe-table-column field="dateString" :title="disp_date" width="auto" align="center">
-            </vxe-table-column>
+            <vxe-table-column
+              field="clockIn"
+              :title="$t('ClockIn')"
+              width="auto"
+              align="center"
+            />
 
-            <vxe-table-column field="clockIn" :title="disp_clockIn" width="auto" align="center">
-            </vxe-table-column>
-
-            <vxe-table-column field="clockOut" :title="disp_clockOut" width="auto" align="center">
-            </vxe-table-column>
-
+            <vxe-table-column
+              field="clockOut"
+              :title="$t('ClockIn')"
+              width="auto"
+              align="center"
+            />
           </vxe-table>
         </div>
       </CCardBody>
@@ -59,110 +111,129 @@
     <!-- 新紀錄 -->
     <CRow>
       <!-- <CCol sm="2" class="h5 font-weight-bold">{{ disp_newRecords }}</CCol> -->
-      <CCol sm="4" class="form-inline">
-        <div class="form-check" style="padding-right: 40px">
-          <input class="form-check-input" type="radio" name="Records" id="flexRadioDefault1" value="ClockIn"
-            v-model="value_clockInRecords" />
-          <label class="form-check-label h5" for="flexRadioDefault1">
-            {{disp_clockIn}}</label>
+      <CCol
+        sm="4"
+        class="form-inline"
+      >
+        <div
+          class="form-check"
+          style="padding-right: 40px"
+        >
+          <input
+            class="form-check-input"
+            type="radio"
+            name="Records"
+            id="flexRadioDefault1"
+            value="ClockIn"
+            v-model="value_clockInRecords"
+          >
+          <label
+            class="form-check-label h5"
+            for="flexRadioDefault1"
+          >
+            {{ $t('ClockIn') }}</label>
         </div>
-        <div class="form-check" style="padding-right: 40px">
-          <input class="form-check-input" type="radio" name="Records" id="flexRadioDefault2" value="ClockOut"
-            v-model="value_clockInRecords" />
-          <label class="form-check-label h5" for="flexRadioDefault2">
-            {{disp_clockOut}}</label>
+        <div
+          class="form-check"
+          style="padding-right: 40px"
+        >
+          <input
+            class="form-check-input"
+            type="radio"
+            name="Records"
+            id="flexRadioDefault2"
+            value="ClockOut"
+            v-model="value_clockInRecords"
+          >
+          <label
+            class="form-check-label h5"
+            for="flexRadioDefault2"
+          >
+            {{ $t('ClockOut') }}</label>
         </div>
       </CCol>
     </CRow>
 
-    <div style="height: 35px"></div>
+    <div style="height: 35px" />
 
     <!-- 時間 -->
     <CRow style="display: block;">
-      <CCol sm="2" class="h5 font-weight-bold">{{ disp_time}}</CCol>
-      <CCol sm="4" class="form-inline">
-        <date-picker :lang="this.$globalDatePickerLanguage" class="w-100 gray-rounded-date-picker" type="time"
-          format="HH:mm" v-model="value_clockInTime" :disabled-time="notAfterNow"></date-picker>
+      <CCol
+        sm="2"
+        class="h5 font-weight-bold"
+      >
+        {{ $t('Time') }}
+      </CCol>
+      <CCol
+        sm="4"
+        class="form-inline"
+      >
+        <date-picker
+          :lang="this.$globalDatePickerLanguage"
+          class="w-100 gray-rounded-date-picker"
+          type="time"
+          format="HH:mm"
+          v-model="value_clockInTime"
+          :disabled-time="notAfterNow"
+        />
       </CCol>
       <!-- {{ value_clockInTime }} -->
     </CRow>
 
-    <div style="height: 35px"></div>
+    <div style="height: 35px" />
 
     <!-- 備註 -->
     <CRow class="d-block">
-      <CCol sm="2" class="h5 font-weight-bold">{{ disp_reason }}</CCol>
+      <CCol
+        sm="2"
+        class="h5 font-weight-bold"
+      >
+        {{ $t('reason') }}
+      </CCol>
 
-      <CCol sm="12" class="form-block">
+      <CCol
+        sm="12"
+        class="form-block"
+      >
         <div class="mt-2 mb-2">
-          <input :class="{'is-invalid': disp_forgotClockIn.length === 0}" class="form-control col-12"
-            :maxLength="maxLength" type="text" value="OtherDirections" v-model="disp_forgotClockIn" required />
-          <p class="invalid-feedback" v-if="disp_forgotClockIn.length === 0">{{ disp_reasonReasonDepiction }}</p>
+          <input
+            :class="{'is-invalid': disp_forgotClockIn.length === 0}"
+            class="form-control col-12"
+            :maxLength="maxLength"
+            type="text"
+            value="OtherDirections"
+            v-model="disp_forgotClockIn"
+            required
+          >
+          <p
+            class="invalid-feedback"
+            v-if="disp_forgotClockIn.length === 0"
+          >
+            {{ $t('ReasonDepiction') }}
+          </p>
         </div>
       </CCol>
     </CRow>
 
     <!-- 儲存按鈕 -->
     <div class="d-flex ml-3 justify-content-end">
-      <CButton class="btn btn-primary btn-w-normal mb-3" size="lg" @click="saveData()" :disabled="saveButtonStatus"
-        ref="save">
-        {{ disp_save }}
+      <CButton
+        class="btn btn-primary btn-w-normal mb-3"
+        size="lg"
+        @click="saveData()"
+        :disabled="saveButtonStatus"
+        ref="save"
+      >
+        {{ $t('Save') }}
       </CButton>
     </div>
-
   </div>
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import VueSelect from 'vue-select';
 
 const dayjs = require('dayjs');
-
-const defaultlState = () => ({
-  obj_loading: null,
-
-  disp_save: i18n.formatter.format('Save'),
-  disp_date: i18n.formatter.format('ForgetPunchDate'),
-  disp_staff: i18n.formatter.format('Staff'),
-  disp_name: i18n.formatter.format('PersonName'),
-  disp_group: i18n.formatter.format('Group'),
-  disp_clockIn: i18n.formatter.format('ClockIn'),
-  disp_clockOut: i18n.formatter.format('ClockOut'),
-  disp_currentRecords: i18n.formatter.format('CurrentRecords'),
-  disp_time: i18n.formatter.format('Time'),
-  disp_reason: i18n.formatter.format('reason'),
-  disp_reasonReasonDepiction: i18n.formatter.format('ReasonDepiction'),
-  disp_dateDepiction: i18n.formatter.format('DateDepiction'),
-  disp_forgotClockIn: i18n.formatter.format('ForgotAttendanceRecord'),
-  disp_other: i18n.formatter.format('Other'),
-  disp_lessThan50words: i18n.formatter.format('lessThan50words'),
-  disp_pleaseEnterName: i18n.formatter.format('PleaseEnterName'),
-
-  flag_enableSearchButton: false,
-
-  value_searchDate: dayjs(new Date()).format('YYYY-MM-DD'),
-  value_dataItemsToShow: [],
-  value_allTableItems: [],
-  value_clockInRecords: 'ClockIn',
-  value_clockInReason: 'ForgotClockIn',
-  value_clockInTime: null,
-
-  maxLength: 50,
-  value_otherDirections: '',
-  saveButtonStatus: false,
-
-  selectedName: '',
-
-  finallyList: [],
-
-  value_tablePage: {
-    currentPage: 1,
-    pageSize: 10,
-    totalResult: 0,
-  },
-});
 
 export default {
   name: 'ChangeAttendanceForm',
@@ -173,7 +244,34 @@ export default {
     'v-select': VueSelect,
   },
   data() {
-    return defaultlState();
+    return {
+      obj_loading: null,
+
+      disp_forgotClockIn: this.$t('ForgotAttendanceRecord'),
+
+      flag_enableSearchButton: false,
+
+      value_searchDate: dayjs(new Date()).format('YYYY-MM-DD'),
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
+      value_clockInRecords: 'ClockIn',
+      value_clockInReason: 'ForgotClockIn',
+      value_clockInTime: null,
+
+      maxLength: 50,
+      value_otherDirections: '',
+      saveButtonStatus: false,
+
+      selectedName: '',
+
+      finallyList: [],
+
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0,
+      },
+    };
   },
   watch: {
     selectedName(newValue) {
@@ -190,11 +288,9 @@ export default {
     },
   },
   async created() {
-    const self = this;
+    this.flag_enableSearchButton = true;
 
-    self.flag_enableSearchButton = true;
-
-    self.value_clockInTime = new Date();
+    this.value_clockInTime = new Date();
   },
   mounted() {
     this.formatNameList();
@@ -238,8 +334,7 @@ export default {
     },
 
     async formatNameList() {
-      const self = this;
-      const ret1 = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
+      const ret1 = await this.$globalFindPersonWithoutPhoto('', 0, 3000);
       const personLists = ret1.data.person_list;
       const handleData = personLists.map(({ id, name, uuid }) => ({ label: `${name}(${id})`, value: uuid }));
 
@@ -247,8 +342,7 @@ export default {
     },
 
     async saveData(cb) {
-      const self = this;
-      const personDatas = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
+      const personDatas = await this.$globalFindPersonWithoutPhoto('', 0, 3000);
       const personData = personDatas.data.person_list;
 
       if (!this.selectedName) return;
@@ -259,7 +353,7 @@ export default {
         return item.name === selectValue;
       });
 
-      const token = self.$globalServerTokenInfo();
+      const token = this.$globalServerTokenInfo();
 
       if (selectMatch.length === 0) return;
       const parameter = selectMatch[0];
@@ -286,7 +380,7 @@ export default {
       const utcTimestamp = searchDate.getTime();
 
       const submitData = {
-        verify_uuid: self.makeid(32),
+        verify_uuid: this.makeid(32),
         timestamp: utcTimestamp,
         verify_mode: verifyMode,
         verify_mode_string: verifyModeString,
@@ -303,7 +397,7 @@ export default {
       };
 
       try {
-        await self.$globalManualClockin(submitData);
+        await this.$globalManualClockin(submitData);
 
         await this.showNotificationAndGoBack(true);
         this.$router.back(-1);
@@ -315,12 +409,11 @@ export default {
     },
 
     showNotificationAndGoBack(pass) {
-      const self = this;
       return new Promise((resolve) => {
-        self.$fire({
+        this.$fire({
           text: pass
-            ? i18n.formatter.format('Successful')
-            : i18n.formatter.format('OperationFailed'),
+            ? this.$t('Successful')
+            : this.$t('OperationFailed'),
           type: pass ? 'success' : 'error',
           timer: 3000,
           onClose: resolve,
@@ -347,17 +440,15 @@ export default {
     },
 
     async queryPersonResult(uuidList, startTime, endTime, sliceShift, sliceLength) {
-      const self = this;
+      this.value_dataItemsToShow = [];
+      this.value_allTableItems = [];
 
-      self.value_dataItemsToShow = [];
-      self.value_allTableItems = [];
-
-      let ret = await self.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
+      let ret = await this.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
       if (ret) {
         if (ret.data) {
           if (ret.data.data) {
             if (ret.data.data.length >= 1) {
-              self.value_allTableItems = self.value_allTableItems.concat(ret.data.data);
+              this.value_allTableItems = this.value_allTableItems.concat(ret.data.data);
             }
           }
         }
@@ -371,20 +462,20 @@ export default {
         uuid_list: uuidList,
         with_image: false,
       };
-      ret = await self.$globalGetPersonResult(query);
+      ret = await this.$globalGetPersonResult(query);
       if (ret) {
         if (ret.data) {
           if (ret.data.result) {
             if (ret.data.result.data) {
               if (ret.data.result.data.length >= 1) {
-                self.value_allTableItems = self.value_allTableItems.concat(ret.data.result.data);
+                this.value_allTableItems = this.value_allTableItems.concat(ret.data.result.data);
               }
             }
           }
         }
       }
 
-      self.value_dataItemsToShow = this.processFields(self.value_allTableItems);
+      this.value_dataItemsToShow = this.processFields(this.value_allTableItems);
     },
 
     processFields(sourceData) {

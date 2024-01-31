@@ -33,9 +33,7 @@ export default {
   },
   methods: {
     onFinish(modifiedSetting, cb) {
-      const self = this;
-
-      self.$globalSetDisplaySetting(modifiedSetting, (err, result) => {
+      this.$globalSetDisplaySetting(modifiedSetting, (err, result) => {
         if (cb) cb(err == null, result);
       });
     },

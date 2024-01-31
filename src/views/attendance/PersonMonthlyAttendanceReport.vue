@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 import CMonthlyAttendanceReportForm from './forms/MonthlyAttendanceReportForm.vue';
 
 export default {
@@ -23,9 +22,9 @@ export default {
     return {
       flag_keepingDownloadPersonData: false,
       flag_keepingDownloadPersonVerifyResult: false,
-      disp_header: i18n.formatter.format('PersonMonthlyAttendanceReport'),
-      disp_id: i18n.formatter.format('PersonId'),
-      disp_name: i18n.formatter.format('PersonName'),
+      disp_header: this.$t('PersonMonthlyAttendanceReport'),
+      disp_id: this.$t('PersonId'),
+      disp_name: this.$t('PersonName'),
 
       flag_downloadingExecl: false,
     };
@@ -45,16 +44,15 @@ export default {
   },
   methods: {
     async downloadPersonDataAsync(sliceSize, cb) {
-      const self = this;
-      if (self.$store.state.loginRedirect) {
+      if (this.$store.state.loginRedirect) {
         if (cb) cb(null, true, false, []);
         return;
       }
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
-      while (self.flag_keepingDownloadPersonData && thereIsMoreData) {
-        const ret = await self.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
+      while (this.flag_keepingDownloadPersonData && thereIsMoreData) {
+        const ret = await this.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -67,8 +65,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          self.$fire({
-            title: i18n.formatter.format('NetworkLoss'),
+          this.$fire({
+            title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -79,13 +77,11 @@ export default {
     },
     onFetchPersonDataCallback(cb) {
       // console.log('onFetchDataCallback' )
-      const self = this;
-      self.flag_keepingDownloadPersonData = true;
-      self.downloadPersonDataAsync(20000, cb);
+      this.flag_keepingDownloadPersonData = true;
+      this.downloadPersonDataAsync(20000, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnMonth, uuidList, sliceSize, cb) {
-      const self = this;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
@@ -95,8 +91,8 @@ export default {
       const endTime = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
-      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await self.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -118,8 +114,8 @@ export default {
       shitf = 0;
       reset = true;
       thereIsMoreData = true;
-      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await self.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        const ret = await this.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -132,8 +128,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          self.$fire({
-            title: i18n.formatter.format('NetworkLoss'),
+          this.$fire({
+            title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -143,10 +139,9 @@ export default {
       }
     },
     onFetchPersonAttendanceDataCallback(dateOnMonth, uuidList, cb) {
-      const self = this;
-      self.flag_keepingDownloadPersonVerifyResult = true;
-      // self.downloadPersonVerifyResultAsync(dateOnMonth, uuidList, 2500, cb);
-      self.downloadPersonVerifyResultAsync(dateOnMonth, [], 250, cb);
+      this.flag_keepingDownloadPersonVerifyResult = true;
+      // this.downloadPersonVerifyResultAsync(dateOnMonth, uuidList, 2500, cb);
+      this.downloadPersonVerifyResultAsync(dateOnMonth, [], 250, cb);
     },
     setWrapperStyle() {
       document.querySelector('style').textContent
