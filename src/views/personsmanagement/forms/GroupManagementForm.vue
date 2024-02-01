@@ -53,13 +53,13 @@
         <div>
           <div>
             <vxe-table
-              data="value_dataItemsToShow"
+              :data="value_dataItemsToShow"
               stripe
               align="center"
-              cell-style="cellStyle"
-              header-cell-style="headerCellStyle"
+              :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle"
               ref="mainTable"
-              checkbox-config="{ checkMethod: checkboxFixed }"
+              :checkbox-config="{ checkMethod: checkboxFixed }"
             >
               <!-- @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent" -->
@@ -70,37 +70,37 @@
                 align="center"
               />
               <vxe-table-column
-                show-overflow="ellipsisMode"
+                :show-overflow="ellipsisMode"
                 field="nameToShow"
-                title="$t('GroupName')"
+                :title="$t('GroupName')"
                 width="16%"
                 align="center"
               />
               <vxe-table-column
-                show-overflow="ellipsisMode"
+                :show-overflow="ellipsisMode"
                 field="numberOfPersonInGroup"
-                title="$t('NumberOfPersonInGroup')"
+                :title="$t('NumberOfPersonInGroup')"
                 width="12%"
                 align="center"
               />
               <vxe-table-column
-                show-overflow="ellipsisMode"
+                :show-overflow="ellipsisMode"
                 field="numberOfVisitorInGroup"
-                title="$t('NumberOfVisitorInGroup')"
+                :title="$t('NumberOfVisitorInGroup')"
                 width="12%"
                 align="center"
               />
               <vxe-table-column
-                show-overflow="ellipsisMode"
+                :show-overflow="ellipsisMode"
                 field="remarks"
                 width="14%"
-                title="$t('Remarks')"
+                :title="$t('Remarks')"
                 align="left"
               />
               <vxe-table-column
-                show-overflow="ellipsisMode"
+                :show-overflow="ellipsisMode"
                 field="createDate"
-                title="$t('CreateDate')"
+                :title="$t('CreateDate')"
                 width="20%"
                 align="center"
               />
