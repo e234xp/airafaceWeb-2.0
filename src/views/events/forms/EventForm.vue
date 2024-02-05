@@ -161,6 +161,7 @@ export default {
       value_eventHttpEnabledSSL: false,
       value_eventHttpUser: '',
       value_eventHttpPass: '',
+      value_eventHttpPort: 80,
 
       // mail
       value_eventSMTPMethod: 'SMTP',
@@ -218,6 +219,7 @@ export default {
         eventHttpEnabledSSL: this.value_eventHttpEnabledSSL,
         eventHttpUser: this.value_eventHttpUser,
         eventHttpPass: this.value_eventHttpPass,
+        eventHttpPort: this.value_eventHttpPort,
       };
 
       const mailProps = {

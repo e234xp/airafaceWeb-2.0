@@ -17,10 +17,109 @@ export default {
     Step2FormMail,
   },
   props: {
-    isAllPassed: Boolean,
-    cardStyle: String,
-    handleUpdateData: Function,
-    eventControlType: String,
+    isAllPassed: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    cardStyle: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+    eventControlType: {
+      type: String,
+      required: true,
+      default: 'line',
+    },
+
+    eventLineAccessToken: {
+      type: String,
+      required: true,
+      default: '',
+    },
+
+    eventHttpHostAddress: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventHttpEnabledSSL: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    eventHttpUser: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventHttpPass: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventHttpPort: {
+      type: Number,
+      required: true,
+      default: 80,
+    },
+
+    eventSMTPMethod: {
+      type: String,
+      required: true,
+      default: 'smtp',
+    },
+    eventSMTPHostAddress: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPPort: {
+      type: Number,
+      required: true,
+      default: 25,
+    },
+    eventSMTPEnabledSecure: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    eventSMTPUser: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPPass: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPSender: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPSubject: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPTo: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPCC: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventSMTPBCC: {
+      type: String,
+      required: true,
+      default: '',
+    },
   },
   emits: [
     'update:isAllPassed',
@@ -43,7 +142,6 @@ export default {
   ],
   data() {
     return {
-      flag_view_password: false,
       flag_enable_SSL: false,
 
       // valid
@@ -146,10 +244,6 @@ export default {
       this.$emit(`update:${key}`, value);
     },
 
-    viewPassword() {
-      this.flag_view_password = !this.flag_view_password;
-    },
-
     // selectDateType(type) {
     //   this.value_selectedData = type;
     //   switch (type) {
@@ -247,9 +341,10 @@ export default {
       this[`flag_${key}`] = errorMsg === '';
       return this[`flag_${key}`];
     },
-    ipAddrValidator(val) {
-      this.flag_ipAddrPass = checkIpAddr(val);
-      return this.flag_ipAddrPass === '';
+    ipAddrValidator(key, val) {
+      const errorMsg = checkIpAddr(val);
+      this.flag_ipAddrPass = errorMsg === '';
+      return this[`flag_${key}`];
     },
 
     // import

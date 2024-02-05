@@ -310,11 +310,68 @@
 export default {
   name: 'Step2FormHttp',
   props: {
+    handleUpdateEmitData: {
+      type: Function,
+      required: true,
+      default: () => {},
+    },
+    isNotEmptyValidator: {
+      type: Function,
+      required: true,
+      default: () => () => false,
+    },
+    checkPort: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
+    portValidator: {
+      type: Function,
+      required: true,
+      default: () => () => false,
+    },
+    emailValidator: {
+      type: Function,
+      required: true,
+      default: () => () => false,
+    },
+    ipAddrValidator: {
+      type: Function,
+      required: true,
+      default: () => () => false,
+    },
     // http
-    eventHttpHostAddress: String,
-    eventHttpEnabledSSL: Boolean,
-    eventHttpUser: String,
-    eventHttpPass: String,
+    eventHttpHostAddress: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventHttpEnabledSSL: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    eventHttpUser: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventHttpPass: {
+      type: String,
+      required: true,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      flag_view_password: false,
+    };
+  },
+  methods: {
+    viewPassword() {
+      this.flag_view_password = !this.flag_view_password;
+    },
+
   },
 };
 </script>

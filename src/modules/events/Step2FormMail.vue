@@ -163,7 +163,7 @@ export default {
     isNotEmptyValidator: {
       type: Function,
       required: true,
-      default: () => () => true,
+      default: () => () => false,
     },
     checkPort: {
       type: Function,
@@ -173,12 +173,12 @@ export default {
     portValidator: {
       type: Function,
       required: true,
-      default: () => () => true,
+      default: () => () => false,
     },
     emailValidator: {
       type: Function,
       required: true,
-      default: () => () => true,
+      default: () => () => false,
     },
     eventSMTPMethod: {
       type: String,
