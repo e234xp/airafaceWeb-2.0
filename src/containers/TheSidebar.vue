@@ -280,16 +280,16 @@ const nav = [
             name: i18n.formatter.format('AccountManagement'),
             to: '/systemsettings/accountmanagement',
           },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('TimeSettings'),
-            to: '/systemsettings/timesettings',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('NetworkSettings'),
-            to: '/systemsettings/networksettings',
-          },
+          // {
+          //   permission: ['Admin', 'PowerUser'],
+          //   name: i18n.formatter.format('TimeSettings'),
+          //   to: '/systemsettings/timesettings',
+          // },
+          // {
+          //   permission: ['Admin', 'PowerUser'],
+          //   name: i18n.formatter.format('NetworkSettings'),
+          //   to: '/systemsettings/networksettings',
+          // },
           {
             permission: ['Admin', 'PowerUser'],
             name: i18n.formatter.format('BackupAndRestore'),

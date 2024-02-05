@@ -800,6 +800,8 @@ export default {
         definedBreakTimeMins: 60, //
         specifiedHolidays: [{ date_time: 0 }],
         specifiedNonHolidays: [{ date_time: 0 }],
+          videoDeviceGroupIn: [],
+          videoDeviceGroupOut: []
       },
 
       ...this.formData,
@@ -811,6 +813,40 @@ export default {
     this.$globalGetAttendanceSettings((err, data) => {
       if (!err) {
         this.value_workingHourSettings = data;
+          this.value_workingHourSettings.videoDeviceGroupIn = [];
+          this.value_workingHourSettings.videoDeviceGroupOut = [];
+
+          if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
+            || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
+
+            this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
+              if (err == null) {
+                let result = data.result;
+
+                result.forEach((r) => {
+                  if (r) {
+                    if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
+                      this.value_workingHourSettings.videoDeviceGroupIn =
+                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
+                      this.value_workingHourSettings.videoDeviceGroupIn =
+                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
+                    }
+
+                    if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
+                      this.value_workingHourSettings.videoDeviceGroupOut =
+                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
+                      this.value_workingHourSettings.videoDeviceGroupOut =
+                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
+                    }
+                  }
+
+
+                });
+
+
+              }
+            });
+          }
       }
 
       if (this.value_workingHourSettings == null) {
@@ -832,6 +868,8 @@ export default {
           definedBreakTimeMins: 60,
           specifiedHolidays: [{ date_time: 0 }],
           specifiedNonHolidays: [{ date_time: 0 }],
+            videoDeviceGroupIn: [],
+            videoDeviceGroupOut: [],
         };
       }
       this.refreshTableItems();
@@ -1985,6 +2023,7 @@ export default {
                             name: d.name,
                             verify_uuid: d.verify_uuid,
                             timestamp: d.timestamp,
+                              source_id: d.source_id,
                             temperature: (d.temperature === 0 || d.temperature === '') ? '' : `${d.temperature.toFixed(1)}°C`,
                             verify_mode: d.verify_mode,
                             verify_mode_string: d.verify_mode_string,
@@ -2065,6 +2104,9 @@ export default {
       // const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
       const specifiedHolidays = workingHourSettings.specified_holidays || [];
       const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
+
+        const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
+        const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
 
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
 
@@ -2173,6 +2215,19 @@ export default {
               && attRec.verify_mode === 6,
           );
 
+            for (let index = passModeRecord.length - 1; index >= passModeRecord.length - 2; index -= 1) {
+              const rec = passModeRecord[index];
+
+              if (videoGroupIn.indexOf(rec.source_id) >= 0) {
+                clockInModeRecord.push(rec);
+                passModeRecord.splice(index, 1);
+              }
+
+              if (videoGroupOut.indexOf(rec.source_id) >= 0) {
+                clockOutModeRecord.push(rec);
+                passModeRecord.splice(index, 1);
+              }
+            }
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockInModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockOutModeRecord.sort((a, b) => a.timestamp - b.timestamp);

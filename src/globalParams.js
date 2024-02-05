@@ -193,7 +193,9 @@ function postJson(cgi, jsondata, cb) {
     fetch(apiServerPath() + cgi, requestOptions)
       .then(
         (response) => {
-          if (response.status !== 200) {
+          if (response.status === 401) {
+            router.push({ path: '/' });
+          } else if (response.status !== 200) {
             throw new Error('Bad response from server');
           }
           return response.json();
