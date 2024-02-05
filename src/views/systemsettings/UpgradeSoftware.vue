@@ -84,7 +84,6 @@
 import ProgressBar from 'vuejs-progress-bar';
 import Axios from 'axios';
 
-// FIXME: I have no idea :<
 // eslint-disable-next-line no-extend-native
 Date.prototype.yyyy_mm_dd_HH_MM_SS = function () {
   const mm = this.getMonth() + 1; // getMonth() is zero-based

@@ -170,7 +170,6 @@
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
-// FIXME: I have no idea :<
 // eslint-disable-next-line no-extend-native
 Date.prototype.yyyy_mm_dd = function () {
   const mm = this.getMonth() + 1; // getMonth() is zero-based

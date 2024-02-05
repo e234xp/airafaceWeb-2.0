@@ -19,7 +19,6 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <!-- FIXME: no i18n-->
               <!-- <CCol sm="5">
                 <div class="h5">{{$t('MAC')}}</div>
                 <CSelect size="lg" :value.sync="value_networkMac" :options="value_avaiableNetworkListToShow"

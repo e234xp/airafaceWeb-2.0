@@ -6,7 +6,10 @@
       <!-- Basic -->
       <div class="mt-3">
         <CRow sm="12">
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_WiegandBasicDeviceName }}
             <CInput
               size="lg"
@@ -17,7 +20,10 @@
               required
             />
           </CCol>
-          <CCol sm="6" class="h5 d-none">
+          <CCol
+            sm="6"
+            class="h5 d-none"
+          >
             {{ disp_WiegandBasicDeviceGroups }}
             <CSelect
               size="lg"
@@ -30,7 +36,10 @@
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_WiegandBasicIP }}
             <CInput
               size="lg"
@@ -41,7 +50,10 @@
               required
             />
           </CCol>
-          <CCol sm="6" class="h5">
+          <CCol
+            sm="6"
+            class="h5"
+          >
             {{ disp_WiegandBasicPort }}
             <CInput
               size="lg"
@@ -59,10 +71,8 @@
 </template>
 
 <script>
-import i18n from "@/i18n";
-
 export default {
-  name: "ModifyWiegandConvertersStep1Form",
+  name: 'ModifyWiegandConvertersStep1Form',
   props: {
     step1form: Object,
     defaultValues: Object,
@@ -72,16 +82,16 @@ export default {
     return {
       localStep1form: { ...this.step1form },
 
-      disp_header: i18n.formatter.format("WiegandBasicName"),
+      disp_header: i18n.formatter.format('WiegandBasicName'),
 
-      disp_WiegandBasicDeviceName: i18n.formatter.format("WiegandBasicCOlNameDeviceName"),
-      disp_WiegandBasicDeviceGroups: i18n.formatter.format("WiegandBasicCOlNameDeviceGroups"),
-      disp_WiegandBasicIP: i18n.formatter.format("WiegandBasicCOlNameIP"),
-      disp_WiegandBasicPort: i18n.formatter.format("WiegandBasicCOlNamePort"),
+      disp_WiegandBasicDeviceName: i18n.formatter.format('WiegandBasicCOlNameDeviceName'),
+      disp_WiegandBasicDeviceGroups: i18n.formatter.format('WiegandBasicCOlNameDeviceGroups'),
+      disp_WiegandBasicIP: i18n.formatter.format('WiegandBasicCOlNameIP'),
+      disp_WiegandBasicPort: i18n.formatter.format('WiegandBasicCOlNamePort'),
 
-      dis_placeholder: i18n.formatter.format("placeholder"), // port 提示文字
+      dis_placeholder: i18n.formatter.format('placeholder'), // port 提示文字
 
-      value_deviceGroups: "",
+      value_deviceGroups: '',
       // value_deviceGroupsList: [1, 2, 3],
     };
   },
@@ -89,8 +99,8 @@ export default {
   watch: {
     localStep1form: {
       handler(newValue) {
-        console.log("emit updateStep1form");
-        this.$emit("updateStep1form", { ...newValue });
+        console.log('emit updateStep1form');
+        this.$emit('updateStep1form', { ...newValue });
       },
       deep: true,
     },

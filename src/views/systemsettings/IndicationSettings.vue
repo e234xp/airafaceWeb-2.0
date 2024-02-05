@@ -623,10 +623,8 @@ sms ex : SMSTO:0988123456:{{personName}} is clockin
         this.value_tabletSettings = data;
         this.resetSettings(data);
         if (this.value_useHttp_disp) {
-          // FIXME: no i18n
           this.disp_settingType = this.$t('FetchViaHttp');
         } else {
-          // FIXME: no i18n
           this.disp_settingType = this.$t('StaticSettings');
         }
 
@@ -648,10 +646,8 @@ sms ex : SMSTO:0988123456:{{personName}} is clockin
   watch: {
     value_useHttp_disp(value) {
       if (value) {
-        // FIXME: no i18n
         this.disp_settingType = this.$t('FetchViaHttp');
       } else {
-        // FIXME: no i18n
         this.disp_settingType = this.$t('StaticSettings');
       }
     },

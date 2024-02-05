@@ -21,7 +21,7 @@
       <div style="height: 35px" />
     </div>
 
-    <!-- 項目 -->
+    <!-- Step1 -->
     <CCol sm="12">
       <!-- Basic Form-->
       <CCard v-if="isOnStep(0)">
@@ -35,7 +35,7 @@
         </CCardBody>
       </CCard>
 
-      <!-- Connection Form-->
+      <!-- Step2 -->
       <CCard v-else-if="isOnStep(1)">
         <CCardBody>
           <Step2Form
