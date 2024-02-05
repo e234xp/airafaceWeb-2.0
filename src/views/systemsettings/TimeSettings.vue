@@ -61,7 +61,7 @@
                   size="lg"
                   :value.sync="value_selectedTimezone"
                   :options="value_avaiableTimezoneListToShow"
-                  @change="selTimezone($event)"
+                  @change="setTimezone($event)"
                 />
               </CCol>
               <CCol sm="3">
@@ -203,7 +203,7 @@ export default {
         if (cb) cb();
       });
     },
-    selTimezone(e) {
+    setTimezone(e) {
       this.value_selectedTimezone = e.target.value;
     },
     clickOnApplyTimeSettings() {
