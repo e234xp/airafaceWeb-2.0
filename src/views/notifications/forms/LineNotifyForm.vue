@@ -234,6 +234,28 @@ export default {
         { label: 'display_image', checked: false, enabled: true },
       ],
 
+      param_data_fields: [
+        { label: 'timestamp', value: 'verified_timestamp' },
+        { label: 'foreHead_temperature', value: 'foreHead_temperature' },
+        { label: 'is_high_temperature', value: 'is_high_temperature' },
+        { label: 'show_identity', value: 'show_identity' },
+        { label: 'face_image', value: 'captured' },
+        { label: 'register_image', value: 'register' },
+        { label: 'display_image', value: 'display' },
+      ],
+
+      param_person_fields: [
+        { label: 'person_id', value: 'person.id' },
+        { label: 'person_name', value: 'person.name' },
+        { label: 'card_number', value: 'person.card_number' },
+        { label: 'title', value: 'person.title' },
+        { label: 'department', value: 'person.department' },
+        { label: 'email', value: 'person.email' },
+        { label: 'Group', value: 'person.group_list' },
+        { label: 'phone_number', value: 'person.phone_number' },
+        { label: 'extension_number', value: 'person.extension_number' },
+      ],
+
       flag_currentSetp: 0,
 
       value_uuid: '',
