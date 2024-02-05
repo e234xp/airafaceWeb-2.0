@@ -20,7 +20,6 @@
           class="h5 ml-2 mb-3"
           style="padding-top: 10px;text-align: right; "
         >
-          <!-- FIXME: no i18n -->
           {{ $t('TabletsBasicCOlNameUUID') }}
         </CRow>
         <CRow>
@@ -85,7 +84,6 @@
           class="h5 ml-2 mb-3"
           style="padding-top: 10px;text-align: right; "
         >
-          <!-- FIXME: no i18n -->
           {{ $t('TabletsBasicCOlNameFaceDetectionThreshold') }}
         </CRow>
         <CRow>
@@ -120,7 +118,6 @@
           class="h5 ml-2 mb-3"
           style="padding-top: 10px;text-align: right; "
         >
-          <!-- FIXME: no i18n -->
           {{ $t('TabletsBasicCOlNameAntiSpoofingThreshold') }}
         </CRow>
         <CRow>

@@ -15,7 +15,7 @@ Vue.use(CoreuiVue);
 
 global.webVersion = '2.00.01.240124';
 
-const TEST_MODE = process.env.NODE_ENV === 'development'; 
+const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
 const TEST_HOST = '192.168.10.122'; // airaFace2
@@ -1215,6 +1215,9 @@ Vue.prototype.$globalRemoveOutputDeviceGroup = (
     });
 });
 
+
+// TODO: Delte unuse ----------------------------------------------------------------
+
 // Tulip
 Vue.prototype.$globalGetLineNotifyList = (
   cb,
@@ -1460,6 +1463,48 @@ Vue.prototype.$globalRemoveActionRule = (
   uuid, cb,
 ) => new Promise((resolve) => {
   postJson('/airafacelite/removerule', { uuid },
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+// ----------------------------------------------------------------
+
+// Tulip
+Vue.prototype.$globalGetEventList = (
+  uuid, shift, sliceSize, cb,
+) => new Promise((resolve) => {
+  const query = {
+    uuid,
+    slice_shift: shift,
+    slice_length: sliceSize,
+  };
+  postJson('/airafacelite/findeventhandle', query,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+// Tulip
+Vue.prototype.$globalCreateEventHandle = (
+  setting, cb,
+) => new Promise((resolve) => {
+  console.log('setting', setting)
+  postJson('/airafacelite/createeventhandle', setting,
+    (err, data) => {
+      console.log(err, data)
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+// Tulip
+Vue.prototype.$globalRemoveEventHandle = (
+  uuid, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/removeeventhandle', { uuid } ,
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });

@@ -106,7 +106,6 @@
                 />
               </td>
               <td class="table-td">
-                <!-- FIXME: no i18n -->
                 <CInput
                   size="lg"
                   v-model="value_password"
@@ -133,7 +132,6 @@
                 </CInput>
               </td>
               <td class="table-td">
-                <!-- FIXME: no i18n -->
                 <CInput
                   size="lg"
                   v-model="value_subject"

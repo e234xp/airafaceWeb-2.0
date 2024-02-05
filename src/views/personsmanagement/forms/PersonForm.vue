@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h1 mb-5">
-      {{ disp_header }}
+      {{ $t('AddPerson') }}
     </div>
     <stepprogress
       class="w-step-progress-3"
@@ -499,7 +499,6 @@ export default {
       param_activeThickness: 3,
       param_passiveThickness: 3,
 
-      disp_header: 'none',
       // FIXME: no i18n
       disp_noRepeat: this.$t('NoRepeat'),
 

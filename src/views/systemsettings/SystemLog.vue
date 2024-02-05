@@ -98,7 +98,6 @@
 <script>
 import TableObserver from '@/utils/TableObserver.vue';
 
-// FIXME: I have no idea :<
 // eslint-disable-next-line no-extend-native
 Date.prototype.yyyymmdd_HHMMSS = function () {
   const mm = this.getMonth() + 1; // getMonth() is zero-based

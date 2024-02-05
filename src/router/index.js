@@ -56,8 +56,8 @@ const CheckGroup = () => import('@/views/personsmanagement/CheckGroup.vue');
 
 /// ////////////////////////////////////////
 /// /////    Event Control    //////////////
-// const EventControlManagement = () => import('@/views/events/EventControlManagement.vue');
-// const CreateEventControlSetting = () => import('@/views/events/CreateEventControlSetting.vue');
+const EventControlManagement = () => import('@/views/events/EventControlManagement.vue');
+const CreateEventControlSetting = () => import('@/views/events/CreateEventControlSetting.vue');
 // const ModifyEventControlSetting = () => import('@/views/events/ModifyEventControlSetting.vue');
 
 /// ////////////////////////////////////////
@@ -121,6 +121,7 @@ const ModifyOutputDeviceGroups = () => import('@/views/outputdevice/ModifyOutput
 // const IOboxesBasic = () => import('@/views/outputdevice/forms/IOboxesBasic')
 // const WiegandBasic = () => import('@/views/outputdevice/forms/WiegandBasic')
 
+// TODO: Delete unuse nav
 /// ////////////////////////////////////////
 /// /////    Notify Management    //////////
 const LineNotifyManagement = () => import('@/views/notifications/LineNotifyManagement.vue');
@@ -716,6 +717,31 @@ function configRoutes() {
               name: 'ModifySchedule',
               component: ModifySchedule,
             },
+          ],
+        },
+        {
+          path: 'events',
+          redirect: '/events/EventControlManagement',
+          name: 'EventControl',
+          component: {
+            render(c) { return c('router-view'); },
+          },
+          children: [
+            {
+              path: 'eventcontrolmanagement',
+              name: 'EventControlManagement',
+              component: EventControlManagement,
+            },
+            {
+              path: 'createeventcontrolsetting',
+              name: 'CreateEventControlSetting',
+              component: CreateEventControlSetting,
+            },
+            // {
+            //   path: 'modifyeventcontrolsetting',
+            //   name: 'ModifyEventControlSetting',
+            //   component: ModifyEventControlSetting,
+            // },
           ],
         },
       ],
