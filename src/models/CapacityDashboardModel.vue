@@ -61,7 +61,7 @@ export default {
             try {
               for (let i = 0; i < result.person_list.length; i++) {
                 const p = result.person_list[i];
-                p.status = 1;
+                  p.status = -1;
                 p.register_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
                 p.display_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
               }
@@ -94,7 +94,7 @@ export default {
             try {
               for (let i = 0; i < result.visitor_list.length; i++) {
                 const p = result.visitor_list[i];
-                p.status = 1;
+                  p.status = -1;
                 p.register_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
                 p.display_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==";
               }
@@ -140,13 +140,42 @@ export default {
           with_image: false
         };
 
-        let retResult = await self.$globalGetPersonResult(query);
+          let retResultP = await self.$globalGetPersonResult(query);
 
-        let err = retResult.error;
-        if (err == null && retResult.data) {
-          let result = retResult.data.result;
-          if (result.data) {
-            if (result.data.length >= 1) {
+          let errP = retResultP.error;
+          if (errP == null && retResultP.data) {
+            let result = retResultP.data.result;
+            if (result.data) {
+              if (result.data.length >= 1) {
+
+                result.data.sort(function (a, b) {
+                  return a.timestamp - b.timestamp;
+                });
+
+                self.lastRecordTimestamp = result.data[result.data.length - 1].timestamp;
+                console.log("self.lastRecordTimestamp", self.lastRecordTimestamp);
+
+                self.verifyData = self.verifyData.concat(result.data);
+              }
+            }
+
+            if (result.slice_shift + result.data.length < result.total_length) {
+              thereIsMoreData = true;
+              shitf = result.slice_shift + result.data.length;
+            }
+            else
+              thereIsMoreData = false;
+          }
+          else
+            thereIsMoreData = false;
+
+          let retResultV = await self.$globalGetVisitorResult(query);
+
+          let errV = retResultV.error;
+          if (errV == null && retResultV.data) {
+            let result = retResultV.data.result;
+            if (result.data) {
+              if (result.data.length >= 1) {
 
               result.data.sort(function (a, b) {
                 return a.timestamp - b.timestamp;
