@@ -15,7 +15,7 @@
             {{ $t('GroupToApply') }}
           </th>
           <th class="h5 w-25 table-th">
-            {{ $t('Note') }}
+            {{ $t('DeviceGroup') }}
           </th>
         </tr>
         <tr class="table-tr">
@@ -37,7 +37,9 @@
               :options="[
                 { value: 'line', label: $t('LineNotify') },
                 { value: 'http', label: $t('HttpCommand') },
-                { value: 'mail', label: $t('SendMail') }
+                { value: 'mail', label: $t('SendMail') },
+                { value: 'iobox', label: $t('IOboxes') },
+                { value: 'wiegand', label: $t('Wiegand Converters') },
               ]"
             />
           </td>
@@ -46,7 +48,7 @@
               placeholder=""
               :class="flag_groupListPass ? 'is-valid' : 'is-invalid'"
               :value="eventControlGroupList"
-              :options="value_groupsNameList"
+              :options="groupNameOptions"
               :multiple="true"
               :taggable="true"
               :hide-selected="true"
@@ -63,6 +65,35 @@
               {{ $t('NoEmptyNoSpaceOnly') }}
             </div>
           </td>
+          <td class="table-td">
+            <multiselect
+              placeholder=""
+              :class="flag_diviceGroupsPass ? 'is-valid' : 'is-invalid'"
+              :value="diviceGroups"
+              :options="diviceGroupOptions"
+              :multiple="true"
+              :taggable="true"
+              :hide-selected="true"
+              :select-label="$t('Select')"
+              :selected-label="$t('Selected')"
+              :deselect-label="$t('Deselect')"
+              :show-no-options="false"
+              @input="deviceGroupsValidator($event), handleUpdateEmitData('diviceGroups', $event);"
+            />
+            <div
+              v-if="!flag_groupListPass"
+              class="invalid-feedback"
+            >
+              {{ $t('NoEmptyNoSpaceOnly') }}
+            </div>
+          </td>
+        </tr>
+        <tr class="table-tr">
+          <th class="h5 w-25 table-th">
+            {{ $t('Note') }}
+          </th>
+        </tr>
+        <tr class="table-tr">
           <td class="table-td">
             <CInput
               size="lg"
@@ -86,31 +117,29 @@ export default {
     multiselect: Multiselect,
   },
   props: {
-    isAllPassed: Boolean,
     cardStyle: String,
-    handleUpdateData: Function,
     eventControlType: String,
-
     eventControlName: String,
     eventControlGroupList: Array,
     eventControlRemarks: String,
+    diviceGroups: Array,
   },
   emits: [
     'update:isAllPassed',
     'update:eventControlName',
     'update:eventControlType',
     'update:eventControlRemarks',
+    'update:eventControlGroupList',
+    'update:diviceGroups',
   ],
   data() {
     return {
-      value_groupsNameList: [
-        'All Person',
-        'All Visitor',
-      ],
-      value_remarks: '',
+      groupNameOptions: [],
+      diviceGroupOptions: [],
 
       flag_eventNamePass: false,
       flag_groupListPass: false,
+      flag_diviceGroupsPass: false,
 
       ...this.formData,
     };
@@ -152,15 +181,29 @@ export default {
         this.flag_groupListPass = true;
       }
     },
+    deviceGroupsValidator(val) {
+      if (!Array.isArray(val)) return;
+
+      if (val.length === 0) {
+        this.flag_diviceGroupsPass = false;
+      } else {
+        this.flag_diviceGroupsPass = true;
+      }
+    },
 
     // Fetch Groups
     async fetchGroupsData() {
-      const ret = await this.$globalGetGroupList();
-      const list = ret.group_list;
-      const { error } = ret;
-      if (error == null) {
-        if (list) {
-          this.value_groupsNameList = list.map((item) => item.name);
+      const [ret1, ret2] = await Promise.all([
+        this.$globalGetGroupList(),
+        this.$globalFindVideoDeviceGroups(''),
+      ]);
+      if (ret1.error === null && ret2.error === null) {
+        if (ret1?.group_list) {
+          this.groupNameOptions = ret1?.group_list.map((item) => item.name);
+        }
+
+        if (ret2?.data) {
+          this.diviceGroupOptions = ret2?.data.result.map((item) => item.uuid);
         }
       } else {
         this.$fire({

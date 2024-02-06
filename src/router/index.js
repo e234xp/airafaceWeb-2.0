@@ -58,7 +58,7 @@ const CheckGroup = () => import('@/views/personsmanagement/CheckGroup.vue');
 /// /////    Event Control    //////////////
 const EventControlManagement = () => import('@/views/events/EventControlManagement.vue');
 const CreateEventControlSetting = () => import('@/views/events/CreateEventControlSetting.vue');
-// const ModifyEventControlSetting = () => import('@/views/events/ModifyEventControlSetting.vue');
+const ModifyEventControlSetting = () => import('@/views/events/ModifyEventControlSetting.vue');
 
 /// ////////////////////////////////////////
 /// /////    Display settings    ///////////
@@ -737,11 +737,11 @@ function configRoutes() {
               name: 'CreateEventControlSetting',
               component: CreateEventControlSetting,
             },
-            // {
-            //   path: 'modifyeventcontrolsetting',
-            //   name: 'ModifyEventControlSetting',
-            //   component: ModifyEventControlSetting,
-            // },
+            {
+              path: 'modifyeventcontrolsetting',
+              name: 'ModifyEventControlSetting',
+              component: ModifyEventControlSetting,
+            },
           ],
         },
       ],

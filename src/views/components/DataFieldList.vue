@@ -2,8 +2,8 @@
   <div style="overflow-y: scroll;">
     <div
       class="list-group-item"
-      v-for="(item, index) in dataFields"
-      :key="index"
+      v-for="(item) in dataFields"
+      :key="item.value"
     >
       <input
         class="form-check-input me-1"
@@ -31,8 +31,8 @@
     </div>
     <div
       class="list-group-item"
-      v-for="(item, index) in personFields"
-      :key="index"
+      v-for="(item) in personFields"
+      :key="item.value"
     >
       <input
         class="form-check-input me-1"
@@ -81,6 +81,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['update:data'],
   data() {
     return {
       dataSelected: [],
@@ -124,12 +125,14 @@ export default {
   },
   methods: {
     checkImage(key) {
+      console.log(key);
       const imageList = ['captured', 'register', 'display'];
       const filter = imageList.filter((item) => item !== key);
       if (filter.length === imageList.length) return true;
       return filter.every((item) => this.dataSelected.indexOf(item) < 0);
     },
     dataFieldChanged(item, evt) {
+      console.log(item, evt.target.checked, this.dataSelected);
       const temp = this.dataSelected.map((d) => d);
       if (evt.target.checked) {
         this.dataSelected.push(item);
@@ -195,6 +198,7 @@ export default {
         }
         temp[person][value] = true;
       });
+      console.log('temp', temp);
       this.$emit('update:data', temp);
     },
   },

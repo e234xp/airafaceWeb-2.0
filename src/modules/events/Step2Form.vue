@@ -6,15 +6,24 @@
 </template>
 
 <script>
-import { checkPort, checkEmail, checkIpAddr } from '@/utils/validate';
+import {
+  checkPort, checkEmail, checkIpAddr, checkDelay,
+} from '@/utils/validate';
+import i18n from '@/i18n';
 import Step2FormLine from './Step2FormLine.vue';
+import Step2FormHttp from './Step2FormHttp.vue';
 import Step2FormMail from './Step2FormMail.vue';
+import Step2FormIobox from './Step2FormIO.vue';
+import Step2FormWiegand from './Step2FormWiegand.vue';
 
 export default {
   name: 'Step2Form',
   components: {
     Step2FormLine,
+    Step2FormHttp,
     Step2FormMail,
+    Step2FormIobox,
+    Step2FormWiegand,
   },
   props: {
     isAllPassed: {
@@ -23,122 +32,41 @@ export default {
       default: false,
     },
     cardStyle: {
-      type: Object,
+      type: String,
       required: true,
-      default: () => ({}),
+      default: '',
     },
     eventControlType: {
       type: String,
-      required: true,
       default: 'line',
     },
-
-    eventLineAccessToken: {
-      type: String,
-      required: true,
-      default: '',
+    data: {
+      type: Object,
+      default: () => ({}),
     },
-
-    eventHttpHostAddress: {
-      type: String,
-      required: true,
-      default: '',
+    lineForm: {
+      type: Object,
+      default: () => ({}),
     },
-    eventHttpEnabledSSL: {
-      type: Boolean,
-      required: true,
-      default: false,
+    httpForm: {
+      type: Object,
+      default: () => ({}),
     },
-    eventHttpUser: {
-      type: String,
-      required: true,
-      default: '',
+    mailForm: {
+      type: Object,
+      defauljt: () => ({}),
     },
-    eventHttpPass: {
-      type: String,
-      required: true,
-      default: '',
+    ioboxForm: {
+      type: Object,
+      default: () => ({}),
     },
-    eventHttpPort: {
-      type: Number,
-      required: true,
-      default: 80,
-    },
-
-    eventSMTPMethod: {
-      type: String,
-      required: true,
-      default: 'smtp',
-    },
-    eventSMTPHostAddress: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPPort: {
-      type: Number,
-      required: true,
-      default: 25,
-    },
-    eventSMTPEnabledSecure: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    eventSMTPUser: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPPass: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPSender: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPSubject: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPTo: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPCC: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPBCC: {
-      type: String,
-      required: true,
-      default: '',
+    wiegandForm: {
+      type: Object,
+      default: () => ({}),
     },
   },
   emits: [
     'update:isAllPassed',
-
-    'update:eventHttpHostAddress',
-    'update:eventHttpEnabledSSL',
-    'update:eventHttpUser',
-
-    'update:eventSMTPMethod',
-    'update:eventSMTPHostAddress',
-    'update:eventSMTPPort',
-    'update:eventSMTPEnabledSecure',
-    'update:eventSMTPUser',
-    'update:eventHttpHostAddress',
-    'update:eventSMTPSender',
-    'update:eventSMTPSubject',
-    'update:eventSMTPTo',
-    'update:eventSMTPCC',
-    'update:eventSMTPBCC',
   ],
   data() {
     return {
@@ -158,6 +86,106 @@ export default {
       flag_toPass: false,
       flag_ccPass: false,
       flag_bccPass: false,
+
+      dataFields: [
+        {
+          label: 'DisplayPhoto',
+          value: 'display_image',
+        },
+        {
+          label: 'ForeheadTemperature',
+          value: 'foreHead_temperature',
+        },
+        {
+          label: 'HighTemperatureOnly',
+          value: 'is_high_temperature',
+        },
+        {
+          label: 'ShowIdentity',
+          value: 'show_identity',
+        },
+        {
+          label: 'VerifiedTimestamp',
+          value: 'verified_timestamp',
+        },
+      ],
+      personFields: [
+        {
+          label: 'DisplayImage',
+          value: 'card_number',
+        },
+        {
+          label: 'Department',
+          value: 'department',
+        },
+        {
+          label: 'HighTemperatureOnly',
+          value: 'email',
+        },
+        {
+          label: 'ExtensionNumber',
+          value: 'extension_number',
+        },
+        {
+          label: 'Group',
+          value: 'group_list',
+        },
+        {
+          label: 'PersonId',
+          value: 'id',
+        },
+        {
+          label: 'PersonName',
+          value: 'name',
+        },
+        {
+          label: 'PhoneNumber',
+          value: 'phone_number',
+        },
+        {
+          label: 'Remarks',
+          value: 'remarks',
+        },
+        {
+          label: 'JobTitle',
+          value: 'title',
+        },
+      ],
+
+      lineFormPass: {
+        token: false,
+      },
+
+      httpFormPass: {
+        host: false,
+        user: false,
+        pass: false,
+      },
+
+      mailFormPass: {
+        host: false,
+        port: false,
+        user: false,
+        pass: false,
+        to: false,
+        cc: false,
+        bcc: false,
+      },
+
+      ioboxFormPass: {
+        host: false,
+        port: false,
+        user: false,
+        pass: false,
+        delay: false,
+      },
+
+      wiegandFormPass: {
+        host: false,
+        port: false,
+        index: false,
+        syscode: false,
+      },
     };
   },
   computed: {
@@ -165,195 +193,92 @@ export default {
       return `Step2Form${this.eventControlType.charAt(0).toUpperCase() + this.eventControlType.slice(1)}`;
     },
     getFormProps() {
-      const defaultProps = {
-        handleUpdateEmitData: this.handleUpdateEmitData,
-        isNotEmptyValidator: this.isNotEmptyValidator,
-        checkPort: this.checkPort,
-        checkEmail: this.checkEmail,
-        checkIpAddr: this.checkIpAddr,
-        portValidator: this.portValidator,
-        emailValidator: this.emailValidator,
-        ipAddrValidator: this.ipAddrValidator,
-        urlValidator: this.urlValidator,
-
-        eventControlType: this.eventControlType,
-      };
-
-      const lineProps = {
-        eventLineAccessToken: this.eventLineAccessToken,
-      };
-
-      const httpProps = {
-        eventHttpHostAddress: this.eventHttpHostAddress,
-        eventHttpEnabledSSL: this.eventHttpEnabledSSL,
-        eventHttpUser: this.eventHttpUser,
-        eventHttpPass: this.eventHttpPass,
-      };
-
-      const mailProps = {
-        eventSMTPMethod: this.eventSMTPMethod,
-        eventSMTPHostAddress: this.eventSMTPHostAddress,
-        eventSMTPPort: this.eventSMTPPort,
-        eventSMTPEnabledSecure: this.eventSMTPEnabledSecure,
-        eventSMTPUser: this.eventSMTPUser,
-        eventSMTPPass: this.eventSMTPPass,
-        eventSMTPSender: this.eventSMTPSender,
-        eventSMTPSubject: this.eventSMTPSubject,
-        eventSMTPTo: this.eventSMTPTo,
-        eventSMTPCC: this.eventSMTPCC,
-        eventSMTPBCC: this.eventSMTPBCC,
-      };
-
       switch (this.eventControlType) {
         case 'line':
           return {
-            ...lineProps,
-            ...defaultProps,
+            isNotEmptyValidator: this.isNotEmptyValidator,
+
+            dataFields: this.dataFields,
+            personFields: this.personFields,
+            data: structuredClone(this.data),
+            form: this.lineForm,
+            formPass: this.lineFormPass,
           };
         case 'http':
           return {
-            ...httpProps,
-            ...defaultProps,
+            checkPort: this.checkPort,
+            checkIpAddr: this.checkIpAddr,
+            isNotEmptyValidator: this.isNotEmptyValidator,
+
+            form: this.httpForm,
+            formPass: this.httpFormPass,
           };
         case 'mail':
           return {
-            ...mailProps,
-            ...defaultProps,
-          };
+            // validators
+            checkPort: this.checkPort,
+            checkEmail: this.checkEmail,
+            isNotEmptyValidator: this.isNotEmptyValidator,
 
+            dataFields: this.dataFields,
+            personFields: this.personFields,
+            data: structuredClone(this.data),
+            form: this.mailForm,
+            formPass: this.mailFormPass,
+          };
+        case 'iobox': {
+          return {
+            // validators
+            checkPort: this.checkPort,
+            checkIpAddr: this.checkIpAddr,
+            checkDelay: this.checkDelay,
+            isNotEmptyValidator: this.isNotEmptyValidator,
+
+            form: this.ioboxForm,
+            formPass: this.ioboxFormPass,
+          };
+        }
+        case 'wiegand': {
+          return {
+            // validators
+            checkPort: this.checkPort,
+            checkIpAddr: this.checkIpAddr,
+
+            form: this.wiegandForm,
+            formPass: this.wiegandFormPass,
+          };
+        }
         default: {
           return {};
         }
       }
     },
     step2FormStatus() {
-      switch (this.eventControlType) {
-        case 'line':
-          return this.flag_lineAccessTokenPass;
-        case 'http':
-          return true;
-        case 'mail':
-          return this.flag_hostAddressPass && this.flag_mailPortPass && this.flag_senderPass && this.flag_toPass && this.flag_ccPass && this.flag_bccPass;
-        default:
-          return false;
-      }
+      return Object.values(this[`${this.eventControlType}FormPass`]).every((status) => status);
     },
   },
   methods: {
-    handleUpdateEmitData(key, value) {
-      this.$emit(`update:${key}`, value);
-    },
-
-    // selectDateType(type) {
-    //   this.value_selectedData = type;
-    //   switch (type) {
-    //     case 0:
-    //       this.value_dataType = 'JSON';
-    //       this.value_customData = '';
-    //       this.value_customTextarea = '';
-    //       this.value_newFieldKey = '';
-    //       this.value_typeInData = '';
-    //       this.flag_customData = false;
-    //       break;
-    //     case 1:
-    //       this.value_dataType = 'XML';
-    //       this.value_customData = '';
-    //       this.value_customTextarea = '';
-    //       this.value_newFieldKey = '';
-    //       this.value_typeInData = '';
-    //       this.flag_customData = false;
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // },
-    // cleanUrl(inputUrl) {
-    //   try {
-    //     let processUrl = '';
-    //     let outputUrl = '';
-    //     processUrl = this.removeQmark(inputUrl);
-    //     outputUrl = this.removeDbSlash(processUrl);
-    //     return outputUrl;
-    //   } catch (e) {
-    //     console.log(e);
-    //     return null;
-    //   }
-    // },
-    // clearSetting() {
-    //   if (this.value_eventHttpMethod == 'GET') {
-    //     this.value_dataType = 'JSON';
-    //     this.value_customData = '';
-    //     this.value_customTextarea = '';
-    //     this.value_eventHttpUrl = '';
-    //     this.flag_customData = true;
-    //     this.value_selectedDefaultData = '';
-    //     this.value_newFieldKey = '';
-    //     this.value_typeInData = '';
-    //     this.value_typeInOption = true;
-    //   } else if (this.value_eventHttpMethod == 'POST') {
-    //     this.value_customData = '';
-    //     this.value_customTextarea = '';
-    //     this.value_eventHttpUrl = '';
-    //     this.flag_customData = false;
-    //     this.value_selectedDefaultData = '';
-    //     this.value_newFieldKey = '';
-    //     this.value_typeInData = '';
-    //     this.value_typeInOption = true;
-    //   }
-    // },
-
     // Validators
     // TODO: 判斷 name 重複
-    isNotEmptyValidator(key, val) {
-      console.log(key, val);
-      this[`flag_${key}`] = val.replace(/\s/g, '').length > 0;
-      return this[`flag_${key}`];
-    },
-    urlValidatorFn(val) {
-      const pattern = new RegExp(
-        '^(https?:\\/\\/)?' // protocol
-          + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
-          + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
-          + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
-          + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
-          + '(\\#[-a-z\\d_]*)?$',
-        'i',
-      ); // fragment locator
-      return !!pattern.test(val);
-    },
-    urlValidator(text) {
-      let url;
-
-      try {
-        url = new URL(text);
-      } catch (err) {
-        return false;
+    isNotEmptyValidator(val) {
+      if (val.replace(/\s/g, '').length <= 0) {
+        return i18n.formatter.format('NoEmptyNoSpace');
       }
-      return url.protocol === 'http:' || url.protocol === 'https:';
-    },
-    portValidator(key, val) {
-      const errorMsg = checkPort(Number(val));
-      this[`flag_${key}`] = errorMsg === '';
-      return this[`flag_${key}`];
-    },
-    emailValidator(key, email) {
-      const errorMsg = checkEmail(email);
-      this[`flag_${key}`] = errorMsg === '';
-      return this[`flag_${key}`];
-    },
-    ipAddrValidator(key, val) {
-      const errorMsg = checkIpAddr(val);
-      this.flag_ipAddrPass = errorMsg === '';
-      return this[`flag_${key}`];
+      return '';
     },
 
     // import
     checkPort,
     checkIpAddr,
+    checkEmail,
+    checkDelay,
   },
   watch: {
-    step2FormStatus(status) {
-      this.$emit('update:isAllPassed', status);
+    step2FormStatus: {
+      handler(newStatus) {
+        this.$emit('update:isAllPassed', newStatus);
+      },
+      immediate: true,
     },
   },
 };

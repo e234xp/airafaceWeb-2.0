@@ -23,14 +23,6 @@
         :class="showOnStep(flag_currentSetp)"
       >
         <keep-alive>
-          <!-- <component
-            :is="currentFormComponent"
-            v-bind="getFormProps"
-            @update:isAllPassed="handleUpdatePassStatus"
-            @update:eventControlType="handleUpdateData($event, 'eventControlType')"
-            @update:eventControlGroupList="handleUpdateData($event, 'eventControlGroupList')"
-          /> -->
-
           <component
             :is="currentFormComponent"
             v-bind="getFormProps"
@@ -38,26 +30,10 @@
             @update:eventControlName="handleUpdateData('eventControlName', $event)"
             @update:eventControlType="handleUpdateData('eventControlType', $event)"
             @update:eventControlGroupList="handleUpdateData('eventControlGroupList', $event)"
+            @update:diviceGroups="handleUpdateData('diviceGroups', $event)"
             @update:eventControlRemarks="handleUpdateData('eventControlRemarks', $event)"
-
-            @update:eventLineAccessToken="handleUpdateData('eventLineAccessToken', $event)"
-
-            @update:eventHttpHostAddress="handleUpdateData('eventHttpHostAddress', $event)"
-            @update:eventHttpEnabledSSL="handleUpdateData('eventHttpEnabledSSL', $event)"
-
-            @update:eventSMTPMethod="handleUpdateData('eventSMTPMethod', $event)"
-            @update:eventSMTPHostAddress="handleUpdateData('eventSMTPHostAddress', $event)"
-            @update:eventSMTPPort="handleUpdateData('eventSMTPPort', $event)"
-            @update:eventSMTPEnabledSecure="handleUpdateData('eventSMTPEnabledSecure', $event)"
-            @update:eventSMTPUser="handleUpdateData('eventSMTPUser', $event)"
-            @update:eventSMTPPass="handleUpdateData('eventSMTPPass', $event)"
-            @update:eventSMTPSender="handleUpdateData('eventSMTPSender', $event)"
-            @update:eventSMTPSubject="handleUpdateData('eventSMTPSubject', $event)"
-            @update:eventSMTPTo="handleUpdateData('eventSMTPTo', $event)"
-            @update:eventSMTPCC="handleUpdateData('eventSMTPCC', $event)"
-            @update:eventSMTPBCC="handleUpdateData('eventSMTPBCC', $event)"
-
             @update:eventControlSelectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
+
             @update:specifiedDatetimeToShow="handleUpdateData('specifiedDatetimeToShow', $event)"
             @update:specifiedDatetimeRange="handleUpdateData('specifiedDatetimeRange', $event)"
           />
@@ -143,38 +119,84 @@ export default {
       flag_step1FormPass: false,
       flag_step2FormPass: false,
 
-      // step1 data
-      value_eventControlName: '',
-      value_eventControlGroupList: [],
-      value_eventControlRemarks: '',
-
-      // step2 data
-      // line
-      value_eventLineAccessToken: '',
       value_language: 'zh',
       value_note: '',
       // NOTE: what this ?
       value_temperatureTriggerRule: 0,
 
-      // http
-      value_eventHttpHostAddress: '',
-      value_eventHttpEnabledSSL: false,
-      value_eventHttpUser: '',
-      value_eventHttpPass: '',
-      value_eventHttpPort: 80,
+      // step1 data
+      value_eventControlName: '',
+      value_eventControlGroupList: [],
+      value_eventControlRemarks: '',
+      value_diviceGroups: [],
 
-      // mail
-      value_eventSMTPMethod: 'SMTP',
-      value_eventSMTPHostAddress: '',
-      value_eventSMTPPort: 25,
-      value_eventSMTPEnabledSecure: false,
-      value_eventSMTPUser: '',
-      value_eventSMTPPass: '',
-      value_eventSMTPSender: '',
-      value_eventSMTPSubject: '',
-      value_eventSMTPTo: '',
-      value_eventSMTPCC: '',
-      value_eventSMTPBCC: '',
+      // step2 data
+      data_list: {},
+
+      // line
+      lineForm: {
+        token: '',
+      },
+
+      httpForm: {
+        method: 'GET',
+        https: false,
+        user: '',
+        pass: '',
+        host: '',
+        port: 80,
+        url: '/',
+        custom_data: '',
+        data_type: 'JSON',
+      },
+
+      mailForm: {
+        from: '',
+        host: '',
+        port: 25,
+        user: '',
+        pass: '',
+        subject: '',
+        to: [''],
+        cc: [''],
+        bcc: [''],
+        method: 'SMTP',
+        secure: false,
+      },
+
+      ioboxForm: {
+        brand: '',
+        model: '',
+        host: '',
+        port: 80,
+        user: '',
+        pass: '',
+        iopoint: [
+          {
+            no: 1,
+            enable: true,
+            default: false,
+            trigger: false,
+            delay: 3,
+          },
+          {
+            no: 2,
+            enable: false,
+            default: false,
+            trigger: false,
+            delay: 3,
+          },
+        ],
+      },
+
+      wiegandForm: {
+        host: '',
+        port: 80,
+        bits: 0,
+        index: 0,
+        syscode: 1,
+        special_card_number: '',
+      },
 
       // step3 data
       value_eventControlSelectedWeeklySchedule: {},
@@ -210,38 +232,13 @@ export default {
         eventControlType: this.value_eventControlType,
       };
 
-      const lineProps = {
-        eventLineAccessToken: this.value_eventLineAccessToken,
-      };
-
-      const httpProps = {
-        eventHttpHostAddress: this.value_eventHttpHostAddress,
-        eventHttpEnabledSSL: this.value_eventHttpEnabledSSL,
-        eventHttpUser: this.value_eventHttpUser,
-        eventHttpPass: this.value_eventHttpPass,
-        eventHttpPort: this.value_eventHttpPort,
-      };
-
-      const mailProps = {
-        eventSMTPMethod: this.value_eventSMTPMethod,
-        eventSMTPHostAddress: this.value_eventSMTPHostAddress,
-        eventSMTPPort: this.value_eventSMTPPort,
-        eventSMTPEnabledSecure: this.value_eventSMTPEnabledSecure,
-        eventSMTPUser: this.value_eventSMTPUser,
-        eventSMTPPass: this.value_eventSMTPPass,
-        eventSMTPSender: this.value_eventSMTPSender,
-        eventSMTPSubject: this.value_eventSMTPSubject,
-        eventSMTPTo: this.value_eventSMTPTo,
-        eventSMTPCC: this.value_eventSMTPCC,
-        eventSMTPBCC: this.value_eventSMTPBCC,
-      };
-
       switch (this.flag_currentSetp) {
         case 0:
           return {
             eventControlName: this.value_eventControlName,
             eventControlGroupList: this.value_eventControlGroupList,
             eventControlRemarks: this.eventControlRemarks,
+            diviceGroups: this.value_diviceGroups,
 
             ...defaultProps,
           };
@@ -249,19 +246,32 @@ export default {
           switch (this.value_eventControlType) {
             case 'line':
               return {
-                ...lineProps,
+                lineForm: this.lineForm,
+                data: this.data_list,
                 ...defaultProps,
               };
             case 'http':
               return {
-                ...httpProps,
+                httpForm: this.httpForm,
                 ...defaultProps,
               };
             case 'mail':
               return {
-                ...mailProps,
+                mailForm: this.mailForm,
                 ...defaultProps,
               };
+            case 'iobox': {
+              return {
+                ioboxForm: this.ioboxForm,
+                ...defaultProps,
+              };
+            }
+            case 'wiegand': {
+              return {
+                wiegandForm: this.wiegandForm,
+                ...defaultProps,
+              };
+            }
             default:
               return {
                 ...defaultProps,
@@ -277,18 +287,24 @@ export default {
           };
 
         case 3:
-          return {
-            ...defaultProps,
-          };
-
+          return null;
         default: {
-          return {};
+          return null;
         }
       }
     },
   },
   methods: {
-    // global valid
+    handleUpdateData(key, value) {
+      if (Array.isArray(value)) {
+        this[`value_${key}`] = [...value];
+      } else if (typeof value === 'object') {
+        this[`value_${key}`] = { ...value };
+      } else {
+        this[`value_${key}`] = value;
+      }
+    },
+
     // TODO: 判斷 name 重複
     isNotEmptyValidator(key, val) {
       this[`flag_${key}`] = val.replace(/\s/g, '').length > 0;
@@ -307,16 +323,6 @@ export default {
           break;
       }
     },
-    handleUpdateData(key, value) {
-      if (Array.isArray(value)) {
-        this[`value_${key}`] = [...value];
-      } else if (typeof value === 'object') {
-        this[`value_${key}`] = { ...value };
-      } else {
-        this[`value_${key}`] = value;
-      }
-    },
-
     // 是否可以按下一步
     isStepPassed(step) {
       switch (step) {
@@ -343,7 +349,6 @@ export default {
     },
     // 上一步按鈕
     handlePrev() {
-      console.log(this.value_returnRoutePath);
       if (this.flag_currentSetp === 0) {
         if (this.value_returnRoutePath.length > 0) {
           this.$router.push({ name: this.value_returnRoutePath });
@@ -390,27 +395,6 @@ export default {
               });
             });
 
-            // TEST: mock data
-            const data_list = {
-              display_image: '',
-              foreHead_temperature: false,
-              is_high_temperature: false,
-              show_identity: true,
-              verified_timestamp: false,
-              person: {
-                card_number: false,
-                department: false,
-                email: false,
-                extension_number: false,
-                group_list: false,
-                id: true,
-                name: true,
-                phone_number: false,
-                remarks: false,
-                title: false,
-              },
-            };
-
             const defaultSendData = {
               action_type: this.value_eventControlType,
               name: this.value_eventControlName,
@@ -420,47 +404,45 @@ export default {
               remarks: this.value_eventControlRemarks,
               specify_time: specifyTime,
               weekly_schedule: weeklySchedule,
+              divice_groups: this.value_diviceGroups,
               // TODO: replace mock data
               language: 'en',
               note: '',
-              divice_groups: [
-                'cdc97c86-5f06-4504-914e-87172af202c5',
-                'c07b60a3-2380-4f90-ad8a-464287a8dbe2',
-              ],
+              data_list: this.data_list,
             };
 
-            const lineSendData = {
-              token: this.value_eventLineAccessToken,
-              data_list,
-            };
-
-            const mailSendData = {
-              from: this.value_eventSMTPSender,
-              host: this.value_eventSMTPHostAddress,
-              port: this.value_eventSMTPPort,
-              user: this.value_eventSMTPUser,
-              pass: this.value_eventSMTPPass,
-              subject: this.value_eventSMTPSubject,
-              to: [this.value_eventSMTPTo],
-              cc: [this.value_eventSMTPCC],
-              bcc: [this.value_eventSMTPBCC],
-              method: this.value_eventSMTPMethod,
-              secure: this.value_eventSMTPEnabledSecure,
-              data_list,
-            };
+            console.log(this.data_list);
 
             let sendData = {};
 
             switch (this.value_eventControlType) {
               case 'line':
                 sendData = {
-                  ...lineSendData,
+                  ...this.lineForm,
+                  ...defaultSendData,
+                };
+                break;
+              case 'http':
+                sendData = {
+                  ...this.httpForm,
                   ...defaultSendData,
                 };
                 break;
               case 'mail':
                 sendData = {
-                  ...mailSendData,
+                  ...this.mailForm,
+                  ...defaultSendData,
+                };
+                break;
+              case 'iobox':
+                sendData = {
+                  ...this.ioboxForm,
+                  ...defaultSendData,
+                };
+                break;
+              case 'wiegand':
+                sendData = {
+                  ...this.wiegandForm,
                   ...defaultSendData,
                 };
                 break;
@@ -468,11 +450,13 @@ export default {
                 break;
             }
 
+            console.log('sendData :', sendData);
+
             this.onFinish(sendData, (success, result) => {
-              console.log('success :', success);
-              console.log('result :', result);
               if (this.obj_loading) this.obj_loading.hide();
               if (success) {
+                console.log('success :', success);
+                console.log('result :', result);
                 this.flag_currentSetp = 3;
               } else {
                 this.$fire({

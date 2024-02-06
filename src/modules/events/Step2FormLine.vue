@@ -11,10 +11,9 @@
               size="lg"
               placeholder=""
               required
-              :is-valid="(val) => isNotEmptyValidator('lineAccessTokenPass', val)"
+              :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
               :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
-              :value="eventLineAccessToken"
-              @input="handleUpdateEmitData('eventLineAccessToken', $event)"
+              v-model="form.token"
             />
           </CCol>
         </CRow>
@@ -23,35 +22,61 @@
 
     <CCard>
       <CCardBody>
-        213
+        <DataFieldList
+          :data-fields="dataFields"
+          :person-fields="personFields"
+          :data="data"
+          @update:data="newData => Object.assign(data, newData)"
+        />
       </CCardBody>
     </CCard>
   </section>
 </template>
 
 <script>
+import DataFieldList from '@/views/components/DataFieldList.vue';
+
 export default {
   name: 'Step2FormLine',
+  components: {
+    DataFieldList,
+  },
   props: {
-    handleUpdateEmitData: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
     isNotEmptyValidator: {
       type: Function,
       required: true,
-      default: () => () => true,
+      default: () => '',
     },
-    eventLineAccessToken: {
-      type: String,
+    dataFields: {
+      type: Array,
       required: true,
-      default: '',
+      default: () => [],
+    },
+    personFields: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    data: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+    form: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+    formPass: {
+      type: Object,
+      required: true,
+      default: () => ({}),
     },
   },
-  emit: [
-    'update:eventLineAccessToken',
-  ],
+  data() {
+    return {
+    };
+  },
 };
 
 </script>

@@ -16,10 +16,10 @@
             </h5>
             <CSelect
               size="lg"
-              v-model="form.brand"
+              class="font-control mt-2"
+              :value.sync="form.brand"
               :options="value_brandList"
               :filterable="true"
-              class="font-control mt-2"
             />
           </CCol>
           <CCol
@@ -31,10 +31,10 @@
             </h5>
             <CSelect
               size="lg"
-              v-model="form.model"
+              class="font-control mt-2"
+              :value.sync="form.model"
               :options="value_modelList"
               :filterable="true"
-              class="font-control mt-2"
             />
           </CCol>
         </CRow>
@@ -58,10 +58,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="form.host"
-              :invalid-feedback="checkIpAddr(form.host)"
-              :is-valid="checkIpAddr(form.host) === ''"
               required
+              :invalid-feedback="checkIpAddr(form.host)"
+              :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+              v-model="form.host"
             />
           </CCol>
           <CCol
@@ -74,10 +74,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model.number="form.port"
-              :invalid-feedback="checkPort(form.port)"
-              :is-valid="checkPort(form.port) === ''"
               required
+              :invalid-feedback="checkPort(form.port)"
+              :is-valid="formPass.port = checkPort(form.port) === ''"
+              v-model.number="form.port"
             />
           </CCol>
         </CRow>
@@ -89,13 +89,19 @@
             <h5 class="ml-2">
               {{ $t('I/OBoxesBasicCOlNameUserName') }}
             </h5>
-            <CInput
+            <!-- <CInput
               size="lg"
               class="mt-2"
               v-model="form.user"
-              :invalid-feedback="checkNonEmpty(form.user)"
-              :is-valid="checkNonEmpty(form.user) === ''"
               required
+            /> -->
+            <CInput
+              size="lg"
+              class="mt-2"
+              required
+              :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
+              :invalid-feedback="isNotEmptyValidator(form.user)"
+              v-model="form.user"
             />
           </CCol>
           <CCol
@@ -108,11 +114,11 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="form.pass"
-              :type="flag_view_password ? 'text' : 'password'"
-              :invalid-feedback="checkNonEmpty(form.pass)"
-              :is-valid="checkNonEmpty(form.pass) === ''"
               required
+              :type="flag_view_password ? 'text' : 'password'"
+              :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
+              :invalid-feedback="isNotEmptyValidator(form.pass)"
+              v-model="form.pass"
             >
               <template #append-content>
                 <CButton
@@ -156,7 +162,7 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                v-model="form.iopoint[idx].enable"
+                v-model="form.iopont[idx].enable"
               >
               <span class="slider round" />
             </label>
@@ -170,12 +176,12 @@
             </h5>
             <CSelect
               size="lg"
-              v-model="form.iopoint[idx].default"
+              class="font-control mt-2"
+              :value.sync="form.iopont[idx].default"
               :options="value_deviceDefaultValue"
               :filterable="true"
-              class="font-control mt-2"
               :placeholder="$t('placeholder')"
-              :disabled="!form.iopoint[idx].enable"
+              :disabled="!form.iopont[idx].enable"
             />
           </CCol>
         </CRow>
@@ -189,12 +195,12 @@
             </h5>
             <CSelect
               size="lg"
-              v-model="form.iopoint[idx].trigger"
+              class="font-control mt-2"
+              :value.sync="form.iopont[idx].trigger"
               :options="value_deviceTrigger"
               :filterable="true"
-              class="font-control mt-2"
               :placeholder="$t('placeholder')"
-              :disabled="!form.iopoint[idx].enable"
+              :disabled="!form.iopont[idx].enable"
             />
           </CCol>
           <CCol
@@ -207,12 +213,12 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model.number="form.iopoint[idx].delay"
               pattern="[0-9]*"
-              :invalid-feedback="checkDelay(form.iopoint[idx].delay)"
-              :is-valid="checkDelay(form.iopoint[idx].delay) === ''"
               required
-              :disabled="!form.iopoint[idx].enable"
+              :disabled="!form.iopont[idx].enable"
+              :is-valid="formPass.delay = checkDelay(form.iopont[idx].delay) === ''"
+              :invalid-feedback="checkDelay(form.iopont[idx].delay)"
+              v-model.number="form.iopont[idx].delay"
             />
           </CCol>
         </CRow>
@@ -222,7 +228,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
 
 export default {
   name: 'Step2FormIO',
@@ -237,15 +242,25 @@ export default {
       required: true,
       default: () => '',
     },
+    checkDelay: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
+    isNotEmptyValidator: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
     form: {
       type: Object,
       required: true,
       default: () => ({}),
     },
-    handleUpdateEmitData: {
-      type: Function,
+    formPass: {
+      type: Object,
       required: true,
-      default: () => '',
+      default: () => ({}),
     },
   },
   data() {
@@ -260,20 +275,9 @@ export default {
     };
   },
   methods: {
-    checkNonEmpty: (value) => {
-      if (value === '') {
-        return i18n.formatter.format('NoEmptyNoSpace');
-      }
-      return '';
-    },
-    checkDelay: (value) => {
-      if (value < 1 || value > 30) {
-        return i18n.formatter.format('disp_limitNumber1to30');
-      }
-      return '';
+    viewPassword() {
+      this.flag_view_password = !this.flag_view_password;
     },
   },
-  emit: [],
 };
-
 </script>

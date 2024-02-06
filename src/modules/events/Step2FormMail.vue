@@ -10,7 +10,7 @@
             <CSelect
               size="lg"
               :options="['SMTP']"
-              :value.sync="value_eventSMTPMethod"
+              :value.sync="form.method"
             />
           </CCol>
           <CCol sm="3">
@@ -21,10 +21,9 @@
               size="lg"
               placeholder=""
               required
-              :is-valid="(val) => isNotEmptyValidator('hostAddressPass', val)"
-              :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
-              :value="eventSMTPHostAddress"
-              @input="handleUpdateEmitData('eventSMTPHostAddress', $event)"
+              :is-valid="formPass.host = isNotEmptyValidator(form.host) === ''"
+              :invalid-feedback="isNotEmptyValidator(form.host)"
+              v-model="form.host"
             />
           </CCol>
           <CCol sm="3">
@@ -34,10 +33,9 @@
             <CInput
               size="lg"
               placeholder=""
-              :is-valid="val => portValidator('mailPortPass', val)"
-              :invalid-feedback="checkPort(eventSMTPPort)"
-              :value="eventSMTPPort"
-              @input="handleUpdateEmitData('eventSMTPPort', Number($event))"
+              :is-valid="formPass.port = checkPort(form.port) === ''"
+              :invalid-feedback="checkPort(form.port)"
+              v-model="form.port"
             />
           </CCol>
           <CCol sm="3">
@@ -49,8 +47,7 @@
               class="ml-0"
               color="success"
               shape="pill"
-              :checked="eventSMTPEnabledSecure"
-              @update:checked="handleUpdateEmitData('eventSMTPEnabledSecure', $event)"
+              v-model="form.secure"
             />
           </CCol>
         </CRow>
@@ -62,8 +59,9 @@
             <CInput
               size="lg"
               placeholder=""
-              :value="eventSMTPUser"
-              @input="handleUpdateEmitData('eventSMTPUser', $event)"
+              :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
+              :invalid-feedback="isNotEmptyValidator(form.user)"
+              v-model="form.user"
             />
           </CCol>
           <CCol sm="3">
@@ -75,8 +73,9 @@
                 type="password"
                 size="lg"
                 placeholder=""
-                :value="eventSMTPPass"
-                @input="handleUpdateEmitData('eventSMTPPass', $event)"
+                :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
+                :invalid-feedback="isNotEmptyValidator(form.pass)"
+                v-model="form.pass"
               />
             </form>
           </CCol>
@@ -87,10 +86,9 @@
             <CInput
               size="lg"
               placeholder=""
-              :is-valid="(val) => emailValidator('senderPass', val)"
-              :invalid-feedback="$t('InvalidEmailFormat')"
-              :value="eventSMTPSender"
-              @input="handleUpdateEmitData('eventSMTPSender', $event)"
+              :is-valid="formPass.from = checkEmail(form.from) === ''"
+              :invalid-feedback="checkEmail(form.from)"
+              v-model="form.from"
             />
           </CCol>
           <CCol sm="3">
@@ -100,8 +98,7 @@
             <CInput
               size="lg"
               placeholder=""
-              :value="eventSMTPSubject"
-              @input="handleUpdateEmitData('eventSMTPSubject', $event)"
+              v-model="form.subject"
             />
           </CCol>
         </CRow>
@@ -113,10 +110,9 @@
             <CInput
               size="lg"
               placeholder=""
-              :is-valid="(val) => emailValidator('toPass', val)"
-              :invalid-feedback="$t('InvalidEmailFormat')"
-              :value="eventSMTPTo"
-              @input="handleUpdateEmitData('eventSMTPTo', $event)"
+              :is-valid="formPass.to = checkEmail(form.to[0]) === ''"
+              :invalid-feedback="checkEmail(form.to[0])"
+              v-model="form.to[0]"
             />
           </CCol>
           <CCol sm="3">
@@ -126,10 +122,9 @@
             <CInput
               size="lg"
               placeholder=""
-              :is-valid="(val) => emailValidator('ccPass', val)"
-              :invalid-feedback="$t('InvalidEmailFormat')"
-              :value="eventSMTPCC"
-              @input="handleUpdateEmitData('eventSMTPCC', $event)"
+              :is-valid="formPass.cc = checkEmail(form.cc[0]) === ''"
+              :invalid-feedback="checkEmail(form.cc[0])"
+              v-model="form.cc[0]"
             />
           </CCol>
           <CCol sm="3">
@@ -139,27 +134,37 @@
             <CInput
               size="lg"
               placeholder=""
-              :is-valid="(val) => emailValidator('bccPass', val)"
-              :invalid-feedback="$t('InvalidEmailFormat')"
-              :value="eventSMTPBCC"
-              @input="handleUpdateEmitData('eventSMTPBCC', $event)"
+              :is-valid="formPass.bcc = checkEmail(form.bcc[0]) === ''"
+              :invalid-feedback="checkEmail(form.bcc[0])"
+              v-model="form.bcc[0]"
             />
           </CCol>
         </CRow>
+      </CCardBody>
+    </CCard>
+
+    <CCard>
+      <CCardBody>
+        <DataFieldList
+          :data-fields="dataFields"
+          :person-fields="personFields"
+          :data="data"
+          @update:data="newData => Object.assign(data, newData)"
+        />
       </CCardBody>
     </CCard>
   </section>
 </template>
 
 <script>
+import DataFieldList from '@/views/components/DataFieldList.vue';
+
 export default {
   name: 'Step2FormMail',
+  components: {
+    DataFieldList,
+  },
   props: {
-    handleUpdateEmitData: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
     isNotEmptyValidator: {
       type: Function,
       required: true,
@@ -170,85 +175,35 @@ export default {
       required: true,
       default: () => '',
     },
-    portValidator: {
+    checkEmail: {
       type: Function,
       required: true,
-      default: () => () => false,
+      default: () => '',
     },
-    emailValidator: {
-      type: Function,
+    dataFields: {
+      type: Array,
       required: true,
-      default: () => () => false,
+      default: () => [],
     },
-    eventSMTPMethod: {
-      type: String,
+    personFields: {
+      type: Array,
       required: true,
-      default: '',
+      default: () => [],
     },
-    eventSMTPHostAddress: {
-      type: String,
+    data: {
+      type: Object,
       required: true,
-      default: '',
+      default: () => ({}),
     },
-    eventSMTPPort: {
-      type: Number,
+    form: {
+      type: Object,
       required: true,
-      default: 0,
+      default: () => ({}),
     },
-    eventSMTPEnabledSecure: {
-      type: Boolean,
+    formPass: {
+      type: Object,
       required: true,
-      default: false,
-    },
-    eventSMTPUser: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPPass: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPSender: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPSubject: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPTo: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPCC: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventSMTPBCC: {
-      type: String,
-      required: true,
-      default: '',
-    },
-  },
-  computed: {
-    value_eventSMTPMethod: {
-      get() {
-        return this.eventSMTPMethod;
-      },
-      set(value) {
-        return this.$emit('update:eventSMTPMethod;', value);
-      },
-    },
-  },
-  methods: {
-    validateForm() {
-      this.$emit('validateForm');
+      default: () => ({}),
     },
   },
 };

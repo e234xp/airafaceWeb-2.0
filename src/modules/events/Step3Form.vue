@@ -104,8 +104,6 @@ export default {
       ...this.formData,
     };
   },
-  computed: {
-  },
   methods: {
     handleUpdateEmitData(key, value) {
       this.$emit(`update:${key}`, value);

@@ -11,10 +11,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="host"
-              :invalid-feedback="checkIpAddr(host)"
-              :is-valid="checkIpAddr(host) === ''"
               required
+              :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+              :invalid-feedback="checkIpAddr(form.host)"
+              v-model="form.host"
             />
           </CCol>
           <CCol
@@ -25,10 +25,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model.number="port"
-              :invalid-feedback="checkPort(port)"
-              :is-valid="checkPort(port) === ''"
               required
+              :is-valid="formPass.port = checkPort(form.port) === ''"
+              :invalid-feedback="checkPort(form.port)"
+              v-model.number="form.port"
             />
           </CCol>
         </CRow>
@@ -40,11 +40,11 @@
             {{ $t('WiegandBasicCOlNameDataFormat') }}
             <CSelect
               size="lg"
-              v-model.number="bits"
+              class="font-control mt-2"
               :options="value_DataFormatBitsList"
               :filterable="true"
-              class="font-control mt-2"
               :placeholder="$t('placeholder')"
+              v-model.number="form.bits"
             />
           </CCol>
         </CRow>
@@ -57,10 +57,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model.number="index"
-              :invalid-feedback="checkIndex(index)"
-              :is-valid="checkIndex(index) === ''"
               required
+              :is-valid="formPass.index = checkIndex(form.index) === ''"
+              :invalid-feedback="checkIndex(form.index)"
+              v-model.number="form.index"
             />
           </CCol>
 
@@ -72,10 +72,10 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model.number="syscode"
-              :invalid-feedback="checkSyscode(syscode)"
-              :is-valid="checkSyscode(syscode) === ''"
               required
+              :invalid-feedback="checkSyscode(form.syscode)"
+              :is-valid="formPass.syscode = checkSyscode(form.syscode) === ''"
+              v-model.number="form.syscode"
             />
           </CCol>
         </CRow>
@@ -92,7 +92,7 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="specialCardNumber"
+              v-model="form.specialCardNumber"
             />
           </CCol>
         </CRow>
@@ -155,66 +155,16 @@ export default {
       required: true,
       default: () => ({}),
     },
-    handleUpdateEmitData: {
-      type: Function,
+    formPass: {
+      type: Object,
       required: true,
-      default: () => '',
+      default: () => ({}),
     },
   },
   data() {
     return {
       value_DataFormatBitsList: [{ label: '26-bit', value: 26 }, { label: '34-bit', value: 34 }],
     };
-  },
-  computed: {
-    host: {
-      get() {
-        return this.form.host;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, host: value });
-      },
-    },
-    port: {
-      get() {
-        return this.form.port;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, port: value });
-      },
-    },
-    bits: {
-      get() {
-        return this.form.bits;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, bits: value });
-      },
-    },
-    index: {
-      get() {
-        return this.form.index;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, index: value });
-      },
-    },
-    syscode: {
-      get() {
-        return this.form.syscode;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, syscode: value });
-      },
-    },
-    specialCardNumber: {
-      get() {
-        return this.form.special_card_number;
-      },
-      set(value) {
-        this.handleUpdateEmitData('eventWiegandForm', { ...this.form, special_card_number: value });
-      },
-    },
   },
   methods: {
     checkIndex(value) {

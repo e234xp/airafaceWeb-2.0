@@ -1,308 +1,314 @@
 <template>
-  <CCard>
-    <CCardBody>
-      <CRow class="mb-4">
-        <CCol
-          sm="3"
-        >
-          <div>
-            <div class="h5">
-              {{ $t('HostAddress') }}
+  <section>
+    <CCard>
+      <CCardBody>
+        <CRow class="mb-4">
+          <CCol
+            sm="3"
+          >
+            <div>
+              <div class="h5">
+                {{ $t('HostAddress') }}
+              </div>
+              <CInput
+                size="lg"
+                placeholder=""
+                required
+                :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+                :invalid-feedback="checkIpAddr(form.host)"
+                v-model="form.host"
+              />
             </div>
-            <CInput
-              size="lg"
-              placeholder=""
-              required
-              :is-valid="ipAddrValidator"
-              :invalid-feedback="checkIpAddr(eventHttpHostAddress)"
-              :value="eventHttpHostAddress"
-              @input="handleUpdateEmitData('ventHttpHostAddress', $event)"
-            />
-          </div>
-        </CCol>
-        <CCol
-          sm="3"
-        >
-          <div class="column-space-between">
-            <div class="h5">
-              {{ $t('HttpEnabledSSL') }}
+          </CCol>
+          <CCol
+            sm="3"
+          >
+            <div class="column-space-between">
+              <div class="h5">
+                {{ $t('HttpEnabledSSL') }}
+              </div>
+              <CSwitch
+                size="lg"
+                class="mb-form-row"
+                color="success"
+                shape="pill"
+                v-model="form.https"
+              />
             </div>
-            <CSwitch
-              size="lg"
-              class="mb-form-row"
-              color="success"
-              shape="pill"
-              :checked="eventHttpEnabledSSL"
-              @update:checked="handleUpdateEmitData('eventHttpEnabledSSL', !$event)"
-            />
-          </div>
-        </CCol>
-        <CCol
-          sm="3"
-        >
-          <div class="column-space-between">
-            <div class="h5">
-              {{ $t('Username') }}
-            </div>
-            <CInput
-              class="mb-form-row"
-              size="lg"
-              placeholder=""
-              :value="eventHttpUser"
-              @input="handleUpdateEmitData('eventHttpUser', $event)"
-            />
-          </div>
-        </CCol>
-        <CCol sm="3">
-          <div class="column-space-between">
-            <div class="h5">
-              {{ $t('Password') }}
-            </div>
-            <form>
+          </CCol>
+          <CCol
+            sm="3"
+          >
+            <div class="column-space-between">
+              <div class="h5">
+                {{ $t('Username') }}
+              </div>
               <CInput
                 class="mb-form-row"
                 size="lg"
                 placeholder=""
-                autocomplete="on"
-                :type="flag_view_password ? 'text' : 'password'"
-                :value="eventHttpPass"
-                @input="handleUpdateData('eventHttpPass', $event)"
-              >
-                <template #append-content>
-                  <CButton
-                    @click="viewPassword"
-                    style="padding: 0.375rem 0.375rem;"
-                  >
-                    <CIcon
-                      v-show="flag_view_password"
-                      src="/img/eye-slash.png"
-                    />
-                    <CIcon
-                      v-show="!flag_view_password"
-                      src="/img/eye.png"
-                    />
-                  </CButton>
-                </template>
-              </CInput>
-            </form>
-          </div>
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="3">
-          <div class="h5">
-            {{ $t('Port') }}
-          </div>
-          <CInput
-            size="lg"
-            value=""
-            v-model="value_eventHttpPort"
-            placeholder=""
-            :is-valid="val => portValidator('httpPortPass', val)"
-            :invalid-feedback="checkPort(value_eventHttpPort)"
-          />
-        </CCol>
-        <CCol sm="3">
-          <div class="h5">
-            PATH
-
-            <span
-              class="h6 table-td px-3 py-0"
-              style="vertical-align: bottom;"
-            >ex: http://127.0.0.1:7001/api/createEvent</span>
-          </div>
-          <CInput
-            size="lg"
-            value=""
-            style="display: inline-block; width: 85%"
-            v-model="value_eventHttpUrl"
-            placeholder=""
-            :is-valid="urlValidator"
-            :invalid-feedback="$t('InvalidURL')"
-          />
-        </CCol>
-        <CCol
-          sm="6"
-          v-if="value_eventHttpMethod == 'GET'"
-        >
-          <div class="h5">
-            {{ $t('ShowCompleteUrl') }}
-          </div>
-          <CInput
-            size="lg"
-            :value="value_eventHttpUrl"
-            placeholder=""
-            readonly
-          />
-        </CCol>
-      </CRow>
-    </CCardBody>
-  </CCard>
-
-  <CCard style="height: 31rem">
-    <CCardBody>
-      <CRow style="height: 100%;">
-        <CCol
-          sm="12"
-        >
-          <CRow>
-            <CCol sm="12">
-              <div
-                class="h5"
-                style="display: block; height: 25px; margin-bottom: 6px"
-              >
-                Method
-              </div>
-              <CSelect
-                size="lg"
-                @change="clearSetting"
-                :value.sync="value_eventHttpMethod"
-                :options="value_eventHttpMethodList"
+                :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
+                :invalid-feedback="isNotEmptyValidator(form.user)"
+                v-model="form.user"
               />
-            </CCol>
+            </div>
+          </CCol>
+          <CCol sm="3">
+            <div class="column-space-between">
+              <div class="h5">
+                {{ $t('Password') }}
+              </div>
+              <form>
+                <CInput
+                  class="mb-form-row"
+                  size="lg"
+                  placeholder=""
+                  autocomplete="on"
+                  :type="flag_view_password ? 'text' : 'password'"
+                  :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
+                  :invalid-feedback="isNotEmptyValidator(form.pass)"
+                  v-model="form.pass"
+                >
+                  <template #append-content>
+                    <CButton
+                      style="padding: 0.375rem 0.375rem;"
+                      @click="viewPassword"
+                    >
+                      <CIcon
+                        v-show="flag_view_password"
+                        src="/img/eye-slash.png"
+                      />
+                      <CIcon
+                        v-show="!flag_view_password"
+                        src="/img/eye.png"
+                      />
+                    </CButton>
+                  </template>
+                </CInput>
+              </form>
+            </div>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="3">
+            <div class="h5">
+              {{ $t('Port') }}
+            </div>
+            <CInput
+              size="lg"
+              placeholder=""
+              :is-valid="formPass.port = checkPort(form.port) === ''"
+              :invalid-feedback="checkPort(form.port)"
+              v-model="form.port"
+            />
+          </CCol>
+          <CCol sm="3">
+            <div class="h5">
+              PATH
+              {{ form.method }}
+            </div>
+            <CInput
+              id="pathInput"
+              type="text"
+              size="lg"
+              style="display: inline-block; width: 85%"
+              prepend="/"
+              v-model="value_realTime_eventHttpUrl"
+              @input="handlePathInput"
+            />
+          </CCol>
+          <CCol
+            sm="6"
+            v-if="form.method === 'GET'"
+          >
+            <div class="h5">
+              {{ $t('ShowCompleteUrl') }}
+            </div>
+            <CInput
+              size="lg"
+              placeholder=""
+              readonly
+              :value="form.url"
+            />
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
 
-            <CCol sm="12">
-              <CForm
-                style="position: relative; display: block; padding-bottom: 10px"
-              >
-                <CRow>
-                  <CCol sm="3">
-                    <span
-                      class="h5"
-                      style="display: block"
-                    >
-                      {{ $t('FieldName') }}
-                    </span>
-                    <CInput
-                      size="lg"
-                      style="display: block; margin-bottom: 0px"
-                      value=""
-                      v-model="value_newFieldName"
-                      placeholder=""
-                      :is-valid="(val) => isNotEmptyValidator('newFieldNamePass', val)"
-                      :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
-                      required
-                    />
-                  </CCol>
+    <CCard style="height: 31rem">
+      <CCardBody>
+        <CRow style="height: 100%;">
+          <CCol
+            sm="12"
+          >
+            <CRow>
+              <CCol sm="12">
+                <div
+                  class="h5"
+                  style="display: block; height: 25px; margin-bottom: 6px"
+                >
+                  Method
+                </div>
+                <CSelect
+                  size="lg"
+                  :value.sync="form.method"
+                  :options="value_eventHttpMethodList"
+                  @change="clearSetting"
+                />
+              </CCol>
 
-                  <CCol sm="4">
-                    <span
-                      class="h5"
-                      style="display: block"
-                    >
-                      {{ $t('FieldData') }}
-                    </span>
-                    <div
-                      style="position: relative; display: block; height: 40px"
-                    >
-                      <CSelect
-                        id="defaultList"
+              <CCol sm="12">
+                <CForm
+                  style="position: relative; display: block; padding-bottom: 10px"
+                >
+                  <CRow>
+                    <CCol sm="3">
+                      <span
+                        class="h5"
+                        style="display: block"
+                      >
+                        {{ $t('FieldName') }}
+                      </span>
+                      <CInput
                         size="lg"
-                        style="
+                        placeholder=""
+                        required
+                        style="display: block; margin-bottom: 0px"
+                        v-model="value_newFieldName"
+                      />
+                    </CCol>
+
+                    <CCol sm="4">
+                      <span
+                        class="h5"
+                        style="display: block"
+                      >
+                        {{ $t('FieldData') }}
+                      </span>
+                      <div
+                        style="position: relative; display: block; height: 40px"
+                      >
+                        <CSelect
+                          id="defaultList"
+                          size="lg"
+                          style="
                               position: relative;
                               display: block;
                               margin-bottom: 0px;
                               z-index: 10000;
                             "
-                        :value.sync="value_selectedDefaultData"
-                        :options="value_defaultDataList"
-                      />
-                    </div>
-                  </CCol>
+                          :options="value_defaultDataList"
+                          :value.sync="value_selectedDefaultData"
+                        />
+                      </div>
+                    </CCol>
 
-                  <CCol
-                    sm="2"
-                    style="flex: 0 0 14.666667%; max-width: 14.666667%"
-                  >
-                    <span
-                      class="h5"
-                      v-if="
-                        value_dataType == 'JSON' &&
-                          value_eventHttpMethod == 'POST'
-                      "
-                      style="position: relative; display: block"
+                    <CCol sm="1">
+                      <CButton
+                        type="submit"
+                        variant="outline"
+                        size="lg"
+                        style="
+                          position: relative;
+                          display: inline-block;
+                          color: #20a8d8;
+                          border: 1px solid #20a8d8;
+                          vertical-align: top;
+                          margin-right: 20px;
+                          top: 1.85rem;
+                          margin-bottom: 0px;
+                        "
+                        :disabled="!isAddNewField"
+                        @click="addNewField"
+                      >
+                        +
+                      </CButton>
+                    </CCol>
+
+                    <CCol
+                      sm="2"
+                      style="flex: 0 0 14.666667%; max-width: 14.666667%"
                     >
-                      {{ $t('JSONType') }}
-                    </span>
-                    <span
-                      class="h5"
-                      v-if="
-                        value_dataType == 'XML' &&
-                          value_eventHttpMethod == 'POST'
-                      "
-                      style="position: relative; display: block"
-                    >
-                      {{ $t('XMLType') }}
-                    </span>
-                    <CButtonGroup
-                      v-if="value_eventHttpMethod == 'POST'"
-                      class="float-right mr-3"
-                      size="lg"
-                      style="
+                      <span
+                        class="h5"
+                        v-if="
+                          form.data_type === 'JSON' &&
+                            form.method === 'POST'
+                        "
+                        style="position: relative; display: block"
+                      >
+                        {{ $t('JSONType') }}
+                      </span>
+                      <span
+                        class="h5"
+                        v-if="
+                          form.data_type === 'XML' &&
+                            form.method === 'POST'
+                        "
+                        style="position: relative; display: block"
+                      >
+                        {{ $t('XMLType') }}
+                      </span>
+                      <CButtonGroup
+                        v-if="form.method === 'POST'"
+                        class="float-right mr-3"
+                        size="lg"
+                        style="
                             position: relative;
                             height: 45px;
                             float: none !important;
                             margin-bottom: 0px;
                           "
-                    >
-                      <CButton
-                        style="color: #20a8d8; border: 1px solid #20a8d8"
-                        color="outline-secondary"
-                        v-for="(value, key) in [0, 1]"
-                        :key="key"
-                        :pressed="value === value_selectedData ? true : false"
-                        @click="selectDateType(value)"
                       >
-                        {{ value_selectedDataType[value] }}
-                      </CButton>
-                    </CButtonGroup>
-                  </CCol>
+                        <CButton
+                          style="color: #20a8d8; border: 1px solid #20a8d8"
+                          color="outline-secondary"
+                          v-for="(value, key) in [0, 1]"
+                          :key="key"
+                          :pressed="value === value_selectedData ? true : false"
+                          @click="selectDateType(value)"
+                        >
+                          {{ value_selectedDataType[value] }}
+                        </CButton>
+                      </CButtonGroup>
+                    </CCol>
 
-                  <CCol
-                    sm="12"
-                    style=""
-                  >
-                    <div
-                      v-if="value_eventHttpMethod == 'GET'"
-                      class="h5"
-                      style="position: relative; margin-top: 10px"
+                    <CCol
+                      sm="12"
+                      style=""
                     >
-                      {{ $t('QueryString') }}
-                    </div>
-                    <div
-                      v-else
-                      class="h5"
-                      style="position: relative; margin-top: 10px"
-                    >
-                      {{ $t('Body') }}
-                    </div>
-                    <CTextarea
-                      v-if="value_eventHttpMethod == 'POST'"
-                      id="customBody1"
-                      v-model="value_customTextarea"
-                      spellcheck="false"
-                      rows="10"
-                      placeholder=""
-                      style="position: relative; width: 100%"
-                    />
-                    <CTextarea
-                      v-else
-                      id="customBody2"
-                      v-model="value_customTextarea"
-                      spellcheck="false"
-                      rows="10"
-                      placeholder=""
-                      style="position: relative; width: 100%"
-                    />
-                  </CCol>
-                </CRow>
-              </CForm>
-            </CCol>
-          </CRow>
-        </CCol>
-      </CRow>
-    </CCardBody>
-  </CCard>
+                      <div
+                        v-if="form.method === 'GET'"
+                        class="h5"
+                        style="position: relative; margin-top: 10px"
+                      >
+                        {{ $t('QueryString') }}
+                      </div>
+                      <div
+                        v-else
+                        class="h5"
+                        style="position: relative; margin-top: 10px"
+                      >
+                        {{ $t('Body') }}
+                      </div>
+                      <CTextarea
+                        id="customBody1"
+                        spellcheck="false"
+                        rows="10"
+                        placeholder=""
+                        style="position: relative; width: 100%"
+                        v-model="value_customTextarea"
+                      />
+                    </CCol>
+                  </CRow>
+                </CForm>
+              </CCol>
+            </CRow>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
+  </section>
 </template>
 
 <script>
@@ -310,11 +316,6 @@
 export default {
   name: 'Step2FormHttp',
   props: {
-    handleUpdateEmitData: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
     isNotEmptyValidator: {
       type: Function,
       required: true,
@@ -325,53 +326,220 @@ export default {
       required: true,
       default: () => '',
     },
-    portValidator: {
+    checkIpAddr: {
       type: Function,
       required: true,
-      default: () => () => false,
+      default: () => '',
     },
-    emailValidator: {
-      type: Function,
+    form: {
+      type: Object,
       required: true,
-      default: () => () => false,
+      default: () => ({}),
     },
-    ipAddrValidator: {
-      type: Function,
+    formPass: {
+      type: Object,
       required: true,
-      default: () => () => false,
-    },
-    // http
-    eventHttpHostAddress: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventHttpEnabledSSL: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    eventHttpUser: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    eventHttpPass: {
-      type: String,
-      required: true,
-      default: '',
+      default: () => ({}),
     },
   },
   data() {
     return {
       flag_view_password: false,
+
+      value_selectedData: 0,
+
+      value_newFieldName: '',
+      value_selectedDefaultData: '',
+      value_realTime_eventHttpUrl: '',
+      value_customTextarea: '',
+
+      value_eventHttpMethodList: [
+        { value: 'GET', label: this.$t('GET') },
+        { value: 'POST', label: this.$t('POST') },
+      ],
+      value_selectedDataType: [
+        this.$t('JSON'),
+        this.$t('XML'),
+      ],
+      value_defaultDataList: [
+        {
+          label: this.$t('FieldData'),
+          value: '',
+          disabled: true,
+        },
+        {
+          label: `${this.$t('VerifiedTimeStamp')}  (String)`,
+          value: '##VerifiedTimeStamp##',
+        },
+        {
+          label: `${this.$t('IsStranger')}  (Boolean)`,
+          value: '##IsStranger##',
+        },
+        { label: `${this.$t('PersonId')}  (String)`, value: '##PersonId##' },
+        {
+          label: `${this.$t('PersonName')}  (String)`,
+          value: '##PersonName##',
+        },
+        {
+          label: `${this.$t('CardNumber')}  (String)`,
+          value: '##CardNumber##',
+        },
+        {
+          label: `${this.$t('Group')}  (String)`,
+          value: '##Group##',
+        },
+        {
+          label: `${this.$t('JobTitle')}  (String)`,
+          value: '##JobTitle##',
+        },
+        {
+          label: `${this.$t('Department')}  (String)`,
+          value: '##Department##',
+        },
+        {
+          label: `${this.$t('EmailAddress')}  (String)`,
+          value: '##EmailAddress##',
+        },
+        {
+          label: `${this.$t('PhoneNumber')}  (String)`,
+          value: '##PhoneNumber##',
+        },
+        {
+          label: `${this.$t('ExtensionNumber')}  (String)`,
+          value: '##ExtensionNumber##',
+        },
+        {
+          label: `${this.$t('Remarks')}  (String)`,
+          value: '##Remarks##',
+        },
+        {
+          label: `${this.$t('Temperature')}  (Float)`,
+          value: '##Temperature##',
+        },
+        {
+          label: `${this.$t('IsHighTemperature')}  (Boolean)`,
+          value: '##IsHighTemperature##',
+        },
+        {
+          label: `${this.$t('CapturedPhoto')}  (base64 encoded image)`,
+          value: '##CapturedPhoto##',
+        },
+        {
+          label: `${this.$t('RegisterPhoto')}  (base64 encoded image)`,
+          value: '##RegisterPhoto##',
+        },
+        {
+          label: `${this.$t('DisplayPhoto')}  (base64 encoded image)`,
+          value: '##DisplayPhoto##',
+        },
+      ],
     };
+  },
+  computed: {
+    isAddNewField() {
+      return this.value_newFieldName && this.value_selectedDefaultData;
+    },
   },
   methods: {
     viewPassword() {
       this.flag_view_password = !this.flag_view_password;
     },
 
+    handlePathInput(value) {
+      if (!value.startsWith('/')) {
+        this.form.url = `/${value}`;
+      }
+
+      this.form.url = value;
+    },
+
+    selectDateType(type) {
+      this.value_selectedData = type;
+
+      switch (type) {
+        case 0:
+          this.form_data_type = 'JSON';
+          break;
+        case 1:
+          this.form_data_type = 'XMS';
+          break;
+        default:
+          break;
+      }
+
+      this.form.custom_data = '';
+      this.value_customTextarea = '';
+    },
+
+    clearSetting() {
+      if (this.form.methods == 'GET') {
+        this.form.data_type = 'JSON';
+      }
+
+      Object.assign(this.form, {
+        custom_data: '',
+        url: '/',
+      });
+
+      this.value_newFieldName = '';
+      this.value_selectedDefaultData = '';
+      this.value_customTextarea = '';
+    },
+
+    combineJSON(fieldName, data) {
+      return `"${fieldName}":"${data}",`;
+    },
+    splitJSON(json) {
+      const split = json.split(':');
+      return {
+        fieldName: split[0].replace(/"/g, ''),
+        data: split[1].replace(/"/g, ''),
+      };
+    },
+    combineXML(fieldName, data) {
+      return `<${fieldName}>${data}</${fieldName}>`;
+    },
+    splitXML(combined) {
+      const fieldName = combined.match(/<(.+)>/)[1];
+      const data = combined.match(/>(.+)<\//)[1];
+      return { fieldName, data };
+    },
+
+    addNewField() {
+      let newCustomData = '';
+
+      switch (this.form.method) {
+        case 'GET':
+          newCustomData = `&${this.value_newFieldName}=${this.value_selectedDefaultData}`;
+
+          this.value_customTextarea = `${this.value_customTextarea}${newCustomData}`;
+          this.form.url = `${this.form.url}?${newCustomData}`;
+          break;
+        case 'POST':
+          switch (this.form.data_type) {
+            case 'JSON':
+              newCustomData = this.combineJSON(this.value_newFieldName, this.value_selectedDefaultData);
+
+              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.form.custom_data = this.value_customTextarea;
+              break;
+            case 'XML':
+              newCustomData = this.combineXML(this.value_newFieldName, this.value_selectedDefaultData);
+
+              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.form.custom_data = this.value_customTextarea;
+              break;
+            default:
+              break;
+          }
+          break;
+        default:
+          break;
+      }
+
+      this.value_newFieldName = '';
+      this.value_selectedDefaultData = '';
+    },
   },
 };
 </script>

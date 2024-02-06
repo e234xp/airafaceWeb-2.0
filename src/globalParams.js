@@ -1493,10 +1493,8 @@ Vue.prototype.$globalGetEventList = (
 Vue.prototype.$globalCreateEventHandle = (
   setting, cb,
 ) => new Promise((resolve) => {
-  console.log('setting', setting)
   postJson('/airafacelite/createeventhandle', setting,
     (err, data) => {
-      console.log(err, data)
       if (cb) cb(err, data);
       resolve({ error: err, data });
     });

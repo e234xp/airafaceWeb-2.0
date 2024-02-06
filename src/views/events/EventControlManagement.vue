@@ -96,9 +96,9 @@ export default {
 
     async onModify(item) {
       this.$router.push({
-        name: 'ModifyMailNotify',
+        name: 'ModifyEventControlSetting',
         params: {
-          value_returnRoutePath: 'MailNotifyManagement',
+          value_returnRoutePath: 'ModifyEventControlSetting',
           value_returnRouteName: this.$t('Return'),
           value_item: item,
         },

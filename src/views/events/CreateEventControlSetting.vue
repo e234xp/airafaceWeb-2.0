@@ -18,7 +18,7 @@
 import CEventForm from './forms/EventForm.vue';
 
 export default {
-  name: 'AddPerson',
+  name: 'CreateEventControlSetting',
   components: { CEventForm },
   data() {
     return {
@@ -36,8 +36,6 @@ export default {
   },
   created() {
     if (this.value_returnRoutePath === '') this.$router.push({ name: 'Eventcontrolmanagement' });
-
-    console.log(this.$route);
   },
   methods: {
     canModify() {
