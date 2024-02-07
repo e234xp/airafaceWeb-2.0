@@ -24,8 +24,8 @@
         <DataFieldList
           :data-fields="dataFields"
           :person-fields="personFields"
-          :data="data"
-          @update:data="newData => Object.assign(data, newData)"
+          :data="dataList"
+          @update:data="newData => Object.assign(dataList, newData)"
         />
       </CCardBody>
     </CCard>
@@ -56,7 +56,7 @@ export default {
       required: true,
       default: () => [],
     },
-    data: {
+    dataList: {
       type: Object,
       required: true,
       default: () => ({}),

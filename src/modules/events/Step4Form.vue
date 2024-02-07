@@ -6,7 +6,10 @@
       <CCardBody>
         <CRow>
           <CCol sm="12">
-            <p class="display-4 row justify-content-center">
+            <p
+              class="display-4 row justify-content-center align-items-center"
+              style="height: 34rem;"
+            >
               {{ $t('Complete') }}
             </p>
           </CCol>

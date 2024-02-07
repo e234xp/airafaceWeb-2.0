@@ -302,18 +302,20 @@ export default {
 
     isStepPassed(step) {
       switch (step) {
-        case 0: {
+        case 0:
           return this.isFormPassed(this.step1form);
-        }
         case 1:
-        default: {
           return this.isFormPassed(this.step2form);
-        }
+        default:
+          return false;
       }
     },
 
     isFormPassed(form) {
-      const ret = Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value));
+      const isRtsp = form.enable_rtsp_camera;
+      const ret = isRtsp
+        ? Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value))
+        : Object.entries(form).filter(([key]) => key !== 'rtsp_password' && key !== 'rtsp_username').every(([key, value]) => this.isFieldPassed(key, value));
       return ret;
     },
 

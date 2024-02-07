@@ -803,6 +803,7 @@
               size="lg"
               class="mt-2"
               :type="flag_view_password ? 'text' : 'password'"
+              :disabled="!localStep2form.enable_rtsp_camera"
               v-model="localStep2form.rtsp_password"
             >
               <template #append-content>

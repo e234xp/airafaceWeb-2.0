@@ -272,7 +272,7 @@ export default {
       this.$globalGenerateDbBackup(query, async (err, data) => {
         if (!err) {
           if (data.message !== 'ok') {
-            this.disp_dbBackupInfo = `Processing : ${data.progress} %`;
+            this.disp_dbBackupInfo = `Processing : ${data.progress.toFixed(1)} %`;
             await this.sleep(5000);
             this.CheckGenerateBackup({ restart: false });
           } else {

@@ -33,6 +33,7 @@
             @update:groupList="handleUpdateData('eventControlGroupList', $event)"
             @update:diviceGroups="handleUpdateData('eventControlDiviceGroups', $event)"
             @update:remarks="handleUpdateData('eventControlRemarks', $event)"
+            @update:dataList="handleUpdateData('eventControlDataList', $event)"
 
             @update:selectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
             @update:specifiedDatetimeToShow="handleUpdateData('specifiedDatetimeToShow', $event)"
@@ -132,7 +133,7 @@ export default {
       value_eventControlGroupList: [],
       value_eventControlRemarks: '',
       value_eventControlDiviceGroups: [],
-      value_eventControlDataList: [],
+      value_eventControlDataList: {},
 
       // line
       lineForm: {
@@ -248,7 +249,7 @@ export default {
             case 'line':
               return {
                 lineForm: this.lineForm,
-                data_list: this.value_eventControlDataList,
+                dataList: this.value_eventControlDataList,
                 ...defaultProps,
               };
             case 'http':
@@ -259,6 +260,7 @@ export default {
             case 'mail':
               return {
                 mailForm: this.mailForm,
+                dataList: this.value_eventControlDataList,
                 ...defaultProps,
               };
             case 'iobox': {
@@ -543,11 +545,9 @@ export default {
 
             console.log('sendData :', sendData);
 
-            this.onFinish(sendData, (success, result) => {
+            this.onFinish(sendData, (err) => {
               if (this.obj_loading) this.obj_loading.hide();
-              if (success) {
-                console.log('success :', success);
-                console.log('result :', result);
+              if (!err) {
                 this.flag_currentSetp = 3;
               } else {
                 this.$fire({

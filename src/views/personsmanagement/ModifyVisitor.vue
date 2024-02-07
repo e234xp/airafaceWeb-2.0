@@ -1,6 +1,5 @@
 <template>
   <div>
-    123
     <CRow>
       <CCol sm="12">
         <CPersonForm

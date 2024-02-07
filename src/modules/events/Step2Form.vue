@@ -43,7 +43,7 @@ export default {
       type: String,
       default: 'line',
     },
-    data: {
+    dataList: {
       type: Object,
       default: () => ({}),
     },
@@ -123,43 +123,43 @@ export default {
       personFields: [
         {
           label: 'card_number',
-          value: 'card_number',
+          value: 'person.card_number',
         },
         {
           label: 'Department',
-          value: 'department',
+          value: 'person.department',
         },
         {
           label: 'HighTemperatureOnly',
-          value: 'email',
+          value: 'person.email',
         },
         {
           label: 'ExtensionNumber',
-          value: 'extension_number',
+          value: 'person.extension_number',
         },
         {
           label: 'Group',
-          value: 'group_list',
+          value: 'person.group_list',
         },
         {
           label: 'PersonId',
-          value: 'id',
+          value: 'person.id',
         },
         {
           label: 'PersonName',
-          value: 'name',
+          value: 'person.name',
         },
         {
           label: 'PhoneNumber',
-          value: 'phone_number',
+          value: 'person.phone_number',
         },
         {
           label: 'Remarks',
-          value: 'remarks',
+          value: 'person.remarks',
         },
         {
           label: 'JobTitle',
-          value: 'title',
+          value: 'person.title',
         },
       ],
 
@@ -211,7 +211,7 @@ export default {
 
             dataFields: this.dataFields,
             personFields: this.personFields,
-            data: structuredClone(this.data),
+            dataList: this.dataList,
             form: this.lineForm,
             formPass: this.lineFormPass,
           };
