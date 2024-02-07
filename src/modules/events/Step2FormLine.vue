@@ -9,7 +9,6 @@
             </div>
             <CInput
               size="lg"
-              placeholder=""
               required
               :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
               :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
@@ -72,10 +71,6 @@ export default {
       required: true,
       default: () => ({}),
     },
-  },
-  data() {
-    return {
-    };
   },
 };
 

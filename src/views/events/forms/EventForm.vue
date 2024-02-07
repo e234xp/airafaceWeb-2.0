@@ -27,13 +27,14 @@
             :is="currentFormComponent"
             v-bind="getFormProps"
             @update:isAllPassed="handleUpdatePassStatus"
-            @update:eventControlName="handleUpdateData('eventControlName', $event)"
-            @update:eventControlType="handleUpdateData('eventControlType', $event)"
-            @update:eventControlGroupList="handleUpdateData('eventControlGroupList', $event)"
-            @update:diviceGroups="handleUpdateData('diviceGroups', $event)"
-            @update:eventControlRemarks="handleUpdateData('eventControlRemarks', $event)"
-            @update:eventControlSelectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
 
+            @update:name="handleUpdateData('eventControlName', $event)"
+            @update:type="handleUpdateData('eventControlType', $event)"
+            @update:groupList="handleUpdateData('eventControlGroupList', $event)"
+            @update:diviceGroups="handleUpdateData('eventControlDiviceGroups', $event)"
+            @update:remarks="handleUpdateData('eventControlRemarks', $event)"
+
+            @update:selectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
             @update:specifiedDatetimeToShow="handleUpdateData('specifiedDatetimeToShow', $event)"
             @update:specifiedDatetimeRange="handleUpdateData('specifiedDatetimeRange', $event)"
           />
@@ -45,15 +46,15 @@
     <CCol sm="12">
       <!-- <div style="text-align: right"> -->
       <div class="row justify-content-center mb-4">
-        <!-- <div v-if="flag_currentSetp === 0 && value_returnRoutePath.length > 0">
+        <div v-if="flag_currentSetp === 0 && value_returnRoutePath.length > 0">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
           >
             {{ value_returnRouteName }}
           </CButton>
-        </div> -->
-        <div v-if="flag_currentSetp !== 3">
+        </div>
+        <div v-else>
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
@@ -77,6 +78,8 @@
 </template>
 
 <script>
+import { v4 as UUIDv4 } from 'uuid';
+
 import StepProgress from 'vue-step-progress';
 import '@/airacss/vue-step-progress.css';
 
@@ -121,17 +124,15 @@ export default {
 
       value_language: 'zh',
       value_note: '',
-      // NOTE: what this ?
       value_temperatureTriggerRule: 0,
 
-      // step1 data
+      value_eventControlUUID: '',
+      value_eventControlEnable: true,
       value_eventControlName: '',
       value_eventControlGroupList: [],
       value_eventControlRemarks: '',
-      value_diviceGroups: [],
-
-      // step2 data
-      data_list: {},
+      value_eventControlDiviceGroups: [],
+      value_eventControlDataList: [],
 
       // line
       lineForm: {
@@ -236,9 +237,9 @@ export default {
         case 0:
           return {
             eventControlName: this.value_eventControlName,
-            eventControlGroupList: this.value_eventControlGroupList,
-            eventControlRemarks: this.eventControlRemarks,
-            diviceGroups: this.value_diviceGroups,
+            eventControlGroupList: [...this.value_eventControlGroupList],
+            eventControlRemarks: this.value_eventControlRemarks,
+            eventControlDiviceGroups: this.value_eventControlDiviceGroups,
 
             ...defaultProps,
           };
@@ -247,7 +248,7 @@ export default {
             case 'line':
               return {
                 lineForm: this.lineForm,
-                data: this.data_list,
+                data_list: this.value_eventControlDataList,
                 ...defaultProps,
               };
             case 'http':
@@ -282,6 +283,7 @@ export default {
             eventControlSelectedWeeklySchedule: this.value_eventControlSelectedWeeklySchedule,
             specifiedDatetimeRange: this.value_specifiedDatetimeRange,
             specifiedDatetimeToShow: this.value_specifiedDatetimeToShow,
+            formatDateToYYYYMMDD_HHMMSS: this.formatDateToYYYYMMDD_HHMMSS,
 
             ...defaultProps,
           };
@@ -295,6 +297,83 @@ export default {
     },
   },
   methods: {
+    handleUpdateExistData(item) {
+      if (this.value_mode !== 'modify' && !Object.hasOwn(item, 'action_type')) return;
+
+      this.value_eventControlUUID = item.uuid;
+      this.value_eventControlType = item.action_type;
+      this.value_eventControlName = item.name;
+      this.value_enable = item.enable;
+      this.value_eventControlGroupList = [...item.group_list];
+      this.value_temperatureTriggerRule = item.temperature_trigger_rule;
+      this.value_eventControlRemarks = item.remarks;
+      this.value_eventControlDiviceGroups = [...item.divice_groups];
+      this.value_eventControlDataList = structuredClone(item.data_list);
+      this.value_eventControlSelectedWeeklySchedule = this.convertBackToEventControlSelectedWeeklySchedule(item.weekly_schedule);
+      this.value_specifiedDatetimeToShow = this.convertBackToSpecifiedDatetimeToShow(item.specify_time);
+
+      // language: 'en',
+      // note: '',
+
+      switch (item.action_type) {
+        case 'line':
+          Object.assign(this.lineForm, {
+            token: item.token,
+          });
+          break;
+        case 'http':
+          Object.assign(this.httpForm, {
+            method: item.method,
+            https: item.https,
+            user: item.user,
+            pass: item.pass,
+            host: item.host,
+            port: item.port,
+            url: item.url,
+            custom_data: item.custom_data,
+            data_type: item.data_type,
+          });
+          break;
+        case 'mail':
+          Object.assign(this.mailForm, {
+            from: item.from,
+            host: item.host,
+            port: item.port,
+            user: item.user,
+            pass: item.pass,
+            subject: item.subject,
+            to: item.to,
+            cc: item.cc,
+            bcc: item.bcc,
+            method: item.method,
+            secure: item.secure,
+          });
+          break;
+        case 'iobox':
+          Object.assign(this.ioboxForm, {
+            brand: item.brand,
+            model: item.model,
+            host: item.host,
+            port: item.port,
+            user: item.user,
+            pass: item.pass,
+            iopoint: item.iopoint,
+          });
+          break;
+        case 'wiegand':
+          Object.assign(this.wiegandForm, {
+            host: item.host,
+            port: item.port,
+            bits: item.bits,
+            index: item.index,
+            syscode: item.syscode,
+            special_card_number: item.special_card_number,
+          });
+          break;
+        default:
+          break;
+      }
+    },
     handleUpdateData(key, value) {
       if (Array.isArray(value)) {
         this[`value_${key}`] = [...value];
@@ -303,6 +382,57 @@ export default {
       } else {
         this[`value_${key}`] = value;
       }
+    },
+
+    convertToWeeklySchedule(selectedWeeklySchedule) {
+      return {
+        list: Object.entries(selectedWeeklySchedule)
+          .filter(([, value]) => value != null)
+          .map(([key, value]) => ({ day_of_week: parseInt(key, 10), hours_list: value })),
+      };
+    },
+    convertBackToEventControlSelectedWeeklySchedule(weeklySchedule) {
+      return weeklySchedule.list.reduce((acc, { day_of_week: dayOfWeek, hours_list: hoursList }) => {
+        acc[dayOfWeek] = hoursList;
+        return acc;
+      }, {});
+    },
+    convertToSpecifyTime(specifiedDatetimeToShow) {
+      return {
+        list: specifiedDatetimeToShow.map((spDay) => ({
+          start_time: spDay.start_time,
+          end_time: spDay.end_time,
+        })),
+      };
+    },
+    convertBackToSpecifiedDatetimeToShow(specifyTime) {
+      return specifyTime.list.map((item) => {
+        const startTime = new Date(item.start_time);
+        const endTime = new Date(item.end_time);
+
+        return {
+          uuid: UUIDv4(),
+          display_string: `${this.formatDateToYYYYMMDD_HHMMSS(startTime)} ~ ${this.formatDateToYYYYMMDD_HHMMSS(endTime)}`,
+          start_time: item.start_time,
+          end_time: item.end_time,
+        };
+      });
+    },
+    formatDateToYYYYMMDD_HHMMSS(date) {
+      const mm = date.getMonth() + 1; // getMonth() is zero-based
+      const dd = date.getDate();
+      const HH = date.getHours();
+      const MM = date.getMinutes();
+      const SS = date.getSeconds();
+
+      return [
+        `${date.getFullYear()}-`,
+        `${(mm > 9 ? '' : '0') + mm}-`,
+        `${(dd > 9 ? '' : '0') + dd} `,
+        `${(HH > 9 ? '' : '0') + HH}:`,
+        `${(MM > 9 ? '' : '0') + MM}:`,
+        (SS > 9 ? '' : '0') + SS,
+      ].join('');
     },
 
     // TODO: 判斷 name 重複
@@ -329,21 +459,11 @@ export default {
         case 0: {
           return this.flag_step1FormPass;
         }
-
         case 1: {
           return this.flag_step2FormPass;
         }
-
-        case 2: {
-          return true;
-        }
-
-        case 3: {
-          return true;
-        }
-
         default: {
-          return false;
+          return true;
         }
       }
     },
@@ -351,19 +471,10 @@ export default {
     handlePrev() {
       if (this.flag_currentSetp === 0) {
         if (this.value_returnRoutePath.length > 0) {
+          console.log('goto', this.value_returnRoutePath);
           this.$router.push({ name: this.value_returnRoutePath });
-        } else this.updateSettings();
+        }
       } else if (this.flag_currentSetp > 0) this.flag_currentSetp -= 1;
-
-      // if (this.flag_currentSetp > 0) {
-      //   this.flag_currentSetp -= 1;
-      //   return;
-      // }
-
-      // if (this.value_returnRoutePath.length === 0) return;
-
-      // this.$router.go(-1);
-      // this.$router.push({ name: this.value_returnRoutePath });
     },
     // 下一步按鈕
     async handleNext() {
@@ -376,42 +487,22 @@ export default {
           if (this.onFinish) {
             this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
-            const weeklySchedule = { list: [] };
-            for (let i = 0; i < 7; i += 1) {
-              const sch = this.value_eventControlSelectedWeeklySchedule[i.toString()];
-              if (sch != null) {
-                weeklySchedule.list.push({
-                  day_of_week: i,
-                  hours_list: sch,
-                });
-              }
-            }
-
-            const specifyTime = { list: [] };
-            this.value_specifiedDatetimeToShow.forEach((spDay) => {
-              specifyTime.list.push({
-                start_time: spDay.start_time,
-                end_time: spDay.end_time,
-              });
-            });
-
             const defaultSendData = {
+              uuid: this.value_model === 'create' ? null : this.value_eventControlUUID,
               action_type: this.value_eventControlType,
               name: this.value_eventControlName,
-              enable: true,
+              enable: this.value_eventControlEnable,
               group_list: this.value_eventControlGroupList,
               temperature_trigger_rule: this.value_temperatureTriggerRule,
               remarks: this.value_eventControlRemarks,
-              specify_time: specifyTime,
-              weekly_schedule: weeklySchedule,
-              divice_groups: this.value_diviceGroups,
+              specify_time: this.convertToSpecifyTime(this.value_specifiedDatetimeToShow),
+              weekly_schedule: this.convertToWeeklySchedule(this.value_eventControlSelectedWeeklySchedule),
+              divice_groups: this.value_eventControlDiviceGroups,
+              data_list: this.value_eventControlDataList,
               // TODO: replace mock data
               language: 'en',
               note: '',
-              data_list: this.data_list,
             };
-
-            console.log(this.data_list);
 
             let sendData = {};
 
@@ -481,6 +572,9 @@ export default {
     showOnStep(step) {
       return step === this.flag_currentSetp ? 'd-block' : 'd-none';
     },
+  },
+  created() {
+    this.handleUpdateExistData(this.value_item);
   },
 };
 </script>

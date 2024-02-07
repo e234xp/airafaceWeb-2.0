@@ -10,7 +10,7 @@
         type="checkbox"
         value="item"
         :checked="dataSelected.indexOf(item.value) >= 0"
-        :disabled="checkImage(item.value)"
+        :disabled="!checkImage(item.value)"
         @change="dataFieldChanged(item.value, $event)"
       >
       {{ $t(item.label) }}
@@ -39,7 +39,7 @@
         type="checkbox"
         value="item"
         :checked="personSelected.indexOf(item.value) >= 0"
-        :disabled="checkImage(item.value)"
+        :disabled="!checkImage(item.value)"
         @change="personFieldChanged(item.value, $event)"
       >
       {{ $t(item.label) }}
@@ -125,7 +125,6 @@ export default {
   },
   methods: {
     checkImage(key) {
-      console.log(key);
       const imageList = ['captured', 'register', 'display'];
       const filter = imageList.filter((item) => item !== key);
       if (filter.length === imageList.length) return true;
@@ -201,6 +200,10 @@ export default {
       console.log('temp', temp);
       this.$emit('update:data', temp);
     },
+  },
+  created() {
+    console.log('data', this.dataFields);
+    console.log('person', this.personFields);
   },
 };
 </script>

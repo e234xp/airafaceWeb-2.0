@@ -24,12 +24,8 @@ export default {
     return {
       type: 'EventControl',
       flag_keepingDownload: false,
+      actionTypeList: ['http', 'line', 'mail', 'wiegand', 'iobox'],
     };
-  },
-  created() { },
-  updated() { },
-  beforeRouteEnter(to, from, next) {
-    next();
   },
   beforeRouteLeave(to, from, next) {
     console.log('EventControlManagement', to, from, next);
@@ -38,21 +34,13 @@ export default {
   },
   methods: {
     async downloadTableItemsAsync(sliceSize, cb) {
-      let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
 
-      // const getLineNotifyList = (q, f, s) => new Promise((resolve) => {
-      //   this.$globalGetLineNotifyList(q, f, s, (err, data) => {
-      //     resolve({ error: err, data });
-      //   });
-      // });
-
       while (this.flag_keepingDownload && thereIsMoreData) {
         const ret = await this.$globalGetEventList(
-          '', shitf, sliceSize,
+          '', this.actionTypeList,
         );
-        console.log('ret', ret);
         const rData = {
           list: ret.data.list,
         };
@@ -84,6 +72,7 @@ export default {
     },
 
     onAdd(allRecords) {
+      console.log('allRecords', allRecords);
       this.$router.push({
         name: 'CreateEventControlSetting',
         params: {
@@ -95,10 +84,11 @@ export default {
     },
 
     async onModify(item) {
+      console.log('item', item);
       this.$router.push({
         name: 'ModifyEventControlSetting',
         params: {
-          value_returnRoutePath: 'ModifyEventControlSetting',
+          value_returnRoutePath: 'EventControlManagement',
           value_returnRouteName: this.$t('Return'),
           value_item: item,
         },

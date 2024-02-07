@@ -1475,13 +1475,13 @@ Vue.prototype.$globalRemoveActionRule = (
 
 // Tulip
 Vue.prototype.$globalGetEventList = (
-  uuid, shift, sliceSize, cb,
+  uuid, action_type, cb,
 ) => new Promise((resolve) => {
   const query = {
     uuid,
-    slice_shift: shift,
-    slice_length: sliceSize,
+    action_type
   };
+  console.log('query', query);
   postJson('/airafacelite/findeventhandle', query,
     (err, data) => {
       if (cb) cb(err, data);
@@ -1494,6 +1494,17 @@ Vue.prototype.$globalCreateEventHandle = (
   setting, cb,
 ) => new Promise((resolve) => {
   postJson('/airafacelite/createeventhandle', setting,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+// Tulip
+Vue.prototype.$globalModifyEventHandle = (
+  setting, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/modifyeventhandle', setting,
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });

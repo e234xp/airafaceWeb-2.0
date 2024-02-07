@@ -7,7 +7,10 @@
 
 <script>
 import {
-  checkPort, checkEmail, checkIpAddr, checkDelay,
+  checkPort,
+  checkEmail,
+  checkIpAddr,
+  checkDelay,
 } from '@/utils/validate';
 import i18n from '@/i18n';
 import Step2FormLine from './Step2FormLine.vue';
@@ -89,11 +92,7 @@ export default {
 
       dataFields: [
         {
-          label: 'DisplayPhoto',
-          value: 'display_image',
-        },
-        {
-          label: 'ForeheadTemperature',
+          label: 'foreHead_temperature',
           value: 'foreHead_temperature',
         },
         {
@@ -101,17 +100,29 @@ export default {
           value: 'is_high_temperature',
         },
         {
-          label: 'ShowIdentity',
+          label: 'show_identity',
           value: 'show_identity',
         },
         {
           label: 'VerifiedTimestamp',
           value: 'verified_timestamp',
         },
+        {
+          label: 'face_image',
+          value: 'captured',
+        },
+        {
+          label: 'register_image',
+          value: 'register',
+        },
+        {
+          label: 'display_image',
+          value: 'display',
+        },
       ],
       personFields: [
         {
-          label: 'DisplayImage',
+          label: 'card_number',
           value: 'card_number',
         },
         {
@@ -274,12 +285,13 @@ export default {
     checkDelay,
   },
   watch: {
-    step2FormStatus: {
-      handler(newStatus) {
-        this.$emit('update:isAllPassed', newStatus);
-      },
-      immediate: true,
+    step2FormStatus(newStatus) {
+      this.$emit('update:isAllPassed', newStatus);
     },
+  },
+  created() {
+    // TEST:
+    console.log(this.httpForm);
   },
 };
 </script>

@@ -24,10 +24,10 @@
               size="lg"
               placeholder=""
               required
+              :is-valid="eventControlNameValidator"
               :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
               :value="eventControlName"
-              :is-valid="eventControlNameValidator"
-              @input="handleUpdateEmitData('eventControlName', $event)"
+              @input="handleUpdateEmitData('name', $event)"
             />
           </td>
           <td class="table-td">
@@ -56,7 +56,7 @@
               :selected-label="$t('Selected')"
               :deselect-label="$t('Deselect')"
               :show-no-options="false"
-              @input="groupListValidator($event), handleUpdateEmitData('eventControlGroupList', $event);"
+              @input="groupListValidator($event), handleUpdateEmitData('groupList', $event);"
             />
             <div
               v-if="!flag_groupListPass"
@@ -69,7 +69,7 @@
             <multiselect
               placeholder=""
               :class="flag_diviceGroupsPass ? 'is-valid' : 'is-invalid'"
-              :value="diviceGroups"
+              :value="eventControlDiviceGroups"
               :options="diviceGroupOptions"
               :multiple="true"
               :taggable="true"
@@ -98,7 +98,7 @@
             <CInput
               size="lg"
               :value="eventControlRemarks"
-              @input="handleUpdateEmitData('eventControlRemarks', $event)"
+              @input="handleUpdateEmitData('remarks', $event)"
             />
           </td>
         </tr>
@@ -117,20 +117,43 @@ export default {
     multiselect: Multiselect,
   },
   props: {
-    cardStyle: String,
-    eventControlType: String,
-    eventControlName: String,
-    eventControlGroupList: Array,
-    eventControlRemarks: String,
-    diviceGroups: Array,
+    cardStyle: {
+      type: String,
+      default: 'height: 100%;',
+    },
+    eventControlName: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventControlType: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    eventControlGroupList: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    eventControlDiviceGroups: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    eventControlRemarks: {
+      type: String,
+      required: true,
+      default: '',
+    },
   },
   emits: [
     'update:isAllPassed',
-    'update:eventControlName',
-    'update:eventControlType',
-    'update:eventControlRemarks',
-    'update:eventControlGroupList',
+    'update:name',
+    'update:type',
+    'update:groupList',
     'update:diviceGroups',
+    'update:remarks',
   ],
   data() {
     return {
@@ -150,7 +173,7 @@ export default {
         return this.eventControlType;
       },
       set(value) {
-        return this.$emit('update:eventControlType', value);
+        return this.$emit('update:type', value);
       },
     },
     step1FormStatus() {
@@ -172,6 +195,10 @@ export default {
       return this.flag_eventNamePass;
     },
 
+    initialValid() {
+      this.groupListValidator(this.eventControlGroupList);
+      this.deviceGroupsValidator(this.eventControlDiviceGroups);
+    },
     groupListValidator(val) {
       if (!Array.isArray(val)) return;
 
@@ -217,11 +244,14 @@ export default {
     },
   },
   watch: {
-    step1FormStatus(status) {
-      this.$emit('update:isAllPassed', status);
+    step1FormStatus(newStatus) {
+      this.$emit('update:isAllPassed', newStatus);
     },
   },
-  mounted() {
+  created() {
+    this.initialValid();
+
+    // TODO: 換地方
     this.fetchGroupsData();
   },
 };

@@ -448,9 +448,9 @@ export default {
     handlePathInput(value) {
       if (!value.startsWith('/')) {
         this.form.url = `/${value}`;
+      } else {
+        this.form.url = value;
       }
-
-      this.form.url = value;
     },
 
     selectDateType(type) {
@@ -486,6 +486,23 @@ export default {
       this.value_customTextarea = '';
     },
 
+    initialConvert() {
+      if (this.form.url === '') return;
+
+      if (this.form.method === 'GET') {
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? this.form.url.slice(1).spilt('?')[0] : this.form.url;
+
+        const customTextarea = this.form.url;
+        const [, queryString] = customTextarea.split('?');
+        this.value_customTextarea = queryString;
+
+        console.log('url', this.form.url);
+        console.log('customTextarea', customTextarea);
+        console.log('real', this.value_realTime_eventHttpUrl);
+      } else if (this.form.method === 'POST') {
+        this.value_customTextarea = this.form.custom_data;
+      }
+    },
     combineJSON(fieldName, data) {
       return `"${fieldName}":"${data}",`;
     },
@@ -540,6 +557,9 @@ export default {
       this.value_newFieldName = '';
       this.value_selectedDefaultData = '';
     },
+  },
+  created() {
+    this.initialConvert();
   },
 };
 </script>

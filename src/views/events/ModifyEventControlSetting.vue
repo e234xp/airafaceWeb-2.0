@@ -18,27 +18,27 @@
 import CEventForm from './forms/EventForm.vue';
 
 export default {
-  name: 'CreateEventControlSetting',
+  name: 'ModifyEventControlSetting',
   components: { CEventForm },
   data() {
     return {
       value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : '',
       value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
-      value_item: {},
-      value_mode: 'create',
+      value_item: this.$route.params.value_item ? this.$route.params.value_item : null,
+      value_mode: 'modify',
     };
   },
   created() {
     if (this.value_returnRoutePath === '') this.$router.push({ name: 'Eventcontrolmanagement' });
 
-    console.log(this.$route.params);
+    console.log('route.params', this.$route.params);
   },
   methods: {
     canModify() {
       return !(this.$globalAiraManagerSettings.manager_enable === true);
     },
     async onFinish(data, cb) {
-      await this.$globalCreateEventHandle(data, cb);
+      await this.$globalModifyEventHandle(data, cb);
     },
   },
 };

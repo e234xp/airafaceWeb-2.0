@@ -11,7 +11,7 @@
             <Scheduler
               :multiple="true"
               :value="eventControlSelectedWeeklySchedule"
-              @change="handleUpdateEmitData('eventControlSelectedWeeklySchedule', $event)"
+              @change="handleUpdateEmitData('selectedWeeklySchedule', $event)"
             />
           </CCol>
           <CCol sm="6">
@@ -88,6 +88,12 @@ export default {
     eventControlSelectedWeeklySchedule: Object,
     specifiedDatetimeRange: Array,
     specifiedDatetimeToShow: Array,
+
+    formatDateToYYYYMMDD_HHMMSS: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
   },
   emits: [
     'update:specifiedDatetimeToShow',
@@ -111,25 +117,8 @@ export default {
     cellStyle() {
       return 'fontSize: 16px;';
     },
-    formatDateToYYYYMMDD_HHMMSS(date) {
-      const mm = date.getMonth() + 1; // getMonth() is zero-based
-      const dd = date.getDate();
-      const HH = date.getHours();
-      const MM = date.getMinutes();
-      const SS = date.getSeconds();
-
-      return [
-        `${date.getFullYear()}-`,
-        `${(mm > 9 ? '' : '0') + mm}-`,
-        `${(dd > 9 ? '' : '0') + dd} `,
-        `${(HH > 9 ? '' : '0') + HH}:`,
-        `${(MM > 9 ? '' : '0') + MM}:`,
-        (SS > 9 ? '' : '0') + SS,
-      ].join('');
-    },
 
     clickOnInsertSchedule() {
-      console.log('specifiedDatetimeRange', this.specifiedDatetimeRange);
       if (this.specifiedDatetimeRange.length == 2) {
         const startTime = this.specifiedDatetimeRange[0];
         const endTime = this.specifiedDatetimeRange[1];
@@ -153,10 +142,6 @@ export default {
         (data) => data.uuid != item.uuid,
       ));
     },
-  },
-  watch: {
-  },
-  mounted() {
   },
 };
 </script>
