@@ -2,6 +2,7 @@
   <component
     :is="currentFormComponent"
     v-bind="getFormProps"
+    @update:dataList="newDataList => $emit('update:dataList', newDataList)"
   />
 </template>
 
@@ -43,7 +44,7 @@ export default {
       type: String,
       default: 'line',
     },
-    dataList: {
+    eventControlDataList: {
       type: Object,
       default: () => ({}),
     },
@@ -73,23 +74,6 @@ export default {
   ],
   data() {
     return {
-      flag_enable_SSL: false,
-
-      // valid
-      flag_lineAccessTokenPass: false,
-
-      flag_httpPortPass: false,
-      flag_urlPass: false,
-      flag_ipAddrPass: false,
-      flag_newFieldNamePass: false,
-
-      flag_hostAddressPass: false,
-      flag_mailPortPass: false,
-      flag_senderPass: false,
-      flag_toPass: false,
-      flag_ccPass: false,
-      flag_bccPass: false,
-
       dataFields: [
         {
           label: 'foreHead_temperature',
@@ -211,7 +195,7 @@ export default {
 
             dataFields: this.dataFields,
             personFields: this.personFields,
-            dataList: this.dataList,
+            dataList: structuredClone(this.eventControlDataList),
             form: this.lineForm,
             formPass: this.lineFormPass,
           };
@@ -233,7 +217,7 @@ export default {
 
             dataFields: this.dataFields,
             personFields: this.personFields,
-            data: structuredClone(this.data),
+            dataList: structuredClone(this.eventControlDataList),
             form: this.mailForm,
             formPass: this.mailFormPass,
           };
@@ -270,7 +254,6 @@ export default {
   },
   methods: {
     // Validators
-    // TODO: 判斷 name 重複
     isNotEmptyValidator(val) {
       if (val.replace(/\s/g, '').length <= 0) {
         return i18n.formatter.format('NoEmptyNoSpace');
@@ -288,10 +271,6 @@ export default {
     step2FormStatus(newStatus) {
       this.$emit('update:isAllPassed', newStatus);
     },
-  },
-  created() {
-    // TEST:
-    console.log(this.httpForm);
   },
 };
 </script>

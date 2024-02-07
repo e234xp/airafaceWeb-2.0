@@ -25,6 +25,9 @@ export default {
       type: 'EventControl',
       flag_keepingDownload: false,
       actionTypeList: ['http', 'line', 'mail', 'wiegand', 'iobox'],
+
+      value_groupNameOptions: [],
+      value_diviceGroupOptions: [],
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -65,10 +68,34 @@ export default {
         }
       }
     },
+    async fetchGroupsData() {
+      const [ret1, ret2] = await Promise.all([
+        this.$globalGetGroupList(),
+        this.$globalFindVideoDeviceGroups(''),
+      ]);
+      if (ret1.error === null && ret2.error === null) {
+        if (ret1?.group_list) {
+          this.value_groupNameOptions = ret1?.group_list.map((item) => item.name);
+        }
 
-    onFetchDataCallback(cb) {
+        if (ret2?.data) {
+          this.value_diviceGroupOptions = ret2?.data.result.map((item) => item.uuid);
+        }
+      } else {
+        this.$fire({
+          title: this.$t('NetworkLoss'),
+          text: '',
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+        });
+      }
+    },
+
+    async onFetchDataCallback(cb) {
       this.flag_keepingDownload = true;
-      this.downloadTableItemsAsync(/* sliceSize */ 3000, cb);
+      await this.downloadTableItemsAsync(/* sliceSize */ 3000, cb);
+      await this.fetchGroupsData();
     },
 
     onAdd(allRecords) {
@@ -79,18 +106,21 @@ export default {
           value_allRecords: allRecords,
           value_returnRoutePath: 'EventControlManagement',
           value_returnRouteName: this.$t('Return'),
+          value_groupNameOptions: this.value_groupNameOptions,
+          value_diviceGroupOptions: this.value_diviceGroupOptions,
         },
       });
     },
 
     async onModify(item) {
-      console.log('item', item);
       this.$router.push({
         name: 'ModifyEventControlSetting',
         params: {
           value_returnRoutePath: 'EventControlManagement',
           value_returnRouteName: this.$t('Return'),
           value_item: item,
+          value_groupNameOptions: this.value_groupNameOptions,
+          value_diviceGroupOptions: this.value_diviceGroupOptions,
         },
       });
     },

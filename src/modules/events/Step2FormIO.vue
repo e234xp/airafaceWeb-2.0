@@ -17,9 +17,9 @@
             <CSelect
               size="lg"
               class="font-control mt-2"
+              :filterable="true"
               :value.sync="form.brand"
               :options="value_brandList"
-              :filterable="true"
             />
           </CCol>
           <CCol
@@ -32,9 +32,9 @@
             <CSelect
               size="lg"
               class="font-control mt-2"
+              :filterable="true"
               :value.sync="form.model"
               :options="value_modelList"
-              :filterable="true"
             />
           </CCol>
         </CRow>
@@ -142,88 +142,90 @@
     </CCard>
 
     <!-- Digital OutPut 1 -->
-    <CCard
-      v-for="idx in [0, 1]"
-      :key="idx"
-    >
-      <CCardHeader>
-        <span class="h3">{{ `${$t('DigitalOutput')} #${idx + 1}` }}</span>
-      </CCardHeader>
-      <CCardBody>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
-              {{ $t('I/OBoxesBasicCOlNameEnable') }}
-            </h5>
-            <label class="switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="form.iopont[idx].enable"
-              >
-              <span class="slider round" />
-            </label>
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
-              {{ $t('I/OBoxesBasicCOlNameDefaultValue') }}
-            </h5>
-            <CSelect
-              size="lg"
-              class="font-control mt-2"
-              :value.sync="form.iopont[idx].default"
-              :options="value_deviceDefaultValue"
-              :filterable="true"
-              :placeholder="$t('placeholder')"
-              :disabled="!form.iopont[idx].enable"
-            />
-          </CCol>
-        </CRow>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
-              {{ $t('I/OBoxesBasicCOlNameValueWhenTriggered') }}
-            </h5>
-            <CSelect
-              size="lg"
-              class="font-control mt-2"
-              :value.sync="form.iopont[idx].trigger"
-              :options="value_deviceTrigger"
-              :filterable="true"
-              :placeholder="$t('placeholder')"
-              :disabled="!form.iopont[idx].enable"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
-              {{ $t('I/OBoxesBasicCOlNameDurationWhenTriggered') }}
-            </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              pattern="[0-9]*"
-              required
-              :disabled="!form.iopont[idx].enable"
-              :is-valid="formPass.delay = checkDelay(form.iopont[idx].delay) === ''"
-              :invalid-feedback="checkDelay(form.iopont[idx].delay)"
-              v-model.number="form.iopont[idx].delay"
-            />
-          </CCol>
-        </CRow>
-      </CCardBody>
-    </CCard>
+    <template v-if="form.iopoint && form.iopoint.length > 0">
+      <CCard
+        v-for="idx in [0, 1]"
+        :key="idx"
+      >
+        <CCardHeader>
+          <span class="h3">{{ `${$t('DigitalOutput')} #${idx + 1}` }}</span>
+        </CCardHeader>
+        <CCardBody>
+          <CRow sm="12">
+            <!-- <CCol
+              sm="6"
+              class="h5"
+            >
+              <h5 class="ml-2">
+                {{ $t('I/OBoxesBasicCOlNameEnable') }}
+              </h5>
+              <label class="switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="form.iopoint[idx].enable"
+                >
+                <span class="slider round" />
+              </label>
+            </CCol>
+            <CCol
+              sm="6"
+              class="h5"
+            >
+              <h5 class="ml-2">
+                {{ $t('I/OBoxesBasicCOlNameDefaultValue') }}
+              </h5>
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :value.sync="form.iopoint[idx].default"
+                :options="value_deviceDefaultValue"
+                :filterable="true"
+                :placeholder="$t('placeholder')"
+                :disabled="!form.iopoint[idx].enable"
+              />
+            </CCol> -->
+          </CRow>
+          <CRow sm="12">
+            <CCol
+              sm="6"
+              class="h5"
+            >
+              <h5 class="ml-2">
+                {{ $t('I/OBoxesBasicCOlNameValueWhenTriggered') }}
+              </h5>
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :filterable="true"
+                :placeholder="$t('placeholder')"
+                :disabled="!form.iopoint[idx].enable"
+                :value.sync="form.iopoint[idx].trigger"
+                :options="value_deviceTrigger"
+              />
+            </CCol>
+            <CCol
+              sm="6"
+              class="h5"
+            >
+              <h5 class="ml-2">
+                {{ $t('I/OBoxesBasicCOlNameDurationWhenTriggered') }}
+              </h5>
+              <CInput
+                size="lg"
+                class="mt-2"
+                pattern="[0-9]*"
+                required
+                :disabled="!form.iopoint[idx].enable"
+                :is-valid="formPass.delay = checkDelay(form.iopoint[idx].delay) === ''"
+                :invalid-feedback="checkDelay(form.iopoint[idx].delay)"
+                v-model.number="form.iopoint[idx].delay"
+              />
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
+    </template>
   </section>
 </template>
 
@@ -278,6 +280,10 @@ export default {
     viewPassword() {
       this.flag_view_password = !this.flag_view_password;
     },
+  },
+  created() {
+    console.log(this.form);
+    console.log(this.formPass);
   },
 };
 </script>

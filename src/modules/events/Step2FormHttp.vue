@@ -2,14 +2,23 @@
   <section>
     <CCard>
       <CCardBody>
-        <CRow class="mb-4">
-          <CCol
-            sm="3"
-          >
-            <div>
-              <div class="h5">
-                {{ $t('HostAddress') }}
-              </div>
+        <table class="table-layout">
+          <tr class="table-tr">
+            <th class="h5 w-25 table-th">
+              {{ $t('HostAddress') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('HttpEnabledSSL') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('Username') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('Password') }}
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
               <CInput
                 size="lg"
                 placeholder=""
@@ -18,31 +27,18 @@
                 :invalid-feedback="checkIpAddr(form.host)"
                 v-model="form.host"
               />
-            </div>
-          </CCol>
-          <CCol
-            sm="3"
-          >
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('HttpEnabledSSL') }}
-              </div>
+            </td>
+            <td class="table-td">
               <CSwitch
                 size="lg"
                 class="mb-form-row"
                 color="success"
                 shape="pill"
-                v-model="form.https"
+                :checked="form.https"
+                @update:checked="form.https = $event"
               />
-            </div>
-          </CCol>
-          <CCol
-            sm="3"
-          >
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('Username') }}
-              </div>
+            </td>
+            <td class="table-td">
               <CInput
                 class="mb-form-row"
                 size="lg"
@@ -51,14 +47,9 @@
                 :invalid-feedback="isNotEmptyValidator(form.user)"
                 v-model="form.user"
               />
-            </div>
-          </CCol>
-          <CCol sm="3">
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('Password') }}
-              </div>
-              <form>
+            </td>
+            <td class="table-td">
+              <formg>
                 <CInput
                   class="mb-form-row"
                   size="lg"
@@ -85,53 +76,57 @@
                     </CButton>
                   </template>
                 </CInput>
-              </form>
-            </div>
-          </CCol>
-        </CRow>
-        <CRow>
-          <CCol sm="3">
-            <div class="h5">
+                </form>
+              </formg>
+            </td>
+          </tr>
+        </table>
+        <table class="table-layout">
+          <tr class="table-tr">
+            <th class="h5 w-25 table-th">
               {{ $t('Port') }}
-            </div>
-            <CInput
-              size="lg"
-              placeholder=""
-              :is-valid="formPass.port = checkPort(form.port) === ''"
-              :invalid-feedback="checkPort(form.port)"
-              v-model="form.port"
-            />
-          </CCol>
-          <CCol sm="3">
-            <div class="h5">
+            </th>
+            <th class="h5 w-25 table-th">
               PATH
-              {{ form.method }}
-            </div>
-            <CInput
-              id="pathInput"
-              type="text"
-              size="lg"
-              style="display: inline-block; width: 85%"
-              prepend="/"
-              v-model="value_realTime_eventHttpUrl"
-              @input="handlePathInput"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            v-if="form.method === 'GET'"
-          >
-            <div class="h5">
+            </th>
+            <th
+              v-if="form.method === 'GET'"
+              class="h5 w-50 table-th"
+            >
               {{ $t('ShowCompleteUrl') }}
-            </div>
-            <CInput
-              size="lg"
-              placeholder=""
-              readonly
-              :value="form.url"
-            />
-          </CCol>
-        </CRow>
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                placeholder=""
+                :is-valid="formPass.port = checkPort(form.port) === ''"
+                :invalid-feedback="checkPort(form.port)"
+                v-model="form.port"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                id="pathInput"
+                type="text"
+                size="lg"
+                style="display: inline-block; width: 85%"
+                prepend="/"
+                v-model="value_realTime_eventHttpUrl"
+                @input="handlePathInput"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                placeholder=""
+                readonly
+                :value="form.url"
+              />
+            </td>
+          </tr>
+        </table>
       </CCardBody>
     </CCard>
 
@@ -151,6 +146,7 @@
                 </div>
                 <CSelect
                   size="lg"
+                  :filterable="true"
                   :value.sync="form.method"
                   :options="value_eventHttpMethodList"
                   @change="clearSetting"
@@ -197,6 +193,7 @@
                               margin-bottom: 0px;
                               z-index: 10000;
                             "
+                          :filterable="true"
                           :options="value_defaultDataList"
                           :value.sync="value_selectedDefaultData"
                         />
@@ -319,7 +316,7 @@ export default {
     isNotEmptyValidator: {
       type: Function,
       required: true,
-      default: () => () => false,
+      default: () => () => '',
     },
     checkPort: {
       type: Function,
@@ -458,10 +455,10 @@ export default {
 
       switch (type) {
         case 0:
-          this.form_data_type = 'JSON';
+          this.form.data_type = 'JSON';
           break;
         case 1:
-          this.form_data_type = 'XMS';
+          this.form.data_type = 'XML';
           break;
         default:
           break;
@@ -490,16 +487,16 @@ export default {
       if (this.form.url === '') return;
 
       if (this.form.method === 'GET') {
-        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? this.form.url.slice(1).spilt('?')[0] : this.form.url;
+        const copyUrl = this.form.url;
+        const [, value] = copyUrl.split('/');
+        const [result] = value.split('?');
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? result : this.form.url;
 
         const customTextarea = this.form.url;
         const [, queryString] = customTextarea.split('?');
         this.value_customTextarea = queryString;
-
-        console.log('url', this.form.url);
-        console.log('customTextarea', customTextarea);
-        console.log('real', this.value_realTime_eventHttpUrl);
       } else if (this.form.method === 'POST') {
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? this.form.url.slice(1) : this.form.url;
         this.value_customTextarea = this.form.custom_data;
       }
     },
@@ -524,7 +521,6 @@ export default {
 
     addNewField() {
       let newCustomData = '';
-
       switch (this.form.method) {
         case 'GET':
           newCustomData = `&${this.value_newFieldName}=${this.value_selectedDefaultData}`;
@@ -537,13 +533,13 @@ export default {
             case 'JSON':
               newCustomData = this.combineJSON(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             case 'XML':
               newCustomData = this.combineXML(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             default:
@@ -560,6 +556,8 @@ export default {
   },
   created() {
     this.initialConvert();
+
+    this.value_selectedData = this.form.data_type === 'JSON' ? 0 : 1;
   },
 };
 </script>

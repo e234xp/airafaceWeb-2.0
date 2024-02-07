@@ -36,10 +36,11 @@
               style="margin-left: auto"
             >
               <CInput
-                v-model.lazy="value_searchingFilter"
                 style="width: 280px"
                 size="lg"
                 :placeholder="$t('Search')"
+                v-model.lazy="value_searchingFilter"
+                @input="() => refreshTableItems()"
               >
                 <template #prepend-content>
                   <CIcon name="cil-search" />
@@ -69,14 +70,6 @@
                 width="5%"
                 align="center"
               />
-              <!-- <vxe-table-column field="enable" width="10%" :show-overflow="ellipsisMode" :title="$t('Enable')">
-                <template #default="{ row }">
-                  <label class="switch">
-                    <input type="checkbox" :checked="row.enable" @change="(event) => clickOnSwitch(event, row)">
-                    <span class="slider round"></span>
-                  </label>
-                </template>
-              </vxe-table-column> -->
               <vxe-table-column
                 field="enable"
                 width="10%"
@@ -174,7 +167,7 @@ export default {
       value_allTableItems: [],
       value_tablePage: {
         currentPage: 1,
-        pageSize: 4,
+        pageSize: 10,
         totalResult: 0,
       },
 
@@ -185,22 +178,12 @@ export default {
   },
   computed: {
     ...mapState(['ellipsisMode']),
-  },
-  mixins: [TableObserver],
-  created() { },
-  async mounted() {
-    this.refreshTableItems();
-  },
-
-  updated() { },
-  watch: {
-    value_searchingFilter: () => {
-      this.value_tablePage.currentPage = 1;
-      this.generateFilteredData(
-        this.value_allTableItems, this.value_searchingFilter,
-      );
+    getFilterTableItems() {
+      const regex = new RegExp(this.value_searchingFilter, 'gi');
+      return this.value_allTableItems.filter(({ name = '' }) => name.match(regex));
     },
   },
+  mixins: [TableObserver],
   methods: {
     headerCellStyle() {
       return 'fontSize: 18px;word-break: break-all !important; ';
@@ -224,21 +207,15 @@ export default {
         this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
 
-      // sliceList.forEach((pitem) => {
-      //   const item = pitem;
-      //   pitem['nameToShow'] = pitem.name;
-      // });
       this.value_dataItemsToShow = Object.assign([], sliceList);
     },
 
     displayFields(row) {
       let { fields } = row;
       if (fields) {
-        // console.log('111', fields);
         fields = fields.slice(0, 3).map(
           (item) => this.$t(item),
         );
-        // console.log('222', fields);
 
         return fields.join(', ');
       }
@@ -258,7 +235,7 @@ export default {
                 tableItems,
               );
               this.generateFilteredData(
-                this.value_allTableItems,
+                this.getFilterTableItems,
                 this.value_searchingFilter,
               );
               this.observeTableSize();
@@ -277,18 +254,19 @@ export default {
       this.resizeOneTable();
     },
 
-    // TODO: Need Test
     async clickOnSwitch(event, row) {
       const localItem = row;
 
       localItem.enable = event.srcElement.checked;
 
-      const settingData = {
-        uuid: localItem.uuid ? localItem.uuid : undefined,
-        ...localItem,
+      const sendData = {
+        uuid: localItem.uuid,
+        data: {
+          ...localItem,
+        },
       };
 
-      await this.$globalModifyEvent(settingData);
+      await this.$globalModifyEventHandle(sendData);
     },
 
     clickOnAdd() {
@@ -309,7 +287,7 @@ export default {
               ) => item.uuid !== deletedItem.uuid);
             });
             this.generateFilteredData(
-              this.value_allTableItems,
+              this.getFilterTableItems,
               this.value_searchingFilter,
             );
           }
@@ -325,6 +303,9 @@ export default {
       const list = this.$refs.mainTable.getCheckboxRecords();
       if (list.length > 0) this.deleteItem(list);
     },
+  },
+  async mounted() {
+    this.refreshTableItems();
   },
 };
 </script>

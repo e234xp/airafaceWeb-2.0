@@ -1481,7 +1481,6 @@ Vue.prototype.$globalGetEventList = (
     uuid,
     action_type
   };
-  console.log('query', query);
   postJson('/airafacelite/findeventhandle', query,
     (err, data) => {
       if (cb) cb(err, data);

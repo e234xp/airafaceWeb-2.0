@@ -9,6 +9,7 @@
             </div>
             <CSelect
               size="lg"
+              :filterable="true"
               :options="['SMTP']"
               :value.sync="form.method"
             />
@@ -47,7 +48,8 @@
               class="ml-0"
               color="success"
               shape="pill"
-              v-model="form.secure"
+              :checked="form.secure"
+              @update:checked="form.secure = $event"
             />
           </CCol>
         </CRow>
@@ -149,7 +151,7 @@
           :data-fields="dataFields"
           :person-fields="personFields"
           :data="dataList"
-          @update:data="newData => Object.assign(dataList, newData)"
+          @update:data="newDataList => $emit('update:dataList', newDataList)"
         />
       </CCardBody>
     </CCard>
@@ -168,7 +170,7 @@ export default {
     isNotEmptyValidator: {
       type: Function,
       required: true,
-      default: () => () => false,
+      default: () => () => '',
     },
     checkPort: {
       type: Function,
@@ -206,5 +208,6 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['update:dataList'],
 };
 </script>
