@@ -2,7 +2,7 @@
   <div>
     <!-- Title & Step -->
     <div class="h1 mb-5">
-      {{ $t('AddPerson') }}
+      {{ getTitle }}
     </div>
     <StepProgress
       class="w-step-progress-3"
@@ -27,13 +27,12 @@
             :is="currentFormComponent"
             v-bind="getFormProps"
             @update:isAllPassed="handleUpdatePassStatus"
-
             @update:name="handleUpdateData('eventControlName', $event)"
             @update:type="handleUpdateData('eventControlType', $event)"
             @update:groupList="handleUpdateData('eventControlGroupList', $event)"
             @update:diviceGroups="handleUpdateData('eventControlDiviceGroups', $event)"
             @update:remarks="handleUpdateData('eventControlRemarks', $event)"
-
+            @update:dataList="handleUpdateData('eventControlDataList', $event)"
             @update:selectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
             @update:specifiedDatetimeToShow="handleUpdateData('specifiedDatetimeToShow', $event)"
             @update:specifiedDatetimeRange="handleUpdateData('specifiedDatetimeRange', $event)"
@@ -126,13 +125,12 @@ export default {
       value_note: '',
       value_temperatureTriggerRule: 0,
 
-      value_eventControlUUID: '',
       value_eventControlEnable: true,
       value_eventControlName: '',
       value_eventControlGroupList: [],
       value_eventControlRemarks: '',
       value_eventControlDiviceGroups: [],
-      value_eventControlDataList: [],
+      value_eventControlDataList: {},
 
       // line
       lineForm: {
@@ -199,7 +197,6 @@ export default {
         special_card_number: '',
       },
 
-      // step3 data
       value_eventControlSelectedWeeklySchedule: {},
       value_specifiedDatetimeRange: [null, null],
       value_specifiedDatetimeToShow: [],
@@ -208,6 +205,9 @@ export default {
     };
   },
   computed: {
+    getTitle() {
+      return this.value_mode === 'create' ? this.$t('AddPerson') : this.$t('ModifyEventControl');
+    },
     currentFormComponent() {
       return `Step${this.flag_currentSetp + 1}Form`;
     },
@@ -248,7 +248,7 @@ export default {
             case 'line':
               return {
                 lineForm: this.lineForm,
-                data_list: this.value_eventControlDataList,
+                eventControlDataList: this.value_eventControlDataList,
                 ...defaultProps,
               };
             case 'http':
@@ -259,6 +259,7 @@ export default {
             case 'mail':
               return {
                 mailForm: this.mailForm,
+                eventControlDataList: this.value_eventControlDataList,
                 ...defaultProps,
               };
             case 'iobox': {
@@ -300,7 +301,6 @@ export default {
     handleUpdateExistData(item) {
       if (this.value_mode !== 'modify' && !Object.hasOwn(item, 'action_type')) return;
 
-      this.value_eventControlUUID = item.uuid;
       this.value_eventControlType = item.action_type;
       this.value_eventControlName = item.name;
       this.value_enable = item.enable;
@@ -437,6 +437,7 @@ export default {
 
     // TODO: 判斷 name 重複
     isNotEmptyValidator(key, val) {
+      console.log(key, val);
       this[`flag_${key}`] = val.replace(/\s/g, '').length > 0;
       return this[`flag_${key}`];
     },
@@ -471,7 +472,6 @@ export default {
     handlePrev() {
       if (this.flag_currentSetp === 0) {
         if (this.value_returnRoutePath.length > 0) {
-          console.log('goto', this.value_returnRoutePath);
           this.$router.push({ name: this.value_returnRoutePath });
         }
       } else if (this.flag_currentSetp > 0) this.flag_currentSetp -= 1;
@@ -488,7 +488,6 @@ export default {
             this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
             const defaultSendData = {
-              uuid: this.value_model === 'create' ? null : this.value_eventControlUUID,
               action_type: this.value_eventControlType,
               name: this.value_eventControlName,
               enable: this.value_eventControlEnable,

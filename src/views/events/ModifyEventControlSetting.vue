@@ -30,15 +30,18 @@ export default {
   },
   created() {
     if (this.value_returnRoutePath === '') this.$router.push({ name: 'Eventcontrolmanagement' });
-
-    console.log('route.params', this.$route.params);
   },
   methods: {
     canModify() {
       return !(this.$globalAiraManagerSettings.manager_enable === true);
     },
     async onFinish(data, cb) {
-      await this.$globalModifyEventHandle(data, cb);
+      await this.$globalModifyEventHandle({
+        uuid: this.value_item.uuid,
+        data: {
+          ...data,
+        },
+      }, cb);
     },
   },
 };

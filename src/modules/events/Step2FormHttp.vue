@@ -32,7 +32,8 @@
                 class="mb-form-row"
                 color="success"
                 shape="pill"
-                v-model="form.https"
+                :checked="form.https"
+                @update:checked="form.https = $event"
               />
             </div>
           </CCol>
@@ -105,7 +106,6 @@
           <CCol sm="3">
             <div class="h5">
               PATH
-              {{ form.method }}
             </div>
             <CInput
               id="pathInput"
@@ -151,6 +151,7 @@
                 </div>
                 <CSelect
                   size="lg"
+                  :filterable="true"
                   :value.sync="form.method"
                   :options="value_eventHttpMethodList"
                   @change="clearSetting"
@@ -197,6 +198,7 @@
                               margin-bottom: 0px;
                               z-index: 10000;
                             "
+                          :filterable="true"
                           :options="value_defaultDataList"
                           :value.sync="value_selectedDefaultData"
                         />
@@ -319,7 +321,7 @@ export default {
     isNotEmptyValidator: {
       type: Function,
       required: true,
-      default: () => () => false,
+      default: () => () => '',
     },
     checkPort: {
       type: Function,
@@ -458,10 +460,10 @@ export default {
 
       switch (type) {
         case 0:
-          this.form_data_type = 'JSON';
+          this.form.data_type = 'JSON';
           break;
         case 1:
-          this.form_data_type = 'XMS';
+          this.form.data_type = 'XML';
           break;
         default:
           break;
@@ -490,16 +492,16 @@ export default {
       if (this.form.url === '') return;
 
       if (this.form.method === 'GET') {
-        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? this.form.url.slice(1).spilt('?')[0] : this.form.url;
+        const copyUrl = this.form.url;
+        const [, value] = copyUrl.split('/');
+        const [result] = value.split('?');
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? result : this.form.url;
 
         const customTextarea = this.form.url;
         const [, queryString] = customTextarea.split('?');
         this.value_customTextarea = queryString;
-
-        console.log('url', this.form.url);
-        console.log('customTextarea', customTextarea);
-        console.log('real', this.value_realTime_eventHttpUrl);
       } else if (this.form.method === 'POST') {
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? this.form.url.slice(1) : this.form.url;
         this.value_customTextarea = this.form.custom_data;
       }
     },
@@ -524,7 +526,6 @@ export default {
 
     addNewField() {
       let newCustomData = '';
-
       switch (this.form.method) {
         case 'GET':
           newCustomData = `&${this.value_newFieldName}=${this.value_selectedDefaultData}`;
@@ -537,13 +538,13 @@ export default {
             case 'JSON':
               newCustomData = this.combineJSON(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             case 'XML':
               newCustomData = this.combineXML(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.customTextarea ? `${this.customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             default:
@@ -560,6 +561,8 @@ export default {
   },
   created() {
     this.initialConvert();
+
+    this.value_selectedData = this.form.data_type === 'JSON' ? 0 : 1;
   },
 };
 </script>

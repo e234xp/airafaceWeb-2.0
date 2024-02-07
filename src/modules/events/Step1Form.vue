@@ -24,8 +24,8 @@
               size="lg"
               placeholder=""
               required
-              :is-valid="eventControlNameValidator"
-              :invalid-feedback="$t('NoEmptyNorSpaceNeigherRepeat')"
+              :is-valid="formPass.name = eventControlNameValidator(eventControlName) === ''"
+              :invalid-feedback="eventControlNameValidator(eventControlName)"
               :value="eventControlName"
               @input="handleUpdateEmitData('name', $event)"
             />
@@ -33,7 +33,7 @@
           <td class="table-td">
             <CSelect
               size="lg"
-              :value.sync="value_eventControlType"
+              :filterable="true"
               :options="[
                 { value: 'line', label: $t('LineNotify') },
                 { value: 'http', label: $t('HttpCommand') },
@@ -41,12 +41,13 @@
                 { value: 'iobox', label: $t('IOboxes') },
                 { value: 'wiegand', label: $t('Wiegand Converters') },
               ]"
+              :value.sync="value_eventControlType"
             />
           </td>
           <td class="table-td">
             <multiselect
               placeholder=""
-              :class="flag_groupListPass ? 'is-valid' : 'is-invalid'"
+              :class="formPass.groupList ? 'is-valid' : 'is-invalid'"
               :value="eventControlGroupList"
               :options="groupNameOptions"
               :multiple="true"
@@ -59,7 +60,7 @@
               @input="groupListValidator($event), handleUpdateEmitData('groupList', $event);"
             />
             <div
-              v-if="!flag_groupListPass"
+              v-if="!formPass.groupList"
               class="invalid-feedback"
             >
               {{ $t('NoEmptyNoSpaceOnly') }}
@@ -68,7 +69,7 @@
           <td class="table-td">
             <multiselect
               placeholder=""
-              :class="flag_diviceGroupsPass ? 'is-valid' : 'is-invalid'"
+              :class="formPass.diviceGroups ? 'is-valid' : 'is-invalid'"
               :value="eventControlDiviceGroups"
               :options="diviceGroupOptions"
               :multiple="true"
@@ -81,7 +82,7 @@
               @input="deviceGroupsValidator($event), handleUpdateEmitData('diviceGroups', $event);"
             />
             <div
-              v-if="!flag_groupListPass"
+              v-if="!formPass.diviceGroups"
               class="invalid-feedback"
             >
               {{ $t('NoEmptyNoSpaceOnly') }}
@@ -108,6 +109,8 @@
 </template>
 
 <script>
+import i18n from '@/i18n';
+
 import Multiselect from 'vue-multiselect';
 import '@/airacss/vue-multiselect.css';
 
@@ -157,12 +160,15 @@ export default {
   ],
   data() {
     return {
-      groupNameOptions: [],
-      diviceGroupOptions: [],
+      groupNameOptions: this.$route.params.value_groupNameOptions ? this.$route.params.value_groupNameOptions : [],
+      diviceGroupOptions: this.$route.params.value_diviceGroupOptions ? this.$route.params.value_diviceGroupOptions : [],
+      allRecords: this.$route.params.value_allRecords ? this.$route.params.value_allRecords : [],
 
-      flag_eventNamePass: false,
-      flag_groupListPass: false,
-      flag_diviceGroupsPass: false,
+      formPass: {
+        name: false,
+        groupList: false,
+        diviceGroups: false,
+      },
 
       ...this.formData,
     };
@@ -177,7 +183,7 @@ export default {
       },
     },
     step1FormStatus() {
-      return this.flag_eventNamePass && this.flag_groupListPass;
+      return Object.values(this.formPass).every((status) => status);
     },
   },
   methods: {
@@ -186,13 +192,15 @@ export default {
     },
 
     eventControlNameValidator(val) {
-      if (val.replace(/\s/g, '').length === 0) {
-        this.flag_eventNamePass = false;
-      } else {
-        this.flag_eventNamePass = val.length > 0;
+      if (val.replace(/\s/g, '').length <= 0) {
+        return i18n.formatter.format('NoEmptyNoSpace');
       }
 
-      return this.flag_eventNamePass;
+      if (this.allRecords.some((item) => item.name === val)) {
+        return i18n.formatter.format('NoEmptyNoSpace');
+      }
+
+      return '';
     },
 
     initialValid() {
@@ -203,43 +211,18 @@ export default {
       if (!Array.isArray(val)) return;
 
       if (val.length === 0) {
-        this.flag_groupListPass = false;
+        this.formPass.groupList = false;
       } else {
-        this.flag_groupListPass = true;
+        this.formPass.groupList = true;
       }
     },
     deviceGroupsValidator(val) {
       if (!Array.isArray(val)) return;
 
       if (val.length === 0) {
-        this.flag_diviceGroupsPass = false;
+        this.formPass.diviceGroups = false;
       } else {
-        this.flag_diviceGroupsPass = true;
-      }
-    },
-
-    // Fetch Groups
-    async fetchGroupsData() {
-      const [ret1, ret2] = await Promise.all([
-        this.$globalGetGroupList(),
-        this.$globalFindVideoDeviceGroups(''),
-      ]);
-      if (ret1.error === null && ret2.error === null) {
-        if (ret1?.group_list) {
-          this.groupNameOptions = ret1?.group_list.map((item) => item.name);
-        }
-
-        if (ret2?.data) {
-          this.diviceGroupOptions = ret2?.data.result.map((item) => item.uuid);
-        }
-      } else {
-        this.$fire({
-          title: this.$t('NetworkLoss'),
-          text: '',
-          type: 'error',
-          timer: 3000,
-          confirmButtonColor: '#20a8d8',
-        });
+        this.formPass.diviceGroups = true;
       }
     },
   },
@@ -250,9 +233,6 @@ export default {
   },
   created() {
     this.initialValid();
-
-    // TODO: 換地方
-    this.fetchGroupsData();
   },
 };
 </script>

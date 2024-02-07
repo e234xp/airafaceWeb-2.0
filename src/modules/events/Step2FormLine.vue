@@ -25,7 +25,7 @@
           :data-fields="dataFields"
           :person-fields="personFields"
           :data="data"
-          @update:data="newData => Object.assign(data, newData)"
+          @update:data="newDataList => $emit('update:dataList', newDataList)"
         />
       </CCardBody>
     </CCard>
@@ -72,6 +72,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['update:dataList'],
 };
 
 </script>

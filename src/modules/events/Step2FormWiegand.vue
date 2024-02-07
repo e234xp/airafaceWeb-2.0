@@ -44,7 +44,7 @@
               :options="value_DataFormatBitsList"
               :filterable="true"
               :placeholder="$t('placeholder')"
-              v-model.number="form.bits"
+              :value.sync="form.bits"
             />
           </CCol>
         </CRow>
