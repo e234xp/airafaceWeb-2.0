@@ -150,7 +150,7 @@
         <DataFieldList
           :data-fields="dataFields"
           :person-fields="personFields"
-          :data="data"
+          :data="dataList"
           @update:data="newDataList => $emit('update:dataList', newDataList)"
         />
       </CCardBody>
@@ -192,7 +192,7 @@ export default {
       required: true,
       default: () => [],
     },
-    data: {
+    dataList: {
       type: Object,
       required: true,
       default: () => ({}),

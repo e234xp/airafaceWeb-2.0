@@ -92,12 +92,12 @@
                 <CCardBody>
                   <CRow>
                     <CCol
-                      col="1"
-                      class="pt-2 label"
+                      col="2"
+                      class="label"
                     >
                       {{ $t('PersonInfoFile') }}
                     </CCol>
-                    <CCol col="11">
+                    <CCol col="10">
                       <CInputFile
                         :lazy="false"
                         @change="personInfoListener"
@@ -108,12 +108,12 @@
                   </CRow>
                   <CRow>
                     <CCol
-                      col="1"
-                      class="pt-2 label"
+                      col="2"
+                      class="label"
                     >
                       {{ $t('UploadFile') }}
                     </CCol>
-                    <CCol col="11">
+                    <CCol col="10">
                       <CInputFile
                         :lazy="false"
                         :multiple="true"
@@ -928,6 +928,8 @@ export default {
           const expireDate = localItem['Expire Date'] && localItem['Expire Date'].length > 0
             ? new Date(localItem['Expire Date'].replaceAll('-', '/')).getTime()
             : 0;
+
+          localItem.Id = localItem.Id.toString();
 
           const idx = me.value_allTableItems.findIndex((x) => x.id === localItem.Id);
           const data = {

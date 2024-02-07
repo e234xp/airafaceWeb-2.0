@@ -542,11 +542,9 @@ export default {
 
             console.log('sendData :', sendData);
 
-            this.onFinish(sendData, (success, result) => {
+            this.onFinish(sendData, (err) => {
               if (this.obj_loading) this.obj_loading.hide();
-              if (success) {
-                console.log('success :', success);
-                console.log('result :', result);
+              if (!err) {
                 this.flag_currentSetp = 3;
               } else {
                 this.$fire({

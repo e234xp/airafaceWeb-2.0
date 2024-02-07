@@ -2,14 +2,23 @@
   <section>
     <CCard>
       <CCardBody>
-        <CRow class="mb-4">
-          <CCol
-            sm="3"
-          >
-            <div>
-              <div class="h5">
-                {{ $t('HostAddress') }}
-              </div>
+        <table class="table-layout">
+          <tr class="table-tr">
+            <th class="h5 w-25 table-th">
+              {{ $t('HostAddress') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('HttpEnabledSSL') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('Username') }}
+            </th>
+            <th class="h5 w-25 table-th">
+              {{ $t('Password') }}
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
               <CInput
                 size="lg"
                 placeholder=""
@@ -18,15 +27,8 @@
                 :invalid-feedback="checkIpAddr(form.host)"
                 v-model="form.host"
               />
-            </div>
-          </CCol>
-          <CCol
-            sm="3"
-          >
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('HttpEnabledSSL') }}
-              </div>
+            </td>
+            <td class="table-td">
               <CSwitch
                 size="lg"
                 class="mb-form-row"
@@ -35,15 +37,8 @@
                 :checked="form.https"
                 @update:checked="form.https = $event"
               />
-            </div>
-          </CCol>
-          <CCol
-            sm="3"
-          >
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('Username') }}
-              </div>
+            </td>
+            <td class="table-td">
               <CInput
                 class="mb-form-row"
                 size="lg"
@@ -52,14 +47,9 @@
                 :invalid-feedback="isNotEmptyValidator(form.user)"
                 v-model="form.user"
               />
-            </div>
-          </CCol>
-          <CCol sm="3">
-            <div class="column-space-between">
-              <div class="h5">
-                {{ $t('Password') }}
-              </div>
-              <form>
+            </td>
+            <td class="table-td">
+              <formg>
                 <CInput
                   class="mb-form-row"
                   size="lg"
@@ -86,52 +76,57 @@
                     </CButton>
                   </template>
                 </CInput>
-              </form>
-            </div>
-          </CCol>
-        </CRow>
-        <CRow>
-          <CCol sm="3">
-            <div class="h5">
+                </form>
+              </formg>
+            </td>
+          </tr>
+        </table>
+        <table class="table-layout">
+          <tr class="table-tr">
+            <th class="h5 w-25 table-th">
               {{ $t('Port') }}
-            </div>
-            <CInput
-              size="lg"
-              placeholder=""
-              :is-valid="formPass.port = checkPort(form.port) === ''"
-              :invalid-feedback="checkPort(form.port)"
-              v-model="form.port"
-            />
-          </CCol>
-          <CCol sm="3">
-            <div class="h5">
+            </th>
+            <th class="h5 w-25 table-th">
               PATH
-            </div>
-            <CInput
-              id="pathInput"
-              type="text"
-              size="lg"
-              style="display: inline-block; width: 85%"
-              prepend="/"
-              v-model="value_realTime_eventHttpUrl"
-              @input="handlePathInput"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            v-if="form.method === 'GET'"
-          >
-            <div class="h5">
+            </th>
+            <th
+              v-if="form.method === 'GET'"
+              class="h5 w-50 table-th"
+            >
               {{ $t('ShowCompleteUrl') }}
-            </div>
-            <CInput
-              size="lg"
-              placeholder=""
-              readonly
-              :value="form.url"
-            />
-          </CCol>
-        </CRow>
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                placeholder=""
+                :is-valid="formPass.port = checkPort(form.port) === ''"
+                :invalid-feedback="checkPort(form.port)"
+                v-model="form.port"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                id="pathInput"
+                type="text"
+                size="lg"
+                style="display: inline-block; width: 85%"
+                prepend="/"
+                v-model="value_realTime_eventHttpUrl"
+                @input="handlePathInput"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                placeholder=""
+                readonly
+                :value="form.url"
+              />
+            </td>
+          </tr>
+        </table>
       </CCardBody>
     </CCard>
 

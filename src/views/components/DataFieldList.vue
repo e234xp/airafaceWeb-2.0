@@ -112,7 +112,7 @@ export default {
             const personKeyList = Object.keys(this.data.person);
             personKeyList.forEach((personKey) => {
               if (this.data.person[personKey]) {
-                this.personSelected.push(`person.${this.data.person[personKey]}`);
+                this.personSelected.push(`person.${[personKey]}`);
               }
             });
           } else if (this.data[key]) {
@@ -121,6 +121,7 @@ export default {
         });
       },
       deep: true,
+      immediate: true,
     },
   },
   methods: {
@@ -197,13 +198,8 @@ export default {
         }
         temp[person][value] = true;
       });
-      console.log('temp', temp);
       this.$emit('update:data', temp);
     },
-  },
-  created() {
-    console.log('data', this.dataFields);
-    console.log('person', this.personFields);
   },
 };
 </script>

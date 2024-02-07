@@ -226,9 +226,11 @@ export default {
 
           const parameter = {
             uuid: this.uuid,
-            ...this.step1form,
-            camera_uuid_list: [],
-            tablet_uuid_list: [],
+            data: {
+              ...this.step1form,
+              camera_uuid_list: [],
+              tablet_uuid_list: [],
+            },
           };
 
           const { data } = await this.modify(parameter);

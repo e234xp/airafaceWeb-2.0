@@ -42,7 +42,9 @@ export default {
     onFinish(data, cb) {
       const dataForModify = {
         uuid: data.uuid,
-        remarks: data.remarks,
+        data: {
+          remarks: data.remarks,
+        },
       };
       let personUuidList = null;
       if (data.person_list) {
@@ -50,7 +52,7 @@ export default {
         data.person_list.forEach((person) => {
           personUuidList.push(person.uuid);
         });
-        dataForModify.person_uuid_list = personUuidList;
+        dataForModify.data.person_uuid_list = personUuidList;
       }
 
       let visitorUuidList = null;
@@ -59,7 +61,7 @@ export default {
         data.visitor_list.forEach((visitor) => {
           visitorUuidList.push(visitor.uuid);
         });
-        dataForModify.visitor_uuid_list = visitorUuidList;
+        dataForModify.data.visitor_uuid_list = visitorUuidList;
       }
       this.$globalModifyGroup(dataForModify, (error, result) => {
         if (cb) cb(error == null, result);
