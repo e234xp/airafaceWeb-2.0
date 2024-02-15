@@ -26,16 +26,7 @@
           <component
             :is="currentFormComponent"
             v-bind="getFormProps"
-            @update:isAllPassed="handleUpdatePassStatus"
-            @update:name="handleUpdateData('eventControlName', $event)"
-            @update:type="handleUpdateData('eventControlType', $event)"
-            @update:groupList="handleUpdateData('eventControlGroupList', $event)"
-            @update:diviceGroups="handleUpdateData('eventControlDiviceGroups', $event)"
-            @update:remarks="handleUpdateData('eventControlRemarks', $event)"
-            @update:dataList="handleUpdateData('eventControlDataList', $event)"
-            @update:selectedWeeklySchedule="handleUpdateData('eventControlSelectedWeeklySchedule', $event)"
-            @update:specifiedDatetimeToShow="handleUpdateData('specifiedDatetimeToShow', $event)"
-            @update:specifiedDatetimeRange="handleUpdateData('specifiedDatetimeRange', $event)"
+            v-on="getFormEmits"
           />
         </keep-alive>
       </div>
@@ -115,22 +106,23 @@ export default {
 
       flag_currentSetp: 0,
 
-      value_eventControlType: 'line',
-
       // is valid pass
       flag_step1FormPass: false,
       flag_step2FormPass: false,
 
-      value_language: 'zh',
-      value_note: '',
-      value_temperatureTriggerRule: 0,
-
-      value_eventControlEnable: true,
+      value_eventControlType: 'line',
       value_eventControlName: '',
+      value_eventControlEnable: true,
       value_eventControlGroupList: [],
-      value_eventControlRemarks: '',
       value_eventControlDiviceGroups: [],
+      value_temperatureTriggerRule: 0,
+      value_eventControlRemarks: '',
+      value_eventControlSelectedWeeklySchedule: {},
+      value_specifiedDatetimeRange: [null, null],
+      value_specifiedDatetimeToShow: [],
+      value_eventControlLanguage: 'en',
       value_eventControlDataList: {},
+      value_eventControlNote: '',
 
       // line
       lineForm: {
@@ -197,10 +189,6 @@ export default {
         special_card_number: '',
       },
 
-      value_eventControlSelectedWeeklySchedule: {},
-      value_specifiedDatetimeRange: [null, null],
-      value_specifiedDatetimeToShow: [],
-
       ...this.formData,
     };
   },
@@ -238,8 +226,8 @@ export default {
           return {
             eventControlName: this.value_eventControlName,
             eventControlGroupList: [...this.value_eventControlGroupList],
-            eventControlRemarks: this.value_eventControlRemarks,
             eventControlDiviceGroups: this.value_eventControlDiviceGroups,
+            eventControlRemarks: this.value_eventControlRemarks,
 
             ...defaultProps,
           };
@@ -248,18 +236,24 @@ export default {
             case 'line':
               return {
                 lineForm: this.lineForm,
+                eventControlLanguage: this.value_eventControlLanguage,
                 eventControlDataList: this.value_eventControlDataList,
+                eventControlNote: this.value_eventControlNote,
                 ...defaultProps,
               };
             case 'http':
               return {
                 httpForm: this.httpForm,
+                eventControlLanguage: this.value_eventControlLanguage,
+                eventControlNote: this.value_eventControlNote,
                 ...defaultProps,
               };
             case 'mail':
               return {
                 mailForm: this.mailForm,
+                eventControlLanguage: this.value_eventControlLanguage,
                 eventControlDataList: this.value_eventControlDataList,
+                eventControlNote: this.value_eventControlNote,
                 ...defaultProps,
               };
             case 'iobox': {
@@ -296,6 +290,67 @@ export default {
         }
       }
     },
+    getFormEmits() {
+      const defaultEmits = {
+        'update:isAllPassed': (val) => this.handleUpdatePassStatus(val),
+      };
+
+      switch (this.flag_currentSetp) {
+        case 0:
+          return {
+            'update:name': (val) => this.handleUpdateData('eventControlName', val),
+            'update:type': (val) => this.handleUpdateData('eventControlType', val),
+            'update:groupList': (val) => this.handleUpdateData('eventControlGroupList', val),
+            'update:diviceGroups': (val) => this.handleUpdateData('eventControlDiviceGroups', val),
+            'update:remarks': (val) => this.handleUpdateData('eventControlRemarks', val),
+
+            ...defaultEmits,
+          };
+        case 1:
+          switch (this.value_eventControlType) {
+            case 'line':
+              return {
+                'update:language': (val) => this.handleUpdateData('eventControlLanguage', val),
+                'update:dataList': (val) => this.handleUpdateData('eventControlDataList', val),
+                'update:note': (val) => this.handleUpdateData('eventControlNote', val),
+
+                ...defaultEmits,
+              };
+            case 'http':
+              return {
+                'update:language': (val) => this.handleUpdateData('eventControlLanguage', val),
+                'update:note': (val) => this.handleUpdateData('eventControlNote', val),
+
+                ...defaultEmits,
+              };
+            case 'mail':
+              return {
+                'update:language': (val) => this.handleUpdateData('eventControlLanguage', val),
+                'update:dataList': (val) => this.handleUpdateData('eventControlDataList', val),
+                'update:note': (val) => this.handleUpdateData('eventControlNote', val),
+
+                ...defaultEmits,
+              };
+            case 'iobox':
+            case 'wiegand':
+            default:
+              return defaultEmits;
+          }
+        case 2:
+          return {
+            'update:selectedWeeklySchedule': (val) => this.handleUpdateData('eventControlSelectedWeeklySchedule', val),
+            'update:specifiedDatetimeToShow': (val) => this.handleUpdateData('specifiedDatetimeToShow', val),
+            'update:specifiedDatetimeRange': (val) => this.handleUpdateData('specifiedDatetimeRange', val),
+
+            ...defaultEmits,
+          };
+
+        case 3:
+        default: {
+          return defaultEmits;
+        }
+      }
+    },
   },
   methods: {
     handleUpdateExistData(item) {
@@ -305,23 +360,23 @@ export default {
       this.value_eventControlName = item.name;
       this.value_enable = item.enable;
       this.value_eventControlGroupList = [...item.group_list];
+      this.value_eventControlDiviceGroups = [...item.divice_groups];
       this.value_temperatureTriggerRule = item.temperature_trigger_rule;
       this.value_eventControlRemarks = item.remarks;
-      this.value_eventControlDiviceGroups = [...item.divice_groups];
-      this.value_eventControlDataList = structuredClone(item.data_list);
       this.value_eventControlSelectedWeeklySchedule = this.convertBackToEventControlSelectedWeeklySchedule(item.weekly_schedule);
       this.value_specifiedDatetimeToShow = this.convertBackToSpecifiedDatetimeToShow(item.specify_time);
 
-      // language: 'en',
-      // note: '',
-
       switch (item.action_type) {
         case 'line':
+          this.value_eventControlLanguage = item.language;
+          this.value_eventControlDataList = structuredClone(item.data_list);
+          this.value_eventControlNote = item.note;
           Object.assign(this.lineForm, {
             token: item.token,
           });
           break;
         case 'http':
+          this.value_eventControlNote = item.note;
           Object.assign(this.httpForm, {
             method: item.method,
             https: item.https,
@@ -335,6 +390,9 @@ export default {
           });
           break;
         case 'mail':
+          this.value_eventControlLanguage = item.language;
+          this.value_eventControlDataList = structuredClone(item.data_list);
+          this.value_eventControlNote = item.note;
           Object.assign(this.mailForm, {
             from: item.from,
             host: item.host,
@@ -435,13 +493,6 @@ export default {
       ].join('');
     },
 
-    // TODO: 判斷 name 重複
-    isNotEmptyValidator(key, val) {
-      console.log(key, val);
-      this[`flag_${key}`] = val.replace(/\s/g, '').length > 0;
-      return this[`flag_${key}`];
-    },
-
     handleUpdatePassStatus(status) {
       switch (this.flag_currentSetp) {
         case 0:
@@ -492,15 +543,11 @@ export default {
               name: this.value_eventControlName,
               enable: this.value_eventControlEnable,
               group_list: this.value_eventControlGroupList,
+              divice_groups: this.value_eventControlDiviceGroups,
               temperature_trigger_rule: this.value_temperatureTriggerRule,
               remarks: this.value_eventControlRemarks,
               specify_time: this.convertToSpecifyTime(this.value_specifiedDatetimeToShow),
               weekly_schedule: this.convertToWeeklySchedule(this.value_eventControlSelectedWeeklySchedule),
-              divice_groups: this.value_eventControlDiviceGroups,
-              data_list: this.value_eventControlDataList,
-              // TODO: replace mock data
-              language: 'en',
-              note: '',
             };
 
             let sendData = {};
@@ -510,18 +557,25 @@ export default {
                 sendData = {
                   ...this.lineForm,
                   ...defaultSendData,
+                  language: this.value_eventControlLanguage,
+                  data_list: this.value_eventControlDataList,
+                  note: this.value_eventControlNote,
                 };
                 break;
               case 'http':
                 sendData = {
                   ...this.httpForm,
                   ...defaultSendData,
+                  note: this.value_eventControlNote,
                 };
                 break;
               case 'mail':
                 sendData = {
                   ...this.mailForm,
                   ...defaultSendData,
+                  language: this.value_eventControlLanguage,
+                  data_list: this.value_eventControlDataList,
+                  note: this.value_eventControlNote,
                 };
                 break;
               case 'iobox':
@@ -539,8 +593,6 @@ export default {
               default:
                 break;
             }
-
-            console.log('sendData :', sendData);
 
             this.onFinish(sendData, (err) => {
               if (this.obj_loading) this.obj_loading.hide();

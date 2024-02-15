@@ -2,7 +2,7 @@
   <component
     :is="currentFormComponent"
     v-bind="getFormProps"
-    @update:dataList="newDataList => $emit('update:dataList', newDataList)"
+    v-on="getFormEmits"
   />
 </template>
 
@@ -22,6 +22,86 @@ import Step2FormWiegand from './Step2FormWiegand.vue';
 
 export default {
   name: 'Step2Form',
+  languageOptions: [
+    { value: 'en', label: 'English' },
+    { value: 'zh', label: '繁體中文' },
+    { value: 'ja', label: '日本語' },
+    { value: 'es', label: 'español' },
+    { value: 'fr', label: 'Français' },
+    { value: 'th', label: 'แบบไทย' },
+  ],
+  dataFields: [
+    {
+      label: 'foreHead_temperature',
+      value: 'foreHead_temperature',
+    },
+    {
+      label: 'HighTemperatureOnly',
+      value: 'is_high_temperature',
+    },
+    {
+      label: 'show_identity',
+      value: 'show_identity',
+    },
+    {
+      label: 'VerifiedTimestamp',
+      value: 'verified_timestamp',
+    },
+    {
+      label: 'face_image',
+      value: 'captured',
+    },
+    {
+      label: 'register_image',
+      value: 'register',
+    },
+    {
+      label: 'display_image',
+      value: 'display',
+    },
+  ],
+  personFields: [
+    {
+      label: 'card_number',
+      value: 'person.card_number',
+    },
+    {
+      label: 'Department',
+      value: 'person.department',
+    },
+    {
+      label: 'HighTemperatureOnly',
+      value: 'person.email',
+    },
+    {
+      label: 'ExtensionNumber',
+      value: 'person.extension_number',
+    },
+    {
+      label: 'Group',
+      value: 'person.group_list',
+    },
+    {
+      label: 'PersonId',
+      value: 'person.id',
+    },
+    {
+      label: 'PersonName',
+      value: 'person.name',
+    },
+    {
+      label: 'PhoneNumber',
+      value: 'person.phone_number',
+    },
+    {
+      label: 'Remarks',
+      value: 'person.remarks',
+    },
+    {
+      label: 'JobTitle',
+      value: 'person.title',
+    },
+  ],
   components: {
     Step2FormLine,
     Step2FormHttp,
@@ -44,9 +124,17 @@ export default {
       type: String,
       default: 'line',
     },
+    eventControlLanguage: {
+      type: String,
+      default: '',
+    },
     eventControlDataList: {
       type: Object,
       default: () => ({}),
+    },
+    eventControlNote: {
+      type: String,
+      default: '',
     },
     lineForm: {
       type: Object,
@@ -70,82 +158,13 @@ export default {
     },
   },
   emits: [
+    'update:language',
+    'update:dataList',
+    'update:note',
     'update:isAllPassed',
   ],
   data() {
     return {
-      dataFields: [
-        {
-          label: 'foreHead_temperature',
-          value: 'foreHead_temperature',
-        },
-        {
-          label: 'HighTemperatureOnly',
-          value: 'is_high_temperature',
-        },
-        {
-          label: 'show_identity',
-          value: 'show_identity',
-        },
-        {
-          label: 'VerifiedTimestamp',
-          value: 'verified_timestamp',
-        },
-        {
-          label: 'face_image',
-          value: 'captured',
-        },
-        {
-          label: 'register_image',
-          value: 'register',
-        },
-        {
-          label: 'display_image',
-          value: 'display',
-        },
-      ],
-      personFields: [
-        {
-          label: 'card_number',
-          value: 'person.card_number',
-        },
-        {
-          label: 'Department',
-          value: 'person.department',
-        },
-        {
-          label: 'HighTemperatureOnly',
-          value: 'person.email',
-        },
-        {
-          label: 'ExtensionNumber',
-          value: 'person.extension_number',
-        },
-        {
-          label: 'Group',
-          value: 'person.group_list',
-        },
-        {
-          label: 'PersonId',
-          value: 'person.id',
-        },
-        {
-          label: 'PersonName',
-          value: 'person.name',
-        },
-        {
-          label: 'PhoneNumber',
-          value: 'person.phone_number',
-        },
-        {
-          label: 'Remarks',
-          value: 'person.remarks',
-        },
-        {
-          label: 'JobTitle',
-          value: 'person.title',
-        },
-      ],
 
       lineFormPass: {
         token: false,
@@ -193,9 +212,12 @@ export default {
           return {
             isNotEmptyValidator: this.isNotEmptyValidator,
 
-            dataFields: this.dataFields,
-            personFields: this.personFields,
+            dataFields: this.$options.dataFields,
+            personFields: this.$options.personFields,
+            language: this.eventControlLanguage,
+            languageOptions: this.$options.languageOptions,
             dataList: structuredClone(this.eventControlDataList),
+            note: this.eventControlNote,
             form: this.lineForm,
             formPass: this.lineFormPass,
           };
@@ -205,6 +227,7 @@ export default {
             checkIpAddr: this.checkIpAddr,
             isNotEmptyValidator: this.isNotEmptyValidator,
 
+            note: this.eventControlNote,
             form: this.httpForm,
             formPass: this.httpFormPass,
           };
@@ -215,9 +238,12 @@ export default {
             checkEmail: this.checkEmail,
             isNotEmptyValidator: this.isNotEmptyValidator,
 
-            dataFields: this.dataFields,
-            personFields: this.personFields,
+            dataFields: this.$options.dataFields,
+            personFields: this.$options.personFields,
+            language: this.eventControlLanguage,
+            languageOptions: this.$options.languageOptions,
             dataList: structuredClone(this.eventControlDataList),
+            note: this.eventControlNote,
             form: this.mailForm,
             formPass: this.mailFormPass,
           };
@@ -248,6 +274,26 @@ export default {
         }
       }
     },
+    getFormEmits() {
+      switch (this.eventControlType) {
+        case 'line':
+        case 'mail':
+          return {
+            'update:language': (newLanguage) => this.$emit('update:language', newLanguage),
+            'update:dataList': (newDataList) => this.$emit('update:dataList', newDataList),
+            'update:note': (newNote) => this.$emit('update:note', newNote),
+          };
+        case 'http':
+          return {
+            'update:language': (newLanguage) => this.$emit('update:language', newLanguage),
+            'update:note': (newNote) => this.$emit('update:note', newNote),
+          };
+        case 'iobox':
+        case 'wiegand':
+        default:
+          return null;
+      }
+    },
     step2FormStatus() {
       return Object.values(this[`${this.eventControlType}FormPass`]).every((status) => status);
     },
@@ -255,7 +301,7 @@ export default {
   methods: {
     // Validators
     isNotEmptyValidator(val) {
-      if (val.replace(/\s/g, '').length <= 0) {
+      if (val === '' && val.replace(/\s/g, '').length <= 0) {
         return i18n.formatter.format('NoEmptyNoSpace');
       }
       return '';

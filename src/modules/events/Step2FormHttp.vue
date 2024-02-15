@@ -49,7 +49,7 @@
               />
             </td>
             <td class="table-td">
-              <formg>
+              <form>
                 <CInput
                   class="mb-form-row"
                   size="lg"
@@ -76,12 +76,10 @@
                     </CButton>
                   </template>
                 </CInput>
-                </form>
-              </formg>
+              </form>
             </td>
           </tr>
-        </table>
-        <table class="table-layout">
+
           <tr class="table-tr">
             <th class="h5 w-25 table-th">
               {{ $t('Port') }}
@@ -91,7 +89,8 @@
             </th>
             <th
               v-if="form.method === 'GET'"
-              class="h5 w-50 table-th"
+              colspan="2"
+              class="h5 w-25 table-th"
             >
               {{ $t('ShowCompleteUrl') }}
             </th>
@@ -117,7 +116,10 @@
                 @input="handlePathInput"
               />
             </td>
-            <td class="table-td">
+            <td
+              colspan="2"
+              class="table-td"
+            >
               <CInput
                 size="lg"
                 placeholder=""
@@ -272,7 +274,6 @@
 
                     <CCol
                       sm="12"
-                      style=""
                     >
                       <div
                         v-if="form.method === 'GET'"
@@ -295,6 +296,43 @@
                         placeholder=""
                         style="position: relative; width: 100%"
                         v-model="value_customTextarea"
+                      />
+                    </CCol>
+                  </CRow>
+                </CForm>
+              </CCol>
+            </CRow>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
+
+    <CCard>
+      <CCardBody>
+        <CRow style="height: 100%;">
+          <CCol
+            sm="12"
+          >
+            <CRow>
+              <CCol sm="12">
+                <CForm
+                  style="position: relative; display: block; padding-bottom: 10px"
+                >
+                  <CRow>
+                    <CCol
+                      sm="12"
+                    >
+                      <div
+                        class="h5"
+                        style="position: relative; margin-top: 10px"
+                      >
+                        {{ $t('ExpansionField') }}
+                      </div>
+                      <CTextarea
+                        size="lg"
+                        rows="9"
+                        :value="note"
+                        @input="$emit('update:note', $event)"
                       />
                     </CCol>
                   </CRow>
@@ -328,6 +366,11 @@ export default {
       required: true,
       default: () => '',
     },
+    note: {
+      type: String,
+      required: true,
+      default: '',
+    },
     form: {
       type: Object,
       required: true,
@@ -339,6 +382,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['update:note'],
   data() {
     return {
       flag_view_password: false,

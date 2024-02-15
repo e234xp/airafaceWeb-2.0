@@ -89,6 +89,7 @@
             </div>
           </td>
         </tr>
+
         <tr class="table-tr">
           <th class="h5 w-25 table-th">
             {{ $t('Note') }}
@@ -180,6 +181,14 @@ export default {
       },
       set(value) {
         return this.$emit('update:type', value);
+      },
+    },
+    value_eventControlLanguage: {
+      get() {
+        return this.eventControlLanguage;
+      },
+      set(value) {
+        return this.$emit('update:language', value);
       },
     },
     step1FormStatus() {

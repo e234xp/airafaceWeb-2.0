@@ -6,38 +6,36 @@
         <span class="h3">{{ $t('I/OBoxesBasicName') }}</span>
       </CCardHeader>
       <CCardBody>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+        <table class="table-layout">
+          <tr>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNameBrand') }}
-            </h5>
-            <CSelect
-              size="lg"
-              class="font-control mt-2"
-              :filterable="true"
-              :value.sync="form.brand"
-              :options="value_brandList"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+            </th>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNameModel') }}
-            </h5>
-            <CSelect
-              size="lg"
-              class="font-control mt-2"
-              :filterable="true"
-              :value.sync="form.model"
-              :options="value_modelList"
-            />
-          </CCol>
-        </CRow>
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :filterable="true"
+                :value.sync="form.brand"
+                :options="value_brandList"
+              />
+            </td>
+            <td class="table-td">
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :filterable="true"
+                :value.sync="form.model"
+                :options="value_modelList"
+              />
+            </td>
+          </tr>
+        </table>
       </CCardBody>
     </CCard>
 
@@ -47,97 +45,86 @@
         <span class="h3">{{ $t('I/OBoxesBasicTitleNameConnection') }}</span>
       </CCardHeader>
       <CCardBody>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+        <table class="table-layout">
+          <tr>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNameIP') }}
-            </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :invalid-feedback="checkIpAddr(form.host)"
-              :is-valid="formPass.host = checkIpAddr(form.host) === ''"
-              v-model="form.host"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+            </th>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNamePort') }}
-            </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :invalid-feedback="checkPort(form.port)"
-              :is-valid="formPass.port = checkPort(form.port) === ''"
-              v-model.number="form.port"
-            />
-          </CCol>
-        </CRow>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :invalid-feedback="checkIpAddr(form.host)"
+                :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+                v-model="form.host"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :invalid-feedback="checkPort(form.port)"
+                :is-valid="formPass.port = checkPort(form.port) === ''"
+                v-model.number="form.port"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNameUserName') }}
-            </h5>
-            <!-- <CInput
-              size="lg"
-              class="mt-2"
-              v-model="form.user"
-              required
-            /> -->
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
-              :invalid-feedback="isNotEmptyValidator(form.user)"
-              v-model="form.user"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            <h5 class="ml-2">
+            </th>
+            <th class="h5 w-50 table-th">
               {{ $t('I/OBoxesBasicCOlNamePassword') }}
-            </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :type="flag_view_password ? 'text' : 'password'"
-              :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
-              :invalid-feedback="isNotEmptyValidator(form.pass)"
-              v-model="form.pass"
-            >
-              <template #append-content>
-                <CButton
-                  @click="viewPassword"
-                  style="padding: 0.375rem 0.375rem;"
-                >
-                  <CIcon
-                    v-show="flag_view_password"
-                    src="/img/eye-slash.png"
-                  />
-                  <CIcon
-                    v-show="!flag_view_password"
-                    src="/img/eye.png"
-                  />
-                </CButton>
-              </template>
-            </CInput>
-          </CCol>
-        </CRow>
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
+                :invalid-feedback="isNotEmptyValidator(form.user)"
+                v-model="form.user"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :type="flag_view_password ? 'text' : 'password'"
+                :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
+                :invalid-feedback="isNotEmptyValidator(form.pass)"
+                v-model="form.pass"
+              >
+                <template #append-content>
+                  <CButton
+                    @click="viewPassword"
+                    style="padding: 0.375rem 0.375rem;"
+                  >
+                    <CIcon
+                      v-show="flag_view_password"
+                      src="/img/eye-slash.png"
+                    />
+                    <CIcon
+                      v-show="!flag_view_password"
+                      src="/img/eye.png"
+                    />
+                  </CButton>
+                </template>
+              </CInput>
+            </td>
+          </tr>
+        </table>
       </CCardBody>
     </CCard>
 
@@ -151,78 +138,41 @@
           <span class="h3">{{ `${$t('DigitalOutput')} #${idx + 1}` }}</span>
         </CCardHeader>
         <CCardBody>
-          <CRow sm="12">
-            <!-- <CCol
-              sm="6"
-              class="h5"
-            >
-              <h5 class="ml-2">
-                {{ $t('I/OBoxesBasicCOlNameEnable') }}
-              </h5>
-              <label class="switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="form.iopoint[idx].enable"
-                >
-                <span class="slider round" />
-              </label>
-            </CCol>
-            <CCol
-              sm="6"
-              class="h5"
-            >
-              <h5 class="ml-2">
-                {{ $t('I/OBoxesBasicCOlNameDefaultValue') }}
-              </h5>
-              <CSelect
-                size="lg"
-                class="font-control mt-2"
-                :value.sync="form.iopoint[idx].default"
-                :options="value_deviceDefaultValue"
-                :filterable="true"
-                :placeholder="$t('placeholder')"
-                :disabled="!form.iopoint[idx].enable"
-              />
-            </CCol> -->
-          </CRow>
-          <CRow sm="12">
-            <CCol
-              sm="6"
-              class="h5"
-            >
-              <h5 class="ml-2">
+          <table class="table-layout">
+            <tr>
+              <th class="h5 w-50 table-th">
                 {{ $t('I/OBoxesBasicCOlNameValueWhenTriggered') }}
-              </h5>
-              <CSelect
-                size="lg"
-                class="font-control mt-2"
-                :filterable="true"
-                :placeholder="$t('placeholder')"
-                :disabled="!form.iopoint[idx].enable"
-                :value.sync="form.iopoint[idx].trigger"
-                :options="value_deviceTrigger"
-              />
-            </CCol>
-            <CCol
-              sm="6"
-              class="h5"
-            >
-              <h5 class="ml-2">
+              </th>
+              <th class="h5 w-50 table-th">
                 {{ $t('I/OBoxesBasicCOlNameDurationWhenTriggered') }}
-              </h5>
-              <CInput
-                size="lg"
-                class="mt-2"
-                pattern="[0-9]*"
-                required
-                :disabled="!form.iopoint[idx].enable"
-                :is-valid="formPass.delay = checkDelay(form.iopoint[idx].delay) === ''"
-                :invalid-feedback="checkDelay(form.iopoint[idx].delay)"
-                v-model.number="form.iopoint[idx].delay"
-              />
-            </CCol>
-          </CRow>
+              </th>
+            </tr>
+            <tr class="table-tr">
+              <td class="table-td">
+                <CSelect
+                  size="lg"
+                  class="font-control mt-2"
+                  :filterable="true"
+                  :placeholder="$t('placeholder')"
+                  :disabled="!form.iopoint[idx].enable"
+                  :value.sync="form.iopoint[idx].trigger"
+                  :options="value_deviceTrigger"
+                />
+              </td>
+              <td class="table-td">
+                <CInput
+                  size="lg"
+                  class="mt-2"
+                  pattern="[0-9]*"
+                  required
+                  :disabled="!form.iopoint[idx].enable"
+                  :is-valid="formPass.delay = checkDelay(form.iopoint[idx].delay) === ''"
+                  :invalid-feedback="checkDelay(form.iopoint[idx].delay)"
+                  v-model.number="form.iopoint[idx].delay"
+                />
+              </td>
+            </tr>
+          </table>
         </CCardBody>
       </CCard>
     </template>

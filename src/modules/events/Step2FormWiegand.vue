@@ -2,104 +2,111 @@
   <section>
     <CCard>
       <CCardBody>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('WiegandBasicCOlNameIP') }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :is-valid="formPass.host = checkIpAddr(form.host) === ''"
-              :invalid-feedback="checkIpAddr(form.host)"
-              v-model="form.host"
-            />
-          </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('WiegandBasicCOlNamePort') }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :is-valid="formPass.port = checkPort(form.port) === ''"
-              :invalid-feedback="checkPort(form.port)"
-              v-model.number="form.port"
-            />
-          </CCol>
-        </CRow>
-        <CRow sm="6">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('WiegandBasicCOlNameDataFormat') }}
-            <CSelect
-              size="lg"
-              class="font-control mt-2"
-              :options="value_DataFormatBitsList"
-              :filterable="true"
-              :placeholder="$t('placeholder')"
-              :value.sync="form.bits"
-            />
-          </CCol>
-        </CRow>
-        <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('WiegandBasicCOlNameIndex') }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :is-valid="formPass.index = checkIndex(form.index) === ''"
-              :invalid-feedback="checkIndex(form.index)"
-              v-model.number="form.index"
-            />
-          </CCol>
+        <table class="table-layout">
+          <tr>
+            <th class="h5 w-50 table-th">
+              {{ $t('WiegandBasicCOlNameIP') }}
+            </th>
+            <th class="h5 w-50 table-th">
+              {{ $t('WiegandBasicCOlNamePort') }}
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+                :invalid-feedback="checkIpAddr(form.host)"
+                v-model="form.host"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :is-valid="formPass.port = checkPort(form.port) === ''"
+                :invalid-feedback="checkPort(form.port)"
+                v-model.number="form.port"
+              />
+            </td>
+          </tr>
 
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('WiegandBasicCOlNameSystemCode') }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              required
-              :invalid-feedback="checkSyscode(form.syscode)"
-              :is-valid="formPass.syscode = checkSyscode(form.syscode) === ''"
-              v-model.number="form.syscode"
-            />
-          </CCol>
-        </CRow>
+          <tr>
+            <th class="h5 w-50 table-th">
+              {{ $t('WiegandBasicCOlNameDataFormat') }}
+            </th>
+            <th />
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :options="value_DataFormatBitsList"
+                :filterable="true"
+                :placeholder="$t('placeholder')"
+                :value.sync="form.bits"
+              />
+            </td>
+            <td />
+          </tr>
 
-        <CRow
-          sm="12"
-          class="pt-3"
-        >
-          <CCol
-            sm="6"
-            class="h5"
-          >
-            {{ $t('SpecialCardNumber') }}
-            <CInput
-              size="lg"
-              class="mt-2"
-              v-model="form.specialCardNumber"
-            />
-          </CCol>
-        </CRow>
+          <tr>
+            <th class="h5 w-50 table-th">
+              {{ $t('WiegandBasicCOlNameIndex') }}
+            </th>
+            <th class="h5 w-50 table-th">
+              {{ $t('WiegandBasicCOlNameSystemCode') }}
+            </th>
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :is-valid="formPass.index = checkIndex(form.index) === ''"
+                :invalid-feedback="checkIndex(form.index)"
+                v-model.number="form.index"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :invalid-feedback="checkSyscode(form.syscode)"
+                :is-valid="formPass.syscode = checkSyscode(form.syscode) === ''"
+                v-model.number="form.syscode"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <th class="h5 w-50 table-th">
+              {{ $t('SpecialCardNumber') }}
+            </th>
+            <th />
+          </tr>
+          <tr class="table-tr">
+            <td class="table-td">
+              <CInput
+                size="lg"
+                class="mt-2"
+                v-model="form.specialCardNumber"
+              />
+            </td>
+            <td />
+          </tr>
+        </table>
 
         <!-- 圖片 -->
         <CRow sm="12">
           <CCol sm="12">
+            <!-- eslint-disable max-len -->
             <svg
               width="28"
               height="28"
@@ -125,7 +132,7 @@
                 />
               </g>
             </svg>
-
+            <!-- eslint-enable max-len -->
             {{ $t('SpecialCardHint') }}
           </CCol>
         </CRow>
