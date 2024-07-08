@@ -87,7 +87,7 @@ export default {
         displayGroup: ['All Visitor'],
         welcomeword: 'Welcome',
         maintitle: 'Conference 2023',
-        subtitle: 'aira Corporation',
+        subtitle: 'Latticework Inc.',
         displayPhoto: 'REGISTER',
         line1: 'JOBTITLE',
         line2: 'NAME',

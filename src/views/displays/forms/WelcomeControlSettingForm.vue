@@ -565,7 +565,7 @@ export default {
         line4: 'NONE',
         welcomeword: 'Welcome',
         maintitle: '2023 Product launch',
-        subtitle: 'aira Corporation',
+        subtitle: 'Latticework Inc.',
         numberOfDisplayPersons: 4,
         showDuration: 10,
 

@@ -319,7 +319,7 @@
             powered by
           </div>
           <img
-            src="@/assets/img/aira-logo-white.svg"
+            src="@/assets/img/latticework-logo-white.png"
             alt=""
             class="footer-logo"
           >

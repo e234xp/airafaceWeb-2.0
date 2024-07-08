@@ -551,7 +551,7 @@ export default {
           width: 220,
           height: 220,
           logo: {
-            src: '/img/logo/airaLogo.png',
+            src: '/img/logo/latticeworkLogo.png',
             radius: 1,
           },
         });
