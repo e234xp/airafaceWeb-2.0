@@ -13,12 +13,12 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.00.01.240207';
+global.webVersion = '2.00.01.240626';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.122'; // airaFace2
+const TEST_HOST = '192.168.10.86'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = '443'; // 測試mini的PORT
@@ -614,6 +614,16 @@ Vue.prototype.$globalRestartDevice = (
     });
 });
 
+Vue.prototype.$globalRestartService = (
+  cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/restartservice', {},
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
+
 Vue.prototype.$globalDownloadDbPath = () => `${apiServerPath()}/system/downloaddb`;
 
 Vue.prototype.$globalUploadDbPath = () => `${apiServerPath()}/system/uploaddb`;
@@ -634,7 +644,8 @@ Vue.prototype.$globalGotoRootPage = (page, cb) => {
       case 'Welcome': router.push({ name: 'DashboardWelcome' }); break;
       case 'Occupancy': router.push({ name: 'DashboardOccupancy' }); break;
       case 'Capacity': router.push({ name: 'DashboardCapacity' }); break;
-      // case 'SelfCheckin': router.push({ name: 'DashboardSelfCheckin' }); break;
+      case 'SelfCheckin': router.push({ name: 'DashboardSelfCheckin' }); break;
+      case 'AlcoholCheckin': router.push({ name: 'DashboardAlcoholCheckin' }); break;
       case 'Guard': router.push({ name: 'DashboardGuard' }); break;
       case 'Setting':
       default:
@@ -1689,5 +1700,34 @@ Vue.prototype.$globalResetPassword = (
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalSendNotification = (
+  payload, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/sendnotification', payload,
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
+Vue.prototype.$globalAttendanceVerifyResult = (
+  uuidList, startTime, endTime, shift, sliceSize, cb,
+) => new Promise((resolve) => {
+  const query = {
+    start_time: startTime,
+    end_time: endTime,
+    slice_shift: shift,
+    slice_length: sliceSize,
+    with_image: false,
+    uuid_list: uuidList,
+  };
+
+  postJson('/airafacelite/queryattendanceverifyresult', query,
+    (err, data) => {
+      if (cb) cb(err, err ? null : data.result);
+      resolve({ error: err, data: err ? null : data.result });
     });
 });

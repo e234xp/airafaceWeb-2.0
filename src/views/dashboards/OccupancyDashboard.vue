@@ -16,8 +16,9 @@
           <div
             class="dashboard-attendance-logo"
             @click="toLoginPage"
-            :style="[{backgroundImage:'url('+displaySettings.logo+')'}, 'zoom: ' + zoomRatio + ' !important;']"
-          />
+            :style="['zoom: ' + zoomRatio + ' !important;']">
+            <img :src="displaySettings.logo" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
           <div class="attendance-title" />
         </div>
         <div class="current-date-time text-white ff-noto-sans fw-200">
@@ -68,7 +69,6 @@
               <!-- Attendance 甜甜圈圖表 -->
               <canvas
                 id="doughnut-chart-canvas"
-                class=""
               />
             </div>
             <div class="d-flex align-items-end">
@@ -114,6 +114,7 @@
       <div
         v-if="!isShowGroup"
         style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
+        :style="{'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px`}"
         :class="[
           getGridStyleByAmount(),
           ,
@@ -205,6 +206,7 @@
       <div
         v-if="isShowGroup"
         style="height: 60%; margin-left: 20px; margin-right: 20px; align-items: start;grid-auto-rows: min-content;"
+        :style="{'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px`}"
         :class="[
           getGridStyleByAmount(),
           ,
@@ -273,7 +275,7 @@
             @click="onClickPagerDot(i)"></button> -->
           <button
             v-for="(item, i) in range(dispPageIndexStart, currentPageIndex - 1)"
-            :key="i"
+            :key="`${range(dispPageIndexStart, currentPageIndex - 1)}${i}`"
             class="pager-left-dots btn-reset"
             @click="onClickPagerDot(i)"
           />
@@ -289,7 +291,7 @@
             @click="onClickPagerDot(i + currentPageIndex + 1)"></button> -->
           <button
             v-for="(item, i) in range(currentPageIndex + 1, dispPageIndexEnd)"
-            :key="i"
+            :key="`${range(currentPageIndex + 1, dispPageIndexEnd)}${i}`"
             class="pager-right-dots btn-reset"
             @click="onClickPagerDot(i + currentPageIndex + 1)"
           />
@@ -323,6 +325,12 @@
           >
         </div>
       </div>
+    </div>
+    <div
+      class="loading"
+      v-if="loading"
+    >
+      <CSpinner color="primary" />
     </div>
   </div>
 </template>
@@ -512,8 +520,6 @@ export default {
   },
   watch: {
     currentPageIndex(newIndex) {
-      // console.log('currentPageIndex', newIndex, oldIndex);
-
       const self = this;
 
       self.displayAmount = self.setupPageLayoutAmount();
@@ -606,11 +612,7 @@ export default {
         self.dispPageIndexEnd = self.totalPageIndex;
       }
 
-      // console.log('dispPageIndexStart dispPageIndexEnd', self.dispPageIndexStart, self.dispPageIndexEnd);
-
       setTimeout(() => {
-        console.log('currentPageIndex setTimeout');
-
         const cards = document.getElementsByName('groupCards');
 
         cards.forEach((element) => {
@@ -624,11 +626,11 @@ export default {
   // Tulip
   async created() {
     const self = this;
-    // console.log('created start');
 
     this.unSubscribe = this.$store.subscribe(async (mutation) => {
       let payload = {};
       let person = {};
+      let result = {};
       switch (mutation.type) {
         case 'changeWebSocket':
           if (mutation.payload === 0) {
@@ -640,29 +642,33 @@ export default {
           break;
         case 'changeNotifications':
           if (mutation.payload.statusCode === '200') {
-            console.log('created subscribe', 'mutation payload statusCode == 200');
+            // console.log('created subscribe', 'mutation payload statusCode == 200');
             return;
           }
 
           payload = mutation.payload;
 
-          if (payload.person === undefined) {
-            console.log('created subscribe', 'payload.person === undefined');
+          if (payload !== undefined) {
+            person = payload.person || payload.person_info;
+          }
+
+          if (person === undefined) {
+            // console.log('created subscribe', 'payload.person === undefined');
             return;
           }
 
-          person = {
-            card_facility_code: payload.person.card_facility_code,
-            card_number: payload.person.card_number,
+          result = {
+            card_facility_code: person.card_facility_code,
+            card_number: person.card_number,
             face_image_id: payload.face_image,
-            group_list: payload.person.group_list,
+            group_list: payload.groups || person.group_list,
             high_temperature: payload.is_high_temperature,
-            id: payload.person.id,
-            name: payload.person.name,
-            source_id: payload.source_id,
+            id: payload.person_id || person.id,
+            name: person.fullname || person.name,
+            source_id: payload.source_id || payload.channel || '',
             temperature: payload.foreHead_temperature,
             timestamp: payload.timestamp,
-            uuid: payload.person.uuid,
+            uuid: payload.person_id || person.uuid,
             verify_mode: payload.verify_mode,
             target_score: 0,
             verify_mode_string: '',
@@ -670,7 +676,7 @@ export default {
             verify_uuid: '',
           };
 
-          self.applyVerifyToPerson([person]);
+          self.applyVerifyToPerson([result]);
           self.groupPersons.forEach((elem) => {
             const element = elem;
             const present = element.persons.filter((p) => p.punchMode === 3);
@@ -706,7 +712,6 @@ export default {
   // Tulip
   async mounted() {
     const self = this;
-    // console.log('mounted start');
 
     self.isLoadSetting = true;
 
@@ -722,6 +727,9 @@ export default {
     const setting = await self.$globalGetAttendanceSettings();
     const videoDeviceGroupIn = setting.data.video_device_group_in;
     const videoDeviceGroupOut = setting.data.video_device_group_out;
+
+    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
+    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
 
     self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
       let result = [];
@@ -746,7 +754,21 @@ export default {
       self.params_entryChannels = Array.from(new Set(entryChannels));
       self.params_leaveChannels = Array.from(new Set(leaveChannels));
 
-      console.log('Channels', JSON.stringify(self.params_entryChannels), JSON.stringify(self.params_leaveChannels));
+      self.params_entryChannels = self.params_entryChannels.map((id) => {
+        const camera = cameraList.find((c) => c.uuid === id);
+        const tablet = tabletList.find((c) => c.uuid === id);
+        if (camera) return `${id}${camera.name}`;
+        if (tablet) return `${id}${tablet.identity}`;
+        return id;
+      });
+
+      self.params_leaveChannels = self.params_leaveChannels.map((id) => {
+        const camera = cameraList.find((c) => c.uuid === id);
+        const tablet = tabletList.find((c) => c.uuid === id);
+        if (camera) return `${id}${camera.name}`;
+        if (tablet) return `${id}${tablet.identity}`;
+        return id;
+      });
     });
 
     // 2.0 modify setting
@@ -796,8 +818,6 @@ export default {
 
     // 8.0 start Looper
     self.setupCurrentTimeLooper();
-
-    // console.log('mounted end');
   },
 
   destroyed() {
@@ -835,7 +855,7 @@ export default {
     range(start, end) {
       let ret = [];
 
-      if (start < end) {
+      if (start <= end) {
         ret = Array(end - start + 1).fill().map((val, i) => start + i);
       }
 
@@ -871,7 +891,6 @@ export default {
       const self = this;
 
       self.persons = await self.setupPersonData();
-      // console.log(self.persons);
 
       for (let i = self.persons.length - 1; i >= 0; i -= 1) {
         const r = self.persons[i];
@@ -880,11 +899,6 @@ export default {
         // 檢查人員的群組是否在顯示設定中的群組中
         if (r.group_list && Array.isArray(r.group_list)) {
           inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
-
-          // if (inDisplayGroup) {
-          //   console.log(r);
-          //   console.log(r.group_list, self.displaySettings.displayGroup, inDisplayGroup);
-          // }
         }
 
         if (!inDisplayGroup) {
@@ -993,7 +1007,6 @@ export default {
           return ret;
         });
       });
-      // console.log( 'mounted groupPersons 2',self.groupPersons) ;
     },
 
     PartialName(pPerson) {
@@ -1172,15 +1185,11 @@ export default {
       if (self.dispPageIndexEnd >= self.totalPageIndex) {
         self.dispPageIndexEnd = self.totalPageIndex;
       }
-
-      console.log('refreshData', self.currentPageIndex, self.totalPageIndex);
-      console.log('refreshData', self.dispPageIndexStart, self.dispPageIndexEnd);
     },
 
     // Tulip
     refreshDoughnutChart() {
       // from attendancePresent and persons
-      // console.log('refreshDoughnutChart ============================');
 
       const self = this;
 
@@ -1229,7 +1238,7 @@ export default {
         self.currentTime = `${hour}:${minute}`;
 
         if (self.displaySettings.enableSummaryView && !self.isShowGroup) {
-          if ((Date.now() - self.idleTime) > (self.displaySettings.patrolidleTime * 1000)) {
+          if (self.displaySettings.patrolidleTime > 0 && (Date.now() - self.idleTime) > (self.displaySettings.patrolidleTime * 1000)) {
             self.returnToAllGroups();
           }
         }
@@ -1242,25 +1251,24 @@ export default {
 
     //  merge Person and Verify Date
     applyVerifyToPerson(data) {
-      console.log('============  applyVerifyToPerson');
       const self = this;
 
       let passModeRecord = [];
       let clockModeRecord = [];
 
       if (data.length >= 1) {
-        passModeRecord = data.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
+        passModeRecord = data.filter((attRec) => (attRec.uuid !== undefined && attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
 
         // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (self.params_entryChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          if (self.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 3;
               clockModeRecord.push(ppp[0]);
             }
-          } else if (self.params_leaveChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          } else if (self.params_leaveChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 4;
@@ -1368,7 +1376,7 @@ export default {
                 if (person.clockinRecord.timestamp < person.clockoutRecord.timestamp) {
                   // in < out
                   person.punchMode = 4;
-                  person.status = 2;
+                  person.status = 1;
                 } else {
                   // in >= out
                   person.punchMode = 3;
@@ -1389,8 +1397,6 @@ export default {
                 const hourOut = present.out;
 
                 if (hourIn && hourOut) {
-                  // console.log('presentRecord', person, hourIn, hourOut);
-
                   for (let k = hourIn; k < hourOut; k += 1) {
                     const hValue = self.hourlyPresentData.get(k) || [];
 
@@ -1407,10 +1413,6 @@ export default {
 
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
-
-          // console.log('c persons', self.persons);
-          // console.log('c entryPersons', self.entryPersons);
-          // console.log('c leavePersons', self.leavePersons);
         } else if (passModeRecord.length >= 1) {
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
 
@@ -1422,7 +1424,7 @@ export default {
             const hour = new Date(record.timestamp).getHours();
             const person = self.persons.find((r) => r.uuid === uuid);
 
-            if (record.group_list.indexOf('All Visitor') >= 0) {
+            if (person && record.group_list.indexOf('All Visitor') >= 0) {
               person.display_image = record.face_image_id;
             }
 
@@ -1472,11 +1474,6 @@ export default {
 
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
-
-          // console.log('p persons', self.persons);
-          // console.log('P hourlyPresentData', self.hourlyPresentData);
-          // console.log('p hourlyPersonInData', self.hourlyPersonInData);
-          // console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
         }
       }
     },
@@ -1551,8 +1548,6 @@ export default {
       if (containerElement) containerElement.classList.add('container-fluid-reset');
 
       setTimeout(() => {
-        // console.log('initViews setTimeout');
-
         self.zoomViews();
       }, 168);
     },
@@ -1566,8 +1561,6 @@ export default {
       if (self.showPageProgressTimer) {
         clearInterval(self.showPageProgressTimer);
       }
-
-      // console.log('resetAutoChangePageTimer', self.currentPageIndex, self.totalPageIndex);
 
       self.countdownStartTime = new Date();
       self.countdownCurrentTime = new Date();
@@ -1782,8 +1775,6 @@ export default {
 
     onClickPrev() {
       const self = this;
-
-      // console.log('onClickPrev');
       if (self.currentPageIndex === 0) return;
 
       self.currentPageIndex -= 1;
@@ -1792,7 +1783,6 @@ export default {
 
     onClickNext() {
       const self = this;
-      // console.log('onClickNext');
       if (self.currentPageIndex === self.totalPageIndex) return;
 
       self.currentPageIndex += 1;
@@ -1801,7 +1791,6 @@ export default {
 
     onClickPagerDot(index) {
       const self = this;
-      // console.log('onClickPagerDot');
       self.currentPageIndex = index;
       self.resetAutoChangePageTimer();
     },
@@ -1941,5 +1930,19 @@ export default {
   .list-leave-to {
     opacity: 0;
     transform: translateY(200px);
+  }
+
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 </style>

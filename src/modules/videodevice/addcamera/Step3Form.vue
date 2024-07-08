@@ -96,6 +96,40 @@
           />
         </CCol>
       </CRow>
+
+      <CRow
+        sm="6"
+        class="h5 ml-2 mb-3"
+        style="padding-top: 10px; text-align: right"
+      >
+        {{ $t('FaceDetectThreshold') }}
+      </CRow>
+      <CRow>
+        <CCol sm="6">
+          <CSelect
+            size="lg"
+            v-model="localStep3form.face_detection_score"
+            :options="param_faceDetectionScore"
+          />
+        </CCol>
+      </CRow>
+
+      <CRow
+        sm="6"
+        class="h5 ml-2 mb-3"
+        style="padding-top: 10px; text-align: right"
+      >
+        April Tag Type
+      </CRow>
+      <CRow>
+        <CCol sm="6">
+          <CSelect
+            size="lg"
+            v-model="localStep3form.april_tag_type"
+            :options="param_aprilTagType"
+          />
+        </CCol>
+      </CRow>
     </div>
   </div>
 </template>
@@ -143,6 +177,24 @@ export default {
         { label: i18n.formatter.format('SpoofingLevelHigh'), value: 0.3 },
         { label: i18n.formatter.format('SpoofingLevelExtremeHigh'), value: 0.6 },
       ],
+
+      param_faceDetectionScore: [
+        { label: i18n.formatter.format('SpoofingLevelLow'), value: 0.8 },
+        { label: i18n.formatter.format('Medium'), value: 0.5 },
+        { label: i18n.formatter.format('SpoofingLevelHigh'), value: 0.1 },
+      ],
+
+      param_aprilTagType: [
+        { label: i18n.formatter.format('Disable'), value: '' },
+        { label: 'tag36h11', value: 'tag36h11' },
+        { label: 'tag25h9', value: 'tag25h9' },
+        { label: 'tag16h5', value: 'tag16h5' },
+        { label: 'tagCircle21h7', value: 'tagCircle21h7' },
+        { label: 'tagCircle49h12', value: 'tagCircle49h12' },
+        { label: 'tagCustom48h12', value: 'tagCustom48h12' },
+        { label: 'tagStandard41h12', value: 'tagStandard41h12' },
+        { label: 'tagStandard52h13', value: 'tagStandard52h13' },
+      ],
     };
   },
   watch: {
@@ -164,6 +216,8 @@ export default {
       immediate: true,
     },
   },
-  created() {},
+  created() {
+    this.localStep3form = { ...this.step3form, ...this.localStep3form };
+  },
 };
 </script>

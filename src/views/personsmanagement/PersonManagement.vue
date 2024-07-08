@@ -61,7 +61,7 @@ export default {
         const { data } = ret;
         const { error } = ret;
         if (error == null) {
-          if (data.total_length && data.total_length > (sliceSize + shitf)) {
+          if (20 > (sliceSize + shitf)) {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else {

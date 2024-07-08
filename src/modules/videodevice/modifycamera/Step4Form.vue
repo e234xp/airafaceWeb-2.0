@@ -34,15 +34,23 @@
           <h5 class="ml-2">
             {{ $t('MergeDuration') }}
           </h5>
-          <CSelect
+          <!-- <CSelect
             size="lg"
             v-model="localStep4form.verified_merge_setting.merge_duration"
             :placeholder="disp_placeholder"
             :options="param_durationOptions"
             :disabled="!localStep4form.verified_merge_setting.enable"
+          /> -->
+          <CInput
+            size="lg"
+            v-model.number="localStep4form.verified_merge_setting.merge_duration"
+            :invalid-feedback="$t('limitNumbers1000up')"
+            :is-valid="localStep4form.verified_merge_setting.merge_duration >= 1000 && localStep4form.verified_merge_setting.merge_duration <= 600000"
+            :required="localStep4form.verified_merge_setting.enable"
+            :disabled="!localStep4form.verified_merge_setting.enable"
           />
         </CCol>
-        <CCol
+        <!-- <CCol
           sm="6"
           class="h5"
         >
@@ -56,7 +64,7 @@
             :options="param_enableOptions"
             :disabled="!localStep4form.verified_merge_setting.enable"
           />
-        </CCol>
+        </CCol> -->
       </CRow>
       <CRow
         sm="12"
@@ -93,7 +101,7 @@
             :disabled="!localStep4form.non_verified_merge_setting.enable"
           />
         </CCol>
-        <CCol
+        <!-- <CCol
           sm="6"
           class="h5"
         >
@@ -107,7 +115,7 @@
             :options="param_enableOptions"
             :disabled="!localStep4form.non_verified_merge_setting.enable"
           />
-        </CCol>
+        </CCol> -->
       </CRow>
       <CRow sm="12">
         <CCol

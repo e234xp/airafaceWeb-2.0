@@ -8,7 +8,7 @@
         <CCol sm="12">
           <CRow class="justify-content-center">
             <CButton
-              class="btn btn-danger btn-w-md mr-5 my-2"
+              class="btn btn-danger btn-w-md mr-4 my-2"
               @click="clickOnExcecute"
               :disabled="flag_applying"
             >
@@ -17,12 +17,21 @@
               </div>
             </CButton>
             <CButton
-              class="btn btn-primary btn-w-md mx-5 my-2"
+              class="btn btn-primary btn-w-md mx-4 my-2"
               @click="clickOnReboot"
               :disabled="flag_applying"
             >
               <div style="font-size: 20px">
                 {{ $t('Reboot') }}
+              </div>
+            </CButton>
+            <CButton
+              class="btn btn-primary btn-w-md mx-4 my-2"
+              @click="clickOnRestart"
+              :disabled="flag_applying"
+            >
+              <div style="font-size: 20px">
+                {{ $t('RestartService') }}
               </div>
             </CButton>
           </CRow>
@@ -103,6 +112,46 @@ export default {
                   type: 'success',
                   timer: 3000,
                 });
+              } else {
+                this.$fire({
+                  text: this.$t('OperationFailed'),
+                  type: 'error',
+                  timer: 3000,
+                  confirmButtonColor: '#20a8d8',
+                });
+              }
+            } else {
+              this.$fire({
+                text: this.$t('OperationFailed'),
+                type: 'error',
+                timer: 3000,
+                confirmButtonColor: '#20a8d8',
+              });
+            }
+            this.flag_applying = false;
+          });
+        })
+        .catch(() => {
+          this.flag_applying = false;
+        });
+    },
+    clickOnRestart() {
+      this.$confirm('', this.$t('ConfirmToLogout'), {
+        confirmButtonText: this.$t('Confirm'),
+        cancelButtonText: this.$t('Cancel'),
+        confirmButtonColor: '#20a8d8',
+        cancelButtonColor: '#f86c6b',
+      })
+        .then(() => {
+          this.$globalRestartService((error, data) => {
+            if (error === null) {
+              if (data.message === 'ok') {
+                this.$fire({
+                  text: this.$t('Successful'),
+                  type: 'success',
+                  timer: 3000,
+                });
+                this.$globalLogout();
               } else {
                 this.$fire({
                   text: this.$t('OperationFailed'),

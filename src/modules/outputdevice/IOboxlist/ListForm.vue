@@ -275,9 +275,6 @@ export default {
 
       self.deleteItem(list);
     },
-    activeStatusChange() {
-      console.log('ABC');
-    },
   },
 };
 </script>

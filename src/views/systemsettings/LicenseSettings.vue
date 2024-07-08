@@ -246,7 +246,6 @@ export default {
 
             let availableLicenseAmount = 0;
             localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-            console.log('refreshTableItems 1', 'availableLicenseAmount', availableLicenseAmount);
 
             this.value_allTableItems.forEach((item) => {
               const localItem = item;
@@ -255,15 +254,13 @@ export default {
               no += 1;
 
               if (item.trial_days >= 0) {
-                if (item.trial_end_time > new Date()) {
+                if (new Date(item.trial_end_time) > new Date()) {
                   availableLicenseAmount += +item.channel_amount;
                   localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-                  console.log('refreshTableItems 2', availableLicenseAmount);
                 }
               } else {
                 availableLicenseAmount += +item.channel_amount;
                 localStorage.setItem('availableLicenseAmount', availableLicenseAmount);
-                console.log('refreshTableItems 3', availableLicenseAmount);
               }
 
               return localItem;

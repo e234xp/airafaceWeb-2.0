@@ -6,25 +6,37 @@
       class="ratio-content selfcheckin-dashboard"
     >
       <img
+        :src="display.logo"
+        style="height: 60px; min-width: 120px; object-fit: contain; object-fit: contain; position: absolute; top: 16px;"
+        :style="{ left: `${(paddingX / 2) + 16}px` }"
+        @click="toLoginPage"
+        v-if="display.logo !== ''"
+      >
+      <img
         :src="backgroud"
         style="width: 100%; height: 100%; object-fit: cover;"
         v-if="backgroud !== ''"
       >
+      <!-- <div style="font-size: 20px; color: red">{{ testMsg }}</div> -->
       <template v-if="currentStep === 1">
         <div
           class="section-step-1"
           :style="{ zoom: `${zoomRatio}!important` }"
         >
           <!-- <CSelect
-          v-model="selectedCamera"
-          :options="cameraList"
-          :placeholder="$t('Select')"
-        /> -->
+            v-model="selectedCamera"
+            :options="cameraList"
+            :placeholder="$t('Select')"
+          /> -->
           <QrcodeStream
             @decode="onDecode"
             :camera="selectedCamera"
             class="mirror qrcodeReader"
+            v-if="freshReader"
           />
+          <div class="err-msg" v-else>
+            {{ errMsg }}
+          </div>
         </div>
       </template>
       <template v-if="currentStep === 2">
@@ -34,16 +46,17 @@
         >
           <div class="info">
             <div>
-              <div>編號</div>
+              <div>{{ $t('VisitorId') }}</div>
               <div>{{ visitor.id }}</div>
             </div>
             <div>
-              <div>姓名</div>
+              <div>{{ $t('KeywordName') }}</div>
               <div>{{ visitor.name }}</div>
             </div>
             <div>
-              <div>時段</div>
-              <div>12/07 12:00 - 12/07 17:00</div>
+              <div>{{ $t('ValidPeriod') }}</div>
+              <div v-if="visitor.begin_date === 0 && visitor.expire_date === 0">--</div>
+              <div v-else>{{ parseTime(visitor.begin_date) }} ~ {{ parseTime(visitor.expire_date) }}</div>
             </div>
           </div>
           <div class="webcam-list">
@@ -51,23 +64,29 @@
               class="btn type-1"
               @click="onReTake"
             >
-              Re-Take
+              {{ $t('ReTake') }}
             </div>
             <div
               class="webcam"
               style="margin-right: 2rem;"
             >
+              <CSelect
+                v-model="selectedDeviceId"
+                :options="cameraList"
+                :placeholder="$t('Select')"
+              />
               <WebCam
                 ref="webcam"
                 :device-id="selectedDeviceId"
                 @cameras="onCameras"
+                @started="onStart"
                 class="mirror"
                 style="width: 100%; height: 100%; "
               />
             </div>
             <div
               class="webcam"
-              style="margin-left: 2rem;"
+              style="margin-left: 2rem; margin-top: 3.2rem"
             >
               <img
                 :src="imageList[0]"
@@ -80,7 +99,7 @@
               class="btn type-2"
               @click="onRegister(0)"
             >
-              Capture
+              {{ $t('Capture') }}
             </div>
           </div>
         </div>
@@ -100,23 +119,24 @@
           </div>
           <div class="info">
             <div>
-              <div>編號</div>
+              <div>{{ $t('VisitorId') }}</div>
               <div>{{ visitor.id }}</div>
             </div>
             <div>
-              <div>姓名</div>
+              <div>{{ $t('KeywordName') }}</div>
               <div>{{ visitor.name }}</div>
             </div>
             <div>
-              <div>時段</div>
-              <div>12/07 12:00 - 12/07 17:00</div>
+              <div>{{ $t('ValidPeriod') }}</div>
+              <div v-if="visitor.begin_date === 0 && visitor.expire_date === 0">--</div>
+              <div v-else>{{ parseTime(visitor.begin_date) }} ~ {{ parseTime(visitor.expire_date) }}</div>
             </div>
           </div>
           <div
             class="back-btn"
             @click="onBack"
           >
-            返回 ({{ cdCount }})
+            {{ $t('GoBack') }} ({{ cdCount }})
           </div>
         </div>
       </template>
@@ -136,9 +156,10 @@
 </template>
 
 <script>
-
 import { QrcodeStream } from 'vue-qrcode-reader';
 import { WebCam } from 'vue-web-cam';
+import dayjs from 'dayjs';
+import i18n from '@/i18n';
 
 export default {
   name: 'SelfCheckinDashboard',
@@ -161,6 +182,14 @@ export default {
       cdCount: 10,
       timer: null,
       cdTimer: null,
+      initTimer: null,
+      zoomRatio: 0,
+      freshReader: true,
+      errMsg: '',
+      testMsg: '',
+      isAuo: false,
+      trackToken: '',
+      tabletToken: '',
     };
   },
   computed: {
@@ -169,6 +198,11 @@ export default {
       if (this.currentStep === 2) return this.display.step2Background;
       if (this.currentStep === 3) return this.display.step3Background;
       return '';
+    },
+  },
+  watch: {
+    selectedCamera() {
+      this.onRefresh();
     },
   },
   methods: {
@@ -200,9 +234,6 @@ export default {
           const dW = width - (1920 * this.zoomRatio);
           const dH = height - (1080 * this.zoomRatio);
 
-          // dashboard.style.width = `${Math.floor(1920 * this.zoomRatio)}px`;
-          // dashboard.style.height = `${Math.floor(1080 * this.zoomRatio)}px`;
-
           dashboard.style.paddingTop = `${Math.floor(dH / 2)}px`;
           dashboard.style.paddingBottom = `${Math.floor(dH / 2)}px`;
           dashboard.style.paddingLeft = `${Math.floor(dW / 2)}px`;
@@ -213,38 +244,62 @@ export default {
       }
     },
     async onCameras(cameras) {
-      this.selectedDeviceId = cameras[0].deviceId;
-      this.startTimer(1500);
+      // this.cameraList = cameras;
+      const idx = this.cameraList.findIndex((item) => item.label.toLowerCase().indexOf('front') >= 0 || item.label.toLowerCase().indexOf('face') >= 0);
+      this.selectedDeviceId = this.cameraList[idx < 0 ? this.cameraList.length - 1 : idx].value;
+      // this.$refs.webcam.start();
+      this.testMsg += `onCameras ${JSON.stringify(cameras)}`;
+      // this.startTimer(1500);
+    },
+    onStart() {
+      this.startTimer(500);
     },
     async startTimer(t) {
       setTimeout(() => {
-        const image = this.$refs.webcam.capture();
-        if (image) this.imageList.push(image);
+        try {
+          const image = this.$refs.webcam.capture();
+          this.testMsg += `image ${JSON.stringify(image)}`;
+          if (image) this.imageList.push(image);
+        } catch (e) {
+          this.testMsg = `startTimer ${e}`;
+        }
       }, t || 500);
-      // this.timer = setInterval(() => {
-      //   if (this.imageTaked === 1) clearInterval(this.timer);
-      //   else {
-      //     const image = this.$refs.webcam.capture();
-      //     if (image) {
-      //       this.imageTaked += 1;
-      //       this.imageList.push(image);
-      //     }
-      //   }
-      // }, 1000);
     },
     async onDecode(decode) {
+      let isErr = true;
       const { uuid } = JSON.parse(decode);
       if (uuid) {
         const { data } = await this.$globalFindVisitor(uuid, 0, 20);
         if (data.message === 'ok') {
           const [item] = data.visitor_list;
           this.visitor = item;
-          console.log(this.visitor);
-          this.currentStep = 2;
+          // if (this.visitor.card_number === '') {
+          //   this.$message.error(i18n.formatter.format('NoCardMsg'));
+          //   // this.errMsg = i18n.formatter.format('NoCardMsg');
+          // }
+          if (this.visitor.expire_date !== 0 && this.visitor.expire_date < Date.now()) {
+            this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
+            // this.errMsg = i18n.formatter.format('QRcodeExpiredMsg');
+          } else if (this.visitor.begin_date !== 0 && this.visitor.begin_date > Date.now()) {
+            this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
+            // this.errMsg = i18n.formatter.format('QRcodeExpiredMsg');
+          } else {
+            this.currentStep = 2;
+            isErr = false;
+          }
         } else {
-          // this.currentStep = 3;
+          this.$message.error(i18n.formatter.format('NoInfoMsg'));
+          // this.errMsg = i18n.formatter.format('NoInfoMsg');
         }
-      }
+      } else this.$message.error(i18n.formatter.format('NoInfoMsg')); // this.errMsg = i18n.formatter.format('NoInfoMsg');
+      if (isErr) this.onRefresh();
+    },
+    onRefresh() {
+      this.freshReader = false;
+      setTimeout(() => {
+        this.freshReader = true;
+        this.errMsg = '';
+      }, 2000);
     },
     onReTake() {
       this.imageList = [];
@@ -258,17 +313,24 @@ export default {
       this.visitor.display_image = this.imageList[idx].replaceAll('data:image/jpeg;base64,', '');
       this.$globalModifyVisitor({ uuid: this.visitor.uuid, data: this.visitor }, (error, result) => {
         if (!error && result.message === 'ok') {
-          this.$globalVerifyCard({
-            client_id: this.display.entryChannel.label,
-            device_uuid: this.display.entryChannel.value,
-            card_number: this.visitor.card_number,
-            timestamp: Date.now(),
-          }, (err, res) => {
-            if (!err && res.message === 'ok') {
-              this.currentStep = 3;
-              this.onCountDown();
-            }
-          });
+          this.currentStep = 3;
+          this.onCountDown();
+          // this.$globalVerifyCard({
+          //   client_id: this.display.entryChannel.label,
+          //   device_uuid: this.display.entryChannel.value.split('/')[0],
+          //   uuid: this.display.entryChannel.value.split('/')[1],
+          //   card_number: this.visitor.card_number,
+          //   timestamp: Date.now(),
+          // }, (err, res) => {
+          //   if (!err && res.message === 'ok') {
+          //     this.currentStep = 3;
+          //     // if (this.isAuo) {
+          //     //   this.addToTablet();
+          //     //   this.addToTrack();
+          //     // }
+          //     this.onCountDown();
+          //   }
+          // });
         }
       });
     },
@@ -289,28 +351,187 @@ export default {
       this.selectedDeviceId = '';
       this.currentStep = 1;
     },
+    toLoginPage() {
+      this.$globalLogout();
+      this.$router.push('/');
+    },
+    parseTime(val) {
+      return val === 0 ? '--' : dayjs(val).format('YYYY-MM-DD');
+    },
+    initAuo() {
+      const track = 'https://192.168.10.212:8443/airaTracker/login';
+      const tablet = 'https://192.168.10.199/airafacelite/generatetoken';
+      const info = {
+        username: 'Admin',
+        password: '123456',
+      };
+      const requestOptions = {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(info),
+      };
+      fetch(track, requestOptions)
+        .then(
+          async (response) => {
+            const payload = await response.json();
+            this.trackToken = payload.sessionId;
+          },
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+      fetch(tablet, requestOptions)
+        .then(
+          async (response) => {
+            const payload = await response.json();
+            this.tabletToken = payload.token;
+          },
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    maintain() {
+      const track = 'https://192.168.10.212:8443/airaTracker/expiretime/extend';
+      const tablet = 'https://192.168.10.199/airafacelite/maintaintoken';
+      const trackOptions = {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: this.trackToken,
+        },
+      };
+      const tabletOptions = {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: this.tabletToken }),
+      };
+      fetch(track, trackOptions)
+        .then(
+          async (response) => {
+            console.log(response);
+            // const payload = await response.json();
+            // this.trackToken = payload.sessionId;
+          },
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+      fetch(tablet, tabletOptions)
+        .then(
+          async (response) => {
+            const payload = await response.json();
+            this.tabletToken = payload.token;
+          },
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addToTablet() {
+      const requestOptions = {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+          token: this.tabletToken,
+        },
+        body: JSON.stringify(this.visitor),
+      };
+      const api = 'https://192.168.10.199/airafacelite/createvisitor';
+      fetch(api, requestOptions)
+        .then(
+          async (response) => {
+            if (response.status === 200) {
+              this.$fire({
+                text: i18n.formatter.format('Successful'),
+                type: 'success',
+                timer: 1000,
+              });
+            }
+          },
+        )
+        .catch(() => {
+          this.$fire({
+            text: '',
+            type: 'error',
+            timer: 3000,
+          });
+        });
+    },
+    addToTrack() {
+      const requestOptions = {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: this.trackToken,
+        },
+        body: JSON.stringify({
+          face_image: `data:image/jpeg;base64,${this.visitor.register_image}`,
+          albumId: '3',
+        }),
+      };
+      const api = 'https://192.168.10.212:8443/airaTracker/albums/uploadPhoto';
+      fetch(api, requestOptions)
+        .then(
+          async (response) => {
+            if (response.status === 200) {
+              this.$fire({
+                text: i18n.formatter.format('Successful'),
+                type: 'success',
+                timer: 1000,
+              });
+            }
+          },
+        )
+        .catch(() => {
+          this.$fire({
+            text: '',
+            type: 'error',
+            timer: 3000,
+          });
+        });
+    },
   },
   async created() {
     await this.$globalGetDisplaySetting((err, data) => {
       if (data.SELFCHECKIN) this.display = data.SELFCHECKIN;
     });
-    navigator.mediaDevices.enumerateDevices()
-      .then((devices) => {
-        devices.forEach((device) => {
-          if (device.kind === 'videoinput' && device.label.indexOf('IR') <= -1) {
-            this.cameraList.push({ value: device.deviceId, label: device.label });
-          }
+    try {
+      navigator.mediaDevices.enumerateDevices()
+        .then((devices) => {
+          devices.forEach((device) => {
+            if (device.kind === 'videoinput' && device.label.indexOf('IR') <= -1) {
+              this.cameraList.push({ value: device.deviceId, label: device.label });
+            }
+          });
+          this.selectedCamera = this.cameraList.length > 1 ? 'front' : 'auto';
+        })
+        .catch((err) => {
+          console.log(`${err.name}: ${err.message}`);
         });
-        this.selectedCamera = this.cameraList.length > 1 ? 'front' : 'auto';
-        // this.selectedDeviceId = this.cameraList[0].value;
-      })
-      .catch((err) => {
-        console.log(`${err.name}: ${err.message}`);
-      });
+    } catch (e) {
+      // this.testMsg = `try ${e}`;
+    }
   },
   async mounted() {
     this.initViews();
     this.zoomViews();
+
+    // if (this.isAuo) {
+    //   this.initAuo();
+    //   this.initTimer = setInterval(() => {
+    //     this.maintain();
+    //   }, 60000);
+    // }
 
     window.addEventListener('resize', () => {
       console.log('zoomViews');
@@ -320,6 +541,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.cdTimer);
+    clearInterval(this.initTimer);
 
     const mainElement = document.querySelector('.c-main');
     const headerElement = document.querySelector('.c-header');
@@ -356,6 +578,7 @@ export default {
 
 .section-step-2 {
   position: absolute;
+  left: 50%;
   top: 40%;
   height: 540px;
   display: flex;
@@ -364,6 +587,7 @@ export default {
   align-items: center;
   padding: 0 2rem;
   gap: 2rem;
+  transform: translate(-50%, 0);
 
   .info {
     width: 90%;
@@ -481,5 +705,12 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.err-msg {
+  width: 100%;
+  height: 100%;
+  background: #E2E2E2;
+  color: #323232;
 }
 </style>

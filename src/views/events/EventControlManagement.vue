@@ -79,7 +79,7 @@ export default {
         }
 
         if (ret2?.data) {
-          this.value_diviceGroupOptions = ret2?.data.result.map((item) => item.uuid);
+          this.value_diviceGroupOptions = ret2?.data.result.map((item) => ({ id: item.uuid, name: item.name }));
         }
       } else {
         this.$fire({
@@ -99,7 +99,6 @@ export default {
     },
 
     onAdd(allRecords) {
-      console.log('allRecords', allRecords);
       this.$router.push({
         name: 'CreateEventControlSetting',
         params: {
@@ -112,10 +111,11 @@ export default {
       });
     },
 
-    async onModify(item) {
+    async onModify(item, allRecords) {
       this.$router.push({
         name: 'ModifyEventControlSetting',
         params: {
+          value_allRecords: allRecords,
           value_returnRoutePath: 'EventControlManagement',
           value_returnRouteName: this.$t('Return'),
           value_item: item,

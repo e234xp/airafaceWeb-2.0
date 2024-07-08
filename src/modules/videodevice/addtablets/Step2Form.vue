@@ -22,7 +22,7 @@
             <CInput
               size="lg"
               class="h5"
-              v-model="localStep2form.verify_target_score"
+              v-model.number="localStep2form.verify_target_score"
               :invalid-feedback="$t('NoEmptyInRange').replace('$1', '0.0 ~ 1.0')"
               :is-valid="isFieldPassed('verify_target_score', localStep2form.verify_target_score)"
               required
@@ -40,7 +40,7 @@
             <CInput
               size="lg"
               class="h5"
-              v-model="localStep2form.face_capture_interval"
+              v-model.number="localStep2form.face_capture_interval"
               :invalid-feedback="$t('NoEmptyInRange').replace('$1', '100 ~ 1000')"
               :is-valid="isFieldPassed('face_capture_interval', localStep2form.face_capture_interval)"
               required
@@ -58,7 +58,7 @@
             <CInput
               size="lg"
               class="h5"
-              v-model="localStep2form.face_overlap_ratio"
+              v-model.number="localStep2form.face_overlap_ratio"
               :invalid-feedback="$t('NoEmptyInRange').replace('$1', '0.0 ~ 1.0')"
               :is-valid="isFieldPassed('face_overlap_ratio', localStep2form.face_overlap_ratio)"
               required
@@ -76,7 +76,7 @@
             <CInput
               size="lg"
               class="h5"
-              v-model="localStep2form.target_face_size_width"
+              v-model.number="localStep2form.target_face_size_width"
               :invalid-feedback="disp_noEmptyInRange0to1000"
               :is-valid="isFieldPassed('target_face_size_width', localStep2form.target_face_size_width)"
               required
@@ -199,7 +199,7 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="localStep2form.relay_delay"
+              v-model.number="localStep2form.relay_delay"
               :disabled="!localStep2form.enable_id_card"
               :invalid-feedback="disp_noEmptyInRange0to5000"
               :is-valid="isFieldPassed('relay_delay', localStep2form.relay_delay)"
@@ -249,7 +249,7 @@
             <CInput
               size="lg"
               class="mt-2"
-              v-model="localStep2form.high_temperature"
+              v-model.number="localStep2form.high_temperature"
               :invalid-feedback="disp_noEmptyInRange30to50"
               :is-valid="isFieldPassed('high_temperature', localStep2form.high_temperature)"
               required

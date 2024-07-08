@@ -101,6 +101,7 @@
                       >
                         <CButton
                           style="width: 140px; color: #20a8d8; border: 1px solid #20a8d8"
+                          :disabled="value_username === '' || value_password === ''"
                           @click="clickOnLogin"
                         >
                           {{ disp_title }}
@@ -156,6 +157,8 @@ export default {
     { value: 'es', label: 'español' },
     { value: 'fr', label: 'Français' },
     { value: 'th', label: 'แบบไทย' },
+    { value: 'vi', label: 'Tiếng Việt' },
+    { value: 'id', label: 'Bahasa Indonesia' },
   ],
   data() {
     return {
@@ -185,7 +188,8 @@ export default {
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
-        // { value: 'SelfCheckin', label: 'SelfCheckin' },
+        { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        // { value: 'AlcoholCheckin', label: '人員辨識與酒測系統' },
       ],
     };
   },
@@ -232,8 +236,8 @@ export default {
       self.value_disbleLoginButton = true;
       self.$globalGetSystemInfo((err, data) => {
         if (data) {
-          self.disp_versionNumber = data.fw_version;
-          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version} / ${global.webVersion}`;
+          // self.disp_versionNumber = data.fw_version;
+          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${data.fw_version === 'unknown' ? '' : `${data.fw_version}/`} ${global.webVersion}`;
           self.value_disbleLoginButton = false;
 
           for (let i = 0; i < self.$profileLists.length; i += 1) {
@@ -292,14 +296,15 @@ export default {
       this.disp_loginfailed = i18n.formatter.format('Failed');
       this.disp_UsernameorPasswordError = i18n.formatter.format('UsernameorPasswordError');
       this.disp_rememberMe = i18n.formatter.format('RememberMe');
-      this.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${this.disp_versionNumber}`;
+      // this.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${this.disp_versionNumber}`;
       this.value_displayModeOptions = [
         { value: 'Setting', label: i18n.formatter.format('Setup_Mode') },
         { value: 'Welcome', label: i18n.formatter.format('Welcome_Mode') },
         { value: 'Occupancy', label: i18n.formatter.format('MenuAttendanceBoard') },
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
-        // { value: 'SelfCheckin', label: 'SelfCheckin' },
+        { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        // { value: 'AlcoholCheckin', label: '辨識與酒精偵測' },
       ];
     },
     clickOnLogin() {
@@ -311,6 +316,7 @@ export default {
           password: self.value_password,
         },
         async (err) => {
+          console.log(err)
           if (self.obj_loading) self.obj_loading.hide();
           if (err) {
             self.$globalLogout();

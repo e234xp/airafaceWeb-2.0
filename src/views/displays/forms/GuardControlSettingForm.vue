@@ -99,7 +99,7 @@
                   <CSelect
                     size="lg"
                     :value.sync="value_guardSetting.deviceIn"
-                    :options="deviceInList"
+                    :options="value_deviceList"
                   />
                 </CCol>
                 <CCol sm="4">
@@ -109,7 +109,7 @@
                   <CSelect
                     size="lg"
                     :value.sync="value_guardSetting.deviceOut"
-                    :options="deviceOutList"
+                    :options="value_deviceList"
                   />
                 </CCol>
               </CRow>
@@ -359,7 +359,9 @@ export default {
       // param_videoDeviceGroupIn: [],
       // param_videoDeviceGroupOut: [],
       value_displayGroupList: [],
-      value_deviceList: [],
+      value_deviceList: [
+        { value: '', label: '--' },
+      ],
 
       value_Setting: {},
 
@@ -443,12 +445,12 @@ export default {
 
     // console.log(this.value_deviceList);
 
-    if (this.value_guardSetting.deviceIn == '' && this.value_deviceList[0]) {
-      this.value_guardSetting.deviceIn = this.value_deviceList[0].value;
+    if (this.value_guardSetting.deviceIn !== '' && this.value_deviceList.findIndex((item) => item.value === this.value_guardSetting.deviceIn) < 0) {
+      this.value_guardSetting.deviceIn = '';
     }
 
-    if (this.value_guardSetting.deviceOut == '' && this.value_deviceList[1]) {
-      this.value_guardSetting.deviceOut = this.value_deviceList[1].value;
+    if (this.value_guardSetting.deviceOut !== '' && this.value_deviceList.findIndex((item) => item.value === this.value_guardSetting.deviceOut) < 0) {
+      this.value_guardSetting.deviceOut = '';
     }
   },
   updated() { },

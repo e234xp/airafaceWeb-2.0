@@ -90,9 +90,6 @@
               <CInput
                 size="lg"
                 class="mt-2"
-                required
-                :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
-                :invalid-feedback="isNotEmptyValidator(form.user)"
                 v-model="form.user"
               />
             </td>
@@ -100,10 +97,7 @@
               <CInput
                 size="lg"
                 class="mt-2"
-                required
                 :type="flag_view_password ? 'text' : 'password'"
-                :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
-                :invalid-feedback="isNotEmptyValidator(form.pass)"
                 v-model="form.pass"
               >
                 <template #append-content>
@@ -230,10 +224,6 @@ export default {
     viewPassword() {
       this.flag_view_password = !this.flag_view_password;
     },
-  },
-  created() {
-    console.log(this.form);
-    console.log(this.formPass);
   },
 };
 </script>

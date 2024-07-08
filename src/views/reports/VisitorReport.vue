@@ -2,60 +2,131 @@
   <div class="VisitorReport">
     <div>
       <CCol sm="12">
-        <div class="h1">{{ disp_header }}</div>
+        <div class="h1">
+          {{ disp_header }}
+        </div>
       </CCol>
-      <div style="height: 35px"></div>
+      <div style="height: 35px" />
     </div>
     <div>
       <CCol sm="12">
         <CRow class="justify-content-between">
           <div class="d-flex align-items-center h-100 mb-3 mr-3">
-            <date-picker style="width: 400px" :lang="this.$globalDatePickerLanguage"
-              v-model="value_specifiedDatetimeRange" type="datetime" range :placeholder="disp_selectDatetimeRange"
-              @change="datePickerDatachange()"></date-picker>
-            <CButton class="btn btn-primary btn-w-normal ml-3" size="lg" @click="clickOnSearch()"
-              :disabled="!flag_enableSearchButton">
-              {{disp_search}}
+            <date-picker
+              style="width: 400px"
+              :lang="this.$globalDatePickerLanguage"
+              v-model="value_specifiedDatetimeRange"
+              type="datetime"
+              range
+              :placeholder="disp_selectDatetimeRange"
+              @change="datePickerDatachange()"
+            />
+            <CButton
+              class="btn btn-primary btn-w-normal ml-3"
+              size="lg"
+              @click="clickOnSearch()"
+              :disabled="!flag_enableSearchButton"
+            >
+              {{ disp_search }}
             </CButton>
-            <CDropdown :togglerText="toggleText()" class="btn btn-primary btn-w-normal ml-3 p-0 dropdown-theme"
-              size="lg" :disabled="!flag_enableSearchButton">
-              <CDropdownItem @click="exportExcel(true)">{{ disp_exportExcel }} ({{ disp_withPhoto }})</CDropdownItem>
-              <CDropdownItem @click="exportExcel(false)">{{ disp_exportExcel }} ({{ disp_withoutPhoto }})
+            <CDropdown
+              :toggler-text="toggleText()"
+              class="btn btn-primary btn-w-normal ml-3 p-0 dropdown-theme"
+              size="lg"
+              :disabled="!flag_enableSearchButton"
+            >
+              <CDropdownItem @click="exportExcel(true)">
+                {{ disp_exportExcel }} ({{ disp_withPhoto }})
+              </CDropdownItem>
+              <CDropdownItem @click="exportExcel(false)">
+                {{ disp_exportExcel }} ({{ disp_withoutPhoto }})
               </CDropdownItem>
             </CDropdown>
           </div>
 
-          <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+          <CInput
+            v-model.lazy="value_searchingFilter"
+            style="width: 400px"
+            size="lg"
+            :placeholder="disp_search"
+          >
             <template #prepend-content>
               <CIcon name="cil-search" />
             </template>
           </CInput>
         </CRow>
       </CCol>
-      <div style="height: 12px"></div>
+      <div style="height: 12px" />
     </div>
     <CCard>
       <CCardBody>
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" @checkbox-all="selectAllEvent"
-            @checkbox-change="selectChangeEvent">
-            <vxe-table-column field="dateTime" :title="disp_dateTime" :show-overflow="ellipsisMode" width="16%"
-              align="center">
-            </vxe-table-column>
-            <vxe-table-column field="id" :title="disp_id" :show-overflow="ellipsisMode" width="13%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="name" :title="disp_name" :show-overflow="ellipsisMode" width="13%" align="center">
-            </vxe-table-column>
-            <vxe-table-column field="groups" :title="disp_group_list" :show-overflow="ellipsisMode" width="16%"
-              align="center">
-            </vxe-table-column>
-            <vxe-table-column v-if="$deviceProfile.supportTemperature" field="temperature" :title="disp_temperature"
-              :show-overflow="ellipsisMode" width="13%" align="center"></vxe-table-column>
-            <vxe-table-column field="score" :title="disp_verify_score" :show-overflow="ellipsisMode" width="16%"
-              align="center"></vxe-table-column>
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="cellStyle"
+            :header-cell-style="headerCellStyle"
+            ref="mainTable"
+            @checkbox-all="selectAllEvent"
+            @checkbox-change="selectChangeEvent"
+          >
+            <vxe-table-column
+              field="dateTime"
+              :title="disp_dateTime"
+              :show-overflow="ellipsisMode"
+              width="16%"
+              align="center"
+            />
+            <vxe-table-column
+              field="source"
+              :title="disp_source"
+              width="10%"
+              align="center"
+            />
+            <vxe-table-column
+              field="id"
+              :title="disp_id"
+              :show-overflow="ellipsisMode"
+              width="13%"
+              align="center"
+            />
+            <vxe-table-column
+              field="name"
+              :title="disp_name"
+              :show-overflow="ellipsisMode"
+              width="13%"
+              align="center"
+            />
+            <vxe-table-column
+              field="groups"
+              :title="disp_group_list"
+              :show-overflow="ellipsisMode"
+              width="16%"
+              align="center"
+            />
+            <vxe-table-column
+              v-if="$deviceProfile.supportTemperature"
+              field="temperature"
+              :title="disp_temperature"
+              :show-overflow="ellipsisMode"
+              width="13%"
+              align="center"
+            />
+            <vxe-table-column
+              field="score"
+              :title="disp_verify_score"
+              :show-overflow="ellipsisMode"
+              width="16%"
+              align="center"
+            />
 
-            <vxe-table-column min-width="13%" field="showimage" :title="disp_face_image" type="html"></vxe-table-column>
+            <vxe-table-column
+              min-width="13%"
+              field="showimage"
+              :title="disp_face_image"
+              type="html"
+            />
             <!-- <vxe-table-column :title="disp_face_image" min-width="13%">
               <template #default="{ row }">
                 <img :id="row.face_image_id.f + row.face_image_id.uuid" />
@@ -63,7 +134,8 @@
             </vxe-table-column> -->
           </vxe-table>
         </div>
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -71,9 +143,12 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" @page-change="handlePageChange">
-        </vxe-pager>
+          ]"
+          :current-page="value_tablePage.currentPage"
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        />
       </CCardBody>
     </CCard>
   </div>
@@ -119,6 +194,7 @@ const defaultlState = () => ({
   disp_withoutPhoto: i18n.formatter.format('WithoutPhoto'),
 
   disp_dateTime: i18n.formatter.format('Time'),
+  disp_source: i18n.formatter.format('PersonInformationSource'),
   disp_id: i18n.formatter.format('PersonId'),
   disp_name: i18n.formatter.format('PersonName'),
   disp_group_list: i18n.formatter.format('GroupName'),
@@ -137,6 +213,9 @@ const defaultlState = () => ({
     pageSize: 10,
     totalResult: 0,
   },
+
+  cameraList: [],
+  tabletList: [],
 });
 
 export default {
@@ -155,12 +234,18 @@ export default {
     ...mapState(['ellipsisMode']),
   },
   mixins: [TableObserver],
-  created() {
+  async created() {
     const self = this;
     const endTime = new Date();
     endTime.setHours(23, 59, 59, 999);
     const endTimeTimestamp = endTime.getTime();
     const startTimeTimestamp = endTimeTimestamp - 86400000 + 1;
+
+    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
+    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
+
+    this.cameraList = cameraList;
+    this.tabletList = tabletList;
 
     self.value_specifiedDatetimeRange[0] = new Date(startTimeTimestamp);
     self.value_specifiedDatetimeRange[1] = endTime;
@@ -210,7 +295,83 @@ export default {
         uuid_list: [],
       };
 
-      this.queryVisitorResult(data);
+      this.setupVisitorData(startTime, endTime);
+    },
+    async setupVisitorData(startTS, endTS) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.value_allTableItems = [];
+      self.value_dataTotalLength = 0;
+      let shitf = 0;
+      let thereIsMoreData = true;
+
+      while (thereIsMoreData) {
+        const query = {
+          start_time: startTS,
+          end_time: endTS,
+          slice_length: 10000,
+          slice_shift: shitf,
+          uuid_list: [],
+          with_image: false,
+        };
+
+        const retResult = await self.$globalGetVisitorResult(query);
+
+        const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              self.value_allTableItems.push(...filter);
+              self.value_dataTotalLength += filter.length;
+              self.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }
+
+          if (result.slice_shift + result.data.length < result.total_length) {
+            thereIsMoreData = true;
+            shitf = result.slice_shift + result.data.length;
+          } else thereIsMoreData = false;
+        } else thereIsMoreData = false;
+      }
+
+      try {
+        self.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            item.groups = item.group_list;
+            item.groups = JSON.parse(item.group_list);
+            item.groups = item.groups.filter((g) => g !== 'All Visitor');
+            item.groups = item.groups.join(',');
+
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf`
+              + 'FcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAA'
+              + 'QAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        self.value_dataItemsToShow = self.generateFilteredData(
+          self.value_allTableItems,
+        );
+        self.value_tablePage.currentPage = 1;
+        self.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
     },
     queryVisitorResult(_data) {
       const self = this;
@@ -229,6 +390,7 @@ export default {
           self.value_allTableItems.forEach((pItem) => {
             const item = pItem;
             try {
+              item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
               item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
 
               item.score = `${(item.verify_score * 100).toFixed(2)}%`;
@@ -328,11 +490,12 @@ export default {
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
         { header: self.disp_dateTime, key: 'dateTime', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
+        { header: self.disp_source, key: 'source', width: 10 },
+        { header: self.disp_id, key: 'id', width: 8 },
         { header: self.disp_name, key: 'name', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
-        { header: self.disp_verify_score, key: 'score', width: 10 },
-        { header: self.disp_face_image, key: 'showimage', width: 15 },
+        { header: self.disp_group_list, key: 'groups', width: 8 },
+        { header: self.disp_verify_score, key: 'score', width: 8 },
+        { header: self.disp_face_image, key: 'showimage', width: 10 },
       ];
 
       if (self.$deviceProfile.supportTemperature) {
@@ -348,6 +511,7 @@ export default {
 
         worksheet.addRow({
           No: self.exportNo,
+          source: self.value_allTableItems[idx].source,
           dateTime: self.value_allTableItems[idx].dateTime,
           id: self.value_allTableItems[idx].id,
           name: self.value_allTableItems[idx].name,
@@ -366,11 +530,12 @@ export default {
               base64: faceImageRet.data.face_image,
               extension: 'jpeg',
             });
+
+            worksheet.lastRow.height = 60;
             worksheet.addImage(
               photoId,
               `H${worksheet.rowCount}:H${worksheet.rowCount}`,
             );
-            worksheet.lastRow.height = 60;
 
             const fileName = self.value_allTableItems[idx].dateTime
               .replace('-', '_')
@@ -398,11 +563,12 @@ export default {
           worksheet.columns = [
             { header: 'No', key: 'No', width: 10 },
             { header: self.disp_dateTime, key: 'dateTime', width: 10 },
-            { header: self.disp_id, key: 'id', width: 10 },
+            { header: self.disp_source, key: 'source', width: 10 },
+            { header: self.disp_id, key: 'id', width: 8 },
             { header: self.disp_name, key: 'name', width: 10 },
-            { header: self.disp_group_list, key: 'groups', width: 10 },
-            { header: self.disp_verify_score, key: 'score', width: 10 },
-            { header: self.disp_face_image, key: 'showimage', width: 30 },
+            { header: self.disp_group_list, key: 'groups', width: 8 },
+            { header: self.disp_verify_score, key: 'score', width: 8 },
+            { header: self.disp_face_image, key: 'showimage', width: 10 },
           ];
 
           if (self.$deviceProfile.supportTemperature) {

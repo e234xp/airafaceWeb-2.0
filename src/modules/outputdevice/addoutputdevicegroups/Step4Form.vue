@@ -85,7 +85,6 @@
     watch: {
       localStep4form: {
         handler(newValue) {
-          console.log('emit updateStep4form')
           this.$emit('updateStep4form', { ...newValue });
         },
         deep: true,

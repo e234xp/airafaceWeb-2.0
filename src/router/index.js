@@ -24,6 +24,7 @@ const OccupancyDashboard = () => import('@/views/dashboards/OccupancyDashboard.v
 const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue');
 const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboard.vue');
 const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
+const AlcoholCheckinDashboard = () => import('@/views/dashboards/AlcoholCheckinDashboard.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -202,6 +203,11 @@ function configRoutes() {
           path: 'selfcheckinmode',
           name: 'DashboardSelfCheckin',
           component: SelfCheckinDashboard,
+        },
+        {
+          path: 'alcoholcheckinmode',
+          name: 'DashboardAlcoholCheckin',
+          component: AlcoholCheckinDashboard,
         },
         {
           path: 'guardmode',

@@ -573,7 +573,7 @@
           <table class="table-layout">
             <tr class="table-tr">
               <th class="h5 w-25 table-th">
-                {{ $t('HostName') }}
+                {{ $t('HostAddress') }}
               </th>
               <th class="h5 w-25 table-th" />
               <th class="h5 w-25 table-th" />
@@ -584,7 +584,8 @@
                 <CInput
                   size="lg"
                   v-model="value_airaManagerHostName"
-                  :value="value_airaManagerHostName"
+                  :is-valid="managerIpValidator"
+                  :invalid-feedback="flag_manager_host"
                   :disabled="!value_enableAiraManager"
                 />
               </td>
@@ -592,6 +593,7 @@
                 <CButton
                   class="btn btn-primary fz-xl"
                   @click="clickOnApplyAiraManager"
+                  :disabled="!value_enableAiraManager || flag_manager_host !== ''"
                 >
                   {{ $t('Apply') }}
                 </CButton>
@@ -714,12 +716,109 @@
           </CRow>
         </CCardBody>
       </CCard>
+      <!-- SMTP 設定 -->
+      <CCard>
+        <CCardHeader>
+          <div>
+            <span class="h3">{{ $t('SmtpSettingTitle') }}</span>
+          </div>
+        </CCardHeader>
+        <CCardBody>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('IpAddress') }}
+              </h5>
+              <CInput
+                size="lg"
+                v-model="value_smtp_host"
+                :invalid-feedback="flag_smtp_host"
+                :is-valid="hostValidator"
+              />
+            </CCol>
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('SMTPEnabledSecure') }}
+              </h5>
+              <CSwitch
+                size="lg"
+                class="ml-0"
+                color="success"
+                shape="pill"
+                :checked="value_smtp_secure"
+                @update:checked="value_smtp_secure = $event"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('Port') }}
+              </h5>
+              <CInput
+                size="lg"
+                v-model.number="value_smtp_port"
+                :invalid-feedback="flag_smtp_port"
+                :is-valid="portValidator"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('email') }}
+              </h5>
+              <CInput
+                size="lg"
+                v-model.number="value_smtp_user"
+                :invalid-feedback="flag_smtp_user"
+                :is-valid="emailValidator"
+              />
+            </CCol>
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('Password') }}
+              </h5>
+              <CInput
+                size="lg"
+                type="password"
+                v-model="value_smtp_pass"
+                :invalid-feedback="flag_smtp_pass"
+                :is-valid="passValidator"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <h5 class="ml-2">
+                {{ $t('SMTPSender') }}
+              </h5>
+              <CInput
+                size="lg"
+                v-model="value_smtp_from"
+              />
+            </CCol>
+          </CRow>
+          <CRow class="ml-2">
+            <CCol sm="3">
+              <CButton
+                class="btn btn-primary fz-xl"
+                :disabled="flag_smtp_host !== '' || flag_smtp_port !== '' || flag_smtp_user !== '' || flag_smtp_pass !== ''"
+                @click="applySmtpSetting"
+              >
+                {{ $t('Apply') }}
+              </CButton>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
     </CCol>
   </div>
 </template>
 
 <script>
-// import { deviceTypes } from '@/globalParams.js';
+import i18n from '@/i18n';
+import { checkDomainName, checkPort, checkEmail, checkIpAddr } from '../../utils/validate';
 
 export default {
   name: 'GeneralSettings',
@@ -840,6 +939,22 @@ export default {
         { value: 14 * 24 * 60 * 60 * 1000, label: '14' },
         { value: 30 * 24 * 60 * 60 * 1000, label: '30' },
       ],
+
+      value_smtp_secure: false,
+      value_smtp_from: '',
+      value_smtp_user: '',
+      value_smtp_pass: '',
+      value_smtp_host: '',
+      value_smtp_port: 0,
+
+      flag_smtp_secure: '',
+      flag_smtp_from: '',
+      flag_smtp_user: '',
+      flag_smtp_pass: '',
+      flag_smtp_host: '',
+      flag_smtp_port: '',
+
+      flag_manager_host: '',
     };
   },
   created() {
@@ -877,118 +992,118 @@ export default {
       }
     });
 
-    this.$globalGetTabletSetting((err, data) => {
-      if (!err) {
-        this.value_tabletSettings = data;
+    // this.$globalGetTabletSetting((err, data) => {
+    //   if (!err) {
+    //     this.value_tabletSettings = data;
 
-        this.value_rtspUsername = this.checkAndReturnValue(
-          this.value_tabletSettings.rtsp_username,
-          '',
-        );
-        this.value_rtspPassword = this.checkAndReturnValue(
-          this.value_tabletSettings.rtsp_password,
-          '',
-        );
-        this.value_enableRtsp = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_rtsp_camera,
-          false,
-        );
-        this.value_rtspActivated = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_rtsp_camera,
-          false,
-        );
-        this.value_enableClockinMode = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_clock_mode,
-          false,
-        );
-        this.value_haveToWearFaceMask = this.checkAndReturnValue(
-          this.value_tabletSettings.have_to_wear_face_mask,
-          false,
-        );
-        this.value_faceMaskEnhancement = this.checkAndReturnValue(
-          this.value_tabletSettings.face_mask_enhancement,
-          false,
-        );
-        this.value_showProfilePhoto = this.checkAndReturnValue(
-          this.value_tabletSettings.show_profile_photo,
-          false,
-        );
-        this.value_showVerifyIndication = this.checkAndReturnValue(
-          this.value_tabletSettings.show_verify_indication,
-          false,
-        );
-        this.value_displayVerifyResultTime = this.checkAndReturnValue(
-          this.value_tabletSettings.display_verify_result_time,
-          false,
-        );
-        this.value_temperatureUnitCelsius = this.checkAndReturnValue(
-          this.value_tabletSettings.temperature_unit_celsius,
-          false,
-        );
-        this.value_enableIdCard = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_id_card,
-          false,
-        );
-        this.value_enableTwoFactorAuthentication = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_two_factor_authentication,
-          false,
-        );
+    //     this.value_rtspUsername = this.checkAndReturnValue(
+    //       this.value_tabletSettings.rtsp_username,
+    //       '',
+    //     );
+    //     this.value_rtspPassword = this.checkAndReturnValue(
+    //       this.value_tabletSettings.rtsp_password,
+    //       '',
+    //     );
+    //     this.value_enableRtsp = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_rtsp_camera,
+    //       false,
+    //     );
+    //     this.value_rtspActivated = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_rtsp_camera,
+    //       false,
+    //     );
+    //     this.value_enableClockinMode = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_clock_mode,
+    //       false,
+    //     );
+    //     this.value_haveToWearFaceMask = this.checkAndReturnValue(
+    //       this.value_tabletSettings.have_to_wear_face_mask,
+    //       false,
+    //     );
+    //     this.value_faceMaskEnhancement = this.checkAndReturnValue(
+    //       this.value_tabletSettings.face_mask_enhancement,
+    //       false,
+    //     );
+    //     this.value_showProfilePhoto = this.checkAndReturnValue(
+    //       this.value_tabletSettings.show_profile_photo,
+    //       false,
+    //     );
+    //     this.value_showVerifyIndication = this.checkAndReturnValue(
+    //       this.value_tabletSettings.show_verify_indication,
+    //       false,
+    //     );
+    //     this.value_displayVerifyResultTime = this.checkAndReturnValue(
+    //       this.value_tabletSettings.display_verify_result_time,
+    //       false,
+    //     );
+    //     this.value_temperatureUnitCelsius = this.checkAndReturnValue(
+    //       this.value_tabletSettings.temperature_unit_celsius,
+    //       false,
+    //     );
+    //     this.value_enableIdCard = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_id_card,
+    //       false,
+    //     );
+    //     this.value_enableTwoFactorAuthentication = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_two_factor_authentication,
+    //       false,
+    //     );
 
-        this.value_alarmVolume = this.checkAndReturnValue(
-          this.value_tabletSettings.audio_alarm_volume,
-          0,
-        );
-        this.value_highTemperatureThreshold_Celsius = this.checkAndReturnValue(
-          this.value_tabletSettings.high_temperature,
-          38,
-        );
+    //     this.value_alarmVolume = this.checkAndReturnValue(
+    //       this.value_tabletSettings.audio_alarm_volume,
+    //       0,
+    //     );
+    //     this.value_highTemperatureThreshold_Celsius = this.checkAndReturnValue(
+    //       this.value_tabletSettings.high_temperature,
+    //       38,
+    //     );
 
-        this.value_tabletSystemPassword = this.checkAndReturnValue(
-          this.value_tabletSettings.system_password,
-          '123456',
-        );
+    //     this.value_tabletSystemPassword = this.checkAndReturnValue(
+    //       this.value_tabletSettings.system_password,
+    //       '123456',
+    //     );
 
-        this.value_highTemperatureThreshold_Fahrenheit = (this.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
-        this.value_highTemperatureThreshold = this.value_temperatureUnitCelsius === true
-          ? this.value_highTemperatureThreshold_Celsius
-          : this.value_highTemperatureThreshold_Fahrenheit;
-        this.disp_highTemperatureThreshold = `${this.$t('HighTemperatureThreshold')
-        } ${
-          this.value_temperatureUnitCelsius === true
-            ? this.$t('Celsius')
-            : this.$t('Fahrenheit')}`;
+    //     this.value_highTemperatureThreshold_Fahrenheit = (this.value_highTemperatureThreshold_Celsius * 9) / 5 + 32;
+    //     this.value_highTemperatureThreshold = this.value_temperatureUnitCelsius === true
+    //       ? this.value_highTemperatureThreshold_Celsius
+    //       : this.value_highTemperatureThreshold_Fahrenheit;
+    //     this.disp_highTemperatureThreshold = `${this.$t('HighTemperatureThreshold')
+    //     } ${
+    //       this.value_temperatureUnitCelsius === true
+    //         ? this.$t('Celsius')
+    //         : this.$t('Fahrenheit')}`;
 
-        this.value_verifyThreshold = this.checkAndReturnValue(
-          this.value_tabletSettings.score_for_valid_face,
-          0.9,
-        );
-        this.value_antiSpoofingThreshold = this.checkAndReturnValue(
-          this.value_tabletSettings.anti_spoofing_score,
-          0,
-        );
-        this.value_faceDetectThreshold = this.checkAndReturnValue(
-          this.value_tabletSettings.face_detection_threshold,
-          0.5,
-        );
-        // intercom
-        this.value_enableIntercom = this.checkAndReturnValue(
-          this.value_tabletSettings.enable_intercom,
-          false,
-        );
+    //     this.value_verifyThreshold = this.checkAndReturnValue(
+    //       this.value_tabletSettings.score_for_valid_face,
+    //       0.9,
+    //     );
+    //     this.value_antiSpoofingThreshold = this.checkAndReturnValue(
+    //       this.value_tabletSettings.anti_spoofing_score,
+    //       0,
+    //     );
+    //     this.value_faceDetectThreshold = this.checkAndReturnValue(
+    //       this.value_tabletSettings.face_detection_threshold,
+    //       0.5,
+    //     );
+    //     // intercom
+    //     this.value_enableIntercom = this.checkAndReturnValue(
+    //       this.value_tabletSettings.enable_intercom,
+    //       false,
+    //     );
 
-        // custom button
-        if (this.value_tabletSettings.custom_trigger_button_settings != null) {
-          this.value_enableCustomButton = this.checkAndReturnValue(
-            this.value_tabletSettings.custom_trigger_button_settings.enable,
-            false,
-          );
-          this.value_customFunctionUrl = this.checkAndReturnValue(
-            this.value_tabletSettings.custom_trigger_button_settings.url,
-            '',
-          );
-        }
-      }
-    });
+    //     // custom button
+    //     if (this.value_tabletSettings.custom_trigger_button_settings != null) {
+    //       this.value_enableCustomButton = this.checkAndReturnValue(
+    //         this.value_tabletSettings.custom_trigger_button_settings.enable,
+    //         false,
+    //       );
+    //       this.value_customFunctionUrl = this.checkAndReturnValue(
+    //         this.value_tabletSettings.custom_trigger_button_settings.url,
+    //         '',
+    //       );
+    //     }
+    //   }
+    // });
 
     this.$globalFetchSupportedlanguagelist((err, data) => {
       if (!err) {
@@ -1008,10 +1123,18 @@ export default {
 
     this.$globalGetSystemSettings((err, data) => {
       if (!err) {
-        const { settings: { db } } = data;
+        const { settings: { db, smtp } } = data;
         if (db.verified_maintain_duration) this.value_verified_maintain_duration = db.verified_maintain_duration;
         if (db.non_verified_maintain_duration) this.value_non_verified_maintain_duration = db.non_verified_maintain_duration;
         if (db.maintain_disk_space_in_gb) this.value_maintain_disk_space_in_gb = db.maintain_disk_space_in_gb;
+        if (smtp) {
+          this.value_smtp_secure = smtp.secure;
+          this.value_smtp_from = smtp.from;
+          this.value_smtp_user = smtp.user;
+          this.value_smtp_pass = smtp.pass;
+          this.value_smtp_host = smtp.host;
+          this.value_smtp_port = smtp.port;
+        }
       }
     });
   },
@@ -1045,6 +1168,30 @@ export default {
   methods: {
     viewPassword() {
       this.flag_view_password = !this.flag_view_password;
+    },
+    hostValidator(val) {
+      this.flag_smtp_host = checkDomainName(val);
+      return this.flag_smtp_host === '';
+    },
+    portValidator(val) {
+      this.flag_smtp_port = checkPort(val);
+      return this.flag_smtp_port === '';
+    },
+    passValidator(val) {
+      this.flag_smtp_pass = val.length < 1 ? i18n.formatter.format('NoEmptyNoSpace') : '';
+      return this.flag_smtp_pass === '';
+    },
+    emailValidator(val) {
+      this.flag_smtp_user = checkEmail(val);
+      return this.flag_smtp_user === '';
+    },
+    managerIpValidator(val) {
+      if (!this.value_enableAiraManager) {
+        this.flag_manager_host = '';
+        return true;
+      }
+      this.flag_manager_host = checkIpAddr(val);
+      return this.flag_manager_host === '';
     },
 
     checkAndReturnValue(value, defaultValue) {
@@ -1586,6 +1733,25 @@ export default {
         },
       };
       this.$globalSetSystemSettings(payload, (err) => {
+        if (!err) {
+          this.$fire({
+            text: this.$t('Successful'),
+            type: 'success',
+            timer: 3000,
+          });
+        }
+      });
+    },
+    async applySmtpSetting() {
+      const payload = {
+        secure: this.value_smtp_secure,
+        from: this.value_smtp_from,
+        user: this.value_smtp_user,
+        pass: this.value_smtp_pass,
+        host: this.value_smtp_host,
+        port: this.value_smtp_port,
+      };
+      this.$globalSetSystemSettings({ smtp: payload }, (err) => {
         if (!err) {
           this.$fire({
             text: this.$t('Successful'),

@@ -269,4 +269,8 @@ export default {
     color: $primary;
   }
 }
+
+.form-check-input {
+  margin-top: unset !important;
+}
 </style>

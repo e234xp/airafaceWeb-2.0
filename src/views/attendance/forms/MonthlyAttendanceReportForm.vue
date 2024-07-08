@@ -460,10 +460,7 @@
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('MASTER', item, $event)"
-              > {{ value_masterfieldsforExport.find(
-                (field) =>
-                {return
-                 field.key == item}).value }}
+              > {{ value_masterfieldsforExport.find((field) => {return field.key == item}).value }}
             </li>
           </ul>
         </CCol>
@@ -653,6 +650,7 @@ export default {
     formData: Object,
     onFetchPersonDataCallback: { type: Function },
     onFetchPersonAttendanceDataCallback: { type: Function },
+    onFetchSingleAttendanceDataCallback: { type: Function },
   },
   data() {
     return {
@@ -788,8 +786,8 @@ export default {
         definedBreakTimeMins: 60, //
         specifiedHolidays: [{ date_time: 0 }],
         specifiedNonHolidays: [{ date_time: 0 }],
-          videoDeviceGroupIn: [],
-          videoDeviceGroupOut: []
+        videoDeviceGroupIn: [],
+        videoDeviceGroupOut: [],
       },
 
       ...this.formData,
@@ -802,40 +800,31 @@ export default {
       if (!err) {
         this.value_workingHourSettings = data;
 
-          this.value_workingHourSettings.videoDeviceGroupIn = [];
-          this.value_workingHourSettings.videoDeviceGroupOut = [];
+        this.value_workingHourSettings.videoDeviceGroupIn = [];
+        this.value_workingHourSettings.videoDeviceGroupOut = [];
 
-          if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
+        if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
             || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
+          this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
+            if (err == null) {
+              const { result } = data;
 
-            this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
-              if (err == null) {
-                let result = data.result;
-
-                result.forEach((r) => {
-                  if (r) {
-                    if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
-                      this.value_workingHourSettings.videoDeviceGroupIn =
-                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
-                      this.value_workingHourSettings.videoDeviceGroupIn =
-                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
-                    }
-
-                    if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
-                      this.value_workingHourSettings.videoDeviceGroupOut =
-                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
-                      this.value_workingHourSettings.videoDeviceGroupOut =
-                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
-                    }
+              result.forEach((r) => {
+                if (r) {
+                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
                   }
 
-
-                });
-
-
-              }
-            });
-          }
+                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
+                  }
+                }
+              });
+            }
+          });
+        }
       }
 
       if (this.value_workingHourSettings == null) {
@@ -857,8 +846,8 @@ export default {
           definedBreakTimeMins: 60,
           specifiedHolidays: [{ date_time: 0 }],
           specifiedNonHolidays: [{ date_time: 0 }],
-            videoDeviceGroupIn: [],
-            videoDeviceGroupOut: [],
+          videoDeviceGroupIn: [],
+          videoDeviceGroupOut: [],
         };
       }
       this.refreshTableItems();
@@ -1135,6 +1124,7 @@ export default {
         this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
       }
     },
+    // 選擇某一個人 (item) 查看整個月份的每個紀錄
     clickOnDetails(item) {
       this.value_searchingFilter = '';
       this.value_tablePageForDetailData = {
@@ -1142,19 +1132,68 @@ export default {
         pageSize: 10,
         totalResult: 0,
       };
+      console.log(item)
       if (item.attendance_data_list && item.attendance_data_list.length > 0) {
-        this.value_attendanceDataListToReview = item.attendance_data_list;
+        this.value_attendanceDataListToReview = [
+          ...item.attendanceStatusData.attendance_data.clock_in_record.filter((rec) => Object.keys(rec).length > 0),
+          ...item.attendanceStatusData.attendance_data.clock_out_record.filter((rec) => Object.keys(rec).length > 0),
+        ];
+        this.value_attendanceDataListToReview.sort((a, b) => a.timestamp - b.timestamp);
         this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
           this.value_attendanceDataListToReview,
           this.value_searchingFilter,
         );
+        // const result = [];
+        // const month = dayjs(this.value_specifiedMonth).format('YYYY-MM');
+
+        // this.onFetchSingleAttendanceDataCallback(
+        //   `${month}-01`,
+        //   `${month}-${dayjs(month).daysInMonth()}`,
+        //   item.uuid,
+        //   (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+        //     if (personVrItems && personVrItems.length > 0) {
+        //       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === item.uuid);
+        //       dataListOnUuid.forEach((d) => {
+        //         if (!result.find((att) => att.verify_uuid === d.verify_uuid)) {
+        //           result.push({
+        //             id: d.id,
+        //             name: d.name,
+        //             department: item.extra_info.department,
+        //             verify_uuid: d.verify_uuid,
+        //             timestamp: d.timestamp,
+        //             source_id: d.source_id,
+        //             // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
+        //             yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
+        //             temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
+        //             verify_mode: d.verify_mode,
+        //             verify_mode_string: d.verify_mode_string,
+        //             verify_score: d.verify_score,
+        //             card_number: d.card_number,
+        //             group_list: d.group_list,
+        //             face_image_id: d.face_image_id,
+        //           });
+        //         }
+        //       });
+        //     }
+        //     if (!morePersonVr || errorOnPersonVr) {
+        //       this.value_attendanceDataListToReview = result;
+        //       this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
+        //         this.value_attendanceDataListToReview,
+        //         this.value_searchingFilter,
+        //       );
+        //     }
+        //   },
+        // );
       }
     },
+    // 選擇某一個人 (item) 查看某一天 (dayIdx) 的每個紀錄
     clickOnDatDetails(item, dayIdx) {
       const startTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth(), 1,
         0, 0, 0, 0);
+      // const dateCode = dayjs(startTimeOfMonth.getTime() + dayIdx * 86400000).format('YYYY-MM-DD');
       const startTimeOfSelectedDay = startTimeOfMonth.getTime() + dayIdx * 86400000;
       const endTimeOfSelectedDay = startTimeOfSelectedDay + 86399999;
+
       this.value_searchingFilter = '';
       this.value_tablePageForDetailData = {
         currentPage: 1,
@@ -1162,8 +1201,52 @@ export default {
         totalResult: 0,
       };
       if (item.attendance_data_list && item.attendance_data_list.length > 0) {
-        const l = item.attendance_data_list.filter((data) => data.timestamp >= startTimeOfSelectedDay
-          && data.timestamp <= endTimeOfSelectedDay);
+        // const result = [];
+        // this.onFetchSingleAttendanceDataCallback(
+        //   dateCode,
+        //   dateCode,
+        //   item.uuid,
+        //   (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+        //     if (personVrItems && personVrItems.length > 0) {
+        //       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === item.uuid);
+        //       dataListOnUuid.forEach((d) => {
+        //         if (!result.find((att) => att.verify_uuid === d.verify_uuid)) {
+        //           result.push({
+        //             id: d.id,
+        //             name: d.name,
+        //             department: item.extra_info.department,
+        //             verify_uuid: d.verify_uuid,
+        //             timestamp: d.timestamp,
+        //             source_id: d.source_id,
+        //             // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
+        //             yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
+        //             temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
+        //             verify_mode: d.verify_mode,
+        //             verify_mode_string: d.verify_mode_string,
+        //             verify_score: d.verify_score,
+        //             card_number: d.card_number,
+        //             group_list: d.group_list,
+        //             face_image_id: d.face_image_id,
+        //           });
+        //         }
+        //       });
+        //     }
+        //     if (!morePersonVr || errorOnPersonVr) {
+        //       this.value_attendanceDataListToReview = result;
+        //       this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
+        //         this.value_attendanceDataListToReview,
+        //         this.value_searchingFilter,
+        //       );
+        //     }
+        //   },
+        // );
+        // const l = item.attendance_data_list.filter((data) => data.timestamp >= startTimeOfSelectedDay
+        //   && data.timestamp <= endTimeOfSelectedDay);
+        // console.log(item);
+        // console.log(dayIdx);
+        const l = [];
+        if (Object.keys(item.attendanceStatusData.attendance_data.clock_in_record[dayIdx]).length > 0) l.push(item.attendanceStatusData.attendance_data.clock_in_record[dayIdx]);
+        if (Object.keys(item.attendanceStatusData.attendance_data.clock_out_record[dayIdx]).length > 0) l.push(item.attendanceStatusData.attendance_data.clock_out_record[dayIdx]);
 
         if (l.length > 0) {
           this.value_attendanceDataListToReview = l;
@@ -2152,16 +2235,16 @@ export default {
           item.groups = '';
         }
 
-        const ln = [`"${this.exportNo}"`];
+        const ln = [`${this.exportNo}`];
         for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
           switch (this.value_detailexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'mode': ln.push(`"${item.clockMode}"`); break;
-            case 'clockTime': ln.push(`"${item.clockTime}"`); break;
-            case 'temperature': ln.push(`"${item.temperature}"`); break;
-            case 'cardno': ln.push(`"${item.card_number}"`); break;
+            case 'id': ln.push(`${item.id}`); break;
+            case 'name': ln.push(`${item.nameToShow}`); break;
+            case 'group_list': ln.push(`${item.groups}`); break;
+            case 'mode': ln.push(`${item.clockMode}`); break;
+            case 'clockTime': ln.push(`${item.clockTime}`); break;
+            case 'temperature': ln.push(`${item.temperature}`); break;
+            case 'cardno': ln.push(`${item.card_number}`); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
@@ -2448,6 +2531,7 @@ export default {
                             department: person.extra_info.department,
                             verify_uuid: d.verify_uuid,
                             timestamp: d.timestamp,
+                            source_id: d.source_id,
                             // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
                             yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
                             temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
@@ -2530,8 +2614,8 @@ export default {
       const specifiedHolidays = workingHourSettings.specified_holidays || [];
       const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
 
-        const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
-        const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
+      const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
+      const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
 
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
 
@@ -2648,19 +2732,21 @@ export default {
               && attRec.verify_mode === 6,
           );
 
+          if (passModeRecord.length > 0) {
             for (let index = passModeRecord.length - 1; index >= passModeRecord.length - 2; index -= 1) {
               const rec = passModeRecord[index];
 
-              if (videoGroupIn.indexOf(rec.source_id) >= 0) {
-                clockInModeRecord.push(rec);
-                passModeRecord.splice(index, 1);
-              }
-
-              if (videoGroupOut.indexOf(rec.source_id) >= 0) {
-                clockOutModeRecord.push(rec);
-                passModeRecord.splice(index, 1);
+              if (rec) {
+                if (videoGroupIn.indexOf(rec.source_id) >= 0) {
+                  clockInModeRecord.push(rec);
+                  passModeRecord.splice(index, 1);
+                } else if (videoGroupOut.indexOf(rec.source_id) >= 0) {
+                  clockOutModeRecord.push(rec);
+                  passModeRecord.splice(index, 1);
+                }
               }
             }
+          }
 
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockInModeRecord.sort((a, b) => a.timestamp - b.timestamp);

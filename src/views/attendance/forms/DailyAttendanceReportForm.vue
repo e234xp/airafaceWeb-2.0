@@ -438,7 +438,7 @@
             <li
               class="list-group-item"
               v-for="(item, index) in value_masterexportFields"
-              :key="index"
+              :key="item"
             >
               <input
                 class="form-check-input me-1"
@@ -446,9 +446,8 @@
                 value="item"
                 checked
                 @change="fieldChanged('MASTER', item, $event)"
-              > {{ value_masterfieldsforExport.find(
-                (field) =>
-                {return field.key == item}).value }}
+              >
+              {{ value_masterfieldsforExport.find((field) => field.key === item).value }}
               <CButton
                 style="float:right;width: 40px; min-width:unset;"
                 @click="fieldMove('MASTER', item, -1)"
@@ -486,7 +485,7 @@
           <CButton
             class="ml-1 btn-temp"
             color="secondary"
-            @click="flag_masterCollapse=false"
+            @click="() => flag_masterCollapse = false"
           >
             {{ $t('Cancel') }}
           </CButton>
@@ -592,9 +591,8 @@
                 value="item"
                 checked
                 @change="fieldChanged('DETAIL', item, $event)"
-              > {{ value_detailfieldsforExport.find(
-                (field) =>
-                {return field.key == item}).value }}
+              >
+              {{ value_detailfieldsforExport.find((field) => field.key === item).value }}
               <CButton
                 style="float:right;width: 40px; min-width:unset;"
                 @click="fieldMove('DETAIL', item, -1)"
@@ -632,7 +630,7 @@
           <CButton
             class="ml-1 btn-temp"
             color="secondary"
-            @click="flag_detailCollapse=false"
+            @click="() => flag_detailCollapse = false"
           >
             {{ $t('Cancel') }}
           </CButton>
@@ -800,8 +798,8 @@ export default {
         definedBreakTimeMins: 60, //
         specifiedHolidays: [{ date_time: 0 }],
         specifiedNonHolidays: [{ date_time: 0 }],
-          videoDeviceGroupIn: [],
-          videoDeviceGroupOut: []
+        videoDeviceGroupIn: [],
+        videoDeviceGroupOut: [],
       },
 
       ...this.formData,
@@ -813,40 +811,31 @@ export default {
     this.$globalGetAttendanceSettings((err, data) => {
       if (!err) {
         this.value_workingHourSettings = data;
-          this.value_workingHourSettings.videoDeviceGroupIn = [];
-          this.value_workingHourSettings.videoDeviceGroupOut = [];
+        this.value_workingHourSettings.videoDeviceGroupIn = [];
+        this.value_workingHourSettings.videoDeviceGroupOut = [];
 
-          if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
+        if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
             || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
+          this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
+            if (err == null) {
+              const { result } = data;
 
-            this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
-              if (err == null) {
-                let result = data.result;
-
-                result.forEach((r) => {
-                  if (r) {
-                    if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
-                      this.value_workingHourSettings.videoDeviceGroupIn =
-                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
-                      this.value_workingHourSettings.videoDeviceGroupIn =
-                        this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
-                    }
-
-                    if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
-                      this.value_workingHourSettings.videoDeviceGroupOut =
-                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
-                      this.value_workingHourSettings.videoDeviceGroupOut =
-                        this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
-                    }
+              result.forEach((r) => {
+                if (r) {
+                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
                   }
 
-
-                });
-
-
-              }
-            });
-          }
+                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
+                  }
+                }
+              });
+            }
+          });
+        }
       }
 
       if (this.value_workingHourSettings == null) {
@@ -868,8 +857,8 @@ export default {
           definedBreakTimeMins: 60,
           specifiedHolidays: [{ date_time: 0 }],
           specifiedNonHolidays: [{ date_time: 0 }],
-            videoDeviceGroupIn: [],
-            videoDeviceGroupOut: [],
+          videoDeviceGroupIn: [],
+          videoDeviceGroupOut: [],
         };
       }
       this.refreshTableItems();
@@ -1324,9 +1313,10 @@ export default {
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      const columns = this.value_detailexportFields.unshift('No');
+      const columns = this.value_masterexportFields.map((d) => d);
+      columns.unshift('No');
       separator = `"${separator}"`;
-      let data = `"${columns.join(separator)}"`;
+      let data = `"${columns.join(separator)}"\r\n`;
 
       // let data = `"No"${separator}"${this.value_detailexportFields.join('\"' + separator + '\"')}"\r\n`;
 
@@ -1409,23 +1399,23 @@ export default {
           }
         }
 
-        const ln = [`"${this.exportNo}"`];
+        const ln = [`${this.exportNo}`];
         for (let i = 0; i < this.value_masterexportFields.length; i += 1) {
           switch (this.value_masterexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'timestamp': ln.push(`"${dayjs(this.value_specifiedDate).format('MM/DD')}"`); break;
-            case 'workingTime': ln.push(`"${item.working_time}"`); break;
-            case 'overTime': ln.push(`"${item.over_time}"`); break;
-            case 'clockinTime': ln.push(`"${item.clockin}"`); break;
-            case 'clockinTemperature': ln.push(`"${item.clockin_temperature}"`); break;
-            case 'clockoutTime': ln.push(`"${item.clockout}"`); break;
-            case 'clockoutTemperature': ln.push(`"${item.clockout_temperature}"`); break;
+            case 'id': ln.push(`${item.id}`); break;
+            case 'name': ln.push(`${item.nameToShow}`); break;
+            case 'group_list': ln.push(`${item.groups}`); break;
+            case 'timestamp': ln.push(`${dayjs(this.value_specifiedDate).format('MM/DD')}`); break;
+            case 'workingTime': ln.push(`${item.working_time}`); break;
+            case 'overTime': ln.push(`${item.over_time}`); break;
+            case 'clockinTime': ln.push(`${item.clockin}`); break;
+            case 'clockinTemperature': ln.push(`${item.clockin_temperature}`); break;
+            case 'clockoutTime': ln.push(`${item.clockout}`); break;
+            case 'clockoutTemperature': ln.push(`${item.clockout_temperature}`); break;
             default: break;
           }
         }
-        data += `${ln.join(separator)}\r\n`;
+        data += `"${ln.join(separator)}"\r\n`;
       }
 
       let filename = '';
@@ -1631,9 +1621,12 @@ export default {
         personName = this.value_attendanceDataListToReview[0].name;
       }
 
-      const columns = this.value_detailexportFields.unshift('No');
+      const columns = this.value_masterexportFields.map((d) => d);
+      columns.unshift('No');
+      // const columns = this.value_detailexportFields.unshift('No');
+      // this.value_detailexportFields.unshift('No');
       separator = `"${separator}"`;
-      let data = `"${columns.join(separator)}"`;
+      let data = `"${columns.join(separator)}"\r\n`;
 
       // let data = `"No"${separator}"${this.value_detailexportFields.join('\"' + separator + '\"')}"\r\n`;
 
@@ -1680,21 +1673,21 @@ export default {
           item.groups = '';
         }
 
-        const ln = [`"${this.exportNo}"`];
+        const ln = [`${this.exportNo}`];
         for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
           switch (this.value_detailexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'mode': ln.push(`"${item.clockMode}"`); break;
-            case 'clockTime': ln.push(`"${item.clockTime}"`); break;
-            case 'temperature': ln.push(`"${item.temperature}"`); break;
-            case 'cardno': ln.push(`"${item.card_number}}"`); break;
+            case 'id': ln.push(`${item.id}`); break;
+            case 'name': ln.push(`${item.nameToShow}`); break;
+            case 'group_list': ln.push(`${item.groups}`); break;
+            case 'mode': ln.push(`${item.clockMode}`); break;
+            case 'clockTime': ln.push(`${item.clockTime}`); break;
+            case 'temperature': ln.push(`${item.temperature}`); break;
+            case 'cardno': ln.push(`${item.card_number}`); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
         }
-        data += `${ln.join(separator)}\r\n`;
+        data += `"${ln.join(separator)}"\r\n`;
       }
 
       let filename = '';
@@ -2023,7 +2016,7 @@ export default {
                             name: d.name,
                             verify_uuid: d.verify_uuid,
                             timestamp: d.timestamp,
-                              source_id: d.source_id,
+                            source_id: d.source_id,
                             temperature: (d.temperature === 0 || d.temperature === '') ? '' : `${d.temperature.toFixed(1)}°C`,
                             verify_mode: d.verify_mode,
                             verify_mode_string: d.verify_mode_string,
@@ -2105,8 +2098,8 @@ export default {
       const specifiedHolidays = workingHourSettings.specified_holidays || [];
       const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
 
-        const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
-        const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
+      const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
+      const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
 
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
 
@@ -2215,19 +2208,22 @@ export default {
               && attRec.verify_mode === 6,
           );
 
+          if (passModeRecord.length > 0) {
             for (let index = passModeRecord.length - 1; index >= passModeRecord.length - 2; index -= 1) {
               const rec = passModeRecord[index];
 
-              if (videoGroupIn.indexOf(rec.source_id) >= 0) {
-                clockInModeRecord.push(rec);
-                passModeRecord.splice(index, 1);
-              }
-
-              if (videoGroupOut.indexOf(rec.source_id) >= 0) {
-                clockOutModeRecord.push(rec);
-                passModeRecord.splice(index, 1);
+              if (rec) {
+                if (videoGroupIn.indexOf(rec.source_id) >= 0) {
+                  clockInModeRecord.push(rec);
+                  passModeRecord.splice(index, 1);
+                } else if (videoGroupOut.indexOf(rec.source_id) >= 0) {
+                  clockOutModeRecord.push(rec);
+                  passModeRecord.splice(index, 1);
+                }
               }
             }
+          }
+
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockInModeRecord.sort((a, b) => a.timestamp - b.timestamp);
           clockOutModeRecord.sort((a, b) => a.timestamp - b.timestamp);
@@ -2517,3 +2513,4 @@ export default {
     margin-top: 0.8rem;
   }
 </style>
+0

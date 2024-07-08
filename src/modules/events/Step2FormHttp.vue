@@ -102,7 +102,7 @@
                 placeholder=""
                 :is-valid="formPass.port = checkPort(form.port) === ''"
                 :invalid-feedback="checkPort(form.port)"
-                v-model="form.port"
+                v-model.number="form.port"
               />
             </td>
             <td class="table-td">
@@ -144,7 +144,7 @@
                   class="h5"
                   style="display: block; height: 25px; margin-bottom: 6px"
                 >
-                  Method
+                  {{ $t('Method') }}
                 </div>
                 <CSelect
                   size="lg"
@@ -295,7 +295,10 @@
                         rows="10"
                         placeholder=""
                         style="position: relative; width: 100%"
-                        v-model="value_customTextarea"
+                        :is-valid="formPass.body = checkBody(value_customTextarea) === ''"
+                        :invalid-feedback="checkBody(value_customTextarea)"
+                        :value="value_customTextarea"
+                        @input="onChangeCustomText"
                       />
                     </CCol>
                   </CRow>
@@ -412,6 +415,14 @@ export default {
           label: `${this.$t('VerifiedTimeStamp')}  (String)`,
           value: '##VerifiedTimeStamp##',
         },
+        // {
+        //   label: `${this.$t('VerifiedDateTime')}  (String)`,
+        //   value: '##VerifiedDateTime##',
+        // },
+        {
+          label: `${this.$t('VideoDeviceVideoSource')}  (String)`,
+          value: '##SourceDevice##',
+        },
         {
           label: `${this.$t('IsStranger')}  (Boolean)`,
           value: '##IsStranger##',
@@ -492,6 +503,7 @@ export default {
       } else {
         this.form.url = value;
       }
+      this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
     },
 
     selectDateType(type) {
@@ -532,9 +544,10 @@ export default {
 
       if (this.form.method === 'GET') {
         const copyUrl = this.form.url;
-        const [, value] = copyUrl.split('/');
-        const [result] = value.split('?');
-        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? result : this.form.url;
+        // const [, value] = copyUrl.split('/');
+        // const [result] = value.split('?');
+        const [result] = copyUrl.split('?');
+        this.value_realTime_eventHttpUrl = this.form.url.startsWith('/') ? result.slice(1) : this.form.url;
 
         const customTextarea = this.form.url;
         const [, queryString] = customTextarea.split('?');
@@ -569,8 +582,8 @@ export default {
         case 'GET':
           newCustomData = `&${this.value_newFieldName}=${this.value_selectedDefaultData}`;
 
-          this.value_customTextarea = `${this.value_customTextarea}${newCustomData}`;
-          this.form.url = `${this.form.url}?${newCustomData}`;
+          this.value_customTextarea = `${this.value_customTextarea || ''}${newCustomData}`;
+          this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
           break;
         case 'POST':
           switch (this.form.data_type) {
@@ -596,6 +609,33 @@ export default {
 
       this.value_newFieldName = '';
       this.value_selectedDefaultData = '';
+    },
+    onChangeCustomText(value) {
+      this.value_customTextarea = value;
+
+      if (this.form.method === 'GET') {
+        this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
+      } else if (this.form.method === 'POST') {
+        this.form.custom_data = this.value_customTextarea;
+      }
+    },
+    checkBody(value) {
+      if (value === '') return '';
+      if (this.form.method === 'GET') {
+        const regex = /^(?:&[^\s&=]+=##[^#]+##)(?:&[^\s&=]+=##[^#]+##)*$/;
+        return regex.test(value) ? '' : this.$t('InvalidEmailFormat');
+      }
+      if (this.form.method === 'POST') {
+        if (this.form.data_type === 'JSON') {
+          const regex = /^("[^"]+":"##[^"]+##",(?:\n|$))+$/;
+          return regex.test(value) ? '' : this.$t('InvalidEmailFormat');
+        }
+        if (this.form.data_type === 'XML') {
+          const regex = /^(<[^>]+>##[^#]+##<\/[^>]+>(?:\n|$))+$/;
+          return regex.test(value) ? '' : this.$t('InvalidEmailFormat');
+        }
+      }
+      return '';
     },
   },
   created() {

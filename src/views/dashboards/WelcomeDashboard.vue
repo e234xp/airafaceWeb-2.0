@@ -12,7 +12,9 @@
     <div ref="welcomePanel" class="ratio-content welcome-dashboard" style="position: absolute; z-index: 50;"
       :style="{backgroundImage:'url('+displaySettings.background_image+')'}">
       <div class="welcome-logo" @click="toLoginPage"
-        :style="[{'backgroundImage':'url('+displaySettings.logo+')', 'zoom':zoomRatio+' !important'}]"></div>
+        :style="[{'zoom':zoomRatio+' !important'}]">
+        <img :src="displaySettings.logo" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
 
       <div class="welcome-header" :style="'zoom: ' + zoomRatio + ' !important;'">
         <div class="welcome-message">{{ displaySettings.welcomeword }}</div>
@@ -135,9 +137,14 @@ export default {
             return;
           }
 
-          person.snapshot_image = payload.snapshot || payload.face_image;
+          person.snapshot_image = payload.snapshot || payload.face_image || person.snapshot_image;
 
-          self.checkRecord({ ...person, uuid: payload.person_id, groups: payload.groups });
+          self.checkRecord({
+            ...person,
+            name: person.name || person.fullname,
+            uuid: payload.person_id || payload.person.uuid,
+            groups: payload.groups || payload.person.group_list
+          });
           break;
         default:
           break;
@@ -162,7 +169,7 @@ export default {
     self.displaySettings.showDuration *= 1000;
 
     for (let idx = self.displaySettings.advertising.length - 1; idx >= 0; idx -= 1) {
-      if (self.displaySettings.advertising[idx] === `data:image/png;base64,${px}`) {
+      if (self.displaySettings.advertising[idx] === '' || self.displaySettings.advertising[idx] === `data:image/png;base64,${px}`) {
         self.displaySettings.advertising.splice(idx, 1);
       }
     }

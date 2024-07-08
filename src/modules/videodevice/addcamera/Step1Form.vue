@@ -177,9 +177,6 @@
               class="mt-2"
               style="width: 100%"
               v-model="localStep1form.user"
-              :invalid-feedback="$t('NoEmptyNoSpace')"
-              :is-valid="isFieldPassed('user', localStep1form.user)"
-              required
             />
           </CCol>
 
@@ -194,9 +191,6 @@
               class="mt-2"
               style="width: 100%"
               v-model="localStep1form.pass"
-              :invalid-feedback="flag_pwdPass"
-              :is-valid="pwdValidator"
-              required
             >
               <template #append-content>
                 <CButton
@@ -431,6 +425,7 @@ export default {
       if (!error) {
         self.param_deviceGroupsValue = [];
         self.param_deviceGroupsList = [];
+        self.localStep1form.divice_groups = [];
         for (let i = 0; i < dataList.length; i += 1) {
           if (dataList[i].uuid.length === 36) {
             self.param_deviceGroupsValue.push({ value: dataList[i].uuid, label: dataList[i].name });

@@ -44,8 +44,9 @@ export default {
       }
     });
     const { data } = await this.$globalGetTabletList('', 0, 3000);
-    // console.log(data);
-    this.list = data.data_list.map((item) => ({ label: item.identity, value: item.code }));
+    this.list.push(...data.data_list.map((item) => ({ label: item.identity, value: `${item.code || ''}/${item.uuid || ''}` })));
+    // const cam = await this.$globalFindCameras('', 0, 3000);
+    // this.list.push(...cam.data.list.map((item) => ({ label: item.name, value: item.uuid || '' })));
   },
   methods: {
     onSubmit(data) {

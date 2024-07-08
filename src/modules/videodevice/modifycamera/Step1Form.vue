@@ -429,6 +429,7 @@ export default {
       if (!error) {
         self.param_deviceGroupsValue = [];
         self.param_deviceGroupsList = [];
+        self.localStep1form.divice_groups = [];
         for (let i = 0; i < dataList.length; i += 1) {
           if (dataList[i].uuid.length === 36) {
             self.param_deviceGroupsValue.push({ value: dataList[i].uuid, label: dataList[i].name });

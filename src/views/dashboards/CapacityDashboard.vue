@@ -274,60 +274,132 @@
       </div>
 
       <!-- footer -->
-      <!-- <div class="footer-box-wrap">
+      <div class="footer-box-wrap">
         <div class="footer-box">
-          <div class="pager d-flex align-items-center justify-content-center">
-            <button class="btn-reset" :disabled="currentPageIndex[0] === 0" @click="onClickPrev">
-              <img v-if="currentPageIndex[0] === 0" class="pager-left-arrow"
-                src="@/assets/img/pager_left_arrow_disabled.svg" />
-              <img v-else class="pager-left-arrow" src="@/assets/img/pager_left_arrow.svg" />
+          <div class="pager d-flex align-items-center justify-content-center" style="width: 66%">
+            <button
+              class="btn-reset"
+              :disabled="currentPageIndex[0] === 0"
+              @click="onClickPrev(0)"
+            >
+              <img
+                v-if="currentPageIndex[0] === 0"
+                class="pager-left-arrow"
+                src="@/assets/img/pager_left_arrow_disabled.svg"
+              >
+              <img
+                v-else
+                class="pager-left-arrow"
+                src="@/assets/img/pager_left_arrow.svg"
+              >
             </button>
-            <button v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[0] - 1)"
-              class="pager-left-dots btn-reset" @click="onClickPagerDot(i)"></button>
+            <button
+              v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[0] - 1)"
+              class="pager-left-dots btn-reset"
+              @click="onClickPagerDot(0, i)"
+              :key="i"
+            />
 
             <div class="pager-progressbar-box">
-              <div class="pager-progressbar-track"></div>
-              <div class="pager-progressbar-thumb" :style="{ width: pageProgressPercentage }"></div>
+              <div class="pager-progressbar-track" />
+              <div
+                class="pager-progressbar-thumb"
+                :style="{ width: pageProgressPercentage }"
+              />
             </div>
-            <button v-for="(item, i) in range(currentPageIndex[0] + 1, dispPageIndexEnd)"
-              class="pager-right-dots btn-reset" @click="onClickPagerDot(i + currentPageIndex[0] + 1)"></button>
+            <button
+              v-for="(item, i) in range(currentPageIndex[0] + 1, dispPageIndexEnd)"
+              class="pager-right-dots btn-reset"
+              @click="onClickPagerDot(0, i + currentPageIndex[0] + 1)"
+              :key="i"
+            />
 
-            <button class="btn-reset" :disabled="currentPageIndex[0] === totalPageIndex" @click="onClickNext">
-              <img v-if="currentPageIndex[0] === totalPageIndex" class="pager-right-arrow"
-                src="@/assets/img/pager_right_arrow_disabled.svg" />
-              <img v-else class="pager-right-arrow" src="@/assets/img/pager_right_arrow.svg" />
+            <button
+              class="btn-reset"
+              :disabled="currentPageIndex[0] === totalPageIndex[0]"
+              @click="onClickNext(0)"
+            >
+              <img
+                v-if="currentPageIndex[0] === totalPageIndex[0]"
+                class="pager-right-arrow"
+                src="@/assets/img/pager_right_arrow_disabled.svg"
+              >
+              <img
+                v-else
+                class="pager-right-arrow"
+                src="@/assets/img/pager_right_arrow.svg"
+              >
             </button>
           </div>
 
-          <div class="pager d-flex align-items-center justify-content-center">
-            <button class="btn-reset" :disabled="currentPageIndex[1] === 0" @click="onClickPrev">
-              <img v-if="currentPageIndex[1] === 0" class="pager-left-arrow"
-                src="@/assets/img/pager_left_arrow_disabled.svg" />
-              <img v-else class="pager-left-arrow" src="@/assets/img/pager_left_arrow.svg" />
+          <div class="pager d-flex align-items-center justify-content-center" style="width: 33%">
+            <button
+              class="btn-reset"
+              :disabled="currentPageIndex[1] === 0"
+              @click="onClickPrev(1)"
+            >
+              <img
+                v-if="currentPageIndex[1] === 0"
+                class="pager-left-arrow"
+                src="@/assets/img/pager_left_arrow_disabled.svg"
+              >
+              <img
+                v-else
+                class="pager-left-arrow"
+                src="@/assets/img/pager_left_arrow.svg"
+              >
             </button>
-            <button v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[1] - 1)"
-              class="pager-left-dots btn-reset" @click="onClickPagerDot(i)"></button>
+            <button
+              v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[1] - 1)"
+              class="pager-left-dots btn-reset"
+              @click="onClickPagerDot(1, i)"
+              :key="i"
+            />
 
             <div class="pager-progressbar-box">
-              <div class="pager-progressbar-track"></div>
-              <div class="pager-progressbar-thumb" :style="{ width: pageProgressPercentage }"></div>
+              <div class="pager-progressbar-track" />
+              <div
+                class="pager-progressbar-thumb"
+                :style="{ width: pageProgressPercentage }"
+              />
             </div>
-            <button v-for="(item, i) in range(currentPageIndex[1] + 1, dispPageIndexEnd)"
-              class="pager-right-dots btn-reset" @click="onClickPagerDot(i + currentPageIndex[1] + 1)"></button>
+            <button
+              v-for="(item, i) in range(currentPageIndex[1] + 1, dispPageIndexEnd)"
+              class="pager-right-dots btn-reset"
+              @click="onClickPagerDot(1, i + currentPageIndex[1] + 1)"
+              :key="i"
+            />
 
-            <button class="btn-reset" :disabled="currentPageIndex[1] === totalPageIndex" @click="onClickNext">
-              <img v-if="currentPageIndex[1] === totalPageIndex" class="pager-right-arrow"
-                src="@/assets/img/pager_right_arrow_disabled.svg" />
-              <img v-else class="pager-right-arrow" src="@/assets/img/pager_right_arrow.svg" />
+            <button
+              class="btn-reset"
+              :disabled="currentPageIndex[1] === totalPageIndex[1]"
+              @click="onClickNext(1)"
+            >
+              <img
+                v-if="currentPageIndex[1] === totalPageIndex[1]"
+                class="pager-right-arrow"
+                src="@/assets/img/pager_right_arrow_disabled.svg"
+              >
+              <img
+                v-else
+                class="pager-right-arrow"
+                src="@/assets/img/pager_right_arrow.svg"
+              >
             </button>
           </div>
         </div>
-      </div> -->
+      </div>
       <!-- 右下角 powered by aira 字樣 -->
       <!-- <div class="footer-detail-box">
         <div class="footer-detail-text">powered by</div>
         <img src="@/assets/img/aira-logo-white.svg" alt="" class="footer-logo" />
       </div> -->
+      <div
+        class="loading"
+        v-if="loading"
+      >
+        <CSpinner color="primary" />
+      </div>
     </div>
   </div>
 </template>
@@ -392,8 +464,8 @@ export default {
       // 分頁：
       currentPageIndex: [0, 0],
       displayAmount: [20, 8],
-      // dispPageIndexStart: 0,
-      // dispPageIndexEnd: 0,
+      dispPageIndexStart: 0,
+      dispPageIndexEnd: 0,
 
       // progressDotAmount: 5,
       // autoChangePageTimer: null,
@@ -543,8 +615,6 @@ export default {
         self.countdownCurrentTime = new Date();
 
         setTimeout(() => {
-          console.log('currentPageIndex setTimeout');
-
           const cards = document.getElementsByName('groupCards');
 
           cards.forEach((element) => {
@@ -559,11 +629,11 @@ export default {
 
   created() {
     const self = this;
-    // console.log('created start');
 
     this.unSubscribe = this.$store.subscribe(async (mutation) => {
       let payload = {};
       let person = {};
+      let result = {};
 
       switch (mutation.type) {
         case 'changeNotifications':
@@ -574,23 +644,27 @@ export default {
 
           payload = mutation.payload;
 
-          if (payload.person === undefined) {
+          if (payload !== undefined) {
+            person = payload.person || payload.person_info;
+          }
+
+          if (person === undefined) {
             console.log('created subscribe', 'payload.person === undefined');
             return;
           }
 
-          person = {
-            card_facility_code: payload.person.card_facility_code,
-            card_number: payload.person.card_number,
+          result = {
+            card_facility_code: person.card_facility_code,
+            card_number: person.card_number,
             face_image_id: payload.face_image,
-            group_list: payload.person.group_list,
+            group_list: payload.groups || person.group_list,
             high_temperature: payload.is_high_temperature,
-            id: payload.person.id,
-            name: payload.person.name,
-            source_id: payload.source_id,
+            id: payload.person_id || person.id,
+            name: person.fullname || person.name,
+            source_id: payload.source_id || payload.channel || '',
             temperature: payload.foreHead_temperature,
             timestamp: payload.timestamp,
-            uuid: payload.person.uuid,
+            uuid: payload.person_id || person.uuid,
             verify_mode: payload.verify_mode,
             target_score: 0,
             verify_mode_string: '',
@@ -598,7 +672,7 @@ export default {
             verify_uuid: '',
           };
 
-          self.applyVerifyToPerson([person]);
+          self.applyVerifyToPerson([result]);
           self.refreshKey *= -1;
 
           self.refreshData();
@@ -626,14 +700,11 @@ export default {
     });
 
     self.isLoadSetting = false;
-
-    // console.log('created end');
   },
 
   // Tulip
   async mounted() {
     const self = this;
-    // console.log('mounted start');
 
     self.isLoadSetting = true;
 
@@ -654,6 +725,9 @@ export default {
 
     const videoDeviceGroupIn = valueSetting.data.video_device_group_in;
     const videoDeviceGroupOut = valueSetting.data.video_device_group_out;
+
+    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
+    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
 
     self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
       let result = [];
@@ -678,7 +752,21 @@ export default {
       self.params_entryChannels = Array.from(new Set(entryChannels));
       self.params_leaveChannels = Array.from(new Set(leaveChannels));
 
-      console.log('Channels', self.params_entryChannels, self.params_leaveChannels);
+      self.params_entryChannels = self.params_entryChannels.map((id) => {
+        const camera = cameraList.find((c) => c.uuid === id);
+        const tablet = tabletList.find((c) => c.uuid === id);
+        if (camera) return `${id}${camera.name}`;
+        if (tablet) return `${id}${tablet.identity}`;
+        return id;
+      });
+
+      self.params_leaveChannels = self.params_leaveChannels.map((id) => {
+        const camera = cameraList.find((c) => c.uuid === id);
+        const tablet = tabletList.find((c) => c.uuid === id);
+        if (camera) return `${id}${camera.name}`;
+        if (tablet) return `${id}${tablet.identity}`;
+        return id;
+      });
     });
 
     // 2.0 modify setting
@@ -728,8 +816,6 @@ export default {
 
     // 8.0 start Looper
     self.setupCurrentTimeLooper();
-
-    // console.log('mounted end');
   },
 
   destroyed() {
@@ -762,6 +848,39 @@ export default {
     }
   },
   methods: {
+    range(start, end) {
+      let ret = [];
+
+      if (start <= end) {
+        ret = Array(end - start + 1).fill().map((val, i) => start + i);
+      }
+
+      return ret;
+    },
+
+    onClickPrev(idx) {
+      const self = this;
+      if (self.currentPageIndex[idx] === 0) return;
+
+      self.currentPageIndex[idx] -= 1;
+      self.resetAutoChangePageTimer();
+    },
+
+    onClickNext(idx) {
+      const self = this;
+      if (self.currentPageIndex[idx] === self.totalPageIndex[idx]) return;
+
+      self.currentPageIndex[idx] += 1;
+      self.resetAutoChangePageTimer();
+    },
+
+    onClickPagerDot(idx, index) {
+      const self = this;
+      // console.log('onClickPagerDot');
+      self.currentPageIndex[idx] = index;
+      self.resetAutoChangePageTimer();
+    },
+
     toLoginPage() {
       const self = this;
       self.flag_login = false;
@@ -904,11 +1023,9 @@ export default {
 
     // Tulip
     refreshData() {
-      console.log('========= refreshData');
       const self = this;
 
       self.displayAmount = self.setupPageLayoutAmount();
-      console.log(self.entryPersons);
 
       self.entryPersons.sort((a, b) => b.clockinRecord.timestamp - a.clockinRecord.timestamp);
       self.currentEntryPersons = self.entryPersons.slice(
@@ -916,9 +1033,7 @@ export default {
         self.displayAmount[0],
       );
       self.totalPageIndex[0] = Math.ceil(self.entryPersons.length / self.displayAmount[0]) - 1;
-      console.log(self.entryPersons);
 
-      console.log(self.leavePersons);
       self.leavePersons.sort((a, b) => b.clockoutRecord.timestamp - a.clockoutRecord.timestamp);
       self.currentLeavePersons = self.leavePersons.slice(
         self.currentPageIndex[1],
@@ -926,9 +1041,11 @@ export default {
       );
       self.totalPageIndex[1] = Math.ceil(self.leavePersons.length / self.displayAmount[1]) - 1;
 
+      self.totalPageIndex[0] = self.totalPageIndex[0] < 0 ? 0 : self.totalPageIndex[0];
+      self.totalPageIndex[1] = self.totalPageIndex[1] < 0 ? 0 : self.totalPageIndex[1];
+
       self.currentEntryPersons.forEach((pPerson) => {
         const person = pPerson;
-        console.log(person);
 
         if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALE'
           + 'gHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
@@ -1009,53 +1126,36 @@ export default {
     },
 
     setupCurrentTimeLooper() {
-      // console.log('setupCurrentTimeLooper ============================');
-
       const self = this;
 
       self.currentTimeLooper = setInterval(async () => {
-        // console.log('dashboards self.currentTimeLooper');
-
         const now = new Date();
-        // let month = now.getMonth() + 1;
         const hour = String(now.getHours()).padStart(2, '0');
         const minute = String(now.getMinutes()).padStart(2, '0');
-        // self.currentDate = month + '/' + now.getDate() + '/' + now.getFullYear();
         self.currentDate = now.toLocaleDateString();
 
         self.currentTime = `${hour}:${minute}`;
-
-        // if (now.getMinutes() === 0 && now.getSeconds() === 0) {
-
-        //   console.log( 'dashboards self.currentTimeLooper refreshBarChart') ;
-
-        //   self.refreshBarChart();
-        // }
       }, 1000);
     },
 
     //  merge Person and Verify Date
     applyVerifyToPerson(data) {
-      console.log('============  applyVerifyToPerson');
       const self = this;
 
       let passModeRecord = [];
       let clockModeRecord = [];
 
       if (data.length >= 1) {
-        passModeRecord = data.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
-
+        passModeRecord = data.filter((attRec) => (attRec.uuid !== undefined && attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          // console.log('params_entryChannels', self.params_entryChannels, passModeRecord[i].source_id, self.params_entryChannels.indexOf(passModeRecord[i].source_id));
-
-          if (self.params_entryChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          if (self.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 3;
               clockModeRecord.push(ppp[0]);
             }
-          } else if (self.params_leaveChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          } else if (self.params_leaveChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 4;
@@ -1184,13 +1284,6 @@ export default {
 
           self.entryPersons = self.persons.filter((p) => p.status === 0 && p.punchMode !== undefined);
           self.leavePersons = self.persons.filter((p) => p.status === 1 && p.punchMode !== undefined);
-
-          // console.log('c persons', self.persons);
-          // console.log('c entryPersons', self.entryPersons);
-          // console.log('c leavePersons', self.leavePersons);
-          // console.log('c hourlyPresentData', self.hourlyPresentData);
-          // console.log('c hourlyPersonInData', self.hourlyPersonInData);
-          // console.log('c hourlyPersonOutData', self.hourlyPersonOutData);
         } else if (passModeRecord.length >= 1) {
           passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
 
@@ -1248,11 +1341,6 @@ export default {
 
           self.entryPersons = self.persons.filter((p) => p.status === 0);
           self.leavePersons = self.persons.filter((p) => p.status === 1);
-
-          // console.log('p persons', self.persons);
-          // console.log('P hourlyPresentData', self.hourlyPresentData);
-          // console.log('p hourlyPersonInData', self.hourlyPersonInData);
-          // console.log('p hourlyPersonOutData', self.hourlyPersonOutData);
         }
       }
     },
@@ -1299,7 +1387,6 @@ export default {
       if (containerElement) containerElement.classList.add('container-fluid-reset');
 
       setTimeout(() => {
-        console.log('initViews setTimeout');
         self.zoomViews();
       }, 168);
     },
@@ -1313,6 +1400,32 @@ export default {
 
       self.countdownStartTime = new Date();
       self.countdownCurrentTime = new Date();
+
+      self.showPageProgressTimer = setInterval(() => {
+        self.totalPageIndex.forEach((total, idx) => {
+          if (total > 0) {
+            self.countdownCurrentTime = new Date();
+
+            // let base = 1;
+            // if (self.isShowGroup) base = self.displaySettings.summaryPatrolTime;
+            // else base = self.displaySettings.personPatrolTime;
+
+            const base = self.displaySettings.personPatrolTime;
+
+            const percentage = (100 * (self.countdownCurrentTime - self.countdownStartTime)) / (base * 1000);
+            self.pageProgressPercentage = `${percentage}%`;
+
+            if (percentage >= 100) {
+              self.pageProgressPercentage = '0%';
+              if (self.currentPageIndex[idx] === total) {
+                self.currentPageIndex[idx] = 0;
+              } else {
+                self.currentPageIndex[idx] += 1;
+              }
+            }
+          }
+        });
+      }, 1000);
     },
 
     zoomViews() {
@@ -1340,6 +1453,7 @@ export default {
         const headerElement = document.querySelector('.dashboard-header');
         const dividerElement = document.querySelector('.dashboard-divider');
         const footerBoxElement = document.querySelector('.footer-box');
+        const footerBoxWrapElement = document.querySelector('.footer-box-wrap');
         const attendanceTopElement = document.querySelector('.attendance-top-box');
 
         // 將下列 views 進行 zoom
@@ -1348,7 +1462,9 @@ export default {
         if (summaryBox) self.setZoom(summaryBox);
         if (headerElement) self.setZoom(headerElement);
         if (dividerElement) self.setZoom(dividerElement);
-        if (footerBoxElement) self.setZoom(footerBoxElement);
+        // if (footerBoxElement) self.setZoom(footerBoxElement);
+        if (footerBoxElement) footerBoxElement.style.setProperty('width', '100%');
+        if (footerBoxWrapElement) footerBoxWrapElement.style.setProperty('width', `calc(100% - ${dashboard.style.paddingLeft} - ${dashboard.style.paddingRight})`);
         if (attendanceTopElement) self.setZoom(attendanceTopElement);
       }
     },
@@ -1519,5 +1635,19 @@ export default {
   .list-leave-to {
     opacity: 0;
     transform: translateY(200px);
+  }
+
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 </style>

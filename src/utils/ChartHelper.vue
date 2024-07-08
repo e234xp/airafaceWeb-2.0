@@ -96,6 +96,7 @@ export default {
             },
 
             options: {
+              animation: false,
               plugins: {
                 legend: {
                   display: true,

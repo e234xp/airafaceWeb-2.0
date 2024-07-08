@@ -121,7 +121,7 @@
                   <vxe-button
                     class="btn-in-cell-danger btn-in-cell"
                     @click="handleOnSingleDelete(row)"
-                    :disabled="row.uuid==='0' || row.uuid==='1'"
+                    :disabled="row.uuid==='0' || row.uuid==='1' || row.rules > 0"
                   >
                     {{ disp_delete }}
                   </vxe-button>
@@ -176,6 +176,7 @@ export default {
         totalResult: 0,
       },
       value_searchingFilter: '',
+      value_rule_list: [],
 
       disp_header: i18n.formatter.format('NewVideoDeviceGroups'),
       disp_search: i18n.formatter.format('Search'),
@@ -206,6 +207,12 @@ export default {
   async mounted() {
     const self = this;
     self.refreshTableItems();
+
+    const { data: { list } } = await this.$globalGetEventList(
+      '', ['http', 'line', 'mail', 'wiegand', 'iobox'],
+    );
+
+    this.value_rule_list = list;
   },
   methods: {
     handlePageChange({ currentPage, pageSize }) {
@@ -230,6 +237,7 @@ export default {
         const modifiedItem = { ...item };
 
         modifiedItem.camera_count = modifiedItem.camera_uuid_list.length;
+        modifiedItem.outputDevices = modifiedItem.tablet_uuid_list.length;
         return modifiedItem;
       });
       return modifyFieldsData;
@@ -249,6 +257,11 @@ export default {
         (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
         self.value_tablePage.currentPage * self.value_tablePage.pageSize,
       );
+
+      sliceList.forEach((item, idx) => {
+        sliceList[idx].rules = self.value_rule_list
+          .filter((rule) => rule.divice_groups.indexOf(item.uuid) >= 0).length;
+      });
 
       return Object.assign([], sliceList);
     },

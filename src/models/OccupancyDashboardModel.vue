@@ -10,6 +10,7 @@ export default {
       strangerData: [],
 
       lastRecordTimestamp: 0,
+      loading: false,
     };
   },
   methods: {
@@ -48,7 +49,6 @@ export default {
     },
 
     async setupPersonData() {
-      console.log('============  setupPersonData');
       const self = this;
       self.personData = [];
       let shitf = 0;
@@ -122,7 +122,6 @@ export default {
 
     // get Person Info
     async setupVisitorData() {
-      console.log('============  setupVisitorData');
       const self = this;
       self.visitorData = [];
       let shitf = 0;
@@ -131,9 +130,7 @@ export default {
       await new Promise((resolve) => {
         (async () => {
           while (thereIsMoreData) {
-            console.log('setupVisitorData 1', thereIsMoreData, shitf);
             const retPerson = await self.$globalFindVisitor('', shitf, 250);
-            console.log('setupVisitorData 2', retPerson);
 
             const err = retPerson.error;
             const result = retPerson.data;
@@ -168,17 +165,17 @@ export default {
 
     // get Verify Data
     async setupVerifyData(startTS, endTS, cb) {
-      console.log('============  setupVerifyData');
       const self = this;
       self.verifyData = [];
       let shitf = 0;
       let thereIsMoreData = true;
+      self.loading = true;
 
       while (thereIsMoreData) {
         const query = {
           start_time: startTS,
           end_time: endTS,
-          slice_length: 20,
+          slice_length: 10000,
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
@@ -216,7 +213,7 @@ export default {
         const query = {
           start_time: startTS,
           end_time: endTS,
-          slice_length: 20,
+          slice_length: 10000,
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
@@ -248,6 +245,7 @@ export default {
       }
 
       try {
+        self.loading = false;
         if (cb) {
           cb(self.verifyData, self.lastRecordTimestamp);
         }
@@ -257,17 +255,17 @@ export default {
     },
 
     async setupStrangerData(startTS, endTS, cb) {
-      console.log('============  setupVerifyData');
       const self = this;
       self.strangerData = [];
       let shitf = 0;
       let thereIsMoreData = true;
+      self.loading = true;
 
       while (thereIsMoreData) {
         const query = {
           start_time: startTS,
           end_time: endTS,
-          slice_length: 1000,
+          slice_length: 10000,
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
@@ -299,6 +297,7 @@ export default {
       }
 
       try {
+        self.loading = false;
         if (cb) {
           cb(self.strangerData, self.lastRecordTimestamp);
         }

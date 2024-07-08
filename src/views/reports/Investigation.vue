@@ -71,14 +71,13 @@
           </CCol>
           <CCol sm="4">
             <CInput
-              class="mb-form-row"
               size="lg"
               v-model="value_keyword"
               style="width: 100%"
             />
           </CCol>
         </CRow>
-        <CRow>
+        <CRow class="mb-4">
           <CCol
             sm="2"
             class="h5"
@@ -147,7 +146,32 @@
               }}</label>
             </div>
           </CCol>
-          <!-- <CCol sm="6"></CCol> -->
+          <CCol
+            sm="2"
+            class="h5"
+          >
+            {{ disp_source }}
+          </CCol>
+          <CCol
+            sm="4"
+            class="form-inline"
+          >
+            <multiselect
+              v-model="value_searchSource"
+              placeholder=""
+              :options="value_displayPersonSourceList"
+              :multiple="true"
+              :taggable="true"
+              :hide-selected="true"
+              :select-label="disp_select"
+              :selected-label="disp_selected"
+              :deselect-label="disp_deselect"
+              :show-no-options="false"
+            />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="6" />
           <CCol
             sm="6"
             class="d-flex flex-wrap justify-content-end"
@@ -210,16 +234,22 @@
               align="center"
             />
             <vxe-table-column
+              field="source"
+              :title="disp_source"
+              width="10%"
+              align="center"
+            />
+            <vxe-table-column
               field="id"
               :title="disp_id"
-              width="10%"
+              width="8%"
               align="center"
             />
             <vxe-table-column
               field="name"
               :title="disp_name"
               align="center"
-              width="10%"
+              width="8%"
             />
             <vxe-table-column
               field="card_number"
@@ -230,14 +260,14 @@
             <vxe-table-column
               field="groups"
               :title="disp_group_list"
-              width="14%"
+              width="10%"
               align="center"
             />
             <vxe-table-column
               v-if="$deviceProfile.supportTemperature"
               field="temperature"
               :title="disp_temperature"
-              width="9%"
+              width="8%"
               align="center"
             />
             <vxe-table-column
@@ -249,17 +279,17 @@
             <vxe-table-column
               field="score"
               :title="disp_verify_score"
-              width="10%"
+              width="8%"
               align="center"
             />
             <vxe-table-column
-              min-width="10%"
+              min-width="8%"
               field="showimage"
               :title="disp_face_image"
               type="html"
             />
             <vxe-table-column
-              min-width="15%"
+              min-width="8%"
               field="commands"
               :title="$t('Remarks')"
               align="center"
@@ -330,6 +360,7 @@ const defaultlState = () => ({
   ],
 
   value_displayPersonGroupList: [],
+  value_displayPersonSourceList: [],
 
   disp_select: i18n.formatter.format('Select'),
   disp_selected: i18n.formatter.format('Selected'),
@@ -351,6 +382,7 @@ const defaultlState = () => ({
   disp_withoutPhoto: i18n.formatter.format('WithoutPhoto'),
 
   disp_dateTime: i18n.formatter.format('Time'),
+  disp_source: i18n.formatter.format('PersonInformationSource'),
   disp_id: i18n.formatter.format('PersonId'),
   disp_name: i18n.formatter.format('PersonName'),
   disp_cardnumber: i18n.formatter.format('CardNumber'),
@@ -364,6 +396,7 @@ const defaultlState = () => ({
   value_searchDatetimeRange: [],
   value_keyword: '',
   value_searchGroups: [],
+  value_searchSource: [],
   value_searchTypes: 'Person',
   value_Temperature: 'All',
 
@@ -375,6 +408,9 @@ const defaultlState = () => ({
     pageSize: 10,
     totalResult: 0,
   },
+
+  cameraList: [],
+  tabletList: [],
 });
 
 export default {
@@ -388,8 +424,19 @@ export default {
 
     return cloneObject;
   },
+  computed: {
+    searchSourceIdList() {
+      return this.value_searchSource.map((item) => {
+        const camera = this.cameraList.find((c) => c.name === item);
+        if (camera) return camera.uuid;
+        const tablet = this.tabletList.find((t) => t.name === item);
+        if (tablet) return tablet.uuid;
+        return '';
+      });
+    },
+  },
   mixins: [TableObserver],
-  created() {
+  async created() {
     const self = this;
     const endTime = new Date();
     endTime.setHours(23, 59, 59, 999);
@@ -399,6 +446,13 @@ export default {
     self.value_searchDatetimeRange[0] = new Date(startTimeTimestamp);
     self.value_searchDatetimeRange[1] = endTime;
     self.flag_enableSearchButton = true;
+    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
+    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
+
+    this.cameraList = cameraList;
+    this.tabletList = tabletList;
+    this.value_displayPersonSourceList = [...this.cameraList.map((item) => item.name), ...this.tabletList.map((item) => item.name)];
+
     self.clickOnSearch();
   },
 
@@ -443,18 +497,19 @@ export default {
       const startTime = this.value_searchDatetimeRange[0].getTime();
       const endTime = this.value_searchDatetimeRange[1].getTime();
 
-      const data = {
-        start_time: startTime,
-        end_time: endTime,
-        slice_shift: 0,
-        slice_length: 20000,
-        with_image: false,
-        uuid_list: [],
-      };
+      // const data = {
+      //   start_time: startTime,
+      //   end_time: endTime,
+      //   slice_shift: 0,
+      //   slice_length: 20000,
+      //   with_image: false,
+      //   uuid_list: [],
+      // };
 
       switch (this.value_searchTypes) {
         case 'Visitor':
-          this.queryVisitorResult(data);
+          // this.queryVisitorResult(data);
+          this.setupVisitorData(startTime, endTime);
           break;
         case 'Stranger':
           // this.queryStrangerResult(data);
@@ -462,8 +517,106 @@ export default {
           break;
         case 'Person':
         default:
-          this.queryPersonResult(data);
+          // this.queryPersonResult(data);
+          this.setupPersonData(startTime, endTime);
           break;
+      }
+    },
+
+    async setupPersonData(startTS, endTS) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.value_allTableItems = [];
+      self.value_dataTotalLength = 0;
+      let shitf = 0;
+      let thereIsMoreData = true;
+
+      while (thereIsMoreData) {
+        const query = {
+          start_time: startTS,
+          end_time: endTS,
+          slice_length: 10000,
+          slice_shift: shitf,
+          uuid_list: [],
+          with_image: false,
+        };
+
+        const retResult = await self.$globalGetPersonResult(query);
+
+        const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              self.value_allTableItems.push(...filter);
+              self.value_dataTotalLength += filter.length;
+              self.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }
+
+          if (result.slice_shift + result.data.length < result.total_length) {
+            thereIsMoreData = true;
+            shitf = result.slice_shift + result.data.length;
+          } else thereIsMoreData = false;
+        } else thereIsMoreData = false;
+      }
+
+      try {
+        self.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            // item.groups = eval(item.group_list).join(', ');
+            item.groups = item.group_list;
+            item.groups = item.group_list;
+            item.groups = JSON.parse(item.group_list);
+            item.groups = item.groups.filter((g) => g !== 'All Person');
+            item.groups = item.groups.filter((g) => g !== 'All Visitor');
+            item.groups = item.groups.join(',');
+
+            switch (item.verify_mode) {
+              case 1:
+                item.clockMode = i18n.formatter.format('ClockModeCard');
+                break;
+              case 2:
+                item.clockMode = i18n.formatter.format('ClockModePass');
+                break;
+              case 3:
+                item.clockMode = i18n.formatter.format('ClockModeClockIn');
+                break;
+              case 4:
+                item.clockMode = i18n.formatter.format('ClockModeClockOut');
+                break;
+              default:
+                item.lockMode = i18n.formatter.format('None');
+                break;
+            }
+
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ`
+              + 'AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAA'
+              + 'AAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        self.value_dataItemsToShow = self.generateFilteredData(
+          self.value_allTableItems,
+        );
+        self.value_tablePage.currentPage = 1;
+        self.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
       }
     },
 
@@ -485,6 +638,7 @@ export default {
           self.value_allTableItems.forEach((pItem) => {
             const item = pItem;
             try {
+              item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
               item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
               item.score = `${(item.verify_score * 100).toFixed(2)}%`;
               // item.groups = eval(item.group_list).join(', ');
@@ -532,6 +686,79 @@ export default {
         }
       });
     },
+
+    async setupVisitorData(startTS, endTS) {
+      const self = this;
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      self.value_allTableItems = [];
+      self.value_dataTotalLength = 0;
+      let shitf = 0;
+      let thereIsMoreData = true;
+
+      while (thereIsMoreData) {
+        const query = {
+          start_time: startTS,
+          end_time: endTS,
+          slice_length: 10000,
+          slice_shift: shitf,
+          uuid_list: [],
+          with_image: false,
+        };
+
+        const retResult = await self.$globalGetVisitorResult(query);
+
+        const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              self.value_allTableItems.push(...filter);
+              self.value_dataTotalLength += filter.length;
+              self.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }
+
+          if (result.slice_shift + result.data.length < result.total_length) {
+            thereIsMoreData = true;
+            shitf = result.slice_shift + result.data.length;
+          } else thereIsMoreData = false;
+        } else thereIsMoreData = false;
+      }
+
+      try {
+        self.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            item.groups = '';
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
+              + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
+              + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        self.value_dataItemsToShow = self.generateFilteredData(
+          self.value_allTableItems,
+        );
+        self.value_tablePage.currentPage = 1;
+        self.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
+
     queryVisitorResult(_data) {
       const self = this;
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
@@ -550,6 +777,7 @@ export default {
           self.value_allTableItems.forEach((pItem) => {
             const item = pItem;
             try {
+              item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
               item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
               item.score = `${(item.verify_score * 100).toFixed(2)}%`;
               item.groups = '';
@@ -620,6 +848,7 @@ export default {
         self.value_allTableItems.forEach((pItem) => {
           const item = pItem;
           try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
             item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
             item.id = '';
             item.name = '';
@@ -702,15 +931,15 @@ export default {
       const self = this;
       const filteredItems = sourceData.filter((item) => {
         if (self.value_keyword) {
+          let pass = true;
           if (
             item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
             || item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
             || item.card_number.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
             || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1)
           ) {
-            return true;
-          }
-          return false;
+            pass = true;
+          } else return false;
         }
 
         if (self.value_searchGroups.length >= 1) {
@@ -729,6 +958,11 @@ export default {
           }
 
           if (!pass) return false;
+        }
+
+        if (self.searchSourceIdList.length >= 1) {
+          const temp = this.searchSourceIdList.indexOf(item.source_id) >= 0;
+          if (!temp) return false;
         }
 
         switch (self.value_Temperature) {
@@ -795,12 +1029,13 @@ export default {
       worksheet.columns = [
         { header: 'No', key: 'No', width: 10 },
         { header: self.disp_dateTime, key: 'dateTime', width: 10 },
-        { header: self.disp_id, key: 'id', width: 10 },
+        { header: self.disp_source, key: 'source', width: 10 },
+        { header: self.disp_id, key: 'id', width: 8 },
         { header: self.disp_name, key: 'name', width: 10 },
-        { header: self.disp_cardnumber, key: 'card_number', width: 10 },
-        { header: self.disp_group_list, key: 'groups', width: 10 },
-        { header: self.disp_verify_mode, key: 'clockMode', width: 10 },
-        { header: self.disp_verify_score, key: 'score', width: 10 },
+        { header: self.disp_cardnumber, key: 'card_number', width: 8 },
+        { header: self.disp_group_list, key: 'groups', width: 8 },
+        { header: self.disp_verify_mode, key: 'clockMode', width: 8 },
+        { header: self.disp_verify_score, key: 'score', width: 8 },
         { header: self.disp_face_image, key: 'showimage', width: 15 },
       ];
 
@@ -814,6 +1049,7 @@ export default {
 
         worksheet.addRow({
           No: self.exportNo,
+          source: self.value_allTableItems[idx].source,
           dateTime: self.value_allTableItems[idx].dateTime,
           id: self.value_allTableItems[idx].id,
           name: self.value_allTableItems[idx].name,
@@ -874,12 +1110,13 @@ export default {
           worksheet.columns = [
             { header: 'No', key: 'No', width: 10 },
             { header: self.disp_dateTime, key: 'dateTime', width: 10 },
-            { header: self.disp_id, key: 'id', width: 10 },
+            { header: self.disp_source, key: 'source', width: 10 },
+            { header: self.disp_id, key: 'id', width: 8 },
             { header: self.disp_name, key: 'name', width: 10 },
-            { header: self.disp_cardnumber, key: 'card_number', width: 10 },
-            { header: self.disp_group_list, key: 'groups', width: 10 },
-            { header: self.disp_verify_mode, key: 'clockMode', width: 10 },
-            { header: self.disp_verify_score, key: 'score', width: 10 },
+            { header: self.disp_cardnumber, key: 'card_number', width: 8 },
+            { header: self.disp_group_list, key: 'groups', width: 8 },
+            { header: self.disp_verify_mode, key: 'clockMode', width: 8 },
+            { header: self.disp_verify_score, key: 'score', width: 8 },
             { header: self.disp_face_image, key: 'showimage', width: 15 },
           ];
 

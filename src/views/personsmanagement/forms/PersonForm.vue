@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="h1 mb-5">
-      {{ $t('AddPerson') }}
+      <template v-if="enableAdminField">
+        {{ modifyMode ? $t('EditPerson') : $t('AddPerson') }}
+      </template>
+      <template v-else>
+        {{ modifyMode ? $t('EditVisitor') : $t('AddVisitor') }}
+      </template>
     </div>
     <stepprogress
       class="w-step-progress-3"
@@ -499,9 +504,6 @@ export default {
       param_activeThickness: 3,
       param_passiveThickness: 3,
 
-      // FIXME: no i18n
-      disp_noRepeat: this.$t('NoRepeat'),
-
       value_allPerson: [],
       value_returnRoutePath: '',
       value_returnRouteName: '',
@@ -627,7 +629,7 @@ export default {
     async detectFaceAndGetHeadBox(img, cb) {
       const detection = await faceapi.detectSingleFace(
         img,
-        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.2 }),
+        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 }),
       );
       return new Promise((resolve) => {
         let box = null;

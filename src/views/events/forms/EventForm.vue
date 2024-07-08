@@ -44,7 +44,7 @@
             {{ value_returnRouteName }}
           </CButton>
         </div>
-        <div v-else>
+        <div v-else-if="flag_currentSetp < 3">
           <CButton
             class="btn btn-outline-primary fz-lg btn-w-normal"
             @click="handlePrev"
@@ -110,6 +110,7 @@ export default {
       flag_step1FormPass: false,
       flag_step2FormPass: false,
 
+      value_eventControlUuid: '',
       value_eventControlType: 'line',
       value_eventControlName: '',
       value_eventControlEnable: true,
@@ -194,7 +195,7 @@ export default {
   },
   computed: {
     getTitle() {
-      return this.value_mode === 'create' ? this.$t('AddPerson') : this.$t('ModifyEventControl');
+      return this.value_mode === 'create' ? this.$t('AddEvent') : this.$t('ModifyEventControl');
     },
     currentFormComponent() {
       return `Step${this.flag_currentSetp + 1}Form`;
@@ -224,6 +225,7 @@ export default {
       switch (this.flag_currentSetp) {
         case 0:
           return {
+            eventControlUuid: this.value_eventControlUuid,
             eventControlName: this.value_eventControlName,
             eventControlGroupList: [...this.value_eventControlGroupList],
             eventControlDiviceGroups: this.value_eventControlDiviceGroups,
@@ -356,6 +358,7 @@ export default {
     handleUpdateExistData(item) {
       if (this.value_mode !== 'modify' && !Object.hasOwn(item, 'action_type')) return;
 
+      this.value_eventControlUuid = item.uuid;
       this.value_eventControlType = item.action_type;
       this.value_eventControlName = item.name;
       this.value_enable = item.enable;
@@ -598,6 +601,21 @@ export default {
               if (this.obj_loading) this.obj_loading.hide();
               if (!err) {
                 this.flag_currentSetp = 3;
+                if (this.value_eventControlType === 'mail') {
+                  this.$globalGetSystemSettings((e, data) => {
+                    if (!e) {
+                      const { settings: { smtp } } = data;
+                      if (!smtp || !smtp.host) {
+                        this.$fire({
+                          text: this.$t('MssingSmtpHint'),
+                          type: 'warning',
+                          timer: 5000,
+                          confirmButtonColor: '#20a8d8',
+                        });
+                      }
+                    }
+                  });
+                }
               } else {
                 this.$fire({
                   text: this.$t('Failed'),

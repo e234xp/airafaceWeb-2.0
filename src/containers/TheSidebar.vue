@@ -148,73 +148,73 @@ const nav = [
         ],
       },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('OutputDevice'),
-        to: '/outputdevice',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('IOboxes'),
-            to: '/outputdevice/ioboxsManagement',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Wiegandboxs'),
-            to: '/outputdevice/wiegandconverters',
-          },
-          // {
-          //   permission: ['Admin', 'PowerUser'],
-          //   name: i18n.formatter.format('OutputDeviceGroup'),
-          //   to: '/outputdevice/outputDeviceGroups',
-          // },
-        ],
-      },
+      // {
+      //   _name: 'CSidebarNavDropdown',
+      //   name: i18n.formatter.format('OutputDevice'),
+      //   to: '/outputdevice',
+      //   permission: ['Admin', 'PowerUser'],
+      //   items: [
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('IOboxes'),
+      //       to: '/outputdevice/ioboxsManagement',
+      //     },
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('Wiegandboxs'),
+      //       to: '/outputdevice/wiegandconverters',
+      //     },
+      //     // {
+      //     //   permission: ['Admin', 'PowerUser'],
+      //     //   name: i18n.formatter.format('OutputDeviceGroup'),
+      //     //   to: '/outputdevice/outputDeviceGroups',
+      //     // },
+      //   ],
+      // },
 
       // TODO: Delete unuse nav
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('AccessRules'),
-        to: '/accessrules',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Schedules'),
-            to: '/accessrules/schedules',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('AccessRules'),
-            to: '/accessrules/actionrule',
-          },
-        ],
-      },
+      // {
+      //   _name: 'CSidebarNavDropdown',
+      //   name: i18n.formatter.format('AccessRules'),
+      //   to: '/accessrules',
+      //   permission: ['Admin', 'PowerUser'],
+      //   items: [
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('Schedules'),
+      //       to: '/accessrules/schedules',
+      //     },
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('AccessRules'),
+      //       to: '/accessrules/actionrule',
+      //     },
+      //   ],
+      // },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('Notifications'),
-        to: '/notifications',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('LineNotify'),
-            to: '/notifications/linenotify',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('MailNotify'),
-            to: '/notifications/mailnotify',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('HttpNotify'),
-            to: '/notifications/httpnotify',
-          },
-        ],
-      },
+      // {
+      //   _name: 'CSidebarNavDropdown',
+      //   name: i18n.formatter.format('Notifications'),
+      //   to: '/notifications',
+      //   permission: ['Admin', 'PowerUser'],
+      //   items: [
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('LineNotify'),
+      //       to: '/notifications/linenotify',
+      //     },
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('MailNotify'),
+      //       to: '/notifications/mailnotify',
+      //     },
+      //     {
+      //       permission: ['Admin', 'PowerUser'],
+      //       name: i18n.formatter.format('HttpNotify'),
+      //       to: '/notifications/httpnotify',
+      //     },
+      //   ],
+      // },
 
       {
         _name: 'CSidebarNavDropdown',
@@ -248,7 +248,7 @@ const nav = [
           },
           {
             permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Capacity'),
+            name: i18n.formatter.format('MenuOccupancyBoard'),
             to: '/displays/modifycapacitycontrolsetting',
           },
           {
@@ -256,11 +256,11 @@ const nav = [
             name: i18n.formatter.format('GuardBoard'),
             to: '/displays/modifyguardcontrolsetting',
           },
-          // {
-          //   permission: ['Admin', 'PowerUser'],
-          //   name: 'Self Checkin',
-          //   to: '/displays/modifyselfcheckincontrolsetting',
-          // },
+          {
+            permission: ['Admin', 'PowerUser'],
+            name: i18n.formatter.format('SelfCheckin'),
+            to: '/displays/modifyselfcheckincontrolsetting',
+          },
         ],
       },
 

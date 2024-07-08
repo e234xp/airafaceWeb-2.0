@@ -20,7 +20,6 @@
       <div style="height: 35px" />
     </div>
 
-    213
     <CCol sm="12">
       <CCard v-if="isOnStep(0)">
         <CCardBody>

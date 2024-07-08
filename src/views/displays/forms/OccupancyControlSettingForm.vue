@@ -133,7 +133,10 @@
                   <CSelect
                     size="lg"
                     :value.sync="value_occupancySetting.patrolidleTime"
-                    :options="[5,10,15,20,30,60]"
+                    :options="[
+                      { value: 0, label: $t('Disable') },
+                      5,10,15,20,30,60
+                    ]"
                     :disabled="!value_occupancySetting.enableSummaryView"
                   />
                 </CCol>
@@ -218,7 +221,7 @@
               <CRow>
                 <CCol sm="3">
                   <div class="h5">
-                    {{ $t('') }}
+                    {{ $t('PageLayout') }}
                   </div>
                   <CSelect
                     size="lg"

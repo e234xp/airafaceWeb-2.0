@@ -92,7 +92,6 @@
     watch: {
       localStep3form: {
         handler(newValue) {
-          console.log('emit updateStep3form')
           this.$emit('updateStep3form', { ...newValue });
         },
         deep: true,

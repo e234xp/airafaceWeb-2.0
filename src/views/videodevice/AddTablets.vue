@@ -306,6 +306,8 @@ export default {
           return this.isFormPassed(this.step1form);
         case 1:
           return this.isFormPassed(this.step2form);
+        case 2:
+          return true;
         default:
           return false;
       }

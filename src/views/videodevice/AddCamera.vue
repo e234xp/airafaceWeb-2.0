@@ -175,6 +175,8 @@ export default {
         target_score: null,
         face_min_length: null,
         antispoofing_score: null,
+        april_tag_type: null,
+        face_detection_score: null,
       },
       step4form: {
         verified_merge_setting: {
@@ -211,10 +213,6 @@ export default {
       if (this.step1form.stream_type === 'sdp') {
         this.step1form.ip_address = '1.1.1.1';
       }
-
-      if (!this.step1form.user) {
-        this.step1form.user = '0';
-      }
     },
     updateStep2form(newValue) {
       this.step2form = { ...newValue };
@@ -239,7 +237,9 @@ export default {
         face_min_length: 0,
         target_score: 0.85,
         capture_interval: 500,
-        antispoofing_score: 0.3,
+        antispoofing_score: 0,
+        april_tag_type: '',
+        face_detection_score: 0.5,
         verified_merge_setting: {
           enable: false,
           merge_duration: 5000,

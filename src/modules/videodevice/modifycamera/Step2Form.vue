@@ -294,7 +294,6 @@ export default {
       url: valueUrl,
     };
 
-    console.log('params', params);
     self.$globalCameraSnapshot(params, (err, data) => {
       if (!err) {
         self.image.src = `data:image/jpg;base64,${data.base64}`;

@@ -61,7 +61,6 @@ export default {
           },
         ])
       );
-      console.log(("mock data", self.personData));
     },
     async setupVerifyData(startTS, endTS, cb) {
       console.log("============  setupVerifyData");
@@ -92,7 +91,6 @@ export default {
 
               self.lastRecordTimestamp = result.data[result.data.length - 1].timestamp;
               try {
-                console.log('callback a', { result: result.data, LastRecordTimestamp: self.lastRecordTimestamp });
                 if (cb) {
                   cb({ result: result.data, LastRecordTimestamp: self.lastRecordTimestamp });
                 }
@@ -101,7 +99,6 @@ export default {
               }
             } else {
               try {
-                console.log('callback b', { result: [], LastRecordTimestamp: self.lastRecordTimestamp });
 
                 if (cb) {
                   cb({ result: [], LastRecordTimestamp: self.lastRecordTimestamp });

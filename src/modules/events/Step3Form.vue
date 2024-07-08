@@ -10,6 +10,7 @@
             </div>
             <Scheduler
               :multiple="true"
+              :locale="locale"
               :value="eventControlSelectedWeeklySchedule"
               @change="handleUpdateEmitData('selectedWeeklySchedule', $event)"
             />
@@ -106,6 +107,19 @@ export default {
         'All Visitor',
       ],
       value_remarks: '',
+      locale: {
+        AM: this.$t('AM'),
+        PM: this.$t('PM'),
+        TIME_TITLE: this.$t('Time'),
+        WEEK_TITLE: this.$t('Date'),
+        WEEK_DAYS: [this.$t('Sun'), this.$t('Mon'), this.$t('Tue'), this.$t('Wed'), this.$t('Thu'), this.$t('Fri'), this.$t('Sat')],
+        HOURS: [
+          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
+          '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
+        ],
+        DRAG_TIP: this.$t('DragSelect'),
+        RESET: this.$t('ResetSelected'),
+      },
 
       ...this.formData,
     };

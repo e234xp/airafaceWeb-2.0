@@ -99,6 +99,13 @@
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
+                field="rules"
+                :title="disp_rules"
+                width="auto"
+                align="center"
+              />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
                 field="createDate"
                 :title="$t('CreateDate')"
                 width="20%"
@@ -133,6 +140,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n';
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
 
@@ -153,6 +161,7 @@ export default {
 
       value_dataItemsToShow: [],
       value_allTableItems: [],
+      value_rule_list: [],
       value_tablePage: {
         currentPage: 1,
         pageSize: 10,
@@ -160,12 +169,19 @@ export default {
       },
       value_searchingFilter: '',
 
+      disp_rules: i18n.formatter.format('Rules'),
+
       ...this.formData,
     };
   },
   mixins: [TableObserver],
   created() { },
-  mounted() {
+  async mounted() {
+    const { data: { list } } = await this.$globalGetEventList(
+      '', ['http', 'line', 'mail', 'wiegand', 'iobox'],
+    );
+    this.value_rule_list = list;
+
     this.refreshTableItems();
     this.observeTableSize();
   },
@@ -250,8 +266,12 @@ export default {
         (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
         this.value_tablePage.currentPage * this.value_tablePage.pageSize,
       );
-      sliceList.forEach((item) => {
+
+      sliceList.forEach((item, idx) => {
         const localItem = item;
+
+        sliceList[idx].rules = this.value_rule_list
+          .filter((rule) => rule.group_list.indexOf(item.uuid) >= 0 || rule.group_list.indexOf(item.name) >= 0).length;
 
         localItem.nameToShow = item.name;
         if (item.no_edit !== true) {
@@ -262,7 +282,7 @@ export default {
             + ' class="btn btn-outline-primary btn-in-cell p-0"/>'
             + '<div style="height:15px;"></div>'
             + `<input type="button" id="${deleteButtonId}" value="${this.$t('Delete')}"`
-            + ' class="btn btn-outline-danger btn-in-cell p-0"/>';
+            + ` class="${item.rules > 0 ? 'disabled' : ''} btn btn-outline-danger btn-in-cell p-0"/>`;
         } else {
           const checkButtonId = `actionOnCheck_${item.uuid}`;
           localItem.actionButton = `<input type="button" id="${checkButtonId}" value="${this.$t('CheckInfo')}"`
@@ -324,6 +344,7 @@ export default {
       }
     },
     clickOnSingleDelete(item) {
+      if (item.rules > 0) return;
       const list = [item];
       if (list.length > 0) {
         this.deleteItem(list);

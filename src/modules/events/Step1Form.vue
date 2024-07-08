@@ -70,8 +70,8 @@
             <multiselect
               placeholder=""
               :class="formPass.diviceGroups ? 'is-valid' : 'is-invalid'"
-              :value="eventControlDiviceGroups"
-              :options="diviceGroupOptions"
+              :value="parseEventControlDiviceGroups"
+              :options="parseDiviceGroupOptions"
               :multiple="true"
               :taggable="true"
               :hide-selected="true"
@@ -79,7 +79,7 @@
               :selected-label="$t('Selected')"
               :deselect-label="$t('Deselect')"
               :show-no-options="false"
-              @input="deviceGroupsValidator($event), handleUpdateEmitData('diviceGroups', $event);"
+              @input="deviceGroupsValidator($event), handleUpdateEmitData('diviceGroups', handleParseDeviceGroup($event));"
             />
             <div
               v-if="!formPass.diviceGroups"
@@ -124,6 +124,11 @@ export default {
     cardStyle: {
       type: String,
       default: 'height: 100%;',
+    },
+    eventControlUuid: {
+      type: String,
+      required: true,
+      default: '',
     },
     eventControlName: {
       type: String,
@@ -194,6 +199,12 @@ export default {
     step1FormStatus() {
       return Object.values(this.formPass).every((status) => status);
     },
+    parseDiviceGroupOptions() {
+      return this.diviceGroupOptions.map((item) => item.name);
+    },
+    parseEventControlDiviceGroups() {
+      return this.eventControlDiviceGroups.map((id) => this.diviceGroupOptions.find((item) => item.id === id).name);
+    },
   },
   methods: {
     handleUpdateEmitData(key, value) {
@@ -205,8 +216,8 @@ export default {
         return i18n.formatter.format('NoEmptyNoSpace');
       }
 
-      if (this.allRecords.some((item) => item.name === val)) {
-        return i18n.formatter.format('NoEmptyNoSpace');
+      if (this.allRecords.filter((item) => item.name === val && item.uuid !== this.eventControlUuid).length >= 1) {
+        return i18n.formatter.format('NoRepeat');
       }
 
       return '';
@@ -233,6 +244,9 @@ export default {
       } else {
         this.formPass.diviceGroups = true;
       }
+    },
+    handleParseDeviceGroup(val) {
+      return val.map((name) => this.diviceGroupOptions.find((item) => item.name === name).id);
     },
   },
   watch: {

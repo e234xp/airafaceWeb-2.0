@@ -60,6 +60,7 @@
               <label
                 v-if="!value_selectedDbFile"
                 class="btn btn-primary btn-w-normal fz-lg"
+                style="margin-bottom: 0 !important;"
               >
                 {{ $t('ChooseFile') }}
                 <input
@@ -76,6 +77,7 @@
               <label
                 v-else
                 class="btn btn-primary btn-w-normal fz-lg"
+                style="margin-bottom: 0 !important;"
               >
                 {{ $t('ChooseAnotherFile') }}
                 <input
@@ -138,7 +140,7 @@ export default {
           height: 50,
           width: 50,
           verticalTextAlign: 35,
-          horizontalTextAlign: 8,
+          horizontalTextAlign: 15,
           zeroOffset: 0,
           strokeWidth: 10,
           progressPadding: 0,
@@ -207,7 +209,7 @@ export default {
       const token = this.$globalGetTokenString();
       this.flag_downloading = true;
       await client
-        .get(`${this.$globalDownloadDbPath()}?token=${token}`, {
+        .post(`${this.$globalDownloadDbPath()}?token=${token}`, {
           responseType: 'blob',
           onDownloadProgress: (progressEvent) => {
             const total = parseFloat(progressEvent.total);
@@ -348,7 +350,7 @@ export default {
     },
     onUploadFiles() {
       this.value_selectedDbFile = null;
-      this.$refs.uploadFile.files.forEach((file) => {
+      Array.from(this.$refs.uploadFile.files).forEach((file) => {
         this.value_selectedDbFile = file;
       });
       const file = document.getElementById('file').files[0];
@@ -356,7 +358,7 @@ export default {
     },
     onReUploadFiles() {
       this.value_selectedDbFile = null;
-      this.$refs.uploadFile.files.forEach((file) => {
+      Array.from(this.$refs.uploadFile.files).forEach((file) => {
         this.value_selectedDbFile = file;
       });
       const file = document.getElementById('newfile').files[0];

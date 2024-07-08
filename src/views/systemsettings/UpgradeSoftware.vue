@@ -147,9 +147,9 @@ export default {
     next();
   },
   created() {
-    this.$globalGetSystemInfo(function (err, data) {
+    this.$globalGetSystemInfo((err, data) => {
       if (data) {
-        this.disp_versionInfo = `${this.$t('CurrentVersionNumber')} : ${data.fw_version} / ${global.webVersion}`;
+        this.disp_versionInfo = `${this.$t('CurrentVersionNumber')} : ${data.fw_version !== 'unknown' ? `${data.fw_version}/` : ''}${global.webVersion}`;
       }
     });
   },
@@ -214,7 +214,7 @@ export default {
     },
     onUploadFiles() {
       this.value_selectedDbFile = null;
-      this.$refs.uploadFile.files.forEach((file) => {
+      Array.from(this.$refs.uploadFile.files).forEach((file) => {
         // let filesArray = Object.keys(this.$refs.uploadFile.files).map((key) => [
         //   this.$refs.uploadFile.files[key],
         // ]);
@@ -226,7 +226,7 @@ export default {
     },
     onReUploadFiles() {
       this.value_selectedDbFile = null;
-      this.$refs.uploadFile.files.forEach((file) => {
+      Array.from(this.$refs.uploadFile.files).forEach((file) => {
         this.value_selectedDbFile = file;
       });
       const file = document.getElementById('newfile').files[0];

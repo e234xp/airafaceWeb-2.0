@@ -27,6 +27,7 @@
                 class="btn btn-danger btn-w-sm mr-3 mb-3"
                 size="lg"
                 @click="clickOnMultipleDelete()"
+                :disabled="!canDelete"
               >
                 {{ $t('Delete') }}
               </CButton>
@@ -64,6 +65,8 @@
               :cell-style="cellStyle"
               :header-cell-style="headerCellStyle"
               :edit-config="{ trigger: 'manual', mode: 'row' }"
+              @checkbox-change="checkboxChange"
+              @checkbox-all="selectAllCheckboxChange"
             >
               <vxe-table-column
                 type="checkbox"
@@ -118,6 +121,7 @@
                     <vxe-button
                       class="btn-in-cell-danger btn-in-cell"
                       @click="clickOnSingleDelete(row)"
+                      :disabled="row.enable"
                     >
                       {{ $t('Delete') }}
                     </vxe-button>
@@ -162,6 +166,7 @@ export default {
   data() {
     return {
       obj_loading: null,
+      canDelete: false,
 
       value_dataItemsToShow: [],
       value_allTableItems: [],
@@ -274,7 +279,7 @@ export default {
     },
 
     clickOnModify(item) {
-      if (this.onModify) this.onModify(item);
+      if (this.onModify) this.onModify(item, this.value_allTableItems);
     },
 
     deleteItem(listToDel) {
@@ -302,6 +307,12 @@ export default {
     clickOnMultipleDelete() {
       const list = this.$refs.mainTable.getCheckboxRecords();
       if (list.length > 0) this.deleteItem(list);
+    },
+    checkboxChange() {
+      this.canDelete = this.$refs.mainTable.getCheckboxRecords().filter((item) => !item.enable).length > 0;
+    },
+    selectAllCheckboxChange() {
+      this.canDelete = this.$refs.mainTable.getCheckboxRecords().filter((item) => !item.enable).length > 0;
     },
   },
   async mounted() {

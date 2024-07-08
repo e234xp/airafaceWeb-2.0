@@ -113,6 +113,7 @@
                 stripe
                 :cell-style="cellStyle"
                 :header-cell-style="headerCellStyle"
+                :checkbox-config="{ labelField: 'id', checkRowKeys: value_selectedLeftItems }"
                 ref="allTable"
                 show-header-overflow
                 empty-text=" "
@@ -203,6 +204,7 @@
                 show-header-overflow
                 :cell-style="cellStyle"
                 :header-cell-style="headerCellStyle"
+                :checkbox-config="{ labelField: 'id', checkRowKeys: value_selectedLeftItems }"
                 ref="selectedTable"
                 empty-text=" "
               >
@@ -363,6 +365,8 @@ export default {
       value_selectedItems: [],
       value_allItemsToShow: [],
       value_selectedItemsToShow: [],
+      value_selectedLeftItems: [],
+      value_selectedRightItems: [],
 
       flag_keepingDownload: false,
       value_allPersonList: [],

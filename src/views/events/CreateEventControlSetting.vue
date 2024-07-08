@@ -30,8 +30,6 @@ export default {
   },
   created() {
     if (this.value_returnRoutePath === '') this.$router.push({ name: 'Eventcontrolmanagement' });
-
-    console.log(this.$route.params);
   },
   methods: {
     canModify() {

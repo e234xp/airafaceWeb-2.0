@@ -175,6 +175,8 @@ export default {
         target_score: null,
         face_min_length: null,
         antispoofing_score: 0,
+        april_tag_type: '',
+        face_detection_score: 0.8,
       },
       step4form: {
         verified_merge_setting: {

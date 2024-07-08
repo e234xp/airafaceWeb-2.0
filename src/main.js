@@ -114,6 +114,16 @@ const mainVue = new Vue({
         browserLanguage = enUS;
         Vue.prototype.$globalDatePickerLanguage = datepickerLangTh;
         break;
+      case 'vi':
+        i18n.locale = 'vi';
+        browserLanguage = enUS;
+        Vue.prototype.$globalDatePickerLanguage = datePickerLangEn;
+        break;
+      case 'id':
+        i18n.locale = 'id';
+        browserLanguage = enUS;
+        Vue.prototype.$globalDatePickerLanguage = datePickerLangEn;
+        break;
       default:
         if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('zh-tw')) {
           i18n.locale = 'zh';

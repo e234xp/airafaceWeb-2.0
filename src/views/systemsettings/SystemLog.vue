@@ -9,7 +9,7 @@
         <CRow>
           <div class="mb-3 d-flex align-items-center">
             <date-picker
-              style="width: 400px"
+              style="width: 500px"
               :lang="this.$globalDatePickerLanguage"
               v-model="value_specifiedDatetimeRange"
               type="datetime"
@@ -150,7 +150,7 @@ export default {
     const endTime = new Date();
     endTime.setHours(23, 59, 59, 999);
     const endTimeTimestamp = endTime.getTime();
-    const startTimeTimestamp = endTimeTimestamp - 86400000 * 7 + 1;
+    const startTimeTimestamp = endTimeTimestamp - 86400000 * 1 + 1;
 
     this.value_specifiedDatetimeRange[0] = new Date(startTimeTimestamp);
     this.value_specifiedDatetimeRange[1] = endTime;

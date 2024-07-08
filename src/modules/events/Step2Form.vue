@@ -32,7 +32,11 @@ export default {
   ],
   dataFields: [
     {
-      label: 'foreHead_temperature',
+      label: 'VideoDeviceVideoSource',
+      value: 'source_device',
+    },
+    {
+      label: 'Temperature',
       value: 'foreHead_temperature',
     },
     {
@@ -44,25 +48,29 @@ export default {
       value: 'show_identity',
     },
     {
-      label: 'VerifiedTimestamp',
+      label: 'VerifiedTimeStamp',
       value: 'verified_timestamp',
     },
+    // {
+    //   label: 'VerifiedDateTime',
+    //   value: 'verified_datetime',
+    // },
     {
-      label: 'face_image',
+      label: 'CapturedPhoto',
       value: 'captured',
     },
     {
-      label: 'register_image',
+      label: 'RegisterPhoto',
       value: 'register',
     },
     {
-      label: 'display_image',
+      label: 'DisplayImage',
       value: 'display',
     },
   ],
   personFields: [
     {
-      label: 'card_number',
+      label: 'CardNumber',
       value: 'person.card_number',
     },
     {
@@ -174,6 +182,7 @@ export default {
         host: false,
         user: false,
         pass: false,
+        body: false,
       },
 
       mailFormPass: {
@@ -189,8 +198,6 @@ export default {
       ioboxFormPass: {
         host: false,
         port: false,
-        user: false,
-        pass: false,
         delay: false,
       },
 

@@ -50,9 +50,20 @@
               class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
               size="lg"
               @click="clickOnExport(true)"
-              :disabled="!canDelete()"
+              :disabled="!canDelete() || value_selectedItems.length === 0"
             >
               {{ $t('Export') }}
+            </CButton>
+          </div>
+
+          <div v-if="formData.type === 'Visitor'">
+            <CButton
+              class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnSendNotification()"
+              :disabled="!canSend"
+            >
+              {{ $t('SendMail') }}
             </CButton>
           </div>
 
@@ -181,6 +192,7 @@
               ref="mainTable"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
+              :checkbox-config="{ reserve: true }"
               :edit-config="{ trigger: 'manual', mode: 'row' }"
             >
               <vxe-table-column
@@ -348,6 +360,7 @@ export default {
     + 'AAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
       value_dataItemsToShow: [],
       value_allTableItems: [],
+      value_selectedItems: [],
       value_tablePage: {
         currentPage: 1,
         pageSize: 10,
@@ -364,6 +377,9 @@ export default {
   },
   computed: {
     ...mapState(['ellipsisMode']),
+    canSend() {
+      return this.value_personGroupList.length > 0;
+    },
   },
   mixins: [TableObserver],
   created() { },
@@ -573,10 +589,18 @@ export default {
     },
     // selectAllEvent({ checked, records }) {
     selectAllEvent() {
+      this.value_selectedItems = [
+        ...this.$refs.mainTable.getCheckboxReserveRecords(),
+        ...this.$refs.mainTable.getCheckboxRecords(),
+      ];
       // console.log(checked ? '所有勾选事件' : '所有取消事件', records)
     },
     // selectChangeEvent({ checked, records }) {
     selectChangeEvent() {
+      this.value_selectedItems = [
+        ...this.$refs.mainTable.getCheckboxReserveRecords(),
+        ...this.$refs.mainTable.getCheckboxRecords(),
+      ];
       // console.log(checked ? '勾选事件' : '取消事件', records)
     },
     getSelectEvent() {
@@ -1003,8 +1027,8 @@ export default {
                   expire_date: expireDate === 0 ? person.expire_date : expireDate,
                   group_list: data.group_list.length === 0 ? person.group_list : data.group_list,
                   card_facility_code: '',
-                  display_image: data.display_image,
-                  register_image: data.register_image,
+                  display_image: data.display_image !== '' ? data.display_image : undefined,
+                  register_image: data.register_image !== '' ? data.register_image : undefined,
                   as_admin: !data.as_admin ? person.as_admin : data.as_admin,
                   extra_info: {
                     title: data.extra_info.title === '' ? person.extra_info.title : data.extra_info.title,
@@ -1030,7 +1054,7 @@ export default {
                       if (me.value_personGroupList.indexOf(g) < 0) {
                         const data1 = {
                           name: g,
-                          person_uuid_list: [result.uuid],
+                          person_uuid_list: [person.uuid],
                           remarks: '',
                           visitor_uuid_list: [],
                         };
@@ -1083,8 +1107,8 @@ export default {
                   expire_date: expireDate === 0 ? person.expire_date : expireDate,
                   group_list: data.group_list.length === 0 ? person.group_list : data.group_list,
                   card_facility_code: '',
-                  display_image: data.display_image,
-                  register_image: data.register_image,
+                  display_image: data.display_image !== '' ? data.display_image : undefined,
+                  register_image: data.register_image !== '' ? data.register_image : undefined,
                   as_admin: !data.as_admin ? person.as_admin : data.as_admin,
                   extra_info: {
                     title: data.extra_info.title === '' ? person.extra_info.title : data.extra_info.title,
@@ -1233,7 +1257,7 @@ export default {
 
       worksheet = workbook.addWorksheet('Persons');
 
-      if (salf.value_allTableItems != null) {
+      if (salf.value_selectedItems != null) {
         worksheet.columns = [
           { header: 'No', key: 'No', width: 10 },
           { header: 'Id', key: 'id', width: 10 },
@@ -1250,10 +1274,10 @@ export default {
           { header: 'Remarks', key: 'remarks', width: 10 },
         ];
 
-        salf.excelExecutionAmounts = salf.value_allTableItems.length;
+        salf.excelExecutionAmounts = salf.value_selectedItems.length;
         salf.excelCounter = 0;
 
-        for (let idx = 0; idx < salf.value_allTableItems.length; idx += 1) {
+        for (let idx = 0; idx < salf.value_selectedItems.length; idx += 1) {
           salf.exportNo += 1;
           salf.excelCounter += 1;
 
@@ -1261,40 +1285,40 @@ export default {
 
           worksheet.addRow({
             No: salf.exportNo,
-            id: salf.value_allTableItems[idx].id,
-            name: salf.value_allTableItems[idx].name,
-            department: salf.value_allTableItems[idx].extra_info.department,
-            group: salf.value_allTableItems[idx].group_list.join('|'),
-            title: salf.value_allTableItems[idx].extra_info.title,
-            cardnumber: salf.value_allTableItems[idx].card_number,
-            email: salf.value_allTableItems[idx].extra_info.email,
-            extension_number: salf.value_allTableItems[idx].extra_info.extension_number,
-            phone_number: salf.value_allTableItems[idx].extra_info.phone_number,
+            id: salf.value_selectedItems[idx].id,
+            name: salf.value_selectedItems[idx].name,
+            department: salf.value_selectedItems[idx].extra_info.department,
+            group: salf.value_selectedItems[idx].group_list.join('|'),
+            title: salf.value_selectedItems[idx].extra_info.title,
+            cardnumber: salf.value_selectedItems[idx].card_number,
+            email: salf.value_selectedItems[idx].extra_info.email,
+            extension_number: salf.value_selectedItems[idx].extra_info.extension_number,
+            phone_number: salf.value_selectedItems[idx].extra_info.phone_number,
             begin_date:
-              salf.value_allTableItems[idx].begin_date === 0
+              salf.value_selectedItems[idx].begin_date === 0
                 ? ''
-                : dayjs(salf.value_allTableItems[idx].begin_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
+                : dayjs(salf.value_selectedItems[idx].begin_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
             expire_date:
-              salf.value_allTableItems[idx].expire_date === 0
+              salf.value_selectedItems[idx].expire_date === 0
                 ? ''
-                : dayjs(salf.value_allTableItems[idx].expire_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
-            remarks: salf.value_allTableItems[idx].extra_info.remarks,
+                : dayjs(salf.value_selectedItems[idx].expire_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
+            remarks: salf.value_selectedItems[idx].extra_info.remarks,
           });
 
           if (withPhoto) {
             const photoRet = await salf.$globalFetchPhoto(
-              salf.value_allTableItems[idx].uuid,
+              salf.value_selectedItems[idx].uuid,
             );
 
             if (photoRet.data && photoRet.data.register_image.length > 0) {
-              const fileNameR = salf.value_allTableItems[idx].id;
+              const fileNameR = salf.value_selectedItems[idx].id;
               snapshotFolder.file(`${fileNameR}.jpeg`, photoRet.data.register_image, {
                 base64: true,
               });
             }
 
             if (photoRet.data && photoRet.data.display_image.length > 0) {
-              const fileNameD = `${salf.value_allTableItems[idx].id}_D`;
+              const fileNameD = `${salf.value_selectedItems[idx].id}_D`;
               snapshotFolder.file(`${fileNameD}.jpeg`, photoRet.data.display_image, {
                 base64: true,
               });
@@ -1302,8 +1326,8 @@ export default {
           }
 
           if (this.formData.type === 'Visitor') {
-            const fileNameR = salf.value_allTableItems[idx].id;
-            qrcodeFolder.file(`${fileNameR}.jpeg`, salf.value_allTableItems[idx].qrCode, {
+            const fileNameR = salf.value_selectedItems[idx].id;
+            qrcodeFolder.file(`${fileNameR}.jpeg`, salf.value_selectedItems[idx].qrCode, {
               base64: true,
             });
           }
@@ -1346,12 +1370,49 @@ export default {
       if (list.length > 0) this.deleteItem([item]);
     },
     clickOnMultipleDelete() {
-      const list = this.$refs.mainTable.getCheckboxRecords();
+      const list = [
+        ...this.$refs.mainTable.getCheckboxReserveRecords(),
+        ...this.$refs.mainTable.getCheckboxRecords(),
+      ];
       if (list.length > 0) this.deleteItem(list);
     },
     clickOnModify(item) {
       if (this.onModify) this.onModify(this.value_allTableItems, item);
     },
+    clickOnSendNotification() {
+      const list = [
+        ...this.$refs.mainTable.getCheckboxReserveRecords(),
+        ...this.$refs.mainTable.getCheckboxRecords(),
+      ];
+      if (list.length > 0) {
+        const filter = list.filter((item) => item.extra_info.email !== '');
+        for (let i = 0; i < filter.length; i += 1) {
+          const item = filter[i];
+          const data = {
+            subject: `${item.card_number}-${item.name}`,
+            to: [item.extra_info.email],
+            cc: [],
+            bcc: [],
+            body: `
+              No: ${item.card_number} \n
+              Full Name: ${item.name} \n
+              Mobile: ${item.extra_info.phone_number} \n
+              Department: ${item.extra_info.department} \n
+              Job Title: ${item.extra_info.title} \n
+              Email: ${item.extra_info.email}
+            `,
+            attach: item.qrCode,
+          };
+          this.$globalSendNotification(data, (error) => {
+            if (error === null) {
+              this.$message.success('Send Email Success');
+            } else {
+              this.$message.error('Send Email Fail');
+            }
+          });
+        }
+      }
+    }
   },
 };
 </script>

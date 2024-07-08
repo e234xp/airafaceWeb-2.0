@@ -126,7 +126,7 @@
                   style="padding: 0 16px; margin-left: auto"
                   @click="onBatchAck(false)"
                 >
-                  {{ $t('remarks') }}
+                  {{ $t('Remarks') }}
                 </div>
                 <div
                   class="chart-btn fz-lg"
@@ -218,7 +218,7 @@
                   style="padding: 0 16px; margin-left: auto"
                   @click="onBatchAck(false)"
                 >
-                  {{ $t('remarks') }}
+                  {{ $t('Remarks') }}
                 </div>
                 <div
                   class="chart-btn fz-lg"
@@ -300,6 +300,12 @@
       @confirm="onConfirm"
       v-if="showAckModal"
     />
+    <div
+      class="loading"
+      v-if="loading"
+    >
+      <CSpinner color="primary" />
+    </div>
   </div>
 </template>
 
@@ -432,6 +438,7 @@ export default {
     this.unSubscribe = this.$store.subscribe(async (mutation) => {
       let payload = {};
       let person = {};
+      let result = {};
       // console.log(mutation);
       switch (mutation.type) {
         case 'changeWebSocket':
@@ -456,7 +463,7 @@ export default {
               ...payload,
               verify_uuid: payload.verify_face_id,
               face_image: payload.snapshot,
-              source_id: payload.channel,
+              source_id: payload.source_id || payload.channel || '',
               verify_score: payload.score,
               nearest_person: payload.person,
             }]);
@@ -467,18 +474,25 @@ export default {
             // console.log('========== changeNotifications');
             // console.log(payload);
 
-            person = {
-              card_facility_code: payload.person_info.card_facility_code,
-              card_number: payload.person_info.card_number,
+            person = payload.person || payload.person_info;
+
+            if (person === undefined) {
+              console.log('created subscribe', 'payload.person === undefined');
+              return;
+            }
+
+            result = {
+              card_facility_code: person.card_facility_code,
+              card_number: person.card_number,
               face_image_id: payload.face_image,
-              group_list: payload.person_info.group_list,
+              group_list: payload.groups || person.group_list,
               high_temperature: payload.is_high_temperature,
-              id: payload.person_info.id,
-              name: payload.person_info.fullname,
-              source_id: payload.channel,
+              id: payload.person_id || person.id,
+              name: person.fullname || person.name,
+              source_id: payload.source_id || payload.channel || '',
               temperature: payload.foreHead_temperature,
               timestamp: payload.timestamp,
-              uuid: payload.person_id,
+              uuid: payload.person_id || person.uuid,
               verify_mode: payload.verify_mode,
               target_score: 0,
               verify_mode_string: '',
@@ -486,7 +500,7 @@ export default {
               verify_uuid: '',
             };
 
-            self.applyVerifyToPerson([person]);
+            self.applyVerifyToPerson([result]);
             this.refreshData();
             self.refreshBarChart();
           }
@@ -515,8 +529,27 @@ export default {
       this.displaySettings.dailyResetTime += ':00';
     }
 
+    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
+    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
+
     this.params_entryChannels.push(this.displaySettings.deviceIn);
     this.params_leaveChannels.push(this.displaySettings.deviceOut);
+
+    this.params_entryChannels = this.params_entryChannels.map((id) => {
+      const camera = cameraList.find((c) => c.uuid === id);
+      const tablet = tabletList.find((c) => c.uuid === id);
+      if (camera) return `${id}${camera.name}`;
+      if (tablet) return `${id}${tablet.identity}`;
+      return id;
+    });
+
+    this.params_leaveChannels = this.params_leaveChannels.map((id) => {
+      const camera = cameraList.find((c) => c.uuid === id);
+      const tablet = tabletList.find((c) => c.uuid === id);
+      if (camera) return `${id}${camera.name}`;
+      if (tablet) return `${id}${tablet.identity}`;
+      return id;
+    });
 
     console.log(this.params_entryChannels);
     console.log(this.params_leaveChannels);
@@ -656,14 +689,13 @@ export default {
 
     onAck(id) {
       const person = this.currentStrangers.find((item) => item.verify_uuid === id);
-      console.log(person);
       if (!person) return;
-      if (!person.person_id && (!person.nearest_person || !person.nearest_person.person_info)) {
+      if ((!person.nearest_person || !person.nearest_person.person_info)) {
         this.ackedStrangers = [person];
         this.showAckModal = true;
         return;
       }
-      const uuid = person.person_id ? person.person_id : person.nearest_person.person_info.uuid;
+      const uuid = person.person_id || person.nearest_person.person_info.uuid;
       const nearIdx = this.persons.findIndex((item) => item.uuid === uuid);
       if (nearIdx < 0) {
         this.ackedStrangers = [person];
@@ -862,6 +894,7 @@ export default {
     //  merge Person and Verify Date
     applyVerifyToPerson(data) {
       // console.log('============  applyVerifyToPerson');
+      // console.log(data);
       const self = this;
 
       let passModeRecord = [];
@@ -873,18 +906,18 @@ export default {
       });
 
       if (filter.length >= 1) {
-        passModeRecord = filter.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
+        passModeRecord = filter.filter((attRec) => (attRec.uuid !== undefined && attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         // clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
 
         // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (self.params_entryChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          if (self.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 3;
               clockModeRecord.push(ppp[0]);
             }
-          } else if (self.params_leaveChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          } else if (self.params_leaveChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 4;
@@ -1012,7 +1045,7 @@ export default {
 
         // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (this.params_entryChannels.indexOf(passModeRecord[i].source_id) >= 0) {
+          if (this.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
             const ppp = passModeRecord.splice(i, 1);
             if (ppp) {
               ppp[0].verify_mode = 3;
@@ -1022,7 +1055,6 @@ export default {
         }
 
         if (clockModeRecord.length >= 1) {
-          console.log(clockModeRecord);
           this.entryStrangers.push(...clockModeRecord);
           this.entryStrangers.sort((a, b) => b.timestamp - a.timestamp);
         }
@@ -1215,5 +1247,19 @@ export default {
     grid-template-rows: repeat(7, 1fr);
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 16px;
+  }
+
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 </style>

@@ -9,6 +9,13 @@
         />
       </CCol>
     </CRow>
+    <div
+      class="loading"
+      v-if="loading_percent < 100"
+    >
+      <CSpinner color="primary" />
+      <div>{{ loading_percent }}%</div>
+    </div>
   </div>
 </template>
 
@@ -27,6 +34,7 @@ export default {
       disp_name: this.$t('PersonName'),
 
       flag_downloadingExecl: false,
+      loading_percent: 100,
     };
   },
   created() { },
@@ -86,6 +94,7 @@ export default {
     },
 
     async downloadPersonVerifyResultAsync(dateOnDay, uuidList, sliceSize, cb) {
+      this.loading_percent = 0;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
@@ -133,10 +142,12 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
+          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
           if (cb) cb(error, reset, thereIsMoreData, data.data);
           reset = false;
         } else {
           thereIsMoreData = false;
+          this.loading_percent = 100;
           if (cb) cb(error, true, false, []);
           this.$fire({
             title: this.$t('NetworkLoss'),
@@ -151,7 +162,7 @@ export default {
     onFetchPersonAttendanceDataCallback(dateOnDay, uuidList, cb) {
       this.flag_keepingDownloadPersonVerifyResult = true;
       // this.downloadPersonVerifyResultAsync(dateOnDay, uuidList, 2500, cb);
-      this.downloadPersonVerifyResultAsync(dateOnDay, [], 250, cb);
+      this.downloadPersonVerifyResultAsync(dateOnDay, [], 5000, cb);
     },
     setWrapperStyle() {
       document.querySelector('style').textContent
@@ -164,3 +175,19 @@ export default {
   },
 };
 </script>
+
+<style>
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+</style>

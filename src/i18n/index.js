@@ -7,6 +7,8 @@ import ja from './jp.json';
 import es from './es.json';
 import fr from './fr.json';
 import th from './th.json';
+import vi from './vi.json';
+import id from './id.json';
 
 Vue.use(VueI18n);
 
@@ -20,6 +22,8 @@ const messages = {
   es,
   fr,
   th,
+  vi,
+  id,
 };
 
 const i18n = new VueI18n({

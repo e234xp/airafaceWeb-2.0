@@ -56,7 +56,6 @@ export default {
   watch: {
     localStep1form: {
       handler(newValue) {
-        console.log("emit updateStep1form");
         this.$emit("updateStep1form", { ...newValue });
       },
       deep: true,
