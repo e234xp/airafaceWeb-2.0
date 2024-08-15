@@ -47,14 +47,14 @@ export default {
       label: 'show_identity',
       value: 'show_identity',
     },
-    {
-      label: 'VerifiedTimeStamp',
-      value: 'verified_timestamp',
-    },
     // {
-    //   label: 'VerifiedDateTime',
-    //   value: 'verified_datetime',
+    //   label: 'VerifiedTimeStamp',
+    //   value: 'verified_timestamp',
     // },
+    {
+      label: 'VerifiedDateTime',
+      value: 'verified_datetime',
+    },
     {
       label: 'CapturedPhoto',
       value: 'captured',

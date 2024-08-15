@@ -411,14 +411,14 @@ export default {
           value: '',
           disabled: true,
         },
-        {
-          label: `${this.$t('VerifiedTimeStamp')}  (String)`,
-          value: '##VerifiedTimeStamp##',
-        },
         // {
-        //   label: `${this.$t('VerifiedDateTime')}  (String)`,
-        //   value: '##VerifiedDateTime##',
+        //   label: `${this.$t('VerifiedTimeStamp')}  (String)`,
+        //   value: '##VerifiedTimeStamp##',
         // },
+        {
+          label: `${this.$t('VerifiedDateTime')}  (String)`,
+          value: '##VerifiedDateTime##',
+        },
         {
           label: `${this.$t('VideoDeviceVideoSource')}  (String)`,
           value: '##SourceDevice##',

@@ -94,7 +94,7 @@
               <CButton
                 class="btn btn-primary btn-w-normal fz-lg ml-5"
                 @click="clickOnUpload"
-                :disabled="flag_uploading || !value_selectedDbFile"
+                :disabled="flag_uploading || !value_selectedDbFile && false"
               >
                 {{ $t('Upload') }}
               </CButton>
@@ -331,10 +331,17 @@ export default {
           })
           .then(() => {
             this.flag_uploading = false;
+            // this.$fire({
+            //   text: this.$t('Complete'),
+            //   type: 'success',
+            //   timer: 3000,
+            // });
             this.$fire({
-              text: this.$t('Complete'),
+              text: this.$t('ConfirmToLogout'),
               type: 'success',
               timer: 3000,
+            }).then(() => {
+              this.$globalLogout();
             });
           })
           .catch(() => {

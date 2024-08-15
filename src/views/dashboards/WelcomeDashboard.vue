@@ -446,12 +446,13 @@ export default {
     },
 
     showField(person, line) {
+      console.log(person);
       const field = this.displaySettings[line];
       let g = person.group_list || [];
 
       let ret = '';
       switch (field) {
-        case 'ID': ret = person.id; break;
+        case 'ID': ret = person.employeeno; break;
         case 'NAME': ret = person.name; break;
         case 'PARTIALNAME':
           if (person.name.charCodeAt(0) > 256) {

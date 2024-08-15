@@ -1456,13 +1456,15 @@ export default {
         const footerBoxWrapElement = document.querySelector('.footer-box-wrap');
         const attendanceTopElement = document.querySelector('.attendance-top-box');
 
+        footerBoxWrapElement.style.bottom = `${Math.floor(dH / 2)}px`;
+
         // 將下列 views 進行 zoom
         if (dateTimeElement) self.setZoom(dateTimeElement);
         if (chartElement) self.setZoom(chartElement);
         if (summaryBox) self.setZoom(summaryBox);
         if (headerElement) self.setZoom(headerElement);
         if (dividerElement) self.setZoom(dividerElement);
-        // if (footerBoxElement) self.setZoom(footerBoxElement);
+        if (footerBoxElement) self.setZoom(footerBoxElement);
         if (footerBoxElement) footerBoxElement.style.setProperty('width', '100%');
         if (footerBoxWrapElement) footerBoxWrapElement.style.setProperty('width', `calc(100% - ${dashboard.style.paddingLeft} - ${dashboard.style.paddingRight})`);
         if (attendanceTopElement) self.setZoom(attendanceTopElement);

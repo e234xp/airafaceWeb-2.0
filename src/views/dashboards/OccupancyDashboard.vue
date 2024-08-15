@@ -718,6 +718,7 @@ export default {
     // 1.0 Load Display Config
     const { data: display } = await self.$globalGetDisplaySetting();
     self.displaySettings = { ...self.displaySettings, ...display.OCCUPANCY };
+    console.log(self.displaySettings);
 
     if (self.displaySettings.dailyResetTime.length === 2) {
       self.displaySettings.dailyResetTime += ':00';
@@ -869,7 +870,7 @@ export default {
       let retName = '';
       if (self.displaySettings.line1 === 'NAME') {
         retName = person.name;
-      } else {
+      } else if (self.displaySettings.line1 === 'PARTIALNAME') {
         retName = self.showField(person, 'PARTIALNAME');
       }
 
