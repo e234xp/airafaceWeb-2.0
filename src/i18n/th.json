@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "คณะกรรมการเข้าร่วม",
   "MenuOccupancyBoard": "บอร์ด",
   "MenuOccupancyBoardSettings": "บอร์ด",
+  "MenuCustomerBoard": "บอร์ดลูกค้า",
+  "MenuCustomerBoardSettings": "บอร์ดลูกค้า",
   "MergeDuration": "รวมระยะเวลา (มิลลิวินาที)",
   "MergeScore": "รวมคะแนน",
   "Method": "วิธี",
@@ -434,6 +436,7 @@
   "PageLayout": "เค้าโครงหน้า",
   "PageTitleAttendanceBoardSettings": "การตั้งค่าคณะกรรมการเข้าร่วม",
   "PageTitleOccupancyBoardSettings": "การตั้งค่าคณะกรรมการ",
+  "PageTitleCustomerBoardSettings": "การตั้งค่าบอร์ดลูกค้า",
   "PartialName": "ชื่อบางส่วน",
   "Password": "รหัสผ่าน",
   "PasswordIsDifferent": "รหัสผ่านไม่ตรงกัน",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "โปรดอย่าลืมเพิ่มการตั้งค่า SMTP ใน 'การตั้งค่าทั่วไป' เพื่อให้แน่ใจว่าการแจ้งเตือนจะถูกส่งผ่านทางอีเมลอย่างถูกต้อง",
   "RestartService": "เริ่มบริการใหม่",
-  "ConfirmToLogout": "หลังจากรีสตาร์ท คุณจะออกจากระบบ โปรดเข้าสู่ระบบอีกครั้ง"
+  "ConfirmToLogout": "หลังจากรีสตาร์ท คุณจะออกจากระบบ โปรดเข้าสู่ระบบอีกครั้ง",
+  "ShowAmount": "แสดงจำนวนเงิน",
+  "ShowLeave": "แสดงคนลา",
+  "Show": "แสดง",
+  "Hide": "ซ่อน"
 }

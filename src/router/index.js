@@ -22,6 +22,7 @@ const ChangeAttendance = () => import('@/views/attendance/ChangeAttendance.vue')
 const WelcomeDashboard = () => import('@/views/dashboards/WelcomeDashboard.vue');
 const OccupancyDashboard = () => import('@/views/dashboards/OccupancyDashboard.vue');
 const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue');
+const CustomerDashboard = () => import('@/views/dashboards/CustomerDashboard.vue');
 const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboard.vue');
 const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
 const AlcoholCheckinDashboard = () => import('@/views/dashboards/AlcoholCheckinDashboard.vue');
@@ -66,6 +67,7 @@ const ModifyEventControlSetting = () => import('@/views/events/ModifyEventContro
 const ModifyWelcomeControlSetting = () => import('@/views/displays/ModifyWelcomeControlSetting.vue');
 const ModifyOccupancyControlSetting = () => import('@/views/displays/ModifyOccupancyControlSetting.vue');
 const ModifyCapacityControlSetting = () => import('@/views/displays/ModifyCapacityControlSetting.vue');
+const ModifyCustomerControlSetting = () => import('@/views/displays/ModifyCustomerControlSetting.vue');
 const ModifySelfCheckinControlSetting = () => import('@/views/displays/ModifySelfCheckinControlSetting.vue');
 const ModifyGuardControlSetting = () => import('@/views/displays/ModifyGuardControlSetting.vue');
 
@@ -198,6 +200,11 @@ function configRoutes() {
           path: 'capacitymode',
           name: 'DashboardCapacity',
           component: CapacityDashboard,
+        },
+        {
+          path: 'customermode',
+          name: 'DashboardCustomer',
+          component: CustomerDashboard,
         },
         {
           path: 'selfcheckinmode',
@@ -416,6 +423,11 @@ function configRoutes() {
               path: 'modifycapacitycontrolsetting',
               name: 'ModifyCapacityControlSetting',
               component: ModifyCapacityControlSetting,
+            },
+            {
+              path: 'modifycustomercontrolsetting',
+              name: 'ModifyCustomerControlSetting',
+              component: ModifyCustomerControlSetting,
             },
             {
               path: 'modifyselfcheckincontrolsetting',

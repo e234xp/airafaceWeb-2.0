@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "點名看板",
   "MenuOccupancyBoard": "容留看板",
   "MenuOccupancyBoardSettings": "容留看板",
+  "MenuCustomerBoard": "客戶看板",
+  "MenuCustomerBoardSettings": "客戶看板",
   "MergeDuration": "合併時長 (毫秒)",
   "MergeScore": "合併分數",
   "Method": "方法",
@@ -434,6 +436,7 @@
   "PageLayout": "頁面排版",
   "PageTitleAttendanceBoardSettings": "點名看板設定",
   "PageTitleOccupancyBoardSettings": "容留看板設定",
+  "PageTitleCustomerBoardSettings": "客戶看板設定",
   "PartialName": "部分姓名",
   "Password": "密碼",
   "PasswordIsDifferent": "密碼不匹配",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "請務必在「一般設定」中加入SMTP設定，以確保通知能夠透過郵件正確發送。",
   "RestartService": "重啟服務",
-  "ConfirmToLogout": "重啟服務後，將自動登出，請重新登入。"
+  "ConfirmToLogout": "重啟服務後，將自動登出，請重新登入。",
+  "ShowAmount": "顯示總數",
+  "ShowLeave": "顯示離開人員",
+  "Show": "顯示",
+  "Hide": "隱藏"
 }

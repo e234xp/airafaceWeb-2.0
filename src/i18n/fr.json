@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "Comité de fréquentation",
   "MenuOccupancyBoard": "Comité d'occupation",
   "MenuOccupancyBoardSettings": "Comité d'occupation",
+  "MenuCustomerBoard": "Conseil d'administration des clients",
+  "MenuCustomerBoardSettings": "Conseil d'administration des clients",
   "MergeDuration": "Durée de fusion (ms)",
   "MergeScore": "Fusionner le score",
   "Method": "Méthode",
@@ -434,6 +436,7 @@
   "PageLayout": "Mise en page",
   "PageTitleAttendanceBoardSettings": "Paramètres du conseil d'assistance",
   "PageTitleOccupancyBoardSettings": "Paramètres du conseil d'occupation",
+  "PageTitleCustomerBoardSettings": "Paramètres du tableau client",
   "PartialName": "Nom partiel",
   "Password": "Mot de passe",
   "PasswordIsDifferent": "Les mots de passe ne correspondent pas",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Assurez-vous d'ajouter les paramètres SMTP dans les « Paramètres généraux » pour garantir que les notifications sont correctement envoyées par e-mail.",
   "RestartService": "Redémarrer le service",
-  "ConfirmToLogout": "Après le redémarrage, vous serez déconnecté, veuillez vous reconnecter."
+  "ConfirmToLogout": "Après le redémarrage, vous serez déconnecté, veuillez vous reconnecter.",
+  "ShowAmount": "Afficher le montant",
+  "ShowLeave": "Afficher la personne qui quitte",
+  "Show": "Montrer",
+  "Hide": "Cacher"
 }

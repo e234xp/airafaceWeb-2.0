@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "出席ボードのセッティング",
   "MenuOccupancyBoard": "占有ボード",
   "MenuOccupancyBoardSettings": "占有ボード設定",
+  "MenuCustomerBoard": "顧客ボード",
+  "MenuCustomerBoardSettings": "顧客ボードの設定",
   "MergeDuration": "マージ期間 (ミリ秒)",
   "MergeScore": "マージスコア",
   "Method": "方法",
@@ -434,6 +436,7 @@
   "PageLayout": "ページレイアウト",
   "PageTitleAttendanceBoardSettings": "出席ボードの設定",
   "PageTitleOccupancyBoardSettings": "占有ボードの設定",
+  "PageTitleCustomerBoardSettings": "顧客ボード設定",
   "PartialName": "名前の一部",
   "Password": "パスワード",
   "PasswordIsDifferent": "パスワードが一致していません",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "通知が正しく電子メールで送信されるように、「一般設定」にSMTP設定を追加してください。",
   "RestartService": "サービスの再起動",
-  "ConfirmToLogout": "再起動後はログアウトされますので、再度ログインしてください。"
+  "ConfirmToLogout": "再起動後はログアウトされますので、再度ログインしてください。",
+  "ShowAmount": "金額を表示",
+  "ShowLeave": "休暇中の人を表示",
+  "Show": "見せる",
+  "Hide": "隠れる"
 }

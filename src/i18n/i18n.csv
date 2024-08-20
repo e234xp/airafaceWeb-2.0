@@ -355,6 +355,8 @@ MenuAttendanceBoard,Attendance Board,點名看板,Concentración de asistencia,C
 MenuAttendanceBoardSettings,Attendance Board,點名看板,Concentración de asistencia,Comité de fréquentation,出席ボードのセッティング,คณะกรรมการเข้าร่วม,Bảng chấm công,Papan Kehadiran
 MenuOccupancyBoard,Occupancy Board,容留看板,Junta de ocupación,Comité d'occupation,占有ボード,บอร์ด,Bảng chiếm dụng,Papan Okupansi
 MenuOccupancyBoardSettings,Occupancy Board,容留看板,Junta de ocupación,Comité d'occupation,占有ボード設定,บอร์ด,Bảng chiếm dụng,Papan Okupansi
+MenuCustomerBoard,Customer Board,客戶看板,Tablero de clientes,Conseil d'administration des clients,顧客ボード,บอร์ดลูกค้า,Bảng khách hàng,Papan Pelanggan
+MenuCustomerBoardSettings,Customer Board,客戶看板,Tablero de clientes,Conseil d'administration des clients,顧客ボードの設定,บอร์ดลูกค้า,Bảng khách hàng,Papan Pelanggan
 MergeDuration,Merge Duration (ms),合併時長 (毫秒),Duración de la fusión (ms),Durée de fusion (ms),マージ期間 (ミリ秒),รวมระยะเวลา (มิลลิวินาที),Thời lượng hợp nhất (ms),Durasi Penggabungan (md)
 MergeScore,Merge Score,合併分數,Fusionar puntuación,Fusionner le score,マージスコア,รวมคะแนน,Điểm Hợp nhất,Penggabungan Skor
 Method,Method,方法,Método,Méthode,方法,วิธี,Phương pháp,Metode
@@ -434,6 +436,7 @@ PageDisplay,Page Display,頁面顯示,Visualización de la página,Affichage de 
 PageLayout,Page Layout,頁面排版,Diseño de página,Mise en page,ページレイアウト,เค้าโครงหน้า,Bố cục trang,Tata letak Halaman
 PageTitleAttendanceBoardSettings,Attendance Board Settings,點名看板設定,Configuración de la junta de asistencia,Paramètres du conseil d'assistance,出席ボードの設定,การตั้งค่าคณะกรรมการเข้าร่วม,Cài đặt bảng chấm công,Pengaturan Papan Kehadiran
 PageTitleOccupancyBoardSettings,Occupancy Board Settings,容留看板設定,Configuración de la junta de ocupación,Paramètres du conseil d'occupation,占有ボードの設定,การตั้งค่าคณะกรรมการ,Cài đặt bảng chiếm dụng,Pengaturan Papan Okupansi
+PageTitleCustomerBoardSettings,Customer Board Settings,客戶看板設定,Configuración del panel de clientes,Paramètres du tableau client,顧客ボード設定,การตั้งค่าบอร์ดลูกค้า,Cài đặt bảng khách hàng,Pengaturan Papan Pelanggan
 PartialName,Partial Name,部分姓名,Nombre parcial,Nom partiel,名前の一部,ชื่อบางส่วน,Tên một phần,Nama Parsial
 Password,Password,密碼,Contraseña,Mot de passe,パスワード,รหัสผ่าน,Mật khẩu,Kata sandi
 PasswordIsDifferent,Passwords do not match,密碼不匹配,Las contraseñas no coinciden,Les mots de passe ne correspondent pas,パスワードが一致していません,รหัสผ่านไม่ตรงกัน,Mật khẩu không phù hợp,Kata sandi tidak cocok
@@ -761,3 +764,7 @@ JSON,JSON,JSON,JSON,JSON,JSON,JSON,JSON,JSON
 MssingSmtpHint,Please be sure to add SMTP settings in the 'General Settings' to ensure notifications are correctly sent via email.,請務必在「一般設定」中加入SMTP設定，以確保通知能夠透過郵件正確發送。,Asegúrese de agregar la configuración SMTP en la 'Configuración general' para garantizar que las notificaciones se envíen correctamente por correo electrónico.,Assurez-vous d'ajouter les paramètres SMTP dans les « Paramètres généraux » pour garantir que les notifications sont correctement envoyées par e-mail.,通知が正しく電子メールで送信されるように、「一般設定」にSMTP設定を追加してください。,โปรดอย่าลืมเพิ่มการตั้งค่า SMTP ใน 'การตั้งค่าทั่วไป' เพื่อให้แน่ใจว่าการแจ้งเตือนจะถูกส่งผ่านทางอีเมลอย่างถูกต้อง,Hãy đảm bảo thêm cài đặt SMTP trong 'Cài đặt chung' để đảm bảo thông báo được gửi chính xác qua email.,Pastikan untuk menambahkan pengaturan SMTP di 'Pengaturan Umum' untuk memastikan notifikasi dikirim dengan benar melalui email.
 RestartService,Restart Service,重啟服務,Reiniciar servicio,Redémarrer le service,サービスの再起動,เริ่มบริการใหม่,Khởi động lại dịch vụ,Mulai Ulang Layanan
 ConfirmToLogout,"After restart, you'll be logged out, please log in again.",重啟服務後，將自動登出，請重新登入。,"Después de reiniciar, se cerrará su sesión; inicie sesión nuevamente.","Après le redémarrage, vous serez déconnecté, veuillez vous reconnecter.",再起動後はログアウトされますので、再度ログインしてください。,หลังจากรีสตาร์ท คุณจะออกจากระบบ โปรดเข้าสู่ระบบอีกครั้ง,"Sau khi khởi động lại, bạn sẽ đăng xuất, vui lòng đăng nhập lại.","Setelah restart, Anda akan logout, silakan login lagi."
+ShowAmount,Show Amount,顯示總數,Mostrar cantidad,Afficher le montant,金額を表示,แสดงจำนวนเงิน,Hiển thị số tiền,Tampilkan Jumlah
+ShowLeave,Show Leave Person,顯示離開人員,Mostrar persona de salida,Afficher la personne qui quitte,休暇中の人を表示,แสดงคนลา,Hiển thị người nghỉ phép,Tunjukkan Orang yang Tinggalkan
+Show,Show,顯示,Espectáculo,Montrer,見せる,แสดง,Trình diễn,Menunjukkan
+Hide,Hide,隱藏,Esconder,Cacher,隠れる,ซ่อน,Trốn,Bersembunyi

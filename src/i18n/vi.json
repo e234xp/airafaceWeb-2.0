@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "Bảng chấm công",
   "MenuOccupancyBoard": "Bảng chiếm dụng",
   "MenuOccupancyBoardSettings": "Bảng chiếm dụng",
+  "MenuCustomerBoard": "Bảng khách hàng",
+  "MenuCustomerBoardSettings": "Bảng khách hàng",
   "MergeDuration": "Thời lượng hợp nhất (ms)",
   "MergeScore": "Điểm Hợp nhất",
   "Method": "Phương pháp",
@@ -434,6 +436,7 @@
   "PageLayout": "Bố cục trang",
   "PageTitleAttendanceBoardSettings": "Cài đặt bảng chấm công",
   "PageTitleOccupancyBoardSettings": "Cài đặt bảng chiếm dụng",
+  "PageTitleCustomerBoardSettings": "Cài đặt bảng khách hàng",
   "PartialName": "Tên một phần",
   "Password": "Mật khẩu",
   "PasswordIsDifferent": "Mật khẩu không phù hợp",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Hãy đảm bảo thêm cài đặt SMTP trong 'Cài đặt chung' để đảm bảo thông báo được gửi chính xác qua email.",
   "RestartService": "Khởi động lại dịch vụ",
-  "ConfirmToLogout": "Sau khi khởi động lại, bạn sẽ đăng xuất, vui lòng đăng nhập lại."
+  "ConfirmToLogout": "Sau khi khởi động lại, bạn sẽ đăng xuất, vui lòng đăng nhập lại.",
+  "ShowAmount": "Hiển thị số tiền",
+  "ShowLeave": "Hiển thị người nghỉ phép",
+  "Show": "Trình diễn",
+  "Hide": "Trốn"
 }

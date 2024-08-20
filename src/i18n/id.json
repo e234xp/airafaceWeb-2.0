@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "Papan Kehadiran",
   "MenuOccupancyBoard": "Papan Okupansi",
   "MenuOccupancyBoardSettings": "Papan Okupansi",
+  "MenuCustomerBoard": "Papan Pelanggan",
+  "MenuCustomerBoardSettings": "Papan Pelanggan",
   "MergeDuration": "Durasi Penggabungan (md)",
   "MergeScore": "Penggabungan Skor",
   "Method": "Metode",
@@ -434,6 +436,7 @@
   "PageLayout": "Tata letak Halaman",
   "PageTitleAttendanceBoardSettings": "Pengaturan Papan Kehadiran",
   "PageTitleOccupancyBoardSettings": "Pengaturan Papan Okupansi",
+  "PageTitleCustomerBoardSettings": "Pengaturan Papan Pelanggan",
   "PartialName": "Nama Parsial",
   "Password": "Kata sandi",
   "PasswordIsDifferent": "Kata sandi tidak cocok",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Pastikan untuk menambahkan pengaturan SMTP di 'Pengaturan Umum' untuk memastikan notifikasi dikirim dengan benar melalui email.",
   "RestartService": "Mulai Ulang Layanan",
-  "ConfirmToLogout": "Setelah restart, Anda akan logout, silakan login lagi."
+  "ConfirmToLogout": "Setelah restart, Anda akan logout, silakan login lagi.",
+  "ShowAmount": "Tampilkan Jumlah",
+  "ShowLeave": "Tunjukkan Orang yang Tinggalkan",
+  "Show": "Menunjukkan",
+  "Hide": "Bersembunyi"
 }

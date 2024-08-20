@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "Concentración de asistencia",
   "MenuOccupancyBoard": "Junta de ocupación",
   "MenuOccupancyBoardSettings": "Junta de ocupación",
+  "MenuCustomerBoard": "Tablero de clientes",
+  "MenuCustomerBoardSettings": "Tablero de clientes",
   "MergeDuration": "Duración de la fusión (ms)",
   "MergeScore": "Fusionar puntuación",
   "Method": "Método",
@@ -434,6 +436,7 @@
   "PageLayout": "Diseño de página",
   "PageTitleAttendanceBoardSettings": "Configuración de la junta de asistencia",
   "PageTitleOccupancyBoardSettings": "Configuración de la junta de ocupación",
+  "PageTitleCustomerBoardSettings": "Configuración del panel de clientes",
   "PartialName": "Nombre parcial",
   "Password": "Contraseña",
   "PasswordIsDifferent": "Las contraseñas no coinciden",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Asegúrese de agregar la configuración SMTP en la 'Configuración general' para garantizar que las notificaciones se envíen correctamente por correo electrónico.",
   "RestartService": "Reiniciar servicio",
-  "ConfirmToLogout": "Después de reiniciar, se cerrará su sesión; inicie sesión nuevamente."
+  "ConfirmToLogout": "Después de reiniciar, se cerrará su sesión; inicie sesión nuevamente.",
+  "ShowAmount": "Mostrar cantidad",
+  "ShowLeave": "Mostrar persona de salida",
+  "Show": "Espectáculo",
+  "Hide": "Esconder"
 }

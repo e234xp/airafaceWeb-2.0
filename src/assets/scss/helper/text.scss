@@ -27,8 +27,24 @@ $theme-font: 'Noto Sans', 'Noto Sans TC', sans-serif;
     font-size: 24px;
 }
 
+.fz-xxxxl {
+    font-size: 28px;
+}
+
+.fz-xxxxxl {
+    font-size: 32px;
+}
+
+.fz-super-slarge {
+    font-size: 40px;
+}
+
 .fz-super-large {
     font-size: 44px;
+}
+
+.fz-super-xLarge {
+    font-size: 64px;
 }
 
 .fw-200 {
@@ -63,6 +79,10 @@ $theme-font: 'Noto Sans', 'Noto Sans TC', sans-serif;
 
 .break-word {
     word-break: break-all;
+}
+
+.lh-1 {
+    line-height: 1em;
 }
 
 .lh-6 {

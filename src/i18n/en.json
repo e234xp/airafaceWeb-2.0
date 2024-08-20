@@ -355,6 +355,8 @@
   "MenuAttendanceBoardSettings": "Attendance Board",
   "MenuOccupancyBoard": "Occupancy Board",
   "MenuOccupancyBoardSettings": "Occupancy Board",
+  "MenuCustomerBoard": "Customer Board",
+  "MenuCustomerBoardSettings": "Customer Board",
   "MergeDuration": "Merge Duration (ms)",
   "MergeScore": "Merge Score",
   "Method": "Method",
@@ -434,6 +436,7 @@
   "PageLayout": "Page Layout",
   "PageTitleAttendanceBoardSettings": "Attendance Board Settings",
   "PageTitleOccupancyBoardSettings": "Occupancy Board Settings",
+  "PageTitleCustomerBoardSettings": "Customer Board Settings",
   "PartialName": "Partial Name",
   "Password": "Password",
   "PasswordIsDifferent": "Passwords do not match",
@@ -760,5 +763,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Please be sure to add SMTP settings in the 'General Settings' to ensure notifications are correctly sent via email.",
   "RestartService": "Restart Service",
-  "ConfirmToLogout": "After restart, you'll be logged out, please log in again."
+  "ConfirmToLogout": "After restart, you'll be logged out, please log in again.",
+  "ShowAmount": "Show Amount",
+  "ShowLeave": "Show Leave Person",
+  "Show": "Show",
+  "Hide": "Hide"
 }

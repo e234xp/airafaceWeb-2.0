@@ -21,7 +21,7 @@ const TEST_MODE = process.env.NODE_ENV === 'development';
 const TEST_HOST = '192.168.10.86'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
-const TEST_PORT = '443'; // 測試mini的PORT
+const TEST_PORT = ''; // 測試mini的PORT
 const HOST = TEST_MODE ? TEST_HOST : window.location.hostname;
 const PORT = TEST_MODE ? TEST_PORT : window.location.port;
 const href = window.location.href.toLowerCase();
@@ -99,16 +99,16 @@ Vue.prototype.$profileLists = [
 
 global.usingHttps = href.includes('https://') || TEST_MODE;
 // global.usingHttps = false;
-if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelite/verifyresults`;
+if (false) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelite/verifyresults`;
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 // window.apiSocketPath = `ws://${HOST}:80/airafacelite/verifyresults`;
 
 console.log('globalParams.js', window.apiSocketPath);
 
 function apiServerPath() {
-  if (global.usingHttps) {
-    return `https://${HOST}:${PORT}`;
-  }
+  // if (global.usingHttps) {
+  //   return `https://${HOST}:${PORT}`;
+  // }
   return `http://${HOST}:${PORT}`;
 }
 
