@@ -768,3 +768,12 @@ ShowAmount,Show Amount,顯示總數,Mostrar cantidad,Afficher le montant,金額�
 ShowLeave,Show Leave Person,顯示離開人員,Mostrar persona de salida,Afficher la personne qui quitte,休暇中の人を表示,แสดงคนลา,Hiển thị người nghỉ phép,Tunjukkan Orang yang Tinggalkan
 Show,Show,顯示,Espectáculo,Montrer,見せる,แสดง,Trình diễn,Menunjukkan
 Hide,Hide,隱藏,Esconder,Cacher,隠れる,ซ่อน,Trốn,Bersembunyi
+,,,,,,,,
+ThisChange,This change,本次異動,este cambio,Ce changement,この変更は,การเปลี่ยนแปลงครั้งนี้,Sự thay đổi này,Perubahan ini
+Search,Search,查詢,Buscar,Recherche,検索,ค้นหา,Tìm kiếm,Mencari
+InputMobilePhoneNumberToQuery,Input mobile phone number to query,輸入手機號查詢,Ingrese el número de teléfono móvil para consultar,Saisissez le numéro de téléphone mobile à interroger,携帯電話番号を入力して問い合わせる,กรอกหมายเลขโทรศัพท์มือถือเพื่อสอบถาม,Nhập số điện thoại di động để truy vấn,Masukkan nomor ponsel untuk ditanyakan
+Smoothie,Smoothie,果昔,Zalamero,Smoothies,スムージー,สมูทตี้,sinh tố,smoothie
+FruitPlate,FruitPlate,果盤,plato de fruta,Assiette De Fruits,フルーツプレート,จานผลไม้,Đĩa trái cây,Piring Buah
+Milk,Milk,牛奶,Leche,Lait,牛乳,น้ำนม,Sữa,Susu
+MobilePhoneNumberLastThreeDigits,Last three digits of mobile phone,手機末三碼,Últimos tres dígitos del teléfono móvil,Trois derniers chiffres du téléphone mobile,携帯電話番号の下 3 桁,โทรศัพท์มือถือสามหลักสุดท้าย,Ba chữ số cuối của điện thoại di động,Tiga digit terakhir ponsel
+NoSuchPersonFound,No such person found,查無此人,No se encontró tal persona,Aucune personne de ce type n'a été trouvée,そのような人は見つかりませんでした,ไม่พบบุคคลดังกล่าว,Không tìm thấy người như vậy,Tidak ada orang seperti itu yang ditemukan

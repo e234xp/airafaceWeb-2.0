@@ -515,7 +515,7 @@
   "ScheduleType": "排程類型",
   "ScheduleUsed": "有一些排程正在使用中",
   "Score": "分數",
-  "Search": "搜尋",
+  "Search": "查詢",
   "Select": "選擇",
   "SelectAll": "全選",
   "SelectDatetimeRange": "指定日期範圍",
@@ -767,5 +767,13 @@
   "ShowAmount": "顯示總數",
   "ShowLeave": "顯示離開人員",
   "Show": "顯示",
-  "Hide": "隱藏"
+  "Hide": "隱藏",
+  "": "",
+  "ThisChange": "本次異動",
+  "InputMobilePhoneNumberToQuery": "輸入手機號查詢",
+  "Smoothie": "果昔",
+  "FruitPlate": "果盤",
+  "Milk": "牛奶",
+  "MobilePhoneNumberLastThreeDigits": "手機末三碼",
+  "NoSuchPersonFound": "查無此人"
 }

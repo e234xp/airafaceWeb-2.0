@@ -767,5 +767,13 @@
   "ShowAmount": "Show Amount",
   "ShowLeave": "Show Leave Person",
   "Show": "Show",
-  "Hide": "Hide"
+  "Hide": "Hide",
+  "": "",
+  "ThisChange": "This change",
+  "InputMobilePhoneNumberToQuery": "Input mobile phone number to query",
+  "Smoothie": "Smoothie",
+  "FruitPlate": "FruitPlate",
+  "Milk": "Milk",
+  "MobilePhoneNumberLastThreeDigits": "Last three digits of mobile phone",
+  "NoSuchPersonFound": "No such person found"
 }

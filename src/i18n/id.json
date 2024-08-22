@@ -515,7 +515,7 @@
   "ScheduleType": "Jenis Jadwal",
   "ScheduleUsed": "Beberapa jadwal sedang digunakan.",
   "Score": "Skor",
-  "Search": "Cari",
+  "Search": "Mencari",
   "Select": "Pilih",
   "SelectAll": "Pilih Semua",
   "SelectDatetimeRange": "tentukan rentang tanggal",
@@ -767,5 +767,13 @@
   "ShowAmount": "Tampilkan Jumlah",
   "ShowLeave": "Tunjukkan Orang yang Tinggalkan",
   "Show": "Menunjukkan",
-  "Hide": "Bersembunyi"
+  "Hide": "Bersembunyi",
+  "": "",
+  "ThisChange": "Perubahan ini",
+  "InputMobilePhoneNumberToQuery": "Masukkan nomor ponsel untuk ditanyakan",
+  "Smoothie": "smoothie",
+  "FruitPlate": "Piring Buah",
+  "Milk": "Susu",
+  "MobilePhoneNumberLastThreeDigits": "Tiga digit terakhir ponsel",
+  "NoSuchPersonFound": "Tidak ada orang seperti itu yang ditemukan"
 }

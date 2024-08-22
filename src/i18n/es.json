@@ -767,5 +767,13 @@
   "ShowAmount": "Mostrar cantidad",
   "ShowLeave": "Mostrar persona de salida",
   "Show": "Espectáculo",
-  "Hide": "Esconder"
+  "Hide": "Esconder",
+  "": "",
+  "ThisChange": "este cambio",
+  "InputMobilePhoneNumberToQuery": "Ingrese el número de teléfono móvil para consultar",
+  "Smoothie": "Zalamero",
+  "FruitPlate": "plato de fruta",
+  "Milk": "Leche",
+  "MobilePhoneNumberLastThreeDigits": "Últimos tres dígitos del teléfono móvil",
+  "NoSuchPersonFound": "No se encontró tal persona"
 }

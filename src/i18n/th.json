@@ -767,5 +767,13 @@
   "ShowAmount": "แสดงจำนวนเงิน",
   "ShowLeave": "แสดงคนลา",
   "Show": "แสดง",
-  "Hide": "ซ่อน"
+  "Hide": "ซ่อน",
+  "": "",
+  "ThisChange": "การเปลี่ยนแปลงครั้งนี้",
+  "InputMobilePhoneNumberToQuery": "กรอกหมายเลขโทรศัพท์มือถือเพื่อสอบถาม",
+  "Smoothie": "สมูทตี้",
+  "FruitPlate": "จานผลไม้",
+  "Milk": "น้ำนม",
+  "MobilePhoneNumberLastThreeDigits": "โทรศัพท์มือถือสามหลักสุดท้าย",
+  "NoSuchPersonFound": "ไม่พบบุคคลดังกล่าว"
 }

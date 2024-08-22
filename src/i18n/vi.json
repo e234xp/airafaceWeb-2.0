@@ -767,5 +767,13 @@
   "ShowAmount": "Hiển thị số tiền",
   "ShowLeave": "Hiển thị người nghỉ phép",
   "Show": "Trình diễn",
-  "Hide": "Trốn"
+  "Hide": "Trốn",
+  "": "",
+  "ThisChange": "Sự thay đổi này",
+  "InputMobilePhoneNumberToQuery": "Nhập số điện thoại di động để truy vấn",
+  "Smoothie": "sinh tố",
+  "FruitPlate": "Đĩa trái cây",
+  "Milk": "Sữa",
+  "MobilePhoneNumberLastThreeDigits": "Ba chữ số cuối của điện thoại di động",
+  "NoSuchPersonFound": "Không tìm thấy người như vậy"
 }

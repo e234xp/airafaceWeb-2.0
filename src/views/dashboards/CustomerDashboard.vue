@@ -8,86 +8,96 @@
       class="ratio-content customer-dashboard"
       :style="{backgroundImage:'url('+displaySettings.background_image+')'}"
     >
-      <transition
-        name="fade"
-        mode="out-in"
-      >
-        <template v-if="displayMode === 'Dashboard'">
+      <div class="w-100 h-100 d-flex flex-column">
+        <transition
+          name="fade"
+          mode="out-in"
+        >
           <div
-            key="dashboard"
-            class="w-100 h-100"
+            v-if="displayMode !== 'Profile'"
+            class="dashboard-header d-flex justify-content-between align-items-center"
+            style="margin-left: 20px; margin-right: 20px; margin-bottom: 22px;"
           >
-            <div
-              class="dashboard-header d-flex justify-content-between align-items-center"
-              style="margin-left: 20px; margin-right: 20px; margin-bottom: 22px;"
+            <el-button
+              type="text"
+              class="text-left"
+              style="flex: 1;"
+              @click="goHome"
             >
-              <el-button type="text">
-                <svg
-                  width="80"
-                  height="80"
-                  viewBox="0 0 80 80"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    x="2"
-                    y="2"
-                    width="76"
-                    height="76"
-                    rx="38"
-                    stroke="#463A2A"
-                    stroke-width="4"
-                  />
-                  <path
-                    d="M22 34L40 22L58 34V58H22V34Z"
-                    stroke="#463A2A"
-                    stroke-width="4"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </el-button>
-
-              <div
-                :style="[{
-                  backgroundImage:'url('+displaySettings.logo+')',
-                  width: '120px',
-                  height: '120px',
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                }, 'zoom: ' + zoomRatio + ' !important;']"
-              />
-
-              <div class="current-date-time text-white ff-noto-sans">
-                <button
-                  type="button"
-                  class="fat-button fz-super-slarge primary-color"
-                  @click="() => { drawer = true }"
-                >
-                  <div
-                    class="d-flex align-items-center justify-content-center"
-                    style="gap: 0.5rem;"
-                  >
-                    <CIcon
-                      name="cil-search"
-                      style="width: 2rem; height: 2rem;"
-                    />
-                    輸入手機號查詢
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <!-- Occupancy/Attendance 顯示人員資料列表 -->
-            <div style="padding-left: 10px;">
-              <div
-                :class="[
-                  'grid-4x4',
-                  'd-flex',
-                  'flex-wrap',
-                ]"
+              <svg
+                width="80"
+                height="80"
+                viewBox="0 0 80 80"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
+                <rect
+                  x="2"
+                  y="2"
+                  width="76"
+                  height="76"
+                  rx="38"
+                  stroke="#463A2A"
+                  stroke-width="4"
+                />
+                <path
+                  d="M22 34L40 22L58 34V58H22V34Z"
+                  stroke="#463A2A"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </el-button>
+
+            <div
+              :style="[{
+                flex: '1',
+                backgroundImage:'url('+displaySettings.logo+')',
+                width: '120px',
+                height: '120px',
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+              }, 'zoom: ' + zoomRatio + ' !important;']"
+            />
+
+            <div
+              style="flex: 1;"
+              class="current-date-time text-white"
+            >
+              <button
+                type="button"
+                class="fat-button fz-super-slarge primary-color ml-auto"
+                @click="() => { drawer = true }"
+              >
+                <div
+                  class="d-flex align-items-center justify-content-center"
+                  style="gap: 0.5rem;"
+                >
+                  <CIcon
+                    name="cil-search"
+                    style="width: 2rem; height: 2rem;"
+                  />
+                  {{ $t('InputMobilePhoneNumberToQuery') }}
+                </div>
+              </button>
+            </div>
+          </div>
+        </transition>
+
+        <transition
+          name="fade"
+          mode="out-in"
+        >
+          <template v-if="displayMode === 'Dashboard'">
+            <!-- Occupancy/Attendance 顯示人員資料列表 -->
+            <div
+              key="dashboard"
+              class="person-card-container flex-grow-1 overflow-auto"
+              style="margin-bottom: 2.5rem;"
+            >
+              <div class="grid-4x4 d-flex">
                 <div
                   v-for="(person, index) in currentEntryPersons"
                   :key="index"
@@ -124,7 +134,7 @@
                         style="gap: 0.5rem;"
                       >
                         <div class="vip-tag fz-md fw-400">
-                          VIP 會員
+                          {{ person.group_list[0] }}
                         </div>
                         <div
                           class="fz-super-slarge fw-500 lh-1 text-truncate d-block"
@@ -156,216 +166,268 @@
                 Loading...
               </div>
             </div>
-
-            <!-- 電話查詢 -->
-            <el-drawer
-              class="phone-drawer"
-              title="我是标题"
-              :size="802"
-              :visible.sync="drawer"
-              :with-header="false"
-              style="backdrop-filter: blur(16px);"
+          </template>
+          <template v-else-if="displayMode === 'Phone'">
+            <div
+              key="phone"
+              class="w-100 h-100 mt-5"
             >
+              <p
+                class="fz-super-slarge fw-500 lh-1 primary-color text-center"
+                style="margin-bottom: 1.25rem;"
+              >
+                {{ $t('MobilePhoneNumberLastThreeDigits') }}
+              </p>
+              <p
+                class="mb-0 fw-500 lh-1 primary-color text-center"
+                style="font-size: 8.75rem;"
+              >
+                {{ searchNumber.join('') }}
+              </p>
+              <div class="same-phone-card-container">
+                <div
+                  v-for="person in matchedPersons"
+                  :key="person.uuid"
+                  class="same-phone-card"
+                  @click="handleSelectPerson(person)"
+                >
+                  <img
+                    v-show="displaySettings.displayPhoto !== 'NONE'"
+                    :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
+                    :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
+                  >
+                  <img
+                    :src="`data:image/png;base64,${emptyFace}`"
+                    v-show="displaySettings.displayPhoto === 'NONE'"
+                  >
+                  <div class="flex flex-column justify-content-center align-items-center">
+                    <div class="vip-tag">
+                      {{ person.group_list[0] }}
+                    </div>
+                    <p
+                      class="fw-500 lh-1 primary-color"
+                      style="font-size: 3.75rem; margin: 1.375rem 0"
+                    >
+                      {{ person.name }}
+                    </p>
+                    <p
+                      class="fw-500 lh-1 primary-color"
+                      style="font-size: 3.75rem"
+                    >
+                      {{ person.extra_info.phone_number }}
+                    </p>
+                    <div />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="d-flex justify-content-center h-100">
               <div
-                class="d-flex justify-content-center align-items-start h-100"
-                style="padding: 4rem 0; gap: 3.5rem;"
+                key="profile"
+                class="profile-info"
               >
                 <div
-                  class="d-flex flex-column align-items-center justify-content-center h-100"
-                  style="gap: 2.5rem;"
+                  class="d-flex justify-content-between align-items-center"
+                  style="padding: 2rem 3.25rem; margin-bottom: 2.5rem;"
                 >
-                  <div
-                    class="fw-500 lh-1 primary-color"
-                    style="font-size: 5rem;"
+                  <el-button
+                    type="text"
+                    @click="goHome"
                   >
-                    手機末三碼
-                  </div>
+                    <svg
+                      width="80"
+                      height="80"
+                      viewBox="0 0 80 80"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="2"
+                        y="2"
+                        width="76"
+                        height="76"
+                        rx="38"
+                        stroke="#463A2A"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M22 34L40 22L58 34V58H22V34Z"
+                        stroke="#463A2A"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </el-button>
 
-                  <!-- 顯示已按下的號碼 -->
                   <div
-                    class="d-flex align-items-center justify-content-center my-3"
-                    style="gap: 1.25rem;"
-                  >
-                    <div
-                      class="view-box"
-                      v-for="(digit, index) in displayNumbers"
-                      :key="index"
-                    >
-                      {{ digit }}
-                    </div>
-                  </div>
-
-                  <!-- 號碼輸入區 -->
-                  <div
-                    class="number-pad"
-                  >
-                    <div
-                      v-for="i in 9"
-                      :key="i"
-                      class="pad"
-                      @click="onNumberClick(i)"
-                    >
-                      {{ i }}
-                    </div>
-                    <div />
-                    <div
-                      class="pad"
-                      @click="onNumberClick(0)"
-                    >
-                      0
-                    </div>
-                    <div />
-                  </div>
+                    :style="[{
+                      backgroundImage:'url('+displaySettings.logo+')',
+                      width: '120px',
+                      height: '120px',
+                      backgroundSize: 'contain',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center',
+                    }, 'zoom: ' + zoomRatio + ' !important;']"
+                  />
 
                   <el-button
-                    class="search-button fz-super-slarge fw-500 lh-1"
-                    :disabled="searchNumber.length < 3"
-                    @click="handleSearch"
+                    type="text"
+                    style="visibility: hidden;"
                   >
-                    查詢
+                    <svg
+                      width="80"
+                      height="80"
+                      viewBox="0 0 80 80"
+                    />
                   </el-button>
                 </div>
-                <el-button
-                  type="text"
-                  @click="drawer = false"
-                >
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <img
+                    v-if="displaySettings.displayPhoto !== 'NONE'"
+                    class="profile-person-image"
+                    :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
                   >
-                    <rect
-                      x="2"
-                      y="2"
-                      width="76"
-                      height="76"
-                      rx="38"
-                      stroke="#463A2A"
-                      stroke-width="4"
-                    />
-                    <path
-                      d="M24 24L56 56M56 24L24 56"
-                      stroke="#463A2A"
-                      stroke-width="6.4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </el-button>
+                  <img
+                    v-else
+                    class="profile-person-image"
+                    :src="`data:image/png;base64,${emptyFace}`"
+                  >
+
+                  <div
+                    class="big-vip-tag fw-400"
+                  >
+                    {{ person.group_list[0] }}
+                  </div>
+
+                  <p
+                    style="max-width: 28rem; font-size: 5rem; margin: 0.75rem 0;"
+                    class="primary-color fw-500 text-truncate"
+                  >
+                    {{ person.name }}
+                  </p>
+
+                  <p
+                    class="fw-500 primary-color"
+                    style="font-size: 3rem;"
+                  >
+                    {{ person.extra_info.phone_number || '--' }}
+                  </p>
+                </div>
               </div>
-            </el-drawer>
-          </div>
-        </template>
-        <template v-else-if="displayMode === 'Profile'">
+
+              <CustomerProfile
+                :person="person"
+                :fields="fields"
+                @save="handleSave"
+              />
+            </div>
+          </template>
+        </transition>
+      </div>
+
+      <!-- 電話查詢 -->
+      <el-drawer
+        class="phone-drawer"
+        :size="802"
+        :visible.sync="drawer"
+        :with-header="false"
+        style="backdrop-filter: blur(16px);"
+        @open="clearSearchNumber"
+      >
+        <div
+          class="d-flex justify-content-center align-items-start h-100"
+          style="padding: 4rem 0; gap: 3.5rem;"
+        >
           <div
-            key="profile"
-            class="w-100 h-100"
+            class="d-flex flex-column align-items-center justify-content-center h-100"
+            style="gap: 2.5rem;"
           >
             <div
-              class="profile-info"
+              class="fw-500 lh-1 primary-color"
+              style="font-size: 5rem;"
+            >
+              {{ $t('MobilePhoneNumberLastThreeDigits') }}
+            </div>
+
+            <!-- 顯示已按下的號碼 -->
+            <div
+              class="d-flex align-items-center justify-content-center my-3"
+              style="gap: 1.25rem;"
             >
               <div
-                class="d-flex justify-content-between align-items-center"
-                style="padding: 2rem 3.5rem; margin-bottom: 2.5rem;"
+                class="view-box"
+                v-for="(digit, index) in searchNumber"
+                :key="index"
               >
-                <el-button
-                  type="text"
-                  @click="goHome"
-                >
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="2"
-                      y="2"
-                      width="76"
-                      height="76"
-                      rx="38"
-                      stroke="#463A2A"
-                      stroke-width="4"
-                    />
-                    <path
-                      d="M22 34L40 22L58 34V58H22V34Z"
-                      stroke="#463A2A"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </el-button>
-
-                <div
-                  :style="[{
-                    backgroundImage:'url('+displaySettings.logo+')',
-                    width: '120px',
-                    height: '120px',
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                  }, 'zoom: ' + zoomRatio + ' !important;']"
-                />
-
-                <el-button
-                  type="text"
-                  style="visibility: hidden;"
-                >
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                  />
-                </el-button>
-              </div>
-
-              <div class="d-flex flex-column justify-content-center align-items-center">
-                <img
-                  v-if="displaySettings.displayPhoto !== 'NONE'"
-                  class="profile-person-image"
-                  :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
-                >
-                <img
-                  v-else
-                  class="profile-person-image"
-                  :src="`data:image/png;base64,${emptyFace}`"
-                >
-
-                <div
-                  class="profile-vip-tag fw-400"
-                  style="font-size: 3rem; margin-top: 4rem;"
-                >
-                  VIP 會員
-                </div>
-
-                <p
-                  style="max-width: 28rem; font-size: 5rem; margin: 0.75rem 0;"
-                  class="primary-color fw-500 text-truncate"
-                >
-                  {{ person.name }}
-                </p>
-
-                <p
-                  class="fw-500 primary-color"
-                  style="font-size: 3rem;"
-                >
-                  {{ person.extra_info.phone_number || '--' }}
-                </p>
+                {{ digit }}
               </div>
             </div>
 
-            <CustomerProfile
-              :person="person"
-              @update-person="updatePerson"
-              @go-home="goHome"
-            />
+            <!-- 號碼輸入區 -->
+            <div
+              class="number-pad"
+            >
+              <div
+                v-for="i in 9"
+                :key="i"
+                class="pad"
+                @click="onNumberClick(i)"
+              >
+                {{ i }}
+              </div>
+              <div />
+              <div
+                class="pad"
+                @click="onNumberClick(0)"
+              >
+                0
+              </div>
+              <div />
+            </div>
+
+            <el-button
+              class="search-button fz-super-slarge fw-500 lh-1"
+              :disabled="searchNumber.join('').length < 3"
+              @click="handleSearch"
+            >
+              {{ $t('Search') }}
+            </el-button>
           </div>
-        </template>
-      </transition>
+          <el-button
+            type="text"
+            @click="drawer = false"
+          >
+            <svg
+              width="80"
+              height="80"
+              viewBox="0 0 80 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="2"
+                y="2"
+                width="76"
+                height="76"
+                rx="38"
+                stroke="#463A2A"
+                stroke-width="4"
+              />
+              <path
+                d="M24 24L56 56M56 24L24 56"
+                stroke="#463A2A"
+                stroke-width="6.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </el-button>
+        </div>
+      </el-drawer>
     </div>
 
     <!------------------- Footer - BEGIN ------------------>
@@ -403,8 +465,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-
 import { airaLogoWhite as airaLogo } from '@/utils';
 
 import capacityModel from '@/models/CapacityDashboardModel.vue';
@@ -432,12 +492,12 @@ export default {
   },
   data() {
     return {
-      // Display | Profile
+      // Display | Profile | Phone
       displayMode: 'Dashboard',
 
       obj_loading: null,
 
-      isLoadSetting: true,
+      isLoadSetting: false,
       zoomRatio: 0,
 
       currentTime: '',
@@ -487,11 +547,17 @@ export default {
 
       // 電話查詢的變數
       drawer: false,
-      searchNumber: [],
-      displayNumbers: ['', '', ''],
+      searchNumber: ['', '', ''],
+      matchedPersons: [],
 
       // Profile
       person: {},
+
+      fields: {
+        smoothie: '0',
+        fruitPlate: '0',
+        milk: '0',
+      },
     };
   },
   mixins: [capacityModel],
@@ -647,112 +713,33 @@ export default {
     window.addEventListener('resize', () => {
       self.zoomViews();
     });
-
-    self.isLoadSetting = false;
   },
 
   // Tulip
   async mounted() {
-    const self = this;
-
-    self.isLoadSetting = true;
+    this.isLoadSetting = true;
 
     // 1.0 Load Display Config
-    let setting = await self.$globalGetDisplaySetting();
+    let setting = await this.$globalGetDisplaySetting();
 
     let valueSetting = setting.data || {};
     const customer = valueSetting.CUSTOMER;
-    self.displaySettings = { ...self.displaySettings, ...customer };
+    this.displaySettings = { ...this.displaySettings, ...customer };
 
-    if (self.displaySettings.dailyResetTime.length === 2) {
-      self.displaySettings.dailyResetTime += ':00';
+    if (this.displaySettings.dailyResetTime.length === 2) {
+      this.displaySettings.dailyResetTime += ':00';
     }
 
     // 1.5 Load Attendance Config
-    setting = await self.$globalGetAttendanceSettings();
+    setting = await this.$globalGetAttendanceSettings();
     valueSetting = setting || {};
 
-    const videoDeviceGroupIn = valueSetting.data.video_device_group_in;
-    const videoDeviceGroupOut = valueSetting.data.video_device_group_out;
-
-    const { data: { list: cameraList } } = await this.$globalFindCameras('', 0, 3000);
-    const { data: { data_list: tabletList } } = await this.$globalGetTabletList('', 0, 3000);
-
-    self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
-      let result = [];
-      if (data) {
-        result = data.result || [];
-      }
-
-      let entryChannels = [];
-      let leaveChannels = [];
-      result.forEach((g) => {
-        if (videoDeviceGroupIn.indexOf(g.name) >= 0) {
-          entryChannels = entryChannels.concat(g.camera_uuid_list);
-          entryChannels = entryChannels.concat(g.tablet_uuid_list);
-        }
-
-        if (videoDeviceGroupOut.indexOf(g.name) >= 0) {
-          leaveChannels = leaveChannels.concat(g.camera_uuid_list);
-          leaveChannels = leaveChannels.concat(g.tablet_uuid_list);
-        }
-      });
-
-      self.params_entryChannels = Array.from(new Set(entryChannels));
-      self.params_leaveChannels = Array.from(new Set(leaveChannels));
-
-      self.params_entryChannels = self.params_entryChannels.map((id) => {
-        const camera = cameraList.find((c) => c.uuid === id);
-        const tablet = tabletList.find((c) => c.uuid === id);
-        if (camera) return `${id}${camera.name}`;
-        if (tablet) return `${id}${tablet.identity}`;
-        return id;
-      });
-
-      self.params_leaveChannels = self.params_leaveChannels.map((id) => {
-        const camera = cameraList.find((c) => c.uuid === id);
-        const tablet = tabletList.find((c) => c.uuid === id);
-        if (camera) return `${id}${camera.name}`;
-        if (tablet) return `${id}${tablet.identity}`;
-        return id;
-      });
-    });
-
-    // 3.0 initiao Group Person
-    await self.initialPerson();
-
-    // 4.0 initial Views
-    self.initViews();
-
-    // 5.0 display Layout
-    self.refreshData();
-
-    if (self.totalPageIndex[0] >= 1 || self.totalPageIndex[1] >= 1) {
-      self.resetAutoChangePageTimer();
-    }
-
-    self.isLoadSetting = false;
-
-    // 6.0 defind query startTS
-    const nowHM = `${`00${new Date().getHours()}`.slice(-2)}:${`00${new Date().getMinutes()}`.slice(-2)}`;
-
-    let startTS = new Date().setHours(self.displaySettings.dailyResetTime.split(':')[0], self.displaySettings.dailyResetTime.split(':')[1], 0, 0);
-    if (nowHM < self.displaySettings.dailyResetTime) {
-      startTS -= 86400000;
-    }
-
-    const endTS = new Date() - 1000;
-
-    // 7.0 Load Last Data
-    self.setupVerifyData(startTS, endTS, (verifyData) => {
-      self.applyVerifyToPerson(verifyData);
-      self.refreshKey *= -1;
-
-      self.refreshData();
-    });
+    await this.initializeData();
 
     // 8.0 start Looper
-    self.setupCurrentTimeLooper();
+    this.setupCurrentTimeLooper();
+
+    this.isLoadSetting = false;
   },
 
   destroyed() {
@@ -800,6 +787,39 @@ export default {
     //   self.currentPageIndex[idx] = index;
     //   self.resetAutoChangePageTimer();
     // },
+
+    async initializeData() {
+      // 3.0 initiao Group Person
+      await this.initialPerson();
+
+      // 4.0 initial Views
+      this.initViews();
+
+      // 5.0 display Layout
+      this.refreshData();
+
+      if (this.totalPageIndex[0] >= 1 || this.totalPageIndex[1] >= 1) {
+        this.resetAutoChangePageTimer();
+      }
+
+      // 6.0 defind query startTS
+      const nowHM = `${`00${new Date().getHours()}`.slice(-2)}:${`00${new Date().getMinutes()}`.slice(-2)}`;
+
+      let startTS = new Date().setHours(this.displaySettings.dailyResetTime.split(':')[0], this.displaySettings.dailyResetTime.split(':')[1], 0, 0);
+      if (nowHM < this.displaySettings.dailyResetTime) {
+        startTS -= 86400000;
+      }
+
+      const endTS = new Date() - 1000;
+
+      // 7.0 Load Last Data
+      this.setupVerifyData(startTS, endTS, (verifyData) => {
+        this.applyVerifyToPerson(verifyData);
+        this.refreshKey *= -1;
+
+        this.refreshData();
+      });
+    },
 
     toLoginPage() {
       const self = this;
@@ -1330,50 +1350,97 @@ export default {
     },
 
     onNumberClick(number) {
-      if (this.searchNumber.length < 3) {
-        this.searchNumber.push(number);
-        this.$set(this.displayNumbers, this.searchNumber.length - 1, number.toString());
+      const emptyIndex = this.searchNumber.findIndex((digit) => digit === '');
+      if (emptyIndex !== -1) {
+        this.$set(this.searchNumber, emptyIndex, number.toString());
       } else {
         // 清空並重新開始
-        this.searchNumber = [number];
-        this.displayNumbers = [number.toString(), '', ''];
+        this.$set(this.searchNumber, 0, number.toString());
+        this.$set(this.searchNumber, 1, '');
+        this.$set(this.searchNumber, 2, '');
       }
     },
 
     handleSearch() {
-      if (this.searchNumber.length < 3) return;
+      const searchPhoneNumber = this.searchNumber.join('');
+      if (searchPhoneNumber.length < 3) return;
 
-      this.displayMode = 'Profile';
+      const result = this.persons.filter((p) => p?.extra_info?.phone_number?.endsWith(searchPhoneNumber));
+
       this.drawer = false;
-      console.log('search');
+
+      if (result.length === 0) {
+        this.$fire({
+          text: '查無此人',
+          type: 'error',
+          timer: 5000,
+          confirmButtonColor: '#20a8d8',
+        });
+        return;
+      }
+
+      if (result.length === 1) {
+        this.person = result[0];
+        this.displayMode = 'Profile';
+        this.clearSearchNumber();
+        this.initialFields();
+      } else {
+        this.matchedPersons = result;
+        this.displayMode = 'Phone';
+      }
+    },
+
+    clearSearchNumber() {
+      this.searchNumber = ['', '', ''];
     },
 
     handleSelectPerson(person) {
       this.person = { ...person };
       this.displayMode = 'Profile';
+
+      this.initialFields();
+
+      if (this.searchNumber.length > 0) this.searchNumber = [];
     },
 
-    async updatePerson(updatedPerson) {
-      try {
-        // 這裡應該調用 API 來更新人員資料
-        // const response = await api.updatePerson(updatedPerson);
-        console.log('更新人員資料:', updatedPerson);
-
-        // 更新本地數據
-        const index = this.persons.findIndex((p) => p.uuid === updatedPerson.uuid);
-        if (index !== -1) {
-          this.$set(this.persons, index, updatedPerson);
+    initialFields() {
+      if (Object.hasOwn(this.person, 'plugin_info')) {
+        if (Object.hasOwn(this.person.plugin_info, 'smoothie')) {
+          this.fields.smoothie = this.person.plugin_info.smoothie;
         }
 
-        // 更新當前選中的人員
-        this.person = { ...updatedPerson };
-      } catch (error) {
-        console.error('更新人員資料失敗:', error);
-        // 這裡可以添加錯誤處理邏輯
+        if (Object.hasOwn(this.person.plugin_info, 'fruitPlate')) {
+          this.fields.fruitPlate = this.person.plugin_info.fruitPlate;
+        }
+
+        if (Object.hasOwn(this.person.plugin_info, 'milk')) {
+          this.fields.milk = this.person.plugin_info.milk;
+        }
+      } else {
+        this.fields = {
+          smoothie: '0',
+          fruitPlate: '0',
+          milk: '0',
+        };
       }
     },
 
+    async handleSave(fields) {
+      this.fields = fields;
+      const { uuid, ...plugin_info } = this.person;
+      const data = {
+        uuid,
+        data: {
+          ...plugin_info,
+          plugin_info: this.fields,
+        },
+      };
+
+      await this.$globalModifyPerson(data);
+    },
+
     goHome() {
+      this.initializeData();
       this.displayMode = 'Dashboard';
     },
   },
@@ -1389,6 +1456,15 @@ export default {
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
+  }
+
+  .person-card-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .person-card-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 </style>
 
@@ -1486,6 +1562,24 @@ export default {
     }
   }
 
+  .same-phone-card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  .same-phone-card {
+    width: 100%;
+    border: 1px solid white;
+    background-color: #FFFFFF;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: start;
+    gap: 27px;
+  }
+
   .profile-info {
     position: absolute;
     top: 0;
@@ -1493,13 +1587,20 @@ export default {
     bottom: 0;
     width: 712px;
     background-color: white;
-
-    .profile-vip-tag {
-      width: fit-content;
-      background: rgba(191, 118, 21, 1);
-      border-radius: 0.25rem;
-      padding: 0.5rem 2rem;
-      color: #FFFFFF;
-    }
   }
+
+  .vip-tag {
+    width: fit-content;
+    background: rgba(191, 118, 21, 1);
+    border-radius: 0.25rem;
+    padding: 0.5rem 2rem;
+    color: #FFFFFF;
+  }
+
+  .big-vip-tag {
+    @extend .vip-tag;
+    margin-top: 2.5rem;
+    font-size: 3rem;
+  }
+
 </style>

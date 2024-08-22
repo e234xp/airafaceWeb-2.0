@@ -767,5 +767,13 @@
   "ShowAmount": "金額を表示",
   "ShowLeave": "休暇中の人を表示",
   "Show": "見せる",
-  "Hide": "隠れる"
+  "Hide": "隠れる",
+  "": "",
+  "ThisChange": "この変更は",
+  "InputMobilePhoneNumberToQuery": "携帯電話番号を入力して問い合わせる",
+  "Smoothie": "スムージー",
+  "FruitPlate": "フルーツプレート",
+  "Milk": "牛乳",
+  "MobilePhoneNumberLastThreeDigits": "携帯電話番号の下 3 桁",
+  "NoSuchPersonFound": "そのような人は見つかりませんでした"
 }
