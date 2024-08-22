@@ -114,12 +114,6 @@
                 </CCol>
               </CRow>
               <CRow>
-                <!-- <CCol sm="3">
-                  <div class="h5">{{ $t('DisplayMode') }}</div>
-                  <CSelect size="lg" :value.sync="value_customersetting.displayCardMode"
-                    :options="value_displayModeList" />
-                </CCol> -->
-
                 <CCol sm="3">
                   <div class="h5">
                     {{ $t('DisplayPhoto') }}
@@ -369,7 +363,7 @@ import { airalogo } from '@/utils/capacityMode';
 import { backgroundImage } from '@/utils/customerMode';
 
 export default {
-  name: 'CapacityControlSettingForm',
+  name: 'CustomerControlSettingForm',
   props: {
     formData: Object,
     onFinish: { type: Function },
@@ -442,13 +436,11 @@ export default {
 
       value_Setting: {},
       value_customersetting: {
-        displayMode: 'CAPACITY',
         uuid: '',
         background_image: backgroundImage,
         logo: airalogo,
 
         displayGroup: ['All Person'],
-        displayCardMode: 'STANDARD', // STANDARD, COMPACT
         displayPhoto: 'REGISTER', // NONE, REGISTER, SNAPSHOT, DISPLAY
         line1: 'NAME', // NONE, NAME, PARTIALNAME
         line2: 'NONE', // NONE, JOBTITLE, GROUP, DEPARTMENT, TEMPERATURE
@@ -581,13 +573,11 @@ export default {
           this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
 
           const sendData = {
-            displayMode: 'CAPACITY',
             uuid: this.value_customersetting.uuid,
             background_image: this.value_customersetting.background_image,
             logo: this.value_customersetting.logo,
 
             displayGroup: this.value_customersetting.displayGroup,
-            displayCardMode: 'STANDARD',
             displayPhoto: this.value_customersetting.displayPhoto,
             line1: this.value_customersetting.line1,
             line2: this.value_customersetting.line2,

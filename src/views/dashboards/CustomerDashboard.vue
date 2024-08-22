@@ -4,193 +4,373 @@
     v-show="!isLoadSetting"
   >
     <div
+      key="dashboard"
       class="ratio-content customer-dashboard"
       :style="{backgroundImage:'url('+displaySettings.background_image+')'}"
     >
-      <div
-        class="dashboard-header d-flex justify-content-between align-items-center"
-        style="margin-left: 20px; margin-right: 20px; margin-bottom: 22px;"
+      <transition
+        name="fade"
+        mode="out-in"
       >
-        <button
-          type="button"
-          class="home-button primary-color"
-        >
-          <CIcon
-            name="cil-home"
-            style="width: 2.25rem; height: 2.25rem;"
-          />
-        </button>
-        <div
-          @click="toLoginPage"
-          :style="[{
-            backgroundImage:'url('+displaySettings.logo+')',
-            width: '120px',
-            height: '120px',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-          }, 'zoom: ' + zoomRatio + ' !important;']"
-        />
-        <div class="current-date-time text-white ff-noto-sans">
-          <button
-            type="button"
-            class="fat-button fz-super-slarge primary-color"
-          >
-            <div
-              class="d-flex align-items-center justify-content-center"
-              style="gap: 0.5rem;"
-            >
-              <CIcon
-                name="cil-search"
-                style="width: 2rem; height: 2rem;"
-              />
-              輸入手機號查詢
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-------------------  Attendance - BEGIN ------------------>
-      <div
-        class="attendance-top-box"
-        v-show="displaySettings.displayChart"
-      >
-        <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
-        <div class="attendance-statistics-box">
-          <!-- 第 1 列：標籤 -->
-          <div class="attendance-header-tag">
-            <div>{{ attendanceGroupTitle }}</div>
-          </div>
-
-          <!-- 第 2 列： 甜甜圈圖表 + 人數的數值-->
-          <div class="attendance-statistics-data-box">
-            <div class="doughnut-chart-canvas-wrap">
-              <!-- Attendance 甜甜圈圖表 -->
-              <canvas
-                id="doughnut-chart-canvas"
-                class=""
-              />
-            </div>
-            <div class="d-flex align-items-end">
-              <div class="attendance-header-present">
-                {{ attendancePresent }}
-              </div>
-              <div class="attendance-header-total">
-                / {{ attendanceTotal }}
-              </div>
-            </div>
-          </div>
-
-          <!-- 第 3 列：排序選項 + 檢視模式選項 -->
-          <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-              <div class="d-flex align-items-center">
-                <CIcon
-                  name="cilSortDescending"
-                  class="attendance-sort-icon text-white"
-                />
-                <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ $t("SortByGroupName") }}</span>
-              </div>
-              <button class="btn-reset">
-                <img
-                  class="attendance-dropdown-arrow"
-                  src="@/assets/img/dropdown_arrow_down.svg"
-                  alt="dropdown_arrow_down"
-                >
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Attendance 柱狀圖統計圖表 -->
-        <div class="attendance-chart-canvas-wrap">
-          <canvas id="attendance-chart-canvas" />
-        </div>
-      </div>
-
-      <!-------------------  Attendance - END ------------------>
-
-      <!-- Occupancy/Attendance 顯示人員資料列表 -->
-      <div style="padding-left: 10px;">
-        <div
-          :class="[
-            'grid-4x4',
-            'd-flex',
-            'flex-wrap',
-          ]"
-        >
+        <template v-if="displayMode === 'Dashboard'">
           <div
-            v-for="(person, index) in currentEntryPersons"
-            :key="index"
-            :class="[
-              'person-card',
-              'inline-block',
-              person.status === 0 ? 'normal-person-card' : '',
-              person.status === 2 ? 'abnormal-person-card' : '',
-              person.status === 1 ? 'absent-person-card' : '',
-              'person-card-4x4',
-            ]"
-            :style="'zoom: ' + zoomRatio + ' !important;'"
+            key="dashboard"
+            class="w-100 h-100"
           >
             <div
-              class="d-flex justify-content-between align-items-stretch person-image-box"
-              style="height: 100%; gap: 1.75rem;"
+              class="dashboard-header d-flex justify-content-between align-items-center"
+              style="margin-left: 20px; margin-right: 20px; margin-bottom: 22px;"
             >
-              <img
-                v-show="displaySettings.displayPhoto !== 'NONE'"
-                :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
-                :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
-              >
-              <img
-                :src="`data:image/png;base64,${emptyFace}`"
-                v-show="displaySettings.displayPhoto === 'NONE'"
-              >
+              <el-button type="text">
+                <svg
+                  width="80"
+                  height="80"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="2"
+                    y="2"
+                    width="76"
+                    height="76"
+                    rx="38"
+                    stroke="#463A2A"
+                    stroke-width="4"
+                  />
+                  <path
+                    d="M22 34L40 22L58 34V58H22V34Z"
+                    stroke="#463A2A"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </el-button>
 
               <div
-                class="flex-grow-1 w-full h-full overflow-hidden primary-color d-flex flex-column justify-content-center"
-              >
-                <div
-                  class="flex-grow-1 d-flex flex-column justify-content-start"
-                  style="gap: 0.5rem;"
+                :style="[{
+                  backgroundImage:'url('+displaySettings.logo+')',
+                  width: '120px',
+                  height: '120px',
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }, 'zoom: ' + zoomRatio + ' !important;']"
+              />
+
+              <div class="current-date-time text-white ff-noto-sans">
+                <button
+                  type="button"
+                  class="fat-button fz-super-slarge primary-color"
+                  @click="() => { drawer = true }"
                 >
-                  <div class="vip-tag">
-                    VIP 會員
-                  </div>
                   <div
-                    class="fz-super-slarge fw-500 lh-1 text-truncate d-block"
-                    :style="'zoom: ' + zoomRatio + ' !important;'"
+                    class="d-flex align-items-center justify-content-center"
+                    style="gap: 0.5rem;"
                   >
-                    {{ getDisplayName(person) }}
+                    <CIcon
+                      name="cil-search"
+                      style="width: 2rem; height: 2rem;"
+                    />
+                    輸入手機號查詢
                   </div>
-                </div>
-                <div
-                  v-show="displaySettings.displayCardMode=='STANDARD'"
-                  class="fz-super-slarge fw-500 lh-1 secondary-color"
-                >
-                  {{
-                    person.clockinRecord ?
-                      person.clockinRecord.timestamp ?
-                        formatEpochTime(person.clockinRecord.timestamp)
-                        : "&nbsp;"
-                      : "&nbsp;" }}
-                </div>
+                </button>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div
-          v-show="isLoadSetting"
-          class="align-items-center"
-          style="color:white"
-        >
-          Loading...
-        </div>
-      </div>
+            <!-- Occupancy/Attendance 顯示人員資料列表 -->
+            <div style="padding-left: 10px;">
+              <div
+                :class="[
+                  'grid-4x4',
+                  'd-flex',
+                  'flex-wrap',
+                ]"
+              >
+                <div
+                  v-for="(person, index) in currentEntryPersons"
+                  :key="index"
+                  :class="[
+                    'person-card',
+                    'inline-block',
+                    person.status === 0 ? 'normal-person-card' : '',
+                    person.status === 2 ? 'abnormal-person-card' : '',
+                    person.status === 1 ? 'absent-person-card' : '',
+                    'person-card-4x4',
+                  ]"
+                  :style="'zoom: ' + zoomRatio + ' !important;'"
+                  @click="handleSelectPerson(person)"
+                >
+                  <div
+                    class="d-flex justify-content-between align-items-stretch person-image-box"
+                    style="height: 100%; gap: 1.75rem;"
+                  >
+                    <img
+                      v-show="displaySettings.displayPhoto !== 'NONE'"
+                      :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
+                      :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
+                    >
+                    <img
+                      :src="`data:image/png;base64,${emptyFace}`"
+                      v-show="displaySettings.displayPhoto === 'NONE'"
+                    >
+
+                    <div
+                      class="flex-grow-1 w-100 h-100 overflow-hidden primary-color d-flex flex-column justify-content-center"
+                    >
+                      <div
+                        class="flex-grow-1 d-flex flex-column justify-content-start"
+                        style="gap: 0.5rem;"
+                      >
+                        <div class="vip-tag fz-md fw-400">
+                          VIP 會員
+                        </div>
+                        <div
+                          class="fz-super-slarge fw-500 lh-1 text-truncate d-block"
+                          :style="'zoom: ' + zoomRatio + ' !important;'"
+                        >
+                          {{ getDisplayName(person) }}
+                        </div>
+                      </div>
+                      <div
+                        class="fz-super-slarge fw-500 lh-1 secondary-color"
+                      >
+                        {{
+                          person.clockinRecord ?
+                            person.clockinRecord.timestamp ?
+                              formatEpochTime(person.clockinRecord.timestamp)
+                              : "&nbsp;"
+                            : "&nbsp;" }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                v-show="isLoadSetting"
+                class="align-items-center"
+                style="color:white"
+              >
+                Loading...
+              </div>
+            </div>
+
+            <!-- 電話查詢 -->
+            <el-drawer
+              class="phone-drawer"
+              title="我是标题"
+              :size="802"
+              :visible.sync="drawer"
+              :with-header="false"
+              style="backdrop-filter: blur(16px);"
+            >
+              <div
+                class="d-flex justify-content-center align-items-start h-100"
+                style="padding: 4rem 0; gap: 3.5rem;"
+              >
+                <div
+                  class="d-flex flex-column align-items-center justify-content-center h-100"
+                  style="gap: 2.5rem;"
+                >
+                  <div
+                    class="fw-500 lh-1 primary-color"
+                    style="font-size: 5rem;"
+                  >
+                    手機末三碼
+                  </div>
+
+                  <!-- 顯示已按下的號碼 -->
+                  <div
+                    class="d-flex align-items-center justify-content-center my-3"
+                    style="gap: 1.25rem;"
+                  >
+                    <div
+                      class="view-box"
+                      v-for="(digit, index) in displayNumbers"
+                      :key="index"
+                    >
+                      {{ digit }}
+                    </div>
+                  </div>
+
+                  <!-- 號碼輸入區 -->
+                  <div
+                    class="number-pad"
+                  >
+                    <div
+                      v-for="i in 9"
+                      :key="i"
+                      class="pad"
+                      @click="onNumberClick(i)"
+                    >
+                      {{ i }}
+                    </div>
+                    <div />
+                    <div
+                      class="pad"
+                      @click="onNumberClick(0)"
+                    >
+                      0
+                    </div>
+                    <div />
+                  </div>
+
+                  <el-button
+                    class="search-button fz-super-slarge fw-500 lh-1"
+                    :disabled="searchNumber.length < 3"
+                    @click="handleSearch"
+                  >
+                    查詢
+                  </el-button>
+                </div>
+                <el-button
+                  type="text"
+                  @click="drawer = false"
+                >
+                  <svg
+                    width="80"
+                    height="80"
+                    viewBox="0 0 80 80"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="76"
+                      height="76"
+                      rx="38"
+                      stroke="#463A2A"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M24 24L56 56M56 24L24 56"
+                      stroke="#463A2A"
+                      stroke-width="6.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </el-button>
+              </div>
+            </el-drawer>
+          </div>
+        </template>
+        <template v-else-if="displayMode === 'Profile'">
+          <div
+            key="profile"
+            class="w-100 h-100"
+          >
+            <div
+              class="profile-info"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center"
+                style="padding: 2rem 3.5rem; margin-bottom: 2.5rem;"
+              >
+                <el-button
+                  type="text"
+                  @click="goHome"
+                >
+                  <svg
+                    width="80"
+                    height="80"
+                    viewBox="0 0 80 80"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="76"
+                      height="76"
+                      rx="38"
+                      stroke="#463A2A"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M22 34L40 22L58 34V58H22V34Z"
+                      stroke="#463A2A"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </el-button>
+
+                <div
+                  :style="[{
+                    backgroundImage:'url('+displaySettings.logo+')',
+                    width: '120px',
+                    height: '120px',
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                  }, 'zoom: ' + zoomRatio + ' !important;']"
+                />
+
+                <el-button
+                  type="text"
+                  style="visibility: hidden;"
+                >
+                  <svg
+                    width="80"
+                    height="80"
+                    viewBox="0 0 80 80"
+                  />
+                </el-button>
+              </div>
+
+              <div class="d-flex flex-column justify-content-center align-items-center">
+                <img
+                  v-if="displaySettings.displayPhoto !== 'NONE'"
+                  class="profile-person-image"
+                  :src="`data:image/png;base64,${displaySettings.displayPhoto === 'REGISTER' ? person.register_image : person.display_image}`"
+                >
+                <img
+                  v-else
+                  class="profile-person-image"
+                  :src="`data:image/png;base64,${emptyFace}`"
+                >
+
+                <div
+                  class="profile-vip-tag fw-400"
+                  style="font-size: 3rem; margin-top: 4rem;"
+                >
+                  VIP 會員
+                </div>
+
+                <p
+                  style="max-width: 28rem; font-size: 5rem; margin: 0.75rem 0;"
+                  class="primary-color fw-500 text-truncate"
+                >
+                  {{ person.name }}
+                </p>
+
+                <p
+                  class="fw-500 primary-color"
+                  style="font-size: 3rem;"
+                >
+                  {{ person.extra_info.phone_number || '--' }}
+                </p>
+              </div>
+            </div>
+
+            <CustomerProfile
+              :person="person"
+              @update-person="updatePerson"
+              @go-home="goHome"
+            />
+          </div>
+        </template>
+      </transition>
     </div>
 
     <!------------------- Footer - BEGIN ------------------>
     <div
+      v-if="displayMode !== 'Profile'"
       style="position: absolute; bottom: 21px; left: 28px;"
       class="fz-xxxxxl fw-500 lh-1 primary-color"
     >
@@ -198,6 +378,7 @@
     </div>
 
     <div
+      v-if="displayMode !== 'Profile'"
       style="position: absolute; bottom: 21px; right: 28px; gap: 1.125rem;"
       class="d-flex justify-content-center align-items-baseline"
     >
@@ -207,10 +388,9 @@
       <img
         src="@/assets/img/aira-logo-white.svg"
         alt=""
-        style="width: auto; height: 32px;"
+        style="width: auto; height: 2rem;"
       >
     </div>
-
     <!------------------- Footer - END ------------------>
 
     <div
@@ -224,13 +404,12 @@
 
 <script>
 import i18n from '@/i18n';
-import { mapState } from 'vuex';
 
 import { airaLogoWhite as airaLogo } from '@/utils';
 
 import capacityModel from '@/models/CapacityDashboardModel.vue';
-import chartHelper from '@/utils/ChartHelper.vue';
 import { backgroundImage } from '@/utils/customerMode';
+import CustomerProfile from './components/CustomerProfile.vue';
 
 const emptyFace = 'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAAXNSR0IB2cksfwAAA'
   + 'AlwSFlzAAALEwAACxMBAJqcGAAAAd1QTFRF19nZztDQtbe3vL6+wsPDsbKzubq7ycvL09XV2Nray83Nh4eIWVlaXFxdW1xdYWFiaWlqcnJzfH19hoeIkpOTnp+gq6ysubu7uLm5jI2Oa2tsWlpbWllb'
@@ -248,16 +427,19 @@ const emptyFace = 'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAAXNSR0IB2cksf
 
 export default {
   name: 'CapacityDashboard',
-
+  components: {
+    CustomerProfile,
+  },
   data() {
     return {
+      // Display | Profile
+      displayMode: 'Dashboard',
+
       obj_loading: null,
 
       isLoadSetting: true,
       zoomRatio: 0,
 
-      idleTime: null,
-      currentDate: '',
       currentTime: '',
       currentTimeLooper: null,
 
@@ -265,7 +447,6 @@ export default {
       params_leaveChannels: [],
 
       persons: [],
-      // groupPersons: [],
       entryPersons: [],
       leavePersons: [],
 
@@ -273,48 +454,21 @@ export default {
       hourlyPersonOutData: new Map(),
       hourlyPresentData: new Map(),
 
-      chartBarAmount: 24,
-      chartLabels: [],
-      chartDataIn: [],
-      chartDataOut: [],
-      chartDataPresent: [],
-
       // 分頁：
       currentPageIndex: [0, 0],
       displayAmount: [20, 8],
-      dispPageIndexStart: 0,
-      dispPageIndexEnd: 0,
 
-      // progressDotAmount: 5,
-      // autoChangePageTimer: null,
       showPageProgressTimer: null,
       countdownStartTime: null,
       countdownCurrentTime: null,
       pageProgressPercentage: '0%',
       totalPageIndex: [0, 0],
-      // previousArrowEnabled: false,
-      // nextArrowEnabled: true,
-
-      // rawData: [],
-      // currentPersons: [],
-      currentEntryPersons: [],
-      currentLeavePersons: [],
-      // personStatus: {},
 
       displaySettings: {
-        displayMode: 'CAPACITY',
         background_image: backgroundImage,
         logo: airaLogo,
 
-        mode: 0, // 0: 標準模式 | 1: 精簡模式
-        showDuration: 10000,
-        // temperatureUnit: 'C', // 度 C | 度 F
-
-        // Summary View
-        enableSummaryView: true,
-        summaryBy: 'GROUP',
-        summaryPatrolTime: 10,
-        patrolidleTime: 60,
+        mode: 0, // 0: 標模式 | 1: 精簡模式
 
         // Personal View
         displayGroup: ['All Person'],
@@ -324,50 +478,29 @@ export default {
         line2: 'NAME',
 
         // Page Layout
-        pageLayout: 'LARGE',
-        displayChart: false,
         dailyResetTime: '00',
         personPatrolTime: 15,
       },
 
-      // ------------ Attendance 的變數 -------------
-      // orderBy: 0, // 0: 依群組名稱排序 | 1: 依人數排序
-      // isDetailMode: false,
-      attendanceTitle: i18n.formatter.format('CAPACITY'),
-      attendanceGroupTitle: '',
-      currentGroups: [],
-
-      // isAttendance: true,
-      currentGroup: '',
-
       refreshKey: 1,
       emptyFace,
+
+      // 電話查詢的變數
+      drawer: false,
+      searchNumber: [],
+      displayNumbers: ['', '', ''],
+
+      // Profile
+      person: {},
     };
   },
-  mixins: [capacityModel, chartHelper],
-  computed: {
-    ...mapState(['deviceName']),
-    attendancePresent() {
-      // this.refreshKey;
-
-      const self = this;
-      return self.currentEntryPersons.length;
-    },
-    attendanceTotal() {
-      // this.refreshKey;
-
-      const self = this;
-      return self.currentEntryPersons.length + self.currentLeavePersons.length;
-    },
-  },
+  mixins: [capacityModel],
   watch: {
     currentPageIndex: {
       deep: true,
       immediate: true,
       handler(newIndex) {
         const self = this;
-
-        self.displayAmount = self.setupPageLayoutAmount();
 
         const beginIndex = [];
 
@@ -494,8 +627,6 @@ export default {
           self.refreshKey *= -1;
 
           self.refreshData();
-          self.refreshBarChart();
-          self.refreshDoughnutChart();
 
           break;
         case 'changeWebSocket':
@@ -587,11 +718,8 @@ export default {
       });
     });
 
-    // 2.0 modify setting
-    self.displaySettings.enableSummaryView = false;
-
     // 3.0 initiao Group Person
-    await self.initialGroupPerson();
+    await self.initialPerson();
 
     // 4.0 initial Views
     self.initViews();
@@ -615,21 +743,12 @@ export default {
 
     const endTS = new Date() - 1000;
 
-    self.initBarChart();
-    self.initDoughnutChart();
-
     // 7.0 Load Last Data
     self.setupVerifyData(startTS, endTS, (verifyData) => {
       self.applyVerifyToPerson(verifyData);
-      // self.groupPersons.forEach(element => {
-      //   let present = element.persons.filter((p) => p.punchMode == 3);
-      //   element.present = present.length;
-      // });
       self.refreshKey *= -1;
 
       self.refreshData();
-      self.refreshBarChart();
-      self.refreshDoughnutChart();
     });
 
     // 8.0 start Looper
@@ -648,11 +767,6 @@ export default {
     if (headerElement) headerElement.classList.remove('c-header-reset');
     if (containerElement) containerElement.classList.remove('container-fluid-reset');
 
-    // if (self.autoChangePageTimer) {
-    //   clearInterval(self.autoChangePageTimer);
-    //   self.autoChangePageTimer = null;
-    // }
-
     if (self.showPageProgressTimer) {
       clearInterval(self.showPageProgressTimer);
       self.showPageProgressTimer = null;
@@ -664,38 +778,28 @@ export default {
     }
   },
   methods: {
-    range(start, end) {
-      let ret = [];
+    // onClickPrev(idx) {
+    //   const self = this;
+    //   if (self.currentPageIndex[idx] === 0) return;
 
-      if (start <= end) {
-        ret = Array(end - start + 1).fill().map((val, i) => start + i);
-      }
+    //   self.currentPageIndex[idx] -= 1;
+    //   self.resetAutoChangePageTimer();
+    // },
 
-      return ret;
-    },
+    // onClickNext(idx) {
+    //   const self = this;
+    //   if (self.currentPageIndex[idx] === self.totalPageIndex[idx]) return;
 
-    onClickPrev(idx) {
-      const self = this;
-      if (self.currentPageIndex[idx] === 0) return;
+    //   self.currentPageIndex[idx] += 1;
+    //   self.resetAutoChangePageTimer();
+    // },
 
-      self.currentPageIndex[idx] -= 1;
-      self.resetAutoChangePageTimer();
-    },
-
-    onClickNext(idx) {
-      const self = this;
-      if (self.currentPageIndex[idx] === self.totalPageIndex[idx]) return;
-
-      self.currentPageIndex[idx] += 1;
-      self.resetAutoChangePageTimer();
-    },
-
-    onClickPagerDot(idx, index) {
-      const self = this;
-      // console.log('onClickPagerDot');
-      self.currentPageIndex[idx] = index;
-      self.resetAutoChangePageTimer();
-    },
+    // onClickPagerDot(idx, index) {
+    //   const self = this;
+    //   // console.log('onClickPagerDot');
+    //   self.currentPageIndex[idx] = index;
+    //   self.resetAutoChangePageTimer();
+    // },
 
     toLoginPage() {
       const self = this;
@@ -731,7 +835,7 @@ export default {
       return retName;
     },
 
-    async initialGroupPerson() {
+    async initialPerson() {
       const self = this;
 
       self.persons = await self.setupPersonData();
@@ -763,85 +867,61 @@ export default {
     },
 
     // Tulip
-    PartialName(pPerson) {
-      const person = pPerson;
+    // showField(person, field) {
+    //   let ret = '';
 
-      person.partialName = '';
+    //   switch (field) {
+    //     case 'ID':
+    //       ret = person.id;
+    //       break;
+    //     case 'NAME':
+    //       ret = person.name;
+    //       break;
+    //     case 'PARTIALNAME':
+    //       if (person.name.charCodeAt(0) > 256) {
+    //         // '李***瑋'
+    //         ret = `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
+    //       } else {
+    //         // J. Lee
+    //         const pNames = (`${person.name} `).split(' ');
+    //         ret = pNames[0].charAt(0);
 
-      if (person.name.charCodeAt(0) > 256) {
-        // '李***瑋'
-        person.partialName = `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
-      } else {
-        // J. Lee
-        const pNames = (`${person.name} `).split(' ');
-        person.partialName = pNames[0].charAt(0);
-
-        if (pNames.length >= 3) {
-          person.partialName += (`. ${pNames[pNames.length - 2]}`);
-        }
-      }
-
-      return person.partialName;
-    },
-
-    // Tulip
-    showField(person, field) {
-      let ret = '';
-
-      switch (field) {
-        case 'ID':
-          ret = person.id;
-          break;
-        case 'NAME':
-          ret = person.name;
-          break;
-        case 'PARTIALNAME':
-          if (person.name.charCodeAt(0) > 256) {
-            // '李***瑋'
-            ret = `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
-          } else {
-            // J. Lee
-            const pNames = (`${person.name} `).split(' ');
-            ret = pNames[0].charAt(0);
-
-            if (pNames.length >= 3) {
-              ret += (`. ${pNames[pNames.length - 2]}`);
-            }
-          }
-          break;
-        case 'GROUP':
-          ret = (person.group_list || []).join(', ');
-          break;
-        case 'JOBTITLE':
-          ret = person.title;
-          ret = person.extra_info ? person.extra_info.title : '';
-          break;
-        case 'DEPARTMENT':
-          ret = person.extra_info ? person.extra_info.department : '';
-          break;
-        case 'REGISTER':
-          ret = person.register_image;
-          break;
-        case 'DISPLAY':
-          ret = person.display_image;
-          break;
-        case 'SNAPSHOT':
-          ret = person.snapshot_image;
-          break;
-        case 'NONE':
-          break;
-        default:
-          ret = emptyFace;
-          break;
-      }
-      return ret;
-    },
+    //         if (pNames.length >= 3) {
+    //           ret += (`. ${pNames[pNames.length - 2]}`);
+    //         }
+    //       }
+    //       break;
+    //     case 'GROUP':
+    //       ret = (person.group_list || []).join(', ');
+    //       break;
+    //     case 'JOBTITLE':
+    //       ret = person.title;
+    //       ret = person.extra_info ? person.extra_info.title : '';
+    //       break;
+    //     case 'DEPARTMENT':
+    //       ret = person.extra_info ? person.extra_info.department : '';
+    //       break;
+    //     case 'REGISTER':
+    //       ret = person.register_image;
+    //       break;
+    //     case 'DISPLAY':
+    //       ret = person.display_image;
+    //       break;
+    //     case 'SNAPSHOT':
+    //       ret = person.snapshot_image;
+    //       break;
+    //     case 'NONE':
+    //       break;
+    //     default:
+    //       ret = emptyFace;
+    //       break;
+    //   }
+    //   return ret;
+    // },
 
     // Tulip
     refreshData() {
       const self = this;
-
-      self.displayAmount = self.setupPageLayoutAmount();
 
       self.entryPersons.sort((a, b) => b.clockinRecord.timestamp - a.clockinRecord.timestamp);
       self.currentEntryPersons = self.entryPersons.slice(
@@ -903,44 +983,6 @@ export default {
       });
     },
 
-    refreshDoughnutChart() {
-      const self = this;
-
-      const normal = self.attendancePresent;
-      // let absent = self.persons.length - self.attendancePresent;
-      const absent = 100;
-
-      const ctx = document.getElementById('doughnut-chart-canvas');
-
-      self.setupAttendanceDoughnutChart(ctx, [normal, absent], true);
-
-      // self.updateAttendanceDoughnutChart();
-    },
-
-    refreshBarChart() {
-      const self = this;
-
-      const hourlyData = self.getHourlyPresentData();
-
-      if (hourlyData) {
-        self.chartDataIn = hourlyData.PersonIn;
-        self.chartDataOut = hourlyData.PersonOut;
-        self.chartDataPresent = hourlyData.PersonPresent;
-      }
-
-      const ctx = document.getElementById('attendance-chart-canvas');
-
-      self.setupDashboardChart(
-        ctx,
-        self.chartLabels,
-        self.chartDataIn,
-        self.chartDataOut,
-        self.chartDataPresent,
-      );
-
-      // self.updateDashboardChart();
-    },
-
     setupCurrentTimeLooper() {
       const self = this;
 
@@ -949,7 +991,6 @@ export default {
         const hour = String(now.getHours()).padStart(2, '0');
         const minute = String(now.getMinutes()).padStart(2, '0');
         const second = String(now.getSeconds()).padStart(2, '0');
-        self.currentDate = now.toLocaleDateString();
 
         self.currentTime = `${hour}:${minute}:${second}`;
       }, 1000);
@@ -1186,10 +1227,6 @@ export default {
       };
     },
 
-    setupPageLayoutAmount() {
-      return [20, 8];
-    },
-
     initViews() {
       const self = this;
       const mainElement = document.querySelector('.c-main');
@@ -1264,44 +1301,16 @@ export default {
 
         const dateTimeElement = document.querySelector('.current-date-time');
         const headerElement = document.querySelector('.dashboard-header');
-        const attendanceTopElement = document.querySelector('.attendance-top-box');
 
         // 將下列 views 進行 zoom
         if (dateTimeElement) self.setZoom(dateTimeElement);
         if (headerElement) self.setZoom(headerElement);
-        if (attendanceTopElement) self.setZoom(attendanceTopElement);
       }
     },
 
     setZoom(element) {
       const self = this;
       element.style.setProperty('zoom', self.zoomRatio, 'important');
-    },
-
-    initBarChart() {
-      const self = this;
-
-      self.chartLabels = Array.from(Array(self.chartBarAmount).keys());
-      self.chartDataIn = Array(self.chartBarAmount).fill(0);
-      self.chartDataOut = Array(self.chartBarAmount).fill(0);
-      self.chartDataPresent = Array(self.chartBarAmount).fill(0);
-
-      const ctx = document.getElementById('attendance-chart-canvas');
-
-      self.setupDashboardChart(
-        ctx,
-        self.chartLabels,
-        self.chartDataIn,
-        self.chartDataOut,
-        self.chartDataPresent,
-      );
-    },
-
-    initDoughnutChart() {
-      const self = this;
-
-      const ctx = document.getElementById('doughnut-chart-canvas');
-      self.setupAttendanceDoughnutChart(ctx, [0, 0], true);
     },
 
     changePage(selectedIndex) {
@@ -1319,9 +1328,69 @@ export default {
 
       return `${hour}:${minute}`;
     },
+
+    onNumberClick(number) {
+      if (this.searchNumber.length < 3) {
+        this.searchNumber.push(number);
+        this.$set(this.displayNumbers, this.searchNumber.length - 1, number.toString());
+      } else {
+        // 清空並重新開始
+        this.searchNumber = [number];
+        this.displayNumbers = [number.toString(), '', ''];
+      }
+    },
+
+    handleSearch() {
+      if (this.searchNumber.length < 3) return;
+
+      this.displayMode = 'Profile';
+      this.drawer = false;
+      console.log('search');
+    },
+
+    handleSelectPerson(person) {
+      this.person = { ...person };
+      this.displayMode = 'Profile';
+    },
+
+    async updatePerson(updatedPerson) {
+      try {
+        // 這裡應該調用 API 來更新人員資料
+        // const response = await api.updatePerson(updatedPerson);
+        console.log('更新人員資料:', updatedPerson);
+
+        // 更新本地數據
+        const index = this.persons.findIndex((p) => p.uuid === updatedPerson.uuid);
+        if (index !== -1) {
+          this.$set(this.persons, index, updatedPerson);
+        }
+
+        // 更新當前選中的人員
+        this.person = { ...updatedPerson };
+      } catch (error) {
+        console.error('更新人員資料失敗:', error);
+        // 這裡可以添加錯誤處理邏輯
+      }
+    },
+
+    goHome() {
+      this.displayMode = 'Dashboard';
+    },
   },
 };
 </script>
+
+<style scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s;
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>
 
 <style lang='scss' scoped>
   $dashboard-customer: rgba(70, 58, 42, 1);
@@ -1334,15 +1403,6 @@ export default {
     color: $dashboard-customer-light;
   }
 
-  .home-button {
-    width: 80px;
-    height: 80px;
-    padding: 0;
-    border-radius: 9999px;
-    border: 4px solid $dashboard-customer;
-    background-color: transparent;
-  }
-
   .fat-button {
     height: 80px;
     padding: 0rem 2.5rem;
@@ -1351,23 +1411,6 @@ export default {
     font-weight: 500;
     line-height: 1;
     background-color: transparent;
-  }
-
-  .list-enter-active,
-  .list-leave-active,
-  .list-move {
-    transition: opacity 1s, transform 1s;
-  }
-
-  .list-enter,
-  .list-enter-from {
-    opacity: 0;
-    transform: translateY(-200px);
-  }
-
-  .list-leave-to {
-    opacity: 0;
-    transform: translateY(200px);
   }
 
   .loading {
@@ -1382,5 +1425,81 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .drawer::v-deep .el-drawer {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .phone-drawer {
+    .common-box {
+      border: 4px solid $dashboard-customer;
+      border-radius: 1.25rem;
+      font-size: 4rem;
+      font-weight: 500;
+      color: $dashboard-customer;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-box {
+      @extend .common-box;
+      width: 10rem;
+      height: 10rem;
+      background: white;
+      padding: 1.25rem 1.375rem;
+    }
+
+    .number-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+
+      > .pad {
+        @extend .common-box;
+        width: 10rem;
+        background: rgba(255, 245, 230, 1);
+        padding: 0.75rem 1.375rem;
+        cursor: pointer;
+        transition: filter 0.1s ease;
+
+        &:active {
+          filter: brightness(0.9);
+        }
+      }
+    }
+
+    .search-button {
+      width: 20rem;
+      border-radius: 1.25rem;
+      border: 4px solid $dashboard-customer;
+      color: white;
+      background-color: $dashboard-customer;
+      padding: 1.5rem 1.375rem;
+      transition: opacity 0.3s ease;
+
+      &.is-disabled {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .profile-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 712px;
+    background-color: white;
+
+    .profile-vip-tag {
+      width: fit-content;
+      background: rgba(191, 118, 21, 1);
+      border-radius: 0.25rem;
+      padding: 0.5rem 2rem;
+      color: #FFFFFF;
+    }
   }
 </style>
