@@ -1291,7 +1291,7 @@ export default {
 
             const person = self.persons.find((r) => r.uuid === uuid);
 
-            if (record.group_list.indexOf('All Visitor') >= 0) {
+            if (person != null && record.group_list.indexOf('All Visitor') >= 0) {
               person.display_image = record.face_image_id;
             }
 
