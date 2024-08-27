@@ -760,5 +760,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Assurez-vous d'ajouter les paramètres SMTP dans les « Paramètres généraux » pour garantir que les notifications sont correctement envoyées par e-mail.",
   "RestartService": "Redémarrer le service",
-  "ConfirmToLogout": "Après le redémarrage, vous serez déconnecté, veuillez vous reconnecter."
+  "ConfirmToLogout": "Après le redémarrage, vous serez déconnecté, veuillez vous reconnecter.",
+  "ShowAmount": "Afficher le montant",
+  "ShowLeave": "Afficher la personne en congé",
+  "Show": "Montrer",
+  "Hide": "Cacher"
 }

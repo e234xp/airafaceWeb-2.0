@@ -760,5 +760,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "通知が正しく電子メールで送信されるように、「一般設定」にSMTP設定を追加してください。",
   "RestartService": "サービスの再起動",
-  "ConfirmToLogout": "再起動後はログアウトされますので、再度ログインしてください。"
+  "ConfirmToLogout": "再起動後はログアウトされますので、再度ログインしてください。",
+  "ShowAmount": "金額を表示",
+  "ShowLeave": "休暇中の人を表示",
+  "Show": "見せる",
+  "Hide": "隠れる"
 }

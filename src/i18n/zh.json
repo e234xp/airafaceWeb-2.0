@@ -760,5 +760,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "請務必在「一般設定」中加入SMTP設定，以確保通知能夠透過郵件正確發送。",
   "RestartService": "重啟服務",
-  "ConfirmToLogout": "重啟服務後，將自動登出，請重新登入。"
+  "ConfirmToLogout": "重啟服務後，將自動登出，請重新登入。",
+  "ShowAmount": "顯示總數",
+  "ShowLeave": "顯示離開人員",
+  "Show": "顯示",
+  "Hide": "隱藏"
 }

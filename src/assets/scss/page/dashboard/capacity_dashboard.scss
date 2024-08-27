@@ -93,7 +93,8 @@
 }
 
 .dashboard-divider {
-  margin-bottom: 1.28%; // <-- 24px / 1872px
+  margin: 12px 0;
+  // margin-bottom: 1.28%; // <-- 24px / 1872px
 }
 
 .statistics-box {
@@ -261,9 +262,10 @@
 }
 
 .person-list-container {
-  margin-bottom: 1.28%; // <-- 24px / 1872px
+  margin-bottom: 24px; // <-- 24px / 1872px
 }
 
+.capacity-dashboard .grid-6x6,
 .capacity-dashboard .grid-4x4,
 // .capacity-dashboard .grid-4x5,
 .capacity-dashboard .grid-2x4,
@@ -306,8 +308,13 @@
   grid-template-columns: 10.3% 10.3% 10.3% 10.3% 10.3% 10.3% 10.3% 10.3% 10.3%;
 }
 
+.grid-6x6 {
+  grid-template-columns: 15.6% 15.6% 15.6% 15.6% 15.6% 15.6%;
+}
+
 .capacity-dashboard .person-card-4x4,
-.capacity-dashboard .person-card-2x4
+.capacity-dashboard .person-card-2x4,
+.capacity-dashboard .person-card-6x6
 {
   width: 302px;
   height: 132px;
@@ -316,7 +323,8 @@
 }
 
 .person-card-6x4,
-.person-card-6x5 {
+.person-card-6x5
+{
   width: 302px;
   height: 152px;
   border-radius: 4px;

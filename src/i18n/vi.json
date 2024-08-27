@@ -760,5 +760,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Hãy đảm bảo thêm cài đặt SMTP trong 'Cài đặt chung' để đảm bảo thông báo được gửi chính xác qua email.",
   "RestartService": "Khởi động lại dịch vụ",
-  "ConfirmToLogout": "Sau khi khởi động lại, bạn sẽ đăng xuất, vui lòng đăng nhập lại."
+  "ConfirmToLogout": "Sau khi khởi động lại, bạn sẽ đăng xuất, vui lòng đăng nhập lại.",
+  "ShowAmount": "Hiển thị số tiền",
+  "ShowLeave": "Hiển thị người nghỉ phép",
+  "Show": "Trình diễn",
+  "Hide": "Trốn"
 }

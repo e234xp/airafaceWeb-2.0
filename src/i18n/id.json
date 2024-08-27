@@ -760,5 +760,9 @@
   "JSON": "JSON",
   "MssingSmtpHint": "Pastikan untuk menambahkan pengaturan SMTP di 'Pengaturan Umum' untuk memastikan notifikasi dikirim dengan benar melalui email.",
   "RestartService": "Mulai Ulang Layanan",
-  "ConfirmToLogout": "Setelah restart, Anda akan logout, silakan login lagi."
+  "ConfirmToLogout": "Setelah restart, Anda akan logout, silakan login lagi.",
+  "ShowAmount": "Tampilkan Jumlah",
+  "ShowLeave": "Tunjukkan Orang yang Tinggalkan",
+  "Show": "Menunjukkan",
+  "Hide": "Bersembunyi"
 }

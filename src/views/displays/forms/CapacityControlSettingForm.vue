@@ -196,6 +196,29 @@
                 </CCol>
                 <CCol sm="3" />
               </CRow>
+              <CRow>
+                <CCol sm="3">
+                  <div class="h5">
+                    {{ $t('ShowAmount') }}
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_capacitySetting.showAmount"
+                    :options="value_showList"
+                  />
+                </CCol>
+                <CCol sm="3">
+                  <div class="h5">
+                    {{ $t('ShowLeave') }}
+                  </div>
+                  <CSelect
+                    size="lg"
+                    :value.sync="value_capacitySetting.showLeaving"
+                    :options="value_showList"
+                  />
+                </CCol>
+                <CCol sm="3" />
+              </CRow>
             </CCardBody>
           </CCard>
         </div>
@@ -437,6 +460,11 @@ export default {
         { value: 'SMALL', label: this.$t('SMALL') },
       ],
 
+      value_showList: [
+        { value: true, label: this.$t('Show') },
+        { value: false, label: this.$t('Hide') },
+      ],
+
       value_displayGroupList: [],
 
       value_Setting: {},
@@ -456,6 +484,9 @@ export default {
         displayChart: false,
         dailyResetTime: '00:00',
         personPatrolTime: 10,
+
+        showAmount: false,
+        showLeaving: false,
 
         // enableSummaryView: false,
         // summaryBy: "GROUP",         // GROUP JOBTITLE, DEPARTMENT
@@ -509,6 +540,8 @@ export default {
         this.value_capacitySetting.uuid = this.makeid(32);
 
         this.value_capacitySetting = { ...this.value_capacitySetting, ...this.occupancy };
+        this.value_capacitySetting.showAmount = this.value_capacitySetting.showAmount === undefined ? false : this.value_capacitySetting.showAmount;
+        this.value_capacitySetting.showLeaving = this.value_capacitySetting.showLeaving === undefined ? true : this.value_capacitySetting.showAmount;
       }
 
       if (this.obj_loading) this.obj_loading.hide();
@@ -596,6 +629,8 @@ export default {
             displayChart: false,
             dailyResetTime: this.value_capacitySetting.dailyResetTime,
             personPatrolTime: this.value_capacitySetting.personPatrolTime,
+            showAmount: this.value_capacitySetting.showAmount,
+            showLeaving: this.value_capacitySetting.showLeaving,
 
             // enableSummaryView: this.value_capacitySetting.enableSummaryView,
             // summaryBy: this.value_capacitySetting.summaryBy,
