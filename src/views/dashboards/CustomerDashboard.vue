@@ -20,13 +20,11 @@
           >
             <el-button
               type="text"
-              class="text-left"
-              style="flex: 1;"
+              class="home-button"
               @click="goHome"
             >
               <svg
-                width="80"
-                height="80"
+                class="home-icon"
                 viewBox="0 0 80 80"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -51,15 +49,8 @@
             </el-button>
 
             <div
-              :style="[{
-                flex: '1',
-                backgroundImage:'url('+displaySettings.logo+')',
-                width: '120px',
-                height: '120px',
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-              }, 'zoom: ' + zoomRatio + ' !important;']"
+              class="logo-container"
+              :style="{ backgroundImage: 'url(' + displaySettings.logo + ')' }"
             />
 
             <div
@@ -68,7 +59,7 @@
             >
               <button
                 type="button"
-                class="fat-button fz-super-slarge primary-color ml-auto"
+                class="fat-button fz-super-slarge customer-primary ml-auto"
                 @click="() => { drawer = true }"
               >
                 <div
@@ -94,8 +85,7 @@
             <!-- Occupancy/Attendance 顯示人員資料列表 -->
             <div
               key="dashboard"
-              class="person-card-container flex-grow-1 overflow-auto"
-              style="margin-bottom: 2.5rem;"
+              class="person-card-container flex-grow-1"
             >
               <div class="grid-4x4 d-flex">
                 <div
@@ -127,7 +117,7 @@
                     >
 
                     <div
-                      class="flex-grow-1 w-100 h-100 overflow-hidden primary-color d-flex flex-column justify-content-center"
+                      class="flex-grow-1 w-100 h-100 overflow-hidden customer-primary d-flex flex-column justify-content-center"
                     >
                       <div
                         class="flex-grow-1 d-flex flex-column justify-content-start"
@@ -136,15 +126,12 @@
                         <div class="vip-tag fz-md fw-400">
                           {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                         </div>
-                        <div
-                          class="fz-super-slarge fw-500 lh-1 text-truncate d-block"
-                          :style="'zoom: ' + zoomRatio + ' !important;'"
-                        >
+                        <div class="fz-super-slarge fw-500 lh-1 text-truncate d-block">
                           {{ getDisplayName(person) }}
                         </div>
                       </div>
                       <div
-                        class="fz-super-slarge fw-500 lh-1 secondary-color"
+                        class="fz-super-slarge fw-500 lh-1 customer-secondary"
                       >
                         {{
                           person.clockinRecord ?
@@ -173,13 +160,13 @@
               class="w-100 h-100 mt-5"
             >
               <p
-                class="fz-super-slarge fw-500 lh-1 primary-color text-center"
+                class="fz-super-slarge fw-500 lh-1 customer-primary text-center"
                 style="margin-bottom: 1.25rem;"
               >
                 {{ $t('MobilePhoneNumberLastThreeDigits') }}
               </p>
               <p
-                class="mb-0 fw-500 lh-1 primary-color text-center"
+                class="mb-0 fw-500 lh-1 customer-primary text-center"
                 style="font-size: 8.75rem;"
               >
                 {{ searchNumber.join('') }}
@@ -204,16 +191,10 @@
                     <div class="vip-tag">
                       {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                     </div>
-                    <p
-                      class="fw-500 lh-1 primary-color"
-                      style="font-size: 3.75rem; margin: 1.375rem 0"
-                    >
+                    <p class="person-name">
                       {{ person.name }}
                     </p>
-                    <p
-                      class="fw-500 lh-1 primary-color"
-                      style="font-size: 3.75rem"
-                    >
+                    <p class="phone-number">
                       {{ person.extra_info.phone_number }}
                     </p>
                     <div />
@@ -228,12 +209,10 @@
                 key="profile"
                 class="profile-info"
               >
-                <div
-                  class="d-flex justify-content-between align-items-center"
-                  style="padding: 2rem 3.25rem; margin-bottom: 2.5rem;"
-                >
+                <div class="profile-info-header d-flex justify-content-between align-items-center">
                   <el-button
                     type="text"
+                    :style="'zoom: ' + zoomRatio + ' !important;'"
                     @click="goHome"
                   >
                     <svg
@@ -263,15 +242,20 @@
                   </el-button>
 
                   <div
-                    :style="[{
-                      backgroundImage:'url('+displaySettings.logo+')',
-                      width: '120px',
-                      height: '120px',
-                      backgroundSize: 'contain',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center',
-                    }, 'zoom: ' + zoomRatio + ' !important;']"
-                  />
+                    style="width: 120px; height: 120px;"
+                    :style="'zoom: ' + zoomRatio + ' !important;'"
+                  >
+                    <div
+                      :style="[{
+                        backgroundImage:'url('+displaySettings.logo+')',
+                        width: '100%',
+                        height: '100%',
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                      }]"
+                    />
+                  </div>
 
                   <el-button
                     type="text"
@@ -304,14 +288,13 @@
                   </div>
 
                   <p
-                    style="max-width: 28rem; font-size: 5rem; margin: 0.75rem 0;"
-                    class="primary-color fw-500 text-truncate"
+                    class="person-name customer-primary text-truncate"
                   >
                     {{ person.name }}
                   </p>
 
                   <p
-                    class="fw-500 primary-color"
+                    class="fw-500 customer-primary"
                     style="font-size: 3rem;"
                   >
                     {{ person.extra_info.phone_number || '--' }}
@@ -320,6 +303,7 @@
               </div>
 
               <CustomerProfile
+                :zoom-ratio="zoomRatio"
                 :person="person"
                 :fields="fields"
                 @save="handleSave"
@@ -332,23 +316,18 @@
       <!-- 電話查詢 -->
       <el-drawer
         class="phone-drawer"
-        :size="802"
+        :size="802 * zoomRatio"
         :visible.sync="drawer"
         :with-header="false"
         style="backdrop-filter: blur(16px);"
         @open="clearSearchNumber"
       >
-        <div
-          class="d-flex justify-content-center align-items-start h-100"
-          style="padding: 4rem 0; gap: 3.5rem;"
-        >
+        <div class="phone-drawer-container d-flex justify-content-center align-items-start h-100">
           <div
-            class="d-flex flex-column align-items-center justify-content-center h-100"
-            style="gap: 2.5rem;"
+            class="left-container d-flex flex-column align-items-center justify-content-start h-100"
           >
             <div
-              class="fw-500 lh-1 primary-color"
-              style="font-size: 5rem;"
+              class="title fw-500 lh-1 customer-primary"
             >
               {{ $t('MobilePhoneNumberLastThreeDigits') }}
             </div>
@@ -399,6 +378,8 @@
           </div>
           <el-button
             type="text"
+            style="margin: 0; padding: 0;"
+            :style="'zoom: ' + zoomRatio + ' !important;'"
             @click="drawer = false"
           >
             <svg
@@ -434,7 +415,7 @@
     <div
       v-if="displayMode !== 'Profile'"
       style="position: absolute; bottom: 21px; left: 28px;"
-      class="fz-xxxxxl fw-500 lh-1 primary-color"
+      class="fz-xxxxxl fw-500 lh-1 customer-primary"
     >
       {{ currentTime }}
     </div>
@@ -454,76 +435,13 @@
       >
     </div>
 
-    <div
-      v-if="displayMode === 'Dashboard'"
-      class="footer-box-wrap"
-    >
-      <div class="footer-box">
-        <div class="pager d-flex align-items-center justify-content-center">
-          <button
-            class="btn-reset"
-            :disabled="currentPageIndex[0] === 0"
-            @click="onClickPrev(0)"
-          >
-            <img
-              v-if="currentPageIndex[0] === 0"
-              class="pager-left-arrow"
-              src="@/assets/img/pager_left_arrow_disabled.svg"
-            >
-            <img
-              v-else
-              class="pager-left-arrow"
-              src="@/assets/img/pager_left_arrow.svg"
-            >
-          </button>
-          <button
-            v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[0] - 1)"
-            class="pager-left-dots btn-reset"
-            @click="onClickPagerDot(0, i)"
-            :key="i"
-          />
-
-          <div class="pager-progressbar-box">
-            <div class="pager-progressbar-track" />
-            <div
-              class="pager-progressbar-thumb"
-              :style="{ width: pageProgressPercentage }"
-            />
-          </div>
-          <button
-            v-for="(item, i) in range(currentPageIndex[0] + 1, dispPageIndexEnd)"
-            class="pager-right-dots btn-reset"
-            @click="onClickPagerDot(0, i + currentPageIndex[0] + 1)"
-            :key="i"
-          />
-
-          <button
-            class="btn-reset"
-            :disabled="currentPageIndex[0] === totalPageIndex[0]"
-            @click="onClickNext(0)"
-          >
-            <img
-              v-if="currentPageIndex[0] === totalPageIndex[0]"
-              class="pager-right-arrow"
-              src="@/assets/img/pager_right_arrow_disabled.svg"
-            >
-            <img
-              v-else
-              class="pager-right-arrow"
-              src="@/assets/img/pager_right_arrow.svg"
-            >
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!------------------- Footer - END ------------------>
 
     <div
-      class="loading"
+      class="customer-loading"
       v-if="loading"
     >
-      <CSpinner color="primary" />
+      <CSpinner color="customer-primary" />
     </div>
   </div>
 </template>
@@ -573,6 +491,7 @@ export default {
       persons: [],
       entryPersons: [],
       leavePersons: [],
+      currentEntryPersons: [],
 
       hourlyPersonInData: new Map(),
       hourlyPersonOutData: new Map(),
@@ -581,8 +500,6 @@ export default {
       // 分頁：
       currentPageIndex: [0, 0],
       displayAmount: [12, 8],
-      dispPageIndexStart: 0,
-      dispPageIndexEnd: 0,
 
       showPageProgressTimer: null,
       countdownStartTime: null,
@@ -627,88 +544,6 @@ export default {
     };
   },
   mixins: [capacityModel],
-  watch: {
-    currentPageIndex: {
-      deep: true,
-      immediate: true,
-      handler(newIndex) {
-        const self = this;
-
-        const beginIndex = [];
-
-        beginIndex[0] = self.displayAmount[0] * newIndex[0];
-        self.currentEntryPersons = self.entryPersons.slice(
-          beginIndex[0],
-          beginIndex[0] + self.displayAmount[0],
-        );
-
-        beginIndex[1] = self.displayAmount[1] * newIndex[1];
-        self.currentLeavePersons = self.leavePersons.slice(
-          beginIndex[1],
-          beginIndex[1] + self.displayAmount[1],
-        );
-
-        self.currentEntryPersons.forEach((pPerson) => {
-          const person = pPerson;
-
-          if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALE'
-            + 'gHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
-            self.$globalFetchPhoto(person.uuid, (err, data) => {
-              if (err === null && data) {
-                if (data.display_image !== '') {
-                  person.display_image = data.display_image;
-                } else {
-                  person.display_image = emptyFace;
-                }
-
-                if (data.register_image !== '') {
-                  person.register_image = data.register_image;
-                } else {
-                  person.register_image = emptyFace;
-                }
-              }
-            });
-          }
-        });
-
-        self.currentLeavePersons.forEach((pPerson) => {
-          const person = pPerson;
-
-          if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALE'
-            + 'gHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
-            self.$globalFetchPhoto(person.uuid, (err, data) => {
-              if (err === null && data) {
-                if (data.display_image !== '') {
-                  person.display_image = data.display_image;
-                } else {
-                  person.display_image = emptyFace;
-                }
-
-                if (data.register_image !== '') {
-                  person.register_image = data.register_image;
-                } else {
-                  person.register_image = emptyFace;
-                }
-              }
-            });
-          }
-        });
-
-        self.countdownStartTime = new Date();
-        self.countdownCurrentTime = new Date();
-
-        setTimeout(() => {
-          const cards = document.getElementsByName('groupCards');
-
-          cards.forEach((element) => {
-            element.classList.toggle('card-flip');
-          });
-
-          self.zoomViews();
-        }, 100);
-      },
-    },
-  },
 
   created() {
     const self = this;
@@ -838,35 +673,6 @@ export default {
     }
   },
   methods: {
-    range(start, end) {
-      let ret = [];
-
-      if (start <= end) {
-        ret = Array(end - start + 1).fill().map((val, i) => start + i);
-      }
-
-      return ret;
-    },
-
-    onClickPrev(idx) {
-      if (this.currentPageIndex[idx] === 0) return;
-
-      this.currentPageIndex[idx] -= 1;
-      this.resetAutoChangePageTimer();
-    },
-
-    onClickNext(idx) {
-      if (this.currentPageIndex[idx] === this.totalPageIndex[idx]) return;
-
-      this.currentPageIndex[idx] += 1;
-      this.resetAutoChangePageTimer();
-    },
-
-    onClickPagerDot(idx, index) {
-      this.currentPageIndex[idx] = index;
-      this.resetAutoChangePageTimer();
-    },
-
     async initializeData() {
       // 3.0 initiao Group Person
       await this.initialPerson();
@@ -1393,21 +1199,16 @@ export default {
         self.zoomRatio = Math.min(rW, rH);
 
         const dW = width - (1920 * self.zoomRatio);
-        const dH = height - (1080 * self.zoomRatio);
 
-        dashboard.style.paddingTop = `${Math.floor(dH / 2) + 32}px`;
-        dashboard.style.paddingBottom = `${Math.floor(dH / 2) + 32}px`;
+        dashboard.style.paddingTop = '32px';
+        dashboard.style.paddingBottom = '32px';
         dashboard.style.paddingLeft = `${Math.floor(dW / 2) + 32}px`;
         dashboard.style.paddingRight = `${Math.floor(dW / 2) + 32}px`;
 
-        const dateTimeElement = document.querySelector('.current-date-time');
-        const headerElement = document.querySelector('.dashboard-header');
         const footerBoxElement = document.querySelector('.footer-box');
         const footerBoxWrapElement = document.querySelector('.footer-box-wrap');
 
         // 將下列 views 進行 zoom
-        if (dateTimeElement) self.setZoom(dateTimeElement);
-        if (headerElement) self.setZoom(headerElement);
         if (footerBoxElement) self.setZoom(footerBoxElement);
         if (footerBoxElement) footerBoxElement.style.setProperty('width', '100%');
         if (footerBoxWrapElement) footerBoxWrapElement.style.setProperty('width', `calc(100% - ${dashboard.style.paddingLeft} - ${dashboard.style.paddingRight})`);
@@ -1552,141 +1353,4 @@ export default {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-</style>
-
-<style lang='scss' scoped>
-  $dashboard-customer: rgba(70, 58, 42, 1);
-  $dashboard-customer-light: rgba(212, 195, 162, 1);
-
-  .primary-color {
-    color: $dashboard-customer;
-  }
-  .secondary-color {
-    color: $dashboard-customer-light;
-  }
-
-  .fat-button {
-    height: 80px;
-    padding: 0rem 2.5rem;
-    border-radius: 4.375rem;
-    border: 4px solid $dashboard-customer;
-    font-weight: 500;
-    line-height: 1;
-    background-color: transparent;
-  }
-
-  .loading {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.6);
-    z-index: 99;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .drawer::v-deep .el-drawer {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-  }
-
-  .phone-drawer {
-    .common-box {
-      border: 4px solid $dashboard-customer;
-      border-radius: 1.25rem;
-      font-size: 4rem;
-      font-weight: 500;
-      color: $dashboard-customer;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .view-box {
-      @extend .common-box;
-      width: 10rem;
-      height: 10rem;
-      background: white;
-      padding: 1.25rem 1.375rem;
-    }
-
-    .number-pad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-
-      > .pad {
-        @extend .common-box;
-        width: 10rem;
-        background: rgba(255, 245, 230, 1);
-        padding: 0.75rem 1.375rem;
-        cursor: pointer;
-        transition: filter 0.1s ease;
-
-        &:active {
-          filter: brightness(0.9);
-        }
-      }
-    }
-
-    .search-button {
-      width: 20rem;
-      border-radius: 1.25rem;
-      border: 4px solid $dashboard-customer;
-      color: white;
-      background-color: $dashboard-customer;
-      padding: 1.5rem 1.375rem;
-      transition: opacity 0.3s ease;
-
-      &.is-disabled {
-        opacity: 0.7;
-      }
-    }
-  }
-
-  .same-phone-card-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 4rem;
-  }
-
-  .same-phone-card {
-    width: 100%;
-    border: 1px solid white;
-    background-color: #FFFFFF;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    display: flex;
-    align-items: start;
-    gap: 27px;
-  }
-
-  .profile-info {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 712px;
-    background-color: white;
-  }
-
-  .vip-tag {
-    width: fit-content;
-    background: rgba(191, 118, 21, 1);
-    border-radius: 0.25rem;
-    padding: 0.5rem 2rem;
-    color: #FFFFFF;
-  }
-
-  .big-vip-tag {
-    @extend .vip-tag;
-    margin-top: 2.5rem;
-    font-size: 3rem;
-  }
-
 </style>

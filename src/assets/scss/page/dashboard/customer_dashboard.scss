@@ -1,87 +1,878 @@
-.customer-dashboard .grid-4x4 {
-  display: grid !important;
-  gap: 24px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+$dashboard-customer: rgba(70, 58, 42, 1);
+$dashboard-customer-light: rgba(212, 195, 162, 1);
+$red: rgba(163, 0, 3, 1);
+$green: rgba(0, 133, 4, 1);
+
+.customer-primary {
+  color: $dashboard-customer;
 }
 
-.customer-dashboard .person-card {
-  background-color: #FFFFFF;
-  border: 1px solid #FFFFFF;
-  border-radius: 0.75rem;
-  cursor: pointer;
+.customer-secondary {
+  color: $dashboard-customer-light;
 }
 
-.customer-dashboard .person-card .vip-tag {
-  width: fit-content;
-  background: rgba(191, 118, 21, 1);
-  border-radius: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  color: #FFFFFF;
-}
-
-.customer-dashboard .person-card-4x4 {
-  width: 100%;
-  height: 260px;
-  border-radius: 0.25rem;
-  padding: 2rem;
-}
-
-.customer-dashboard .person-image {
-  width: 196px;
-  height: 196px;
-  object-fit: contain;
-}
-
-.customer-dashboard .profile-person-image {
-  width: 448px;
-  height: 448px;
-  border-radius: 0.75rem;
-  object-fit: contain;
-}
-
-.customer-dashboard .profile {
-  position: relative;
-  width: calc(100% - 712px);
-  height: 100%;
-  margin-left: auto;
-  padding: 2rem;
-}
-
-.footer-box {
-  position: relative;
+.customer-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 99;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  height: 22px;
-  padding-bottom: 32px;
 }
 
-.footer-box-wrap {
-  // width: 97.5%; // 1872px /1920px
-  position: absolute;
-  bottom: 1.04%; // 20px /1920px
+.customer-dashboard {
+  .home-button {
+    flex: 1;
+    text-align: left;
+  }
 
+  .home-icon {
+    width: 80px;
+    height: 80px;
+
+    @media (max-width: 1366px) {
+      width: 70px;
+      height: 70px;
+    }
+
+    @media (max-width: 1180px) {
+      width: 60px;
+      height: 60px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .logo-container {
+    flex: 1;
+    width: 120px;
+    height: 120px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    @media (max-width: 1366px) {
+      width: 100px;
+      height: 100px;
+    }
+
+    @media (max-width: 1180px) {
+      width: 80px;
+      height: 80px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  .grid-4x4 {
+    display: grid !important;
+    gap: 24px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    @media (max-width: 1366px) {
+      gap: 20px;
+    }
+  }
+
+  .person-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #FFFFFF;
+    border-radius: 0.75rem;
+    cursor: pointer;
+
+    @media (max-width: 1180px) {
+      border-radius: 0.5rem;
+    }
+  }
+
+  .person-card .vip-tag {
+    width: fit-content;
+    background: rgba(191, 118, 21, 1);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    color: #FFFFFF;
+
+    @media (max-width: 1180px) {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.9em;
+    }
+  }
+
+  .person-card-4x4 {
+    width: 100%;
+    height: 260px;
+    padding: 2rem;
+
+    @media (max-width: 1366px) {
+      height: 200px;
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      height: 200px;
+      padding: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      height: 200px;
+      padding: 1rem;
+    }
+  }
+
+  .person-image {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: 1/1;
+  }
+
+  .profile-person-image {
+    width: 448px;
+    height: 448px;
+    border-radius: 0.75rem;
+    object-fit: contain;
+
+    @media (max-width: 1366px) {
+      width: 300px;
+      height: 300px;
+    }
+
+    @media (max-width: 1180px) {
+      width: 250px;
+      height: 250px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+  .profile {
+    position: relative;
+    width: calc(100% - 712px);
+    height: 100%;
+    margin-left: auto;
+    padding: 2rem;
+
+    @media (max-width: 1366px) {
+      width: calc(100% - 500px);
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      width: calc(100% - 400px);
+      padding: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      width: calc(100% - 300px);
+      padding: 1rem;
+    }
+  }
+
+  .fat-button {
+    height: 80px;
+    padding: 0rem 2.5rem;
+    border-radius: 4.375rem;
+    border: 4px solid $dashboard-customer;
+    font-weight: 500;
+    line-height: 1;
+    background-color: transparent;
+
+    @media (max-width: 1366px) {
+      height: 65px;
+      padding: 0 1.5rem;
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1180px) {
+      height: 65px;
+      padding: 0 1.25rem;
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      height: 60px;
+      padding: 0 1rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  .drawer::v-deep .el-drawer {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .phone-drawer {
+    .phone-drawer-container {
+      padding: 4rem 0;
+      gap: 3.5rem;
+
+      @media (max-width: 1366px) {
+        padding: 3rem 0;
+        gap: 2.5rem;
+      }
+
+      @media (max-width: 1180px) {
+        padding: 2.5rem 0;
+        gap: 2rem;
+      }
+
+      @media (max-width: 1024px) {
+        padding: 2rem 0;
+        gap: 1.5rem;
+      }
+    }
+
+    .left-container {
+      gap: 2.5rem;
+
+      @media (max-width: 1366px) {
+        gap: 2rem;
+      }
+
+      @media (max-width: 1180px) {
+        gap: 1.5rem;
+      }
+
+      @media (max-width: 1024px) {
+        gap: 1rem;
+      }
+    }
+
+    .title {
+      font-size: 5rem;
+
+      @media (max-width: 1366px) {
+        font-size: 4rem;
+      }
+
+      @media (max-width: 1180px) {
+        font-size: 3.5rem;
+      }
+
+      @media (max-width: 1024px) {
+        font-size: 3rem;
+      }
+    }
+
+    .common-box {
+      border: 4px solid $dashboard-customer;
+      border-radius: 1.25rem;
+      font-size: 4rem;
+      font-weight: 500;
+      color: $dashboard-customer;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 1366px) {
+        font-size: 3rem;
+      }
+
+      @media (max-width: 1180px) {
+        font-size: 2.5rem;
+      }
+
+      @media (max-width: 1024px) {
+        font-size: 2rem;
+      }
+    }
+
+    .view-box {
+      @extend .common-box;
+      width: 10rem;
+      height: 10rem;
+      background: white;
+      padding: 1.25rem 1.375rem;
+
+      @media (max-width: 1366px) {
+        width: 7rem;
+        height: 7rem;
+        padding: 1rem;
+      }
+
+      @media (max-width: 1180px) {
+        width: 6rem;
+        height: 6rem;
+        padding: 0.75rem;
+      }
+
+      @media (max-width: 1024px) {
+        width: 5rem;
+        height: 5rem;
+        padding: 0.5rem;
+      }
+    }
+
+    .number-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+
+      > .pad {
+        @extend .common-box;
+        width: 10rem;
+        background: rgba(255, 245, 230, 1);
+        padding: 0.75rem 1.375rem;
+        cursor: pointer;
+        transition: filter 0.1s ease;
+
+        &:active {
+          filter: brightness(0.9);
+        }
+
+        @media (max-width: 1366px) {
+          width: 7rem;
+          padding: 0.5rem 1rem;
+          border-radius: 1rem;
+        }
+
+        @media (max-width: 1180px) {
+          width: 6rem;
+          padding: 0.4rem 0.75rem;
+          border-radius: 0.75rem;
+        }
+
+        @media (max-width: 1024px) {
+          width: 5rem;
+          padding: 0.3rem 0.5rem;
+          border-radius: 0.7rem;
+        }
+      }
+    }
+
+    .search-button {
+      width: 20rem;
+      border-radius: 1.25rem;
+      border: 4px solid $dashboard-customer;
+      color: white;
+      background-color: $dashboard-customer;
+      padding: 1.5rem 1.375rem;
+      transition: opacity 0.3s ease;
+
+      &.is-disabled {
+        opacity: 0.7;
+      }
+
+      @media (max-width: 1366px) {
+        width: 16rem;
+        padding: 1.25rem 1rem;
+        font-size: 2.5rem;
+      }
+
+      @media (max-width: 1180px) {
+        width: 14rem;
+        padding: 1rem 0.75rem;
+        font-size: 2rem;
+      }
+
+      @media (max-width: 1024px) {
+        width: 12rem;
+        padding: 0.75rem 0.5rem;
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .same-phone-card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+
+    @media (max-width: 1366px) {
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  }
+
+  .same-phone-card {
+    width: 100%;
+    border: 1px solid white;
+    background-color: #FFFFFF;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: start;
+    gap: 27px;
+
+    @media (max-width: 1366px) {
+      padding: 1.5rem;
+      gap: 20px;
+    }
+
+    @media (max-width: 1180px) {
+      padding: 1.25rem;
+      gap: 16px;
+    }
+
+    @media (max-width: 1024px) {
+      padding: 1rem;
+      gap: 12px;
+    }
+
+    .person-name {
+      font-size: 3.75rem;
+      margin: 1.375rem 0;
+      font-weight: 500;
+      line-height: 1;
+      color: $dashboard-customer;
+
+      @media (max-width: 1366px) {
+        font-size: 3rem;
+        margin: 1.25rem 0;
+      }
+
+      @media (max-width: 1180px) {
+        font-size: 2.75rem;
+        margin: 1rem 0;
+      }
+
+      @media (max-width: 1024px) {
+        font-size: 2.5rem;
+        margin: 0.875rem 0;
+      }
+    }
+
+    .phone-number {
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 1;
+      color: $dashboard-customer;
+
+      @media (max-width: 1366px) {
+        font-size: 3rem;
+      }
+
+      @media (max-width: 1180px) {
+        font-size: 2.75rem;
+      }
+
+      @media (max-width: 1024px) {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .profile-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 712px;
+    background-color: white;
+
+    @media (max-width: 1366px) {
+      width: 500px;
+    }
+
+    @media (max-width: 1180px) {
+      width: 400px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 300px;
+    }
+  }
+
+  .profile-info-header {
+    padding: 2rem 3.25rem;
+    margin-bottom: 2.5rem;
+
+    @media (max-width: 1366px) {
+      padding: 1.5rem 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 1180px) {
+      padding: 1.25rem 2rem;
+      margin-bottom: 1.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .vip-tag {
+    width: fit-content;
+    background: rgba(191, 118, 21, 1);
+    border-radius: 0.25rem;
+    padding: 0.5rem 2rem;
+    color: #FFFFFF;
+
+    @media (max-width: 1366px) {
+      padding: 0.375rem 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 1180px) {
+      padding: 0.3rem 1.25rem;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      padding: 0.25rem 1rem;
+      font-size: 0.625rem;
+    }
+  }
+
+  .big-vip-tag {
+    @extend .vip-tag;
+    margin-top: 2.5rem;
+    font-size: 3rem;
+
+    @media (max-width: 1366px) {
+      margin-top: 3rem;
+      font-size: 2.25rem;
+    }
+
+    @media (max-width: 1180px) {
+      margin-top: 3rem;
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      margin-top: 3rem;
+      font-size: 1.75rem;
+    }
+  }
+
+  .profile-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2.5rem;
+
+    @media (max-width: 1366px) {
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 1rem;
+    }
+  }
+
+  .profile-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3.75rem;
+
+    @media (max-width: 1366px) {
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 1.5rem;
+    }
+  }
+
+  .profile-label {
+    font-weight: 500;
+    font-size: 5rem;
+    color: $dashboard-customer;
+
+    @media (max-width: 1366px) {
+      font-size: 3.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 3rem;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  .profile-value {
+    text-align: center;
+    font-weight: 500;
+    font-size: 7.5rem;
+    color: rgba(34, 34, 34, 1);
+
+    @media (max-width: 1366px) {
+      font-size: 5.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 5rem;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 4.5rem;
+    }
+  }
+
+  .profile-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+
+    @media (max-width: 1366px) {
+      gap: 1rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 0.5rem;
+    }
+  }
+
+  .profile-plus-button,
+  .profile-minus-button {
+    @extend .fw-500;
+    @extend .lh-1;
+    flex: 1;
+    font-size: 4rem;
+    border: 4px solid $dashboard-customer;
+    padding: 0.75rem 0;
+    border-radius: 1.25rem;
+    background-color: transparent;
+
+    @media (max-width: 1366px) {
+      font-size: 3rem;
+      padding: 0.5rem 0;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 3rem;
+      padding: 0.4rem 0;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 3rem;
+      padding: 0.3rem 0;
+    }
+  }
+
+  .profile-total {
+    margin-top: 3.125rem;
+    border: 4px solid white;
+    border-radius: 1.25rem;
+    padding: 2.25rem 0;
+  }
+
+  .profile-total-text {
+    font-size: 3rem;
+    font-weight: 500;
+    color: $dashboard-customer;
+
+    @media (max-width: 1366px) {
+      font-size: 2.25rem;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .profile-total-title {
+    @extend .profile-total-text;
+    margin-bottom: 2rem;
+
+    @media (max-width: 1366px) {
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .profile-total-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    @media (max-width: 1366px) {
+      gap: 1rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 0.5rem;
+    }
+  }
+
+  .profile-total-content-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+
+    @media (max-width: 1366px) {
+      gap: 1.75rem;
+    }
+
+    @media (max-width: 1180px) {
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 1.25rem;
+    }
+  }
+
+  .profile-edit-button {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    width: 20rem;
+    border-radius: 1.25rem;
+    border: 4px solid $dashboard-customer;
+    color: white;
+    background-color: $dashboard-customer;
+    padding: 1.375rem;
+    font-size: 3rem;
+    cursor: pointer;
+
+    @media (max-width: 1366px) {
+      width: 16rem;
+      padding: 1rem;
+      font-size: 2.25rem;
+      bottom: 1.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      width: 14rem;
+      padding: 0.75rem;
+      font-size: 2rem;
+      bottom: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      width: 12rem;
+      padding: 0.5rem;
+      font-size: 1.75rem;
+      bottom: 1rem;
+    }
+  }
+
+  .person-name {
+    height: auto;
+    max-width: 28rem;
+    font-size: 5rem;
+    margin: 0.75rem 0;
+    font-weight: 500;
+    color: $dashboard-customer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    @media (max-width: 1366px) {
+      font-size: 4.5rem;
+      max-width: 24rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 4rem;
+      max-width: 22rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 3.5rem;
+      max-width: 20rem;
+      margin: 1.5rem 0;
+    }
+  }
+
+  .profile-button {
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .profile-minus-button {
+    @extend .profile-button;
+    color: $red;
+  }
+
+  .profile-plus-button {
+    @extend .profile-button;
+    color: $green;
+  }
 }
 
-.footer-detail-box {
-  position: absolute;
-  bottom: 0.96%; // 18px /1872px
-  right: 0;
-  display: flex;
-  color: white;
-  display: flex;
-  align-items: end;
+  .red {
+    color: $red !important;
+  }
 
-}
+  .green {
+    color: $green !important;
+  }
 
-.footer-detail-text {
-  font-size: 14px;
-  font-weight: 200;
-  margin-right: 9px;
-  line-height: 0.6em;
-}
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s;
+  }
 
-.footer-logo {
-  width: 54px;
-  height: 24px;
-  object-fit: contain;
-}
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .person-card-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .person-card-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
