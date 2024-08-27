@@ -304,6 +304,7 @@ export default {
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        { value: 'Customer', label: i18n.formatter.format('MenuCustomerBoard') },
         // { value: 'AlcoholCheckin', label: '辨識與酒精偵測' },
       ];
     },

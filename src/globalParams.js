@@ -647,6 +647,7 @@ Vue.prototype.$globalGotoRootPage = (page, cb) => {
       case 'SelfCheckin': router.push({ name: 'DashboardSelfCheckin' }); break;
       case 'AlcoholCheckin': router.push({ name: 'DashboardAlcoholCheckin' }); break;
       case 'Guard': router.push({ name: 'DashboardGuard' }); break;
+      case 'Customer': router.push({ name: 'DashboardCustomer' }); break;
       case 'Setting':
       default:
         router.push({ name: 'PersonDailyAttendanceReport' }); break;
