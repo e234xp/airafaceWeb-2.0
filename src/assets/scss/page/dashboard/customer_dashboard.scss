@@ -46,3 +46,42 @@
   margin-left: auto;
   padding: 2rem;
 }
+
+.footer-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 22px;
+  padding-bottom: 32px;
+}
+
+.footer-box-wrap {
+  // width: 97.5%; // 1872px /1920px
+  position: absolute;
+  bottom: 1.04%; // 20px /1920px
+
+}
+
+.footer-detail-box {
+  position: absolute;
+  bottom: 0.96%; // 18px /1872px
+  right: 0;
+  display: flex;
+  color: white;
+  display: flex;
+  align-items: end;
+
+}
+
+.footer-detail-text {
+  font-size: 14px;
+  font-weight: 200;
+  margin-right: 9px;
+  line-height: 0.6em;
+}
+
+.footer-logo {
+  width: 54px;
+  height: 24px;
+  object-fit: contain;
+}

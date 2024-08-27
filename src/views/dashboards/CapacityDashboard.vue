@@ -276,7 +276,10 @@
       <!-- footer -->
       <div class="footer-box-wrap">
         <div class="footer-box">
-          <div class="pager d-flex align-items-center justify-content-center" style="width: 66%">
+          <div
+            class="pager d-flex align-items-center justify-content-center"
+            style="width: 66%"
+          >
             <button
               class="btn-reset"
               :disabled="currentPageIndex[0] === 0"
@@ -332,7 +335,10 @@
             </button>
           </div>
 
-          <div class="pager d-flex align-items-center justify-content-center" style="width: 33%">
+          <div
+            class="pager d-flex align-items-center justify-content-center"
+            style="width: 33%"
+          >
             <button
               class="btn-reset"
               :disabled="currentPageIndex[1] === 0"

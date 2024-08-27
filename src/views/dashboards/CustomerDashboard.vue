@@ -134,7 +134,7 @@
                         style="gap: 0.5rem;"
                       >
                         <div class="vip-tag fz-md fw-400">
-                          {{ person.group_list[0] }}
+                          {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                         </div>
                         <div
                           class="fz-super-slarge fw-500 lh-1 text-truncate d-block"
@@ -202,7 +202,7 @@
                   >
                   <div class="flex flex-column justify-content-center align-items-center">
                     <div class="vip-tag">
-                      {{ person.group_list[0] }}
+                      {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                     </div>
                     <p
                       class="fw-500 lh-1 primary-color"
@@ -300,7 +300,7 @@
                   <div
                     class="big-vip-tag fw-400"
                   >
-                    {{ person.group_list[0] }}
+                    {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                   </div>
 
                   <p
@@ -453,6 +453,70 @@
         style="width: auto; height: 2rem;"
       >
     </div>
+
+    <div
+      v-if="displayMode === 'Dashboard'"
+      class="footer-box-wrap"
+    >
+      <div class="footer-box">
+        <div class="pager d-flex align-items-center justify-content-center">
+          <button
+            class="btn-reset"
+            :disabled="currentPageIndex[0] === 0"
+            @click="onClickPrev(0)"
+          >
+            <img
+              v-if="currentPageIndex[0] === 0"
+              class="pager-left-arrow"
+              src="@/assets/img/pager_left_arrow_disabled.svg"
+            >
+            <img
+              v-else
+              class="pager-left-arrow"
+              src="@/assets/img/pager_left_arrow.svg"
+            >
+          </button>
+          <button
+            v-for="(item, i) in range(dispPageIndexStart, currentPageIndex[0] - 1)"
+            class="pager-left-dots btn-reset"
+            @click="onClickPagerDot(0, i)"
+            :key="i"
+          />
+
+          <div class="pager-progressbar-box">
+            <div class="pager-progressbar-track" />
+            <div
+              class="pager-progressbar-thumb"
+              :style="{ width: pageProgressPercentage }"
+            />
+          </div>
+          <button
+            v-for="(item, i) in range(currentPageIndex[0] + 1, dispPageIndexEnd)"
+            class="pager-right-dots btn-reset"
+            @click="onClickPagerDot(0, i + currentPageIndex[0] + 1)"
+            :key="i"
+          />
+
+          <button
+            class="btn-reset"
+            :disabled="currentPageIndex[0] === totalPageIndex[0]"
+            @click="onClickNext(0)"
+          >
+            <img
+              v-if="currentPageIndex[0] === totalPageIndex[0]"
+              class="pager-right-arrow"
+              src="@/assets/img/pager_right_arrow_disabled.svg"
+            >
+            <img
+              v-else
+              class="pager-right-arrow"
+              src="@/assets/img/pager_right_arrow.svg"
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!------------------- Footer - END ------------------>
 
     <div
@@ -516,7 +580,9 @@ export default {
 
       // 分頁：
       currentPageIndex: [0, 0],
-      displayAmount: [20, 8],
+      displayAmount: [12, 8],
+      dispPageIndexStart: 0,
+      dispPageIndexEnd: 0,
 
       showPageProgressTimer: null,
       countdownStartTime: null,
@@ -748,11 +814,18 @@ export default {
 
     const mainElement = document.querySelector('.c-main');
     const headerElement = document.querySelector('.c-header');
+    const footerElement = document.querySelector('.c-footer');
     const containerElement = document.querySelector('.container-fluid');
 
     if (mainElement) mainElement.classList.remove('c-main-reset');
     if (headerElement) headerElement.classList.remove('c-header-reset');
+    if (footerElement) footerElement.classList.remove('c-footer-reset');
     if (containerElement) containerElement.classList.remove('container-fluid-reset');
+
+    // if (self.autoChangePageTimer) {
+    //   clearInterval(self.autoChangePageTimer);
+    //   self.autoChangePageTimer = null;
+    // }
 
     if (self.showPageProgressTimer) {
       clearInterval(self.showPageProgressTimer);
@@ -765,28 +838,34 @@ export default {
     }
   },
   methods: {
-    // onClickPrev(idx) {
-    //   const self = this;
-    //   if (self.currentPageIndex[idx] === 0) return;
+    range(start, end) {
+      let ret = [];
 
-    //   self.currentPageIndex[idx] -= 1;
-    //   self.resetAutoChangePageTimer();
-    // },
+      if (start <= end) {
+        ret = Array(end - start + 1).fill().map((val, i) => start + i);
+      }
 
-    // onClickNext(idx) {
-    //   const self = this;
-    //   if (self.currentPageIndex[idx] === self.totalPageIndex[idx]) return;
+      return ret;
+    },
 
-    //   self.currentPageIndex[idx] += 1;
-    //   self.resetAutoChangePageTimer();
-    // },
+    onClickPrev(idx) {
+      if (this.currentPageIndex[idx] === 0) return;
 
-    // onClickPagerDot(idx, index) {
-    //   const self = this;
-    //   // console.log('onClickPagerDot');
-    //   self.currentPageIndex[idx] = index;
-    //   self.resetAutoChangePageTimer();
-    // },
+      this.currentPageIndex[idx] -= 1;
+      this.resetAutoChangePageTimer();
+    },
+
+    onClickNext(idx) {
+      if (this.currentPageIndex[idx] === this.totalPageIndex[idx]) return;
+
+      this.currentPageIndex[idx] += 1;
+      this.resetAutoChangePageTimer();
+    },
+
+    onClickPagerDot(idx, index) {
+      this.currentPageIndex[idx] = index;
+      this.resetAutoChangePageTimer();
+    },
 
     async initializeData() {
       // 3.0 initiao Group Person
@@ -1251,11 +1330,13 @@ export default {
       const self = this;
       const mainElement = document.querySelector('.c-main');
       const headerElement = document.querySelector('.c-header');
+      const footerElement = document.querySelector('.c-footer');
       const containerElement = document.querySelector('.container-fluid');
 
       // 把 coreUI 套件的一些預設元件的樣式清除掉
       if (mainElement) mainElement.classList.add('c-main-reset');
       if (headerElement) headerElement.classList.add('c-header-reset');
+      if (footerElement) footerElement.classList.add('c-footer-reset');
       if (containerElement) containerElement.classList.add('container-fluid-reset');
 
       setTimeout(() => {
@@ -1290,9 +1371,9 @@ export default {
             if (percentage >= 100) {
               self.pageProgressPercentage = '0%';
               if (self.currentPageIndex[idx] === total) {
-                self.currentPageIndex[idx] = 0;
+                self.$set(self.currentPageIndex, idx, 0);
               } else {
-                self.currentPageIndex[idx] += 1;
+                self.$set(self.currentPageIndex, idx, self.currentPageIndex[idx] + 1);
               }
             }
           }
@@ -1321,10 +1402,15 @@ export default {
 
         const dateTimeElement = document.querySelector('.current-date-time');
         const headerElement = document.querySelector('.dashboard-header');
+        const footerBoxElement = document.querySelector('.footer-box');
+        const footerBoxWrapElement = document.querySelector('.footer-box-wrap');
 
         // 將下列 views 進行 zoom
         if (dateTimeElement) self.setZoom(dateTimeElement);
         if (headerElement) self.setZoom(headerElement);
+        if (footerBoxElement) self.setZoom(footerBoxElement);
+        if (footerBoxElement) footerBoxElement.style.setProperty('width', '100%');
+        if (footerBoxWrapElement) footerBoxWrapElement.style.setProperty('width', `calc(100% - ${dashboard.style.paddingLeft} - ${dashboard.style.paddingRight})`);
       }
     },
 
@@ -1335,7 +1421,7 @@ export default {
 
     changePage(selectedIndex) {
       const self = this;
-      self.currentPageIndex[0] = selectedIndex;
+      self.$set(self.currentPageIndex, 0, selectedIndex);
       self.countdownStartTime = new Date();
       self.countdownCurrentTime = new Date();
       self.resetAutoChangePageTimer();
