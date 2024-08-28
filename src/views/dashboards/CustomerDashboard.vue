@@ -12,6 +12,7 @@
         <transition
           name="fade"
           mode="out-in"
+          @after-enter="onTransitionComplete"
         >
           <div
             v-if="displayMode !== 'Profile'"
@@ -85,9 +86,9 @@
             <!-- Occupancy/Attendance 顯示人員資料列表 -->
             <div
               key="dashboard"
-              class="person-card-container flex-grow-1"
+              class="person-card-container flex-grow-1 overflow-hidden"
             >
-              <div class="grid-4x4 d-flex">
+              <div class="grid-4x4 d-flex h-100">
                 <div
                   v-for="(person, index) in currentEntryPersons"
                   :key="index"
@@ -294,8 +295,7 @@
                   </p>
 
                   <p
-                    class="fw-500 customer-primary"
-                    style="font-size: 3rem;"
+                    class="person-phone-number fw-500 customer-primary"
                   >
                     {{ person.extra_info.phone_number || '--' }}
                   </p>
@@ -613,6 +613,8 @@ export default {
 
     window.addEventListener('resize', () => {
       self.zoomViews();
+      self.initPersonCard();
+      self.refreshData();
     });
   },
 
@@ -679,9 +681,6 @@ export default {
 
       // 4.0 initial Views
       this.initViews();
-
-      // 5.0 display Layout
-      this.refreshData();
 
       if (this.totalPageIndex[0] >= 1 || this.totalPageIndex[1] >= 1) {
         this.resetAutoChangePageTimer();
@@ -1147,7 +1146,23 @@ export default {
 
       setTimeout(() => {
         self.zoomViews();
+        self.initPersonCard();
+        self.refreshData();
       }, 168);
+    },
+
+    initPersonCard() {
+      const cardContainerElement = document.querySelector('.person-card-container');
+      const cardElement = document.querySelector('.person-card');
+
+      if (!cardContainerElement || !cardElement) return;
+
+      const cardContainerHeight = cardContainerElement.offsetHeight;
+      const cardHeight = cardElement.offsetHeight * this.zoomRatio;
+      const gap = 20;
+
+      const row = Math.floor((cardContainerHeight + gap) / (cardHeight + gap));
+      this.displayAmount[0] = row * 4;
     },
 
     resetAutoChangePageTimer() {
@@ -1201,7 +1216,7 @@ export default {
         const dW = width - (1920 * self.zoomRatio);
 
         dashboard.style.paddingTop = '32px';
-        dashboard.style.paddingBottom = '32px';
+        dashboard.style.paddingBottom = '65px';
         dashboard.style.paddingLeft = `${Math.floor(dW / 2) + 32}px`;
         dashboard.style.paddingRight = `${Math.floor(dW / 2) + 32}px`;
 
@@ -1327,8 +1342,15 @@ export default {
       await this.$globalModifyPerson(data);
     },
 
+    onTransitionComplete() {
+      if (this.displayMode !== 'Dashboard') return;
+
+      this.$nextTick(() => {
+        this.initializeData();
+      });
+    },
+
     goHome() {
-      this.initializeData();
       this.displayMode = 'Dashboard';
     },
   },

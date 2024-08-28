@@ -189,6 +189,7 @@ export default {
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        { value: 'Customer', label: i18n.formatter.format('MenuCustomerBoard') },
         // { value: 'AlcoholCheckin', label: '人員辨識與酒測系統' },
       ],
     };
@@ -317,7 +318,7 @@ export default {
           password: self.value_password,
         },
         async (err) => {
-          console.log(err)
+          console.log(err);
           if (self.obj_loading) self.obj_loading.hide();
           if (err) {
             self.$globalLogout();

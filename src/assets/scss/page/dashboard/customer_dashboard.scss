@@ -77,12 +77,10 @@ $green: rgba(0, 133, 4, 1);
 
   .grid-4x4 {
     display: grid !important;
-    gap: 24px;
+    gap: 20px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    @media (max-width: 1366px) {
-      gap: 20px;
-    }
+    grid-auto-rows: min-content;
+    align-content: start;
   }
 
   .person-card {
@@ -676,12 +674,12 @@ $green: rgba(0, 133, 4, 1);
     }
 
     @media (max-width: 1180px) {
-      font-size: 3rem;
+      font-size: 2.8rem;
       padding: 0.4rem 0;
     }
 
     @media (max-width: 1024px) {
-      font-size: 3rem;
+      font-size: 2.5rem;
       padding: 0.3rem 0;
     }
   }
@@ -830,6 +828,22 @@ $green: rgba(0, 133, 4, 1);
       font-size: 3.5rem;
       max-width: 20rem;
       margin: 1.5rem 0;
+    }
+  }
+  
+  .person-phone-number {
+    font-size: 3rem;
+    
+    @media (max-width: 1366px) {
+      font-size: 2.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      font-size: 2.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 2.5rem;
     }
   }
 
