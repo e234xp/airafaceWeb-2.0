@@ -1252,7 +1252,7 @@ export default {
       const searchPhoneNumber = this.searchNumber.join('');
       if (searchPhoneNumber.length < 3) return;
 
-      const result = this.persons.filter((p) => p?.extra_info?.phone_number?.endsWith(searchPhoneNumber));
+      const result = this.currentEntryPersons.filter((p) => p?.extra_info?.phone_number?.endsWith(searchPhoneNumber));
 
       this.drawer = false;
 
@@ -1267,7 +1267,8 @@ export default {
       }
 
       if (result.length === 1) {
-        this.person = result[0];
+        const [person] = result;
+        this.person = person;
         this.displayMode = 'Profile';
         this.clearSearchNumber();
         this.initialFields();
