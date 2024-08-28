@@ -124,7 +124,10 @@
                         class="flex-grow-1 d-flex flex-column justify-content-start"
                         style="gap: 0.5rem;"
                       >
-                        <div class="vip-tag fz-md fw-400">
+                        <div
+                          class="vip-tag fz-md fw-400"
+                          :style="{ backgroundColor: groupColorMap.get(person.group_list[0]) || '#000000' }"
+                        >
                           {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                         </div>
                         <div class="fz-super-slarge fw-500 lh-1 text-truncate d-block">
@@ -158,7 +161,7 @@
           <template v-else-if="displayMode === 'Phone'">
             <div
               key="phone"
-              class="w-100 h-100 mt-5"
+              class="phone"
             >
               <p
                 class="fz-super-slarge fw-500 lh-1 customer-primary text-center"
@@ -166,17 +169,14 @@
               >
                 {{ $t('MobilePhoneNumberLastThreeDigits') }}
               </p>
-              <p
-                class="mb-0 fw-500 lh-1 customer-primary text-center"
-                style="font-size: 8.75rem;"
-              >
+              <p class="phone-last-three-digits">
                 {{ searchNumber.join('') }}
               </p>
               <div class="same-phone-card-container">
                 <div
                   v-for="person in matchedPersons"
                   :key="person.uuid"
-                  class="same-phone-card"
+                  class="same-phone-card person-card-4x4"
                   @click="handleSelectPerson(person)"
                 >
                   <img
@@ -189,7 +189,10 @@
                     v-show="displaySettings.displayPhoto === 'NONE'"
                   >
                   <div class="flex flex-column justify-content-center align-items-center">
-                    <div class="vip-tag">
+                    <div
+                      class="vip-tag"
+                      :style="{ backgroundColor: groupColorMap.get(person.group_list[0]) || '#000000' }"
+                    >
                       {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                     </div>
                     <p class="person-name">
@@ -284,6 +287,7 @@
 
                   <div
                     class="big-vip-tag fw-400"
+                    :style="{ backgroundColor: groupColorMap.get(person.group_list[0]) || '#000000' }"
                   >
                     {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                   </div>
@@ -528,6 +532,8 @@ export default {
       refreshKey: 1,
       emptyFace,
 
+      groupColorMap: new Map(),
+
       // 電話查詢的變數
       drawer: false,
       searchNumber: ['', '', ''],
@@ -611,16 +617,14 @@ export default {
       }
     });
 
-    window.addEventListener('resize', () => {
-      self.zoomViews();
-      self.initPersonCard();
-      self.refreshData();
-    });
+    window.addEventListener('resize', this.init);
   },
 
   // Tulip
   async mounted() {
     this.isLoadSetting = true;
+
+    this.initializeGroupColorMap();
 
     // 1.0 Load Display Config
     let setting = await this.$globalGetDisplaySetting();
@@ -673,8 +677,33 @@ export default {
       clearInterval(self.currentTimeLooper);
       self.currentTimeLooper = null;
     }
+
+    window.removeEventListener('resize', this.init);
   },
   methods: {
+    init() {
+      this.zoomViews();
+      this.initPersonCard();
+      this.refreshData();
+    },
+    async initializeGroupColorMap() {
+      const colorList = [
+        '#E87C25',
+        '#27727B',
+        '#26C0C0',
+        '#B5C334',
+        '#F3A43B',
+        '#9BCA63',
+        '#F0805A',
+        '#FAD860',
+        '#60C0DD',
+      ];
+      const { group_list } = await this.$globalGetGroupList();
+      this.groupColorMap = group_list.reduce((map, group, index) => {
+        map.set(group.name, colorList[index % colorList.length]);
+        return map;
+      }, new Map());
+    },
     async initializeData() {
       // 3.0 initiao Group Person
       await this.initialPerson();

@@ -99,14 +99,46 @@ export default {
   },
   created() {
     this.editedPerson = { ...this.person };
+
+    window.addEventListener('resize', this.setupProfilePadding);
+  },
+  mounted() {
+    this.setupProfilePadding();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.setupProfilePadding);
   },
   methods: {
+    setupProfilePadding(paddingTop) {
+      const headerElement = document.querySelector('.profile-info-header');
+      const profileElement = document.querySelector('.profile');
+
+      if (!headerElement || !profileElement) return;
+
+      if (paddingTop) {
+        profileElement.style.paddingTop = `${paddingTop}px`;
+        return;
+      }
+
+      const headerStyle = window.getComputedStyle(headerElement);
+      const headerHeight = headerElement.offsetHeight
+                         + parseInt(headerStyle.marginTop, 10)
+                         + parseInt(headerStyle.marginBottom, 10);
+
+      profileElement.style.paddingTop = `${headerHeight - 32}px`;
+    },
     toggleEdit() {
       if (this.isEdit) {
         this.$emit('save', this.editableFields);
       }
 
       this.isEdit = !this.isEdit;
+
+      if (this.isEdit) {
+        this.setupProfilePadding(32);
+      } else {
+        this.setupProfilePadding();
+      }
     },
     handleValueChange(key, value) {
       this.$set(this.editableFields, key, Math.max(0, value));
