@@ -437,6 +437,7 @@ $green: rgba(0, 133, 4, 1);
     margin-top: 4rem;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-width: none;
 
     @media (max-width: 1366px) {
       gap: 1.5rem;

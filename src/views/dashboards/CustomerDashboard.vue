@@ -1296,7 +1296,26 @@ export default {
       const searchPhoneNumber = this.searchNumber.join('');
       if (searchPhoneNumber.length < 3) return;
 
-      const result = this.currentEntryPersons.filter((p) => p?.extra_info?.phone_number?.endsWith(searchPhoneNumber));
+      const result = this.persons.filter((p) => p?.extra_info?.phone_number?.endsWith(searchPhoneNumber));
+
+      result.forEach((pPerson) => {
+        const person = pPerson;
+
+        if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALE'
+          + 'gHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
+          this.$globalFetchPhoto(person.uuid, (err, data) => {
+            if (err === null && data) {
+              if (data.display_image !== '') {
+                person.display_image = data.display_image;
+              }
+
+              if (data.register_image !== '') {
+                person.register_image = data.register_image;
+              }
+            }
+          });
+        }
+      });
 
       this.drawer = false;
 
