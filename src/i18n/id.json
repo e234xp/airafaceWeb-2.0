@@ -772,8 +772,9 @@
   "ThisChange": "Perubahan ini",
   "InputMobilePhoneNumberToQuery": "Masukkan nomor ponsel untuk ditanyakan",
   "Smoothie": "smoothie",
-  "FruitPlate": "Piring Buah",
+  "Vegetable": "Sayuran",
   "Milk": "Susu",
   "MobilePhoneNumberLastThreeDigits": "Tiga digit terakhir ponsel",
-  "NoSuchPersonFound": "Tidak ada orang seperti itu yang ditemukan"
+  "NoSuchPersonFound": "Tidak ada orang seperti itu yang ditemukan",
+  "ChangeLog": "Ubah Log"
 }

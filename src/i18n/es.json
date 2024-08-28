@@ -772,8 +772,9 @@
   "ThisChange": "este cambio",
   "InputMobilePhoneNumberToQuery": "Ingrese el número de teléfono móvil para consultar",
   "Smoothie": "Zalamero",
-  "FruitPlate": "plato de fruta",
+  "Vegetable": "Verdura",
   "Milk": "Leche",
   "MobilePhoneNumberLastThreeDigits": "Últimos tres dígitos del teléfono móvil",
-  "NoSuchPersonFound": "No se encontró tal persona"
+  "NoSuchPersonFound": "No se encontró tal persona",
+  "ChangeLog": "Registro de cambios"
 }

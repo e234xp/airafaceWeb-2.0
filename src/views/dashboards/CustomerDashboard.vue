@@ -544,7 +544,7 @@ export default {
 
       fields: {
         smoothie: '0',
-        fruitPlate: '0',
+        vegetable: '0',
         milk: '0',
       },
     };
@@ -1341,8 +1341,8 @@ export default {
           this.fields.smoothie = this.person.plugin_info.smoothie;
         }
 
-        if (Object.hasOwn(this.person.plugin_info, 'fruitPlate')) {
-          this.fields.fruitPlate = this.person.plugin_info.fruitPlate;
+        if (Object.hasOwn(this.person.plugin_info, 'vegetable')) {
+          this.fields.vegetable = this.person.plugin_info.vegetable;
         }
 
         if (Object.hasOwn(this.person.plugin_info, 'milk')) {
@@ -1351,7 +1351,7 @@ export default {
       } else {
         this.fields = {
           smoothie: '0',
-          fruitPlate: '0',
+          vegetable: '0',
           milk: '0',
         };
       }

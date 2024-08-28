@@ -772,8 +772,9 @@
   "ThisChange": "Sự thay đổi này",
   "InputMobilePhoneNumberToQuery": "Nhập số điện thoại di động để truy vấn",
   "Smoothie": "sinh tố",
-  "FruitPlate": "Đĩa trái cây",
+  "Vegetable": "Rau quả",
   "Milk": "Sữa",
   "MobilePhoneNumberLastThreeDigits": "Ba chữ số cuối của điện thoại di động",
-  "NoSuchPersonFound": "Không tìm thấy người như vậy"
+  "NoSuchPersonFound": "Không tìm thấy người như vậy",
+  "ChangeLog": "Nhật ký thay đổi"
 }

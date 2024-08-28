@@ -772,8 +772,9 @@
   "ThisChange": "การเปลี่ยนแปลงครั้งนี้",
   "InputMobilePhoneNumberToQuery": "กรอกหมายเลขโทรศัพท์มือถือเพื่อสอบถาม",
   "Smoothie": "สมูทตี้",
-  "FruitPlate": "จานผลไม้",
+  "Vegetable": "ผัก",
   "Milk": "น้ำนม",
   "MobilePhoneNumberLastThreeDigits": "โทรศัพท์มือถือสามหลักสุดท้าย",
-  "NoSuchPersonFound": "ไม่พบบุคคลดังกล่าว"
+  "NoSuchPersonFound": "ไม่พบบุคคลดังกล่าว",
+  "ChangeLog": "เปลี่ยนบันทึก"
 }

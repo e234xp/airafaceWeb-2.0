@@ -772,8 +772,9 @@
   "ThisChange": "This change",
   "InputMobilePhoneNumberToQuery": "Input mobile phone number to query",
   "Smoothie": "Smoothie",
-  "FruitPlate": "FruitPlate",
+  "Vegetable": "Vegetable",
   "Milk": "Milk",
   "MobilePhoneNumberLastThreeDigits": "Last three digits of mobile phone",
-  "NoSuchPersonFound": "No such person found"
+  "NoSuchPersonFound": "No such person found",
+  "ChangeLog": "Change Log"
 }

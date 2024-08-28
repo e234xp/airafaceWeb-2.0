@@ -772,8 +772,9 @@
   "ThisChange": "本次異動",
   "InputMobilePhoneNumberToQuery": "輸入手機號查詢",
   "Smoothie": "果昔",
-  "FruitPlate": "果盤",
+  "Vegetable": "蔬菜",
   "Milk": "牛奶",
   "MobilePhoneNumberLastThreeDigits": "手機末三碼",
-  "NoSuchPersonFound": "查無此人"
+  "NoSuchPersonFound": "查無此人",
+  "ChangeLog": "異動日誌"
 }

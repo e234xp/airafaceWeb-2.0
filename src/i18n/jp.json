@@ -772,8 +772,9 @@
   "ThisChange": "この変更は",
   "InputMobilePhoneNumberToQuery": "携帯電話番号を入力して問い合わせる",
   "Smoothie": "スムージー",
-  "FruitPlate": "フルーツプレート",
+  "Vegetable": "野菜",
   "Milk": "牛乳",
-  "MobilePhoneNumberLastThreeDigits": "携帯電話番号の下 3 桁",
-  "NoSuchPersonFound": "そのような人は見つかりませんでした"
+  "MobilePhoneNumberLastThreeDigits": "携帯電話の下 3 桁",
+  "NoSuchPersonFound": "そのような人は見つかりませんでした",
+  "ChangeLog": "変更ログ"
 }
