@@ -82,6 +82,7 @@ const UpgradeSoftware = () => import('@/views/systemsettings/UpgradeSoftware.vue
 const AccountManagement = () => import('@/views/systemsettings/AccountManagement.vue');
 const CreateAccount = () => import('@/views/systemsettings/CreateAccount.vue');
 const SystemLog = () => import('@/views/systemsettings/SystemLog.vue');
+const ChangeLog = () => import('@/views/systemsettings/ChangeLog.vue');
 const IndicationSettings = () => import('@/views/systemsettings/IndicationSettings.vue');
 const LicenseSettings = () => import('@/views/systemsettings/LicenseSettings.vue');
 
@@ -508,6 +509,11 @@ function configRoutes() {
               path: 'systemlog',
               name: 'SystemLog',
               component: SystemLog,
+            },
+            {
+              path: 'changelog',
+              name: 'ChangeLog',
+              component: ChangeLog,
             },
           ],
         },

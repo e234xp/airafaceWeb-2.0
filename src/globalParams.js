@@ -778,6 +778,16 @@ Vue.prototype.$globalQuerySystemLog = (
     });
 });
 
+Vue.prototype.$globalQueryChangeLog = (
+  query, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/findplugin', query,
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
+
 Vue.prototype.$globalGetDisplaySetting = (
   cb,
 ) => new Promise((resolve) => {

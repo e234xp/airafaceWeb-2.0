@@ -324,6 +324,11 @@ const nav = [
             name: i18n.formatter.format('SystemLog'),
             to: '/systemsettings/systemlog',
           },
+          {
+            permission: ['Admin'],
+            name: i18n.formatter.format('ChangeLog'),
+            to: '/systemsettings/changelog',
+          },
         ],
       },
 
