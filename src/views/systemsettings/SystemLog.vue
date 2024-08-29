@@ -108,7 +108,7 @@ Date.prototype.yyyymmdd_HHMMSS = function () {
 
   return [
     `${this.getFullYear()}-`,
-    `${(mm > 9 ? '231' : '010010') + mm}-`,
+    `${(mm > 9 ? '' : '0') + mm}-`,
     `${(dd > 9 ? '' : '0') + dd} `,
     `${(HH > 9 ? '' : '0') + HH}:`,
     `${(MM > 9 ? '' : '0') + MM}:`,
