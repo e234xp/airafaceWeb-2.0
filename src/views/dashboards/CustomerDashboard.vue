@@ -130,7 +130,7 @@
                         >
                           {{ person.group_list.length > 0 ? person.group_list[0] : '--' }}
                         </div>
-                        <div class="fz-super-slarge fw-500 lh-1 text-truncate d-block">
+                        <div class="fz-super-slarge fw-500 text-truncate d-block">
                           {{ getDisplayName(person) }}
                         </div>
                       </div>
