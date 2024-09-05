@@ -93,7 +93,7 @@
           <CCard>
             <CCardHeader>{{ $t('PersonalDisplay') }}</CCardHeader>
             <CCardBody>
-              <CRow>
+              <!-- <CRow>
                 <CCol sm="12">
                   <div class="h5">
                     {{ $t('DisplayGroup') }}
@@ -112,7 +112,7 @@
                     :show-no-options="false"
                   />
                 </CCol>
-              </CRow>
+              </CRow> -->
               <CRow>
                 <CCol sm="3">
                   <div class="h5">
@@ -124,7 +124,7 @@
                     :options="value_displayPhotoList"
                   />
                 </CCol>
-                <CCol sm="3">
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('DisplayAttribute') }} 1
                   </div>
@@ -133,8 +133,8 @@
                     :value.sync="value_customersetting.line2"
                     :options="value_displayPrimaryList"
                   />
-                </CCol>
-                <CCol sm="3">
+                </CCol> -->
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('DisplayAttribute') }} 2
                   </div>
@@ -144,7 +144,7 @@
                     :options="value_displayAttributeList"
                     :disabled="value_customersetting.displayCardMode == 'COMPACT'"
                   />
-                </CCol>
+                </CCol> -->
                 <CCol sm="3" />
               </CRow>
             </CCardBody>
@@ -154,7 +154,7 @@
             <CCardHeader>{{ $t('PageDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
-                <CCol sm="3">
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('PageLayout') }}
                   </div>
@@ -163,7 +163,7 @@
                     :value.sync="value_customersetting.pageLayout"
                     :options="value_pageLayoutList"
                   />
-                </CCol>
+                </CCol> -->
                 <!-- <CCol sm="3">
                   <div class="h5">{{ $t('DisplayChart') }}</div>
                   <CSelect size="lg" :value.sync="value_customersetting.displayChart" :options="value_EnableList" />
@@ -178,7 +178,7 @@
                     :options="value_displayResetTime"
                   />
                 </CCol>
-                <CCol sm="3">
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('Duration') }}
                   </div>
@@ -187,7 +187,7 @@
                     :value.sync="value_customersetting.personPatrolTime"
                     :options="[5,10,15,20,30]"
                   />
-                </CCol>
+                </CCol> -->
                 <CCol sm="3" />
               </CRow>
             </CCardBody>
@@ -498,7 +498,7 @@ export default {
       if (!err) {
         this.value_Setting = data || {};
 
-        this.value_customersetting = this.value_Setting.CUSTOMER;
+        if (this.value_Setting.CUSTOMER) this.value_customersetting = this.value_Setting.CUSTOMER;
         this.value_customersetting.uuid = this.makeid(32);
 
         this.value_customersetting = { ...this.value_customersetting, ...this.occupancy };

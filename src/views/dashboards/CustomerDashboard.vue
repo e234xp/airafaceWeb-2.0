@@ -631,7 +631,14 @@ export default {
 
     let valueSetting = setting.data || {};
     const customer = valueSetting.CUSTOMER;
-    this.displaySettings = { ...this.displaySettings, ...customer };
+    this.displaySettings = {
+      ...this.displaySettings,
+      background_image: customer?.background_image || this.displaySettings.background_image,
+      logo: customer?.logo || this.displaySettings.logo,
+      displayPhoto: customer?.displayPhoto || this.displaySettings.displayPhoto,
+      dailyResetTime: customer?.dailyResetTime || this.displaySettings.dailyResetTime,
+      personPatrolTime: customer?.personPatrolTime || this.displaySettings.personPatrolTime,
+    };
 
     if (this.displaySettings.dailyResetTime.length === 2) {
       this.displaySettings.dailyResetTime += ':00';
@@ -1204,31 +1211,27 @@ export default {
       self.countdownStartTime = new Date();
       self.countdownCurrentTime = new Date();
 
-      self.showPageProgressTimer = setInterval(() => {
-        self.totalPageIndex.forEach((total, idx) => {
-          if (total > 0) {
-            self.countdownCurrentTime = new Date();
+      // self.showPageProgressTimer = setInterval(() => {
+      //  self.totalPageIndex.forEach((total, idx) => {
+      //    if (total > 0) {
+      //      self.countdownCurrentTime = new Date();
 
-            // let base = 1;
-            // if (self.isShowGroup) base = self.displaySettings.summaryPatrolTime;
-            // else base = self.displaySettings.personPatrolTime;
+      //      const base = self.displaySettings.personPatrolTime;
 
-            const base = self.displaySettings.personPatrolTime;
+      //      const percentage = (100 * (self.countdownCurrentTime - self.countdownStartTime)) / (base * 1000);
+      //      self.pageProgressPercentage = `${percentage}%`;
 
-            const percentage = (100 * (self.countdownCurrentTime - self.countdownStartTime)) / (base * 1000);
-            self.pageProgressPercentage = `${percentage}%`;
-
-            if (percentage >= 100) {
-              self.pageProgressPercentage = '0%';
-              if (self.currentPageIndex[idx] === total) {
-                self.$set(self.currentPageIndex, idx, 0);
-              } else {
-                self.$set(self.currentPageIndex, idx, self.currentPageIndex[idx] + 1);
-              }
-            }
-          }
-        });
-      }, 1000);
+      //      if (percentage >= 100) {
+      //        self.pageProgressPercentage = '0%';
+      //        if (self.currentPageIndex[idx] === total) {
+      //          self.$set(self.currentPageIndex, idx, 0);
+      //        } else {
+      //          self.$set(self.currentPageIndex, idx, self.currentPageIndex[idx] + 1);
+      //        }
+      //      }
+      //    }
+      //  });
+      //}, 1000);
     },
 
     zoomViews() {
