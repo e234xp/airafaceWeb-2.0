@@ -194,24 +194,26 @@ export default {
           },
           (__, data) => {
             if (this.obj_loading) this.obj_loading.hide();
-            this.value_allTableItems = data.result.data;
-            this.value_dataTotalLength = data.result.total_length;
-            this.value_allTableItems.sort((a, b) => {
-              if (a.timestamp < b.timestamp) return 1;
-              if (a.timestamp > b.timestamp) return -1;
-              return 0;
-            });
-            this.value_allTableItems.forEach((item, index) => {
-              this.value_allTableItems[index].dateTime = new Date(item.timestamp).yyyymmdd_HHMMSS();
-              this.value_allTableItems[index].person_name = person_list.find((person) => person.uuid === item.uuid)?.name;
-              this.value_allTableItems[index].data = this.generateDataInfo(item);
-            });
-            this.value_dataItemsToShow = this.generateFilteredData(
-              this.value_allTableItems,
-              this.value_searchingFilter,
-            );
-            this.value_tablePage.currentPage = 1;
-            if (cb) cb();
+            if (data && data.message && data.message === 'ok') {
+              this.value_allTableItems = data.result.data;
+              this.value_dataTotalLength = data.result.total_length;
+              this.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+              this.value_allTableItems.forEach((item, index) => {
+                this.value_allTableItems[index].dateTime = new Date(item.timestamp).yyyymmdd_HHMMSS();
+                this.value_allTableItems[index].person_name = person_list.find((person) => person.uuid === item.uuid)?.name;
+                this.value_allTableItems[index].data = this.generateDataInfo(item);
+              });
+              this.value_dataItemsToShow = this.generateFilteredData(
+                this.value_allTableItems,
+                this.value_searchingFilter,
+              );
+              this.value_tablePage.currentPage = 1;
+              if (cb) cb();
+            }
           },
         );
       });

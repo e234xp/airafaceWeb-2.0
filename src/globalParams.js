@@ -13,7 +13,7 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.00.01.240904v';
+global.webVersion = '2.00.01.240905v';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
@@ -106,9 +106,9 @@ else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 console.log('globalParams.js', window.apiSocketPath);
 
 function apiServerPath() {
-  // if (global.usingHttps) {
-  //   return `https://${HOST}:${PORT}`;
-  // }
+  if (global.usingHttps) {
+    return `https://${HOST}:${PORT}`;
+  }
   return `http://${HOST}:${PORT}`;
 }
 
