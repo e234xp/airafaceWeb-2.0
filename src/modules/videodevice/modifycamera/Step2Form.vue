@@ -11,24 +11,34 @@
     <CRow
       sm="12"
       class="h5 ml-2 mb-3"
-      v-if="!flag_snapshotReadly"
+      v-if="!flag_snapshotReadly || err_msg !== ''"
     >
-      <CCol
-        sm="1"
-        style="display: flex; justify-content: right; align-items: right;"
-      >
-        <CSpinner
-          color="primary"
-        />
-        <!-- <img src="/img/notify.png"> -->
-      </CCol>
-      <CCol
-        sm="10"
-        style="line-height: 32px;"
-      >
-        {{ disp_msgLoadingVideo }}
-      </CCol>
-      <CCol sm="1" />
+      <template v-if="err_msg === ''">
+        <CCol
+          sm="1"
+          style="display: flex; justify-content: right; align-items: right;"
+        >
+          <CSpinner
+            color="primary"
+          />
+          <!-- <img src="/img/notify.png"> -->
+        </CCol>
+        <CCol
+          sm="10"
+          style="line-height: 32px;"
+        >
+          {{ disp_msgLoadingVideo }}
+        </CCol>
+        <CCol sm="1" />
+      </template>
+      <template v-else>
+        <CCol
+          sm="10"
+          style="line-height: 32px;"
+        >
+          Error: {{ err_msg }}
+        </CCol>
+      </template>
     </CRow>
     <CRow
       sm="12"
@@ -190,6 +200,8 @@ export default {
 
       disp_msgLoadingVideo: i18n.formatter.format('msgLoadingVideo'),
 
+      err_msg: '',
+
       flag_snapshotReadly: false,
 
       // canvas
@@ -297,7 +309,7 @@ export default {
     self.$globalCameraSnapshot(params, (err, data) => {
       if (!err) {
         self.image.src = `data:image/jpg;base64,${data.base64}`;
-      }
+      } else self.err_msg = err;
     });
 
     let isMouseActive = false;

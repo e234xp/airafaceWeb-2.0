@@ -19,6 +19,12 @@
           />
           <div class="attendance-title" />
         </div>
+        <div
+          class="fz-super-large text-white"
+          v-if="displaySettings.showAmount"
+        >
+          {{ entryPersons.length }}
+        </div>
         <div class="current-date-time text-white ff-noto-sans fw-200">
           <div class="fz-xxxl current-date">
             {{ currentDate }}
@@ -96,12 +102,12 @@
       <!-------------------  Attendance - END ------------------>
 
       <!-- Occupancy/Attendance 顯示人員資料列表 -->
-      <div style="display: grid !important; gap: 0.7%; grid-template-columns: 66% 33%;">
+      <div :style="{ display: 'grid !important', gap: '0.7%', 'grid-template-columns': displaySettings.showLeaving ? '66% 33%' : '100%' }">
         <!-- getGridStyleByAmount(), -->
         <div style="padding-left: 10px;">
           <div
             :class="[
-              'grid-4x4',
+              displaySettings.showLeaving ? 'grid-4x4' : 'grid-6x6',
               'd-flex',
               'flex-wrap',
               'person-list-container',
@@ -116,7 +122,7 @@
                 person.status === 0 ? 'normal-person-card' : '',
                 person.status === 2 ? 'abnormal-person-card' : '',
                 person.status === 1 ? 'absent-person-card' : '',
-                'person-card-4x4',
+                displaySettings.showLeaving ? 'person-card-4x4' : 'person-card-6x6',
               ]"
               :style="'zoom: ' + zoomRatio + ' !important;'"
             >
@@ -192,7 +198,7 @@
             Loading...
           </div>
         </div>
-        <div>
+        <div v-if="displaySettings.showLeaving">
           <!-- getGridStyleByAmount(), -->
           <div
             :class="[
@@ -276,7 +282,10 @@
       <!-- footer -->
       <div class="footer-box-wrap">
         <div class="footer-box">
-          <div class="pager d-flex align-items-center justify-content-center" style="width: 66%">
+          <div
+            class="pager d-flex align-items-center justify-content-center"
+            :style="{ width: displaySettings.showLeaving ? '66%' : '100%' }"
+          >
             <button
               class="btn-reset"
               :disabled="currentPageIndex[0] === 0"
@@ -332,7 +341,11 @@
             </button>
           </div>
 
-          <div class="pager d-flex align-items-center justify-content-center" style="width: 33%">
+          <div
+            class="pager d-flex align-items-center justify-content-center"
+            style="width: 33%"
+            v-if="displaySettings.showLeaving"
+          >
             <button
               class="btn-reset"
               :disabled="currentPageIndex[1] === 0"
@@ -714,6 +727,7 @@ export default {
     let valueSetting = setting.data || {};
     const capacity = valueSetting.CAPACITY;
     self.displaySettings = { ...self.displaySettings, ...capacity };
+    console.log(self.displaySettings);
 
     if (self.displaySettings.dailyResetTime.length === 2) {
       self.displaySettings.dailyResetTime += ':00';
@@ -897,7 +911,7 @@ export default {
       let retName = '';
       if (self.displaySettings.line2 === 'NAME') {
         retName = person.name;
-      } else {
+      } else if (self.displaySettings.line2 === 'PARTIALNAME') {
         retName = self.showField(person, 'PARTIALNAME');
       }
 
@@ -1370,7 +1384,7 @@ export default {
     },
 
     setupPageLayoutAmount() {
-      return [20, 8];
+      return this.displaySettings.showLeaving ? [20, 8] : [36, 0];
     },
 
     initViews() {
@@ -1456,13 +1470,15 @@ export default {
         const footerBoxWrapElement = document.querySelector('.footer-box-wrap');
         const attendanceTopElement = document.querySelector('.attendance-top-box');
 
+        footerBoxWrapElement.style.bottom = `${Math.floor(dH / 2)}px`;
+
         // 將下列 views 進行 zoom
         if (dateTimeElement) self.setZoom(dateTimeElement);
         if (chartElement) self.setZoom(chartElement);
         if (summaryBox) self.setZoom(summaryBox);
         if (headerElement) self.setZoom(headerElement);
         if (dividerElement) self.setZoom(dividerElement);
-        // if (footerBoxElement) self.setZoom(footerBoxElement);
+        if (footerBoxElement) self.setZoom(footerBoxElement);
         if (footerBoxElement) footerBoxElement.style.setProperty('width', '100%');
         if (footerBoxWrapElement) footerBoxWrapElement.style.setProperty('width', `calc(100% - ${dashboard.style.paddingLeft} - ${dashboard.style.paddingRight})`);
         if (attendanceTopElement) self.setZoom(attendanceTopElement);
