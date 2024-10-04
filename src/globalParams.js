@@ -13,12 +13,12 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.00.01.240819';
+global.webVersion = '2.00.01.241001';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.86'; // airaFace2
+const TEST_HOST = '192.168.10.122'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = '443'; // 測試mini的PORT
@@ -195,14 +195,21 @@ function postJson(cgi, jsondata, cb) {
         (response) => {
           if (response.status === 401) {
             router.push({ path: '/' });
+            if (cb) cb('error', null);
           } else if (response.status !== 200) {
-            throw new Error('Bad response from server');
-          }
-          return response.json();
+            response.json().then(errJson => {
+              // throw 讓錯誤進入 catch 區塊
+              const err = errJson?.message || 'Bad response from server';
+              if (cb) cb(err, null);
+              // throw new Error(errJson?.message || 'Bad response from server');
+            });;
+            // throw new Error('Bad response from server');
+            // throw new Error(response.json());
+          } else return response.json();
         },
       )
       .then((data) => {
-        if (cb) cb(null, data);
+        if (cb && data) cb(null, data);
       })
       .catch((err) => {
         if (cb) cb(err || 'error', null);
@@ -1535,11 +1542,12 @@ Vue.prototype.$globalRemoveEventHandle = (
 Vue.prototype.$globalCameraSnapshot = (
   setting, cb,
 ) => new Promise((resolve) => {
+  console.log('Vue.prototype.$globalCameraSnapsho')
   postJson('/airafacelite/getcamerasnapshot', setting,
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
-    });
+    })
 });
 
 // Tulip
