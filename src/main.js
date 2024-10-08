@@ -150,6 +150,7 @@ const mainVue = new Vue({
           browserLanguage = enUS;
           Vue.prototype.$globalDatePickerLanguage = datePickerLangEn;
         }
+        Vue.$cookies.set('selectedLang', i18n.locale);
         break;
     }
 

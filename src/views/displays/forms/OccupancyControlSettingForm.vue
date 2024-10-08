@@ -148,26 +148,6 @@
             <CCardHeader>{{ $t('PersonalDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
-                <CCol sm="12">
-                  <div class="h5">
-                    {{ $t('DisplayGroup') }}
-                  </div>
-                  <multiselect
-                    v-model="value_occupancySetting.displayGroup"
-                    placeholder=""
-                    style="margin-bottom: 12px;"
-                    :options="value_displayGroupList"
-                    :multiple="true"
-                    :taggable="true"
-                    :hide-selected="true"
-                    :select-label="$t('Select')"
-                    :selected-label="$t('Selected')"
-                    :deselect-label="$t('Deselect')"
-                    :show-no-options="false"
-                  />
-                </CCol>
-              </CRow>
-              <CRow>
                 <CCol sm="3">
                   <div class="h5">
                     {{ $t('DisplayMode') }}
@@ -209,6 +189,26 @@
                     :value.sync="value_occupancySetting.line2"
                     :options="value_displayAttributeList"
                     :disabled="value_occupancySetting.displayCardMode == 'COMPACT'"
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="12">
+                  <div class="h5">
+                    {{ $t('DisplayGroup') }}
+                  </div>
+                  <multiselect
+                    v-model="value_occupancySetting.displayGroup"
+                    placeholder=""
+                    style="margin-bottom: 12px;"
+                    :options="value_displayGroupList"
+                    :multiple="true"
+                    :taggable="true"
+                    :hide-selected="true"
+                    :select-label="$t('Select')"
+                    :selected-label="$t('Selected')"
+                    :deselect-label="$t('Deselect')"
+                    :show-no-options="false"
                   />
                 </CCol>
               </CRow>

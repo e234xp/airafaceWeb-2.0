@@ -610,10 +610,11 @@ export default {
             console.log(ex);
           }
         });
+        self.value_tablePage.currentPage = 1;
         self.value_dataItemsToShow = self.generateFilteredData(
           self.value_allTableItems,
         );
-        self.value_tablePage.currentPage = 1;
+
         self.obj_loading.hide();
       } catch (ex) {
         console.log(ex);
@@ -677,10 +678,10 @@ export default {
               console.log(ex);
             }
           });
+          self.value_tablePage.currentPage = 1;
           self.value_dataItemsToShow = self.generateFilteredData(
             self.value_allTableItems,
           );
-          self.value_tablePage.currentPage = 1;
 
           // if (cb) cb();
         }
@@ -749,10 +750,11 @@ export default {
             console.log(ex);
           }
         });
+        self.value_tablePage.currentPage = 1;
         self.value_dataItemsToShow = self.generateFilteredData(
           self.value_allTableItems,
         );
-        self.value_tablePage.currentPage = 1;
+
         self.obj_loading.hide();
       } catch (ex) {
         console.log(ex);
@@ -791,10 +793,11 @@ export default {
               console.log(ex);
             }
           });
+          self.value_tablePage.currentPage = 1;
           self.value_dataItemsToShow = self.generateFilteredData(
             self.value_allTableItems,
           );
-          self.value_tablePage.currentPage = 1;
+
           // if (cb) cb();
         }
       });
@@ -865,10 +868,10 @@ export default {
             console.log(ex);
           }
         });
+        self.value_tablePage.currentPage = 1;
         self.value_dataItemsToShow = self.generateFilteredData(
           self.value_allTableItems,
         );
-        self.value_tablePage.currentPage = 1;
         self.obj_loading.hide();
       } catch (ex) {
         console.log(ex);
@@ -909,10 +912,10 @@ export default {
               console.log(ex);
             }
           });
+          self.value_tablePage.currentPage = 1;
           self.value_dataItemsToShow = self.generateFilteredData(
             self.value_allTableItems,
           );
-          self.value_tablePage.currentPage = 1;
 
           // if (cb) cb();
         }
