@@ -13,12 +13,12 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.00.01.241001';
+global.webVersion = '2.00.01.241008';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.122'; // airaFace2
+const TEST_HOST = '192.168.10.86'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = '443'; // 測試mini的PORT

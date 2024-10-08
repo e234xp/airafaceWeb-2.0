@@ -593,7 +593,7 @@
                 <CButton
                   class="btn btn-primary fz-xl"
                   @click="clickOnApplyAiraManager"
-                  :disabled="!value_enableAiraManager || flag_manager_host !== ''"
+                  :disabled="flag_manager_host !== ''"
                 >
                   {{ $t('Apply') }}
                 </CButton>
