@@ -242,7 +242,7 @@ export default {
 
           for (let i = 0; i < self.$profileLists.length; i += 1) {
             if (self.$profileLists[i].device_type === data.device_type) {
-              document.title = self.$profileLists[i].device_type;
+              // document.title = self.$profileLists[i].device_type;
 
               // store.commit('set', ['deviceProfile', self.$profileLists[i]]);
               // console.log('getversionInfo', store.state.deviceProfile);
