@@ -55,15 +55,16 @@ export default {
   },
   methods: {
     async downloadPersonDataAsync(sliceSize, cb) {
-      if (this.$store.state.loginRedirect) {
+      const self = this;
+      if (self.$store.state.loginRedirect) {
         if (cb) cb(null, true, false, []);
         return;
       }
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
-      while (this.flag_keepingDownloadPersonData && thereIsMoreData) {
-        const ret = await this.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
+      while (self.flag_keepingDownloadPersonData && thereIsMoreData) {
+        const ret = await self.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -76,7 +77,7 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          this.$fire({
+          self.$fire({
             title: this.$t('NetworkLoss'),
             text: '',
             type: 'error',
@@ -88,11 +89,14 @@ export default {
     },
     onFetchPersonDataCallback(cb) {
       // console.log('onFetchDataCallback' )
-      this.flag_keepingDownloadPersonData = true;
-      this.downloadPersonDataAsync(20000, cb);
+      const self = this;
+      self.flag_keepingDownloadPersonData = true;
+      self.downloadPersonDataAsync(20000, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnMonth, uuidList, sliceSize, cb) {
+      const self = this;
+
       this.loading_percent = 0;
       let shitf = 0;
       let reset = true;
@@ -104,8 +108,11 @@ export default {
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
       while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        console.log("downloadPersonVerifyResultAsync 1", new Date() );
+
         const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+        console.log("downloadPersonVerifyResultAsync 2", new Date() );
 
         if (error == null) {
           if (data.total_length && data.total_length > sliceSize + shitf) {
@@ -127,8 +134,12 @@ export default {
       reset = true;
       thereIsMoreData = true;
       while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+
+        console.log("globalAttendanceVerifyResult 1", new Date() );
+
         const ret = await this.$globalAttendanceVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+        console.log("globalAttendanceVerifyResult 2", new Date() );
 
         if (error == null) {
           if (data.total_length && data.total_length > (sliceSize + shitf)) {
@@ -171,8 +182,12 @@ export default {
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
       while (this.flag_keepingDownloadSingleVerifyResult && thereIsMoreData) {
+
+        console.log("globalManualClockinResult 1", new Date() );
+
         const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+        console.log("globalManualClockinResult 2", new Date() );
 
         if (error == null) {
           if (data.total_length && data.total_length > sliceSize + shitf) {
@@ -194,8 +209,11 @@ export default {
       reset = true;
       thereIsMoreData = true;
       while (this.flag_keepingDownloadSingleVerifyResult && thereIsMoreData) {
+        console.log("globalPersonVerifyResult 1", new Date() );
+
         const ret = await this.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
+        console.log("globalPersonVerifyResult 2", new Date() );
 
         if (error == null) {
           if (data.total_length && data.total_length > (sliceSize + shitf)) {

@@ -56,15 +56,16 @@ export default {
   },
   methods: {
     async downloadPersonDataAsync(sliceSize, cb) {
-      if (this.$store.state.loginRedirect) {
+      const self = this;
+      if (self.$store.state.loginRedirect) {
         if (cb) cb(null, true, false, []);
         return;
       }
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
-      while (this.flag_keepingDownloadPersonData && thereIsMoreData) {
-        const ret = await this.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
+      while (self.flag_keepingDownloadPersonData && thereIsMoreData) {
+        const ret = await self.$globalFindPersonWithoutPhoto('', shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -77,8 +78,8 @@ export default {
         } else {
           thereIsMoreData = false;
           if (cb) cb(error, true, false, []);
-          this.$fire({
-            title: this.$t('NetworkLoss'),
+          self.$fire({
+            title: i18n.formatter.format('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -89,12 +90,15 @@ export default {
     },
     onFetchPersonDataCallback(cb) {
       // console.log('onFetchDataCallback' )
-      this.flag_keepingDownloadPersonData = true;
-      this.downloadPersonDataAsync(20000, cb);
+      const self = this;
+      self.flag_keepingDownloadPersonData = true;
+      self.downloadPersonDataAsync(20000, cb);
     },
 
     async downloadPersonVerifyResultAsync(dateOnDay, uuidList, sliceSize, cb) {
-      this.loading_percent = 0;
+      const self = this;
+
+      self.loading_percent = 0;
       let shitf = 0;
       let reset = true;
       let thereIsMoreData = true;
@@ -106,8 +110,8 @@ export default {
 
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
-      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        const ret = await self.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -117,10 +121,6 @@ export default {
           } else {
             thereIsMoreData = false;
           }
-
-          // for (let i = 0; i < data.data.length; i++) {
-          //   data.data[i].timestamp += (new Date().getTimezoneOffset() * 60000);
-          // }
 
           if (cb) cb(error, reset, true, data.data);
           reset = false;
@@ -133,8 +133,8 @@ export default {
       shitf = 0;
       reset = true;
       thereIsMoreData = true;
-      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await this.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        const ret = await self.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
 
         if (error == null) {
@@ -142,15 +142,15 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
-          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
+          self.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
           if (cb) cb(error, reset, thereIsMoreData, data.data);
           reset = false;
         } else {
           thereIsMoreData = false;
-          this.loading_percent = 100;
+          self.loading_percent = 100;
           if (cb) cb(error, true, false, []);
-          this.$fire({
-            title: this.$t('NetworkLoss'),
+          self.$fire({
+            title: self.$t('NetworkLoss'),
             text: '',
             type: 'error',
             timer: 3000,
@@ -160,10 +160,12 @@ export default {
       }
     },
     onFetchPersonAttendanceDataCallback(dateOnDay, uuidList, cb) {
-      this.flag_keepingDownloadPersonVerifyResult = true;
-      // this.downloadPersonVerifyResultAsync(dateOnDay, uuidList, 2500, cb);
-      this.downloadPersonVerifyResultAsync(dateOnDay, [], 5000, cb);
+      const self = this;
+      self.flag_keepingDownloadPersonVerifyResult = true;
+      // self.downloadPersonVerifyResultAsync(dateOnDay, uuidList, 2500, cb);
+      self.downloadPersonVerifyResultAsync(dateOnDay, [], 5000, cb);
     },
+
     setWrapperStyle() {
       document.querySelector('style').textContent
         += '@media screen and (max-width: 992px) { '

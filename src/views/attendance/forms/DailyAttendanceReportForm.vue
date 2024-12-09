@@ -808,15 +808,16 @@ export default {
   created() { },
   mixins: [TableObserver],
   mounted() {
-    this.$globalGetAttendanceSettings((err, data) => {
+      const self = this;
+      self.$globalGetAttendanceSettings((err, data) => {
       if (!err) {
-        this.value_workingHourSettings = data;
-        this.value_workingHourSettings.videoDeviceGroupIn = [];
-        this.value_workingHourSettings.videoDeviceGroupOut = [];
+        self.value_workingHourSettings = data;
+        self.value_workingHourSettings.videoDeviceGroupIn = [];
+        self.value_workingHourSettings.videoDeviceGroupOut = [];
 
-        if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
-            || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
-          this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
+        if ((self.value_workingHourSettings.video_device_group_in.length >= 1)
+            || (self.value_workingHourSettings.video_device_group_out.length >= 1)) {
+          self.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
             if (err == null) {
               const { result } = data;
 
@@ -1212,33 +1213,6 @@ export default {
             item.clockout = '';
             item.clockout_temperature = '';
 
-            // if (item.attendance_data_list && item.attendance_data_list.length >= 1) {
-            //   let inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 3);
-
-            //   if (inRecord.length === 0) {
-            //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-            //   }
-
-            //   console.log(inRecord);
-            //   if (inRecord.length >= 1) {
-            //     item.clockin = dayjs(new Date(item.attendance_data_list[0].timestamp)).format('HH:mm:ss');
-            //     item.clockin_temperature = item.attendance_data_list[0].temperature;
-            //   }
-
-            //   let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
-            //   if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
-            //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-            //   }
-
-            //   if (outRecord.length >= 1) {
-            //     item.clockout = dayjs(
-            //       new Date(item.attendance_data_list[item.attendance_data_list.length - 1].timestamp),
-            //     ).format('HH:mm:ss');
-
-            //     item.clockout_temperature = item.attendance_data_list[item.attendance_data_list.length - 1].temperature;
-            //   }
-            // }
-
             if (item.attendanceStatusData.attendance_data.firstClockInRec) {
               item.clockin = item.attendanceStatusData.attendance_data.firstClockInRec.timestamp
                 ? dayjs(new Date(item.attendanceStatusData.attendance_data.firstClockInRec.timestamp)).format('HH:mm:ss')
@@ -1334,30 +1308,6 @@ export default {
           item.clockin_temperature = '';
           item.clockout = '';
           item.clockout_temperature = '';
-
-          // if (item.attendance_data_list && item.attendance_data_list.length >= 1) {
-          //   let inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 3);
-          //   if (inRecord.length === 0) {
-          //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-          //   }
-
-          //   if (inRecord.length >= 1) {
-          //     item.clockin = dayjs(new Date(item.attendance_data_list[0].timestamp)).format('HH:mm:ss');
-          //     item.clockin_temperature = item.attendance_data_list[0].temperature;
-          //   }
-
-          //   let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
-          //   if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
-          //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-          //   }
-
-          //   if (outRecord.length >= 1) {
-          //     item.clockout = dayjs(new Date(
-          //       item.attendance_data_list[item.attendance_data_list.length - 1].timestamp,
-          //     )).format('HH:mm:ss');
-          //     item.clockout_temperature = item.attendance_data_list[item.attendance_data_list.length - 1].temperature;
-          //   }
-          // }
 
           if (item.attendanceStatusData.attendance_data.firstClockInRec) {
             item.clockin = item.attendanceStatusData.attendance_data.firstClockInRec.timestamp
@@ -1841,41 +1791,6 @@ export default {
               ? item.attendanceStatusData.attendance_data.lastClockOutRec.temperature
               : '';
           }
-          // item.attendance_data_list.sort((a, b) => a.timestamp - b.timestamp);
-
-          // if (item.attendance_data_list.length >= 1) {
-          //   let inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 5);
-          //   if (inRecord.length === 0) {
-          //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 3);
-          //   }
-          //   if (inRecord.length === 0) {
-          //     inRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-          //   }
-
-          //   if (inRecord.length >= 1) {
-          //     item.clockin = dayjs(new Date(item.attendance_data_list[0].timestamp)).format('HH:mm:ss');
-          //     item.clockin_temperature = item.attendance_data_list[0].temperature ? item.attendance_data_list[0].temperature : '';
-          //   }
-
-          //   let outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 6);
-          //   if (outRecord.length === 0) {
-          //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 4);
-          //   }
-          //   if ((outRecord.length === 0) && (item.attendance_data_list.length >= 2)) {
-          //     outRecord = item.attendance_data_list.filter((r) => r.verify_mode === 1 || r.verify_mode === 2);
-          //   }
-
-          //   if (outRecord.length >= 1) {
-          //     item.clockout = dayjs(new Date(
-          //       item.attendance_data_list[item.attendance_data_list.length - 1].timestamp,
-          //     )).format('HH:mm:ss');
-          //     item.clockout_temperature = item.attendance_data_list[item.attendance_data_list.length - 1].temperature
-          //       ? item.attendance_data_list[item.attendance_data_list.length - 1].temperature
-          //       : '';
-          //   }
-          // }
-
-          // console.log(item.clockin_temperature, item.clockout_temperature);
 
           item.clockinToShow = `${item.clockin}<br>${item.clockin_temperature}`;
           item.clockoutToShow = `${item.clockout}<br>${item.clockout_temperature}`;
@@ -1969,8 +1884,8 @@ export default {
           item.showimage = '<img src=\'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs'
             + '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD'
             + '5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
-          item.imageb64 = '';
         }
+        item.imageb64 = '';
       });
       return Object.assign([], sliceList);
     },

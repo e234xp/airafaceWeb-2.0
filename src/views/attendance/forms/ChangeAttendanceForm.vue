@@ -288,9 +288,11 @@ export default {
     },
   },
   async created() {
-    this.flag_enableSearchButton = true;
+    const self = this;
 
-    this.value_clockInTime = new Date();
+    self.flag_enableSearchButton = true;
+
+    self.value_clockInTime = new Date();
   },
   mounted() {
     this.formatNameList();
@@ -334,7 +336,8 @@ export default {
     },
 
     async formatNameList() {
-      const ret1 = await this.$globalFindPersonWithoutPhoto('', 0, 3000);
+      const self = this;
+      const ret1 = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
       const personLists = ret1.data.person_list;
       const handleData = personLists.map(({ id, name, uuid }) => ({ label: `${name}(${id})`, value: uuid }));
 
@@ -342,7 +345,8 @@ export default {
     },
 
     async saveData(cb) {
-      const personDatas = await this.$globalFindPersonWithoutPhoto('', 0, 3000);
+      const self = this;
+      const personDatas = await self.$globalFindPersonWithoutPhoto('', 0, 3000);
       const personData = personDatas.data.person_list;
 
       if (!this.selectedName) return;
@@ -353,7 +357,7 @@ export default {
         return item.name === selectValue;
       });
 
-      const token = this.$globalServerTokenInfo();
+      const token = self.$globalServerTokenInfo();
 
       if (selectMatch.length === 0) return;
       const parameter = selectMatch[0];
@@ -380,7 +384,7 @@ export default {
       const utcTimestamp = searchDate.getTime();
 
       const submitData = {
-        verify_uuid: this.makeid(32),
+        verify_uuid: self.makeid(32),
         timestamp: utcTimestamp,
         verify_mode: verifyMode,
         verify_mode_string: verifyModeString,
@@ -397,7 +401,7 @@ export default {
       };
 
       try {
-        await this.$globalManualClockin(submitData);
+        await self.$globalManualClockin(submitData);
 
         await this.showNotificationAndGoBack(true);
         this.$router.back(-1);
@@ -409,11 +413,12 @@ export default {
     },
 
     showNotificationAndGoBack(pass) {
+      const self = this;
       return new Promise((resolve) => {
-        this.$fire({
+        self.$fire({
           text: pass
-            ? this.$t('Successful')
-            : this.$t('OperationFailed'),
+            ? self.$t('Successful')
+            : self.$t('OperationFailed'),
           type: pass ? 'success' : 'error',
           timer: 3000,
           onClose: resolve,
@@ -440,15 +445,17 @@ export default {
     },
 
     async queryPersonResult(uuidList, startTime, endTime, sliceShift, sliceLength) {
-      this.value_dataItemsToShow = [];
-      this.value_allTableItems = [];
+      const self = this;
 
-      let ret = await this.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
+      self.value_dataItemsToShow = [];
+      self.value_allTableItems = [];
+
+      let ret = await self.$globalManualClockinResult(uuidList, startTime, endTime, sliceShift, sliceLength);
       if (ret) {
         if (ret.data) {
           if (ret.data.data) {
             if (ret.data.data.length >= 1) {
-              this.value_allTableItems = this.value_allTableItems.concat(ret.data.data);
+              self.value_allTableItems = self.value_allTableItems.concat(ret.data.data);
             }
           }
         }
@@ -462,20 +469,20 @@ export default {
         uuid_list: uuidList,
         with_image: false,
       };
-      ret = await this.$globalGetPersonResult(query);
+      ret = await self.$globalGetPersonResult(query);
       if (ret) {
         if (ret.data) {
           if (ret.data.result) {
             if (ret.data.result.data) {
               if (ret.data.result.data.length >= 1) {
-                this.value_allTableItems = this.value_allTableItems.concat(ret.data.result.data);
+                self.value_allTableItems = self.value_allTableItems.concat(ret.data.result.data);
               }
             }
           }
         }
       }
 
-      this.value_dataItemsToShow = this.processFields(this.value_allTableItems);
+      self.value_dataItemsToShow = this.processFields(self.value_allTableItems);
     },
 
     processFields(sourceData) {

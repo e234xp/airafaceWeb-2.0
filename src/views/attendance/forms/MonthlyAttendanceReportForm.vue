@@ -1143,47 +1143,6 @@ export default {
           this.value_attendanceDataListToReview,
           this.value_searchingFilter,
         );
-        // const result = [];
-        // const month = dayjs(this.value_specifiedMonth).format('YYYY-MM');
-
-        // this.onFetchSingleAttendanceDataCallback(
-        //   `${month}-01`,
-        //   `${month}-${dayjs(month).daysInMonth()}`,
-        //   item.uuid,
-        //   (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
-        //     if (personVrItems && personVrItems.length > 0) {
-        //       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === item.uuid);
-        //       dataListOnUuid.forEach((d) => {
-        //         if (!result.find((att) => att.verify_uuid === d.verify_uuid)) {
-        //           result.push({
-        //             id: d.id,
-        //             name: d.name,
-        //             department: item.extra_info.department,
-        //             verify_uuid: d.verify_uuid,
-        //             timestamp: d.timestamp,
-        //             source_id: d.source_id,
-        //             // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
-        //             yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
-        //             temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
-        //             verify_mode: d.verify_mode,
-        //             verify_mode_string: d.verify_mode_string,
-        //             verify_score: d.verify_score,
-        //             card_number: d.card_number,
-        //             group_list: d.group_list,
-        //             face_image_id: d.face_image_id,
-        //           });
-        //         }
-        //       });
-        //     }
-        //     if (!morePersonVr || errorOnPersonVr) {
-        //       this.value_attendanceDataListToReview = result;
-        //       this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
-        //         this.value_attendanceDataListToReview,
-        //         this.value_searchingFilter,
-        //       );
-        //     }
-        //   },
-        // );
       }
     },
     // 選擇某一個人 (item) 查看某一天 (dayIdx) 的每個紀錄
@@ -1201,49 +1160,6 @@ export default {
         totalResult: 0,
       };
       if (item.attendance_data_list && item.attendance_data_list.length > 0) {
-        // const result = [];
-        // this.onFetchSingleAttendanceDataCallback(
-        //   dateCode,
-        //   dateCode,
-        //   item.uuid,
-        //   (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
-        //     if (personVrItems && personVrItems.length > 0) {
-        //       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === item.uuid);
-        //       dataListOnUuid.forEach((d) => {
-        //         if (!result.find((att) => att.verify_uuid === d.verify_uuid)) {
-        //           result.push({
-        //             id: d.id,
-        //             name: d.name,
-        //             department: item.extra_info.department,
-        //             verify_uuid: d.verify_uuid,
-        //             timestamp: d.timestamp,
-        //             source_id: d.source_id,
-        //             // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
-        //             yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
-        //             temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
-        //             verify_mode: d.verify_mode,
-        //             verify_mode_string: d.verify_mode_string,
-        //             verify_score: d.verify_score,
-        //             card_number: d.card_number,
-        //             group_list: d.group_list,
-        //             face_image_id: d.face_image_id,
-        //           });
-        //         }
-        //       });
-        //     }
-        //     if (!morePersonVr || errorOnPersonVr) {
-        //       this.value_attendanceDataListToReview = result;
-        //       this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
-        //         this.value_attendanceDataListToReview,
-        //         this.value_searchingFilter,
-        //       );
-        //     }
-        //   },
-        // );
-        // const l = item.attendance_data_list.filter((data) => data.timestamp >= startTimeOfSelectedDay
-        //   && data.timestamp <= endTimeOfSelectedDay);
-        // console.log(item);
-        // console.log(dayIdx);
         const l = [];
         if (Object.keys(item.attendanceStatusData.attendance_data.clock_in_record[dayIdx]).length > 0) l.push(item.attendanceStatusData.attendance_data.clock_in_record[dayIdx]);
         if (Object.keys(item.attendanceStatusData.attendance_data.clock_out_record[dayIdx]).length > 0) l.push(item.attendanceStatusData.attendance_data.clock_out_record[dayIdx]);
@@ -1932,20 +1848,21 @@ export default {
     },
 
     exportMasterToTXTCSV() {
+      const self = this;
       const zip = new JsZip();
 
-      let separator = this.value_txtSeparator === '' ? this.value_separator : this.value_txtSeparator;
+      let separator = self.value_txtSeparator === '' ? self.value_separator : self.value_txtSeparator;
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
-      let data = `"No"${separator}"${this.value_masterexportFields.join(`"${separator}"`)}"\r\n`;
+      let data = `"No"${separator}"${self.value_masterexportFields.join("\"" + separator + "\"")}"\r\n`;
 
-      this.exportNo = 0;
+      self.exportNo = 0;
 
-      for (let idx2 = 0; idx2 < this.value_allTableItems.length; idx2 += 1) {
-        this.exportNo += 1;
+      for (let idx2 = 0; idx2 < self.value_allTableItems.length; idx2 += 1) {
+        self.exportNo += 1;
 
-        const item = this.value_allTableItems[idx2];
+        const item = self.value_allTableItems[idx2];
         {
           item.nameToShow = item.name;
           item.late = 0;
@@ -1954,7 +1871,7 @@ export default {
           item.no_entry = 0;
           item.no_leave = 0;
 
-          const attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, item);
+          const attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item);
 
           try {
             if (Array.isArray(item.group_list)) {
@@ -1969,19 +1886,19 @@ export default {
           item.attendanceStatusData = attendanceStatusData;
         }
 
-        const ln = [`"${this.exportNo}"`];
-        for (let i = 0; i < this.value_masterexportFields.length; i += 1) {
-          switch (this.value_masterexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'workingTime': ln.push(`"${item.working_time}"`); break;
-            case 'overTime': ln.push(`"${item.over_time}"`); break;
-            case 'norecord': ln.push(`"${item.no_record}"`); break;
-            case 'arrivallate': ln.push(`"${item.late}"`); break;
-            case 'leaveearly': ln.push(`"${item.early}"`); break;
-            case 'noentryrecord': ln.push(`"${item.no_entry}"`); break;
-            case 'noleaverecord': ln.push(`"${item.no_leave}"`); break;
+        const ln = ["\"" + self.exportNo + "\""];
+        for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
+          switch (self.value_masterexportFields[i]) {
+            case 'id': ln.push("\"" + item.id + "\""); break;
+            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
+            case 'group_list': ln.push("\"" + item.groups + "\""); break;
+            case 'workingTime': ln.push("\"" + item.working_time + "\""); break;
+            case 'overTime': ln.push("\"" + item.over_time + "\""); break;
+            case 'norecord': ln.push("\"" + item.no_record + "\""); break;
+            case 'arrivallate': ln.push("\"" + item.late + "\""); break;
+            case 'leaveearly': ln.push("\"" + item.early + "\""); break;
+            case 'noentryrecord': ln.push("\"" + item.no_entry + "\""); break;
+            case 'noleaverecord': ln.push("\"" + item.no_leave + "\""); break;
             default: break;
           }
         }
@@ -1991,11 +1908,11 @@ export default {
       let filename = '';
       let blob = null;
 
-      if (this.value_fileType === '.txt') {
-        filename = `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.txt`;
+      if (self.value_fileType === '.txt') {
+        filename = `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.txt`;
         blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
-      } else if (this.value_fileType === '.csv') {
-        filename = `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}.csv`;
+      } else if (self.value_fileType === '.csv') {
+        filename = `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}.csv`;
         blob = new Blob([`\uFEFF${data}`], { type: 'text/csv;charset=utf-8' });
       }
 
@@ -2004,22 +1921,26 @@ export default {
       zip.generateAsync({ type: 'blob' }).then((content) => {
         FileSaver.saveAs(
           content,
-          `Monthly_Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}.zip`,
+          `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.zip`,
         );
       });
     },
 
     clickOnExportDetail() {
-      switch (this.value_fileType) {
-        case '.txt': this.exportDetailToTXTCSV(); break;
-        case '.csv': this.exportDetailToTXTCSV(); break;
+      const self = this;
+
+      switch (self.value_fileType) {
+        case '.txt': self.exportDetailToTXTCSV(); break;
+        case '.csv': self.exportDetailToTXTCSV(); break;
         case '.xlsx':
         default:
-          this.exportDetailToExcel(); break;
+          self.exportDetailToExcel(); break;
       }
     },
 
     async exportDetailToExcel() {
+      const self = this;
+
       const zip = new JsZip();
 
       const snapshotFolder = zip.folder('snapshot');
@@ -2027,8 +1948,8 @@ export default {
       const workbook = new Excel.Workbook();
       let worksheet = null;
 
-      this.exportNo = 0;
-      this.excelCounter = 0;
+      self.exportNo = 0;
+      self.excelCounter = 0;
 
       // const company = '';
       // let personId = '';
@@ -2109,28 +2030,29 @@ export default {
         }
 
         worksheet.addRow({
-          No: this.exportNo,
-          id: this.value_attendanceDataListToReview[idx].id,
-          nameToShow: this.value_attendanceDataListToReview[idx].nameToShow,
-          card_number: this.value_attendanceDataListToReview[idx].card_number,
-          groups: this.value_attendanceDataListToReview[idx].groups,
-          temperature: this.value_attendanceDataListToReview[idx].temperature,
-          clockMode: this.value_attendanceDataListToReview[idx].clockMode,
-          clockTime: this.value_attendanceDataListToReview[idx].clockTime,
+          No: self.exportNo,
+          id: self.value_attendanceDataListToReview[idx].id,
+          nameToShow: self.value_attendanceDataListToReview[idx].nameToShow,
+          card_number: self.value_attendanceDataListToReview[idx].card_number,
+          groups: self.value_attendanceDataListToReview[idx].groups,
+          temperature: self.value_attendanceDataListToReview[idx].temperature,
+          clockMode: self.value_attendanceDataListToReview[idx].clockMode,
+          clockTime: self.value_attendanceDataListToReview[idx].clockTime,
         });
 
-        const pos = this.value_detailexportFields.indexOf('face_image');
+        const pos = self.value_detailexportFields.indexOf('face_image');
         if (pos >= 0) {
-          if (this.value_snapshotFileType === 'Embedded' || this.value_snapshotFileType === 'Files') {
-            if (this.value_attendanceDataListToReview[idx].face_image_id) {
-              const imageRet = await this.$globalFetchVerifyPhoto(this.value_attendanceDataListToReview[idx].face_image_id);
+          if (self.value_snapshotFileType === 'Embedded' || self.value_snapshotFileType === 'Files') {
+            if (self.value_attendanceDataListToReview[idx].face_image_id) {
+              const imageRet = await self.$globalFetchVerifyPhoto(self.value_attendanceDataListToReview[idx].face_image_id);
 
               if (imageRet && imageRet.data) {
-                if (this.value_snapshotFileType === 'Embedded') {
+                if (self.value_snapshotFileType === 'Embedded') {
                   const photoId = workbook.addImage({
                     base64: imageRet.data.face_image,
                     extension: 'jpeg',
                   });
+
                   worksheet.lastRow.height = 60;
                   worksheet.addImage(
                     photoId,
@@ -2138,13 +2060,13 @@ export default {
                   );
                 }
 
-                if (this.value_snapshotFileType === 'Files') {
-                  const fileTime = this.value_attendanceDataListToReview[idx].clockTime
+                if (self.value_snapshotFileType === 'Files') {
+                  const fileTime = self.value_attendanceDataListToReview[idx].clockTime
                     .replace('/', '_')
                     .replace(' ', '_')
                     .replace(':', '_');
                   snapshotFolder.file(
-                    `${this.exportNo}_${fileTime}.jpeg`,
+                    `${self.exportNo}_${fileTime}.jpeg`,
                     imageRet.data.face_image,
                     { base64: true },
                   );
@@ -2157,7 +2079,7 @@ export default {
 
       if (workbook != null) {
         workbook.xlsx.writeBuffer().then((data) => {
-          const filename = `Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}_${personName}.xlsx`;
+          const filename = `Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}_${personName}.xlsx`;
 
           const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
@@ -2166,19 +2088,21 @@ export default {
           zip.generateAsync({ type: 'blob' }).then((content) => {
             FileSaver.saveAs(
               content,
-              `Attendance_${dayjs(this.value_specifiedMonth).format('YYYYMM')}_${personName}.zip`,
+              `Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}_${personName}.zip`,
             );
           });
         });
       }
 
-      this.flag_downloadingExecl = false;
+      self.flag_downloadingExecl = false;
     },
 
     exportDetailToTXTCSV() {
+      const self = this;
+
       const zip = new JsZip();
 
-      let separator = this.value_txtSeparator === '' ? this.value_separator : this.value_txtSeparator;
+      let separator = self.value_txtSeparator === '' ? self.value_separator : self.value_txtSeparator;
       if (separator === 'S') separator = ' ';
       if (separator === 'T') separator = '\t';
 
@@ -2186,17 +2110,17 @@ export default {
       // let personId = '';
       let personName = '';
 
-      if (this.value_attendanceDataListToReview.length >= 1) {
-        personName = this.value_attendanceDataListToReview[0].name;
+      if (self.value_attendanceDataListToReview.length >= 1) {
+        personName = self.value_attendanceDataListToReview[0].name;
       }
 
-      let data = `"No"${separator}"${this.value_detailexportFields.join(`"${separator}"`)}"\r\n`;
+      let data = `"No"${separator}"${self.value_detailexportFields.join("\"" + separator + "\"")}"\r\n`;
 
-      this.exportNo = 0;
+      self.exportNo = 0;
 
-      for (let idx = 0; idx < this.value_attendanceDataListToReview.length; idx += 1) {
-        this.exportNo += 1;
-        const item = this.value_attendanceDataListToReview[idx];
+      for (let idx = 0; idx < self.value_attendanceDataListToReview.length; idx += 1) {
+        self.exportNo += 1;
+        const item = self.value_attendanceDataListToReview[idx];
 
         item.nameToShow = item.name;
         item.clockTime = dayjs(item.timestamp).format('MM/DD HH:mm');
@@ -2235,16 +2159,16 @@ export default {
           item.groups = '';
         }
 
-        const ln = [`${this.exportNo}`];
-        for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
-          switch (this.value_detailexportFields[i]) {
-            case 'id': ln.push(`${item.id}`); break;
-            case 'name': ln.push(`${item.nameToShow}`); break;
-            case 'group_list': ln.push(`${item.groups}`); break;
-            case 'mode': ln.push(`${item.clockMode}`); break;
-            case 'clockTime': ln.push(`${item.clockTime}`); break;
-            case 'temperature': ln.push(`${item.temperature}`); break;
-            case 'cardno': ln.push(`${item.card_number}`); break;
+        const ln = ["\"" + self.exportNo + "\""];
+        for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
+          switch (self.value_detailexportFields[i]) {
+            case 'id': ln.push("\"" + item.id + "\""); break;
+            case 'name': ln.push("\"" + item.nameToShow + "\""); break;
+            case 'group_list': ln.push("\"" + item.groups + "\""); break;
+            case 'mode': ln.push("\"" + item.clockMode + "\""); break;
+            case 'clockTime': ln.push("\"" + item.clockTime + "\""); break;
+            case 'temperature': ln.push("\"" + item.temperature + "\""); break;
+            case 'cardno': ln.push("\"" + item.card_number + "\""); break;
             case 'face_image': ln.push(''); break;
             default: break;
           }
@@ -2255,13 +2179,13 @@ export default {
       let filename = '';
       let blob = null;
 
-      if (this.value_fileType === '.txt') {
-        filename = `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.txt`;
+      if (self.value_fileType === '.txt') {
+        filename = `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.txt`;
         blob = new Blob([data], {
           type: 'text/plain;charset=utf-8',
         });
-      } else if (this.value_fileType === '.csv') {
-        filename = `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.csv`;
+      } else if (self.value_fileType === '.csv') {
+        filename = `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.csv`;
         blob = new Blob([`\uFEFF${data}`], { type: 'text/csv;charset=utf-8' });
       }
 
@@ -2270,7 +2194,7 @@ export default {
       zip.generateAsync({ type: 'blob' }).then((content) => {
         FileSaver.saveAs(
           content,
-          `Attendance_${dayjs(this.value_specifiedMonth).format('MMDD')}_${personName}.zip`,
+          `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.zip`,
         );
       });
     },
@@ -2282,12 +2206,13 @@ export default {
       return 'padding: 0 0 0 0;fontSize:18px;';
     },
     formatBase64ToImgTag(desireWidth, desireHeight, base64ImageString) {
+      const self = this;
       let ret = '';
 
       if (base64ImageString.length > 0) {
         ret = `<img width='${desireWidth}' height='${desireHeight}' src='data:image/jpeg;base64,${base64ImageString}'>`;
       } else {
-        ret = `<img width='${desireWidth}' height='${desireHeight}' src='${this.value_emptyPhoto}'>`;
+        ret = `<img width='${desireWidth}' height='${desireHeight}' src='${self.value_emptyPhoto}'>`;
       }
 
       return ret;
@@ -2318,13 +2243,14 @@ export default {
       return ret;
     },
     generateFilteredData(sourceData, filter) {
+      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData
         : sourceData.filter((item) => item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
           || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
           || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1));
 
-      this.value_tablePage.totalResult = filteredItems.length;
+      self.value_tablePage.totalResult = filteredItems.length;
 
       filteredItems.forEach((pItem) => {
         const item = pItem;
@@ -2332,8 +2258,8 @@ export default {
         item.working_time = '';
         item.over_time = '';
 
-        item.attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, item);
-        item.attendanceStatus = this.generateAttendanceStatusTable(item.attendanceStatusData, item.uuid);
+        item.attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item);
+        item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, item.uuid);
 
         let totalWorkingTime = 0;
         for (let i = 0; i < item.attendanceStatusData.attendance_data.working_time.length; i += 1) {
@@ -2345,16 +2271,16 @@ export default {
           totalOverTime += item.attendanceStatusData.attendance_data.over_time[i];
         }
 
-        item.working_time = this.formatDurationTime(totalWorkingTime);
-        item.over_time = this.formatDurationTime(totalOverTime);
+        item.working_time = self.formatDurationTime(totalWorkingTime);
+        item.over_time = self.formatDurationTime(totalOverTime);
 
         item.workingTimeToShow = '';
         if (totalWorkingTime > 0) {
-          item.workingTimeToShow += `${this.$t('WorkingTime')} : ${this.formatDurationTime(totalWorkingTime)}`;
+          item.workingTimeToShow += `${this.$t('WorkingTime')} : ${self.formatDurationTime(totalWorkingTime)}`;
         }
 
         if (totalOverTime > 0) {
-          item.workingTimeToShow += `<br> ${this.$t('Overtime')} : ${this.formatDurationTime(totalOverTime)}`;
+          item.workingTimeToShow += `<br> ${this.$t('Overtime')} : ${self.formatDurationTime(totalOverTime)}`;
         }
 
         item.attendanceStatusText = `${this.$t('NoRecord')} : ${item.no_record} <br>`
@@ -2365,8 +2291,8 @@ export default {
           + `${this.$t('OvertimeDays')} : ${item.overtime} <br>`;
       });
       const sliceList = filteredItems.slice(
-        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
-        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
       );
       sliceList.forEach((pItem) => {
         const item = pItem;
@@ -2397,36 +2323,37 @@ export default {
           item.groups = '';
         }
 
-        item.clockDate = dayjs(this.value_specifiedMonth).format('MM/YYYY');
+        item.clockDate = dayjs(self.value_specifiedMonth).format('MM/YYYY');
       });
 
-      this.value_showAllPerson = `${this.$t('AllPerson')}`
-        + ` : ${this.value_allTableItems.length}`;
+      self.value_showAllPerson = `${this.$t('AllPerson')}`
+        + ` : ${self.value_allTableItems.length}`;
 
-      this.value_showLatePerson = `${this.$t('LatePerson')}`
-        + ` : ${this.value_allTableItems.filter((p) => p.late > 0).length}`;
+      self.value_showLatePerson = `${this.$t('LatePerson')}`
+        + ` : ${self.value_allTableItems.filter((p) => p.late > 0).length}`;
 
-      this.value_showLeaveEarlyPerson = `${this.$t('LeaveEarly')}`
-        + ` : ${this.value_allTableItems.filter((p) => p.early > 0).length}`;
+      self.value_showLeaveEarlyPerson = `${this.$t('LeaveEarly')}`
+        + ` : ${self.value_allTableItems.filter((p) => p.early > 0).length}`;
 
-      this.value_showNoRecordPerson = `${this.$t('NoRecord')}`
-        + ` : ${this.value_allTableItems.filter((p) => p.no_record > 0).length}`;
+      self.value_showNoRecordPerson = `${this.$t('NoRecord')}`
+        + ` : ${self.value_allTableItems.filter((p) => p.no_record > 0).length}`;
 
-      this.value_showGoodRecordsPerson = `${this.$t('GoodRecords')}`
-        + ` : ${this.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
+      self.value_showGoodRecordsPerson = `${this.$t('GoodRecords')}`
+        + ` : ${self.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
 
       return Object.assign([], sliceList);
     },
 
     generateFilteredDataForDetailData(sourceData, filter) {
+      const self = this;
       const filteredItems = filter.length === 0
         ? sourceData : sourceData.filter(
           (item) => (item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1),
         );
-      this.value_tablePageForDetailData.totalResult = filteredItems.length;
+      self.value_tablePageForDetailData.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
-        (this.value_tablePageForDetailData.currentPage - 1) * this.value_tablePageForDetailData.pageSize,
-        this.value_tablePageForDetailData.currentPage * this.value_tablePageForDetailData.pageSize,
+        (self.value_tablePageForDetailData.currentPage - 1) * self.value_tablePageForDetailData.pageSize,
+        self.value_tablePageForDetailData.currentPage * self.value_tablePageForDetailData.pageSize,
       );
       sliceList.forEach((pItem) => {
         const item = pItem;
@@ -2475,7 +2402,7 @@ export default {
           item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs`
             + '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQI'
             + 'HWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
-          this.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
+          self.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
             if (error === null && data) {
               item.imageb64 = data.face_image;
 
@@ -2493,27 +2420,29 @@ export default {
       return Object.assign([], sliceList);
     },
     refreshTableItems(cb) {
-      if (this.onFetchPersonDataCallback) {
-        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
-        this.onFetchPersonDataCallback((errorOnPersonTable, resetPersonTable, morePersonItem, personTableItems) => {
+      const self = this;
+
+      if (self.onFetchPersonDataCallback) {
+        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        self.onFetchPersonDataCallback((errorOnPersonTable, resetPersonTable, morePersonItem, personTableItems) => {
           if (!errorOnPersonTable) {
             if (resetPersonTable) {
-              this.value_allTableItems = [];
-              this.value_dataItemsToShow = [];
+              self.value_allTableItems = [];
+              self.value_dataItemsToShow = [];
             }
             if (personTableItems) {
-              this.value_allTableItems = this.value_allTableItems.concat(personTableItems);
+              self.value_allTableItems = self.value_allTableItems.concat(personTableItems);
             }
 
             if (personTableItems.length >= 1) {
               const uuidList = [];
 
-              this.onFetchPersonAttendanceDataCallback(
-                this.value_specifiedMonth,
+              self.onFetchPersonAttendanceDataCallback(
+                self.value_specifiedMonth,
                 uuidList,
                 (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
                   if (personVrItems && personVrItems.length > 0) {
-                    this.value_allTableItems.forEach((record) => {
+                    self.value_allTableItems.forEach((record) => {
                       const person = record;
                       const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
                       dataListOnUuid.forEach((d) => {
@@ -2547,21 +2476,21 @@ export default {
                     });
                   }
                   if (!morePersonVr || errorOnPersonVr) {
-                    this.value_dataItemsToShow = this.generateFilteredData(
-                      this.value_allTableItems,
-                      this.value_searchingFilter,
+                    self.value_dataItemsToShow = self.generateFilteredData(
+                      self.value_allTableItems,
+                      self.value_searchingFilter,
                     );
-                    if (this.obj_loading) this.obj_loading.hide();
+                    if (self.obj_loading) self.obj_loading.hide();
                     if (cb) cb();
                   }
                 },
               );
             }
-            if (this.obj_loading) this.obj_loading.hide();
-            this.observeTableSize();
-            // this.generateFilteredData(this.value_allTableItems, []);
+            if (self.obj_loading) self.obj_loading.hide();
+            self.observeTableSize();
+            // self.generateFilteredData(self.value_allTableItems, []);
           } else {
-            if (this.obj_loading) this.obj_loading.hide();
+            if (self.obj_loading) self.obj_loading.hide();
             if (cb) cb();
           }
         });
@@ -2619,6 +2548,8 @@ export default {
 
       const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
 
+      const self = this;
+
       item.no_record = 0;
       item.late = 0;
       item.early = 0;
@@ -2647,8 +2578,8 @@ export default {
       const overTime = definedOvertimeTimeHour * msHour + definedOvertimeTimeMin * msMin;
       const overTimeBuffer = definedOvertimeMinimumMin * msMin;
 
-      const startTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth(), 1, 0, 0, 0, 0);
-      const endTimeOfMonth = new Date(this.value_specifiedMonth.getFullYear(), this.value_specifiedMonth.getMonth() + 1, 1, 0, 0, 0, 0);
+      const startTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth(), 1, 0, 0, 0, 0);
+      const endTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth() + 1, 1, 0, 0, 0, 0);
       const daysOnMonth = (endTimeOfMonth - startTimeOfMonth) / msDay;
 
       const returnData = {
@@ -2904,7 +2835,7 @@ export default {
           }
 
           if (timeToCheckClockOut && clockOutStatus === _STATUS_NONE) {
-            if (passModeRecord.length > 0) {
+            if (passModeRecord.length >= 2) {
               lastClockOutRec = passModeRecord[passModeRecord.length - 1];
 
               clockOutTimeStamp = lastClockOutRec.timestamp;
@@ -2968,6 +2899,7 @@ export default {
       return returnData;
     },
     generateAttendanceStatusTable(attendanceData, personUuid) {
+      const self = this;
       const tableBordderSize = '1';
       const tableBordderColor = '#9799a1';
       const cellBgColor = '#fff';
@@ -3001,11 +2933,11 @@ export default {
 
         let clockInStatusColor = attendanceNoStatusColor; // no show
         if (!isHoliday) {
-          clockInStatusColor = this.value_attendanceStatusColor[
+          clockInStatusColor = self.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_in_status[i]
           ];
         } else if (attendanceData.attendance_data.clock_in_status[i] !== 5) {
-          clockInStatusColor = this.value_attendanceStatusColor[
+          clockInStatusColor = self.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_in_status[i]
           ];
         }
@@ -3013,11 +2945,11 @@ export default {
 
         let clockOutStatusColor = attendanceNoStatusColor;
         if (!isHoliday) {
-          clockOutStatusColor = this.value_attendanceStatusColor[
+          clockOutStatusColor = self.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_out_status[i]
           ];
         } else if (attendanceData.attendance_data.clock_out_status[i] !== 5) {
-          clockOutStatusColor = this.value_attendanceStatusColor[
+          clockOutStatusColor = self.value_attendanceStatusColor[
             attendanceData.attendance_data.clock_out_status[i]
           ];
         }

@@ -179,9 +179,9 @@ export default {
       ],
 
       param_faceDetectionScore: [
-        { label: i18n.formatter.format('SpoofingLevelLow'), value: 0.8 },
-        { label: i18n.formatter.format('Medium'), value: 0.5 },
-        { label: i18n.formatter.format('SpoofingLevelHigh'), value: 0.1 },
+        { label: i18n.formatter.format('SpoofingLevelLow'), value: 0.1 },
+        { label: i18n.formatter.format('Medium'), value: 0.3 },
+        { label: i18n.formatter.format('SpoofingLevelHigh'), value: 0.5 },
       ],
 
       param_aprilTagType: [
