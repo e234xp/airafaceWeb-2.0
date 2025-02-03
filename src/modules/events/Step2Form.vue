@@ -32,6 +32,14 @@ export default {
   ],
   dataFields: [
     {
+      label: 'EventControlName',
+      value: 'rule_name',
+    },
+    {
+      label: 'VerifiedUuid',
+      value: 'verify_uuid',
+    },
+    {
       label: 'VideoDeviceVideoSource',
       value: 'source_device',
     },
@@ -179,9 +187,9 @@ export default {
       },
 
       httpFormPass: {
-        host: false,
-        user: false,
-        pass: false,
+        // host: false,
+        // user: false,
+        // pass: false,
         body: false,
       },
 
@@ -231,8 +239,8 @@ export default {
         case 'http':
           return {
             checkPort: this.checkPort,
-            checkIpAddr: this.checkIpAddr,
-            isNotEmptyValidator: this.isNotEmptyValidator,
+            //checkIpAddr: this.checkIpAddr,
+            //isNotEmptyValidator: this.isNotEmptyValidator,
 
             note: this.eventControlNote,
             form: this.httpForm,

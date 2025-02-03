@@ -684,6 +684,7 @@
   "UsernameorPasswordError": "บัญชีหรือรหัสผ่านไม่ถูกต้อง",
   "UseWebCamPhoto": "ใช้รูปภาพ",
   "ValidPeriod": "ระยะเวลาที่ถูกต้อง",
+  "VerifiedUuid": "ยืนยันแล้ว อุยอิด",
   "VerifiedDuration": "การเก็บรักษาข้อมูลที่ตรวจสอบแล้ว (วัน)",
   "VerifiedIndication": "พรอมต์ความสำเร็จในการรับรู้",
   "VerifiedTimeStamp": "ประทับเวลาที่ตรวจสอบแล้ว",

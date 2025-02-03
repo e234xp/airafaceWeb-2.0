@@ -62,9 +62,10 @@
       <CCardBody>
         <div>
           <vxe-table
-            :data="value_dataItemsToShow"
             stripe
+            ref="mainTable"
             align="center"
+            :data="value_dataItemsToShow"
             :cell-style="
               () => {
                 return 'fontSize:18px;';
@@ -75,9 +76,6 @@
                 return 'fontSize:18px;';
               }
             "
-            ref="mainTable"
-            :auto-resize="true"
-            keep-source
             highlight-current-row
             :edit-config="{ trigger: 'manual', mode: 'row' }"
           >
@@ -119,12 +117,10 @@
               :show-overflow="ellipsisMode"
               field="ip_address"
               :title="disp_ipAddress"
-              width="auto"
             />
 
             <vxe-table-column
               min-width="5%"
-              width="auto"
             >
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-end">
@@ -176,7 +172,7 @@ import TableObserver from '@/utils/TableObserver.vue';
 
 export default {
   name: 'Form',
-  mixins: [TableObserver],
+ // mixins: [TableObserver],
   props: {
     onAdd: { type: Function, default: () => () => true },
     onDelete: { type: Function, default: () => () => true },

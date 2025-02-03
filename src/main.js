@@ -10,8 +10,10 @@ import VueLoading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import VueSimpleAlert from 'vue-simple-alert';
 import XEUtils from 'xe-utils';
+import VXEUI from 'vxe-pc-ui';
 import VXETable from 'vxe-table';
 import VueCookies from 'vue-cookies';
+import 'vxe-pc-ui/lib/style.css';
 import 'vxe-table/lib/style.css';
 import 'vxe-table-plugin-element/dist/style.css';
 
@@ -45,6 +47,7 @@ Vue.config.performance = true;
 Vue.use(CoreuiVue);
 Vue.use(VueSimpleAlert);
 Vue.use(VueCookies);
+Vue.use(VXEUI);
 Vue.use(VXETable);
 VXETable.use(ElInput);
 VXETable.use(ElSwitch);

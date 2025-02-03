@@ -119,12 +119,10 @@
               :show-overflow="ellipsisMode"
               field="ip_address"
               :title="disp_ipAddress"
-              width="auto"
             />
 
             <vxe-table-column
               min-width="5%"
-              width="auto"
             >
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-end">

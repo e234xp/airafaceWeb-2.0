@@ -23,8 +23,6 @@
                 size="lg"
                 placeholder=""
                 required
-                :is-valid="formPass.host = checkIpAddr(form.host) === ''"
-                :invalid-feedback="checkIpAddr(form.host)"
                 v-model="form.host"
               />
             </td>
@@ -43,8 +41,6 @@
                 class="mb-form-row"
                 size="lg"
                 placeholder=""
-                :is-valid="formPass.user = isNotEmptyValidator(form.user) === ''"
-                :invalid-feedback="isNotEmptyValidator(form.user)"
                 v-model="form.user"
               />
             </td>
@@ -56,8 +52,6 @@
                   placeholder=""
                   autocomplete="on"
                   :type="flag_view_password ? 'text' : 'password'"
-                  :is-valid="formPass.pass = isNotEmptyValidator(form.pass) === ''"
-                  :invalid-feedback="isNotEmptyValidator(form.pass)"
                   v-model="form.pass"
                 >
                   <template #append-content>
@@ -354,21 +348,21 @@
 export default {
   name: 'Step2FormHttp',
   props: {
-    isNotEmptyValidator: {
-      type: Function,
-      required: true,
-      default: () => () => '',
-    },
+    // isNotEmptyValidator: {
+    //   type: Function,
+    //   required: true,
+    //   default: () => () => '',
+    // },
     checkPort: {
       type: Function,
       required: true,
       default: () => '',
     },
-    checkIpAddr: {
-      type: Function,
-      required: true,
-      default: () => '',
-    },
+    // checkIpAddr: {
+    //   type: Function,
+    //   required: true,
+    //   default: () => '',
+    // },
     note: {
       type: String,
       required: true,
@@ -415,6 +409,14 @@ export default {
         //   label: `${this.$t('VerifiedTimeStamp')}  (String)`,
         //   value: '##VerifiedTimeStamp##',
         // },
+        {
+          label: `${this.$t('EventControlName')}  (String)`,
+          value: '##RuleName##',
+        },
+        {
+          label: `${this.$t('VerifiedUuid')}  (String)`,
+          value: '##VerifiedUuid##',
+        },
         {
           label: `${this.$t('VerifiedDateTime')}  (String)`,
           value: '##VerifiedDateTime##',

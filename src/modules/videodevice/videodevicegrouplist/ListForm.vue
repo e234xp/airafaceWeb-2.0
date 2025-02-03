@@ -73,7 +73,7 @@
             <vxe-table-column
               type="checkbox"
               align="center"
-              width="auto"
+              width="5%"
             />
 
             <vxe-table-column
@@ -81,14 +81,14 @@
               field="name"
               :title="disp_group"
               align="center"
-              width="auto"
+              width="15%"
             />
 
             <vxe-table-column
               :show-overflow="ellipsisMode"
               field="camera_count"
               :title="disp_videoDevices"
-              width="auto"
+              width="15%"
               align="center"
             />
 
@@ -96,7 +96,7 @@
               :show-overflow="ellipsisMode"
               field="outputDevices"
               :title="disp_outputDevices"
-              width="auto"
+              width="15%"
               align="center"
             />
 
@@ -104,7 +104,7 @@
               :show-overflow="ellipsisMode"
               field="rules"
               :title="disp_rules"
-              width="auto"
+              width="15%"
               align="center"
             />
 

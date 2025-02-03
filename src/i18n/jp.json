@@ -684,6 +684,7 @@
   "UsernameorPasswordError": "アカウントまたはパスワードが間違っています",
   "UseWebCamPhoto": "写真",
   "ValidPeriod": "有効期間",
+  "VerifiedUuid": "フォローする",
   "VerifiedDuration": "検証済みデータ保持 (日)",
   "VerifiedIndication": "認識成功プロンプト",
   "VerifiedTimeStamp": "検出時間",
