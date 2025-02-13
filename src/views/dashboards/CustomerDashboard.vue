@@ -47,6 +47,13 @@
                   stroke-linejoin="round"
                 />
               </svg>
+
+
+              <div id="download" @click="exportExcel">
+                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" fill="#463a2a" viewBox="0 0 24 24">
+                  <path d="m19,0h-9c-2.757,0-5,2.243-5,5v1h-.5c-2.481,0-4.5,2.019-4.5,4.5v10c0,1.929,1.569,3.499,3.499,3.5h15.501c2.757,0,5-2.243,5-5V5c0-2.757-2.243-5-5-5ZM5,20.5c0,.827-.673,1.5-1.5,1.5s-1.5-.673-1.5-1.5v-10c0-1.378,1.122-2.5,2.5-2.5h.5v12.5Zm17-1.5c0,1.654-1.346,3-3,3H6.662c.216-.455.338-.963.338-1.5V5c0-1.654,1.346-3,3-3h9c1.654,0,3,1.346,3,3v14Zm-2-12c0,.552-.448,1-1,1h-3c-.552,0-1-.448-1-1s.448-1,1-1h3c.552,0,1,.448,1,1Zm0,4c0,.552-.448,1-1,1h-9c-.552,0-1-.448-1-1s.448-1,1-1h9c.552,0,1,.448,1,1Zm0,4c0,.552-.448,1-1,1h-9c-.552,0-1-.448-1-1s.448-1,1-1h9c.552,0,1,.448,1,1Zm0,4c0,.552-.448,1-1,1h-9c-.552,0-1-.448-1-1s.448-1,1-1h9c.552,0,1,.448,1,1ZM9,7v-2c0-.552.448-1,1-1h2c.552,0,1,.448,1,1v2c0,.552-.448,1-1,1h-2c-.552,0-1-.448-1-1Z"/>
+                </svg>
+              </div>
             </el-button>
 
             <div
@@ -452,6 +459,7 @@
 
 <script>
 import { airaLogoWhite as airaLogo } from '@/utils';
+import Excel from 'exceljs/dist/exceljs.min';
 
 import capacityModel from '@/models/CapacityDashboardModel.vue';
 import { backgroundImage } from '@/utils/customerMode';
@@ -1404,11 +1412,45 @@ export default {
     goHome() {
       this.displayMode = 'Dashboard';
     },
+
+    async exportExcel() {
+      const workbook = new Excel.Workbook();
+      const worksheet = workbook.addWorksheet('worksheet');
+
+      // 撰寫 excel 的 column （第一列）
+      worksheet.columns = [
+        { header: '姓名', key: 'name', width: 15 },
+        { header: '果昔', key: 'smoothie', width: 10 },
+        { header: '蔬菜', key: 'vegetable', width: 10 },
+        { header: '牛奶', key: 'milk', width: 10 },
+      ];
+
+      // 撰寫 excel 第二列開始的資料, 若為 undefined 設定為 0
+      this.persons.forEach(person => {
+        worksheet.addRow({
+          name: person.name,
+          smoothie: person.plugin_info?.smoothie ?? 0,
+          vegetable: person.plugin_info?.vegetable ?? 0,
+          milk: person.plugin_info?.milk ?? 0,
+        })
+      })
+
+      // 下載檔案
+      workbook.xlsx.writeBuffer().then((data) => {
+        const link = document.createElement("a");
+        const blobData = new Blob([data], {
+          type: "application/vnd.ms-excel;charset=utf-8;"
+        });
+        link.download = 'result.xlsx';
+        link.href = URL.createObjectURL(blobData);
+        link.click();
+      });
+    }
   },
 };
 </script>
 
-<style scoped>
+<style>
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.3s;
@@ -1426,5 +1468,9 @@ export default {
   .person-card-container {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .home-button > span {
+    display: flex;
   }
 </style>
