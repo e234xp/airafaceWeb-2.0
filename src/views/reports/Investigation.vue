@@ -333,6 +333,7 @@ import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
 
 import JsZip from 'jszip';
+import { merge } from 'chart.js/helpers';
 
 const dayjs = require('dayjs');
 
@@ -506,23 +507,130 @@ export default {
       //   uuid_list: [],
       // };
 
+      // 重設分頁
+      this.value_tablePage.currentPage = 1;
+      // 取第 1 頁
+      this.fetchPageData(startTime, endTime, 1);
+    },
+    async fetchPageData(startTS, endTS, page) {
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.value_allTableItems = [];
+      // 計算要跳過幾筆
+      const shift  = (page - 1) * this.value_tablePage.pageSize;
+      const length = this.value_tablePage.pageSize;
+
+      const query = {
+        start_time:   startTS,
+        end_time:     endTS,
+        slice_length: length,
+        slice_shift:  shift,
+        uuid_list:    [],
+        with_image:   false,
+        merge: false,
+        keyword: this.value_keyword,
+        groups: this.value_searchGroups,
+        source: this.value_searchSource,
+        temperature: this.value_Temperature
+      };
+      console.log("query",query)
+      // 根據類型呼叫不同 API
+      let retResult;
       switch (this.value_searchTypes) {
         case 'Visitor':
-          // this.queryVisitorResult(data);
-          this.setupVisitorData(startTime, endTime);
+          retResult = await this.$globalGetVisitorResult(query);
           break;
         case 'Stranger':
-          // this.queryStrangerResult(data);
-          this.setupStrangerData(startTime, endTime);
+          retResult = await this.$globalGetStrangerResult(query);
           break;
-        case 'Person':
         default:
-          // this.queryPersonResult(data);
-          this.setupPersonData(startTime, endTime);
-          break;
+          retResult = await this.$globalGetPersonResult(query);
       }
+      console.log(retResult)
+      const result = retResult.data.result;
+      
+      // 更新總筆數，Pager 才會正確顯示分頁
+      this.value_tablePage.totalResult = result.total_length;
+
+      const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              console.log(filter)
+              this.value_allTableItems.push(...filter);
+              this.value_dataTotalLength += filter.length;
+              this.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }         
+        } 
+        try {
+        this.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            if(item.group_list){
+              item.groups = JSON.parse(item.group_list);
+              item.groups = item.groups.filter((g) => g !== 'All Person');
+              item.groups = item.groups.filter((g) => g !== 'All Visitor');
+              item.groups = item.groups.join(',');
+
+            }else{
+              item.groups =''
+            }
+            
+            if(item.verify_mode){
+              switch (item.verify_mode) {
+                case 1:
+                  item.clockMode = i18n.formatter.format('ClockModeCard');
+                  break;
+                case 2:
+                  item.clockMode = i18n.formatter.format('ClockModePass');
+                  break;
+                case 3:
+                  item.clockMode = i18n.formatter.format('ClockModeClockIn');
+                  break;
+                case 4:
+                  item.clockMode = i18n.formatter.format('ClockModeClockOut');
+                  break;
+                default:
+                  item.lockMode = i18n.formatter.format('None');
+                  break;
+              }
+            }
+              
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
+              + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
+              + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        console.log(this.value_allTableItems)
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+        );
+
+        this.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
+      
     },
 
+    // 下面可以刪掉原本的 setupPersonData / setupVisitorData / setupStrangerData
+    // 或保留當你要一次撈全量時再用
+  
     async setupPersonData(startTS, endTS) {
       const self = this;
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
@@ -539,9 +647,11 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
         };
 
         const retResult = await self.$globalGetPersonResult(query);
+        console.log(retResult);
 
         const err = retResult.error;
         if (err == null && retResult.data) {
@@ -611,9 +721,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
+        self.value_dataItemsToShow = Object.freeze(self.generateFilteredData(
           self.value_allTableItems,
-        );
+        ));
 
         self.obj_loading.hide();
       } catch (ex) {
@@ -923,14 +1033,17 @@ export default {
     },
 
     handlePageChange({ currentPage, pageSize }) {
-      const self = this;
-      self.value_tablePage.currentPage = currentPage;
-      self.value_tablePage.pageSize = pageSize;
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
-      self.resizeOneTable();
+      this.value_tablePage.currentPage = currentPage;
+      this.value_tablePage.pageSize   = pageSize;
+
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime   = this.value_searchDatetimeRange[1].getTime();
+      this.fetchPageData(startTime, endTime, currentPage);
+      this.resizeOneTable();
     },
 
     generateFilteredData(sourceData) {
+      console.log("sourceData",sourceData)
       const self = this;
       const filteredItems = sourceData.filter((item) => {
         if (self.value_keyword) {
@@ -978,11 +1091,8 @@ export default {
             return true;
         }
       });
-      self.value_tablePage.totalResult = filteredItems.length;
-      const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-      );
+      //self.value_tablePage.totalResult = filteredItems.length;
+      const sliceList = filteredItems
       sliceList.forEach(async (slicei) => {
         try {
           const showimageId = slicei.face_image_id

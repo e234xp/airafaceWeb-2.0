@@ -73,34 +73,34 @@
               field="userName"
               :title="$t('PersonName')"
               align="center"
-              width="auto"
+              width="10%"
             />
 
             <vxe-table-column
               field="groupList"
               :title="$t('Group')"
               align="center"
-              width="auto"
+              width="20%"
             />
 
             <vxe-table-column
               field="dateString"
               :title="$t('ForgetPunchDate')"
-              width="auto"
+              width="20%"
               align="center"
             />
 
             <vxe-table-column
               field="clockIn"
               :title="$t('ClockIn')"
-              width="auto"
+              width="25%"
               align="center"
             />
 
             <vxe-table-column
               field="clockOut"
-              :title="$t('ClockIn')"
-              width="auto"
+              :title="$t('ClockOut')"
+              width="25%"
               align="center"
             />
           </vxe-table>
