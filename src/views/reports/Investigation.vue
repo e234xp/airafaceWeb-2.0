@@ -526,7 +526,7 @@ export default {
         slice_shift:  shift,
         uuid_list:    [],
         with_image:   false,
-        merge: false,
+        merged: false,
         keyword: this.value_keyword,
         groups: this.value_searchGroups,
         source: this.value_searchSource,
@@ -648,6 +648,10 @@ export default {
           uuid_list: [],
           with_image: false,
           merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetPersonResult(query);
@@ -721,9 +725,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = Object.freeze(self.generateFilteredData(
-          self.value_allTableItems,
-        ));
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
 
         self.obj_loading.hide();
       } catch (ex) {
@@ -814,6 +818,11 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetVisitorResult(query);
@@ -861,9 +870,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
 
         self.obj_loading.hide();
       } catch (ex) {
@@ -929,6 +938,11 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetStrangerResult(query);
@@ -979,9 +993,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
         self.obj_loading.hide();
       } catch (ex) {
         console.log(ex);
@@ -1045,54 +1059,8 @@ export default {
     generateFilteredData(sourceData) {
       console.log("sourceData",sourceData)
       const self = this;
-      const filteredItems = sourceData.filter((item) => {
-        if (self.value_keyword) {
-          let pass = true;
-          if (
-            item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || item.card_number.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1)
-          ) {
-            pass = true;
-          } else return false;
-        }
-
-        if (self.value_searchGroups.length >= 1) {
-          let pass = false;
-
-          for (let i = 0; i < self.value_searchGroups.length; i += 1) {
-            // const g = self.value_searchGroups[i];
-
-            // const pos = eval(item.group_list).indexOf(self.value_searchGroups[i]);
-            const pos = item.group_list.indexOf(self.value_searchGroups[i]);
-
-            if (pos >= 0) {
-              pass = true;
-              break;
-            }
-          }
-
-          if (!pass) return false;
-        }
-
-        if (self.searchSourceIdList.length >= 1) {
-          const temp = this.searchSourceIdList.indexOf(item.source_id) >= 0;
-          if (!temp) return false;
-        }
-
-        switch (self.value_Temperature) {
-          case 'Normal':
-            return !item.high_temperature;
-          case 'OverTemperature':
-            return item.high_temperature;
-          case 'All':
-          default:
-            return true;
-        }
-      });
-      //self.value_tablePage.totalResult = filteredItems.length;
-      const sliceList = filteredItems
+      
+      const sliceList = sourceData
       sliceList.forEach(async (slicei) => {
         try {
           const showimageId = slicei.face_image_id
@@ -1123,6 +1091,24 @@ export default {
     async exportExcel(withPhoto) {
       const self = this;
 
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime   = this.value_searchDatetimeRange[1].getTime();
+
+      // 1) 先把所有資料全撈回來，根據 type 呼叫不同的 setupXxxData
+      
+      switch (self.value_searchTypes) {
+        case 'Visitor':
+          await self.setupVisitorData(startTime, endTime);
+          break;
+        case 'Stranger':
+          await self.setupStrangerData(startTime, endTime);
+          break;
+        default:  // Person
+          await self.setupPersonData(startTime, endTime);
+      }
+      
+
+      // 2) 現在 this.value_allTableItems 就是全部資料，開始匯出流程
       self.flag_downloadingExecl = true;
       let snapshotFolder = null;
 
