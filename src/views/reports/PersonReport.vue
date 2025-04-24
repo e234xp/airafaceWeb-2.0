@@ -216,6 +216,7 @@ const defaultlState = () => ({
 
   cameraList: [],
   tabletList: [],
+  searchTimer: null,
 });
 
 export default {
@@ -256,11 +257,18 @@ export default {
     this.observeTableSize();
   },
   watch: {
-    value_searchingFilter() {
+  value_searchingFilter(newVal) {
+    // 先清掉舊的計時器（如果還沒到 500ms 就又改字了）
+    clearTimeout(this.searchTimer);
+    // 再重設一個新的計時器：500ms 後才執行裡面的函式
+    this.searchTimer = setTimeout(() => {
       this.value_tablePage.currentPage = 1;
-      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems);
-    },
-  },
+      const startTime = this.value_specifiedDatetimeRange[0].getTime();
+      const endTime   = this.value_specifiedDatetimeRange[1].getTime();
+      this.fetchPageData(startTime, endTime, 1, newVal);
+    }, 500);
+  }
+},
   methods: {
     toggleText() {
       return i18n.formatter.format('ExportExcel');
@@ -286,17 +294,88 @@ export default {
       const startTime = this.value_specifiedDatetimeRange[0].getTime();
       const endTime = this.value_specifiedDatetimeRange[1].getTime();
 
-      const data = {
-        start_time: startTime,
-        end_time: endTime,
-        slice_shift: 0,
-        slice_length: 10000,
-        with_image: false,
-        uuid_list: [],
-      };
-
-      this.setupPersonData(startTime, endTime);
+      this.value_tablePage.currentPage = 1;
+      this.fetchPageData(startTime, endTime, 1);
     },
+    async fetchPageData(startTS, endTS, page, keyword='') {
+    // 顯示 loading
+    this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+    this.value_allTableItems = []
+
+    // 計算 slice_shift / slice_length
+    const shift  = (page - 1) * this.value_tablePage.pageSize;
+    const length = this.value_tablePage.pageSize;
+
+    const query = {
+      start_time:   startTS,
+      end_time:     endTS,
+      slice_length: length,
+      slice_shift:  shift,
+      uuid_list:    [],
+      with_image:   false,
+      merged: false,
+      keyword,
+    };
+    
+    // 呼叫 API
+    const retResult = await this.$globalGetPersonResult(query);
+   
+
+    // 更新總筆數給 Pager
+    this.value_tablePage.totalResult = retResult.data.result.total_length;
+
+
+    const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              this.value_allTableItems.push(...filter);
+              this.value_dataTotalLength += filter.length;
+              this.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }
+
+        }
+
+        try {
+        this.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            item.groups = JSON.parse(item.group_list);
+            item.groups = item.groups.filter((g) => g !== 'All Person');
+            item.groups = item.groups.join(',');
+
+            const showimageId = item.face_image_id && item.verify_mode !== 2
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf`
+              + 'FcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAA'
+              + 'QAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+        );
+        this.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
+    
+    
+  },
     async setupPersonData(startTS, endTS) {
       const self = this;
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
@@ -313,9 +392,12 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: self.value_searchingFilter
         };
 
         const retResult = await self.$globalGetPersonResult(query);
+       
 
         const err = retResult.error;
         if (err == null && retResult.data) {
@@ -363,9 +445,9 @@ export default {
             console.log(ex);
           }
         });
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
         self.value_tablePage.currentPage = 1;
         self.obj_loading.hide();
       } catch (ex) {
@@ -420,32 +502,16 @@ export default {
       const self = this;
       self.value_tablePage.currentPage = currentPage;
       self.value_tablePage.pageSize = pageSize;
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
+      const startTime = self.value_specifiedDatetimeRange[0].getTime();
+      const endTime   = self.value_specifiedDatetimeRange[1].getTime();
+      const keyword   = this.value_searchingFilter;
+      self.fetchPageData(startTime, endTime, currentPage, keyword);
       self.resizeOneTable();
     },
 
     generateFilteredData(sourceData) {
       const self = this;
-      const filteredItems = sourceData.filter((item) => {
-        if (self.value_searchingFilter) {
-          if (
-            item.id.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
-            || item.name.toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1
-            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_searchingFilter.toLowerCase()) > -1)
-          ) {
-            return true;
-          }
-          return false;
-        }
-
-        return true;
-      });
-
-      self.value_tablePage.totalResult = filteredItems.length;
-      const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-      );
+      const sliceList = sourceData
       sliceList.forEach(async (slicei) => {
         try {
           const showimageId = slicei.face_image_id
@@ -471,6 +537,11 @@ export default {
 
     async exportExcel(withPhoto) {
       const self = this;
+
+      const startTime = this.value_specifiedDatetimeRange[0].getTime();
+      const endTime = this.value_specifiedDatetimeRange[1].getTime();
+
+      await self.setupPersonData(startTime, endTime);
 
       self.flag_downloadingExecl = true;
       let snapshotFolder = null;

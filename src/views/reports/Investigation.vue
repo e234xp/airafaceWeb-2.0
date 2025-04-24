@@ -333,6 +333,7 @@ import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
 
 import JsZip from 'jszip';
+import { merge } from 'chart.js/helpers';
 
 const dayjs = require('dayjs');
 
@@ -506,23 +507,130 @@ export default {
       //   uuid_list: [],
       // };
 
+      // 重設分頁
+      this.value_tablePage.currentPage = 1;
+      // 取第 1 頁
+      this.fetchPageData(startTime, endTime, 1);
+    },
+    async fetchPageData(startTS, endTS, page) {
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      this.value_allTableItems = [];
+      // 計算要跳過幾筆
+      const shift  = (page - 1) * this.value_tablePage.pageSize;
+      const length = this.value_tablePage.pageSize;
+
+      const query = {
+        start_time:   startTS,
+        end_time:     endTS,
+        slice_length: length,
+        slice_shift:  shift,
+        uuid_list:    [],
+        with_image:   false,
+        merged: false,
+        keyword: this.value_keyword,
+        groups: this.value_searchGroups,
+        source: this.value_searchSource,
+        temperature: this.value_Temperature
+      };
+      
+      // 根據類型呼叫不同 API
+      let retResult;
       switch (this.value_searchTypes) {
         case 'Visitor':
-          // this.queryVisitorResult(data);
-          this.setupVisitorData(startTime, endTime);
+          retResult = await this.$globalGetVisitorResult(query);
           break;
         case 'Stranger':
-          // this.queryStrangerResult(data);
-          this.setupStrangerData(startTime, endTime);
+          retResult = await this.$globalGetStrangerResult(query);
           break;
-        case 'Person':
         default:
-          // this.queryPersonResult(data);
-          this.setupPersonData(startTime, endTime);
-          break;
+          retResult = await this.$globalGetPersonResult(query);
       }
+      
+      const result = retResult.data.result;
+      
+      // 更新總筆數，Pager 才會正確顯示分頁
+      this.value_tablePage.totalResult = result.total_length;
+
+      const err = retResult.error;
+        if (err == null && retResult.data) {
+          const { result } = retResult.data;
+          if (result.data) {
+            if (result.data.length >= 1) {
+              // result.data.sort((a, b) => a.timestamp - b.timestamp);
+              const filter = result.data.filter((item) => !item.merged);
+              
+              this.value_allTableItems.push(...filter);
+              this.value_dataTotalLength += filter.length;
+              this.value_allTableItems.sort((a, b) => {
+                if (a.timestamp < b.timestamp) return 1;
+                if (a.timestamp > b.timestamp) return -1;
+                return 0;
+              });
+            }
+          }         
+        } 
+        try {
+        this.value_allTableItems.forEach((pItem) => {
+          const item = pItem;
+          try {
+            item.source = (this.cameraList.find((c) => c.uuid === item.source_id) || this.tabletList.find((t) => t.uuid === item.source_id))?.name || '';
+            item.dateTime = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss');
+            item.score = `${(item.verify_score * 100).toFixed(2)}%`;
+            if(item.group_list){
+              item.groups = JSON.parse(item.group_list);
+              item.groups = item.groups.filter((g) => g !== 'All Person');
+              item.groups = item.groups.filter((g) => g !== 'All Visitor');
+              item.groups = item.groups.join(',');
+
+            }else{
+              item.groups =''
+            }
+            
+            if(item.verify_mode){
+              switch (item.verify_mode) {
+                case 1:
+                  item.clockMode = i18n.formatter.format('ClockModeCard');
+                  break;
+                case 2:
+                  item.clockMode = i18n.formatter.format('ClockModePass');
+                  break;
+                case 3:
+                  item.clockMode = i18n.formatter.format('ClockModeClockIn');
+                  break;
+                case 4:
+                  item.clockMode = i18n.formatter.format('ClockModeClockOut');
+                  break;
+                default:
+                  item.lockMode = i18n.formatter.format('None');
+                  break;
+              }
+            }
+              
+            const showimageId = item.face_image_id
+              ? item.face_image_id.f + item.face_image_id.uuid
+              : '';
+            item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
+              + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
+              + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          } catch (ex) {
+            console.log(ex);
+          }
+        });
+       
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+        );
+
+        this.obj_loading.hide();
+      } catch (ex) {
+        console.log(ex);
+      }
+      
     },
 
+    // 下面可以刪掉原本的 setupPersonData / setupVisitorData / setupStrangerData
+    // 或保留當你要一次撈全量時再用
+  
     async setupPersonData(startTS, endTS) {
       const self = this;
       self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
@@ -539,9 +647,15 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetPersonResult(query);
+        
 
         const err = retResult.error;
         if (err == null && retResult.data) {
@@ -611,9 +725,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
 
         self.obj_loading.hide();
       } catch (ex) {
@@ -704,6 +818,11 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetVisitorResult(query);
@@ -751,9 +870,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
 
         self.obj_loading.hide();
       } catch (ex) {
@@ -819,6 +938,11 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: this.value_keyword,
+          groups: this.value_searchGroups,
+          source: this.value_searchSource,
+          temperature: this.value_Temperature
         };
 
         const retResult = await self.$globalGetStrangerResult(query);
@@ -869,9 +993,9 @@ export default {
           }
         });
         self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          self.value_allTableItems,
-        );
+        // self.value_dataItemsToShow = self.generateFilteredData(
+        //   self.value_allTableItems,
+        // );
         self.obj_loading.hide();
       } catch (ex) {
         console.log(ex);
@@ -923,66 +1047,20 @@ export default {
     },
 
     handlePageChange({ currentPage, pageSize }) {
-      const self = this;
-      self.value_tablePage.currentPage = currentPage;
-      self.value_tablePage.pageSize = pageSize;
-      self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems);
-      self.resizeOneTable();
+      this.value_tablePage.currentPage = currentPage;
+      this.value_tablePage.pageSize   = pageSize;
+
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime   = this.value_searchDatetimeRange[1].getTime();
+      this.fetchPageData(startTime, endTime, currentPage);
+      this.resizeOneTable();
     },
 
     generateFilteredData(sourceData) {
+      console.log("sourceData",sourceData)
       const self = this;
-      const filteredItems = sourceData.filter((item) => {
-        if (self.value_keyword) {
-          let pass = true;
-          if (
-            item.id.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || item.name.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || item.card_number.toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1
-            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(self.value_keyword.toLowerCase()) > -1)
-          ) {
-            pass = true;
-          } else return false;
-        }
-
-        if (self.value_searchGroups.length >= 1) {
-          let pass = false;
-
-          for (let i = 0; i < self.value_searchGroups.length; i += 1) {
-            // const g = self.value_searchGroups[i];
-
-            // const pos = eval(item.group_list).indexOf(self.value_searchGroups[i]);
-            const pos = item.group_list.indexOf(self.value_searchGroups[i]);
-
-            if (pos >= 0) {
-              pass = true;
-              break;
-            }
-          }
-
-          if (!pass) return false;
-        }
-
-        if (self.searchSourceIdList.length >= 1) {
-          const temp = this.searchSourceIdList.indexOf(item.source_id) >= 0;
-          if (!temp) return false;
-        }
-
-        switch (self.value_Temperature) {
-          case 'Normal':
-            return !item.high_temperature;
-          case 'OverTemperature':
-            return item.high_temperature;
-          case 'All':
-          default:
-            return true;
-        }
-      });
-      self.value_tablePage.totalResult = filteredItems.length;
-      const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-      );
+      
+      const sliceList = sourceData
       sliceList.forEach(async (slicei) => {
         try {
           const showimageId = slicei.face_image_id
@@ -1013,6 +1091,24 @@ export default {
     async exportExcel(withPhoto) {
       const self = this;
 
+      const startTime = this.value_searchDatetimeRange[0].getTime();
+      const endTime   = this.value_searchDatetimeRange[1].getTime();
+
+      // 1) 先把所有資料全撈回來，根據 type 呼叫不同的 setupXxxData
+      
+      switch (self.value_searchTypes) {
+        case 'Visitor':
+          await self.setupVisitorData(startTime, endTime);
+          break;
+        case 'Stranger':
+          await self.setupStrangerData(startTime, endTime);
+          break;
+        default:  // Person
+          await self.setupPersonData(startTime, endTime);
+      }
+      
+
+      // 2) 現在 this.value_allTableItems 就是全部資料，開始匯出流程
       self.flag_downloadingExecl = true;
       let snapshotFolder = null;
 

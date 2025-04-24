@@ -83,7 +83,7 @@
               field="verify_mode_string"
               :title="$t('ChangeLogsType')"
               align="center"
-              width="auto"
+              width="10%"
             />
 
             <vxe-table-column
@@ -91,14 +91,14 @@
               field="name"
               :title="$t('ChangeLogsTargetPerson')"
               align="center"
-              width="auto"
+              width="20%"
             />
 
             <vxe-table-column
               :show-overflow="ellipsisMode"
               field="timestamp"
               :title="$t('ChangeLogsNewTime')"
-              width="auto"
+              width="20%"
               align="center"
             />
 
@@ -106,7 +106,7 @@
               :show-overflow="ellipsisMode"
               field="remark"
               :title="$t('ChangeLogsReason')"
-              width="auto"
+              width="20%"
               align="center"
             />
 
@@ -114,7 +114,7 @@
               :show-overflow="ellipsisMode"
               field="modifier"
               :title="$t('ChangeLogsModifier')"
-              width="auto"
+              width="30%"
               align="center"
             />
           </vxe-table>

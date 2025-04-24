@@ -28,10 +28,13 @@
             :options="cameraList"
             :placeholder="$t('Select')"
           /> -->
+          <!-- <p class="text-white">{{ selectedCamera }}</p> -->
+          <button class="switch-camera-btn" 
+          @click="switchCamera">{{ $t('SwitchCamera') }}</button>
           <QrcodeStream
             @decode="onDecode"
             :camera="selectedCamera"
-            class="mirror qrcodeReader"
+            class="qrcodeReader"
             v-if="freshReader"
           />
           <div class="err-msg" v-else>
@@ -206,6 +209,9 @@ export default {
     },
   },
   methods: {
+    switchCamera(){
+      this.selectedCamera = this.selectedCamera === 'front' ? 'auto' : 'front';
+    },
     initViews() {
       const mainElement = document.querySelector('.c-main');
       const headerElement = document.querySelector('.c-header');
@@ -513,7 +519,7 @@ export default {
               this.cameraList.push({ value: device.deviceId, label: device.label });
             }
           });
-          this.selectedCamera = this.cameraList.length > 1 ? 'front' : 'auto';
+          this.selectedCamera = 'front';
         })
         .catch((err) => {
           console.log(`${err.name}: ${err.message}`);
@@ -712,5 +718,25 @@ export default {
   height: 100%;
   background: #E2E2E2;
   color: #323232;
+}
+.switch-camera-btn {
+  padding: 10px 20px;
+  margin-bottom: 30px;
+  background-color: #2563eb; 
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.switch-camera-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.switch-camera-btn:active {
+  transform: scale(0.98);
 }
 </style>

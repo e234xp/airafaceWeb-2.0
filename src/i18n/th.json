@@ -765,5 +765,6 @@
   "ShowAmount": "แสดงจำนวนเงิน",
   "ShowLeave": "แสดงคนลา",
   "Show": "แสดง",
-  "Hide": "ซ่อน"
+  "Hide": "ซ่อน",
+  "SwitchCamera": "เปลี่ยนเลนส์"
 }

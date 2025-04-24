@@ -765,5 +765,6 @@
   "ShowAmount": "Mostrar cantidad",
   "ShowLeave": "Mostrar persona de salida",
   "Show": "Espectáculo",
-  "Hide": "Esconder"
+  "Hide": "Esconder",
+  "SwitchCamera": "Cambiar lente"
 }
