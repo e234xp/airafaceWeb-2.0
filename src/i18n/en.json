@@ -765,5 +765,6 @@
   "ShowAmount": "Show Amount",
   "ShowLeave": "Show Leave Person",
   "Show": "Show",
-  "Hide": "Hide"
+  "Hide": "Hide",
+  "SwitchCamera": "Change lens"
 }

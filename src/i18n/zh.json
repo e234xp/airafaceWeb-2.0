@@ -765,5 +765,6 @@
   "ShowAmount": "顯示總數",
   "ShowLeave": "顯示離開人員",
   "Show": "顯示",
-  "Hide": "隱藏"
+  "Hide": "隱藏",
+  "SwitchCamera":"轉換鏡頭"
 }

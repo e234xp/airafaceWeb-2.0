@@ -319,7 +319,7 @@ export default {
     
     // 呼叫 API
     const retResult = await this.$globalGetPersonResult(query);
-    console.log(retResult)
+   
 
     // 更新總筆數給 Pager
     this.value_tablePage.totalResult = retResult.data.result.total_length;
@@ -392,9 +392,12 @@ export default {
           slice_shift: shitf,
           uuid_list: [],
           with_image: false,
+          merged: false,
+          keyword: self.value_searchingFilter
         };
 
         const retResult = await self.$globalGetPersonResult(query);
+       
 
         const err = retResult.error;
         if (err == null && retResult.data) {

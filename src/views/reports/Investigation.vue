@@ -532,7 +532,7 @@ export default {
         source: this.value_searchSource,
         temperature: this.value_Temperature
       };
-      console.log("query",query)
+      
       // 根據類型呼叫不同 API
       let retResult;
       switch (this.value_searchTypes) {
@@ -545,7 +545,7 @@ export default {
         default:
           retResult = await this.$globalGetPersonResult(query);
       }
-      console.log(retResult)
+      
       const result = retResult.data.result;
       
       // 更新總筆數，Pager 才會正確顯示分頁
@@ -558,7 +558,7 @@ export default {
             if (result.data.length >= 1) {
               // result.data.sort((a, b) => a.timestamp - b.timestamp);
               const filter = result.data.filter((item) => !item.merged);
-              console.log(filter)
+              
               this.value_allTableItems.push(...filter);
               this.value_dataTotalLength += filter.length;
               this.value_allTableItems.sort((a, b) => {
@@ -616,7 +616,7 @@ export default {
             console.log(ex);
           }
         });
-        console.log(this.value_allTableItems)
+       
         this.value_dataItemsToShow = this.generateFilteredData(
           this.value_allTableItems,
         );
@@ -655,7 +655,7 @@ export default {
         };
 
         const retResult = await self.$globalGetPersonResult(query);
-        console.log(retResult);
+        
 
         const err = retResult.error;
         if (err == null && retResult.data) {
