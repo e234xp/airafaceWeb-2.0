@@ -766,5 +766,9 @@
   "ShowLeave": "Tunjukkan Orang yang Tinggalkan",
   "Show": "Menunjukkan",
   "Hide": "Bersembunyi",
-  "SwitchCamera": "Ubah lensa"
+  "SwitchCamera": "Ubah lensa",
+  "SortByJobTitle": "Urutkan berdasarkan Judul Pekerjaan",
+  "SortByDepartment": "Urutkan berdasarkan departemen",
+  "PleaseEnter": "Harap masuk",
+  "StrangerMaxItem": "Jumlah orang asing yang ditampilkan"
 }

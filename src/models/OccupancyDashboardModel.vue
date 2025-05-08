@@ -254,46 +254,31 @@ export default {
       }
     },
 
-    async setupStrangerData(startTS, endTS, cb) {
+    async setupStrangerData(startTS, endTS, channels, num, cb) {
       const self = this;
       self.strangerData = [];
-      let shitf = 0;
-      let thereIsMoreData = true;
       self.loading = true;
 
-      while (thereIsMoreData) {
-        const query = {
-          start_time: startTS,
-          end_time: endTS,
-          slice_length: 10000,
-          slice_shift: shitf,
-          uuid_list: [],
-          with_image: false,
-        };
+      const query = {
+        start_time: startTS,
+        end_time: endTS,
+        slice_length: num,
+        slice_shift: 0,
+        uuid_list: [],
+        with_image: false,
+        entry_Channels: [channels],
+      };
 
-        const retResult = await self.$globalGetStrangerResult(query);
+      const retResult = await self.$globalGetStrangerResult(query);
 
-        const err = retResult.error;
-        if (err == null && retResult.data) {
-          const { result } = retResult.data;
-          if (result.data) {
-            if (result.data.length >= 1) {
-              result.data.sort((a, b) => a.timestamp - b.timestamp);
-
-              self.lastRecordTimestamp = result.data[result.data.length - 1].timestamp;
-              // console.log('self.lastRecordTimestamp', self.lastRecordTimestamp);
-
-              // self.normalizationData(result.data);
-
-              self.strangerData = self.strangerData.concat(result.data);
-            }
-          }
-
-          if (result.slice_shift + result.data.length < result.total_length) {
-            thereIsMoreData = true;
-            shitf = result.slice_shift + result.data.length;
-          } else thereIsMoreData = false;
-        } else thereIsMoreData = false;
+      const err = retResult.error;
+      if (err == null && retResult.data) {
+        const { result } = retResult.data;
+        if (result.data && result.data.length >= 1) {
+          result.data.sort((a, b) => a.timestamp - b.timestamp);
+          self.lastRecordTimestamp = result.data[result.data.length - 1].timestamp;
+          self.strangerData = result.data;
+        }
       }
 
       try {

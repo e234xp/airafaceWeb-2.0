@@ -766,5 +766,9 @@
   "ShowLeave": "Mostrar persona de salida",
   "Show": "Espectáculo",
   "Hide": "Esconder",
-  "SwitchCamera": "Cambiar lente"
+  "SwitchCamera": "Cambiar lente",
+  "SortByJobTitle": "Ordenar por título de trabajo",
+  "SortByDepartment": "Ordenar por departamento",
+  "PleaseEnter": "Por favor ingrese",
+  "StrangerMaxItem": "El número de extraños que se muestran"
 }

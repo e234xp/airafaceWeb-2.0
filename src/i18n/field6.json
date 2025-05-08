@@ -753,5 +753,9 @@
   "XMLType": "XML タイプ",
   "Yes": "はい",
   "Yesterday": "昨日",
-  "SwitchCamera": "Change lens"
+  "SwitchCamera": "Change lens",
+  "SortByJobTitle": "Sort by job title",
+  "SortByDepartment": "Sort by department",
+  "PleaseEnter": "Please enter",
+  "StrangerMaxItem": "The number of strangers displayed"
 }

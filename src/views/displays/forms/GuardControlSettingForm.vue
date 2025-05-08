@@ -188,6 +188,26 @@
                     :options="value_displayResetTime"
                   />
                 </CCol>
+                <CCol sm="4">
+                  <div class="h5">
+                    {{ $t('StrangerMaxItem') }}
+                  </div>
+                  <CInput
+                    size="lg"
+                    type="number"
+                    :min="100"
+                    :max="1000"
+                    v-model.number="value_guardSetting.strangerMaxItem"
+                    @input="onStrangerMaxItemInput"
+                    :placeholder="$t('PleaseEnter') + ' 100~1000'"
+                  />
+                  <div
+                    v-if="strangerMaxItemError"
+                    style="color: red; font-size: 0.9em;"
+                  >
+                    {{ strangerMaxItemError }}
+                  </div>
+                </CCol>
               </CRow>
             </CCardBody>
           </CCard>
@@ -380,6 +400,7 @@ export default {
 
         deviceIn: '',
         deviceOut: '',
+        strangerMaxItem: 100,
       },
 
       value_displayResetTime: [
@@ -395,6 +416,8 @@ export default {
       value_group_list: [],
 
       flag_currentSetp: 0, //
+
+      strangerMaxItemError: '',
 
       ...this.formData,
     };
@@ -538,6 +561,7 @@ export default {
             dailyResetTime: this.value_guardSetting.dailyResetTime,
             deviceIn: this.value_guardSetting.deviceIn,
             deviceOut: this.value_guardSetting.deviceOut,
+            strangerMaxItem: this.value_guardSetting.strangerMaxItem,
           };
 
           this.value_Setting.GUARD = sendData;
@@ -568,6 +592,16 @@ export default {
     },
     redrawOnStep(step) {
       return step == this.flag_currentSetp ? 'display:block' : 'height:15px;display:none';
+    },
+    onStrangerMaxItemInput() {
+      if (
+        this.value_guardSetting.strangerMaxItem < 100
+        || this.value_guardSetting.strangerMaxItem > 1000
+      ) {
+        this.strangerMaxItemError = this.$t('limitNumbers100up');
+      } else {
+        this.strangerMaxItemError = '';
+      }
     },
   },
   components: {
