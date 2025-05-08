@@ -766,5 +766,9 @@
   "ShowLeave": "休暇中の人を表示",
   "Show": "見せる",
   "Hide": "隠れる",
-  "SwitchCamera": "Change lens"
+  "SwitchCamera": "Change lens",
+  "SortByJobTitle": "Sort by job title",
+  "SortByDepartment": "Sort by department",
+  "PleaseEnter": "Please enter",
+  "StrangerMaxItem": "The number of strangers displayed"
 }

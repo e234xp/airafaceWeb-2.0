@@ -329,7 +329,7 @@
   "LicenseKey": "授權碼",
   "LicenseManagement": "授權管理",
   "limitNumber0to1": "限制輸入0~1",
-  "limitNumberRange": "限制輸入#1 ~ #2",
+  "limitNumberRange": "限制輸入{min} ~ {max}",
   "limitNumbers": "限制輸入數字",
   "limitNumbers100up": "限制輸入數字100~1000",
   "limitNumbers1000up": "限制輸入數字1000~600000",
@@ -544,7 +544,9 @@
   "SmtpSettingTitle": "SMTP設定",
   "SMTPSubject": "主旨",
   "SMTPTo": "收件者",
-  "SortByGroupName": "依群組名稱排序",
+  "SortByDepartment": "依部門排序",
+  "SortByJobTitle": "依職稱排序",
+  "SortByGroupName": "依群組排序",
   "space": "空白 ( )",
   "SpecialCardHint": "一般情況下，當識別成功時，我們會提供被識別者的卡號。不過，您也可以選擇使用指定的卡號。若要這樣做，請在這裡指定該卡號，然後前往存取規則頁面以完成相關設定。",
   "SpecialCardNumber": "訪客卡號",
@@ -766,5 +768,7 @@
   "ShowLeave": "顯示離開人員",
   "Show": "顯示",
   "Hide": "隱藏",
-  "SwitchCamera":"轉換鏡頭"
+  "SwitchCamera": "轉換鏡頭",
+  "PleaseEnter": "請輸入",
+  "StrangerMaxItem": "陌生人顯示數量"
 }

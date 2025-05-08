@@ -766,5 +766,9 @@
   "ShowLeave": "แสดงคนลา",
   "Show": "แสดง",
   "Hide": "ซ่อน",
-  "SwitchCamera": "เปลี่ยนเลนส์"
+  "SwitchCamera": "เปลี่ยนเลนส์",
+  "SortByJobTitle": "เรียงลำดับตามชื่องาน",
+  "SortByDepartment": "จัดเรียงตามแผนก",
+  "PleaseEnter": "โปรดป้อน",
+  "StrangerMaxItem": "จำนวนคนแปลกหน้าที่แสดง"
 }

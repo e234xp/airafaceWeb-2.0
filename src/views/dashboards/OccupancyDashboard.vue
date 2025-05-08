@@ -89,7 +89,7 @@
                   name="cilSortDescending"
                   class="attendance-sort-icon text-white"
                 />
-                <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ $t("SortByGroupName") }}</span>
+                <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ getSortByText }}</span>
               </div>
               <button class="btn-reset">
                 <img
@@ -117,7 +117,6 @@
         :style="{'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px`}"
         :class="[
           getGridStyleByAmount(),
-          ,
           'd-flex',
           'flex-wrap',
           'person-list-container',
@@ -209,7 +208,6 @@
         :style="{'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px`}"
         :class="[
           getGridStyleByAmount(),
-          ,
           'd-flex',
           'flex-wrap',
           'person-list-container',
@@ -517,6 +515,18 @@ export default {
 
       return len;
     },
+    getSortByText() {
+      const self = this;
+      switch (self.displaySettings.summaryBy) {
+        case 'DEPARTMENT':
+          return self.$t('SortByDepartment');
+        case 'JOBTITLE':
+          return self.$t('SortByJobTitle');
+        case 'GROUP':
+        default:
+          return self.$t('SortByGroupName');
+      }
+    },
   },
   watch: {
     currentPageIndex(newIndex) {
@@ -800,8 +810,10 @@ export default {
 
     const endTS = new Date() - 1000;
 
-    self.initBarChart();
-    self.initDoughnutChart();
+    this.$nextTick(() => {
+      self.initBarChart();
+      self.initDoughnutChart();
+    });
 
     // 7.0 Load Last Data
     self.setupVerifyData(startTS, endTS, (verifyData) => {
@@ -813,8 +825,10 @@ export default {
       });
       self.refreshKey *= -1;
 
-      self.refreshBarChart();
-      self.refreshDoughnutChart();
+      this.$nextTick(() => {
+        self.refreshBarChart();
+        self.refreshDoughnutChart();
+      });
     });
 
     // 8.0 start Looper

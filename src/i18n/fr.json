@@ -766,5 +766,9 @@
   "ShowLeave": "Afficher la personne en congé",
   "Show": "Montrer",
   "Hide": "Cacher",
-  "SwitchCamera": "Changer la lentille"
+  "SwitchCamera": "Changer la lentille",
+  "SortByJobTitle": "Trier par titre d'emploi",
+  "SortByDepartment": "Trier par département",
+  "PleaseEnter": "Veuillez entrer",
+  "StrangerMaxItem": "Le nombre d'étrangers affichés"
 }

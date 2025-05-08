@@ -583,7 +583,7 @@ export default {
     });
 
     // 7.0 Load Stranger Data
-    this.setupStrangerData(startTS, endTS, (strangerData) => {
+    this.setupStrangerData(startTS, endTS, this.displaySettings.deviceIn, this.displaySettings.strangerMaxItem, (strangerData) => {
       this.applyVerifyToStranger(strangerData.filter((d) => d.merged === undefined || d.merged === false).filter((d) => !d.commands));
       this.refreshStranger();
     });
@@ -925,7 +925,6 @@ export default {
             }
           }
         }
-
         // 處理進出人員狀態 clockModeRecord
         if (clockModeRecord.length >= 1) {
           clockModeRecord.sort((a, b) => a.timestamp - b.timestamp);
@@ -1042,7 +1041,6 @@ export default {
         const clockModeRecord = [];
         const passModeRecord = data.filter((attRec) => (attRec.verify_mode !== 3 && attRec.verify_mode !== 4));
         // clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
-
         // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
         for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
           if (this.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {

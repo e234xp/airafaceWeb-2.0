@@ -766,5 +766,9 @@
   "ShowLeave": "Hiển thị người nghỉ phép",
   "Show": "Trình diễn",
   "Hide": "Trốn",
-  "SwitchCamera": "Thay đổi ống kính"
+  "SwitchCamera": "Thay đổi ống kính",
+  "SortByJobTitle": "Sắp xếp theo tiêu đề công việc",
+  "SortByDepartment": "Sắp xếp theo bộ phận",
+  "PleaseEnter": "Vui lòng nhập",
+  "StrangerMaxItem": "Số lượng người lạ được hiển thị"
 }
