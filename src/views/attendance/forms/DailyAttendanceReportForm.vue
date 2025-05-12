@@ -248,12 +248,19 @@
                 type="html"
                 min-width="300"
               />
-              <vxe-table-column
-                field="details"
-                title=""
-                width="60"
-                type="html"
-              />
+              <vxe-table-column field="details" title="" width="60">
+                <template #default="{ row }">
+                  <!-- 只有當有 attendance_data_list 且長度 > 0 時才顯示按鈕 -->
+                  <div v-if="row.attendance_data_list && row.attendance_data_list.length" align="center">
+                    <button
+                      class="btn btn-outline-primary btn-detail"
+                      @click="clickOnDetails(row)"
+                    >
+                      <i class="fa fa-list"></i>
+                    </button>
+                  </div>
+                </template>
+              </vxe-table-column>
             </vxe-table>
           </div>
           <vxe-pager

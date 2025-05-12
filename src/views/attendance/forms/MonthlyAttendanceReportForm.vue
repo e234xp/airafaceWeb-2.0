@@ -238,13 +238,21 @@
                 min-width="400"
                 type="html"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="details"
-                title=""
-                min-width="5%"
-                type="html"
-              />
+              <vxe-table-column field="details" title="" width="60">
+                <template #default="{ row }">
+                  <div
+                    v-if="row.attendance_data_list && row.attendance_data_list.length"
+                    align="center"
+                  >
+                    <button
+                      class="btn btn-outline-primary btn-detail"
+                      @click="clickOnDetails(row)"
+                    >
+                      <i class="fa fa-list"></i>
+                    </button>
+                  </div>
+                </template>
+              </vxe-table-column>
             </vxe-table>
           </div>
           <vxe-pager
