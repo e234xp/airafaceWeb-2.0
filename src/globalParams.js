@@ -13,7 +13,7 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.01.1';
+global.webVersion = '2.01.4';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
