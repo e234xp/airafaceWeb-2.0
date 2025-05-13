@@ -139,10 +139,9 @@
             <img
               v-show="displaySettings.displayPhoto!='NONE'"
               :class="['person-image', person.status === 1 ? 'absent-person-image' : 1]"
-              :src="`data:image/png;base64,${displaySettings.displayPhoto=='REGISTER' ? person.register_image : person.display_image}`"
+              :src="getImageSrc(person)"
             >
-
-            <div class="person-info-box text-white">
+               <div class="person-info-box text-white">
               <div
                 :class="[
                   person.status === 1 ? 'absent-person-name' : 'person-name',
@@ -557,6 +556,7 @@ export default {
             if (person.register_image
               === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
               self.$globalFetchPhoto(person.uuid, (err, data) => {
+                
                 if (err == null && data) {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
@@ -585,6 +585,7 @@ export default {
           if (person.register_image
             === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
             self.$globalFetchPhoto(person.uuid, (err, data) => {
+              
               if (err == null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
@@ -867,6 +868,29 @@ export default {
     this.unSubscribe();
   },
   methods: {
+    getImageSrc(person) {
+      // console.log("1111",person.register_image )
+      // console.log("2222",person.display_image )
+  // 先統一 normalize
+  if (typeof person.register_image === 'object') {
+    person.register_image = '';
+  }
+  if (typeof person.display_image === 'object') {
+    person.display_image = '';
+  }
+  const key = this.displaySettings.displayPhoto === 'REGISTER'
+    ? 'register_image'
+    : 'display_image';
+
+  let b64 = person[key] || person._lastImage;
+
+  if (b64) {
+    // 更新快取
+    person._lastImage = b64;
+    return `data:image/png;base64,${b64}`;
+  }
+  return '';
+},
     range(start, end) {
       let ret = [];
 
@@ -903,9 +927,23 @@ export default {
     },
 
     async initialGroupPerson() {
+      
       const self = this;
 
-      self.persons = await self.setupPersonData();
+      const raw = await self.setupPersonData();
+      
+      self.persons = raw.map(p => {
+          // 如果有物件格式就拆成字串
+          if (typeof p.register_image === 'object') {
+            p.register_image =  '';
+          }
+          if (typeof p.display_image === 'object') {
+            p.display_image =  '';
+          }
+          // 新增快取欄位，初始設空
+          p._lastImage = '';
+          return p;
+        });
 
       for (let i = self.persons.length - 1; i >= 0; i -= 1) {
         const r = self.persons[i];
@@ -1136,6 +1174,8 @@ export default {
             if (person.register_image
               === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
               self.$globalFetchPhoto(person.uuid, (err, data) => {
+                
+                
                 if (err == null && data) {
                   if (data.display_image !== '') {
                     person.display_image = data.display_image;
@@ -1167,6 +1207,7 @@ export default {
           if (person.register_image
             === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
             self.$globalFetchPhoto(person.uuid, (err, data) => {
+              
               if (err == null && data) {
                 if (data.display_image !== '') {
                   person.display_image = data.display_image;
@@ -1708,17 +1749,22 @@ export default {
         if (person.register_image === 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlE'
           + 'QVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==') {
           self.$globalFetchPhoto(person.uuid, (err, data) => {
+            
             if (err === null && data) {
               if (data.display_image !== '') {
                 person.display_image = data.display_image;
+                
               } else {
                 person.display_image = emptyFace;
+                
               }
 
               if (data.register_image !== '') {
                 person.register_image = data.register_image;
+                
               } else {
                 person.register_image = emptyFace;
+                
               }
             }
           });
