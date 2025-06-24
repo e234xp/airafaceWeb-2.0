@@ -1389,7 +1389,10 @@ export default {
 
     async handleSave(fields) {
       this.fields = fields;
-      const { uuid, ...plugin_info } = this.person;
+      const { uuid, ...rest } = this.person;
+      const plugin_info = { ...rest };
+      // 刪除 register_image
+      delete plugin_info.register_image;
       const data = {
         uuid,
         data: {
@@ -1397,7 +1400,7 @@ export default {
           plugin_info: this.fields,
         },
       };
-
+      console.log('data', data);
       await this.$globalModifyPerson(data);
     },
 
