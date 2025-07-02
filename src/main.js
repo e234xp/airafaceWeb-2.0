@@ -29,7 +29,10 @@ import datepickerLangTw from 'vue2-datepicker/locale/zh-tw';
 import datepickerLangJa from 'vue2-datepicker/locale/ja';
 import datepickerLangEs from 'vue2-datepicker/locale/es';
 import datepickerLangFr from 'vue2-datepicker/locale/fr';
+import datepickerLangVi from 'vue2-datepicker/locale/vi';
+import datepickerLangId from 'vue2-datepicker/locale/id';
 import datepickerLangTh from 'vue2-datepicker/locale/th';
+import datepickerLangTr from 'vue2-datepicker/locale/tr';
 
 import './globalParams';
 
@@ -120,13 +123,19 @@ const mainVue = new Vue({
       case 'vi':
         i18n.locale = 'vi';
         browserLanguage = enUS;
-        Vue.prototype.$globalDatePickerLanguage = datePickerLangEn;
+        Vue.prototype.$globalDatePickerLanguage = datepickerLangVi;
         break;
       case 'id':
         i18n.locale = 'id';
         browserLanguage = enUS;
-        Vue.prototype.$globalDatePickerLanguage = datePickerLangEn;
+        Vue.prototype.$globalDatePickerLanguage = datepickerLangId;
         break;
+      case 'tr':
+        i18n.locale = 'tr';
+        browserLanguage = enUS;
+        Vue.prototype.$globalDatePickerLanguage = datepickerLangTr;
+        break;
+
       default:
         if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('zh-tw')) {
           i18n.locale = 'zh';
@@ -148,6 +157,18 @@ const mainVue = new Vue({
           i18n.locale = 'th';
           browserLanguage = enUS;
           Vue.prototype.$globalDatePickerLanguage = datepickerLangTh;
+        } else if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('vi')) {
+          i18n.locale = 'vi';
+          browserLanguage = enUS;
+          Vue.prototype.$globalDatePickerLanguage = datepickerLangVi;
+        } else if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('id')) {
+          i18n.locale = 'id';
+          browserLanguage = enUS;
+          Vue.prototype.$globalDatePickerLanguage = datepickerLangId;
+        } else if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('tr')) {
+          i18n.locale = 'tr';
+          browserLanguage = enUS;
+          Vue.prototype.$globalDatePickerLanguage = datepickerLangTr;
         } else {
           i18n.locale = 'en';
           browserLanguage = enUS;

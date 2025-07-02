@@ -368,6 +368,10 @@ export default {
     { value: 'es', label: 'español' },
     { value: 'fr', label: 'Français' },
     { value: 'th', label: 'แบบไทย' },
+    // { value: 'vi', label: 'Tiếng Việt' },
+    // { value: 'id', label: 'Bahasa Indonesia' },
+    // { value: 'tr', label: 'Türkçe' },
+
   ],
   props: {
     formData: { type: Object, default: () => { } },

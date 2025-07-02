@@ -141,12 +141,22 @@ import Vue from 'vue';
 import VXETable from 'vxe-table';
 import store from '@/store';
 import XEUtils from 'xe-utils';
+
 import localeEn from 'vue2-datepicker/locale/en';
 import localeTw from 'vue2-datepicker/locale/zh-tw';
 import localeJP from 'vue2-datepicker/locale/ja';
+import localeEs from 'vue2-datepicker/locale/es';
+import localeFr from 'vue2-datepicker/locale/fr';
+import localeVi from 'vue2-datepicker/locale/vi';
+import localeId from 'vue2-datepicker/locale/id';
+import localeTh from 'vue2-datepicker/locale/th';
+import localeTr from 'vue2-datepicker/locale/tr';
+
 import zhTW from 'vxe-table/lib/locale/lang/zh-TW';
 import enUS from 'vxe-table/lib/locale/lang/en-US';
 import jaJP from 'vxe-table/lib/locale/lang/ja-JP';
+import esES from 'vxe-table/lib/locale/lang/es-ES';
+import viVN from 'vxe-table/lib/locale/lang/vi-VN';
 
 export default {
   name: 'Login',
@@ -159,6 +169,7 @@ export default {
     { value: 'th', label: 'แบบไทย' },
     { value: 'vi', label: 'Tiếng Việt' },
     { value: 'id', label: 'Bahasa Indonesia' },
+    { value: 'tr', label: 'Türkçe' },
   ],
   data() {
     return {
@@ -278,6 +289,30 @@ export default {
             i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(jaJP, key), args),
           });
           Vue.prototype.$globalDatePickerLanguage = localeJP;
+          break;
+        case 'es':
+          VXETable.setup({
+            i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(esES, key), args),
+          });
+          Vue.prototype.$globalDatePickerLanguage = localeEs;
+          break;
+        case 'vi':
+          VXETable.setup({
+            i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(viVN, key), args),
+          });
+          Vue.prototype.$globalDatePickerLanguage = localeVi;
+          break;
+        case 'fr':
+          Vue.prototype.$globalDatePickerLanguage = localeFr;
+          break;
+        case 'id':
+          Vue.prototype.$globalDatePickerLanguage = localeId;
+          break;
+        case 'th':
+          Vue.prototype.$globalDatePickerLanguage = localeTh;
+          break;
+        case 'tr':
+          Vue.prototype.$globalDatePickerLanguage = localeTr;
           break;
         case 'en':
         default:
