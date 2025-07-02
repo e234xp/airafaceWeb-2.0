@@ -8,6 +8,9 @@
               {{ $t('LineAccessToken') }}
             </th>
             <th class="h5 w-25 table-th">
+              {{ $t('LineGroupId') }}
+            </th>
+            <th class="h5 w-25 table-th">
               {{ $t('ContentLanguage') }}
             </th>
             <th colspan="2" />
@@ -20,6 +23,15 @@
                 :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
                 :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
                 v-model="form.token"
+              />
+            </td>
+            <td class="table-td">
+              <CInput
+                size="lg"
+                required
+		:is-valid="formPass.group_id = isNotEmptyValidator(form.group_id) === ''"
+                :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
+		v-model="form.group_id"
               />
             </td>
             <td class="table-td">

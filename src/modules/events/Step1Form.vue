@@ -36,6 +36,7 @@
               :filterable="true"
               :options="[
                 { value: 'line', label: $t('LineNotify') },
+                { value: 'telegram', label: $t('TelegramNotify') },
                 { value: 'http', label: $t('HttpCommand') },
                 { value: 'mail', label: $t('SendMail') },
                 { value: 'iobox', label: $t('IOboxes') },
@@ -203,7 +204,11 @@ export default {
       return this.diviceGroupOptions.map((item) => item.name);
     },
     parseEventControlDiviceGroups() {
-      return this.eventControlDiviceGroups.map((id) => this.diviceGroupOptions.find((item) => item.id === id).name);
+        return this.eventControlDiviceGroups.map((id) => {
+          let devGroup = this.diviceGroupOptions.find((item) => item.id === id);
+          if (devGroup) return devGroup.name;
+          else return '';
+        });
     },
   },
   methods: {

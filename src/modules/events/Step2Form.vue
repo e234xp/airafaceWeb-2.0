@@ -86,7 +86,7 @@ export default {
       value: 'person.department',
     },
     {
-      label: 'HighTemperatureOnly',
+        label: 'EmailAddress',
       value: 'person.email',
     },
     {
@@ -184,6 +184,7 @@ export default {
 
       lineFormPass: {
         token: false,
+          group_id: false
       },
 
       httpFormPass: {
@@ -219,15 +220,27 @@ export default {
   },
   computed: {
     currentFormComponent() {
-      return `Step2Form${this.eventControlType.charAt(0).toUpperCase() + this.eventControlType.slice(1)}`;
-    },
-    getFormProps() {
-      switch (this.eventControlType) {
-        case 'line':
-          return {
-            isNotEmptyValidator: this.isNotEmptyValidator,
+        let type = this.eventControlType;
+        if (type == 'telegram') type = 'line';
 
-            dataFields: this.$options.dataFields,
+        return `Step2Form${type.charAt(0).toUpperCase() + type.slice(1)}`;
+      },
+      getFormProps() {
+        switch (this.eventControlType) {
+          case 'line':
+          case 'telegram':
+            let defaultOptions = Array.from(this.$options.dataFields);
+
+            if (this.eventControlType == 'line') {
+              defaultOptions = defaultOptions.filter(item => item.value != 'captured');
+              defaultOptions = defaultOptions.filter(item => item.value != 'register');
+              defaultOptions = defaultOptions.filter(item => item.value != 'display');
+            }
+
+            return {
+              isNotEmptyValidator: this.isNotEmptyValidator,
+
+              dataFields: defaultOptions,
             personFields: this.$options.personFields,
             language: this.eventControlLanguage,
             languageOptions: this.$options.languageOptions,
@@ -292,6 +305,7 @@ export default {
     getFormEmits() {
       switch (this.eventControlType) {
         case 'line':
+          case 'telegram':
         case 'mail':
           return {
             'update:language': (newLanguage) => this.$emit('update:language', newLanguage),
@@ -310,7 +324,10 @@ export default {
       }
     },
     step2FormStatus() {
-      return Object.values(this[`${this.eventControlType}FormPass`]).every((status) => status);
+        let type = this.eventControlType;
+
+        if (type == 'telegram') type = 'line';
+        return Object.values(this[`${type}FormPass`]).every((status) => status);
     },
   },
   methods: {
