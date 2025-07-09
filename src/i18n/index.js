@@ -9,6 +9,7 @@ import fr from './fr.json';
 import th from './th.json';
 import vi from './vi.json';
 import id from './id.json';
+import tr from './tr.json';
 
 Vue.use(VueI18n);
 
@@ -24,6 +25,7 @@ const messages = {
   th,
   vi,
   id,
+  tr,
 };
 
 const i18n = new VueI18n({
