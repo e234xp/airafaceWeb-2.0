@@ -2,7 +2,7 @@
   <div id="wrapper">
     <!-- 標題 -->
     <div>
-      <h2 sm="12">{{  disp_DigitalOutPut2Title }}</h2>
+      <h2 sm="12">{{ disp_DigitalOutPut2Title }}</h2>
     </div>
 
     <!-- 項目 -->
@@ -17,17 +17,19 @@
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
+        <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true"
+          class="font-control mt-2" />
       </CCol>
     </CRow>
 
     <div class="mt-3">
       <CRow sm="12">
-        <CCol sm="6" class="h5"  >
+        <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true" class="font-control mt-2" />
+          <CSelect size="lg" v-model="value_deviceGroups" :options="value_deviceGroupsList" :filterable="true"
+            class="font-control mt-2" />
         </CCol>
-        <CCol sm="6" class="h5"  >
+        <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
           <CInput size="lg" class="mt-1" />
         </CCol>
@@ -46,7 +48,7 @@
 
   export default {
     name: "AddIOboxesStep4Form",
-    props:{
+    props: {
       step4form: Object
     },
     data() {
@@ -67,7 +69,7 @@
 
         /**v-model */
         value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
+        value_deviceGroupsList: [1, 2, 3]
       };
     },
     components: {

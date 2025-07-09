@@ -88,67 +88,67 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
+  import i18n from '@/i18n';
 
-// import Multiselect from 'vue-multiselect';
-// import '@/airacss/vue-multiselect.css';
+  // import Multiselect from 'vue-multiselect';
+  // import '@/airacss/vue-multiselect.css';
 
-export default {
-  name: 'Step2Form',
-  props: {
-    step2form: Object,
-    defaultValues: Object,
-    isFieldPassed: Function,
-  },
-  data() {
-    return {
-      localStep2form: { ...this.step2form },
-
-      isChecked: true,
-
-      flag_outPut1Visiable: true,
-      flag_outPut2Visiable: true,
-
-      disp_digitalOutPutTitle1: `${i18n.formatter.format('VideoDeviceDigitalOutPut')} #1`,
-      disp_digitalOutPutTitle2: `${i18n.formatter.format('VideoDeviceDigitalOutPut')} #2`,
-
-      dis_placeholder: i18n.formatter.format('placeholder'), // 提示文字
-      disp_limitNumber1to30: i18n.formatter.format('limitNumbers1to30'),
-
-      disp_IOBoxesBasicEnable: i18n.formatter.format('I/OBoxesBasicCOlNameEnable'),
-      disp_IOBoxesBasicDefaultValue: i18n.formatter.format('I/OBoxesBasicCOlNameDefaultValue'),
-      disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameValueWhenTriggered'),
-      disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameDurationWhenTriggered'),
-
-      value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
-      value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
-
-    };
-  },
-  components: {
-    // Multiselect: Multiselect,
-  },
-
-  // 拿資料 寫入資料
-  watch: {
-    localStep2form: {
-      handler(newValue) {
-        this.$emit('updateStep2form', { ...newValue });
-      },
-      deep: true,
+  export default {
+    name: 'Step2Form',
+    props: {
+      step2form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
     },
-    defaultValues: {
-      handler(newValue) {
-        Object.entries(newValue).forEach(([key, value]) => {
-          if (!Object.keys(this.step2form).includes(key)) return;
-          this.localStep2form[key] = value;
-        });
-      },
-      deep: true,
-      immediate: true,
+    data() {
+      return {
+        localStep2form: { ...this.step2form },
+
+        isChecked: true,
+
+        flag_outPut1Visiable: true,
+        flag_outPut2Visiable: true,
+
+        disp_digitalOutPutTitle1: `${i18n.formatter.format('VideoDeviceDigitalOutPut')} #1`,
+        disp_digitalOutPutTitle2: `${i18n.formatter.format('VideoDeviceDigitalOutPut')} #2`,
+
+        dis_placeholder: i18n.formatter.format('placeholder'), // 提示文字
+        disp_limitNumber1to30: i18n.formatter.format('limitNumbers1to30'),
+
+        disp_IOBoxesBasicEnable: i18n.formatter.format('I/OBoxesBasicCOlNameEnable'),
+        disp_IOBoxesBasicDefaultValue: i18n.formatter.format('I/OBoxesBasicCOlNameDefaultValue'),
+        disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameValueWhenTriggered'),
+        disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameDurationWhenTriggered'),
+
+        value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
+        value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
+
+      };
     },
-  },
-};
+    components: {
+      // Multiselect: Multiselect,
+    },
+
+    // 拿資料 寫入資料
+    watch: {
+      localStep2form: {
+        handler(newValue) {
+          this.$emit('updateStep2form', { ...newValue });
+        },
+        deep: true,
+      },
+      defaultValues: {
+        handler(newValue) {
+          Object.entries(newValue).forEach(([key, value]) => {
+            if (!Object.keys(this.step2form).includes(key)) return;
+            this.localStep2form[key] = value;
+          });
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
+  };
 </script>
 
 <style>

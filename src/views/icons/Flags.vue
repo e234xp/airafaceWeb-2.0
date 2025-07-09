@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-globe-alt"/> Flags
+        <CIcon name="cil-globe-alt" /> Flags
       </CCardHeader>
       <CCardBody>
         <CRow class="text-center">
@@ -14,13 +14,8 @@
             flag-icon-squared as well. -->
           </CCol>
           <template v-for="(flag, flagName) in displayedFlags">
-            <CCol
-              class="mb-5"
-              col="3"
-              sm="2"
-              :key="flagName"
-            >
-              <CIcon :height="42" :content="flag"/>
+            <CCol class="mb-5" col="3" sm="2" :key="flagName">
+              <CIcon :height="42" :content="flag" />
               <div>{{toKebabCase(flagName)}}</div>
             </CCol>
           </template>
@@ -31,19 +26,19 @@
 </template>
 
 <script>
-import { flagSet } from '@coreui/icons'
-export default {
-  name: 'Flags',
-  flagSet,
-  computed: {
-    displayedFlags () {
-      return this.$options.flagSet
-    }
-  },
-  methods: {
-    toKebabCase (str) {
-      return str.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()
+  import { flagSet } from '@coreui/icons'
+  export default {
+    name: 'Flags',
+    flagSet,
+    computed: {
+      displayedFlags() {
+        return this.$options.flagSet
+      }
+    },
+    methods: {
+      toKebabCase(str) {
+        return str.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()
+      }
     }
   }
-}
 </script>

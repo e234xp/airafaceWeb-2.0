@@ -1,11 +1,6 @@
 <template>
-  <CSidebar
-    id="my-sidebar"
-    fixed
-    :minimize="minimize"
-    :show="show"
-    @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
-  >
+  <CSidebar id="my-sidebar" fixed :minimize="minimize" :show="show"
+    @update:show="(value) => $store.commit('set', ['sidebarShow', value])">
     <!-- eslint-disable max-len -->
     <CSidebarBrand class="d-md-down-none">
       <!-- <div style="width:230px;height:40px;text-align: left">
@@ -22,11 +17,7 @@
     </CSidebarBrand>
     <!-- eslint-enable max-len -->
 
-    <CRenderFunction
-      style="font-size: 18px"
-      flat
-      :content-to-render="$options.nav"
-    />
+    <CRenderFunction style="font-size: 18px" flat :content-to-render="$options.nav" />
     <!-- <CSidebarMinimizer
       class="d-md-down-none"
       @click.native="$store.commit('set', ['sidebarMinimize', !minimize])"
@@ -35,350 +26,350 @@
 </template>
 
 <script>
-// import store from '../store';
-// import nav from './_nav'
+  // import store from '../store';
+  // import nav from './_nav'
 
-// if( store.state.serverToken && store.state.serverToken === 'Admin' ) {
+  // if( store.state.serverToken && store.state.serverToken === 'Admin' ) {
 
-// }
-// else {
+  // }
+  // else {
 
-import i18n from '@/i18n';
+  import i18n from '@/i18n';
 
-const nav = [
-  {
-    _name: 'CSidebarNav',
-    _children: [
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('Attendance'),
-        to: '/attendance',
-        permission: ['Admin', 'PowerUser', 'User'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('PersonDailyAttendanceReport'),
-            to: '/attendance/persondailyattendancereport',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('PersonMonthlyAttendanceReport'),
-            to: '/attendance/personmonthlyattendanceReport',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('AttendanceSettings'),
-            to: '/attendance/attendancesettings',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('AttendanceOperations'),
-            to: '/attendance/ChangeAttendanceClockIn',
-          },
-        ],
-      },
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('Reports'),
-        to: '/reports',
-        permission: ['Admin', 'PowerUser', 'User'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('PersonReport'),
-            to: '/reports/personreport',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('VisitorReport'),
-            to: '/reports/visitorreport',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('Investigation'),
-            to: '/reports/investigation',
-          },
-        ],
-      },
+  const nav = [
+    {
+      _name: 'CSidebarNav',
+      _children: [
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('Attendance'),
+          to: '/attendance',
+          permission: ['Admin', 'PowerUser', 'User'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('PersonDailyAttendanceReport'),
+              to: '/attendance/persondailyattendancereport',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('PersonMonthlyAttendanceReport'),
+              to: '/attendance/personmonthlyattendanceReport',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('AttendanceSettings'),
+              to: '/attendance/attendancesettings',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('AttendanceOperations'),
+              to: '/attendance/ChangeAttendanceClockIn',
+            },
+          ],
+        },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('Reports'),
+          to: '/reports',
+          permission: ['Admin', 'PowerUser', 'User'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('PersonReport'),
+              to: '/reports/personreport',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('VisitorReport'),
+              to: '/reports/visitorreport',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('Investigation'),
+              to: '/reports/investigation',
+            },
+          ],
+        },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('PersonsManagement'),
-        to: '/personsmanagement',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Person'),
-            to: '/personsmanagement/personmanagement',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Visitor'),
-            to: '/personsmanagement/visitormanagement',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Group'),
-            to: '/personsmanagement/groupmanagement',
-          },
-        ],
-      },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('PersonsManagement'),
+          to: '/personsmanagement',
+          permission: ['Admin', 'PowerUser'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Person'),
+              to: '/personsmanagement/personmanagement',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Visitor'),
+              to: '/personsmanagement/visitormanagement',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Group'),
+              to: '/personsmanagement/groupmanagement',
+            },
+          ],
+        },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('VideoDevice'),
-        to: '/videodevice',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Cameras'),
-            to: '/videodevice/cameralist',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Tablets'),
-            to: '/videodevice/tabletslist',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('DeviceGroup'),
-            to: '/videodevice/deviceGroups',
-          },
-        ],
-      },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('VideoDevice'),
+          to: '/videodevice',
+          permission: ['Admin', 'PowerUser'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Cameras'),
+              to: '/videodevice/cameralist',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Tablets'),
+              to: '/videodevice/tabletslist',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('DeviceGroup'),
+              to: '/videodevice/deviceGroups',
+            },
+          ],
+        },
 
-      // {
-      //   _name: 'CSidebarNavDropdown',
-      //   name: i18n.formatter.format('OutputDevice'),
-      //   to: '/outputdevice',
-      //   permission: ['Admin', 'PowerUser'],
-      //   items: [
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('IOboxes'),
-      //       to: '/outputdevice/ioboxsManagement',
-      //     },
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('Wiegandboxs'),
-      //       to: '/outputdevice/wiegandconverters',
-      //     },
-      //     // {
-      //     //   permission: ['Admin', 'PowerUser'],
-      //     //   name: i18n.formatter.format('OutputDeviceGroup'),
-      //     //   to: '/outputdevice/outputDeviceGroups',
-      //     // },
-      //   ],
-      // },
+        // {
+        //   _name: 'CSidebarNavDropdown',
+        //   name: i18n.formatter.format('OutputDevice'),
+        //   to: '/outputdevice',
+        //   permission: ['Admin', 'PowerUser'],
+        //   items: [
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('IOboxes'),
+        //       to: '/outputdevice/ioboxsManagement',
+        //     },
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('Wiegandboxs'),
+        //       to: '/outputdevice/wiegandconverters',
+        //     },
+        //     // {
+        //     //   permission: ['Admin', 'PowerUser'],
+        //     //   name: i18n.formatter.format('OutputDeviceGroup'),
+        //     //   to: '/outputdevice/outputDeviceGroups',
+        //     // },
+        //   ],
+        // },
 
-      // TODO: Delete unuse nav
-      // {
-      //   _name: 'CSidebarNavDropdown',
-      //   name: i18n.formatter.format('AccessRules'),
-      //   to: '/accessrules',
-      //   permission: ['Admin', 'PowerUser'],
-      //   items: [
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('Schedules'),
-      //       to: '/accessrules/schedules',
-      //     },
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('AccessRules'),
-      //       to: '/accessrules/actionrule',
-      //     },
-      //   ],
-      // },
+        // TODO: Delete unuse nav
+        // {
+        //   _name: 'CSidebarNavDropdown',
+        //   name: i18n.formatter.format('AccessRules'),
+        //   to: '/accessrules',
+        //   permission: ['Admin', 'PowerUser'],
+        //   items: [
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('Schedules'),
+        //       to: '/accessrules/schedules',
+        //     },
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('AccessRules'),
+        //       to: '/accessrules/actionrule',
+        //     },
+        //   ],
+        // },
 
-      // {
-      //   _name: 'CSidebarNavDropdown',
-      //   name: i18n.formatter.format('Notifications'),
-      //   to: '/notifications',
-      //   permission: ['Admin', 'PowerUser'],
-      //   items: [
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('LineNotify'),
-      //       to: '/notifications/linenotify',
-      //     },
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('MailNotify'),
-      //       to: '/notifications/mailnotify',
-      //     },
-      //     {
-      //       permission: ['Admin', 'PowerUser'],
-      //       name: i18n.formatter.format('HttpNotify'),
-      //       to: '/notifications/httpnotify',
-      //     },
-      //   ],
-      // },
+        // {
+        //   _name: 'CSidebarNavDropdown',
+        //   name: i18n.formatter.format('Notifications'),
+        //   to: '/notifications',
+        //   permission: ['Admin', 'PowerUser'],
+        //   items: [
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('LineNotify'),
+        //       to: '/notifications/linenotify',
+        //     },
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('MailNotify'),
+        //       to: '/notifications/mailnotify',
+        //     },
+        //     {
+        //       permission: ['Admin', 'PowerUser'],
+        //       name: i18n.formatter.format('HttpNotify'),
+        //       to: '/notifications/httpnotify',
+        //     },
+        //   ],
+        // },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('Events'),
-        to: '/events',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('EventControlManagement'),
-            to: '/events/eventcontrolmanagement',
-          },
-        ],
-      },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('Events'),
+          to: '/events',
+          permission: ['Admin', 'PowerUser'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('EventControlManagement'),
+              to: '/events/eventcontrolmanagement',
+            },
+          ],
+        },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('Displays'),
-        to: '/displays',
-        permission: ['Admin', 'PowerUser'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Welcome'),
-            to: '/displays/modifywelcomecontrolsetting',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('Occupancy'),
-            to: '/displays/modifyoccupancycontrolsetting',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('MenuOccupancyBoard'),
-            to: '/displays/modifycapacitycontrolsetting',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('GuardBoard'),
-            to: '/displays/modifyguardcontrolsetting',
-          },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('SelfCheckin'),
-            to: '/displays/modifyselfcheckincontrolsetting',
-          },
-        ],
-      },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('Displays'),
+          to: '/displays',
+          permission: ['Admin', 'PowerUser'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Welcome'),
+              to: '/displays/modifywelcomecontrolsetting',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('Occupancy'),
+              to: '/displays/modifyoccupancycontrolsetting',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('MenuOccupancyBoard'),
+              to: '/displays/modifycapacitycontrolsetting',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('GuardBoard'),
+              to: '/displays/modifyguardcontrolsetting',
+            },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('SelfCheckin'),
+              to: '/displays/modifyselfcheckincontrolsetting',
+            },
+          ],
+        },
 
-      {
-        _name: 'CSidebarNavDropdown',
-        name: i18n.formatter.format('SystemSettings'),
-        to: '/systemsettings',
-        permission: ['Admin', 'PowerUser', 'User'],
-        items: [
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('GeneralSettings'),
-            to: '/systemsettings/generalsettings',
-          },
-          {
-            permission: ['Admin', 'PowerUser', 'User'],
-            name: i18n.formatter.format('AccountManagement'),
-            to: '/systemsettings/accountmanagement',
-          },
-          // {
-          //   permission: ['Admin', 'PowerUser'],
-          //   name: i18n.formatter.format('TimeSettings'),
-          //   to: '/systemsettings/timesettings',
-          // },
-          // {
-          //   permission: ['Admin', 'PowerUser'],
-          //   name: i18n.formatter.format('NetworkSettings'),
-          //   to: '/systemsettings/networksettings',
-          // },
-          {
-            permission: ['Admin', 'PowerUser'],
-            name: i18n.formatter.format('BackupAndRestore'),
-            to: '/systemsettings/backupandrestore',
-          },
-          {
-            permission: ['Admin'],
-            name: i18n.formatter.format('UpgradeSoftware'),
-            to: '/systemsettings/upgradesoftware',
-          },
-          {
-            permission: ['Admin'],
-            name: i18n.formatter.format('FactoryDefault'),
-            to: '/systemsettings/factorydefault',
-          },
-          {
-            permission: ['Admin'],
-            name: i18n.formatter.format('License'),
-            to: '/systemsettings/licensesettings',
-          },
-          {
-            permission: ['Admin'],
-            name: i18n.formatter.format('SystemLog'),
-            to: '/systemsettings/systemlog',
-          },
-        ],
-      },
+        {
+          _name: 'CSidebarNavDropdown',
+          name: i18n.formatter.format('SystemSettings'),
+          to: '/systemsettings',
+          permission: ['Admin', 'PowerUser', 'User'],
+          items: [
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('GeneralSettings'),
+              to: '/systemsettings/generalsettings',
+            },
+            {
+              permission: ['Admin', 'PowerUser', 'User'],
+              name: i18n.formatter.format('AccountManagement'),
+              to: '/systemsettings/accountmanagement',
+            },
+            // {
+            //   permission: ['Admin', 'PowerUser'],
+            //   name: i18n.formatter.format('TimeSettings'),
+            //   to: '/systemsettings/timesettings',
+            // },
+            // {
+            //   permission: ['Admin', 'PowerUser'],
+            //   name: i18n.formatter.format('NetworkSettings'),
+            //   to: '/systemsettings/networksettings',
+            // },
+            {
+              permission: ['Admin', 'PowerUser'],
+              name: i18n.formatter.format('BackupAndRestore'),
+              to: '/systemsettings/backupandrestore',
+            },
+            {
+              permission: ['Admin'],
+              name: i18n.formatter.format('UpgradeSoftware'),
+              to: '/systemsettings/upgradesoftware',
+            },
+            {
+              permission: ['Admin'],
+              name: i18n.formatter.format('FactoryDefault'),
+              to: '/systemsettings/factorydefault',
+            },
+            {
+              permission: ['Admin'],
+              name: i18n.formatter.format('License'),
+              to: '/systemsettings/licensesettings',
+            },
+            {
+              permission: ['Admin'],
+              name: i18n.formatter.format('SystemLog'),
+              to: '/systemsettings/systemlog',
+            },
+          ],
+        },
 
-    ],
-  },
-];
+      ],
+    },
+  ];
 
-export default {
-  name: 'TheSidebar',
-  nav,
-  computed: {
-    show() {
-      nav.forEach((n, idx) => {
-        const list = n._children.filter((child) => {
-          const c = child.permission.filter((p) => this.$store.state.serverToken
-            && this.$store.state.serverToken.permission
-            && p === this.$store.state.serverToken.permission);
-          // child.items = child.items.filter((item) => {
-          //   let ns = [];
-          //   if (item.not_support_detype_type) {
-          //     ns = item.not_support_detype_type.filter((dt) => {
-          //       console.log('dt', dt);
-          //       return this.$store.state.deviceType === dt;
-          //     });
-          //   }
-          //   const i = item.permission.filter((p) => (
-          //     this.$store.state.serverToken
-          //     && this.$store.state.serverToken.permission
-          //     && p === this.$store.state.serverToken.permission
-          //   ));
-
-          //   return i.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
-          // });
-          return c.length > 0;
-        });
-        list.forEach((child, i) => {
-          list[i].items = child.items.filter((item) => {
-            let ns = [];
-            if (item.not_support_detype_type) {
-              ns = item.not_support_detype_type.filter((dt) => {
-                console.log('dt', dt);
-                return this.$store.state.deviceType === dt;
-              });
-            }
-            const temp = item.permission.filter((p) => (
-              this.$store.state.serverToken
+  export default {
+    name: 'TheSidebar',
+    nav,
+    computed: {
+      show() {
+        nav.forEach((n, idx) => {
+          const list = n._children.filter((child) => {
+            const c = child.permission.filter((p) => this.$store.state.serverToken
               && this.$store.state.serverToken.permission
-              && p === this.$store.state.serverToken.permission
-            ));
+              && p === this.$store.state.serverToken.permission);
+            // child.items = child.items.filter((item) => {
+            //   let ns = [];
+            //   if (item.not_support_detype_type) {
+            //     ns = item.not_support_detype_type.filter((dt) => {
+            //       console.log('dt', dt);
+            //       return this.$store.state.deviceType === dt;
+            //     });
+            //   }
+            //   const i = item.permission.filter((p) => (
+            //     this.$store.state.serverToken
+            //     && this.$store.state.serverToken.permission
+            //     && p === this.$store.state.serverToken.permission
+            //   ));
 
-            return temp.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
+            //   return i.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
+            // });
+            return c.length > 0;
           });
+          list.forEach((child, i) => {
+            list[i].items = child.items.filter((item) => {
+              let ns = [];
+              if (item.not_support_detype_type) {
+                ns = item.not_support_detype_type.filter((dt) => {
+                  console.log('dt', dt);
+                  return this.$store.state.deviceType === dt;
+                });
+              }
+              const temp = item.permission.filter((p) => (
+                this.$store.state.serverToken
+                && this.$store.state.serverToken.permission
+                && p === this.$store.state.serverToken.permission
+              ));
+
+              return temp.length > 0 && ns.length === 0; /* 子項目 是否顯示 */
+            });
+          });
+          nav[idx]._children = list;
         });
-        nav[idx]._children = list;
-      });
-      if (this.$globalServerTokenIsEffective()) {
-        this.$store.commit('set', ['sidebarShow', true]);
-      } else this.$store.commit('set', ['sidebarShow', false]);
-      return this.$store.state.sidebarShow;
+        if (this.$globalServerTokenIsEffective()) {
+          this.$store.commit('set', ['sidebarShow', true]);
+        } else this.$store.commit('set', ['sidebarShow', false]);
+        return this.$store.state.sidebarShow;
+      },
+      minimize() {
+        return false;
+      },
     },
-    minimize() {
-      return false;
-    },
-  },
-};
+  };
 </script>

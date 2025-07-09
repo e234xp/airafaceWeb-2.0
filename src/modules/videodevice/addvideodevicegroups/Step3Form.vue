@@ -5,7 +5,7 @@
       <CCol sm="12">
         <CRow>
           <div style="margin-left: auto">
-            <CInput v-model.lazy="value_searchingFilter"  style="width: 400px" size="lg" :placeholder="disp_search" >
+            <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -14,21 +14,23 @@
         </CRow>
       </CCol>
     </div>
-      <!-- 表格 -->
+    <!-- 表格 -->
     <CCard>
       <CCardBody>
         <!-- {{ value_dataItemsToShow }} -->
         <div>
           <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
-            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source
-              highlight-current-row :edit-config="{ trigger: 'manual', mode: 'row' }">
+            :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source highlight-current-row
+            :edit-config="{ trigger: 'manual', mode: 'row' }">
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_tabletDevices" width="30%" align="center">
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_tabletDevices" width="30%"
+              align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" align="center" width="auto"></vxe-table-column>
+            <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" align="center"
+              width="auto"></vxe-table-column>
 
             <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">
                 <template #default="{ row }">
@@ -47,11 +49,8 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]"
-          :current-page="value_tablePage.currentPage"
-          :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult"
-          @page-change="handlePageChange">
+          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult" @page-change="handlePageChange">
         </vxe-pager>
       </CCardBody>
     </CCard>
@@ -70,16 +69,16 @@
 
   export default {
     name: "AddCamerasStep2Form",
-    props:{
+    props: {
       step2form: Object
     },
     data() {
-    return {
+      return {
         localStep2form: { ...this.step2form },
 
         isChecked: true,
 
-        value_dataItemsToShow: [{enable:false, name:'Table #1', group:'Clock-in'}, {enable:false, name:'Table #2', group:'Entrance'}],
+        value_dataItemsToShow: [{ enable: false, name: 'Table #1', group: 'Clock-in' }, { enable: false, name: 'Table #2', group: 'Entrance' }],
         value_allTableItems: [],
         value_tablePage: {
           currentPage: 1,
@@ -97,7 +96,7 @@
 
         /**v-model */
         value_deviceGroups: "", /**選單 */
-        value_deviceGroupsList: [1,2,3]
+        value_deviceGroupsList: [1, 2, 3]
       };
     },
     components: {
@@ -127,13 +126,13 @@
         const self = this;
         self.value_tablePage.currentPage = currentPage;
         self.value_tablePage.pageSize = pageSize;
-        self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems,self.value_searchingFilter);
+        self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems, self.value_searchingFilter);
         self.resizeOneTable();
       },
       refreshTableItems(cb) {
         const self = this;
-        if(self.onFetchDataCallback) {
-        self.onFetchDataCallback(function (error, reset, more, tableItems) {
+        if (self.onFetchDataCallback) {
+          self.onFetchDataCallback(function (error, reset, more, tableItems) {
             // console.log("Form",error, reset, more, tableItems)
             // console.log("FormDT", tableItems)
             if (!error) {
@@ -161,10 +160,10 @@
 
         //關鍵字搜尋  item.name裡面看有沒有找到filter
         const filteredItems = filter.length == 0 ? sourceData : sourceData.filter((item) => {
-                return (
-                  item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
-                );
-              });
+          return (
+            item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+          );
+        });
 
         self.value_tablePage.totalResult = filteredItems.length; /**總筆數 */
 
@@ -182,7 +181,7 @@
       headerCellStyle(row, column, rowIndex, columnIndex) {
         return "fontSize: 18px";
       },
-        cellStyle(row, column, rowIndex, columnIndex) {
+      cellStyle(row, column, rowIndex, columnIndex) {
         return "fontSize:18px;";
       },
     },

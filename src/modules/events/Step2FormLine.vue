@@ -17,31 +17,16 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput
-                size="lg"
-                required
-                :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
-                :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
-                v-model="form.token"
-              />
+              <CInput size="lg" required :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
+                :invalid-feedback="$t('NoEmptyNoSpaceOnly')" v-model="form.token" />
             </td>
             <td class="table-td">
-              <CInput
-                size="lg"
-                required
-		:is-valid="formPass.group_id = isNotEmptyValidator(form.group_id) === ''"
-                :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
-		v-model="form.group_id"
-              />
+              <CInput size="lg" required :is-valid="formPass.group_id = isNotEmptyValidator(form.group_id) === ''"
+                :invalid-feedback="$t('NoEmptyNoSpaceOnly')" v-model="form.group_id" />
             </td>
             <td class="table-td">
-              <CSelect
-                size="lg"
-                :filterable="true"
-                :options="languageOptions"
-                :value="language"
-                @update:value="$emit('update:language', $event)"
-              />
+              <CSelect size="lg" :filterable="true" :options="languageOptions" :value="language"
+                @update:value="$emit('update:language', $event)" />
             </td>
             <td colspan="2" />
           </tr>
@@ -62,20 +47,11 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <DataFieldList
-                :data-fields="dataFields"
-                :person-fields="personFields"
-                :data="dataList"
-                @update:data="newDataList => $emit('update:dataList', newDataList)"
-              />
+              <DataFieldList :data-fields="dataFields" :person-fields="personFields" :data="dataList"
+                @update:data="newDataList => $emit('update:dataList', newDataList)" />
             </td>
             <td class="table-td">
-              <CTextarea
-                size="lg"
-                rows="9"
-                :value="note"
-                @input="$emit('update:note', $event)"
-              />
+              <CTextarea size="lg" rows="9" :value="note" @input="$emit('update:note', $event)" />
             </td>
           </tr>
         </table>
@@ -85,65 +61,65 @@
 </template>
 
 <script>
-import DataFieldList from '@/views/components/DataFieldList.vue';
+  import DataFieldList from '@/views/components/DataFieldList.vue';
 
-export default {
-  name: 'Step2FormLine',
-  components: {
-    DataFieldList,
-  },
-  props: {
-    isNotEmptyValidator: {
-      type: Function,
-      required: true,
-      default: () => '',
+  export default {
+    name: 'Step2FormLine',
+    components: {
+      DataFieldList,
     },
-    dataFields: {
-      type: Array,
-      required: true,
-      default: () => [],
+    props: {
+      isNotEmptyValidator: {
+        type: Function,
+        required: true,
+        default: () => '',
+      },
+      dataFields: {
+        type: Array,
+        required: true,
+        default: () => [],
+      },
+      personFields: {
+        type: Array,
+        required: true,
+        default: () => [],
+      },
+      language: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      languageOptions: {
+        type: Array,
+        required: true,
+        default: () => [],
+      },
+      dataList: {
+        type: Object,
+        required: true,
+        default: () => ({}),
+      },
+      note: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      form: {
+        type: Object,
+        required: true,
+        default: () => ({}),
+      },
+      formPass: {
+        type: Object,
+        required: true,
+        default: () => ({}),
+      },
     },
-    personFields: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
-    language: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    languageOptions: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
-    dataList: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-    note: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    form: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-    formPass: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-  },
-  emits: [
-    'update:language',
-    'update:note',
-    'update:dataList',
-  ],
-};
+    emits: [
+      'update:language',
+      'update:note',
+      'update:dataList',
+    ],
+  };
 
 </script>

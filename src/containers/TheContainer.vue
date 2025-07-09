@@ -22,32 +22,32 @@
 </template>
 
 <script>
-// import Vue from 'vue';
-// import router from '../router';
-// import store from '../store';
-import TheSidebar from './TheSidebar.vue';
-import TheHeader from './TheHeader.vue';
-import TheFooter from './TheFooter.vue';
+  // import Vue from 'vue';
+  // import router from '../router';
+  // import store from '../store';
+  import TheSidebar from './TheSidebar.vue';
+  import TheHeader from './TheHeader.vue';
+  import TheFooter from './TheFooter.vue';
 
-export default {
-  name: 'TheContainer',
-  components: {
-    TheSidebar,
-    TheHeader,
-    TheFooter,
-  },
-
-  computed: {
-    isFullScreen() {
-      return sessionStorage.getItem('displayMode') === 'Setting';
+  export default {
+    name: 'TheContainer',
+    components: {
+      TheSidebar,
+      TheHeader,
+      TheFooter,
     },
-  },
-  created() {
-    this.$webSocketsConnect({ apiSocketPath: window.apiSocketPath });
-  },
-  mounted() { },
-  methods: {},
-};
+
+    computed: {
+      isFullScreen() {
+        return sessionStorage.getItem('displayMode') === 'Setting';
+      },
+    },
+    created() {
+      this.$webSocketsConnect({ apiSocketPath: window.apiSocketPath });
+    },
+    mounted() { },
+    methods: {},
+  };
 </script>
 
 <style scoped>

@@ -14,34 +14,18 @@
         <CCol sm="12">
           <CRow>
             <div>
-              <CButton
-                class="btn btn-primary btn-w-sm mr-3 mb-3"
-                size="lg"
-                @click="clickOnAdd()"
-              >
+              <CButton class="btn btn-primary btn-w-sm mr-3 mb-3" size="lg" @click="clickOnAdd()">
                 {{ $t('Add') }}
               </CButton>
             </div>
 
             <div>
-              <CButton
-                class="btn btn-danger btn-w-sm mr-3 mb-3"
-                size="lg"
-                @click="clickOnMultipleDelete()"
-              >
+              <CButton class="btn btn-danger btn-w-sm mr-3 mb-3" size="lg" @click="clickOnMultipleDelete()">
                 {{ $t('Delete') }}
               </CButton>
             </div>
-            <div
-              class="d-flex"
-              style="margin-left: auto"
-            >
-              <CInput
-                v-model.lazy="value_searchingFilter"
-                style="width: 280px"
-                size="lg"
-                :placeholder="$t('Search')"
-              >
+            <div class="d-flex" style="margin-left: auto">
+              <CInput v-model.lazy="value_searchingFilter" style="width: 280px" size="lg" :placeholder="$t('Search')">
                 <template #prepend-content>
                   <CIcon name="cil-search" />
                 </template>
@@ -56,20 +40,9 @@
       <CCardBody>
         <div>
           <div id="HttpNotifyManagementFrom">
-            <vxe-table
-              stripe
-              ref="mainTable"
-              align="center"
-              :data="value_dataItemsToShow"
-              :cell-style="cellStyle"
-              :header-cell-style="headerCellStyle"
-              :edit-config="{ trigger: 'manual', mode: 'row' }"
-            >
-              <vxe-table-column
-                type="checkbox"
-                width="5%"
-                align="center"
-              />
+            <vxe-table stripe ref="mainTable" align="center" :data="value_dataItemsToShow" :cell-style="cellStyle"
+              :header-cell-style="headerCellStyle" :edit-config="{ trigger: 'manual', mode: 'row' }">
+              <vxe-table-column type="checkbox" width="5%" align="center" />
               <!-- <vxe-table-column field="enable" width="10%" :show-overflow="ellipsisMode" :title="$t('Enable')">
                 <template #default="{ row }">
                   <label class="switch">
@@ -80,25 +53,10 @@
                 </template>
               </vxe-table-column> -->
 
-              <vxe-table-column
-                field="name"
-                width="10%"
-                :show-overflow="ellipsisMode"
-                :title="$t('NotifyName')"
-              />
-              <vxe-table-column
-                field="url"
-                width="30%"
-                :show-overflow="ellipsisMode"
-                :title="$t('HttpUrl')"
-              />
+              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" />
+              <vxe-table-column field="url" width="30%" :show-overflow="ellipsisMode" :title="$t('HttpUrl')" />
 
-              <vxe-table-column
-                field="fields"
-                width="40%"
-                :show-overflow="ellipsisMode"
-                :title="$t('ContentField')"
-              >
+              <vxe-table-column field="fields" width="40%" :show-overflow="ellipsisMode" :title="$t('ContentField')">
                 <template #default="{ row }">
                   {{ displayFields(row) }}
                 </template>
@@ -107,16 +65,10 @@
               <vxe-table-column min-width="15%">
                 <template #default="{ row }">
                   <div class="d-flex flex-column align-items-center">
-                    <vxe-button
-                      class="btn-in-cell-primary btn-in-cell"
-                      @click="clickOnModify(row)"
-                    >
+                    <vxe-button class="btn-in-cell-primary btn-in-cell" @click="clickOnModify(row)">
                       {{ $t('Modify') }}
                     </vxe-button>
-                    <vxe-button
-                      class="btn-in-cell-danger btn-in-cell"
-                      @click="clickOnSingleDelete(row)"
-                    >
+                    <vxe-button class="btn-in-cell-danger btn-in-cell" @click="clickOnSingleDelete(row)">
                       {{ $t('Delete') }}
                     </vxe-button>
                   </div>
@@ -124,8 +76,7 @@
               </vxe-table-column>
             </vxe-table>
           </div>
-          <vxe-pager
-            :layouts="[
+          <vxe-pager :layouts="[
               'PrevJump',
               'PrevPage',
               'Number',
@@ -133,205 +84,201 @@
               'NextJump',
               'FullJump',
               'Total',
-            ]"
-            :current-page="value_tablePage.currentPage"
-            :page-size="value_tablePage.pageSize"
-            :total="value_tablePage.totalResult"
-            @page-change="handlePageChange"
-          />
+            ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
+            :total="value_tablePage.totalResult" @page-change="handlePageChange" />
         </div>
       </CCardBody>
     </CCard>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import TableObserver from '@/utils/TableObserver.vue';
+  import { mapState } from 'vuex';
+  import TableObserver from '@/utils/TableObserver.vue';
 
-export default {
-  name: 'HttpNotifyManagementForm',
-  props: {
-    formData: { type: Object, default: () => { } },
-    onAdd: { type: Function, default: () => null },
-    onDelete: { type: Function, default: () => null },
-    onModify: { type: Function, default: () => null },
-    onFetchDataCallback: { type: Function, default: () => null },
-  },
-  data() {
-    return {
-      obj_loading: null,
+  export default {
+    name: 'HttpNotifyManagementForm',
+    props: {
+      formData: { type: Object, default: () => { } },
+      onAdd: { type: Function, default: () => null },
+      onDelete: { type: Function, default: () => null },
+      onModify: { type: Function, default: () => null },
+      onFetchDataCallback: { type: Function, default: () => null },
+    },
+    data() {
+      return {
+        obj_loading: null,
 
-      value_dataItemsToShow: [],
-      value_allTableItems: [],
-      value_tablePage: {
-        currentPage: 1,
-        pageSize: 4,
-        totalResult: 0,
+        value_dataItemsToShow: [],
+        value_allTableItems: [],
+        value_tablePage: {
+          currentPage: 1,
+          pageSize: 4,
+          totalResult: 0,
+        },
+
+        value_searchingFilter: '',
+
+        ...this.formData,
+      };
+    },
+    computed: {
+      ...mapState(['ellipsisMode']),
+    },
+    mixins: [TableObserver],
+    created() { },
+    async mounted() {
+      this.refreshTableItems();
+    },
+
+    updated() { },
+    watch: {
+      value_searchingFilter: () => {
+        this.value_tablePage.currentPage = 1;
+        this.generateFilteredData(
+          this.value_allTableItems, this.value_searchingFilter,
+        );
       },
-
-      value_searchingFilter: '',
-
-      ...this.formData,
-    };
-  },
-  computed: {
-    ...mapState(['ellipsisMode']),
-  },
-  mixins: [TableObserver],
-  created() { },
-  async mounted() {
-    this.refreshTableItems();
-  },
-
-  updated() { },
-  watch: {
-    value_searchingFilter: () => {
-      this.value_tablePage.currentPage = 1;
-      this.generateFilteredData(
-        this.value_allTableItems, this.value_searchingFilter,
-      );
     },
-  },
-  methods: {
-    headerCellStyle() {
-      return 'fontSize: 18px;word-break: break-all !important; ';
-    },
-    cellStyle() {
-      return 'fontSize:18px;';
-    },
-    async generateFilteredData(sourceData, filter) {
-      const filteredItems = filter.length === 0
-        ? sourceData
-        : sourceData.filter((item) => (
-          (item.name && item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)
-          || (item.access_token && item.access_token.toLowerCase().indexOf(filter.toLowerCase()) > -1)
-        ));
+    methods: {
+      headerCellStyle() {
+        return 'fontSize: 18px;word-break: break-all !important; ';
+      },
+      cellStyle() {
+        return 'fontSize:18px;';
+      },
+      async generateFilteredData(sourceData, filter) {
+        const filteredItems = filter.length === 0
+          ? sourceData
+          : sourceData.filter((item) => (
+            (item.name && item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)
+            || (item.access_token && item.access_token.toLowerCase().indexOf(filter.toLowerCase()) > -1)
+          ));
 
-      this.value_tablePage.totalResult = filteredItems.length;
-      const sliceList = filteredItems.slice(
-        (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
-        this.value_tablePage.currentPage * this.value_tablePage.pageSize,
-      );
-
-      // sliceList.forEach((pitem) => {
-      //   const item = pitem;
-      //   pitem['nameToShow'] = pitem.name;
-      // });
-      this.value_dataItemsToShow = Object.assign([], sliceList);
-    },
-
-    displayFields(row) {
-      const { fields } = row;
-      let ret = [];
-
-      if (fields) {
-        const values = Object.values(fields);
-
-        ret = values.slice(0, 3).map(
-          (item) => item,
+        this.value_tablePage.totalResult = filteredItems.length;
+        const sliceList = filteredItems.slice(
+          (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
+          this.value_tablePage.currentPage * this.value_tablePage.pageSize,
         );
 
-        return ret.join(', ');
-      }
-      return '';
-    },
+        // sliceList.forEach((pitem) => {
+        //   const item = pitem;
+        //   pitem['nameToShow'] = pitem.name;
+        // });
+        this.value_dataItemsToShow = Object.assign([], sliceList);
+      },
 
-    refreshTableItems(cb) {
-      if (this.onFetchDataCallback) {
-        this.onFetchDataCallback((error, reset, more, tableItems) => {
-          if (!error) {
-            if (reset) {
-              this.value_allTableItems = [];
-              this.value_dataItemsToShow = [];
-            }
-            if (tableItems) {
-              this.value_allTableItems = this.value_allTableItems.concat(
-                tableItems,
-              );
+      displayFields(row) {
+        const { fields } = row;
+        let ret = [];
+
+        if (fields) {
+          const values = Object.values(fields);
+
+          ret = values.slice(0, 3).map(
+            (item) => item,
+          );
+
+          return ret.join(', ');
+        }
+        return '';
+      },
+
+      refreshTableItems(cb) {
+        if (this.onFetchDataCallback) {
+          this.onFetchDataCallback((error, reset, more, tableItems) => {
+            if (!error) {
+              if (reset) {
+                this.value_allTableItems = [];
+                this.value_dataItemsToShow = [];
+              }
+              if (tableItems) {
+                this.value_allTableItems = this.value_allTableItems.concat(
+                  tableItems,
+                );
+                this.generateFilteredData(
+                  this.value_allTableItems,
+                  this.value_searchingFilter,
+                );
+                this.observeTableSize();
+              }
+              if (!more && cb) cb();
+            } else if (cb) cb();
+          });
+        } else if (cb) cb();
+      },
+      handlePageChange({ currentPage, pageSize }) {
+        this.value_tablePage.currentPage = currentPage;
+        this.value_tablePage.pageSize = pageSize;
+        this.generateFilteredData(
+          this.value_allTableItems, this.value_searchingFilter,
+        );
+        this.resizeOneTable();
+      },
+
+      async clickOnSwitch(event, row) {
+        const localItem = row;
+
+        localItem.enable = event.srcElement.checked;
+
+        const settingData = {
+          uuid: localItem.uuid ? localItem.uuid : undefined,
+          name: localItem.name,
+          enable: localItem.enable,
+          method: localItem.method,
+          url: localItem.url,
+          username: localItem.username,
+          password: localItem.password,
+          fields: localItem.fields,
+          note: localItem.note,
+        };
+
+        await this.$globalModifyHttpNotify(settingData);
+      },
+
+      // selectAllEvent({ checked, records }) {
+      //   console.log(checked ? '所有勾选事件' : '所有取消事件', records)
+      // },
+
+      // selectChangeEvent({ checked, records }) {
+      //   console.log(checked ? '勾选事件' : '取消事件', records)
+      // },
+
+      clickOnAdd() {
+        if (this.onAdd) this.onAdd(this.value_allTableItems);
+      },
+
+      clickOnModify(item) {
+        if (this.onModify) this.onModify(item);
+      },
+
+      deleteItem(listToDel) {
+        if (this.onDelete) {
+          this.onDelete(listToDel, (success) => {
+            if (success) {
+              listToDel.forEach((deletedItem) => {
+                this.value_allTableItems = this.value_allTableItems.filter((
+                  item,
+                ) => item.uuid !== deletedItem.uuid);
+              });
               this.generateFilteredData(
                 this.value_allTableItems,
                 this.value_searchingFilter,
               );
-              this.observeTableSize();
             }
-            if (!more && cb) cb();
-          } else if (cb) cb();
-        });
-      } else if (cb) cb();
+          });
+        }
+      },
+      clickOnSingleDelete(item) {
+        // console.log( 'clickOnSingleDelete', item.uuid )
+        const list = [item];
+        if (list.length > 0) this.deleteItem([item]);
+      },
+      clickOnMultipleDelete() {
+        const list = this.$refs.mainTable.getCheckboxRecords();
+        if (list.length > 0) this.deleteItem(list);
+      },
     },
-    handlePageChange({ currentPage, pageSize }) {
-      this.value_tablePage.currentPage = currentPage;
-      this.value_tablePage.pageSize = pageSize;
-      this.generateFilteredData(
-        this.value_allTableItems, this.value_searchingFilter,
-      );
-      this.resizeOneTable();
-    },
-
-    async clickOnSwitch(event, row) {
-      const localItem = row;
-
-      localItem.enable = event.srcElement.checked;
-
-      const settingData = {
-        uuid: localItem.uuid ? localItem.uuid : undefined,
-        name: localItem.name,
-        enable: localItem.enable,
-        method: localItem.method,
-        url: localItem.url,
-        username: localItem.username,
-        password: localItem.password,
-        fields: localItem.fields,
-        note: localItem.note,
-      };
-
-      await this.$globalModifyHttpNotify(settingData);
-    },
-
-    // selectAllEvent({ checked, records }) {
-    //   console.log(checked ? '所有勾选事件' : '所有取消事件', records)
-    // },
-
-    // selectChangeEvent({ checked, records }) {
-    //   console.log(checked ? '勾选事件' : '取消事件', records)
-    // },
-
-    clickOnAdd() {
-      if (this.onAdd) this.onAdd(this.value_allTableItems);
-    },
-
-    clickOnModify(item) {
-      if (this.onModify) this.onModify(item);
-    },
-
-    deleteItem(listToDel) {
-      if (this.onDelete) {
-        this.onDelete(listToDel, (success) => {
-          if (success) {
-            listToDel.forEach((deletedItem) => {
-              this.value_allTableItems = this.value_allTableItems.filter((
-                item,
-              ) => item.uuid !== deletedItem.uuid);
-            });
-            this.generateFilteredData(
-              this.value_allTableItems,
-              this.value_searchingFilter,
-            );
-          }
-        });
-      }
-    },
-    clickOnSingleDelete(item) {
-      // console.log( 'clickOnSingleDelete', item.uuid )
-      const list = [item];
-      if (list.length > 0) this.deleteItem([item]);
-    },
-    clickOnMultipleDelete() {
-      const list = this.$refs.mainTable.getCheckboxRecords();
-      if (list.length > 0) this.deleteItem(list);
-    },
-  },
-};
+  };
 </script>
 
 <style>

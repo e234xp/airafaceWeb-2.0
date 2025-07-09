@@ -8,7 +8,7 @@
 </template>
 
 <script>
-export default {
-  name: 'TheFooter'
-}
+  export default {
+    name: 'TheFooter'
+  }
 </script>

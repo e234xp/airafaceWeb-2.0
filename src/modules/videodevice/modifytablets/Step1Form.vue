@@ -36,116 +36,116 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
+  import i18n from '@/i18n';
 
-import Multiselect from 'vue-multiselect';
-import '@/airacss/vue-multiselect.css';
+  import Multiselect from 'vue-multiselect';
+  import '@/airacss/vue-multiselect.css';
 
-export default {
-  name: 'ModifyTabletsStep1Form',
-  props: {
-    step1form: Object,
-    defaultValues: Object,
-    isFieldPassed: Function,
-  },
-  emits: ['updateStep1form'],
-  data() {
-    return {
-      localStep1form: { ...this.step1form },
+  export default {
+    name: 'ModifyTabletsStep1Form',
+    props: {
+      step1form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
+    },
+    emits: ['updateStep1form'],
+    data() {
+      return {
+        localStep1form: { ...this.step1form },
 
-      param_deviceGroupsList: [],
-      param_deviceGroupsValue: [],
+        param_deviceGroupsList: [],
+        param_deviceGroupsValue: [],
 
-      disp_header: i18n.formatter.format('TabletsBasicName'),
+        disp_header: i18n.formatter.format('TabletsBasicName'),
 
-      disp_type: i18n.formatter.format('TabletsBasicCOlNameDeviceType'),
-      disp_tabletID: i18n.formatter.format('TabletsBasicCOlNameDeviceID'),
-      disp_tabletDeviceName: i18n.formatter.format('TabletsBasicCOlNameDeviceName'),
-      disp_tabletDeviceGroups: i18n.formatter.format('TabletsBasicCOlNameDeviceGroups'),
+        disp_type: i18n.formatter.format('TabletsBasicCOlNameDeviceType'),
+        disp_tabletID: i18n.formatter.format('TabletsBasicCOlNameDeviceID'),
+        disp_tabletDeviceName: i18n.formatter.format('TabletsBasicCOlNameDeviceName'),
+        disp_tabletDeviceGroups: i18n.formatter.format('TabletsBasicCOlNameDeviceGroups'),
 
-      value_deviceTypesList: ['airaTablet', 'airaTablet xs'],
+        value_deviceTypesList: ['airaTablet', 'airaTablet xs'],
 
-      dis_placeholder: i18n.formatter.format('placeholder'), // port 提示文字
-      disp_select: i18n.formatter.format('Select'),
-      disp_selected: i18n.formatter.format('Selected'),
-      disp_deselect: i18n.formatter.format('Deselect'),
-      // value_deviceTypesList: ['airaTablet', 'airaTablet xs'],
+        dis_placeholder: i18n.formatter.format('placeholder'), // port 提示文字
+        disp_select: i18n.formatter.format('Select'),
+        disp_selected: i18n.formatter.format('Selected'),
+        disp_deselect: i18n.formatter.format('Deselect'),
+        // value_deviceTypesList: ['airaTablet', 'airaTablet xs'],
 
-      disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
-    };
-  },
-  components: {
-    multiselect: Multiselect,
-  },
-  watch: {
-    localStep1form: {
-      handler(newValue) {
-        const self = this;
-        const localValue = { ...newValue };
+        disp_noEmptyNorSpaceOnly: i18n.formatter.format('NoEmptyNoSpaceOnly'),
+      };
+    },
+    components: {
+      multiselect: Multiselect,
+    },
+    watch: {
+      localStep1form: {
+        handler(newValue) {
+          const self = this;
+          const localValue = { ...newValue };
 
-        if (self.param_deviceGroupsValue.length >= 1) {
-          localValue.divice_group_uuids = [];
-          if (localValue.divice_groups.length >= 1) {
-            localValue.divice_group_uuids = localValue.divice_groups.map((item) => {
-              const uuid = self.param_deviceGroupsValue.find((ii) => ii.label === item);
-              return uuid.value;
+          if (self.param_deviceGroupsValue.length >= 1) {
+            localValue.divice_group_uuids = [];
+            if (localValue.divice_groups.length >= 1) {
+              localValue.divice_group_uuids = localValue.divice_groups.map((item) => {
+                const uuid = self.param_deviceGroupsValue.find((ii) => ii.label === item);
+                return uuid.value;
+              });
+            }
+          }
+          this.$emit('updateStep1form', { ...localValue });
+        },
+        deep: true,
+      },
+      defaultValues: {
+        handler(newValue) {
+          const localValue = { ...newValue };
+          if (localValue.divice_group_uuids) {
+            localValue.divice_groups = [];
+
+            const ret = localValue.divice_group_uuids.map((item) => {
+              const uuid = this.param_deviceGroupsValue.find((ii) => ii.value === item);
+              if (uuid) return uuid.label;
+              return null;
+            });
+            ret.map((item) => {
+              if (item !== null) localValue.divice_groups.push(item);
+
+              return true;
             });
           }
-        }
-        this.$emit('updateStep1form', { ...localValue });
-      },
-      deep: true,
-    },
-    defaultValues: {
-      handler(newValue) {
-        const localValue = { ...newValue };
-        if (localValue.divice_group_uuids) {
-          localValue.divice_groups = [];
 
-          const ret = localValue.divice_group_uuids.map((item) => {
-            const uuid = this.param_deviceGroupsValue.find((ii) => ii.value === item);
-            if (uuid) return uuid.label;
-            return null;
+          Object.entries(localValue).forEach(([key, value]) => {
+            if (!Object.keys(this.step1form).includes(key)) return;
+            this.localStep1form[key] = value;
           });
-          ret.map((item) => {
-            if (item !== null) localValue.divice_groups.push(item);
-
-            return true;
-          });
-        }
-
-        Object.entries(localValue).forEach(([key, value]) => {
-          if (!Object.keys(this.step1form).includes(key)) return;
-          this.localStep1form[key] = value;
-        });
+        },
+        deep: true,
+        immediate: true,
       },
-      deep: true,
-      immediate: true,
     },
-  },
 
-  async mounted() {
-    const self = this;
-    const ret = await self.$globalFindVideoDeviceGroups('', 0, 3000);
-    const {
-      data: { result: dataList },
-      error,
-    } = ret;
+    async mounted() {
+      const self = this;
+      const ret = await self.$globalFindVideoDeviceGroups('', 0, 3000);
+      const {
+        data: { result: dataList },
+        error,
+      } = ret;
 
-    if (!error) {
-      self.param_deviceGroupsValue = [];
-      self.param_deviceGroupsList = [];
-      for (let i = 0; i < dataList.length; i += 1) {
-        if (dataList[i].uuid.length === 36) {
-          self.param_deviceGroupsValue.push({ value: dataList[i].uuid, label: dataList[i].name });
-          self.param_deviceGroupsList.push(dataList[i].name);
+      if (!error) {
+        self.param_deviceGroupsValue = [];
+        self.param_deviceGroupsList = [];
+        for (let i = 0; i < dataList.length; i += 1) {
+          if (dataList[i].uuid.length === 36) {
+            self.param_deviceGroupsValue.push({ value: dataList[i].uuid, label: dataList[i].name });
+            self.param_deviceGroupsList.push(dataList[i].name);
 
-          if (self.localStep1form.divice_group_uuids.indexOf(dataList[i].uuid) >= 0) {
-            self.localStep1form.divice_groups.push(dataList[i].name);
+            if (self.localStep1form.divice_group_uuids.indexOf(dataList[i].uuid) >= 0) {
+              self.localStep1form.divice_groups.push(dataList[i].name);
+            }
           }
         }
       }
-    }
-  },
-};
+    },
+  };
 </script>

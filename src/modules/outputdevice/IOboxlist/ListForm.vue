@@ -55,7 +55,7 @@
             </vxe-table-column> -->
 
             <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center"
-            width="20%"></vxe-table-column>
+              width="20%"></vxe-table-column>
 
             <!-- <vxe-table-column :show-overflow="ellipsisMode" field="status" :title="disp_status" width="auto"
               align="center">
@@ -96,185 +96,185 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import TableObserver from '@/utils/TableObserver.vue';
-import i18n from '@/i18n';
+  import { mapState } from 'vuex';
+  import TableObserver from '@/utils/TableObserver.vue';
+  import i18n from '@/i18n';
 
-export default {
-  name: 'IOboxsForm',
-  mixins: [TableObserver],
-  props: {
-    onAdd: { type: Function },
-    onDelete: { type: Function },
-    onModify: { type: Function },
-    onGetItems: { type: Function },
-  },
-  data() {
-    return {
-      value_dataItemsToShow: [
-        {
-          enable: false,
-          name: '',
-          timestamp: '',
-          remark: '',
-          modifier: '',
-          remark1: '',
+  export default {
+    name: 'IOboxsForm',
+    mixins: [TableObserver],
+    props: {
+      onAdd: { type: Function },
+      onDelete: { type: Function },
+      onModify: { type: Function },
+      onGetItems: { type: Function },
+    },
+    data() {
+      return {
+        value_dataItemsToShow: [
+          {
+            enable: false,
+            name: '',
+            timestamp: '',
+            remark: '',
+            modifier: '',
+            remark1: '',
+          },
+        ],
+        value_allTableItems: [],
+        value_tablePage: {
+          currentPage: 1,
+          pageSize: 5,
+          totalResult: 0,
         },
-      ],
-      value_allTableItems: [],
-      value_tablePage: {
-        currentPage: 1,
-        pageSize: 5,
-        totalResult: 0,
+        value_searchingFilter: '',
+
+        new_modifyButton: null,
+
+        disp_header: i18n.formatter.format('IOboxes'),
+        disp_search: i18n.formatter.format('Search'),
+        disp_add: i18n.formatter.format('Add'),
+        disp_delete: i18n.formatter.format('Delete'),
+        disp_modify: i18n.formatter.format('Modify'),
+
+        disp_enable: i18n.formatter.format('Enable'),
+        disp_deviceName: i18n.formatter.format('DeviceName'),
+        disp_status: i18n.formatter.format('DeviceStatus'),
+        disp_ipAddress: i18n.formatter.format('IpAddress'),
+      };
+    },
+    updated() {
+      const self = this;
+
+      self.value_dataItemsToShow.forEach((item) => {
+        const modifyButtonId = `actionOnModify_${item.uuid}`;
+        const deleteButtonId = `actionOnDelete_${item.uuid}`;
+
+        let newDeleteButton = null;
+        let newModifyButton = null;
+        const oldDeleteButton = document.getElementById(deleteButtonId);
+        const oldModifyButton = document.getElementById(modifyButtonId);
+        if (oldDeleteButton && oldDeleteButton.parentNode) {
+          newDeleteButton = oldDeleteButton.cloneNode(true);
+          oldDeleteButton.parentNode.replaceChild(
+            newDeleteButton,
+            oldDeleteButton,
+          );
+        }
+
+        if (oldModifyButton && oldModifyButton.parentNode) {
+          newModifyButton = oldModifyButton.cloneNode(true);
+          oldModifyButton.parentNode.replaceChild(
+            newModifyButton,
+            oldModifyButton,
+          );
+        }
+
+        if (newDeleteButton) {
+          newDeleteButton.addEventListener('click', () => {
+            self.handleOnSingleDelete(item);
+          });
+        }
+
+        if (newModifyButton) {
+          newModifyButton.addEventListener('click', () => {
+            self.handleOnModify(item);
+          });
+        }
+      });
+    },
+    computed: {
+      ...mapState(['ellipsisMode']),
+    },
+    watch: {
+      value_searchingFilter: () => {
+        const self = this;
+        self.value_tablePage.currentPage = 1;
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+          this.value_searchingFilter,
+        );
       },
-      value_searchingFilter: '',
-
-      new_modifyButton: null,
-
-      disp_header: i18n.formatter.format('IOboxes'),
-      disp_search: i18n.formatter.format('Search'),
-      disp_add: i18n.formatter.format('Add'),
-      disp_delete: i18n.formatter.format('Delete'),
-      disp_modify: i18n.formatter.format('Modify'),
-
-      disp_enable: i18n.formatter.format('Enable'),
-      disp_deviceName: i18n.formatter.format('DeviceName'),
-      disp_status: i18n.formatter.format('DeviceStatus'),
-      disp_ipAddress: i18n.formatter.format('IpAddress'),
-    };
-  },
-  updated() {
-    const self = this;
-
-    self.value_dataItemsToShow.forEach((item) => {
-      const modifyButtonId = `actionOnModify_${item.uuid}`;
-      const deleteButtonId = `actionOnDelete_${item.uuid}`;
-
-      let newDeleteButton = null;
-      let newModifyButton = null;
-      const oldDeleteButton = document.getElementById(deleteButtonId);
-      const oldModifyButton = document.getElementById(modifyButtonId);
-      if (oldDeleteButton && oldDeleteButton.parentNode) {
-        newDeleteButton = oldDeleteButton.cloneNode(true);
-        oldDeleteButton.parentNode.replaceChild(
-          newDeleteButton,
-          oldDeleteButton,
+    },
+    async mounted() {
+      const self = this;
+      self.refreshTableItems();
+    },
+    methods: {
+      // 分頁處理
+      handlePageChange({ currentPage, pageSize }) {
+        this.value_tablePage.currentPage = currentPage;
+        this.value_tablePage.pageSize = pageSize;
+        this.value_dataItemsToShow = this.generateFilteredData(
+          this.value_allTableItems,
+          this.value_searchingFilter,
         );
-      }
+      },
+      async refreshTableItems() {
+        const self = this;
+        const tableItems = await self.onGetItems();
 
-      if (oldModifyButton && oldModifyButton.parentNode) {
-        newModifyButton = oldModifyButton.cloneNode(true);
-        oldModifyButton.parentNode.replaceChild(
-          newModifyButton,
-          oldModifyButton,
-        );
-      }
-
-      if (newDeleteButton) {
-        newDeleteButton.addEventListener('click', () => {
-          self.handleOnSingleDelete(item);
-        });
-      }
-
-      if (newModifyButton) {
-        newModifyButton.addEventListener('click', () => {
-          self.handleOnModify(item);
-        });
-      }
-    });
-  },
-  computed: {
-    ...mapState(['ellipsisMode']),
-  },
-  watch: {
-    value_searchingFilter: () => {
-      const self = this;
-      self.value_tablePage.currentPage = 1;
-      this.value_dataItemsToShow = this.generateFilteredData(
-        this.value_allTableItems,
-        this.value_searchingFilter,
-      );
-    },
-  },
-  async mounted() {
-    const self = this;
-    self.refreshTableItems();
-  },
-  methods: {
-    // 分頁處理
-    handlePageChange({ currentPage, pageSize }) {
-      this.value_tablePage.currentPage = currentPage;
-      this.value_tablePage.pageSize = pageSize;
-      this.value_dataItemsToShow = this.generateFilteredData(
-        this.value_allTableItems,
-        this.value_searchingFilter,
-      );
-    },
-    async refreshTableItems() {
-      const self = this;
-      const tableItems = await self.onGetItems();
-
-      self.value_allTableItems = self.value_allTableItems.concat(tableItems);
-      self.value_dataItemsToShow = self.generateFilteredData(
-        self.value_allTableItems,
-        self.value_searchingFilter,
-      );
-    },
-    // 表格資料處理及搜尋
-    generateFilteredData(sourceData, filter) {
-      const self = this;
-
-      // 關鍵字搜尋  item.name裡面看有沒有找到filter ip_address
-      const filteredItems = filter.length === 0
-        ? sourceData
-        : sourceData.filter((item) => (
-          item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
-          || item.ip_address.toLowerCase().indexOf(filter.toLowerCase()) > -1
-        ));
-      self.value_tablePage.totalResult = filteredItems.length;
-
-      const sliceList = filteredItems.slice(
-        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-      );
-
-      return Object.assign([], sliceList);
-    },
-    handleOnAdd() {
-      this.onAdd(this.value_allTableItems);
-    },
-    handleOnModify(item) {
-      this.onModify(item);
-    },
-    deleteItem(listToDel) {
-      const self = this;
-
-      self.onDelete(listToDel, (success) => {
-        if (!success) return;
-
-        const uuidsToDel = listToDel.map(({ uuid }) => uuid);
-        self.value_allTableItems = self.value_allTableItems.filter((item) => !uuidsToDel.includes(item.uuid));
-
+        self.value_allTableItems = self.value_allTableItems.concat(tableItems);
         self.value_dataItemsToShow = self.generateFilteredData(
           self.value_allTableItems,
           self.value_searchingFilter,
         );
-      });
-    },
-    handleOnSingleDelete(item) {
-      const self = this;
+      },
+      // 表格資料處理及搜尋
+      generateFilteredData(sourceData, filter) {
+        const self = this;
 
-      if (!item) return;
-      self.deleteItem([item]);
-    },
-    handleOnMultipleDelete() {
-      const self = this;
-      const list = this.$refs.mainTable.getCheckboxRecords();
+        // 關鍵字搜尋  item.name裡面看有沒有找到filter ip_address
+        const filteredItems = filter.length === 0
+          ? sourceData
+          : sourceData.filter((item) => (
+            item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+            || item.ip_address.toLowerCase().indexOf(filter.toLowerCase()) > -1
+          ));
+        self.value_tablePage.totalResult = filteredItems.length;
 
-      if (list.length === 0) return;
+        const sliceList = filteredItems.slice(
+          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+          self.value_tablePage.currentPage * self.value_tablePage.pageSize,
+        );
 
-      self.deleteItem(list);
+        return Object.assign([], sliceList);
+      },
+      handleOnAdd() {
+        this.onAdd(this.value_allTableItems);
+      },
+      handleOnModify(item) {
+        this.onModify(item);
+      },
+      deleteItem(listToDel) {
+        const self = this;
+
+        self.onDelete(listToDel, (success) => {
+          if (!success) return;
+
+          const uuidsToDel = listToDel.map(({ uuid }) => uuid);
+          self.value_allTableItems = self.value_allTableItems.filter((item) => !uuidsToDel.includes(item.uuid));
+
+          self.value_dataItemsToShow = self.generateFilteredData(
+            self.value_allTableItems,
+            self.value_searchingFilter,
+          );
+        });
+      },
+      handleOnSingleDelete(item) {
+        const self = this;
+
+        if (!item) return;
+        self.deleteItem([item]);
+      },
+      handleOnMultipleDelete() {
+        const self = this;
+        const list = this.$refs.mainTable.getCheckboxRecords();
+
+        if (list.length === 0) return;
+
+        self.deleteItem(list);
+      },
     },
-  },
-};
+  };
 </script>

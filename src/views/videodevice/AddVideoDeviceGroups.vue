@@ -5,17 +5,10 @@
         {{ $t('VideoDeviceBasic') }}
       </div>
 
-      <stepprogress
-        class="w-step-progress-2"
-        :active-thickness="param_activeThickness"
-        :passive-thickness="param_passiveThickness"
-        :active-color="param_activeColor"
-        :passive-color="param_passiveColor"
-        :current-step="flag_currentSetp"
-        :line-thickness="param_lineThickness"
-        :steps="[$t('VideoDeviceBasic'), $t('Complete')]"
-        icon-class="fa fa-check"
-      />
+      <stepprogress class="w-step-progress-2" :active-thickness="param_activeThickness"
+        :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
+        :passive-color="param_passiveColor" :current-step="flag_currentSetp" :line-thickness="param_lineThickness"
+        :steps="[$t('VideoDeviceBasic'), $t('Complete')]" icon-class="fa fa-check" />
 
       <div style="height: 35px" />
     </div>
@@ -23,19 +16,12 @@
     <CCol sm="12">
       <CCard v-if="isOnStep(0)">
         <CCardBody>
-          <Step1Form
-            :step1form="step1form"
-            @updateStep1form="updateStep1form"
-            :is-field-passed="isFieldPassed"
-            :default-values="defaultValues"
-          />
+          <Step1Form :step1form="step1form" @updateStep1form="updateStep1form" :is-field-passed="isFieldPassed"
+            :default-values="defaultValues" />
         </CCardBody>
       </CCard>
 
-      <CCard
-        style="height: 34rem;"
-        v-else-if="isOnStep(1)"
-      >
+      <CCard style="height: 34rem;" v-else-if="isOnStep(1)">
         <CCardBody style="display: flex; justify-content: center; align-items: center;">
           <CRow>
             <CCol sm="12">
@@ -51,10 +37,7 @@
     <CCol sm="12">
       <div class="row justify-content-center mb-4">
         <div v-if="flag_currentSetp == 0 && value_returnRoutePath.length > 0">
-          <CButton
-            class="btn btn-outline-primary fz-lg btn-w-normal"
-            @click="handlePrev"
-          >
+          <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">
             {{ value_returnRouteName }}
           </CButton>
         </div>
@@ -63,12 +46,8 @@
         </div> -->
         <div style="width: 20px" />
         <div>
-          <CButton
-            class="btn btn-primary mb-3"
-            size="lg"
-            @click="handleNext()"
-            :disabled="!isStepPassed(flag_currentSetp)"
-          >
+          <CButton class="btn btn-primary mb-3" size="lg" @click="handleNext()"
+            :disabled="!isStepPassed(flag_currentSetp)">
             {{ nextButtonName(flag_currentSetp) }}
           </CButton>
         </div>
@@ -78,190 +57,190 @@
 </template>
 
 <script>
-import StepProgress from 'vue-step-progress';
-import '@/airacss/vue-step-progress.css';
+  import StepProgress from 'vue-step-progress';
+  import '@/airacss/vue-step-progress.css';
 
-import Step1Form from '@/modules/videodevice/addvideodevicegroups/Step1Form.vue';
+  import Step1Form from '@/modules/videodevice/addvideodevicegroups/Step1Form.vue';
 
-export default {
-  name: 'AddOutputDeviceGroups',
+  export default {
+    name: 'AddOutputDeviceGroups',
 
-  data() {
-    return {
-      param_cardStyle: 'height: 35rem;',
+    data() {
+      return {
+        param_cardStyle: 'height: 35rem;',
 
-      value_returnRoutePath: this.$route.params.value_returnRoutePath
-        ? this.$route.params.value_returnRoutePath
-        : '',
-      value_returnRouteName: this.$route.params.value_returnRouteName
-        ? this.$route.params.value_returnRouteName
-        : '',
+        value_returnRoutePath: this.$route.params.value_returnRoutePath
+          ? this.$route.params.value_returnRoutePath
+          : '',
+        value_returnRouteName: this.$route.params.value_returnRouteName
+          ? this.$route.params.value_returnRouteName
+          : '',
 
-      param_activeColor: '#6baee3',
-      param_passiveColor: '#919bae',
-      param_lineThickness: 3,
-      param_activeThickness: 3,
-      param_passiveThickness: 3,
-      flag_currentSetp: 0,
+        param_activeColor: '#6baee3',
+        param_passiveColor: '#919bae',
+        param_lineThickness: 3,
+        param_activeThickness: 3,
+        param_passiveThickness: 3,
+        flag_currentSetp: 0,
 
-      step1form: {
-        name: '',
+        step1form: {
+          name: '',
+        },
+
+        defaultValues: {},
+      };
+    },
+    components: {
+      stepprogress: StepProgress,
+      Step1Form,
+
+    },
+    async created() {
+      this.defaultValues = await this.getDefaultValues();
+
+      this.isFormPassed(this.step1form);
+    },
+
+    methods: {
+      updateStep1form(newValue) {
+        this.step1form = { ...newValue };
       },
 
-      defaultValues: {},
-    };
-  },
-  components: {
-    stepprogress: StepProgress,
-    Step1Form,
+      async getDefaultValues() {
+        const form = {
+          name: await this.getDefaultName(),
+        };
 
-  },
-  async created() {
-    this.defaultValues = await this.getDefaultValues();
+        return form;
+      },
 
-    this.isFormPassed(this.step1form);
-  },
+      async getDefaultName() {
+        const {
+          data: { totalLength, result: videoGroupList },
+        } = await this.$globalFindVideoDeviceGroups('', 0, 3000);
 
-  methods: {
-    updateStep1form(newValue) {
-      this.step1form = { ...newValue };
-    },
-
-    async getDefaultValues() {
-      const form = {
-        name: await this.getDefaultName(),
-      };
-
-      return form;
-    },
-
-    async getDefaultName() {
-      const {
-        data: { totalLength, result: videoGroupList },
-      } = await this.$globalFindVideoDeviceGroups('', 0, 3000);
-
-      let number = totalLength + 1;
-      let name = `Video Group-${number}`;
-      while (this.isDuplicateName(videoGroupList, name)) {
-        number += 1;
-        name = `Video Group-${number}`;
-      }
-
-      return name;
-    },
-
-    isDuplicateName(videoGroupList, name) {
-      return videoGroupList.some((videoGroup) => videoGroup.name === name);
-    },
-
-    isStepPassed(step) {
-      switch (step) {
-        case 0: {
-          return this.isFormPassed(this.step1form);
+        let number = totalLength + 1;
+        let name = `Video Group-${number}`;
+        while (this.isDuplicateName(videoGroupList, name)) {
+          number += 1;
+          name = `Video Group-${number}`;
         }
-        case 1:
-        default: {
-          return true;
-        }
-      }
-    },
-    isFormPassed(form) { return Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value)); },
-    isFieldPassed(key, value) {
-      const rules = { name: 'nonEmpty' };
-      const rule = rules[key];
-      if (!rule) return true;
-      switch (rule) {
-        case 'nonEmpty': {
-          let ret = !!value;
 
-          switch (key) {
-            case 'name':
-              if (value.replace(/\s/g, '').length === 0) {
-                ret = false;
-              } else if (!/[+()*&^%$#@!~|{}":?><,./';[\]=`]/.test(value)) {
-                ret = true;
-              } else {
-                ret = false;
-              }
-              break;
-            default:
-              ret = !!value;
-              break;
+        return name;
+      },
+
+      isDuplicateName(videoGroupList, name) {
+        return videoGroupList.some((videoGroup) => videoGroup.name === name);
+      },
+
+      isStepPassed(step) {
+        switch (step) {
+          case 0: {
+            return this.isFormPassed(this.step1form);
           }
-
-          return ret;
+          case 1:
+          default: {
+            return true;
+          }
         }
-        default:
-          return true;
-      }
-    },
+      },
+      isFormPassed(form) { return Object.entries(form).every(([key, value]) => this.isFieldPassed(key, value)); },
+      isFieldPassed(key, value) {
+        const rules = { name: 'nonEmpty' };
+        const rule = rules[key];
+        if (!rule) return true;
+        switch (rule) {
+          case 'nonEmpty': {
+            let ret = !!value;
 
-    isOnStep(step) {
-      return this.flag_currentSetp === step;
-    },
+            switch (key) {
+              case 'name':
+                if (value.replace(/\s/g, '').length === 0) {
+                  ret = false;
+                } else if (!/[+()*&^%$#@!~|{}":?><,./';[\]=`]/.test(value)) {
+                  ret = true;
+                } else {
+                  ret = false;
+                }
+                break;
+              default:
+                ret = !!value;
+                break;
+            }
 
-    handlePrev() {
-      if (this.flag_currentSetp > 0) {
-        this.flag_currentSetp -= 1;
-        return;
-      }
+            return ret;
+          }
+          default:
+            return true;
+        }
+      },
 
-      if (this.value_returnRoutePath.length === 0) return;
+      isOnStep(step) {
+        return this.flag_currentSetp === step;
+      },
 
-      this.$router.push({ name: this.value_returnRoutePath });
-    },
+      handlePrev() {
+        if (this.flag_currentSetp > 0) {
+          this.flag_currentSetp -= 1;
+          return;
+        }
 
-    async handleNext() {
-      switch (this.flag_currentSetp) {
-        case 0: {
-          this.obj_loading = this.$loading.show({
-            container: this.$refs.formContainer,
-          });
+        if (this.value_returnRoutePath.length === 0) return;
 
-          const parameter = {
-            ...this.step1form,
-            camera_uuid_list: [],
-            tablet_uuid_list: [],
-          };
+        this.$router.push({ name: this.value_returnRoutePath });
+      },
 
-          const { data } = await this.create(parameter);
-
-          this.obj_loading.hide();
-          if (data && data.message === 'ok') {
-            this.flag_currentSetp += 1;
-          } else {
-            this.$fire({
-              text: this.$t('Failed'),
-              type: 'error',
-              timer: 3000,
-              confirmButtonColor: '#20a8d8',
+      async handleNext() {
+        switch (this.flag_currentSetp) {
+          case 0: {
+            this.obj_loading = this.$loading.show({
+              container: this.$refs.formContainer,
             });
+
+            const parameter = {
+              ...this.step1form,
+              camera_uuid_list: [],
+              tablet_uuid_list: [],
+            };
+
+            const { data } = await this.create(parameter);
+
+            this.obj_loading.hide();
+            if (data && data.message === 'ok') {
+              this.flag_currentSetp += 1;
+            } else {
+              this.$fire({
+                text: this.$t('Failed'),
+                type: 'error',
+                timer: 3000,
+                confirmButtonColor: '#20a8d8',
+              });
+            }
+
+            break;
           }
 
-          break;
+          default: {
+            this.$router.push({ name: this.value_returnRoutePath });
+
+            break;
+          }
         }
+      },
 
-        default: {
-          this.$router.push({ name: this.value_returnRoutePath });
+      create(data) {
+        return this.$globalCreateVideoDeviceGroup(data);
+      },
 
-          break;
+      nextButtonName(step) {
+        switch (step) {
+          case 1:
+            return this.$t('Complete');
+          case 0:
+          default:
+            return this.$t('Next');
         }
-      }
+      },
     },
-
-    create(data) {
-      return this.$globalCreateVideoDeviceGroup(data);
-    },
-
-    nextButtonName(step) {
-      switch (step) {
-        case 1:
-          return this.$t('Complete');
-        case 0:
-        default:
-          return this.$t('Next');
-      }
-    },
-  },
-};
+  };
 </script>

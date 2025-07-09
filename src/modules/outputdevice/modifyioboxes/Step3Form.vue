@@ -6,8 +6,8 @@
     </div>
 
     <!-- 項目 -->
-   <!-- Digital OutPut1 -->
-   <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
+    <!-- Digital OutPut1 -->
+    <div class="form-check mb-3 ml-2"> <!-- Check BOX -->
       <input class="form-check-input" type="checkbox" v-model="localStep3form.enable" id="flexCheckDefault">
       <label class="form-check-label mt-2" for="flexCheckDefault">
         {{ disp_IOBoxesBasicEnable }}
@@ -17,31 +17,24 @@
     <CRow sm="6" class="h5 ml-2 mb-3">{{ disp_IOBoxesBasicDefaultValue }}</CRow>
     <CRow>
       <CCol sm="6">
-        <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true" class="font-control mt-2"
-        :placeholder="dis_placeholder" :disabled="localStep3form.enable"/>
+        <CSelect size="lg" v-model="localStep3form.default" :options="value_deviceDefaultValue" :filterable="true"
+          class="font-control mt-2" :placeholder="dis_placeholder" :disabled="localStep3form.enable" />
       </CCol>
     </CRow>
 
     <!-- trigger -->
     <div class="mt-3">
       <CRow sm="12">
-        <CCol sm="6" class="h5"  >
+        <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicValueWhenTriggered }}
-          <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger"
-            :filterable="true" class="font-control mt-2"
-            :placeholder="dis_placeholder"
-            :disabled="localStep3form.enable"
-            />
+          <CSelect size="lg" v-model="localStep3form.trigger" :options="value_deviceTrigger" :filterable="true"
+            class="font-control mt-2" :placeholder="dis_placeholder" :disabled="localStep3form.enable" />
         </CCol>
-        <CCol sm="6" class="h5"  >
+        <CCol sm="6" class="h5">
           {{ disp_IOBoxesBasicDurationWhenTriggered }}
-          <CInput size="lg" class="mt-2" v-model="localStep3form.delay"
-            pattern="[0-9]*"
-            :invalid-feedback="disp_limitNumber1to30"
-            :is-valid="isFieldPassed('delay', localStep3form.delay)"
-            required
-            :disabled="localStep3form.enable"
-            />
+          <CInput size="lg" class="mt-2" v-model="localStep3form.delay" pattern="[0-9]*"
+            :invalid-feedback="disp_limitNumber1to30" :is-valid="isFieldPassed('delay', localStep3form.delay)" required
+            :disabled="localStep3form.enable" />
         </CCol>
       </CRow>
     </div>
@@ -57,7 +50,7 @@
 
   export default {
     name: "ModifyIoBoxesStep3Form",
-    props:{
+    props: {
       step3form: Object,
       defaultValues: Object,
       isFieldPassed: Function,
@@ -80,8 +73,8 @@
         disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format("I/OBoxesBasicCOlNameDurationWhenTriggered"),
 
         /**v-model */
-        value_deviceDefaultValue: [ {label:"0", value:false}, {label: "1", value:true} ],
-        value_deviceTrigger: [ {label:"0", value:false}, {label: "1", value:true} ],
+        value_deviceDefaultValue: [{ label: "0", value: false }, { label: "1", value: true }],
+        value_deviceTrigger: [{ label: "0", value: false }, { label: "1", value: true }],
       };
     },
     components: {
@@ -110,4 +103,3 @@
 
   }
 </script>
-

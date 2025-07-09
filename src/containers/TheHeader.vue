@@ -3,18 +3,18 @@
     <CHeaderNav class="d-md-down-none mr-auto">
     </CHeaderNav>
     <CHeaderNav class="mr-4">
-      <TheHeaderDropdownAccnt/>
+      <TheHeaderDropdownAccnt />
     </CHeaderNav>
   </CHeader>
 </template>
 
 <script>
-import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+  import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
 
-export default {
-  name: 'TheHeader',
-  components: {
-    TheHeaderDropdownAccnt
+  export default {
+    name: 'TheHeader',
+    components: {
+      TheHeaderDropdownAccnt
+    }
   }
-}
 </script>

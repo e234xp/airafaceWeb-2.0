@@ -13,7 +13,7 @@ Vue.use(CoreuiVue);
 
 /* eslint-disable */
 
-global.webVersion = '2.01.4';
+global.webVersion = '2.01.5';
 
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
@@ -1534,7 +1534,7 @@ Vue.prototype.$globalModifyEventHandle = (
 Vue.prototype.$globalRemoveEventHandle = (
   uuid, cb,
 ) => new Promise((resolve) => {
-  postJson('/airafacelite/removeeventhandle', { uuid } ,
+  postJson('/airafacelite/removeeventhandle', { uuid },
     (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });

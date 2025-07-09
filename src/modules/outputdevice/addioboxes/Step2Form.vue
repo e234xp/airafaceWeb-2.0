@@ -12,75 +12,39 @@
       </CCardHeader>
       <CCardBody v-show="flag_outPut1Visiable">
         <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicEnable }}
             </h5>
             <label class="switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="localStep2form[0].enable"
-              >
+              <input class="form-check-input" type="checkbox" v-model="localStep2form[0].enable">
               <span class="slider round" />
             </label>
           </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicDefaultValue }}
             </h5>
-            <CSelect
-              size="lg"
-              v-model="localStep2form[0].default"
-              :options="value_deviceDefaultValue"
-              :filterable="true"
-              class="font-control mt-2"
-              :placeholder="dis_placeholder"
-              :disabled="!localStep2form[0].enable"
-            />
+            <CSelect size="lg" v-model="localStep2form[0].default" :options="value_deviceDefaultValue"
+              :filterable="true" class="font-control mt-2" :placeholder="dis_placeholder"
+              :disabled="!localStep2form[0].enable" />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicValueWhenTriggered }}
             </h5>
-            <CSelect
-              size="lg"
-              v-model="localStep2form[0].trigger"
-              :options="value_deviceTrigger"
-              :filterable="true"
-              class="font-control mt-2"
-              :placeholder="dis_placeholder"
-              :disabled="!localStep2form[0].enable"
-            />
+            <CSelect size="lg" v-model="localStep2form[0].trigger" :options="value_deviceTrigger" :filterable="true"
+              class="font-control mt-2" :placeholder="dis_placeholder" :disabled="!localStep2form[0].enable" />
           </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicDurationWhenTriggered }}
             </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              v-model="localStep2form[0].delay"
-              pattern="[0-9]*"
-              :invalid-feedback="disp_limitNumber1to30"
-              :is-valid="isFieldPassed('delay', localStep2form[0].delay)"
-              required
-              :disabled="!localStep2form[0].enable"
-            />
+            <CInput size="lg" class="mt-2" v-model="localStep2form[0].delay" pattern="[0-9]*"
+              :invalid-feedback="disp_limitNumber1to30" :is-valid="isFieldPassed('delay', localStep2form[0].delay)"
+              required :disabled="!localStep2form[0].enable" />
           </CCol>
         </CRow>
       </CCardBody>
@@ -98,75 +62,39 @@
       </CCardHeader>
       <CCardBody v-show="flag_outPut2Visiable">
         <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicEnable }}
             </h5>
             <label class="switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="localStep2form[1].enable"
-              >
+              <input class="form-check-input" type="checkbox" v-model="localStep2form[1].enable">
               <span class="slider round" />
             </label>
           </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicDefaultValue }}
             </h5>
-            <CSelect
-              size="lg"
-              v-model="localStep2form[1].default"
-              :options="value_deviceDefaultValue"
-              :filterable="true"
-              class="font-control mt-2"
-              :placeholder="dis_placeholder"
-              :disabled="!localStep2form[1].enable"
-            />
+            <CSelect size="lg" v-model="localStep2form[1].default" :options="value_deviceDefaultValue"
+              :filterable="true" class="font-control mt-2" :placeholder="dis_placeholder"
+              :disabled="!localStep2form[1].enable" />
           </CCol>
         </CRow>
         <CRow sm="12">
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicValueWhenTriggered }}
             </h5>
-            <CSelect
-              size="lg"
-              v-model="localStep2form[1].trigger"
-              :options="value_deviceTrigger"
-              :filterable="true"
-              class="font-control mt-2"
-              :placeholder="dis_placeholder"
-              :disabled="!localStep2form[1].enable"
-            />
+            <CSelect size="lg" v-model="localStep2form[1].trigger" :options="value_deviceTrigger" :filterable="true"
+              class="font-control mt-2" :placeholder="dis_placeholder" :disabled="!localStep2form[1].enable" />
           </CCol>
-          <CCol
-            sm="6"
-            class="h5"
-          >
+          <CCol sm="6" class="h5">
             <h5 class="ml-2">
               {{ disp_IOBoxesBasicDurationWhenTriggered }}
             </h5>
-            <CInput
-              size="lg"
-              class="mt-2"
-              v-model="localStep2form[1].delay"
-              pattern="[0-9]*"
-              :invalid-feedback="disp_limitNumber1to30"
-              :is-valid="isFieldPassed('delay', localStep2form[1].delay)"
-              required
-              :disabled="!localStep2form[1].enable"
-            />
+            <CInput size="lg" class="mt-2" v-model="localStep2form[1].delay" pattern="[0-9]*"
+              :invalid-feedback="disp_limitNumber1to30" :is-valid="isFieldPassed('delay', localStep2form[1].delay)"
+              required :disabled="!localStep2form[1].enable" />
           </CCol>
         </CRow>
       </CCardBody>
@@ -175,67 +103,67 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
+  import i18n from '@/i18n';
 
-// import Multiselect from 'vue-multiselect';
-// import '@/airacss/vue-multiselect.css';
+  // import Multiselect from 'vue-multiselect';
+  // import '@/airacss/vue-multiselect.css';
 
-export default {
-  name: 'Step2Form',
-  props: {
-    step2form: Object,
-    defaultValues: Object,
-    isFieldPassed: Function,
-  },
-  data() {
-    return {
-      localStep2form: { ...this.step2form },
-
-      isChecked: true,
-
-      flag_outPut1Visiable: true,
-      flag_outPut2Visiable: true,
-
-      disp_digitalOutPutTitle1: `${i18n.formatter.format('DigitalOutput')} #1`,
-      disp_digitalOutPutTitle2: `${i18n.formatter.format('DigitalOutput')} #2`,
-
-      dis_placeholder: i18n.formatter.format('placeholder'), // 提示文字
-      disp_limitNumber1to30: i18n.formatter.format('limitNumbers1to30'),
-
-      disp_IOBoxesBasicEnable: i18n.formatter.format('I/OBoxesBasicCOlNameEnable'),
-      disp_IOBoxesBasicDefaultValue: i18n.formatter.format('I/OBoxesBasicCOlNameDefaultValue'),
-      disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameValueWhenTriggered'),
-      disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameDurationWhenTriggered'),
-
-      value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
-      value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
-
-    };
-  },
-  components: {
-    // Multiselect: Multiselect,
-  },
-
-  // 拿資料 寫入資料
-  watch: {
-    localStep2form: {
-      handler(newValue) {
-        this.$emit('updateStep2form', { ...newValue });
-      },
-      deep: true,
+  export default {
+    name: 'Step2Form',
+    props: {
+      step2form: Object,
+      defaultValues: Object,
+      isFieldPassed: Function,
     },
-    defaultValues: {
-      handler(newValue) {
-        Object.entries(newValue).forEach(([key, value]) => {
-          if (!Object.keys(this.step2form).includes(key)) return;
-          this.localStep2form[key] = value;
-        });
-      },
-      deep: true,
-      immediate: true,
+    data() {
+      return {
+        localStep2form: { ...this.step2form },
+
+        isChecked: true,
+
+        flag_outPut1Visiable: true,
+        flag_outPut2Visiable: true,
+
+        disp_digitalOutPutTitle1: `${i18n.formatter.format('DigitalOutput')} #1`,
+        disp_digitalOutPutTitle2: `${i18n.formatter.format('DigitalOutput')} #2`,
+
+        dis_placeholder: i18n.formatter.format('placeholder'), // 提示文字
+        disp_limitNumber1to30: i18n.formatter.format('limitNumbers1to30'),
+
+        disp_IOBoxesBasicEnable: i18n.formatter.format('I/OBoxesBasicCOlNameEnable'),
+        disp_IOBoxesBasicDefaultValue: i18n.formatter.format('I/OBoxesBasicCOlNameDefaultValue'),
+        disp_IOBoxesBasicValueWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameValueWhenTriggered'),
+        disp_IOBoxesBasicDurationWhenTriggered: i18n.formatter.format('I/OBoxesBasicCOlNameDurationWhenTriggered'),
+
+        value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
+        value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
+
+      };
     },
-  },
-};
+    components: {
+      // Multiselect: Multiselect,
+    },
+
+    // 拿資料 寫入資料
+    watch: {
+      localStep2form: {
+        handler(newValue) {
+          this.$emit('updateStep2form', { ...newValue });
+        },
+        deep: true,
+      },
+      defaultValues: {
+        handler(newValue) {
+          Object.entries(newValue).forEach(([key, value]) => {
+            if (!Object.keys(this.step2form).includes(key)) return;
+            this.localStep2form[key] = value;
+          });
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
+  };
 </script>
 
 <style>
