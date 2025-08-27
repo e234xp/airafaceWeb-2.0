@@ -771,5 +771,8 @@
   "similarRate": "Benzer Oran",
   "space": "Uzay ( )",
   "tab": "Sekme (\\t)",
-  "txtSeparator": "Ayırıcı"
+  "txtSeparator": "Ayırıcı",
+  "Status": "durum",
+  "Enabled": "Başlangıç",
+  "Expired": "olgunluk"
 }

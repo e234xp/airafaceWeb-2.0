@@ -771,5 +771,8 @@
   "similarRate": "Tarif Serupa",
   "space": "Spasi ( )",
   "tab": "Tab (\\t)",
-  "txtSeparator": "Pemisah"
+  "txtSeparator": "Pemisah",
+  "Status": "kondisi",
+  "Enabled": "Awal",
+  "Expired": "kematangan"
 }

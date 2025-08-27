@@ -771,5 +771,8 @@
   "similarRate": "Tỷ lệ tương tự",
   "space": "Khoảng trống ( )",
   "tab": "Tab (\\t)",
-  "txtSeparator": "Dấu phân cách"
+  "txtSeparator": "Dấu phân cách",
+  "Status": "tình trạng",
+  "Enabled": "Bắt đầu",
+  "Expired": "Hết hạn"
 }

@@ -549,6 +549,7 @@
   "StartSignal": "起始訊號",
   "StaticPicture": "圖片",
   "StaticSettings": "靜態設定",
+  "Status": "狀態",
   "Stranger": "陌生人",
   "StrangerID": "陌生人卡號碼",
   "StrangerMaxItem": "陌生人顯示數量",
@@ -771,5 +772,7 @@
   "similarRate": "相似度",
   "space": "空白 ( )",
   "tab": "Tab (\\t)",
-  "txtSeparator": "分隔符號"
+  "txtSeparator": "分隔符號",
+  "Enabled": "啟用",
+  "Expired": "到期"
 }

@@ -80,6 +80,8 @@
                   align="left" />
                 <vxe-table-column show-overflow field="channel_amount" :title="$t('Amounts')" min-width="100"
                   align="left" />
+                <vxe-table-column show-overflow field="status_display" :title="$t('Status')" min-width="100"
+                  align="center" type="html" />
               </vxe-table>
             </div>
           </CCardBody>
@@ -176,6 +178,13 @@
           localItem.face_db_size = 0;
           if (localItem.default_face_db_size) localItem.face_db_size += localItem.default_face_db_size;
           if (localItem.addon_face_db_size) localItem.face_db_size += localItem.addon_face_db_size;
+
+          // 根據 expired 欄位設定狀態顯示
+          if (localItem.expired === false) {
+            localItem.status_display = `<span style="color: green; font-weight: bold;">${this.$t('Enabled')}</span>`;
+          } else {
+            localItem.status_display = `<span style="color: red; font-weight: bold;">${this.$t('Expired')}</span>`;
+          }
         });
 
         return Object.assign([], sliceList);

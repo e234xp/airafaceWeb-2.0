@@ -771,5 +771,8 @@
   "similarRate": "อัตราที่คล้ายกัน",
   "space": "ช่องว่าง ( )",
   "tab": "แท็บ (\\t)",
-  "txtSeparator": "เครื่องแยก"
+  "txtSeparator": "เครื่องแยก",
+  "Status": "เงื่อนไข",
+  "Enabled": "เริ่ม",
+  "Expired": "วุฒิภาวะ"
 }
