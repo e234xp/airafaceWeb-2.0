@@ -215,7 +215,7 @@
             <h5 class="ml-2">
               {{ disp_displayVerifyDuration }}
             </h5>
-            <CInput size="lg" class="mt-2" v-model="localStep2form.display_verify_result_time"
+            <CInput size="lg" class="mt-2" v-model.number="localStep2form.display_verify_result_time"
               :invalid-feedback="$t('NoEmptyNoSpace')"
               :is-valid="isFieldPassed('display_verify_result_time', localStep2form.display_verify_result_time)"
               required />
