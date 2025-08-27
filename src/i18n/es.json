@@ -771,5 +771,8 @@
   "similarRate": "Tarifa similar",
   "space": "Espacio ( )",
   "tab": "Tabulador (\\t)",
-  "txtSeparator": "Separador"
+  "txtSeparator": "Separador",
+  "Status": "condición",
+  "Enabled": "Comenzar",
+  "Expired": "madurez"
 }

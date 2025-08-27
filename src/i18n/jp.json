@@ -771,5 +771,8 @@
   "similarRate": "類似率",
   "space": "スペース ( )",
   "tab": "タブ (\\t)",
-  "txtSeparator": "セパレーター"
+  "txtSeparator": "セパレーター",
+  "Status": "condition",
+  "Enabled": "Start",
+  "Expired": "maturity"
 }

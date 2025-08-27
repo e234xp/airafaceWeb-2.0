@@ -549,6 +549,7 @@
   "StartSignal": "Start Signal",
   "StaticPicture": "Picture",
   "StaticSettings": "Static Settings",
+  "Status": "Status",
   "Stranger": "Stranger",
   "StrangerID": "Stranger Card Number",
   "StrangerMaxItem": "The number of strangers displayed",
@@ -771,5 +772,7 @@
   "similarRate": "Similar Rate",
   "space": "Space ( )",
   "tab": "Tab (\\t)",
-  "txtSeparator": "Separator"
+  "txtSeparator": "Separator",
+  "Enabled": "enabled",
+  "Expired": "expired"
 }

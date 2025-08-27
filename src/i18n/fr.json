@@ -771,5 +771,8 @@
   "similarRate": "Tarif similaire",
   "space": "Espace ( )",
   "tab": "Tabulation (\\t)",
-  "txtSeparator": "Séparateur"
+  "txtSeparator": "Séparateur",
+  "Status": "condition",
+  "Enabled": "Commencer",
+  "Expired": "maturité"
 }
