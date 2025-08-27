@@ -434,9 +434,12 @@
               const showimageId = item.face_image_id
                 ? item.face_image_id.f + item.face_image_id.uuid
                 : '';
-              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
-                + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
-                + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              // 建立空的容器，等待後續透過 API 確認是否有圖片
+              if (showimageId && showimageId.length > 0) {
+                item.showimage = `<div id='container_${showimageId}'></div>`;
+              } else {
+                item.showimage = '';
+              }
             } catch (ex) {
               console.log(ex);
             }
@@ -542,9 +545,14 @@
               const showimageId = item.face_image_id
                 ? item.face_image_id.f + item.face_image_id.uuid
                 : '';
-              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ`
-                + 'AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAA'
-                + 'AAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              // 只有當有有效的 face_image_id 時才顯示圖片
+              if (showimageId && showimageId.length > 0) {
+                item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ`
+                  + 'AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAA'
+                  + 'AAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              } else {
+                item.showimage = '';
+              }
             } catch (ex) {
               console.log(ex);
             }
@@ -687,9 +695,12 @@
               const showimageId = item.face_image_id
                 ? item.face_image_id.f + item.face_image_id.uuid
                 : '';
-              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA`
-                + 'AAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAA'
-                + 'AQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              // 建立空的容器，等待後續透過 API 確認是否有圖片
+              if (showimageId && showimageId.length > 0) {
+                item.showimage = `<div id='container_${showimageId}'></div>`;
+              } else {
+                item.showimage = '';
+              }
             } catch (ex) {
               console.log(ex);
             }
@@ -810,9 +821,14 @@
               const showimageId = item.face_image_id
                 ? item.face_image_id.f + item.face_image_id.uuid
                 : '';
-              item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfF`
-                + 'cSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQA'
-                + 'AAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              // 只有當有有效的 face_image_id 時才顯示圖片
+              if (showimageId && showimageId.length > 0) {
+                item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfF`
+                  + 'cSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQA'
+                  + 'AAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+              } else {
+                item.showimage = '';
+              }
             } catch (ex) {
               console.log(ex);
             }
@@ -891,16 +907,17 @@
             const showimageId = slicei.face_image_id
               ? slicei.face_image_id.f + slicei.face_image_id.uuid
               : '';
-            if (showimageId.length > 0) {
+            // 只有當有有效的 face_image_id 時才處理圖片
+            if (showimageId && showimageId.length > 0) {
               const dataImage = await self.$globalFetchVerifyPhoto(slicei.face_image_id);
-              const ele = document.getElementById(showimageId);
-              if (dataImage.error == null && dataImage.data) {
-                if (ele) ele.src = `data:image/jpeg;base64,${dataImage.data.face_image}`;
-              } else if (ele) {
-                ele.src = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmT'
-                  + '0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQV'
-                  + 'QIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==';
+              const container = document.getElementById(`container_${showimageId}`);
+              if (dataImage.error == null && dataImage.data && dataImage.data.face_image && dataImage.data.face_image.trim() !== '') {
+                // API 回傳有效的圖片資料，動態建立圖片元素
+                if (container) {
+                  container.innerHTML = `<img id='${showimageId}' src='data:image/jpeg;base64,${dataImage.data.face_image}' width='100' height='100'>`;
+                }
               }
+              // 如果沒有有效圖片資料，容器保持空白（不顯示任何內容）
             }
           } catch (e) {
             console.log('sliceList.forEach 535', e);
