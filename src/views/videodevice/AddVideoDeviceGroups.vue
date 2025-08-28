@@ -5,10 +5,10 @@
         {{ $t('VideoDeviceBasic') }}
       </div>
 
-      <stepprogress class="w-step-progress-2" :active-thickness="param_activeThickness"
+      <stepprogress class="w-step-progress-3" :active-thickness="param_activeThickness"
         :passive-thickness="param_passiveThickness" :active-color="param_activeColor"
         :passive-color="param_passiveColor" :current-step="flag_currentSetp" :line-thickness="param_lineThickness"
-        :steps="[$t('VideoDeviceBasic'), $t('Complete')]" icon-class="fa fa-check" />
+        :steps="[$t('VideoDeviceBasic'), $t('SelectGroupDevice'), $t('Complete')]" icon-class="fa fa-check" />
 
       <div style="height: 35px" />
     </div>
@@ -21,7 +21,13 @@
         </CCardBody>
       </CCard>
 
-      <CCard style="height: 34rem;" v-else-if="isOnStep(1)">
+      <CCard v-else-if="isOnStep(1)">
+        <CCardBody>
+          <Step2Form :step2form="step2form" @updateStep2form="updateStep2form" />
+        </CCardBody>
+      </CCard>
+
+      <CCard style="height: 34rem;" v-else-if="isOnStep(2)">
         <CCardBody style="display: flex; justify-content: center; align-items: center;">
           <CRow>
             <CCol sm="12">
@@ -41,9 +47,9 @@
             {{ value_returnRouteName }}
           </CButton>
         </div>
-        <!-- <div v-if="flag_currentSetp == 1">
+        <div v-if="flag_currentSetp == 1 || flag_currentSetp == 2">
           <CButton class="btn btn-outline-primary fz-lg btn-w-normal" @click="handlePrev">{{ $t('Previous') }}</CButton>
-        </div> -->
+        </div>
         <div style="width: 20px" />
         <div>
           <CButton class="btn btn-primary mb-3" size="lg" @click="handleNext()"
@@ -61,6 +67,7 @@
   import '@/airacss/vue-step-progress.css';
 
   import Step1Form from '@/modules/videodevice/addvideodevicegroups/Step1Form.vue';
+  import Step2Form from '@/modules/videodevice/addvideodevicegroups/Step2Form.vue';
 
   export default {
     name: 'AddOutputDeviceGroups',
@@ -87,13 +94,18 @@
           name: '',
         },
 
+        step2form: {
+          selectedCameras: [],
+          selectedTablets: [],
+        },
+
         defaultValues: {},
       };
     },
     components: {
       stepprogress: StepProgress,
       Step1Form,
-
+      Step2Form,
     },
     async created() {
       this.defaultValues = await this.getDefaultValues();
@@ -104,6 +116,10 @@
     methods: {
       updateStep1form(newValue) {
         this.step1form = { ...newValue };
+      },
+
+      updateStep2form(newValue) {
+        this.step2form = { ...newValue };
       },
 
       async getDefaultValues() {
@@ -138,7 +154,10 @@
           case 0: {
             return this.isFormPassed(this.step1form);
           }
-          case 1:
+          case 1: {
+            return true; // Step2 is always passable since device selection is optional
+          }
+          case 2:
           default: {
             return true;
           }
@@ -193,14 +212,23 @@
       async handleNext() {
         switch (this.flag_currentSetp) {
           case 0: {
+            this.flag_currentSetp += 1;
+            break;
+          }
+          case 1: {
             this.obj_loading = this.$loading.show({
               container: this.$refs.formContainer,
             });
 
+            const cameraUuidList = this.step2form.selectedCameras ? 
+              this.step2form.selectedCameras.map(camera => camera.uuid) : [];
+            const tabletUuidList = this.step2form.selectedTablets ? 
+              this.step2form.selectedTablets.map(tablet => tablet.uuid) : [];
+
             const parameter = {
               ...this.step1form,
-              camera_uuid_list: [],
-              tablet_uuid_list: [],
+              camera_uuid_list: cameraUuidList,
+              tablet_uuid_list: tabletUuidList,
             };
 
             const { data } = await this.create(parameter);
@@ -234,11 +262,13 @@
 
       nextButtonName(step) {
         switch (step) {
-          case 1:
-            return this.$t('Complete');
           case 0:
-          default:
             return this.$t('Next');
+          case 1:
+            return this.$t('Create');
+          case 2:
+          default:
+            return this.$t('Complete');
         }
       },
     },
