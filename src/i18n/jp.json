@@ -774,5 +774,6 @@
   "txtSeparator": "セパレーター",
   "Status": "condition",
   "Enabled": "Start",
-  "Expired": "maturity"
+  "Expired": "maturity",
+  "About": "About"
 }

@@ -774,5 +774,6 @@
   "txtSeparator": "Séparateur",
   "Status": "condition",
   "Enabled": "Commencer",
-  "Expired": "maturité"
+  "Expired": "maturité",
+  "About": "À propos"
 }
