@@ -420,6 +420,47 @@
           </el-button>
         </div>
       </el-drawer>
+
+      <!-- 日期區間選擇彈窗 -->
+      <el-dialog
+        title="選擇匯出日期區間"
+        :visible.sync="dateRangeDialog"
+        width="400px"
+        :close-on-click-modal="false"
+      >
+        <div class="date-range-container">
+          <div class="date-picker-group">
+            <label>開始日期：</label>
+            <el-date-picker
+              v-model="startDate"
+              type="date"
+              placeholder="選擇開始日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :picker-options="startDatePickerOptions"
+              :default-value="endDate ? new Date(endDate) : null"
+              @change="onStartDateChange"
+            />
+          </div>
+          <div class="date-picker-group">
+            <label>結束日期：</label>
+            <el-date-picker
+              v-model="endDate"
+              type="date"
+              placeholder="選擇結束日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :picker-options="endDatePickerOptions"
+              :default-value="startDate ? new Date(startDate) : null"
+              @change="onEndDateChange"
+            />
+          </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dateRangeDialog = false">取 消</el-button>
+          <el-button type="primary" @click="confirmExport" :disabled="!startDate || !endDate">確 認</el-button>
+        </span>
+      </el-dialog>
     </div>
 
     <!------------------- Footer - BEGIN ------------------>
@@ -555,6 +596,13 @@ export default {
         vegetable: '0',
         milk: '0',
       },
+
+      // 日期區間選擇相關變數
+      dateRangeDialog: false,
+      startDate: null,
+      endDate: null,
+      startDatePickerOptions: {},
+      endDatePickerOptions: {},
     };
   },
   mixins: [capacityModel],
@@ -1072,8 +1120,6 @@ export default {
                 const hourOut = present.out;
 
                 if (hourIn && hourOut) {
-                  // console.log('presentRecord', person, hourIn, hourOut);
-
                   for (let k = hourIn; k < hourOut; k += 1) {
                     const hValue = self.hourlyPresentData.get(k) || [];
 
@@ -1400,7 +1446,6 @@ export default {
           plugin_info: this.fields,
         },
       };
-      console.log('data', data);
       await this.$globalModifyPerson(data);
     },
 
@@ -1416,39 +1461,174 @@ export default {
       this.displayMode = 'Dashboard';
     },
 
-    async exportExcel() {
-      const workbook = new Excel.Workbook();
-      const worksheet = workbook.addWorksheet('worksheet');
+    exportExcel() {
+      this.resetDatePicker();
+      this.dateRangeDialog = true;
+    },
 
-      // 撰寫 excel 的 column （第一列）
-      worksheet.columns = [
-        { header: '姓名', key: 'name', width: 15 },
-        { header: '果昔', key: 'smoothie', width: 10 },
-        { header: '蔬菜', key: 'vegetable', width: 10 },
-        { header: '牛奶', key: 'milk', width: 10 },
-      ];
-
-      // 撰寫 excel 第二列開始的資料, 若為 undefined 設定為 0
-      this.persons.forEach(person => {
-        worksheet.addRow({
-          name: person.name,
-          smoothie: person.plugin_info?.smoothie ?? 0,
-          vegetable: person.plugin_info?.vegetable ?? 0,
-          milk: person.plugin_info?.milk ?? 0,
-        })
-      })
-
-      // 下載檔案
-      workbook.xlsx.writeBuffer().then((data) => {
-        const link = document.createElement("a");
-        const blobData = new Blob([data], {
-          type: "application/vnd.ms-excel;charset=utf-8;"
+    async confirmExport() {
+      if (!this.startDate || !this.endDate) {
+        this.$fire({
+          text: '請選擇完整的日期區間',
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
         });
-        link.download = 'result.xlsx';
-        link.href = URL.createObjectURL(blobData);
-        link.click();
-      });
-    }
+        return;
+      }
+
+      this.dateRangeDialog = false;
+
+      const startTime = new Date(this.startDate).getTime();
+      const endDate = new Date(this.endDate);
+      endDate.setHours(23, 59, 59, 999);
+      const endTime = endDate.getTime();
+
+      try {
+        const result = await this.$globalFindPlugin(startTime, endTime);
+
+        if (result.error) {
+          this.$fire({
+            text: 'API 調用失敗',
+            type: 'error',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+          });
+          return;
+        }
+
+        let pluginData = [];
+        if (Array.isArray(result.data?.result?.data)) {
+          pluginData = result.data.result.data;
+        } else if (Array.isArray(result.data?.data)) {
+          pluginData = result.data.data;
+        } else if (Array.isArray(result.data)) {
+          pluginData = result.data;
+        }
+
+        if (pluginData.length === 0) {
+          this.$fire({
+            text: '選定日期區間內無相關資料',
+            type: 'warning',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+          });
+          return;
+        }
+
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('worksheet');
+
+        worksheet.columns = [
+          { header: 'No.', key: 'no', width: 8 },
+          { header: '姓名', key: 'name', width: 15 },
+          { header: '品項', key: 'item', width: 10 },
+          { header: '數量', key: 'oriAmount', width: 10 },
+          { header: '異動', key: 'difference', width: 10 },
+          { header: '剩餘', key: 'newAmount', width: 10 },
+          { header: '時間', key: 'timestamp', width: 20 },
+        ];
+
+        let rowIndex = 0;
+        pluginData.forEach((item) => {
+          const timestamp = item.timestamp
+            ? new Date(item.timestamp).toLocaleString('zh-TW', { hour12: false })
+            : '無時間記錄';
+
+          const name = item.name || '未知';
+          const oriData = item.oriData || {};
+          const newData = item.newData || {};
+
+          // 檢查每個品項的異動
+          const items = ['smoothie', 'vegetable', 'milk'];
+          const itemNames = { smoothie: '果昔', vegetable: '蔬菜', milk: '牛奶' };
+
+          items.forEach((itemType) => {
+            const oriAmount = parseInt(oriData[itemType], 10) || 0;
+            const newAmount = parseInt(newData[itemType], 10) || 0;
+            const difference = newAmount - oriAmount;
+
+            // 只有當有異動時才加入記錄
+            if (difference !== 0) {
+              worksheet.addRow({
+                no: rowIndex += 1,
+                name,
+                item: itemNames[itemType],
+                oriAmount,
+                difference: difference > 0 ? `+${difference}` : difference,
+                newAmount,
+                timestamp,
+              });
+            }
+          });
+        });
+
+        const fileName = `${this.startDate}_${this.endDate}.xlsx`;
+        workbook.xlsx.writeBuffer().then((data) => {
+          const link = document.createElement('a');
+          const blobData = new Blob([data], {
+            type: 'application/vnd.ms-excel;charset=utf-8;',
+          });
+          link.download = fileName;
+          link.href = URL.createObjectURL(blobData);
+          link.click();
+        });
+      } catch (error) {
+        console.error('Export failed:', error);
+        this.$fire({
+          text: '匯出失敗',
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+        });
+      }
+    },
+
+    updatePickerOptions() {
+      this.startDatePickerOptions = {
+        disabledDate: (time) => {
+          if (!this.endDate) return false;
+
+          const timeDate = new Date(time.getFullYear(), time.getMonth(), time.getDate());
+          const endDate = new Date(this.endDate);
+          const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+          const sevenDaysBefore = new Date(endDateOnly);
+          sevenDaysBefore.setDate(endDateOnly.getDate() - 6);
+
+          return timeDate.getTime() < sevenDaysBefore.getTime() || timeDate.getTime() > endDateOnly.getTime();
+        },
+      };
+
+      // 結束日期的禁用規則
+      this.endDatePickerOptions = {
+        disabledDate: (time) => {
+          if (!this.startDate) return false;
+
+          const timeDate = new Date(time.getFullYear(), time.getMonth(), time.getDate());
+          const startDate = new Date(this.startDate);
+          const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+          const sevenDaysAfter = new Date(startDateOnly);
+          sevenDaysAfter.setDate(startDateOnly.getDate() + 6);
+
+          return timeDate.getTime() < startDateOnly.getTime() || timeDate.getTime() > sevenDaysAfter.getTime();
+        },
+      };
+    },
+
+    onStartDateChange() {
+      this.updatePickerOptions();
+    },
+
+    onEndDateChange() {
+      this.updatePickerOptions();
+    },
+
+    resetDatePicker() {
+      this.startDate = null;
+      this.endDate = null;
+      this.startDatePickerOptions = {};
+      this.endDatePickerOptions = {};
+    },
   },
 };
 </script>
@@ -1475,5 +1655,27 @@ export default {
 
   .home-button > span {
     display: flex;
+  }
+
+  .date-range-container {
+    padding: 20px 0;
+  }
+
+  .date-picker-group {
+    margin-bottom: 20px;
+  }
+
+  .date-picker-group label {
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+    color: #606266;
+    font-size: 14px;
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
   }
 </style>

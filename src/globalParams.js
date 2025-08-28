@@ -18,7 +18,7 @@ global.webVersion = '2.00.01.250624v';
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.86'; // airaFace2
+const TEST_HOST = '192.168.10.156'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = ''; // 測試mini的PORT
@@ -1740,5 +1740,20 @@ Vue.prototype.$globalAttendanceVerifyResult = (
     (err, data) => {
       if (cb) cb(err, err ? null : data.result);
       resolve({ error: err, data: err ? null : data.result });
+    });
+});
+
+Vue.prototype.$globalFindPlugin = (
+  startTime, endTime, cb,
+) => new Promise((resolve) => {
+  const query = {
+    start_time: startTime,
+    end_time: endTime,
+  };
+  postJson('/airafacelite/findplugin', query,
+    (err, data) => {
+      console.log('Plugin data:', data);
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
     });
 });
