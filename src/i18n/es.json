@@ -774,5 +774,6 @@
   "txtSeparator": "Separador",
   "Status": "condición",
   "Enabled": "Comenzar",
-  "Expired": "madurez"
+  "Expired": "madurez",
+  "About": "Acerca de"
 }

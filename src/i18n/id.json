@@ -774,5 +774,6 @@
   "txtSeparator": "Pemisah",
   "Status": "kondisi",
   "Enabled": "Awal",
-  "Expired": "kematangan"
+  "Expired": "kematangan",
+  "About": "Tentang"
 }
