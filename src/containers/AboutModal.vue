@@ -1,49 +1,47 @@
 <template>
   <div class="modal-main">
     <div class="about-modal">
-      <div class="close-btn" @click="$emit('close')">
-        <CIcon name="cil-x" height="24" />
+      <div
+        class="close-btn"
+        @click="$emit('close')"
+      >
+        <CIcon
+          name="cil-x"
+          height="24"
+        />
       </div>
-      
+
       <div class="modal-header">
         <div class="logo-section">
-          <img src="@/assets/img/aira-logo-white.svg" alt="AiraFace Logo" class="logo" />
+          <img
+            src="@/assets/img/aira-logo-white.svg"
+            alt="AiraFace Logo"
+            class="logo"
+          >
         </div>
         <div class="title-section">
-          <h2>AiraFace</h2>
-          <p class="subtitle">人臉辨識系統</p>
+          <h2>{{ $t('About') }} AiraFace</h2>
         </div>
       </div>
 
       <div class="modal-content">
         <div class="info-section">
           <div class="info-item">
-            <label>版本:</label>
-            <span>{{ versionInfo.version }}</span>
+            <label>Main Service:</label>
+            <span>{{ versionInfo.mainService }}</span>
           </div>
           <div class="info-item">
-            <label>建置日期:</label>
-            <span>{{ versionInfo.buildDate }}</span>
+            <label>System Service:</label>
+            <span>{{ versionInfo.systemService }}</span>
           </div>
           <div class="info-item">
-            <label>系統版本:</label>
-            <span>{{ versionInfo.systemVersion }}</span>
+            <label>Data Service:</label>
+            <span>{{ versionInfo.dataService }}</span>
           </div>
           <div class="info-item">
-            <label>API 版本:</label>
-            <span>{{ versionInfo.apiVersion }}</span>
+            <label>Media Service:</label>
+            <span>{{ versionInfo.mediaService }}</span>
           </div>
-        </div>
-
-        <div class="company-info">
-          <p class="copyright">© 2024 AiraFace Technology</p>
-          <p class="description">先進 AI 驅動的人臉辨識解決方案</p>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <div class="confirm-btn" @click="$emit('close')">
-          {{ $t('OK') }}
         </div>
       </div>
     </div>
@@ -57,28 +55,34 @@ export default {
   data() {
     return {
       versionInfo: {
-        version: '2.0.1',
-        buildDate: '2024-01-15',
-        systemVersion: '2.0.1.4',
-        apiVersion: '1.2.3'
-      }
+        mainService: 'Loading...',
+        systemService: 'Loading...',
+        dataService: 'Loading...',
+        mediaService: 'Loading...',
+      },
     };
   },
   created() {
-    // TODO: 未來可以從後端 API 取得版本資訊
-    // this.fetchVersionInfo();
+    this.fetchVersionInfo();
   },
   methods: {
     async fetchVersionInfo() {
       try {
-        // 未來的 API 呼叫
-        // const response = await this.$globalGetSystemVersion();
-        // this.versionInfo = response.data;
+        const response = await this.$globalGetVersionInfo();
+        if (response.data && response.data.version) {
+          this.versionInfo = response.data.version;
+        }
       } catch (error) {
         console.error('Failed to fetch version info:', error);
+        this.versionInfo = {
+          mainService: 'Error',
+          systemService: 'Error',
+          dataService: 'Error',
+          mediaService: 'Error',
+        };
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -114,7 +118,7 @@ export default {
   color: #666;
   cursor: pointer;
   z-index: 1;
-  
+
   &:hover {
     color: #333;
   }
@@ -146,7 +150,7 @@ export default {
     font-size: 28px;
     font-weight: bold;
   }
-  
+
   .subtitle {
     margin: 4px 0 0;
     font-size: 14px;
@@ -168,17 +172,17 @@ export default {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #f0f0f0;
-  
+
   &:last-child {
     border-bottom: none;
   }
-  
+
   label {
     font-weight: 600;
     color: #333;
     font-size: 14px;
   }
-  
+
   span {
     color: #666;
     font-size: 14px;
@@ -189,13 +193,13 @@ export default {
 .company-info {
   text-align: center;
   color: #666;
-  
+
   .copyright {
     font-size: 14px;
     margin: 0 0 8px;
     font-weight: 600;
   }
-  
+
   .description {
     font-size: 12px;
     margin: 0;
@@ -221,7 +225,7 @@ export default {
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background 0.2s;
-  
+
   &:hover {
     background: #0056b3;
   }

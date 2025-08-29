@@ -1053,6 +1053,14 @@ Vue.prototype.$globalFindCameras = (
     });
 });
 
+Vue.prototype.$globalGetVersionInfo = (cb) => new Promise((resolve) => {
+  postJson('/airafacelite/versioninfo', {},
+    (err, data) => {
+      if (cb) cb(err, data);
+      resolve({ error: err, data });
+    });
+});
+
 // 韋根
 Vue.prototype.$globalFindWiegandConverters = (
   uuid, shift, sliceSize, cb,
