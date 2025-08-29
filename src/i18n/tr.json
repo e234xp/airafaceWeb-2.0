@@ -775,5 +775,10 @@
   "Status": "durum",
   "Enabled": "Başlangıç",
   "Expired": "olgunluk",
-  "About": "Hakkında"
+  "About": "Hakkında",
+  "DeviceList": "Ekipman listesi",
+  "DeviceType": "Ekipman türü",
+  "Tablet": "Tablet bilgisayar",
+  "Camera": "Fotoğrafçı",
+  "EditDeviceGroup": "Görüntü grubunu düzenle"
 }

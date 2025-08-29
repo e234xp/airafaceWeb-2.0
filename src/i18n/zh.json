@@ -777,5 +777,13 @@
   "txtSeparator": "分隔符號",
   "Enabled": "啟用",
   "Expired": "到期",
-  "About": "關於"
+  "About": "關於",
+  "And": "與",
+  "SelectionSummary": "選擇摘要",
+  "DeviceList": "設備列表",
+  "DeviceType": "設備類型",
+  "Camera": "攝影機",
+  "Tablet": "平板",
+  "Optional": "選填",
+  "EditDeviceGroup": "編輯影像群組"
 }

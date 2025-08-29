@@ -777,5 +777,13 @@
   "txtSeparator": "Separator",
   "Enabled": "enabled",
   "Expired": "expired",
-  "About": "About"
+  "About": "About",
+  "And": "and",
+  "SelectionSummary": "Selection Summary",
+  "DeviceList": "Device List",
+  "DeviceType": "Device Type",
+  "Camera": "Camera",
+  "Tablet": "Tablet",
+  "Optional": "Optional",
+  "EditDeviceGroup": "Edit Device Group"
 }
