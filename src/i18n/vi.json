@@ -775,5 +775,10 @@
   "Status": "tình trạng",
   "Enabled": "Bắt đầu",
   "Expired": "Hết hạn",
-  "About": "Về"
+  "About": "Về",
+  "DeviceList": "Danh sách thiết bị",
+  "DeviceType": "Loại thiết bị",
+  "Tablet": "Máy tính bảng",
+  "Camera": "Nhiếp ảnh gia",
+  "EditDeviceGroup": "Chỉnh sửa nhóm hình ảnh"
 }

@@ -775,5 +775,10 @@
   "Status": "condición",
   "Enabled": "Comenzar",
   "Expired": "madurez",
-  "About": "Acerca de"
+  "About": "Acerca de",
+  "DeviceList": "Lista de equipos",
+  "DeviceType": "Tipo de equipo",
+  "Tablet": "Tableta",
+  "Camera": "Fotógrafo",
+  "EditDeviceGroup": "Editar el grupo de imágenes"
 }

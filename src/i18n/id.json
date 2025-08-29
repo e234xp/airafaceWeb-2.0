@@ -775,5 +775,10 @@
   "Status": "kondisi",
   "Enabled": "Awal",
   "Expired": "kematangan",
-  "About": "Tentang"
+  "About": "Tentang",
+  "DeviceList": "Daftar Peralatan",
+  "DeviceType": "Jenis peralatan",
+  "Tablet": "Komputer tablet",
+  "Camera": "Fotografer",
+  "EditDeviceGroup": "Edit grup gambar"
 }

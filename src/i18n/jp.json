@@ -775,5 +775,10 @@
   "Status": "condition",
   "Enabled": "Start",
   "Expired": "maturity",
-  "About": "About"
+  "About": "About",
+  "DeviceList": "Equipment List",
+  "DeviceType": "Equipment type",
+  "Tablet": "Tablet computer",
+  "Camera": "Photographer",
+  "EditDeviceGroup": "Edit the image group"
 }

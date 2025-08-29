@@ -14,17 +14,30 @@
       <CCol sm="12">
         <CRow>
           <div>
-            <CButton size="lg" class="btn btn-primary mr-3 mb-3" @click="handleOnAdd()">
+            <CButton
+              size="lg"
+              class="btn btn-primary mr-3 mb-3"
+              @click="handleOnAdd()"
+            >
               {{ disp_add }}
             </CButton>
           </div>
           <div>
-            <CButton class="btn btn-danger mb-3" size="lg" @click="handleOnMultipleDelete()">
+            <CButton
+              class="btn btn-danger mb-3"
+              size="lg"
+              @click="handleOnMultipleDelete()"
+            >
               {{ disp_delete }}
             </CButton>
           </div>
           <div style="margin-left: auto">
-            <CInput v-model.lazy="value_searchingFilter" style="width: 400px" size="lg" :placeholder="disp_search">
+            <CInput
+              v-model.lazy="value_searchingFilter"
+              style="width: 400px"
+              size="lg"
+              :placeholder="disp_search"
+            >
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -37,39 +50,79 @@
     <CCard>
       <CCardBody>
         <div>
-          <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="
+          <vxe-table
+            :data="value_dataItemsToShow"
+            stripe
+            align="center"
+            :cell-style="
               () => {
                 return 'fontSize:18px;';
               }
-            " :header-cell-style="
+            "
+            :header-cell-style="
               () => {
                 return 'fontSize:18px;';
               }
-            " ref="mainTable" :auto-resize="true" keep-source highlight-current-row
-            :edit-config="{ trigger: 'manual', mode: 'row' }">
-            <vxe-table-column type="checkbox" align="center" width="5%" />
+            "
+            ref="mainTable"
+            :auto-resize="true"
+            keep-source
+            highlight-current-row
+            :edit-config="{ trigger: 'manual', mode: 'row' }"
+          >
+            <vxe-table-column
+              type="checkbox"
+              align="center"
+              width="5%"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center"
-              width="15%" />
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="name"
+              :title="disp_group"
+              align="center"
+              width="15%"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="camera_count" :title="disp_videoDevices" width="15%"
-              align="center" />
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="camera_count"
+              :title="disp_videoDevices"
+              width="15%"
+              align="center"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="outputDevices" :title="disp_outputDevices"
-              width="15%" align="center" />
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="outputDevices"
+              :title="disp_outputDevices"
+              width="15%"
+              align="center"
+            />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="15%"
-              align="center" />
+            <vxe-table-column
+              :show-overflow="ellipsisMode"
+              field="rules"
+              :title="disp_rules"
+              width="15%"
+              align="center"
+            />
 
             <vxe-table-column min-width="8%">
               <template #default="{ row }">
                 <div class="d-flex flex-column align-items-center">
-                  <vxe-button class="btn-in-cell-primary btn-in-cell" @click="handleOnModify(row)"
-                    :disabled="row.uuid==='0' || row.uuid==='1'">
+                  <vxe-button
+                    class="btn-in-cell-primary btn-in-cell"
+                    @click="handleOnModify(row)"
+                    :disabled="row.uuid==='0' || row.uuid==='1'"
+                  >
                     {{ disp_modify }}
                   </vxe-button>
-                  <vxe-button class="btn-in-cell-danger btn-in-cell" @click="handleOnSingleDelete(row)"
-                    :disabled="row.uuid==='0' || row.uuid==='1' || row.rules > 0">
+                  <vxe-button
+                    class="btn-in-cell-danger btn-in-cell"
+                    @click="handleOnSingleDelete(row)"
+                    :disabled="row.uuid==='0' || row.uuid==='1' || row.rules > 0"
+                  >
                     {{ disp_delete }}
                   </vxe-button>
                 </div>
@@ -78,7 +131,8 @@
           </vxe-table>
         </div>
 
-        <vxe-pager :layouts="[
+        <vxe-pager
+          :layouts="[
             'PrevJump',
             'PrevPage',
             'Number',
@@ -86,162 +140,166 @@
             'NextJump',
             'FullJump',
             'Total',
-          ]" :current-page="value_tablePage.currentPage" :page-size="value_tablePage.pageSize"
-          :total="value_tablePage.totalResult" @page-change="handlePageChange" />
+          ]"
+          :current-page="value_tablePage.currentPage"
+          :page-size="value_tablePage.pageSize"
+          :total="value_tablePage.totalResult"
+          @page-change="handlePageChange"
+        />
       </CCardBody>
     </CCard>
   </div>
 </template>
 
 <script>
-  import i18n from '@/i18n';
-  import { mapState } from 'vuex';
-  import TableObserver from '@/utils/TableObserver.vue';
+import i18n from '@/i18n';
+import { mapState } from 'vuex';
+import TableObserver from '@/utils/TableObserver.vue';
 
-  export default {
-    name: 'VideoDeviceGroups',
-    mixins: [TableObserver],
-    props: {
-      onAdd: { type: Function },
-      onDelete: { type: Function },
-      onModify: { type: Function },
-      onGetItems: { type: Function },
-    },
-    data() {
-      return {
-        value_dataItemsToShow: [],
-        value_allTableItems: [],
+export default {
+  name: 'VideoDeviceGroups',
+  mixins: [TableObserver],
+  props: {
+    onAdd: { type: Function },
+    onDelete: { type: Function },
+    onModify: { type: Function },
+    onGetItems: { type: Function },
+  },
+  data() {
+    return {
+      value_dataItemsToShow: [],
+      value_allTableItems: [],
 
-        value_tablePage: {
-          currentPage: 1,
-          pageSize: 5,
-          totalResult: 0,
-        },
-        value_searchingFilter: '',
-        value_rule_list: [],
-
-        disp_header: i18n.formatter.format('NewVideoDeviceGroups'),
-        disp_search: i18n.formatter.format('Search'),
-        disp_add: i18n.formatter.format('Add'),
-        disp_delete: i18n.formatter.format('Delete'),
-        disp_modify: i18n.formatter.format('Modify'),
-
-        disp_group: i18n.formatter.format('VideoDevicesGroup'),
-        disp_videoDevices: i18n.formatter.format('Cameras'),
-        disp_outputDevices: i18n.formatter.format('Tablets'),
-        disp_rules: i18n.formatter.format('Rules'),
-      };
-    },
-
-    computed: {
-      ...mapState(['ellipsisMode']),
-    },
-    watch: {
-      value_searchingFilter() {
-        const self = this;
-        self.value_tablePage.currentPage = 1;
-        self.value_dataItemsToShow = self.generateFilteredData(
-          this.value_allTableItems,
-          this.value_searchingFilter,
-        );
+      value_tablePage: {
+        currentPage: 1,
+        pageSize: 5,
+        totalResult: 0,
       },
-    },
-    async mounted() {
-      const self = this;
-      self.refreshTableItems();
+      value_searchingFilter: '',
+      value_rule_list: [],
 
-      const { data: { list } } = await this.$globalGetEventList(
-        '', ['http', 'line', 'mail', 'wiegand', 'iobox'],
+      disp_header: i18n.formatter.format('NewVideoDeviceGroups'),
+      disp_search: i18n.formatter.format('Search'),
+      disp_add: i18n.formatter.format('Add'),
+      disp_delete: i18n.formatter.format('Delete'),
+      disp_modify: i18n.formatter.format('Modify'),
+
+      disp_group: i18n.formatter.format('VideoDevicesGroup'),
+      disp_videoDevices: i18n.formatter.format('Cameras'),
+      disp_outputDevices: i18n.formatter.format('Tablets'),
+      disp_rules: i18n.formatter.format('Rules'),
+    };
+  },
+
+  computed: {
+    ...mapState(['ellipsisMode']),
+  },
+  watch: {
+    value_searchingFilter() {
+      const self = this;
+      self.value_tablePage.currentPage = 1;
+      self.value_dataItemsToShow = self.generateFilteredData(
+        this.value_allTableItems,
+        this.value_searchingFilter,
+      );
+    },
+  },
+  async mounted() {
+    const self = this;
+    self.refreshTableItems();
+
+    const { data: { list } } = await this.$globalGetEventList(
+      '', ['http', 'line', 'mail', 'wiegand', 'iobox'],
+    );
+
+    this.value_rule_list = list;
+  },
+  methods: {
+    handlePageChange({ currentPage, pageSize }) {
+      this.value_tablePage.currentPage = currentPage;
+      this.value_tablePage.pageSize = pageSize;
+      this.value_dataItemsToShow = this.generateFilteredData(
+        this.value_allTableItems,
+        this.value_searchingFilter,
+      );
+    },
+    async refreshTableItems() {
+      const self = this;
+      const tableItems = await self.onGetItems();
+      self.value_allTableItems = self.processFields(tableItems);
+      self.value_dataItemsToShow = self.generateFilteredData(
+        self.value_allTableItems,
+        self.value_searchingFilter,
+      );
+    },
+    processFields(sourceData) {
+      const modifyFieldsData = sourceData.map((item) => {
+        const modifiedItem = { ...item };
+
+        modifiedItem.camera_count = modifiedItem.camera_uuid_list.length;
+        modifiedItem.outputDevices = modifiedItem.tablet_uuid_list.length;
+        return modifiedItem;
+      });
+      return modifyFieldsData;
+    },
+    generateFilteredData(sourceData, filter) {
+      const self = this;
+      // console.log(sourceData);
+
+      const filteredItems = filter.length === 0
+        ? sourceData
+        : sourceData.filter((item) => (
+          item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+        ));
+      self.value_tablePage.totalResult = filteredItems.length;
+
+      const sliceList = filteredItems.slice(
+        (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
+        self.value_tablePage.currentPage * self.value_tablePage.pageSize,
       );
 
-      this.value_rule_list = list;
+      sliceList.forEach((item, idx) => {
+        sliceList[idx].rules = self.value_rule_list
+          .filter((rule) => rule.divice_groups.indexOf(item.uuid) >= 0).length;
+      });
+
+      return Object.assign([], sliceList);
     },
-    methods: {
-      handlePageChange({ currentPage, pageSize }) {
-        this.value_tablePage.currentPage = currentPage;
-        this.value_tablePage.pageSize = pageSize;
-        this.value_dataItemsToShow = this.generateFilteredData(
-          this.value_allTableItems,
-          this.value_searchingFilter,
-        );
-      },
-      async refreshTableItems() {
-        const self = this;
-        const tableItems = await self.onGetItems();
-        self.value_allTableItems = self.processFields(tableItems);
+    handleOnAdd() {
+      this.onAdd(this.value_allTableItems);
+    },
+    handleOnModify(item) {
+      this.onModify(item);
+    },
+    deleteItem(listToDel) {
+      const self = this;
+
+      self.onDelete(listToDel, (success) => {
+        if (!success) return;
+
+        const uuidsToDel = listToDel.map(({ uuid }) => uuid);
+        self.value_allTableItems = self.value_allTableItems.filter((item) => !uuidsToDel.includes(item.uuid));
+
         self.value_dataItemsToShow = self.generateFilteredData(
           self.value_allTableItems,
           self.value_searchingFilter,
         );
-      },
-      processFields(sourceData) {
-        const modifyFieldsData = sourceData.map((item) => {
-          const modifiedItem = { ...item };
-
-          modifiedItem.camera_count = modifiedItem.camera_uuid_list.length;
-          modifiedItem.outputDevices = modifiedItem.tablet_uuid_list.length;
-          return modifiedItem;
-        });
-        return modifyFieldsData;
-      },
-      generateFilteredData(sourceData, filter) {
-        const self = this;
-        // console.log(sourceData);
-
-        const filteredItems = filter.length === 0
-          ? sourceData
-          : sourceData.filter((item) => (
-            item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
-          ));
-        self.value_tablePage.totalResult = filteredItems.length;
-
-        const sliceList = filteredItems.slice(
-          (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
-          self.value_tablePage.currentPage * self.value_tablePage.pageSize,
-        );
-
-        sliceList.forEach((item, idx) => {
-          sliceList[idx].rules = self.value_rule_list
-            .filter((rule) => rule.divice_groups.indexOf(item.uuid) >= 0).length;
-        });
-
-        return Object.assign([], sliceList);
-      },
-      handleOnAdd() {
-        this.onAdd(this.value_allTableItems);
-      },
-      handleOnModify(item) {
-        this.onModify(item);
-      },
-      deleteItem(listToDel) {
-        const self = this;
-
-        self.onDelete(listToDel, (success) => {
-          if (!success) return;
-
-          const uuidsToDel = listToDel.map(({ uuid }) => uuid);
-          self.value_allTableItems = self.value_allTableItems.filter((item) => !uuidsToDel.includes(item.uuid));
-
-          self.value_dataItemsToShow = self.generateFilteredData(
-            self.value_allTableItems,
-            self.value_searchingFilter,
-          );
-        });
-      },
-      handleOnSingleDelete(item) {
-        const self = this;
-
-        if (!item) return;
-        self.deleteItem([item]);
-      },
-      handleOnMultipleDelete() {
-        const self = this;
-        const list = this.$refs.mainTable.getCheckboxRecords();
-
-        if (list.length === 0) return;
-
-        self.deleteItem(list);
-      },
+      });
     },
-  };
+    handleOnSingleDelete(item) {
+      const self = this;
+
+      if (!item) return;
+      self.deleteItem([item]);
+    },
+    handleOnMultipleDelete() {
+      const self = this;
+      const list = this.$refs.mainTable.getCheckboxRecords();
+
+      if (list.length === 0) return;
+
+      self.deleteItem(list);
+    },
+  },
+};
 </script>
