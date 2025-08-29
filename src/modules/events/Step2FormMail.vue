@@ -118,11 +118,44 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <DataFieldList :data-fields="dataFields" :person-fields="personFields" :data="dataList"
-                @update:data="newDataList => $emit('update:dataList', newDataList)" />
+              <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- 辨識資料區塊 -->
+                <div>
+                  <h6 style="margin-bottom: 10px; color: #333; font-weight: 600;">
+                    辨識資料
+                  </h6>
+                  <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px;">
+                    <DataFieldSection
+                      :fields="dataFields"
+                      :selected="dataList.eventData || {}"
+                      field-type="event"
+                      @update:data="updateEventData"
+                    />
+                  </div>
+                </div>
+                <!-- 人員資料區塊 -->
+                <div>
+                  <h6 style="margin-bottom: 10px; color: #333; font-weight: 600;">
+                    人員資料
+                  </h6>
+                  <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px;">
+                    <DataFieldSection
+                      :fields="personFields"
+                      :selected="dataList.personData || {}"
+                      field-type="person"
+                      @update:data="updatePersonData"
+                    />
+                  </div>
+                </div>
+              </div>
             </td>
             <td class="table-td">
-              <CTextarea size="lg" rows="9" :value="note" @input="$emit('update:note', $event)" />
+              <CTextarea
+                size="lg"
+                rows="9"
+                :value="note"
+                @input="$emit('update:note', $event)"
+              />
             </td>
           </tr>
         </table>
@@ -132,80 +165,94 @@
 </template>
 
 <script>
-  import DataFieldList from '@/views/components/DataFieldList.vue';
+import DataFieldSection from '@/views/components/DataFieldSection.vue';
 
-  export default {
-    name: 'Step2FormMail',
-    components: {
-      DataFieldList,
+export default {
+  name: 'Step2FormMail',
+  components: {
+    DataFieldSection,
+  },
+  props: {
+    isNotEmptyValidator: {
+      type: Function,
+      required: true,
+      default: () => () => '',
     },
-    props: {
-      isNotEmptyValidator: {
-        type: Function,
-        required: true,
-        default: () => () => '',
-      },
-      checkPort: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      checkEmail: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      dataFields: {
-        type: Array,
-        required: true,
-        default: () => [],
-      },
-      personFields: {
-        type: Array,
-        required: true,
-        default: () => [],
-      },
-      language: {
-        type: String,
-        required: true,
-        default: '',
-      },
-      languageOptions: {
-        type: Array,
-        required: true,
-        default: () => [],
-      },
-      note: {
-        type: String,
-        required: true,
-        default: '',
-      },
-      dataList: {
-        type: Object,
-        required: true,
-        default: () => ({}),
-      },
-      form: {
-        type: Object,
-        required: true,
-        default: () => ({}),
-      },
-      formPass: {
-        type: Object,
-        required: true,
-        default: () => ({}),
-      },
+    checkPort: {
+      type: Function,
+      required: true,
+      default: () => '',
     },
-    emits: [
-      'update:language',
-      'update:note',
-      'update:dataList',
-    ],
-    methods: {
-      checkCCEmail(val) {
-        if (val === '') return '';
-        return this.checkEmail(val);
-      },
+    checkEmail: {
+      type: Function,
+      required: true,
+      default: () => '',
     },
-  };
+    dataFields: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    personFields: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    language: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    languageOptions: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    note: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    dataList: {
+      type: Object,
+      required: true,
+      default: () => ({ eventData: {}, personData: {} }),
+    },
+    form: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+    formPass: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+  },
+  emits: [
+    'update:language',
+    'update:note',
+    'update:dataList',
+  ],
+  methods: {
+    checkCCEmail(val) {
+      if (val === '') return '';
+      return this.checkEmail(val);
+    },
+    updateEventData(newData) {
+      const updatedDataList = {
+        ...this.dataList,
+        eventData: newData,
+      };
+      this.$emit('update:dataList', updatedDataList);
+    },
+    updatePersonData(newData) {
+      const updatedDataList = {
+        ...this.dataList,
+        personData: newData,
+      };
+      this.$emit('update:dataList', updatedDataList);
+    },
+  },
+};
 </script>
