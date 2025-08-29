@@ -240,7 +240,7 @@
               personFields: this.$options.personFields,
               language: this.eventControlLanguage,
               languageOptions: this.$options.languageOptions,
-              dataList: structuredClone(this.eventControlDataList),
+              dataList: this.convertToNewDataStructure(this.eventControlDataList),
               note: this.eventControlNote,
               form: this.lineForm,
               formPass: this.lineFormPass,
@@ -266,7 +266,7 @@
               personFields: this.$options.personFields,
               language: this.eventControlLanguage,
               languageOptions: this.$options.languageOptions,
-              dataList: structuredClone(this.eventControlDataList),
+              dataList: this.convertToNewDataStructure(this.eventControlDataList),
               note: this.eventControlNote,
               form: this.mailForm,
               formPass: this.mailFormPass,
@@ -340,6 +340,53 @@
       checkIpAddr,
       checkEmail,
       checkDelay,
+
+      // 資料結構轉換方法
+      convertToNewDataStructure(oldDataList) {
+        if (!oldDataList || Object.keys(oldDataList).length === 0) {
+          return { eventData: {}, personData: {} };
+        }
+
+        // 如果已經是新格式，直接返回
+        if (oldDataList.eventData !== undefined || oldDataList.personData !== undefined) {
+          return structuredClone(oldDataList);
+        }
+
+        // 轉換舊格式到新格式
+        const eventData = {};
+        const personData = {};
+
+        Object.keys(oldDataList).forEach(key => {
+          if (key === 'person') {
+            // 將 person 內容直接展開到 personData
+            Object.assign(personData, oldDataList[key]);
+          } else {
+            eventData[key] = oldDataList[key];
+          }
+        });
+
+        return { eventData, personData };
+      },
+
+      convertToOldDataStructure(newDataList) {
+        if (!newDataList) {
+          return {};
+        }
+
+        const result = {};
+
+        // 合併 eventData
+        if (newDataList.eventData) {
+          Object.assign(result, newDataList.eventData);
+        }
+
+        // 合併 personData
+        if (newDataList.personData) {
+          Object.assign(result, newDataList.personData);
+        }
+
+        return result;
+      },
     },
     watch: {
       step2FormStatus(newStatus) {
