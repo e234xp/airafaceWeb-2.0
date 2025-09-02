@@ -17,16 +17,31 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput size="lg" required :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
-                :invalid-feedback="$t('NoEmptyNoSpaceOnly')" v-model="form.token" />
+              <CInput
+                size="lg"
+                required
+                :is-valid="formPass.token = isNotEmptyValidator(form.token) === ''"
+                :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
+                v-model="form.token"
+              />
             </td>
             <td class="table-td">
-              <CInput size="lg" required :is-valid="formPass.group_id = isNotEmptyValidator(form.group_id) === ''"
-                :invalid-feedback="$t('NoEmptyNoSpaceOnly')" v-model="form.group_id" />
+              <CInput
+                size="lg"
+                required
+                :is-valid="formPass.group_id = isNotEmptyValidator(form.group_id) === ''"
+                :invalid-feedback="$t('NoEmptyNoSpaceOnly')"
+                v-model="form.group_id"
+              />
             </td>
             <td class="table-td">
-              <CSelect size="lg" :filterable="true" :options="languageOptions" :value="language"
-                @update:value="$emit('update:language', $event)" />
+              <CSelect
+                size="lg"
+                :filterable="true"
+                :options="languageOptions"
+                :value="language"
+                @update:value="$emit('update:language', $event)"
+              />
             </td>
             <td colspan="2" />
           </tr>
@@ -36,58 +51,60 @@
 
     <CCard>
       <CCardBody>
-        <table class="table-layout">
-          <tr>
-            <th class="h5 w-50 table-th">
-              {{ $t('Fields') }}
-            </th>
-            <th class="h5 w-50 table-th">
-              {{ $t('ExpansionField') }}
-            </th>
-          </tr>
-          <tr class="table-tr">
-            <td class="table-td">
-              <div style="display: flex; flex-direction: column; gap: 20px;">
-                <!-- 辨識資料區塊 -->
-                <div>
-                  <h6 style="margin-bottom: 10px; color: #333; font-weight: 600;">
-                    辨識資料
-                  </h6>
-                  <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px;">
-                    <DataFieldSection
-                      :fields="dataFields"
-                      :selected="dataList.eventData || {}"
-                      field-type="event"
-                      @update:data="updateEventData"
-                    />
-                  </div>
-                </div>
-                <!-- 人員資料區塊 -->
-                <div>
-                  <h6 style="margin-bottom: 10px; color: #333; font-weight: 600;">
-                    人員資料
-                  </h6>
-                  <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px;">
-                    <DataFieldSection
-                      :fields="personFields"
-                      :selected="dataList.personData || {}"
-                      field-type="person"
-                      @update:data="updatePersonData"
-                    />
-                  </div>
-                </div>
-              </div>
-            </td>
-            <td class="table-td">
-              <CTextarea
-                size="lg"
-                rows="9"
-                :value="note"
-                @input="$emit('update:note', $event)"
+        <div style="display: flex; gap: 15px; height: 500px;">
+          <!-- 左欄：辨識資料 -->
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <h6 style="margin-bottom: 10px; color: #333; font-weight: 600; text-align: center;">
+              {{ $t('EventData') }}
+            </h6>
+            <div style="flex: 1; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px; background-color: #fff;">
+              <DataFieldSection
+                :fields="dataFields"
+                :selected="dataList.eventData || {}"
+                field-type="event"
+                @update:data="updateEventData"
               />
-            </td>
-          </tr>
-        </table>
+            </div>
+          </div>
+
+          <!-- 中欄：人員資料 -->
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <h6 style="margin-bottom: 10px; color: #333; font-weight: 600; text-align: center;">
+              {{ $t('PersonData') }}
+            </h6>
+            <div style="flex: 1; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 4px; padding: 10px; background-color: #fff;">
+              <DataFieldSection
+                :fields="personFields"
+                :selected="dataList.personData || {}"
+                field-type="person"
+                @update:data="updatePersonData"
+              />
+            </div>
+          </div>
+
+          <!-- 右欄：擴充欄位 -->
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <h6 style="margin-bottom: 10px; color: #333; font-weight: 600; text-align: center;">
+              {{ $t('ExpansionField') }}
+            </h6>
+            <textarea
+              :value="note"
+              style="
+                flex: 1;
+                width: 100%;
+                border: 1px solid #e9ecef;
+                border-radius: 4px;
+                resize: none;
+                padding: 10px;
+                box-sizing: border-box;
+                font-family: inherit;
+                font-size: 14px;
+                background-color: #fff;
+              "
+              @input="$emit('update:note', $event.target.value)"
+            />
+          </div>
+        </div>
       </CCardBody>
     </CCard>
   </section>

@@ -780,5 +780,7 @@
   "DeviceType": "Tipo de equipo",
   "Tablet": "Tableta",
   "Camera": "Fotógrafo",
-  "EditDeviceGroup": "Editar el grupo de imágenes"
+  "EditDeviceGroup": "Editar el grupo de imágenes",
+  "EventData": "Datos de identificación",
+  "PersonData": "Información del personal"
 }

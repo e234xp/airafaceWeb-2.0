@@ -780,5 +780,7 @@
   "DeviceType": "ประเภทอุปกรณ์",
   "Tablet": "คอมพิวเตอร์แท็บเล็ต",
   "Camera": "ช่างภาพ",
-  "EditDeviceGroup": "แก้ไขกลุ่มภาพ"
+  "EditDeviceGroup": "แก้ไขกลุ่มภาพ",
+  "EventData": "ข้อมูลประจำตัว",
+  "PersonData": "ข้อมูลบุคลากร"
 }

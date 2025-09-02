@@ -780,5 +780,7 @@
   "DeviceType": "Jenis peralatan",
   "Tablet": "Komputer tablet",
   "Camera": "Fotografer",
-  "EditDeviceGroup": "Edit grup gambar"
+  "EditDeviceGroup": "Edit grup gambar",
+  "EventData": "Data Identifikasi",
+  "PersonData": "Informasi Personil"
 }

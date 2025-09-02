@@ -780,5 +780,7 @@
   "DeviceType": "Ekipman türü",
   "Tablet": "Tablet bilgisayar",
   "Camera": "Fotoğrafçı",
-  "EditDeviceGroup": "Görüntü grubunu düzenle"
+  "EditDeviceGroup": "Görüntü grubunu düzenle",
+  "EventData": "Kimlik verileri",
+  "PersonData": "Personel bilgileri"
 }

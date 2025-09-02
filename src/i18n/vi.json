@@ -780,5 +780,7 @@
   "DeviceType": "Loại thiết bị",
   "Tablet": "Máy tính bảng",
   "Camera": "Nhiếp ảnh gia",
-  "EditDeviceGroup": "Chỉnh sửa nhóm hình ảnh"
+  "EditDeviceGroup": "Chỉnh sửa nhóm hình ảnh",
+  "EventData": "Dữ liệu nhận dạng",
+  "PersonData": "Thông tin nhân sự"
 }
