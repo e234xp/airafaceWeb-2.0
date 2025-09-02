@@ -785,5 +785,7 @@
   "Camera": "攝影機",
   "Tablet": "平板",
   "Optional": "選填",
-  "EditDeviceGroup": "編輯影像群組"
+  "EditDeviceGroup": "編輯影像群組",
+  "EventData": "辨識資料",
+  "PersonData": "人員資料"
 }

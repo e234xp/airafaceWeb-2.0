@@ -785,5 +785,7 @@
   "Camera": "Camera",
   "Tablet": "Tablet",
   "Optional": "Optional",
-  "EditDeviceGroup": "Edit Device Group"
+  "EditDeviceGroup": "Edit Device Group",
+  "EventData": "Identification data",
+  "PersonData": "Personnel information"
 }
