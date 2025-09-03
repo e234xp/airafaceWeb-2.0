@@ -20,12 +20,12 @@
           <CRow class="align-items-center">
             <label v-if="!value_selectedDbFile" class="btn btn-primary fz-xl mb-0">
               {{ $t('ChooseFile') }}
-              <input ref="uploadFile" type="file" id="file" :multiple="false" accept=".airasoft" style="display: none"
+              <input ref="uploadFile" type="file" id="file" :multiple="false" accept=".deb" style="display: none"
                 @change="onUploadFiles">
             </label>
             <label v-else class="btn btn-danger fz-xl mb-0">
               {{ $t('ChooseAnotherFile') }}
-              <input ref="uploadFile" type="file" id="newfile" :multiple="false" accept=".airasoft"
+              <input ref="uploadFile" type="file" id="newfile" :multiple="false" accept=".deb"
                 style="display: none" @change="onReUploadFiles">
             </label>
 
