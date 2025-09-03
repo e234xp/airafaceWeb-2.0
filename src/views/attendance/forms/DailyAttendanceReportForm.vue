@@ -1391,9 +1391,8 @@
 
         if (base64ImageString.length > 0) {
           ret = `<img width='${desireWidth}' height='${desireHeight}' src='data:image/jpeg;base64,${base64ImageString}'>`;
-        } else {
-          ret = `<img width='${desireWidth}' height='${desireHeight}' src='${this.value_emptyPhoto}'>`;
         }
+        // 如果沒有圖片資料就不顯示img標籤
 
         return ret;
       },
@@ -1590,17 +1589,19 @@
               + 'AAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
 
             this.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
-              if (error === null && data) {
+              if (error === null && data && data.face_image && data.face_image.length > 0) {
                 item.imageb64 = data.face_image;
-
                 const ele = document.getElementById(showimageId);
                 if (ele) ele.src = `data:image/jpeg;base64,${data.face_image}`;
+              } else {
+                // 如果沒有圖片資料，移除img標籤
+                const ele = document.getElementById(showimageId);
+                if (ele) ele.remove();
+                item.showimage = '';
               }
             });
           } else {
-            item.showimage = '<img src=\'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs'
-              + '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD'
-              + '5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+            item.showimage = '';
           }
           item.imageb64 = '';
         });
