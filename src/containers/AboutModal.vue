@@ -20,7 +20,7 @@
           >
         </div>
         <div class="title-section">
-          <h2>{{ $t('About') }} AiraFace</h2>
+          <h2>{{ $t('About') }} airaFace</h2>
         </div>
       </div>
 
