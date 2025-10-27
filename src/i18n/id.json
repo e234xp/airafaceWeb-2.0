@@ -147,6 +147,7 @@
   "DeletePhoto": "Hapus Foto",
   "Department": "Departemen",
   "Deselect": "Batalkan pilihan",
+  "Diagnose": "Diagnostik",
   "DeviceGroup": "Grup Perangkat Video",
   "DeviceName": "Nama Perangkat",
   "DeviceStatus": "Status Perangkat",
@@ -782,5 +783,13 @@
   "Camera": "Fotografer",
   "EditDeviceGroup": "Edit grup gambar",
   "EventData": "Data Identifikasi",
-  "PersonData": "Informasi Personil"
+  "PersonData": "Informasi Personil",
+  "StorageUsage": "Penggunaan memori",
+  "Device": "perangkat",
+  "ExecutionSteps": "Langkah-langkah eksekusi",
+  "ExecutionStep1": "Pilih perangkat",
+  "ExecutionStep2": "Harap minta seseorang berdiri di depan unit",
+  "ExecutionStep3": "Setelah mengklik \"Diagnosis\", sistem akan melakukan diagnosis lima menit.",
+  "ExecutionStep4": "Jika Anda memerlukan log lengkap, silakan klik \"Ekspor sysLog\" untuk mendapatkan data log lengkap",
+  "ExportSystemLog": "Ekspor log sistem"
 }

@@ -147,6 +147,7 @@
   "DeletePhoto": "Delete Photo",
   "Department": "Department",
   "Deselect": "Deselect",
+  "Diagnose": "Diagnose",
   "DeviceGroup": "Video Device Groups",
   "DeviceId": "Device ID",
   "DeviceName": "Device Name",
@@ -787,5 +788,13 @@
   "Optional": "Optional",
   "EditDeviceGroup": "Edit Device Group",
   "EventData": "Identification data",
-  "PersonData": "Personnel information"
+  "PersonData": "Personnel information",
+  "StorageUsage": "Storage usage",
+  "Device": "\nDevice",
+  "ExecutionSteps": "Execution Steps",
+  "ExecutionStep1": "Choose one device",
+  "ExecutionStep2": "Please have a person in front of the device",
+  "ExecutionStep3": "After clicking \"Diagnose\", the system will run diagnostics for five minutes",
+  "ExecutionStep4": "If you need the complete log, please click \"Export System Log\" to obtain the complete log data",
+  "ExportSystemLog": "Export System Log"
 }

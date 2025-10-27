@@ -147,6 +147,7 @@
   "DeletePhoto": "Fotoğrafı Sil",
   "Department": "Departman",
   "Deselect": "Seçimi kaldır",
+  "Diagnose": "Teşhis",
   "DeviceGroup": "Video Aygıt Grupları",
   "DeviceName": "Aygıt Adı",
   "DeviceStatus": "Aygıt Durumu",
@@ -782,5 +783,13 @@
   "Camera": "Fotoğrafçı",
   "EditDeviceGroup": "Görüntü grubunu düzenle",
   "EventData": "Kimlik verileri",
-  "PersonData": "Personel bilgileri"
+  "PersonData": "Personel bilgileri",
+  "StorageUsage": "Bellek kullanımı",
+  "Device": "cihaz",
+  "ExecutionSteps": "Yürütme adımları",
+  "ExecutionStep1": "Bir cihaz seçin",
+  "ExecutionStep2": "Lütfen birimin önünde bir kişinin durmasını sağlayın",
+  "ExecutionStep3": "\"Teşhis\"e tıkladıktan sonra sistem beş dakikalık bir teşhis gerçekleştirecektir.",
+  "ExecutionStep4": "Günlüğün tamamına ihtiyacınız varsa, günlük verilerinin tamamını almak için lütfen \"SysLog'u Dışa Aktar\" seçeneğine tıklayın",
+  "ExportSystemLog": "Sistem günlüklerini dışa aktar"
 }

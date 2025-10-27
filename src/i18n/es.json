@@ -147,6 +147,7 @@
   "DeletePhoto": "Borrar foto",
   "Department": "Departamento",
   "Deselect": "Deseleccionar",
+  "Diagnose": "Diagnóstico",
   "DeviceGroup": "Grupos de dispositivos de video",
   "DeviceName": "Nombre del dispositivo",
   "DeviceStatus": "Estado del dispositivo",
@@ -782,5 +783,13 @@
   "Camera": "Fotógrafo",
   "EditDeviceGroup": "Editar el grupo de imágenes",
   "EventData": "Datos de identificación",
-  "PersonData": "Información del personal"
+  "PersonData": "Información del personal",
+  "StorageUsage": "Uso de memoria",
+  "Device": "dispositivo",
+  "ExecutionSteps": "Pasos de ejecución",
+  "ExecutionStep1": "Seleccione un dispositivo",
+  "ExecutionStep2": "Por favor, haga que una persona se pare frente a la unidad.",
+  "ExecutionStep3": "Después de hacer clic en \"Diagnóstico\", el sistema realizará un diagnóstico de cinco minutos.",
+  "ExecutionStep4": "Si necesita el registro completo, haga clic en \"Exportar sysLog\" para obtener los datos de registro completos.",
+  "ExportSystemLog": "Exportar registros del sistema"
 }

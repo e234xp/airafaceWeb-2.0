@@ -147,6 +147,7 @@
   "DeletePhoto": "Xóa ảnh",
   "Department": "Phòng ban",
   "Deselect": "Bỏ chọn",
+  "Diagnose": "Chẩn đoán",
   "DeviceGroup": "Nhóm thiết bị video",
   "DeviceName": "Tên thiết bị",
   "DeviceStatus": "Trạng thái thiết bị",
@@ -782,5 +783,13 @@
   "Camera": "Nhiếp ảnh gia",
   "EditDeviceGroup": "Chỉnh sửa nhóm hình ảnh",
   "EventData": "Dữ liệu nhận dạng",
-  "PersonData": "Thông tin nhân sự"
+  "PersonData": "Thông tin nhân sự",
+  "StorageUsage": "Sử dụng bộ nhớ",
+  "Device": "thiết bị",
+  "ExecutionSteps": "Các bước thực hiện",
+  "ExecutionStep1": "Chọn một thiết bị",
+  "ExecutionStep2": "Vui lòng cử một người đứng trước thiết bị",
+  "ExecutionStep3": "Sau khi nhấp vào \"Chẩn đoán\", hệ thống sẽ thực hiện chẩn đoán trong 5 phút.",
+  "ExecutionStep4": "Nếu bạn cần nhật ký đầy đủ, vui lòng nhấp vào \"Xuất nhật ký hệ thống\" để lấy dữ liệu nhật ký đầy đủ",
+  "ExportSystemLog": "Xuất nhật ký hệ thống"
 }

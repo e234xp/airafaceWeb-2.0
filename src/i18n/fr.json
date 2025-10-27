@@ -147,6 +147,7 @@
   "DeletePhoto": "Supprimer la photo",
   "Department": "Département",
   "Deselect": "Désélectionner",
+  "Diagnose": "Diagnostic",
   "DeviceGroup": "Groupes d'appareils vidéo",
   "DeviceName": "Nom de l'appareil",
   "DeviceStatus": "Statut du périphérique",
@@ -775,5 +776,13 @@
   "Status": "condition",
   "Enabled": "Commencer",
   "Expired": "maturité",
-  "About": "À propos"
+  "About": "À propos",
+  "StorageUsage": "Utilisation de la mémoire",
+  "Device": "appareil",
+  "ExecutionSteps": "Étapes d'exécution",
+  "ExecutionStep1": "Sélectionnez un appareil",
+  "ExecutionStep2": "Veuillez demander à une personne de se tenir devant l'unité.",
+  "ExecutionStep3": "Après avoir cliqué sur « Diagnostic », le système effectuera un diagnostic de cinq minutes.",
+  "ExecutionStep4": "Si vous avez besoin du journal complet, veuillez cliquer sur \"Exporter sysLog\" pour obtenir les données complètes du journal.",
+  "ExportSystemLog": "Exporter les journaux système"
 }

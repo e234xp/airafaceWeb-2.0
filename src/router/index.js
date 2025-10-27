@@ -82,6 +82,7 @@ const CreateAccount = () => import('@/views/systemsettings/CreateAccount.vue');
 const SystemLog = () => import('@/views/systemsettings/SystemLog.vue');
 const IndicationSettings = () => import('@/views/systemsettings/IndicationSettings.vue');
 const LicenseSettings = () => import('@/views/systemsettings/LicenseSettings.vue');
+const Diagnose = () => import('@/views/systemsettings/Diagnose.vue');
 
 /// ////////////////////////////////////////
 /// /////    Device settings    ////////////
@@ -496,6 +497,11 @@ function configRoutes() {
               path: 'systemlog',
               name: 'SystemLog',
               component: SystemLog,
+            },
+            {
+              path: 'diagnose',
+              name: 'Diagnose',
+              component: Diagnose,
             },
           ],
         },

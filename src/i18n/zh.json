@@ -147,6 +147,7 @@
   "DeletePhoto": "刪除照片",
   "Department": "部門",
   "Deselect": "移除選擇",
+  "Diagnose": "診斷",
   "DeviceGroup": "影像設備群組",
   "DeviceId": "設備編號",
   "DeviceName": "設備名稱",
@@ -787,5 +788,13 @@
   "Optional": "選填",
   "EditDeviceGroup": "編輯影像群組",
   "EventData": "辨識資料",
-  "PersonData": "人員資料"
+  "PersonData": "人員資料",
+  "StorageUsage": "記憶體用量",
+  "Device": "裝置",
+  "ExecutionSteps": "執行步驟",
+  "ExecutionStep1": "選擇一個裝置",
+  "ExecutionStep2": "請讓一位人員站在裝置前方",
+  "ExecutionStep3": "點擊「診斷」後，系統將進行為期五分鐘的診斷",
+  "ExecutionStep4": "若需要完整日誌，請點擊「匯出系統日誌」以取得完整的日誌資料",
+  "ExportSystemLog": "匯出系統日誌"
 }
