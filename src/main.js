@@ -33,6 +33,8 @@ import datepickerLangVi from 'vue2-datepicker/locale/vi';
 import datepickerLangId from 'vue2-datepicker/locale/id';
 import datepickerLangTh from 'vue2-datepicker/locale/th';
 import datepickerLangTr from 'vue2-datepicker/locale/tr';
+import datepickerLangKo from 'vue2-datepicker/locale/ko';
+import datepickerLangPt from 'vue2-datepicker/locale/pt';
 
 import './globalParams';
 
@@ -135,7 +137,16 @@ const mainVue = new Vue({
         browserLanguage = enUS;
         Vue.prototype.$globalDatePickerLanguage = datepickerLangTr;
         break;
-
+      case 'ko':
+        i18n.locale = 'ko';
+        browserLanguage = enUS;
+        Vue.prototype.$globalDatePickerLanguage = datepickerLangKo;
+        break;
+      case 'pt':
+        i18n.locale = 'pt';
+        browserLanguage = enUS;
+        Vue.prototype.$globalDatePickerLanguage = datepickerLangPt;
+        break;
       default:
         if ((navigator.language || navigator.browserLanguage).toLowerCase().includes('zh-tw')) {
           i18n.locale = 'zh';
