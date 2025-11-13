@@ -56,6 +56,17 @@
             </CButton>
           </div>
 
+          <div>
+            <CButton
+              class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
+              size="lg"
+              @click="clickOnExportAll(true)"
+              :disabled="!canDelete() || value_allTableItems.length === 0"
+            >
+              {{ $t('ExportAll') }}
+            </CButton>
+          </div>
+
           <div v-if="formData.type === 'Visitor'">
             <CButton
               class="btn btn-outline-primary btn-w-sm mr-3 mb-3"
@@ -77,16 +88,8 @@
               {{ $t('Delete') }}
             </CButton>
           </div>
-          <div
-            class="d-flex"
-            style="margin-left: auto"
-          >
-            <CInput
-              v-model.lazy="value_searchingFilter"
-              style="width: 280px"
-              size="lg"
-              :placeholder="$t('Search')"
-            >
+          <div class="d-flex" style="margin-left: auto">
+            <CInput v-model.lazy="value_searchingFilter" style="width: 280px" size="lg" :placeholder="$t('Search')">
               <template #prepend-content>
                 <CIcon name="cil-search" />
               </template>
@@ -94,18 +97,12 @@
           </div>
         </CRow>
         <CRow>
-          <CCol
-            col="12"
-            style="padding-right: 0px !important; padding-left: 0px !important"
-          >
+          <CCol col="12" style="padding-right: 0px !important; padding-left: 0px !important">
             <CCollapse :show="flag_collapse">
               <CCard>
                 <CCardBody>
                   <CRow>
-                    <CCol
-                      col="2"
-                      class="label"
-                    >
+                    <CCol col="2" class="label">
                       {{ $t('PersonInfoFile') }}
                     </CCol>
                     <CCol col="10">
@@ -118,26 +115,15 @@
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol
-                      col="2"
-                      class="label"
-                    >
+                    <CCol col="2" class="label">
                       {{ $t('UploadFile') }}
                     </CCol>
                     <CCol col="10">
-                      <CInputFile
-                        :lazy="false"
-                        :multiple="true"
-                        @change="photoListener"
-                        :disabled="isLocal()"
-                      />
+                      <CInputFile :lazy="false" :multiple="true" @change="photoListener" :disabled="isLocal()" />
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol
-                      col="2"
-                      class="pt-2 label"
-                    >
+                    <CCol col="2" class="pt-2 label">
                       <CButton
                         style="width: 150px; background-color: #20a8d8; color: white"
                         size="lg"
@@ -148,10 +134,7 @@
                       </CButton>
                     </CCol>
 
-                    <CCol
-                      col="10"
-                      class="pt-2 label"
-                    >
+                    <CCol col="10" class="pt-2 label">
                       <div style="float: left; font-size: 20px; padding-top: inherit">
                         {{ $t('SuccessRecords') }} : {{ value_successRecords }} / {{ $t('FailRecords') }} :
                         {{ value_failRecords }} / {{ $t('TotalRecords') }} : {{ value_totalRecords }}
@@ -159,16 +142,10 @@
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol
-                      col="4"
-                      class="pt-2 label"
-                    >
+                    <CCol col="4" class="pt-2 label">
                       {{ $t('ImportFailure') }}
                     </CCol>
-                    <CCol
-                      col="12"
-                      ref="importFailure"
-                    />
+                    <CCol col="12" ref="importFailure" />
                   </CRow>
                 </CCardBody>
               </CCard>
@@ -194,11 +171,7 @@
               :checkbox-config="{ reserve: true }"
               :edit-config="{ trigger: 'manual', mode: 'row' }"
             >
-              <vxe-table-column
-                type="checkbox"
-                width="4%"
-                align="center"
-              />
+              <vxe-table-column type="checkbox" width="4%" align="center" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="id"
@@ -218,20 +191,10 @@
                 :title="$t('Department')"
                 width="14%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="groupToShow"
-                :title="$t('Group')"
-                width="14%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="groupToShow" :title="$t('Group')" width="14%" />
 
               <!-- 註冊照片 -->
-              <vxe-table-column
-                width="170"
-                field="imgRegisterPhoto"
-                :title="$t('RegisterPhoto')"
-                type="html"
-              />
+              <vxe-table-column width="170" field="imgRegisterPhoto" :title="$t('RegisterPhoto')" type="html" />
               <!-- <vxe-table-column :title="disp_registerPhoto" width="170">
                 <template #default="{ row }">
                   <img :id="getRegisterImgId(row.uuid)" />
@@ -239,12 +202,7 @@
               </vxe-table-column> -->
 
               <!-- 顯示照片 -->
-              <vxe-table-column
-                width="170"
-                field="imgDisplayPhoto"
-                :title="$t('DisplayPhoto')"
-                type="html"
-              />
+              <vxe-table-column width="170" field="imgDisplayPhoto" :title="$t('DisplayPhoto')" type="html" />
               <!--  <vxe-table-column :title="disp_displayPhoto" width="170">
                 <template #default="{ row }">
                   <img :id="getDisplayImgId(row.uuid)" />
@@ -296,11 +254,7 @@
         </div>
       </CCardBody>
     </CCard>
-    <canvas
-      ref="qrcode"
-      id="qrcode"
-      style="display: none"
-    />
+    <canvas ref="qrcode" id="qrcode" style="display: none" />
   </div>
 </template>
 
@@ -459,12 +413,13 @@ export default {
         filter.length === 0
           ? sourceData
           : sourceData.filter(
-            (item) => (item.id && item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1) ||
+              (item) =>
+                (item.id && item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1) ||
                 (item.name && item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1) ||
                 (item.extra_info.department &&
                   item.extra_info.department.toLowerCase().indexOf(filter.toLowerCase()) > -1) ||
                 (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1),
-          );
+            );
 
       this.value_tablePage.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
@@ -1202,27 +1157,28 @@ export default {
       }
 
       let lastitem = 1;
-      const doJobWithThrottle = async (items, throttle = 1) => new Promise((resolve) => {
-        const takeOne = () => {
-          const item = items.shift();
+      const doJobWithThrottle = async (items, throttle = 1) =>
+        new Promise((resolve) => {
+          const takeOne = () => {
+            const item = items.shift();
 
-          if (!item) {
-            lastitem -= 1;
+            if (!item) {
+              lastitem -= 1;
 
-            if (lastitem <= 0) resolve(true);
-            return;
-          }
+              if (lastitem <= 0) resolve(true);
+              return;
+            }
 
-          new Promise((resolve1) => {
-            batchEnroll(item, resolve1);
-          }).then(() => {
-            me.importNo += 1;
-            takeOne();
-          });
-        };
+            new Promise((resolve1) => {
+              batchEnroll(item, resolve1);
+            }).then(() => {
+              me.importNo += 1;
+              takeOne();
+            });
+          };
 
-        for (let i = 0; i < throttle; i += 1) takeOne();
-      });
+          for (let i = 0; i < throttle; i += 1) takeOne();
+        });
 
       await doJobWithThrottle(this.value_excelFileImpport);
 
@@ -1320,6 +1276,113 @@ export default {
           if (this.formData.type === 'Visitor') {
             const fileNameR = salf.value_selectedItems[idx].id;
             qrcodeFolder.file(`${fileNameR}.jpeg`, salf.value_selectedItems[idx].qrCode, {
+              base64: true,
+            });
+          }
+        }
+
+        if (workbook != null) {
+          workbook.xlsx.writeBuffer().then((data) => {
+            const blob = new Blob([data], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+
+            zip.file('PersonsList.xlsx', blob);
+
+            zip.generateAsync({ type: 'blob' }).then((content) => FileSaver.saveAs(content, 'PersonsList.zip'));
+          });
+        }
+
+        salf.flag_downloadingExecl = false;
+      }
+      if (salf.obj_loading) salf.obj_loading.hide();
+    },
+    async clickOnExportAll(withPhoto) {
+      const salf = this;
+      salf.obj_loading = salf.$loading.show({ container: salf.$refs.formContainer });
+
+      salf.flag_downloadingExecl = true;
+      let snapshotFolder = null;
+      let qrcodeFolder = null;
+
+      const zip = new JsZip();
+
+      if (withPhoto) snapshotFolder = zip.folder('snapshot');
+      if (this.formData.type === 'Visitor') qrcodeFolder = zip.folder('qrcode');
+
+      const workbook = new Excel.Workbook();
+      let worksheet = null;
+      salf.exportNo = 0;
+
+      worksheet = workbook.addWorksheet('Persons');
+
+      if (salf.value_allTableItems != null) {
+        worksheet.columns = [
+          { header: 'No', key: 'No', width: 10 },
+          { header: 'Id', key: 'id', width: 10 },
+          { header: 'Fullname', key: 'name', width: 10 },
+          { header: 'Department', key: 'department', width: 10 },
+          { header: 'Group', key: 'group', width: 10 },
+          { header: 'Title', key: 'title', width: 10 },
+          { header: 'Card Number', key: 'cardnumber', width: 10 },
+          { header: 'Email', key: 'email', width: 10 },
+          { header: 'Extension Number', key: 'extension_number', width: 10 },
+          { header: 'Phone Number', key: 'phone_number', width: 10 },
+          { header: 'Begin Date', key: 'begin_date', width: 10 },
+          { header: 'Expire Date', key: 'expire_date', width: 10 },
+          { header: 'Remarks', key: 'remarks', width: 10 },
+        ];
+
+        salf.excelExecutionAmounts = salf.value_allTableItems.length;
+        salf.excelCounter = 0;
+
+        for (let idx = 0; idx < salf.value_allTableItems.length; idx += 1) {
+          salf.exportNo += 1;
+          salf.excelCounter += 1;
+
+          worksheet.addRow({
+            No: salf.exportNo,
+            id: salf.value_allTableItems[idx].id,
+            name: salf.value_allTableItems[idx].name,
+            department: salf.value_allTableItems[idx].extra_info.department,
+            group: salf.value_allTableItems[idx].group_list.join('|'),
+            title: salf.value_allTableItems[idx].extra_info.title,
+            cardnumber: salf.value_allTableItems[idx].card_number,
+            email: salf.value_allTableItems[idx].extra_info.email,
+            extension_number: salf.value_allTableItems[idx].extra_info.extension_number,
+            phone_number: salf.value_allTableItems[idx].extra_info.phone_number,
+            begin_date:
+              salf.value_allTableItems[idx].begin_date === 0
+                ? ''
+                : dayjs(salf.value_allTableItems[idx].begin_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
+            expire_date:
+              salf.value_allTableItems[idx].expire_date === 0
+                ? ''
+                : dayjs(salf.value_allTableItems[idx].expire_date).format('DD/MM/YYYY-MM-DD-HH-mm-ss'),
+            remarks: salf.value_allTableItems[idx].extra_info.remarks,
+          });
+
+          if (withPhoto) {
+            const photoRet = await salf.$globalFetchPhoto(salf.value_allTableItems[idx].uuid);
+
+            if (photoRet.data && photoRet.data.register_image.length > 0) {
+              const fileNameR = salf.value_allTableItems[idx].id;
+              snapshotFolder.file(`${fileNameR}.jpeg`, photoRet.data.register_image, {
+                base64: true,
+              });
+            }
+
+            if (photoRet.data && photoRet.data.display_image.length > 0) {
+              const fileNameD = `${salf.value_allTableItems[idx].id}_D`;
+              snapshotFolder.file(`${fileNameD}.jpeg`, photoRet.data.display_image, {
+                base64: true,
+              });
+            }
+          }
+
+          if (this.formData.type === 'Visitor') {
+            const fileNameR = salf.value_allTableItems[idx].id;
+            qrcodeFolder.file(`${fileNameR}.jpeg`, salf.value_allTableItems[idx].qrCode, {
               base64: true,
             });
           }
