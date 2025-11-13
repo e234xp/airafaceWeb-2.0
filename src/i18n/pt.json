@@ -777,5 +777,6 @@
   "Milk": "Leite",
   "MobilePhoneNumberLastThreeDigits": "Últimos três dígitos do celular",
   "NoSuchPersonFound": "Nenhuma pessoa encontrada",
-  "ChangeLog": "Registro de Alterações"
+  "ChangeLog": "Registro de Alterações",
+  "ExportAll": "Exportar tudo"
 }

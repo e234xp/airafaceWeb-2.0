@@ -791,5 +791,6 @@
   "ExecutionStep2": "Vui lòng cử một người đứng trước thiết bị",
   "ExecutionStep3": "Sau khi nhấp vào \"Chẩn đoán\", hệ thống sẽ thực hiện chẩn đoán trong 5 phút.",
   "ExecutionStep4": "Nếu bạn cần nhật ký đầy đủ, vui lòng nhấp vào \"Xuất nhật ký hệ thống\" để lấy dữ liệu nhật ký đầy đủ",
-  "ExportSystemLog": "Xuất nhật ký hệ thống"
+  "ExportSystemLog": "Xuất nhật ký hệ thống",
+  "ExportAll": "Xuất tất cả"
 }

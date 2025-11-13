@@ -791,5 +791,6 @@
   "ExecutionStep2": "Harap minta seseorang berdiri di depan unit",
   "ExecutionStep3": "Setelah mengklik \"Diagnosis\", sistem akan melakukan diagnosis lima menit.",
   "ExecutionStep4": "Jika Anda memerlukan log lengkap, silakan klik \"Ekspor sysLog\" untuk mendapatkan data log lengkap",
-  "ExportSystemLog": "Ekspor log sistem"
+  "ExportSystemLog": "Ekspor log sistem",
+  "ExportAll": "Ekspor semua"
 }

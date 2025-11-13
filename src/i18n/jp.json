@@ -791,5 +791,6 @@
   "ExecutionStep2": "装置の前に人を立たせてください",
   "ExecutionStep3": "「診断」をクリックすると、システムは5分間の診断を実行します。",
   "ExecutionStep4": "完全なログが必要な場合は、「sysLogをエクスポート」をクリックして完全なログデータを取得してください。",
-  "ExportSystemLog": "Export system logs"
+  "ExportSystemLog": "Export system logs",
+  "ExportAll": "Export all"
 }

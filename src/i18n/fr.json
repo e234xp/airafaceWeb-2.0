@@ -784,5 +784,6 @@
   "ExecutionStep2": "Veuillez demander à une personne de se tenir devant l'unité.",
   "ExecutionStep3": "Après avoir cliqué sur « Diagnostic », le système effectuera un diagnostic de cinq minutes.",
   "ExecutionStep4": "Si vous avez besoin du journal complet, veuillez cliquer sur \"Exporter sysLog\" pour obtenir les données complètes du journal.",
-  "ExportSystemLog": "Exporter les journaux système"
+  "ExportSystemLog": "Exporter les journaux système",
+  "ExportAll": "Exporter tout"
 }

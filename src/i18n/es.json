@@ -791,5 +791,6 @@
   "ExecutionStep2": "Por favor, haga que una persona se pare frente a la unidad.",
   "ExecutionStep3": "Después de hacer clic en \"Diagnóstico\", el sistema realizará un diagnóstico de cinco minutos.",
   "ExecutionStep4": "Si necesita el registro completo, haga clic en \"Exportar sysLog\" para obtener los datos de registro completos.",
-  "ExportSystemLog": "Exportar registros del sistema"
+  "ExportSystemLog": "Exportar registros del sistema",
+  "ExportAll": "Exportar todo"
 }
