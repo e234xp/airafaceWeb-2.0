@@ -792,5 +792,8 @@
   "ExecutionStep3": "\"Teşhis\"e tıkladıktan sonra sistem beş dakikalık bir teşhis gerçekleştirecektir.",
   "ExecutionStep4": "Günlüğün tamamına ihtiyacınız varsa, günlük verilerinin tamamını almak için lütfen \"SysLog'u Dışa Aktar\" seçeneğine tıklayın",
   "ExportSystemLog": "Sistem günlüklerini dışa aktar",
-  "ExportAll": "Tümünü dışa aktar"
+  "ExportAll": "Tümünü dışa aktar",
+  "SwapUsage": "Alan kullanımını değiştir",
+  "MemoryUsage": "Bellek kullanımı",
+  "DiskUsage": "Disk kullanımı"
 }

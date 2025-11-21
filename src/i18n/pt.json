@@ -778,5 +778,8 @@
   "MobilePhoneNumberLastThreeDigits": "Últimos três dígitos do celular",
   "NoSuchPersonFound": "Nenhuma pessoa encontrada",
   "ChangeLog": "Registro de Alterações",
-  "ExportAll": "Exportar tudo"
+  "ExportAll": "Exportar tudo",
+  "SwapUsage": "Trocar uso de espaço",
+  "MemoryUsage": "Uso de memória",
+  "DiskUsage": "Uso de disco"
 }

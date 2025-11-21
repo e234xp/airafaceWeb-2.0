@@ -786,6 +786,36 @@ Vue.prototype.$globalQuerySystemLog = (
     });
 });
 
+Vue.prototype.$globalSetDiagnostic = (
+  deviceUuid, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/setdiagnostic', { device_uuid: deviceUuid },
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
+
+Vue.prototype.$globalQueryDiagnostic = (
+  diagnosticUuid, cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/querydiagnostic', { diagnosticUuid },
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
+
+Vue.prototype.$globalGetSpaceStatus = (
+  cb,
+) => new Promise((resolve) => {
+  postJson('/airafacelite/spacestatus', {},
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
+
 Vue.prototype.$globalGetDisplaySetting = (
   cb,
 ) => new Promise((resolve) => {

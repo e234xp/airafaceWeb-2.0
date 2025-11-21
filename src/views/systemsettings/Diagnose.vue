@@ -25,16 +25,37 @@
 
         <!-- Right side: Storage usage -->
         <div class="storage-container">
-          <div class="storage-header">
-            <span class="storage-label">{{ $t('StorageUsage') }}</span>
-            <span class="storage-text">{{ storageUsedGB }}GB of {{ storageTotalGB }}GB</span>
+          <!-- Disk Usage -->
+          <div class="storage-item">
+            <div class="storage-header">
+              <span class="storage-label">{{ $t('DiskUsage') }}</span>
+              <span class="storage-text">{{ disk.used }}GB / {{ disk.total }}GB</span>
+            </div>
+            <div class="progress-wrapper">
+              <CProgress :value="disk.percentage" :color="getStorageColor(disk.percentage)" height="8px" />
+            </div>
           </div>
-          <div class="progress-wrapper">
-            <CProgress
-              :value="storagePercentage"
-              :color="getStorageColor()"
-              height="8px"
-            />
+
+          <!-- Memory Usage -->
+          <div class="storage-item">
+            <div class="storage-header">
+              <span class="storage-label">{{ $t('MemoryUsage') }}</span>
+              <span class="storage-text">{{ memory.used }}GB / {{ memory.total }}GB</span>
+            </div>
+            <div class="progress-wrapper">
+              <CProgress :value="memory.percentage" :color="getStorageColor(memory.percentage)" height="8px" />
+            </div>
+          </div>
+
+          <!-- Swap Usage -->
+          <div class="storage-item">
+            <div class="storage-header">
+              <span class="storage-label">{{ $t('SwapUsage') }}</span>
+              <span class="storage-text">{{ swap.used }}GB / {{ swap.total }}GB</span>
+            </div>
+            <div class="progress-wrapper">
+              <CProgress :value="swap.percentage" :color="getStorageColor(swap.percentage)" height="8px" />
+            </div>
           </div>
         </div>
       </div>
@@ -47,10 +68,7 @@
           <CCard>
             <CCardBody>
               <CRow>
-                <CCol
-                  sm="12"
-                  class="d-flex justify-content-between align-items-center"
-                >
+                <CCol sm="12" class="d-flex justify-content-between align-items-center">
                   <CCol sm="2">
                     <label class="form-label">{{ $t('Device') }}</label>
                   </CCol>
@@ -69,24 +87,11 @@
           </CCard>
           <!-- Action Buttons -->
           <CRow>
-            <CCol
-              sm="12"
-              class="d-flex justify-content-between"
-            >
-              <CButton
-                color="dark"
-                size="lg"
-                :disabled="!selectedDevice || isDiagnosing"
-                @click="startDiagnose"
-              >
+            <CCol sm="12" class="d-flex justify-content-between">
+              <CButton color="dark" size="lg" :disabled="!selectedDevice || isDiagnosing" @click="startDiagnose">
                 {{ $t('Diagnose') }}
               </CButton>
-              <CButton
-                color="dark"
-                size="lg"
-                :disabled="!canExportLog"
-                @click="exportSysLog"
-              >
+              <CButton color="dark" size="lg" :disabled="!canExportLog" @click="exportSysLog">
                 {{ $t('ExportSystemLog') }}
               </CButton>
             </CCol>
@@ -102,18 +107,19 @@
           <CCard>
             <CCardBody>
               <div class="diagnostic-logs">
-                <div
-                  v-for="(log, index) in diagnosticLogs"
-                  :key="index"
-                  class="log-item"
-                >
-                  <span class="log-message">{{ log.message }}</span>
-                  <span
-                    class="log-status"
-                    :class="log.status === 'success' ? 'status-success' : 'status-error'"
-                  >
-                    {{ log.status === 'success' ? $t('Successful') : $t('Failed') }}
-                  </span>
+                <div v-for="(log, index) in diagnosticLogs" :key="index" class="log-item">
+                  <div class="log-content">
+                    <div class="log-header">
+                      <span class="log-timestamp">{{ formatTimestamp(log.timestamp) }}</span>
+                      <span class="log-service">[{{ log.serviceName }}]</span>
+                      <span class="log-type" :class="getLogTypeClass(log.type)">
+                        {{ log.type }}
+                      </span>
+                    </div>
+                    <div class="log-message">
+                      {{ log.message }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </CCardBody>
@@ -138,9 +144,11 @@ export default {
       diagnosticComplete: false,
       diagnosticTimer: null,
       diagnosticStartTime: null,
-      storageUsedGB: 0,
-      storageTotalGB: 0,
-      storagePercentage: 0,
+      diagnosticUuid: null,
+      diagnosticExpireTime: null,
+      disk: { total: 0, used: 0, free: 0, percentage: 0 },
+      memory: { total: 0, used: 0, free: 0, percentage: 0 },
+      swap: { total: 0, used: 0, free: 0, percentage: 0 },
     };
   },
   computed: {
@@ -209,6 +217,8 @@ export default {
       // Reset diagnostic state when device changes
       this.diagnosticLogs = [];
       this.diagnosticComplete = false;
+      this.diagnosticUuid = null;
+      this.diagnosticExpireTime = null;
       if (this.diagnosticTimer) {
         clearInterval(this.diagnosticTimer);
         this.diagnosticTimer = null;
@@ -218,77 +228,107 @@ export default {
     async startDiagnose() {
       if (!this.selectedDevice) return;
 
-      // Reset state
-      this.isDiagnosing = true;
-      this.diagnosticLogs = [];
-      this.diagnosticComplete = false;
-      this.diagnosticStartTime = Date.now();
+      try {
+        // Show loading
+        const loading = this.$loading.show();
 
-      // Restart services (placeholder - actual implementation depends on your API)
-      this.addLog('正在重啟服務 (dataServer, sysServer, mediaConnector)...', 'success');
+        // Reset state
+        this.isDiagnosing = true;
+        this.diagnosticLogs = [];
+        this.diagnosticComplete = false;
+        this.diagnosticStartTime = Date.now();
 
-      // Start diagnostic process
-      this.runDiagnostics();
+        // Get device UUID from selected device
+        const deviceOption = this.deviceOptions.find((opt) => opt.value === this.selectedDevice);
+        if (!deviceOption || !deviceOption.device) {
+          throw new Error('無法取得裝置資訊');
+        }
+
+        const deviceUuid = deviceOption.device.uuid;
+
+        // Call setdiagnostic API
+        const result = await this.$globalSetDiagnostic(deviceUuid);
+
+        if (loading) loading.hide();
+
+        if (result.error || !result.data) {
+          throw new Error('啟動診斷失敗');
+        }
+        console.log(result);
+        // Store diagnostic UUID and expire time
+        this.diagnosticUuid = result.data.data.diagnostic_uuid;
+        this.diagnosticExpireTime = result.data.data.expire;
+
+        // Start querying diagnostic results every 10 seconds
+        this.runDiagnostics();
+      } catch (error) {
+        console.error('Start diagnose failed:', error);
+        this.isDiagnosing = false;
+        this.$fire({
+          title: this.$t('OperationFailed'),
+          text: error.message || '啟動診斷失敗',
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+        });
+      }
     },
 
-    runDiagnostics() {
-      const diagnosticSteps = [
-        { message: '取得連線資訊', delay: 500 },
-        { message: '攝影機連線', delay: 1000 },
-        { message: '取得影像', delay: 1500 },
-        { message: '人臉辨識', delay: 2000 },
-        { message: '資料庫連線', delay: 2500 },
-        { message: '網路連線測試', delay: 3000 },
-        { message: '系統資源檢查', delay: 3500 },
-        { message: '記憶體使用率', delay: 4000 },
-        { message: 'CPU 使用率', delay: 4500 },
-        { message: '磁碟空間檢查', delay: 5000 },
-      ];
-
+    async runDiagnostics() {
       // Clear any existing timer
       if (this.diagnosticTimer) {
         clearInterval(this.diagnosticTimer);
       }
 
-      // Run diagnostics over 5 minutes (300 seconds)
-      let stepIndex = 0;
-      this.diagnosticTimer = setInterval(() => {
-        const elapsed = Date.now() - this.diagnosticStartTime;
+      // Query diagnostic results immediately
+      await this.queryDiagnosticResults();
 
-        // Check if 5 minutes have passed
-        if (elapsed >= 300000) { // 5 minutes in milliseconds
-          this.addLog('診斷完成', 'success');
+      // Set up interval to query every 10 seconds
+      this.diagnosticTimer = setInterval(async () => {
+        // Check if diagnostic session has expired
+        const now = Date.now();
+        if (this.diagnosticExpireTime && now >= this.diagnosticExpireTime) {
+          // 10 minutes have passed, stop diagnostic
           this.isDiagnosing = false;
           this.diagnosticComplete = true;
           clearInterval(this.diagnosticTimer);
           this.diagnosticTimer = null;
+          this.$fire({
+            title: this.$t('Successful'),
+            text: '診斷已完成',
+            type: 'success',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+          });
           return;
         }
 
-        // Add diagnostic logs periodically
-        if (stepIndex < diagnosticSteps.length) {
-          const step = diagnosticSteps[stepIndex];
-          setTimeout(() => {
-            // Randomly determine success/failure (you can replace this with actual diagnostic logic)
-            const isSuccess = Math.random() > 0.1; // 90% success rate
-            this.addLog(step.message, isSuccess ? 'success' : 'error');
-          }, step.delay);
-          stepIndex += 1;
-        } else {
-          // Repeat some checks periodically
-          const randomStep = diagnosticSteps[Math.floor(Math.random() * diagnosticSteps.length)];
-          const isSuccess = Math.random() > 0.1;
-          this.addLog(randomStep.message, isSuccess ? 'success' : 'error');
-        }
-      }, 5000); // Check every 5 seconds
+        // Query diagnostic results
+        await this.queryDiagnosticResults();
+      }, 10000); // Query every 10 seconds
     },
 
-    addLog(message, status) {
-      this.diagnosticLogs.push({
-        message,
-        status,
-        timestamp: new Date().toLocaleTimeString('zh-TW'),
-      });
+    async queryDiagnosticResults() {
+      console.log(this.diagnosticUuid);
+      if (!this.diagnosticUuid) return;
+
+      try {
+        const result = await this.$globalQueryDiagnostic(this.diagnosticUuid);
+        console.log('result.data.data', result.data.data);
+        if (result.error || !result.data) {
+          console.error('Query diagnostic failed:', result.error);
+          return;
+        }
+
+        // Update diagnostic logs with new data
+        if (Array.isArray(result.data.data) && result.data.data.length > 0) {
+          console.log('222222');
+          this.diagnosticLogs = result.data.data;
+          console.log('logs', this.diagnosticLogs);
+        }
+      } catch (error) {
+        console.error('Query diagnostic results failed:', error);
+      }
     },
 
     async exportSysLog() {
@@ -376,17 +416,80 @@ export default {
     },
 
     async loadStorageInfo() {
-      // Placeholder - replace with actual API call to get storage info
-      // For now, using mock data
-      this.storageTotalGB = 256;
-      this.storageUsedGB = 89;
-      this.storagePercentage = Math.round((this.storageUsedGB / this.storageTotalGB) * 100);
+      try {
+        const result = await this.$globalGetSpaceStatus();
+
+        if (result.error || !result.data || !result.data.data) {
+          console.error('Failed to load space status:', result.error);
+          return;
+        }
+
+        const { disk, memory, swap } = result.data.data;
+
+        // Update disk info
+        if (disk) {
+          this.disk.total = disk.Total || 0;
+          this.disk.used = disk.Used || 0;
+          this.disk.free = disk.Free || 0;
+          this.disk.percentage = this.disk.total > 0
+            ? Math.round((this.disk.used / this.disk.total) * 100)
+            : 0;
+        }
+
+        // Update memory info
+        if (memory) {
+          this.memory.total = memory.Total || 0;
+          this.memory.used = memory.Used || 0;
+          this.memory.free = memory.Free || 0;
+          this.memory.percentage = this.memory.total > 0
+            ? Math.round((this.memory.used / this.memory.total) * 100)
+            : 0;
+        }
+
+        // Update swap info
+        if (swap) {
+          this.swap.total = swap.Total || 0;
+          this.swap.used = swap.Used || 0;
+          this.swap.free = swap.Free || 0;
+          this.swap.percentage = this.swap.total > 0
+            ? Math.round((this.swap.used / this.swap.total) * 100)
+            : 0;
+        }
+      } catch (error) {
+        console.error('Load storage info failed:', error);
+      }
     },
 
-    getStorageColor() {
-      if (this.storagePercentage < 50) return 'success';
-      if (this.storagePercentage < 80) return 'warning';
+    getStorageColor(percentage) {
+      if (percentage < 50) return 'success';
+      if (percentage < 80) return 'warning';
       return 'danger';
+    },
+
+    formatTimestamp(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(parseInt(timestamp, 10));
+      return date.toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+    },
+
+    getLogTypeClass(type) {
+      if (!type) return '';
+      const typeUpper = type.toUpperCase();
+      if (typeUpper === 'FATAL') return 'type-fatal';
+      if (typeUpper === 'ERROR') return 'type-error';
+      if (typeUpper === 'WARN') return 'type-warning';
+      if (typeUpper === 'INFO') return 'type-info';
+      if (typeUpper === 'DEBUG') return 'type-debug';
+      if (typeUpper === 'TRACE') return 'type-trace';
+      return 'type-info';
     },
   },
 };
@@ -420,6 +523,13 @@ export default {
 /* Storage usage */
 .storage-container {
   min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.storage-item {
+  width: 100%;
 }
 
 .storage-header {
@@ -430,13 +540,13 @@ export default {
 }
 
 .storage-label {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #2c3e50;
 }
 
 .storage-text {
-  font-size: 16px;
+  font-size: 14px;
   color: #5a6169;
 }
 
@@ -456,37 +566,89 @@ export default {
 }
 
 .log-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 12px 16px;
   border-bottom: 1px solid #e9ecef;
-  font-size: 16px;
 }
 
 .log-item:last-child {
   border-bottom: none;
 }
 
+.log-content {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  min-width: 450px;
+  flex-shrink: 0;
+}
+
+.log-timestamp {
+  color: #6c757d;
+  font-weight: 500;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.log-service {
+  color: #495057;
+  font-weight: 600;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.log-type {
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  width: 60px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.type-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+}
+
+.type-debug {
+  color: #383d41;
+  background-color: #d6d8db;
+}
+
+.type-warning {
+  color: #856404;
+  background-color: #fff3cd;
+}
+
+.type-error {
+  color: #8b2e22;
+  background-color: #ffc9c9;
+}
+
+.type-fatal {
+  color: #721c24;
+  background-color: #f8d7da;
+}
+
+.type-trace {
+  color: #004085;
+  background-color: #cce5ff;
+}
+
 .log-message {
   color: #2c3e50;
-}
-
-.log-status {
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.status-success {
-  color: #28a745;
-  background-color: #d4edda;
-}
-
-.status-error {
-  color: #dc3545;
-  background-color: #f8d7da;
+  font-size: 15px;
+  flex: 1;
+  text-align: right;
 }
 
 /* Custom select styling */
