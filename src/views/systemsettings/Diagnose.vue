@@ -146,9 +146,24 @@ export default {
       diagnosticStartTime: null,
       diagnosticUuid: null,
       diagnosticExpireTime: null,
-      disk: { total: 0, used: 0, free: 0, percentage: 0 },
-      memory: { total: 0, used: 0, free: 0, percentage: 0 },
-      swap: { total: 0, used: 0, free: 0, percentage: 0 },
+      disk: {
+        total: 0,
+        used: 0,
+        free: 0,
+        percentage: 0,
+      },
+      memory: {
+        total: 0,
+        used: 0,
+        free: 0,
+        percentage: 0,
+      },
+      swap: {
+        total: 0,
+        used: 0,
+        free: 0,
+        percentage: 0,
+      },
     };
   },
   computed: {
@@ -314,7 +329,7 @@ export default {
 
       try {
         const result = await this.$globalQueryDiagnostic(this.diagnosticUuid);
-        console.log('result.data.data', result.data.data);
+        // console.log('result.data.data', result.data.data);
         if (result.error || !result.data) {
           console.error('Query diagnostic failed:', result.error);
           return;
@@ -322,9 +337,7 @@ export default {
 
         // Update diagnostic logs with new data
         if (Array.isArray(result.data.data) && result.data.data.length > 0) {
-          console.log('222222');
           this.diagnosticLogs = result.data.data;
-          console.log('logs', this.diagnosticLogs);
         }
       } catch (error) {
         console.error('Query diagnostic results failed:', error);
@@ -341,25 +354,20 @@ export default {
         // Get the selected device info
         const deviceOption = this.deviceOptions.find((opt) => opt.value === this.selectedDevice);
         const deviceName = deviceOption ? deviceOption.label : 'device';
+        const deviceUuid = deviceOption?.device?.uuid || '';
 
-        // Query system logs for the last 5 minutes
-        const endTime = Date.now();
-        const startTime = endTime - 300000; // 5 minutes ago
+        // Use diagnostic start time as startTime, add 5 minutes for endTime
+        const startTime = this.diagnosticStartTime;
+        const endTime = startTime + 5 * 60 * 1000; // startTime + 5 minutes
 
-        const result = await this.$globalQuerySystemLog({
-          start_time: startTime,
-          end_time: endTime,
-          slice_shift: 0,
-          slice_length: 10000,
-          level_list: ['info', 'warning', 'error'],
-        });
+        const result = await this.$globalDownloadLog(deviceUuid, startTime, endTime);
 
         if (loading) loading.hide();
 
-        if (!result || result.error) {
+        if (result.error || !result.data || !result.data.data) {
           this.$fire({
             title: this.$t('OperationFailed'),
-            text: 'Failed to export sysLog',
+            text: this.$t('ExportFailed'),
             type: 'error',
             timer: 3000,
             confirmButtonColor: '#20a8d8',
@@ -367,9 +375,8 @@ export default {
           return;
         }
 
-        // Create and download the log file
-        const logData = result.result ? result.result.data : [];
-        const logContent = this.formatLogsForExport(logData);
+        // Convert array to text content
+        const logContent = result.data.data.join('\n');
 
         // Create blob and download
         const blob = new Blob([logContent], { type: 'text/plain' });
@@ -384,7 +391,7 @@ export default {
 
         this.$fire({
           title: this.$t('Successful'),
-          text: 'sysLog exported successfully',
+          text: this.$t('ExportSuccess'),
           type: 'success',
           timer: 3000,
           confirmButtonColor: '#20a8d8',
@@ -393,26 +400,12 @@ export default {
         console.error('Export sysLog failed:', error);
         this.$fire({
           title: this.$t('OperationFailed'),
-          text: error.message || 'Failed to export sysLog',
+          text: error.message || this.$t('ExportFailed'),
           type: 'error',
           timer: 3000,
           confirmButtonColor: '#20a8d8',
         });
       }
-    },
-
-    formatLogsForExport(logs) {
-      let content = '=== System Log Export ===\n';
-      content += `Export Date: ${new Date().toISOString()}\n`;
-      content += `Device: ${this.selectedDevice}\n`;
-      content += '========================\n\n';
-
-      logs.forEach((log) => {
-        const timestamp = new Date(log.timestamp).toISOString();
-        content += `[${timestamp}] [${log.log_level}] ${log.data}\n`;
-      });
-
-      return content;
     },
 
     async loadStorageInfo() {
@@ -431,9 +424,7 @@ export default {
           this.disk.total = disk.Total || 0;
           this.disk.used = disk.Used || 0;
           this.disk.free = disk.Free || 0;
-          this.disk.percentage = this.disk.total > 0
-            ? Math.round((this.disk.used / this.disk.total) * 100)
-            : 0;
+          this.disk.percentage = this.disk.total > 0 ? Math.round((this.disk.used / this.disk.total) * 100) : 0;
         }
 
         // Update memory info
@@ -441,9 +432,7 @@ export default {
           this.memory.total = memory.Total || 0;
           this.memory.used = memory.Used || 0;
           this.memory.free = memory.Free || 0;
-          this.memory.percentage = this.memory.total > 0
-            ? Math.round((this.memory.used / this.memory.total) * 100)
-            : 0;
+          this.memory.percentage = this.memory.total > 0 ? Math.round((this.memory.used / this.memory.total) * 100) : 0;
         }
 
         // Update swap info
@@ -451,9 +440,7 @@ export default {
           this.swap.total = swap.Total || 0;
           this.swap.used = swap.Used || 0;
           this.swap.free = swap.Free || 0;
-          this.swap.percentage = this.swap.total > 0
-            ? Math.round((this.swap.used / this.swap.total) * 100)
-            : 0;
+          this.swap.percentage = this.swap.total > 0 ? Math.round((this.swap.used / this.swap.total) * 100) : 0;
         }
       } catch (error) {
         console.error('Load storage info failed:', error);
