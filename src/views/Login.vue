@@ -91,9 +91,7 @@
               </CForm>
             </CCardBody>
             <CCardFooter>
-              <span style="color: gray; float: right">
-                {{ disp_versionInfo }}
-              </span>
+              <span style="color: gray; float: right"> {{ disp_versionInfo }}</span>
             </CCardFooter>
           </CCard>
         </CCol>
@@ -171,6 +169,7 @@ export default {
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        { value: 'LiveVideo', label: i18n.formatter.format('LiveVideo_Mode') },
         // { value: 'AlcoholCheckin', label: '人員辨識與酒測系統' },
       ],
     };
@@ -318,6 +317,7 @@ export default {
         { value: 'Capacity', label: i18n.formatter.format('MenuOccupancyBoard') },
         { value: 'Guard', label: i18n.formatter.format('GuardBoard') },
         { value: 'SelfCheckin', label: i18n.formatter.format('SelfCheckin') },
+        { value: 'LiveVideo', label: i18n.formatter.format('LiveVideo_Mode') },
         // { value: 'AlcoholCheckin', label: '辨識與酒精偵測' },
       ];
     },

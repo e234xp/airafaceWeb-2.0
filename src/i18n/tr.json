@@ -795,5 +795,13 @@
   "ExportAll": "Tümünü dışa aktar",
   "SwapUsage": "Alan kullanımını değiştir",
   "MemoryUsage": "Bellek kullanımı",
-  "DiskUsage": "Disk kullanımı"
+  "DiskUsage": "Disk kullanımı",
+  "LiveVideoSettings": "Gerçek zamanlı video reklam panosu ayarları",
+  "LiveVideo": "Canlı video reklam panosu",
+  "LiveVideoPreview": "Anında görüntü panosu önizlemesi",
+  "LiveVideo_Mode": "Canlı görüntü modu",
+  "VideoSettings": "Görüntü modunu ayarla",
+  "ShowVisitors": "ziyaretçileri göster",
+  "ShowStrangers": "yabancıları göster",
+  "PleaseSelectCamera": "Lütfen kamerayı seçin"
 }

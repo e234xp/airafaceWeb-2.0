@@ -25,6 +25,7 @@ const CapacityDashboard = () => import('@/views/dashboards/CapacityDashboard.vue
 const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboard.vue');
 const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
 const AlcoholCheckinDashboard = () => import('@/views/dashboards/AlcoholCheckinDashboard.vue');
+const LiveVideoDashboard = () => import('@/views/dashboards/LiveVideoDashboard.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -68,6 +69,7 @@ const ModifyOccupancyControlSetting = () => import('@/views/displays/ModifyOccup
 const ModifyCapacityControlSetting = () => import('@/views/displays/ModifyCapacityControlSetting.vue');
 const ModifySelfCheckinControlSetting = () => import('@/views/displays/ModifySelfCheckinControlSetting.vue');
 const ModifyGuardControlSetting = () => import('@/views/displays/ModifyGuardControlSetting.vue');
+const ModifyLiveVideoSetting = () => import('@/views/displays/ModifyLiveVideoSetting.vue');
 
 /// ////////////////////////////////////////
 /// /////    System settings    ////////////
@@ -214,6 +216,11 @@ function configRoutes() {
           path: 'guardmode',
           name: 'DashboardGuard',
           component: GuardDashboard,
+        },
+        {
+          path: 'livevideomode',
+          name: 'DashboardLiveVideo',
+          component: LiveVideoDashboard,
         },
         {
           path: 'reports',
@@ -427,6 +434,11 @@ function configRoutes() {
               path: 'modifyguardcontrolsetting',
               name: 'ModifyGuardControlSetting',
               component: ModifyGuardControlSetting,
+            },
+            {
+              path: 'modifylivevideosetting',
+              name: 'ModifyLiveVideoSetting',
+              component: ModifyLiveVideoSetting,
             },
             // {
             //   path: 'welcomeDashboardSettings',

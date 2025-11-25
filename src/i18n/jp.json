@@ -795,5 +795,13 @@
   "ExecutionStep3": "「診断」をクリックすると、システムは5分間の診断を実行します。",
   "ExecutionStep4": "完全なログが必要な場合は、「sysLogをエクスポート」をクリックして完全なログデータを取得してください。",
   "ExportSystemLog": "Export system logs",
-  "ExportAll": "Export all"
+  "ExportAll": "Export all",
+  "LiveVideoSettings": "Real-time video billboard settings",
+  "LiveVideo": "Live video billboard",
+  "LiveVideoPreview": "Instant image board preview",
+  "LiveVideo_Mode": "Live image mode",
+  "VideoSettings": "Set image mode",
+  "ShowVisitors": "show visitors",
+  "ShowStrangers": "show strangers",
+  "PleaseSelectCamera": "Please select camera"
 }

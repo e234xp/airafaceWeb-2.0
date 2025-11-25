@@ -795,5 +795,13 @@
   "ExportAll": "ส่งออกทั้งหมด",
   "SwapUsage": "สลับการใช้พื้นที่",
   "MemoryUsage": "การใช้หน่วยความจำ",
-  "DiskUsage": "การใช้งานดิสก์"
+  "DiskUsage": "การใช้งานดิสก์",
+  "LiveVideoSettings": "การตั้งค่าป้ายโฆษณาวิดีโอแบบเรียลไทม์",
+  "LiveVideo": "ป้ายโฆษณาวิดีโอสด",
+  "LiveVideoPreview": "ดูตัวอย่างบอร์ดรูปภาพทันที",
+  "LiveVideo_Mode": "โหมดภาพสด",
+  "VideoSettings": "ตั้งค่าโหมดภาพ",
+  "ShowVisitors": "แสดงผู้เข้าชม",
+  "ShowStrangers": "แสดงคนแปลกหน้า",
+  "PleaseSelectCamera": "กรุณาเลือกกล้อง"
 }

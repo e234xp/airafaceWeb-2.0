@@ -795,5 +795,13 @@
   "ExecutionStep3": "Después de hacer clic en \"Diagnóstico\", el sistema realizará un diagnóstico de cinco minutos.",
   "ExecutionStep4": "Si necesita el registro completo, haga clic en \"Exportar sysLog\" para obtener los datos de registro completos.",
   "ExportSystemLog": "Exportar registros del sistema",
-  "ExportAll": "Exportar todo"
+  "ExportAll": "Exportar todo",
+  "LiveVideoSettings": "Configuración de cartelera de vídeo en tiempo real",
+  "LiveVideo": "Cartelera de vídeo en vivo",
+  "LiveVideoPreview": "Vista previa instantánea del tablero de imágenes",
+  "LiveVideo_Mode": "Modo de imagen en vivo",
+  "VideoSettings": "Establecer modo de imagen",
+  "ShowVisitors": "mostrar visitantes",
+  "ShowStrangers": "mostrar extraños",
+  "PleaseSelectCamera": "Por favor seleccione cámara"
 }

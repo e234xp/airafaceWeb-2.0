@@ -781,5 +781,13 @@
   "ExportAll": "Exportar tudo",
   "SwapUsage": "Trocar uso de espaço",
   "MemoryUsage": "Uso de memória",
-  "DiskUsage": "Uso de disco"
+  "DiskUsage": "Uso de disco",
+  "LiveVideoSettings": "Configurações de outdoor de vídeo em tempo real",
+  "LiveVideo": "Outdoor de vídeo ao vivo",
+  "LiveVideoPreview": "Pré-visualização instantânea do quadro de imagens",
+  "LiveVideo_Mode": "Modo de imagem ao vivo",
+  "VideoSettings": "Definir modo de imagem",
+  "ShowVisitors": "mostrar aos visitantes",
+  "ShowStrangers": "mostrar estranhos",
+  "PleaseSelectCamera": "Selecione a câmera"
 }

@@ -788,5 +788,13 @@
   "ExecutionStep3": "Après avoir cliqué sur « Diagnostic », le système effectuera un diagnostic de cinq minutes.",
   "ExecutionStep4": "Si vous avez besoin du journal complet, veuillez cliquer sur \"Exporter sysLog\" pour obtenir les données complètes du journal.",
   "ExportSystemLog": "Exporter les journaux système",
-  "ExportAll": "Exporter tout"
+  "ExportAll": "Exporter tout",
+  "LiveVideoSettings": "Paramètres du panneau d'affichage vidéo en temps réel",
+  "LiveVideo": "Panneau d'affichage vidéo en direct",
+  "LiveVideoPreview": "Aperçu instantané du tableau d'images",
+  "LiveVideo_Mode": "Mode image en direct",
+  "VideoSettings": "Définir le mode image",
+  "ShowVisitors": "montrer aux visiteurs",
+  "ShowStrangers": "montrer à des inconnus",
+  "PleaseSelectCamera": "Veuillez sélectionner une caméra"
 }

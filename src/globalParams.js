@@ -603,6 +603,9 @@ Vue.prototype.$globalGotoRootPage = (page, cb) => {
       case 'Guard':
         router.push({ name: 'DashboardGuard' });
         break;
+      case 'LiveVideo':
+        router.push({ name: 'DashboardLiveVideo' });
+        break;
       case 'Setting':
       default:
         router.push({ name: 'PersonDailyAttendanceReport' });

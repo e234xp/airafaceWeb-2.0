@@ -795,5 +795,13 @@
   "ExportAll": "Ekspor semua",
   "SwapUsage": "Tukar penggunaan ruang",
   "MemoryUsage": "Penggunaan memori",
-  "DiskUsage": "Penggunaan disk"
+  "DiskUsage": "Penggunaan disk",
+  "LiveVideoSettings": "Pengaturan papan reklame video waktu nyata",
+  "LiveVideo": "Papan reklame video langsung",
+  "LiveVideoPreview": "Pratinjau papan gambar instan",
+  "LiveVideo_Mode": "Mode gambar langsung",
+  "VideoSettings": "Atur mode gambar",
+  "ShowVisitors": "tunjukkan pengunjung",
+  "ShowStrangers": "tunjukkan pada orang asing",
+  "PleaseSelectCamera": "Silakan pilih kamera"
 }

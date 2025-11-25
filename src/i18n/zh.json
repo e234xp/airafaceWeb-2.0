@@ -800,5 +800,13 @@
   "ExecutionStep2": "請讓一位人員站在裝置前方",
   "ExecutionStep3": "點擊「診斷」後，系統將進行為期五分鐘的診斷",
   "ExecutionStep4": "若需要完整日誌，請點擊「匯出系統日誌」以取得完整的日誌資料",
-  "ExportSystemLog": "匯出系統日誌"
+  "ExportSystemLog": "匯出系統日誌",
+  "LiveVideoSettings": "即時影像看板設定",
+  "LiveVideo": "即時影像看板",
+  "LiveVideoPreview": "即時影像看板預覽",
+  "LiveVideo_Mode": "即時影像模式",
+  "VideoSettings": "設定影像模式",
+  "ShowVisitors": "顯示訪客",
+  "ShowStrangers": "顯示陌生人",
+  "PleaseSelectCamera": "請選擇攝影機"
 }

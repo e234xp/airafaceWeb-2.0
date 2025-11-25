@@ -795,5 +795,13 @@
   "ExportAll": "Xuất tất cả",
   "SwapUsage": "Hoán đổi việc sử dụng không gian",
   "MemoryUsage": "Sử dụng bộ nhớ",
-  "DiskUsage": "Sử dụng đĩa"
+  "DiskUsage": "Sử dụng đĩa",
+  "LiveVideoSettings": "Cài đặt bảng quảng cáo video thời gian thực",
+  "LiveVideo": "Biển quảng cáo video trực tiếp",
+  "LiveVideoPreview": "Xem trước bảng hình ảnh tức thì",
+  "LiveVideo_Mode": "Chế độ hình ảnh trực tiếp",
+  "VideoSettings": "Đặt chế độ hình ảnh",
+  "ShowVisitors": "hiển thị du khách",
+  "ShowStrangers": "cho người lạ xem",
+  "PleaseSelectCamera": "Vui lòng chọn máy ảnh"
 }
