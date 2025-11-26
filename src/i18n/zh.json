@@ -384,6 +384,7 @@
   "NoInfoMsg": "查無此人",
   "NoLeaveRecord": "缺下班紀錄",
   "NoRecord": "無打卡紀錄",
+  "NoDataToExport": "無資料可匯出",
   "NoRepeat": "不可重複",
   "NoSpaceNeigherRepeat": "不能重複",
   "NonAction": "事件合併",

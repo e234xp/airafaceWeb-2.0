@@ -384,6 +384,7 @@
   "NoInfoMsg": "Information not found",
   "NoLeaveRecord": "no clock-out record",
   "NoRecord": "No Records",
+  "NoDataToExport": "No Data To Export",
   "NoRepeat": "No Repeat",
   "NoSpaceNeigherRepeat": "Cannot be duplicated",
   "NonAction": "Event Merge",

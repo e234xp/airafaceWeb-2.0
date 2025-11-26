@@ -12,10 +12,12 @@
         <CCol sm="12">
           <CRow class="flex-row-reverse">
             <CInput
-              v-model.lazy="value_searchingFilter"
+              v-model="value_searchingFilterInput"
               style="width: 300px"
               size="lg"
               :placeholder="$t('Search')"
+              @keyup.enter="triggerSearch"
+              @blur="triggerSearch"
             >
               <template #prepend-content>
                 <CIcon name="cil-search" />
@@ -43,101 +45,105 @@
                   </div>
                 </CButton>
               </div>
-              <div v-if="showAllData()">
-                <CButton
-                  class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnReturnToAll()"
-                >
-                  <div
-                    class="btn-rwd-icon w-100 h-100 btn-p-md"
-                    data-coreui-toggle="tooltip"
-                    title="show all records"
+              <template v-if="showAllData()">
+                <div>
+                  <CButton
+                    class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
+                    @click="clickOnReturnToAll()"
                   >
-                    <CIcon
-                      size="sm"
-                      name="cilPeople"
-                    />
-                  </div>
-                  <div class="btn-rwd-text btn-p-md">
-                    {{ value_showAllPerson }}
-                  </div>
-                </CButton>
-              </div>
+                    <div
+                      class="btn-rwd-icon w-100 h-100 btn-p-md"
+                      data-coreui-toggle="tooltip"
+                      title="show all records"
+                    >
+                      <CIcon
+                        size="sm"
+                        name="cilPeople"
+                      />
+                    </div>
+                    <div class="btn-rwd-text btn-p-md">
+                      {{ $t('AllPerson') }} : {{ value_summary.total || 0 }}
+                    </div>
+                  </CButton>
+                </div>
 
-              <div v-if="showAllData()">
-                <CButton
-                  class="btn btn-outline-success fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowGoodRecordsPerson()"
-                >
-                  <div
-                    data-coreui-toggle="tooltip"
-                    title="show good records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                <div>
+                  <CButton
+                    class="btn btn-outline-success fz-md mr-2 mb-3 btn-rwd p-0"
+                    @click="clickOnShowGoodRecordsPerson()"
                   >
-                    <i class="bi bi-person-fill" />
-                  </div>
-                  <div class="btn-rwd-text btn-p-md">
-                    {{ value_showGoodRecordsPerson }}
-                  </div>
-                </CButton>
-              </div>
+                    <div
+                      data-coreui-toggle="tooltip"
+                      title="show good records"
+                      class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    >
+                      <i class="bi bi-person-fill" />
+                    </div>
+                    <div class="btn-rwd-text btn-p-md">
+                      {{ $t('GoodRecords') }} : {{ value_summary.normal.length || 0 }}
+                    </div>
+                  </CButton>
+                </div>
 
-              <div v-if="showAllData()">
-                <CButton
-                  class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowLatePerson()"
-                >
-                  <div
-                    data-coreui-toggle="tooltip"
-                    title="show late records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                <div>
+                  <CButton
+                    class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
+                    @click="clickOnShowLatePerson()"
                   >
-                    <i class="bi bi-alarm-fill" />
-                  </div>
-                  <div class="btn-rwd-text btn-p-md">
-                    {{ value_showLatePerson }}
-                  </div>
-                </CButton>
-              </div>
+                    <div
+                      data-coreui-toggle="tooltip"
+                      title="show late records"
+                      class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    >
+                      <i class="bi bi-alarm-fill" />
+                    </div>
+                    <div class="btn-rwd-text btn-p-md">
+                      {{ $t('LatePerson') }} : {{ value_summary.late.length || 0 }}
+                    </div>
+                  </CButton>
+                </div>
 
-              <div v-if="showAllData()">
-                <CButton
-                  class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowLeaveEarlyPerson()"
-                >
-                  <div
-                    data-coreui-toggle="tooltip"
-                    title="show leave early records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                <div>
+                  <CButton
+                    class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
+                    @click="clickOnShowLeaveEarlyPerson()"
                   >
-                    <i class="bi bi-clock-history" />
-                  </div>
-                  <div class="btn-rwd-text btn-p-md">
-                    {{ value_showLeaveEarlyPerson }}
-                  </div>
-                </CButton>
-              </div>
+                    <div
+                      data-coreui-toggle="tooltip"
+                      title="show leave early records"
+                      class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    >
+                      <i class="bi bi-clock-history" />
+                    </div>
+                    <div class="btn-rwd-text btn-p-md">
+                      {{ $t('LeaveEarly') }} : {{ value_summary.early.length || 0 }}
+                    </div>
+                  </CButton>
+                </div>
 
-              <div v-if="showAllData()">
-                <CButton
-                  class="btn btn-outline-secondary fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnShowNoRecordPerson()"
-                >
-                  <div
-                    data-coreui-toggle="tooltip"
-                    title="show people with no records"
-                    class="btn-rwd-icon w-100 h-100 btn-p-md"
+                <div>
+                  <CButton
+                    class="btn btn-outline-secondary fz-md mr-2 mb-3 btn-rwd p-0"
+                    @click="clickOnShowNoRecordPerson()"
+                    style="cursor: auto"
+                    :disabled="true"
                   >
-                    <CIcon
-                      size="sm"
-                      name="cilUserX"
-                    />
-                  </div>
-                  <div class="btn-rwd-text btn-p-md">
-                    {{ value_showNoRecordPerson }}
-                  </div>
-                </CButton>
-              </div>
+                    <div
+                      data-coreui-toggle="tooltip"
+                      title="show people with no records"
+                      class="btn-rwd-icon w-100 h-100 btn-p-md"
+                    >
+                      <CIcon
+                        size="sm"
+                        name="cilUserX"
+                      />
+                    </div>
+                    <div class="btn-rwd-text btn-p-md">
+                      {{ $t('NoRecord') }} : {{ value_tablePage.totalResult - (value_summary.total || 0) }}
+                    </div>
+                  </CButton>
+                </div>
+              </template>
             </div>
             <!-- 右邊按鈕群組 -->
             <div class="d-flex">
@@ -655,15 +661,29 @@ import Excel from 'exceljs/dist/exceljs.min';
 
 import JsZip from 'jszip';
 
+/* eslint-disable no-undef */
 const dayjs = require('dayjs');
+/* eslint-enable no-undef */
 
 export default {
   name: 'MonthlyAttendanceReportForm',
   props: {
-    formData: Object,
-    onFetchPersonDataCallback: { type: Function },
-    onFetchPersonAttendanceDataCallback: { type: Function },
-    onFetchSingleAttendanceDataCallback: { type: Function },
+    formData: {
+      type: Object,
+      default: () => ({}),
+    },
+    onFetchPersonDataCallback: {
+      type: Function,
+      default: () => {},
+    },
+    onFetchPersonAttendanceDataCallback: {
+      type: Function,
+      default: () => {},
+    },
+    onFetchSingleAttendanceDataCallback: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -681,6 +701,13 @@ export default {
           + 'QAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
       value_dataItemsToShow: [],
       value_allTableItems: [],
+      value_summary: {
+        total: 0,
+        normal: 0,
+        late: 0,
+        early: 0,
+        no_record: 0,
+      },
       value_tablePage: {
         currentPage: 1,
         pageSize: 10,
@@ -692,6 +719,11 @@ export default {
         totalResult: 0,
       },
       value_searchingFilter: '',
+      value_searchingFilterInput: '',
+
+      // 篩選模式相關
+      value_filterMode: 'all', // 'all' | 'late' | 'early' | 'good' | 'no_record'
+      value_filterUuidList: [], // 當前篩選模式的 UUID 列表
 
       disp_header: 'none',
 
@@ -818,9 +850,9 @@ export default {
 
         if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
             || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
-          this.$globalFindVideoDeviceGroups('', 0, 2000, (err, data) => {
-            if (err == null) {
-              const { result } = data;
+          this.$globalFindVideoDeviceGroups('', 0, 2000, (error, response) => {
+            if (error == null) {
+              const { result } = response;
 
               result.forEach((r) => {
                 if (r) {
@@ -907,9 +939,8 @@ export default {
       this.value_tablePage.currentPage = 1;
       this.value_tablePageForDetailData.currentPage = 1;
       if (this.showAllData()) {
-        this.value_dataItemsToShow = this.generateFilteredData(
-          this.value_allTableItems, this.value_searchingFilter,
-        );
+        // 搜尋時重新載入第一頁資料
+        this.refreshTableItems();
       } else {
         this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
           this.value_attendanceDataListToReview, this.value_searchingFilter,
@@ -918,6 +949,12 @@ export default {
     },
   },
   methods: {
+    triggerSearch() {
+      // 只有當搜尋關鍵字真的改變時才觸發
+      if (this.value_searchingFilterInput !== this.value_searchingFilter) {
+        this.value_searchingFilter = this.value_searchingFilterInput;
+      }
+    },
     datePickerDatachange() {
       this.value_specifiedMonth = this.value_monthPicked;
       this.value_selectedMonthName[2] = dayjs(this.value_specifiedMonth).format('YYYY-MM');
@@ -1079,21 +1116,19 @@ export default {
       this.value_searchingFilter = '';
       this.value_attendanceDataListToReview = null;
       this.value_dataItemsToShowDetailData = [];
+
+      // 重置篩選模式為全部
+      this.value_filterMode = 'all';
+      this.value_filterUuidList = [];
+
       this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0,
       };
-      this.value_dataItemsToShow = this.generateFilteredData(this.value_allTableItems, this.value_searchingFilter);
-      
-      // 需要等待DOM更新完成後重新綁定事件監聽器
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.observeTableSize();
-          // 重新綁定日期點擊事件監聽器
-          this.rebindDateClickEvents();
-        }, 100);
-      });
+
+      // 重新查詢資料
+      this.refreshTableItems();
     },
     rebindDateClickEvents() {
       if (this.showAllData()) {
@@ -1121,51 +1156,67 @@ export default {
     },
     clickOnShowLatePerson() {
       this.value_searchingFilter = '';
+
+      // 設定篩選模式為遲到
+      this.value_filterMode = 'late';
+      this.value_filterUuidList = this.value_summary.late || [];
+
       this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
-        totalResult: 0,
+        totalResult: this.value_filterUuidList.length,
       };
-      if (this.value_allTableItems.length > 0) {
-        const ss = this.value_allTableItems.filter((a) => a.late > 0);
-        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
-      }
+
+      // 重新查詢資料
+      this.refreshTableItems();
     },
     clickOnShowLeaveEarlyPerson() {
       this.value_searchingFilter = '';
+
+      // 設定篩選模式為早退
+      this.value_filterMode = 'early';
+      this.value_filterUuidList = this.value_summary.early || [];
+
       this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
-        totalResult: 0,
+        totalResult: this.value_filterUuidList.length,
       };
-      if (this.value_allTableItems.length > 0) {
-        const ss = this.value_allTableItems.filter((a) => a.early > 0);
-        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
-      }
+
+      // 重新查詢資料
+      this.refreshTableItems();
     },
     clickOnShowNoRecordPerson() {
       this.value_searchingFilter = '';
+
+      // 設定篩選模式為無紀錄
+      this.value_filterMode = 'no_record';
+      this.value_filterUuidList = this.value_summary.no_record || [];
+
       this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
-        totalResult: 0,
+        totalResult: this.value_filterUuidList.length,
       };
-      if (this.value_allTableItems.length > 0) {
-        const ss = this.value_allTableItems.filter((a) => a.no_record > 0);
-        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
-      }
+
+      // 重新查詢資料
+      this.refreshTableItems();
     },
     clickOnShowGoodRecordsPerson() {
       this.value_searchingFilter = '';
+
+      // 設定篩選模式為良好紀錄
+      this.value_filterMode = 'good';
+      this.value_filterUuidList = this.value_summary.normal || [];
+
       this.value_tablePage = {
         currentPage: 1,
         pageSize: 10,
-        totalResult: 0,
+        totalResult: this.value_filterUuidList.length,
       };
-      if (this.value_allTableItems.length > 0) {
-        const ss = this.value_allTableItems.filter((a) => a.late === 0 && a.early === 0 && a.no_record === 0);
-        this.value_dataItemsToShow = this.generateFilteredData(ss, this.value_searchingFilter);
-      }
+
+      // 重新查詢資料
+      this.refreshTableItems();
     },
     // 選擇某一個人 (item) 查看整個月份的每個紀錄
     clickOnDetails(item) {
@@ -1241,7 +1292,107 @@ export default {
       this.flag_downloadingExecl = false;
     },
 
-    exportMaterToExcel() {
+    async fetchAllPersonData() {
+      const allPersonData = [];
+      const totalCount = this.value_tablePage.totalResult;
+      const pageSize = 100;
+      const totalPages = Math.ceil(totalCount / pageSize);
+
+      try {
+        for (let page = 0; page < totalPages; page += 1) {
+          const sliceShift = page * pageSize;
+
+          // eslint-disable-next-line no-await-in-loop
+          const personResult = await new Promise((resolve) => {
+            this.onFetchPersonDataCallback(sliceShift, pageSize, this.value_searchingFilter, (error, personTableItems) => {
+              resolve({ error, personTableItems });
+            });
+          });
+
+          if (personResult.error || !personResult.personTableItems) {
+            throw new Error('Failed to fetch person data');
+          }
+
+          const { personTableItems } = personResult;
+
+          if (personTableItems && personTableItems.length > 0) {
+            const uuidList = personTableItems.map((person) => person.uuid);
+
+            // eslint-disable-next-line no-await-in-loop
+            const attendanceResult = await new Promise((resolve) => {
+              this.onFetchPersonAttendanceDataCallback(
+                this.value_specifiedMonth,
+                uuidList,
+                (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+                  resolve({ error: errorOnPersonVr, personVrItems });
+                },
+              );
+            });
+
+            if (attendanceResult.error) {
+              throw new Error('Failed to fetch attendance data');
+            }
+
+            personTableItems.forEach((person) => {
+              const personCopy = { ...person };
+              personCopy.attendance_data_list = [];
+
+              if (attendanceResult.personVrItems && attendanceResult.personVrItems.length > 0) {
+                const dataListOnUuid = attendanceResult.personVrItems.filter((vr) => vr.uuid === person.uuid);
+                dataListOnUuid.forEach((d) => {
+                  if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
+                    personCopy.attendance_data_list.push({
+                      id: d.id,
+                      name: d.name,
+                      verify_uuid: d.verify_uuid,
+                      timestamp: d.timestamp,
+                      source_id: d.source_id,
+                      temperature: (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
+                      verify_mode: d.verify_mode,
+                      verify_mode_string: d.verify_mode_string,
+                      verify_score: d.verify_score,
+                      card_number: d.card_number,
+                      group_list: d.group_list,
+                      face_image_id: d.face_image_id,
+                      modifier_time: d.modifier_time,
+                    });
+                  }
+                });
+              }
+
+              personCopy.attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, personCopy);
+
+              allPersonData.push(personCopy);
+            });
+          }
+        }
+
+        return allPersonData;
+      } catch (error) {
+        this.$fire({
+          title: this.$t('NetworkLoss'),
+          text: error.message,
+          type: 'error',
+          timer: 3000,
+        });
+        return null;
+      }
+    },
+
+    async exportMaterToExcel() {
+      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      const allData = await this.fetchAllPersonData();
+      if (this.obj_loading) this.obj_loading.hide();
+
+      if (!allData || allData.length === 0) {
+        this.$fire({
+          title: this.$t('NoDataToExport'),
+          type: 'warning',
+          timer: 3000,
+        });
+        return;
+      }
+
       const zip = new JsZip();
 
       // const snapshotFolder = zip.folder('snapshot');
@@ -1274,13 +1425,13 @@ export default {
       }
 
       worksheet.columns = columns;
-      this.excelExecutionAmounts = this.value_allTableItems.length;
+      this.excelExecutionAmounts = allData.length;
 
-      for (let idx2 = 0; idx2 < this.value_allTableItems.length; idx2 += 1) {
+      for (let idx2 = 0; idx2 < allData.length; idx2 += 1) {
         this.exportNo += 1;
         this.excelCounter += 1;
 
-        const item = this.value_allTableItems[idx2];
+        const item = allData[idx2];
 
         {
           item.nameToShow = item.name;
@@ -1896,8 +2047,23 @@ export default {
       this.flag_downloadingExecl = false;
     },
 
-    exportMasterToTXTCSV() {
+    async exportMasterToTXTCSV() {
       const self = this;
+
+      // 先載入全部資料
+      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+      const allData = await self.fetchAllPersonData();
+      if (self.obj_loading) self.obj_loading.hide();
+
+      if (!allData || allData.length === 0) {
+        self.$fire({
+          title: self.$t('NoDataToExport'),
+          type: 'warning',
+          timer: 3000,
+        });
+        return;
+      }
+
       const zip = new JsZip();
 
       let separator = self.value_txtSeparator === '' ? self.value_separator : self.value_txtSeparator;
@@ -1908,10 +2074,10 @@ export default {
 
       self.exportNo = 0;
 
-      for (let idx2 = 0; idx2 < self.value_allTableItems.length; idx2 += 1) {
+      for (let idx2 = 0; idx2 < allData.length; idx2 += 1) {
         self.exportNo += 1;
 
-        const item = self.value_allTableItems[idx2];
+        const item = allData[idx2];
         {
           item.nameToShow = item.name;
           item.late = 0;
@@ -2289,6 +2455,37 @@ export default {
 
       return ret;
     },
+    generateFilteredDataForCurrentPage(sourceData) {
+      // 處理當前頁的資料（後端已分頁,不需再切割）
+      const self = this;
+      const daysInMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth() + 1, 0).getDate();
+
+      sourceData.forEach((pItem) => {
+        const item = pItem;
+        item.attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item, daysInMonth);
+        item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, daysInMonth);
+        item.person = `${item.name}<br>${item.id}`;
+
+        try {
+          if (Array.isArray(item.group_list)) {
+            item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
+          } else {
+            item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
+          }
+        } catch (ex) {
+          item.groups = '';
+        }
+
+        const detailsButtonId = `actionOnDetails_${item.uuid}`;
+        if (item.attendance_data_list && item.attendance_data_list.length > 0) {
+          item.details = `<div align='center'><button type='submit' class='btn btn-outline-primary btn-detail' id='${detailsButtonId}'><i class='fa fa-list'/></button></div>`;
+        } else {
+          item.details = "<div align='center'></div>";
+        }
+      });
+
+      return Object.assign([], sourceData);
+    },
     generateFilteredData(sourceData, filter) {
       const self = this;
       const filteredItems = filter.length === 0
@@ -2468,91 +2665,184 @@ export default {
       });
       return Object.assign([], sliceList);
     },
-    refreshTableItems(cb) {
+    async refreshTableItems(cb) {
       const self = this;
 
       if (self.onFetchPersonDataCallback) {
         self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-        self.onFetchPersonDataCallback((errorOnPersonTable, resetPersonTable, morePersonItem, personTableItems) => {
-          if (!errorOnPersonTable) {
-            if (resetPersonTable) {
-              self.value_allTableItems = [];
-              self.value_dataItemsToShow = [];
-            }
-            if (personTableItems) {
-              self.value_allTableItems = self.value_allTableItems.concat(personTableItems);
-            }
 
-            if (personTableItems.length >= 1) {
-              const uuidList = [];
+        // 先呼叫 getattendancesummary 取得統計資料
+        const date = new Date(self.value_specifiedMonth);
+        const startTime = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+        const endTime = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
 
-              self.onFetchPersonAttendanceDataCallback(
-                self.value_specifiedMonth,
-                uuidList,
-                (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
-                  if (personVrItems && personVrItems.length > 0) {
-                    self.value_allTableItems.forEach((record) => {
-                      const person = record;
-                      const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
-                      dataListOnUuid.forEach((d) => {
-                        if (!person.attendance_data_list) {
-                          person.attendance_data_list = [];
-                        }
-                        if (
-                          !person.attendance_data_list.find(
-                            (att) => att.verify_uuid === d.verify_uuid,
-                          )
-                        ) {
-                          person.attendance_data_list.push({
-                            id: d.id,
-                            name: d.name,
-                            department: person.extra_info.department,
-                            verify_uuid: d.verify_uuid,
-                            timestamp: d.timestamp,
-                            source_id: d.source_id,
-                            // yyyymmdd: new Date(d.timestamp).yyyy_mm_dd(),
-                            yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
-                            temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
-                            verify_mode: d.verify_mode,
-                            verify_mode_string: d.verify_mode_string,
-                            verify_score: d.verify_score,
-                            card_number: d.card_number,
-                            group_list: d.group_list,
-                            face_image_id: d.face_image_id,
-                          });
-                        }
-                      });
+        const summaryRet = await self.$globalGetAttendanceSummary(startTime.getTime(), endTime.getTime());
+        if (!summaryRet.error && summaryRet.data && summaryRet.data.summary) {
+          self.value_summary = {
+            total: summaryRet.data.summary.total || 0,
+            normal: summaryRet.data.summary.normal || [],
+            late: summaryRet.data.summary.late || [],
+            early: summaryRet.data.summary.early || [],
+            no_record: summaryRet.data.summary.no_record || [],
+          };
+        }
+
+        // 根據篩選模式決定查詢方式
+        if (self.value_filterMode === 'all') {
+          // 全部模式：使用原本的分頁查詢
+          const sliceShift = (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize;
+          const sliceSize = self.value_tablePage.pageSize;
+
+          self.onFetchPersonDataCallback(sliceShift, sliceSize, self.value_searchingFilter, async (error, personTableItems, totalLength) => {
+            if (!error) {
+            // 設定總筆數
+              self.value_tablePage.totalResult = totalLength;
+
+              if (personTableItems && personTableItems.length >= 1) {
+                const uuidList = personTableItems.map((person) => person.uuid);
+
+                self.onFetchPersonAttendanceDataCallback(
+                  self.value_specifiedMonth,
+                  uuidList,
+                  (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+                    const currentPageItems = [];
+
+                    personTableItems.forEach((person) => {
+                      const personCopy = { ...person };
+                      personCopy.attendance_data_list = [];
+
+                      if (personVrItems && personVrItems.length > 0) {
+                        const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
+                        dataListOnUuid.forEach((d) => {
+                          if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
+                            personCopy.attendance_data_list.push({
+                              id: d.id,
+                              name: d.name,
+                              department: personCopy.extra_info ? personCopy.extra_info.department : '',
+                              verify_uuid: d.verify_uuid,
+                              timestamp: d.timestamp,
+                              source_id: d.source_id,
+                              yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
+                              temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
+                              verify_mode: d.verify_mode,
+                              verify_mode_string: d.verify_mode_string,
+                              verify_score: d.verify_score,
+                              card_number: d.card_number,
+                              group_list: d.group_list,
+                              face_image_id: d.face_image_id,
+                            });
+                          }
+                        });
+                      }
+
+                      currentPageItems.push(personCopy);
                     });
-                  }
-                  if (!morePersonVr || errorOnPersonVr) {
-                    self.value_dataItemsToShow = self.generateFilteredData(
-                      self.value_allTableItems,
-                      self.value_searchingFilter,
-                    );
+
+                    // 處理當前頁資料並顯示
+                    self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
+
                     if (self.obj_loading) self.obj_loading.hide();
+                    self.observeTableSize();
                     if (cb) cb();
-                  }
-                },
-              );
+                  },
+                );
+              } else {
+                self.value_dataItemsToShow = [];
+                if (self.obj_loading) self.obj_loading.hide();
+                self.observeTableSize();
+                if (cb) cb();
+              }
+            } else {
+              if (self.obj_loading) self.obj_loading.hide();
+              if (cb) cb();
             }
+          });
+        } else {
+          // 篩選模式：使用 summary 中的 UUID 列表
+          const startIndex = (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize;
+          const endIndex = startIndex + self.value_tablePage.pageSize;
+          const currentPageUuids = self.value_filterUuidList.slice(startIndex, endIndex);
+
+          if (currentPageUuids.length === 0) {
+            self.value_dataItemsToShow = [];
             if (self.obj_loading) self.obj_loading.hide();
             self.observeTableSize();
-            // self.generateFilteredData(self.value_allTableItems, []);
-          } else {
-            if (self.obj_loading) self.obj_loading.hide();
             if (cb) cb();
+            return;
           }
-        });
+
+          // 用 UUID 陣列查詢人員資料（傳入 UUID 陣列給後端）
+          self.onFetchPersonDataCallback(
+            0,
+            currentPageUuids.length,
+            '',
+            async (error, personTableItems) => {
+              if (!error && personTableItems && personTableItems.length >= 1) {
+                // 直接使用回傳的人員資料（後端會根據 UUID 陣列返回對應的人員）
+                const uuidList = personTableItems.map((person) => person.uuid);
+
+                self.onFetchPersonAttendanceDataCallback(
+                  self.value_specifiedMonth,
+                  uuidList,
+                  (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+                    const currentPageItems = [];
+
+                    personTableItems.forEach((person) => {
+                      const personCopy = { ...person };
+                      personCopy.attendance_data_list = [];
+
+                      if (personVrItems && personVrItems.length > 0) {
+                        const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
+                        dataListOnUuid.forEach((d) => {
+                          if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
+                            personCopy.attendance_data_list.push({
+                              id: d.id,
+                              name: d.name,
+                              department: personCopy.extra_info ? personCopy.extra_info.department : '',
+                              verify_uuid: d.verify_uuid,
+                              timestamp: d.timestamp,
+                              source_id: d.source_id,
+                              yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
+                              temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
+                              verify_mode: d.verify_mode,
+                              verify_mode_string: d.verify_mode_string,
+                              verify_score: d.verify_score,
+                              card_number: d.card_number,
+                              group_list: d.group_list,
+                              face_image_id: d.face_image_id,
+                            });
+                          }
+                        });
+                      }
+
+                      currentPageItems.push(personCopy);
+                    });
+
+                    // 處理當前頁資料並顯示
+                    self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
+
+                    if (self.obj_loading) self.obj_loading.hide();
+                    self.observeTableSize();
+                    if (cb) cb();
+                  },
+                );
+              } else {
+                self.value_dataItemsToShow = [];
+                if (self.obj_loading) self.obj_loading.hide();
+                self.observeTableSize();
+                if (cb) cb();
+              }
+            },
+            currentPageUuids,
+          );
+        }
       } else if (cb) cb();
     },
     handlePageChange({ currentPage, pageSize }) {
       this.value_tablePage.currentPage = currentPage;
       this.value_tablePage.pageSize = pageSize;
-      this.value_dataItemsToShow = this.generateFilteredData(
-        this.value_allTableItems,
-        this.value_searchingFilter,
-      );
-      this.resizeOneTable();
+      // 換頁時重新載入資料
+      this.refreshTableItems();
     },
     handlePageChangeForDetailData({ currentPage, pageSize }) {
       this.value_tablePageForDetailData.currentPage = currentPage;

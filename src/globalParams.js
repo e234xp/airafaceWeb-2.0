@@ -276,17 +276,30 @@ Vue.prototype.$globalFindPerson = (uuid, shift, sliceSize, cb) =>
     });
   });
 
-Vue.prototype.$globalFindPersonWithoutPhoto = (uuid, shift, sliceSize, cb) =>
-  new Promise((resolve) => {
-    const query = {
-      uuid,
-      slice_shift: shift,
-      slice_length: sliceSize,
-      download_register_image: false,
-      download_display_image: false,
-      download_face_feature: false,
-    };
-    postJson('/airafacelite/findperson', query, (err, data) => {
+Vue.prototype.$globalFindPersonWithoutPhoto = (
+  uuid, shift, sliceSize, keyword, cb, uuidList = null,
+) => new Promise((resolve) => {
+  const query = {
+    uuid,
+    slice_shift: shift,
+    slice_length: sliceSize,
+    download_register_image: false,
+    download_display_image: false,
+    download_face_feature: false,
+  };
+
+  // 如果有 UUID 列表，加入 uuid_list
+  if (uuidList && Array.isArray(uuidList) && uuidList.length > 0) {
+    query.uuid_list = uuidList;
+  }
+
+  // 如果有搜尋關鍵字,加入 query
+  if (keyword && keyword.trim() !== '') {
+    query.keyword = keyword.trim();
+  }
+
+  postJson('/airafacelite/findperson', query,
+    (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
     });
@@ -1553,3 +1566,19 @@ Vue.prototype.$globalDownloadLog = (deviceUuid, startTime, endTime, cb) =>
       resolve({ error: err, data });
     });
   });
+
+
+Vue.prototype.$globalGetAttendanceSummary = (
+  startTime, endTime, cb,
+) => new Promise((resolve) => {
+  const query = {
+    start_time: startTime,
+    end_time: endTime,
+  };
+
+  postJson('/airafacelite/getattendancesummary', query,
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+});
