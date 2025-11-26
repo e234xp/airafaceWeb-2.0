@@ -1347,7 +1347,7 @@ export default {
                       verify_uuid: d.verify_uuid,
                       timestamp: d.timestamp,
                       source_id: d.source_id,
-                      temperature: d.temperature === 0 || d.temperature === '' ? '' : `${d.temperature.toFixed(1)}°C`,
+                      temperature: (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
                       verify_mode: d.verify_mode,
                       verify_mode_string: d.verify_mode_string,
                       verify_score: d.verify_score,
