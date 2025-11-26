@@ -277,7 +277,7 @@ Vue.prototype.$globalFindPerson = (
 });
 
 Vue.prototype.$globalFindPersonWithoutPhoto = (
-  uuid, shift, sliceSize, cb,
+  uuid, shift, sliceSize, keyword, cb, uuidList = null,
 ) => new Promise((resolve) => {
   const query = {
     uuid,
@@ -287,6 +287,17 @@ Vue.prototype.$globalFindPersonWithoutPhoto = (
     download_display_image: false,
     download_face_feature: false,
   };
+
+  // 如果有 UUID 列表，加入 uuid_list
+  if (uuidList && Array.isArray(uuidList) && uuidList.length > 0) {
+    query.uuid_list = uuidList;
+  }
+
+  // 如果有搜尋關鍵字,加入 query
+  if (keyword && keyword.trim() !== '') {
+    query.keyword = keyword.trim();
+  }
+
   postJson('/airafacelite/findperson', query,
     (err, data) => {
       if (cb) cb(err, data);
@@ -1747,5 +1758,20 @@ Vue.prototype.$globalAttendanceVerifyResult = (
     (err, data) => {
       if (cb) cb(err, err ? null : data.result);
       resolve({ error: err, data: err ? null : data.result });
+    });
+});
+
+Vue.prototype.$globalGetAttendanceSummary = (
+  startTime, endTime, cb,
+) => new Promise((resolve) => {
+  const query = {
+    start_time: startTime,
+    end_time: endTime,
+  };
+
+  postJson('/airafacelite/getattendancesummary', query,
+    (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
     });
 });
