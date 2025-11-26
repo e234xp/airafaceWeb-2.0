@@ -803,5 +803,7 @@
   "VideoSettings": "Establecer modo de imagen",
   "ShowVisitors": "mostrar visitantes",
   "ShowStrangers": "mostrar extraños",
-  "PleaseSelectCamera": "Por favor seleccione cámara"
+  "PleaseSelectCamera": "Por favor seleccione cámara",
+  "NoRecognitionResults": "Sin información de identificación",
+  "VisitorsAndStrangers": "visitantes y extraños"
 }

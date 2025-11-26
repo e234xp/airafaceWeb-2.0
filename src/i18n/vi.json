@@ -803,5 +803,7 @@
   "VideoSettings": "Đặt chế độ hình ảnh",
   "ShowVisitors": "hiển thị du khách",
   "ShowStrangers": "cho người lạ xem",
-  "PleaseSelectCamera": "Vui lòng chọn máy ảnh"
+  "PleaseSelectCamera": "Vui lòng chọn máy ảnh",
+  "NoRecognitionResults": "Không có thông tin nhận dạng",
+  "VisitorsAndStrangers": "du khách và người lạ"
 }

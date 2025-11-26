@@ -803,5 +803,7 @@
   "VideoSettings": "ตั้งค่าโหมดภาพ",
   "ShowVisitors": "แสดงผู้เข้าชม",
   "ShowStrangers": "แสดงคนแปลกหน้า",
-  "PleaseSelectCamera": "กรุณาเลือกกล้อง"
+  "PleaseSelectCamera": "กรุณาเลือกกล้อง",
+  "NoRecognitionResults": "ไม่มีข้อมูลระบุตัวตน",
+  "VisitorsAndStrangers": "ผู้มาเยือนและคนแปลกหน้า"
 }

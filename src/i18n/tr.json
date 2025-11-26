@@ -803,5 +803,7 @@
   "VideoSettings": "Görüntü modunu ayarla",
   "ShowVisitors": "ziyaretçileri göster",
   "ShowStrangers": "yabancıları göster",
-  "PleaseSelectCamera": "Lütfen kamerayı seçin"
+  "PleaseSelectCamera": "Lütfen kamerayı seçin",
+  "NoRecognitionResults": "Tanımlayıcı bilgi yok",
+  "VisitorsAndStrangers": "ziyaretçiler ve yabancılar"
 }

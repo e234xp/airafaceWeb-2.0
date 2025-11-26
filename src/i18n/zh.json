@@ -808,5 +808,7 @@
   "VideoSettings": "設定影像模式",
   "ShowVisitors": "顯示訪客",
   "ShowStrangers": "顯示陌生人",
-  "PleaseSelectCamera": "請選擇攝影機"
+  "PleaseSelectCamera": "請選擇攝影機",
+  "NoRecognitionResults": "無辨識資料",
+  "VisitorsAndStrangers": "訪客及陌生人"
 }

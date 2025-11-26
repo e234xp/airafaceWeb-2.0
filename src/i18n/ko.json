@@ -789,5 +789,7 @@
   "VideoSettings": "이미지 모드 설정",
   "ShowVisitors": "방문자에게 보여주기",
   "ShowStrangers": "낯선 사람 보여주기",
-  "PleaseSelectCamera": "카메라를 선택해주세요"
+  "PleaseSelectCamera": "카메라를 선택해주세요",
+  "NoRecognitionResults": "식별 정보 없음",
+  "VisitorsAndStrangers": "방문객과 낯선 사람"
 }

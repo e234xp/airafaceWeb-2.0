@@ -789,5 +789,7 @@
   "VideoSettings": "Definir modo de imagem",
   "ShowVisitors": "mostrar aos visitantes",
   "ShowStrangers": "mostrar estranhos",
-  "PleaseSelectCamera": "Selecione a câmera"
+  "PleaseSelectCamera": "Selecione a câmera",
+  "NoRecognitionResults": "Nenhuma informação de identificação",
+  "VisitorsAndStrangers": "visitantes e estranhos"
 }

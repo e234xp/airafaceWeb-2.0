@@ -803,5 +803,7 @@
   "VideoSettings": "Atur mode gambar",
   "ShowVisitors": "tunjukkan pengunjung",
   "ShowStrangers": "tunjukkan pada orang asing",
-  "PleaseSelectCamera": "Silakan pilih kamera"
+  "PleaseSelectCamera": "Silakan pilih kamera",
+  "NoRecognitionResults": "Tidak ada informasi identitas",
+  "VisitorsAndStrangers": "pengunjung dan orang asing"
 }

@@ -3,10 +3,24 @@
     <div class="ratio-content live-video-dashboard" :style="{ backgroundImage: `url('${settings.background_image}')` }">
       <!-- Header -->
       <div class="dashboard-header">
-        <img v-if="settings.logo" :src="settings.logo" class="dashboard-logo" alt="Logo" />
-        <div class="dashboard-time">
-          <span>{{ currentDate }}</span>
-          <span>{{ currentTime }}</span>
+        <div class="dashboard-header-left">
+          <img v-if="settings.logo" :src="settings.logo" class="dashboard-logo" alt="Logo" />
+          <h2 class="dashboard-title">
+            {{ $t('LiveVideo') }}
+          </h2>
+        </div>
+        <div class="dashboard-header-right">
+          <div class="dashboard-time">
+            <div class="time-date">
+              {{ currentDate }}
+            </div>
+            <div class="time-clock">
+              {{ currentTime }}
+            </div>
+          </div>
+          <button class="settings-btn-header" @click="showSettingsModal = true">
+            <CIcon name="cil-settings" height="24" />
+          </button>
         </div>
       </div>
 
@@ -15,6 +29,9 @@
         <!-- Left: Video Area (3/4) -->
         <div class="video-area">
           <div v-if="selectedCamera && rtspUrl" class="video-container">
+            <div class="camera-name-overlay">
+              {{ selectedCamera.name }}
+            </div>
             <video ref="videoPlayer" class="video-player" autoplay muted playsinline />
           </div>
           <div v-else class="no-camera-selected">
@@ -39,6 +56,9 @@
               >
                 <div class="recognition-snapshot">
                   <img :src="`data:image/jpeg;base64,${result.snapshot}`" alt="Snapshot" />
+                </div>
+                <div v-if="result.type === 1 && result.registered_photo" class="recognition-registered">
+                  <img :src="`data:image/jpeg;base64,${result.registered_photo}`" alt="Registered" />
                 </div>
                 <div class="recognition-info">
                   <div class="recognition-name">
@@ -78,6 +98,9 @@
                 >
                   <div class="recognition-snapshot">
                     <img :src="`data:image/jpeg;base64,${result.snapshot}`" alt="Snapshot" />
+                  </div>
+                  <div v-if="result.type === 1 && result.registered_photo" class="recognition-registered">
+                    <img :src="`data:image/jpeg;base64,${result.registered_photo}`" alt="Registered" />
                   </div>
                   <div class="recognition-info">
                     <div class="recognition-name">
@@ -140,10 +163,11 @@
         </div>
       </div>
 
-      <!-- Settings Button -->
-      <CButton class="settings-btn" color="primary" @click="showSettingsModal = true">
-        <CIcon name="cil-settings" />
-      </CButton>
+      <!-- Footer -->
+      <div class="dashboard-footer">
+        <div />
+        <div class="powered-by">Powered by <img src="/logo-b.png" alt="aira" class="aira-logo" /></div>
+      </div>
 
       <!-- Settings Modal -->
       <CModal :show.sync="showSettingsModal" :centered="true" :close-on-backdrop="false">
@@ -204,8 +228,8 @@ export default {
   name: 'LiveVideoDashboard',
   data() {
     return {
-      currentTime: '',
       currentDate: '',
+      currentTime: '',
       settings: {
         background_image: backgroundImage,
         logo: airalogo,
@@ -222,12 +246,18 @@ export default {
       },
       timeInterval: null,
       hls: null,
+      peerConnection: null, // WebRTC 連接
       recognitionResults: [], // 所有辨識結果
       maxResults: 50, // 最多保留的結果數量
       isConfirmed: false, // 是否已確認設定
+      photoCache: {}, // 快取註冊照片，避免重複 API 呼叫
     };
   },
   computed: {
+    // 動態生成 WebRTC URL
+    webrtcUrl() {
+      return `https://192.168.10.74:8889/${this.selectedCameraUuid}/whep`;
+    },
     // 判斷是否為單一區域模式（兩個都沒勾選）
     isSingleSection() {
       return !this.displayOptions.showVisitors && !this.displayOptions.showStrangers;
@@ -356,16 +386,17 @@ export default {
   methods: {
     updateTime() {
       const now = new Date();
-      this.currentTime = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      });
-      this.currentDate = now.toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-      });
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      // 年月日
+      this.currentDate = `${year}年${month}月${day}日`;
+      // 時分秒
+      this.currentTime = `${hours}:${minutes}:${seconds}`;
     },
     loadSettings() {
       const self = this;
@@ -446,42 +477,104 @@ export default {
         self.initVideoPlayer();
       });
     },
-    initVideoPlayer() {
+    async initVideoPlayer() {
       const self = this;
 
-      if (!self.rtspUrl || !self.$refs.videoPlayer) {
+      if (!self.$refs.videoPlayer) {
+        console.error('Video player element not found');
         return;
       }
 
-      // 注意：瀏覽器無法直接播放 RTSP
-      // 需要後端將 RTSP 轉換為 HLS 或 WebRTC
-      // 這裡提供一個基本框架，實際需要配合後端實作
+      try {
+        console.log('Initializing WebRTC connection to MediaMTX...');
 
-      console.log('Initializing video player with URL:', self.rtspUrl);
+        // 1. 建立 RTCPeerConnection
+        const pc = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+        });
 
-      // 方案 1: 如果後端提供 HLS 轉換
-      // 使用 hls.js 播放 HLS 串流
-      // if (Hls.isSupported()) {
-      //   self.hls = new Hls();
-      //   self.hls.loadSource(hlsUrl);
-      //   self.hls.attachMedia(self.$refs.videoPlayer);
-      // }
+        self.peerConnection = pc;
 
-      // 方案 2: 如果使用 WebRTC
-      // 需要搭配 WebRTC 服務器 (如 Janus, Kurento)
+        // 2. 處理接收到的遠端串流
+        pc.ontrack = (event) => {
+          console.log('Received remote track:', event.track.kind);
+          if (self.$refs.videoPlayer) {
+            self.$refs.videoPlayer.srcObject = event.streams[0];
+          }
+        };
 
-      // 暫時顯示提示訊息
-      self.$fire({
-        text: self.$t('VideoStreamInitializing'),
-        type: 'info',
-        timer: 3000,
-        confirmButtonColor: '#20a8d8',
-      });
+        // 3. 監聽連線狀態
+        pc.onconnectionstatechange = () => {
+          console.log('Connection state:', pc.connectionState);
+          if (pc.connectionState === 'connected') {
+            console.log('WebRTC connection established');
+          } else if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
+            console.error('WebRTC connection failed or disconnected');
+            self.$fire({
+              text: '影片連線失敗，請重試',
+              type: 'error',
+              timer: 3000,
+              confirmButtonColor: '#20a8d8',
+            });
+          }
+        };
+
+        // 4. 添加 transceiver（接收模式）
+        pc.addTransceiver('video', { direction: 'recvonly' });
+        pc.addTransceiver('audio', { direction: 'recvonly' });
+
+        // 5. 建立 SDP offer
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        // 6. 透過 WHEP 協議發送 offer 到 MediaMTX
+        console.log('Sending WHEP request to:', self.webrtcUrl);
+        const response = await fetch(self.webrtcUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/sdp',
+          },
+          body: offer.sdp,
+        });
+
+        if (!response.ok) {
+          throw new Error(`WHEP request failed: ${response.status} ${response.statusText}`);
+        }
+
+        // 7. 接收 SDP answer
+        const answerSdp = await response.text();
+        console.log('Received answer from MediaMTX');
+
+        // 8. 設定遠端描述
+        await pc.setRemoteDescription({
+          type: 'answer',
+          sdp: answerSdp,
+        });
+
+        console.log('WebRTC setup complete, waiting for stream...');
+      } catch (error) {
+        console.error('Failed to initialize video player:', error);
+        self.$fire({
+          text: `影片播放初始化失敗: ${error.message}`,
+          type: 'error',
+          timer: 5000,
+          confirmButtonColor: '#20a8d8',
+        });
+      }
     },
     destroyVideoPlayer() {
-      if (this.hls) {
-        this.hls.destroy();
-        this.hls = null;
+      const self = this;
+
+      // 清理 WebRTC 連接
+      if (self.peerConnection) {
+        console.log('Closing WebRTC connection');
+        self.peerConnection.close();
+        self.peerConnection = null;
+      }
+
+      // 清理 video element
+      if (self.$refs.videoPlayer) {
+        self.$refs.videoPlayer.srcObject = null;
       }
     },
     initViews() {
@@ -542,6 +635,30 @@ export default {
     handleVerifyResult(result) {
       const self = this;
 
+      // 如果是員工，取得註冊照片
+      if (result.type === 1 && result.person_id) {
+        // 檢查快取中是否已有此照片
+        if (self.photoCache[result.person_id]) {
+          // 使用快取的照片
+          self.$set(result, 'registered_photo', self.photoCache[result.person_id]);
+        } else {
+          // 呼叫 API 取得照片
+          self.$globalFetchPhoto(result.person_id, (err, data) => {
+            if (!err && data) {
+              // 優先使用 display_image，若為空則使用 register_image
+              const photo = data.display_image || data.register_image;
+
+              if (photo) {
+                // 存入快取
+                self.$set(self.photoCache, result.person_id, photo);
+                // 設定到 result
+                self.$set(result, 'registered_photo', photo);
+              }
+            }
+          });
+        }
+      }
+
       // 加入新的辨識結果到列表開頭
       self.recognitionResults.unshift(result);
 
@@ -575,7 +692,7 @@ export default {
         // 員工 - 顯示 groupname
         const details = [];
         if (result.person_info.group_list && result.person_info.group_list.length > 0) {
-          const groupNames = result.person_info.group_list.map(g => g.groupname).join(', ');
+          const groupNames = result.person_info.group_list.map((g) => g.groupname).join(', ');
           details.push(groupNames);
         }
         return details.join(' | ');
@@ -648,24 +765,73 @@ export default {
   z-index: 10;
 }
 
+.dashboard-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .dashboard-logo {
   height: 40px;
   object-fit: contain;
 }
 
+.dashboard-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.dashboard-header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .dashboard-time {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  align-items: flex-end;
   color: #ffffff;
-  font-size: 18px;
+  line-height: 1.3;
+}
+
+.time-date {
+  font-size: 16px;
   font-weight: 500;
+}
+
+.time-clock {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.settings-btn-header {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-btn-header:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
 }
 
 .dashboard-content {
   flex: 1;
   display: flex;
   gap: 15px;
-  padding: 15px 20px;
+  padding: 15px 20px 0 20px;
   position: relative;
   overflow: hidden;
 }
@@ -687,6 +853,21 @@ export default {
   background-color: #000;
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
+}
+
+.camera-name-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  z-index: 10;
 }
 
 .video-player {
@@ -754,6 +935,7 @@ export default {
 .recognition-list {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 10px;
 }
 
@@ -785,6 +967,13 @@ export default {
   border-left: 4px solid transparent;
   transition: all 0.3s ease;
   animation: slideIn 0.3s ease;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.recognition-item.type-employee {
+  background-color: rgba(77, 189, 116, 0.3);
+  border-left-color: #4dbd74;
 }
 
 @keyframes slideIn {
@@ -799,20 +988,29 @@ export default {
 }
 
 .recognition-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
   transform: translateX(-5px);
+}
+
+.recognition-item.type-employee:hover {
+  background-color: rgba(77, 189, 116, 0.4);
 }
 
 .recognition-item.type-stranger {
   border-left-color: #f86c6b;
+  background-color: rgba(248, 108, 107, 0.3);
 }
 
-.recognition-item.type-employee {
-  border-left-color: #4dbd74;
+.recognition-item.type-stranger:hover {
+  background-color: rgba(248, 108, 107, 0.4);
 }
 
 .recognition-item.type-visitor {
   border-left-color: #ffc107;
+  background-color: rgba(255, 193, 7, 0.3);
+}
+
+.recognition-item.type-visitor:hover {
+  background-color: rgba(255, 193, 7, 0.4);
 }
 
 .recognition-snapshot {
@@ -825,6 +1023,22 @@ export default {
 }
 
 .recognition-snapshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recognition-registered {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #000;
+  border: 2px solid #4dbd74;
+}
+
+.recognition-registered img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -907,23 +1121,52 @@ export default {
   font-size: 16px;
 }
 
+.dashboard-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
 .settings-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background-color: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+
+.settings-btn svg {
+  width: 28px;
+  height: 28px;
 }
 
 .settings-btn:hover {
-  transform: scale(1.1);
-  transition: transform 0.2s;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  transform: scale(1.05);
+  transition: all 0.2s;
+}
+
+.powered-by {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.aira-logo {
+  height: 20px;
+  vertical-align: middle;
 }
 </style>
