@@ -805,5 +805,6 @@
   "ShowStrangers": "show strangers",
   "PleaseSelectCamera": "Please select camera",
   "NoRecognitionResults": "No identifying information",
-  "VisitorsAndStrangers": "visitors and strangers"
+  "VisitorsAndStrangers": "visitors and strangers",
+  "PleaseSelect": "Please select"
 }

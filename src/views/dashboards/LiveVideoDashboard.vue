@@ -45,19 +45,18 @@
           <div v-if="isSingleSection" class="recognition-section recognition-section-full">
             <div class="recognition-header">
               <h3>{{ $t('Employee') }}</h3>
-              <span class="recognition-count">{{ allEmployeeResults.length }}</span>
             </div>
             <div class="recognition-list">
               <div
                 v-for="result in allEmployeeResults"
                 :key="result._id"
                 class="recognition-item"
-                :class="getResultTypeClass(result.type)"
+                :class="getResultTypeClass(result)"
               >
                 <div class="recognition-snapshot">
                   <img :src="`data:image/jpeg;base64,${result.snapshot}`" alt="Snapshot" />
                 </div>
-                <div v-if="result.type === 1 && result.registered_photo" class="recognition-registered">
+                <div v-if="result.registered_photo" class="recognition-registered">
                   <img :src="`data:image/jpeg;base64,${result.registered_photo}`" alt="Registered" />
                 </div>
                 <div class="recognition-info">
@@ -68,7 +67,7 @@
                     {{ getPersonDetail(result) }}
                   </div>
                   <div class="recognition-meta">
-                    <span class="recognition-type">{{ getTypeLabel(result.type) }}</span>
+                    <span class="recognition-type">{{ getTypeLabel(result) }}</span>
                   </div>
                   <div class="recognition-time">
                     {{ formatTime(result.timestamp) }}
@@ -87,19 +86,18 @@
             <div class="recognition-section">
               <div class="recognition-header">
                 <h3>{{ $t('Employee') }}</h3>
-                <span class="recognition-count">{{ employeeResults.length }}</span>
               </div>
               <div class="recognition-list">
                 <div
                   v-for="result in employeeResults"
                   :key="result._id"
                   class="recognition-item"
-                  :class="getResultTypeClass(result.type)"
+                  :class="getResultTypeClass(result)"
                 >
                   <div class="recognition-snapshot">
                     <img :src="`data:image/jpeg;base64,${result.snapshot}`" alt="Snapshot" />
                   </div>
-                  <div v-if="result.type === 1 && result.registered_photo" class="recognition-registered">
+                  <div v-if="result.registered_photo" class="recognition-registered">
                     <img :src="`data:image/jpeg;base64,${result.registered_photo}`" alt="Registered" />
                   </div>
                   <div class="recognition-info">
@@ -109,9 +107,9 @@
                     <div class="recognition-detail">
                       {{ getPersonDetail(result) }}
                     </div>
-                    <div class="recognition-meta">
-                      <span class="recognition-type">{{ getTypeLabel(result.type) }}</span>
-                    </div>
+                    <!-- <div class="recognition-meta">
+                      <span class="recognition-type">{{ getTypeLabel(result) }}</span>
+                    </div> -->
                     <div class="recognition-time">
                       {{ formatTime(result.timestamp) }}
                     </div>
@@ -127,17 +125,19 @@
             <div class="recognition-section">
               <div class="recognition-header">
                 <h3>{{ otherResultsTitle }}</h3>
-                <span class="recognition-count">{{ otherResults.length }}</span>
               </div>
               <div class="recognition-list">
                 <div
                   v-for="result in otherResults"
                   :key="result._id"
                   class="recognition-item"
-                  :class="getResultTypeClass(result.type)"
+                  :class="getResultTypeClass(result)"
                 >
                   <div class="recognition-snapshot">
                     <img :src="`data:image/jpeg;base64,${result.snapshot}`" alt="Snapshot" />
+                  </div>
+                  <div v-if="result.registered_photo" class="recognition-registered">
+                    <img :src="`data:image/jpeg;base64,${result.registered_photo}`" alt="Registered" />
                   </div>
                   <div class="recognition-info">
                     <div class="recognition-name">
@@ -146,9 +146,9 @@
                     <div class="recognition-detail">
                       {{ getPersonDetail(result) }}
                     </div>
-                    <div class="recognition-meta">
-                      <span class="recognition-type">{{ getTypeLabel(result.type) }}</span>
-                    </div>
+                    <!-- <div class="recognition-meta">
+                      <span class="recognition-type">{{ getTypeLabel(result) }}</span>
+                    </div> -->
                     <div class="recognition-time">
                       {{ formatTime(result.timestamp) }}
                     </div>
@@ -256,7 +256,9 @@ export default {
   computed: {
     // 動態生成 WebRTC URL
     webrtcUrl() {
-      return `https://192.168.10.74:8889/${this.selectedCameraUuid}/whep`;
+      const TEST_MODE = process.env.NODE_ENV === 'development';
+      const HOST = TEST_MODE ? '192.168.10.86' : window.location.hostname;
+      return `https://${HOST}:8889/${this.selectedCameraUuid}/whep`;
     },
     // 判斷是否為單一區域模式（兩個都沒勾選）
     isSingleSection() {
@@ -275,8 +277,8 @@ export default {
           if (result.source_id !== self.selectedCameraUuid) {
             return false;
           }
-          // 只顯示員工 (type 1)
-          return result.type === 1;
+          // 只顯示員工 (type 1 且 person 1)
+          return result.type === 1 && result.person === 1;
         })
         .slice(0, 50); // 整個區域最多 50 筆
     },
@@ -293,8 +295,8 @@ export default {
           if (result.source_id !== self.selectedCameraUuid) {
             return false;
           }
-          // 只顯示員工 (type 1)
-          return result.type === 1;
+          // 只顯示員工 (type 1 且 person 1)
+          return result.type === 1 && result.person === 1;
         })
         .slice(0, 25); // 限制上半部最多 25 筆
     },
@@ -317,11 +319,13 @@ export default {
           }
 
           // 根據勾選狀態篩選
-          if (result.type === 2) {
-            return showVisitors; // 訪客
+          // 訪客：type 1 且 person 0
+          if (result.type === 1 && result.person === 0) {
+            return showVisitors;
           }
+          // 陌生人：type 0
           if (result.type === 0) {
-            return showStrangers; // 陌生人
+            return showStrangers;
           }
 
           return false;
@@ -635,8 +639,8 @@ export default {
     handleVerifyResult(result) {
       const self = this;
 
-      // 如果是員工，取得註冊照片
-      if (result.type === 1 && result.person_id) {
+      // 如果有 person_id，取得註冊照片（員工、訪客、陌生人都需要）
+      if (result.person_id) {
         // 檢查快取中是否已有此照片
         if (self.photoCache[result.person_id]) {
           // 使用快取的照片
@@ -673,7 +677,7 @@ export default {
         return this.$t('Stranger');
       }
       if (result.type === 1) {
-        // 員工 - 顯示 fullname
+        // type 1 可能是員工或訪客
         if (result.person_info && result.person_info.fullname) {
           return result.person_info.fullname;
         }
@@ -706,29 +710,25 @@ export default {
       }
       return '';
     },
-    getTypeLabel(type) {
-      switch (type) {
-        case 0:
-          return this.$t('Stranger');
-        case 1:
-          return this.$t('Employee');
-        case 2:
-          return this.$t('Visitor');
-        default:
-          return this.$t('Unknown');
+    getTypeLabel(result) {
+      if (result.type === 0) {
+        return this.$t('Stranger');
       }
+      if (result.type === 1) {
+        // 根據 person 判斷是員工還是訪客
+        return result.person === 1 ? this.$t('Employee') : this.$t('Visitor');
+      }
+      return this.$t('Unknown');
     },
-    getResultTypeClass(type) {
-      switch (type) {
-        case 0:
-          return 'type-stranger';
-        case 1:
-          return 'type-employee';
-        case 2:
-          return 'type-visitor';
-        default:
-          return '';
+    getResultTypeClass(result) {
+      if (result.type === 0) {
+        return 'type-stranger';
       }
+      if (result.type === 1) {
+        // 根據 person 判斷是員工還是訪客
+        return result.person === 1 ? 'type-employee' : 'type-visitor';
+      }
+      return '';
     },
     formatTime(timestamp) {
       if (!timestamp) return '';
@@ -923,15 +923,6 @@ export default {
   font-weight: 600;
 }
 
-.recognition-count {
-  background-color: #20a8d8;
-  color: #ffffff;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
 .recognition-list {
   flex: 1;
   overflow-y: auto;
@@ -1005,12 +996,12 @@ export default {
 }
 
 .recognition-item.type-visitor {
-  border-left-color: #ffc107;
-  background-color: rgba(255, 193, 7, 0.3);
+  border-left-color: #20a8d8;
+  background-color: rgba(32, 168, 216, 0.3);
 }
 
 .recognition-item.type-visitor:hover {
-  background-color: rgba(255, 193, 7, 0.4);
+  background-color: rgba(32, 168, 216, 0.4);
 }
 
 .recognition-snapshot {
@@ -1035,7 +1026,19 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   background-color: #000;
-  border: 2px solid #4dbd74;
+  border: 2px solid transparent;
+}
+
+.recognition-item.type-employee .recognition-registered {
+  border-color: #4dbd74;
+}
+
+.recognition-item.type-visitor .recognition-registered {
+  border-color: #20a8d8;
+}
+
+.recognition-item.type-stranger .recognition-registered {
+  border-color: #f86c6b;
 }
 
 .recognition-registered img {

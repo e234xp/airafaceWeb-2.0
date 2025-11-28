@@ -791,5 +791,6 @@
   "ShowStrangers": "낯선 사람 보여주기",
   "PleaseSelectCamera": "카메라를 선택해주세요",
   "NoRecognitionResults": "식별 정보 없음",
-  "VisitorsAndStrangers": "방문객과 낯선 사람"
+  "VisitorsAndStrangers": "방문객과 낯선 사람",
+  "PleaseSelect": "선택해주세요"
 }

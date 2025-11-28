@@ -798,5 +798,6 @@
   "ShowStrangers": "montrer à des inconnus",
   "PleaseSelectCamera": "Veuillez sélectionner une caméra",
   "NoRecognitionResults": "Aucune information d'identification",
-  "VisitorsAndStrangers": "visiteurs et étrangers"
+  "VisitorsAndStrangers": "visiteurs et étrangers",
+  "PleaseSelect": "Veuillez sélectionner"
 }

@@ -805,5 +805,6 @@
   "ShowStrangers": "แสดงคนแปลกหน้า",
   "PleaseSelectCamera": "กรุณาเลือกกล้อง",
   "NoRecognitionResults": "ไม่มีข้อมูลระบุตัวตน",
-  "VisitorsAndStrangers": "ผู้มาเยือนและคนแปลกหน้า"
+  "VisitorsAndStrangers": "ผู้มาเยือนและคนแปลกหน้า",
+  "PleaseSelect": "กรุณาเลือก"
 }
