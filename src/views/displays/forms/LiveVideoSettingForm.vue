@@ -76,6 +76,16 @@
               </CRow>
             </CCardBody>
           </CCard>
+          <CCard>
+            <CCardHeader>{{ $t('Caption') }}</CCardHeader>
+            <CCardBody>
+              <CRow>
+                <CCol sm="12">
+                  <CInput v-model="value_liveVideoSetting.title" :placeholder="$t('Caption')" maxlength="50" />
+                </CCol>
+              </CRow>
+            </CCardBody>
+          </CCard>
         </div>
       </CCol>
       <CCol sm="6" v-show="flag_currentSetp == 0">
@@ -88,6 +98,9 @@
           <tr>
             <td height="46">
               <img :src="`${value_liveVideoSetting.logo}`" style="width: 60px; height: 25px; padding-left: 15px" />
+              <span style="padding-left: 10px; color: #ffffff; font-size: 16px; font-weight: 600">
+                {{ value_liveVideoSetting.title || '即時影像看板' }}
+              </span>
               <span style="float: right; padding-right: 15px; color: #ffffff">12:32</span>
               <span style="float: right; padding-right: 15px; color: #ffffff">06/13/2023</span>
             </td>
@@ -173,6 +186,7 @@ export default {
         uuid: '',
         background_image: backgroundImage,
         logo: airalogo,
+        title: this.$t('LiveVideo'),
       },
 
       flag_backgrounduploading: false,
@@ -271,6 +285,7 @@ export default {
             uuid: self.value_liveVideoSetting.uuid,
             background_image: self.value_liveVideoSetting.background_image,
             logo: self.value_liveVideoSetting.logo,
+            title: self.value_liveVideoSetting.title || '即時影像看板',
           };
 
           self.value_Setting.LIVEVIDEO = sendData;

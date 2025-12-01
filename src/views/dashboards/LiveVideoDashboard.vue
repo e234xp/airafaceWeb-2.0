@@ -10,10 +10,10 @@
             class="dashboard-logo"
             alt="Logo"
             @click="handleLogout"
-            style="cursor: pointer;"
+            style="cursor: pointer"
           />
           <h2 class="dashboard-title">
-            {{ $t('LiveVideo') }}
+            {{ settings.title || $t('LiveVideo') }}
           </h2>
         </div>
         <div class="dashboard-header-right">
@@ -41,7 +41,7 @@
             </div>
             <video ref="videoPlayer" class="video-player" autoplay muted playsinline @loadedmetadata="onVideoLoaded" />
             <!-- ROI 畫框圖層 -->
-            <canvas ref="roiCanvas" class="roi-overlay"></canvas>
+            <canvas ref="roiCanvas" class="roi-overlay" />
           </div>
           <div v-else class="no-camera-selected">
             <p>{{ $t('PleaseSelectCamera') }}</p>
@@ -242,6 +242,7 @@ export default {
       settings: {
         background_image: backgroundImage,
         logo: airalogo,
+        title: this.$t('LiveVideo'),
       },
       showSettingsModal: true, // 預設顯示 modal
       cameraList: [],
@@ -631,7 +632,10 @@ export default {
       const videoAspect = video.videoWidth / video.videoHeight;
       const containerAspect = containerWidth / containerHeight;
 
-      let displayWidth, displayHeight, offsetX, offsetY;
+      let displayWidth;
+      let displayHeight;
+      let offsetX;
+      let offsetY;
 
       if (containerAspect > videoAspect) {
         // 容器較寬，影片會垂直填滿，左右有黑邊
