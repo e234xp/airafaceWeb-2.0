@@ -32,7 +32,9 @@
             <div class="camera-name-overlay">
               {{ selectedCamera.name }}
             </div>
-            <video ref="videoPlayer" class="video-player" autoplay muted playsinline />
+            <video ref="videoPlayer" class="video-player" autoplay muted playsinline @loadedmetadata="onVideoLoaded" />
+            <!-- ROI 畫框圖層 -->
+            <canvas ref="roiCanvas" class="roi-overlay"></canvas>
           </div>
           <div v-else class="no-camera-selected">
             <p>{{ $t('PleaseSelectCamera') }}</p>
@@ -366,6 +368,9 @@ export default {
     this.loadCameraList();
     this.initViews();
     this.subscribeWebSocket();
+
+    // 監聽視窗大小變化，重新繪製 ROI
+    window.addEventListener('resize', this.drawROI);
   },
   beforeDestroy() {
     const self = this;
@@ -384,6 +389,10 @@ export default {
     if (this.timeInterval) {
       clearInterval(this.timeInterval);
     }
+
+    // 移除視窗 resize 監聽
+    window.removeEventListener('resize', this.drawROI);
+
     this.destroyVideoPlayer();
     this.unsubscribeWebSocket();
   },
@@ -580,6 +589,92 @@ export default {
       if (self.$refs.videoPlayer) {
         self.$refs.videoPlayer.srcObject = null;
       }
+    },
+    onVideoLoaded() {
+      const self = this;
+      // 當影片載入後，繪製 ROI 框
+      self.$nextTick(() => {
+        self.drawROI();
+      });
+    },
+    drawROI() {
+      const self = this;
+      const canvas = self.$refs.roiCanvas;
+      const video = self.$refs.videoPlayer;
+
+      if (!canvas || !video || !self.selectedCamera || !video.videoWidth || !video.videoHeight) {
+        return;
+      }
+
+      // 設定 canvas 尺寸與容器相同
+      const container = canvas.parentElement;
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      canvas.width = containerWidth;
+      canvas.height = containerHeight;
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 取得攝影機的 ROI 資料
+      const roiList = self.selectedCamera.roi || [];
+
+      // 計算影片在容器中的實際顯示尺寸和位置 (object-fit: contain)
+      const videoAspect = video.videoWidth / video.videoHeight;
+      const containerAspect = containerWidth / containerHeight;
+
+      let displayWidth, displayHeight, offsetX, offsetY;
+
+      if (containerAspect > videoAspect) {
+        // 容器較寬，影片會垂直填滿，左右有黑邊
+        displayHeight = containerHeight;
+        displayWidth = displayHeight * videoAspect;
+        offsetX = (containerWidth - displayWidth) / 2;
+        offsetY = 0;
+      } else {
+        // 容器較高，影片會水平填滿，上下有黑邊
+        displayWidth = containerWidth;
+        displayHeight = displayWidth / videoAspect;
+        offsetX = 0;
+        offsetY = (containerHeight - displayHeight) / 2;
+      }
+
+      // ROI 座標是基於設定頁面的 1024px 寬度 canvas 儲存的
+      // 需要先轉換到影片原始解析度，再縮放到顯示尺寸
+      const ROI_CANVAS_WIDTH = 1024;
+      const roiToVideoScale = video.videoWidth / ROI_CANVAS_WIDTH;
+
+      // 計算從影片解析度到顯示尺寸的縮放比例
+      const scaleX = displayWidth / video.videoWidth;
+      const scaleY = displayHeight / video.videoHeight;
+
+      // 繪製每個 ROI 框
+      roiList.forEach((roi, index) => {
+        if (roi.x !== undefined && roi.y !== undefined && roi.w && roi.h) {
+          // 步驟1: ROI座標(基於1024px) -> 影片原始解析度
+          const videoX = roi.x * roiToVideoScale;
+          const videoY = roi.y * roiToVideoScale;
+          const videoW = roi.w * roiToVideoScale;
+          const videoH = roi.h * roiToVideoScale;
+
+          // 步驟2: 影片原始解析度 -> 顯示尺寸，並加上偏移量
+          const x = videoX * scaleX + offsetX;
+          const y = videoY * scaleY + offsetY;
+          const w = videoW * scaleX;
+          const h = videoH * scaleY;
+
+          // 設定框的樣式
+          ctx.strokeStyle = '#00ff00'; // 綠色框
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, w, h);
+
+          // 繪製框的編號
+          ctx.fillStyle = '#00ff00';
+          ctx.font = '16px Arial';
+          ctx.fillText(`ROI ${index + 1}`, x + 5, y + 20);
+        }
+      });
     },
     initViews() {
       const self = this;
@@ -874,6 +969,16 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.roi-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .no-camera-selected {
