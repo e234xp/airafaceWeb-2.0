@@ -4,7 +4,14 @@
       <!-- Header -->
       <div class="dashboard-header">
         <div class="dashboard-header-left">
-          <img v-if="settings.logo" :src="settings.logo" class="dashboard-logo" alt="Logo" />
+          <img
+            v-if="settings.logo"
+            :src="settings.logo"
+            class="dashboard-logo"
+            alt="Logo"
+            @click="handleLogout"
+            style="cursor: pointer;"
+          />
           <h2 class="dashboard-title">
             {{ $t('LiveVideo') }}
           </h2>
@@ -833,6 +840,19 @@ export default {
         minute: '2-digit',
         second: '2-digit',
         hour12: false,
+      });
+    },
+    handleLogout() {
+      const self = this;
+
+      // 清理資源
+      self.destroyVideoPlayer();
+      self.unsubscribeWebSocket();
+
+      // 執行登出
+      self.$globalLogout(() => {
+        // 跳轉到登入頁
+        self.$router.push({ name: 'Login' });
       });
     },
   },
