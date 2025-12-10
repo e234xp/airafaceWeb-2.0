@@ -449,6 +449,8 @@
   "PhoneNumber": "Telefon Numarası",
   "PleaseEnter": "Lütfen giriniz",
   "PleaseEnterName": "Lütfen bir isim girin",
+  "PleaseHaveYourQRCodeToRegister": "Kayıt olmak için lütfen QR kodunuzu yanınızda bulundurun",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "Liman",
   "Previous": "Öncesi",
   "PriorityIsEthernet": "(Kablolu Ağ Tercih Edilir)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "Kart tanımlama ayarları",
   "TabletsBasicTitleNameFaceAccess": "Yüz tanıma ayarları",
   "TakePhoto": "Fotoğraf Çek",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Telgraf Bildirimi",
   "Temperature": "Sıcaklık",
   "TemperatureDisplayingUnit": "Sıcaklık Birimi",
@@ -715,7 +718,7 @@
   "VisitorName": "Ziyaretçi Adı",
   "VisitorReport": "Ziyaretçi Raporu",
   "Wed": "Çarşamba",
-  "Welcome": "Hoş Geldiniz Kurulu",
+  "Welcome": "Hoş geldin",
   "WelcomeGreeting": "Hoş geldin",
   "Welcome_Mode": "Hoş Geldiniz Kurulu",
   "What": "Ne",
@@ -806,5 +809,8 @@
   "PleaseSelectCamera": "Lütfen kamerayı seçin",
   "NoRecognitionResults": "Tanımlayıcı bilgi yok",
   "VisitorsAndStrangers": "ziyaretçiler ve yabancılar",
-  "PleaseSelect": "Lütfen seçin"
+  "PleaseSelect": "Lütfen seçin",
+  "ReTakePhoto": "Fotoğrafı Yeniden Çek",
+  "next": "Sonraki",
+  "Back": "Geri"
 }

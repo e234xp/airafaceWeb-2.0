@@ -460,6 +460,8 @@
   "PhoneNumber": "전화번호",
   "placeholder": "선택해주세요",
   "PleaseEnterName": "이름을 입력해주세요",
+  "PleaseHaveYourQRCodeToRegister": "등록하려면 QR 코드를 준비하세요.",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "PM": "오후",
   "Port": "포트",
   "POST": "POST",
@@ -656,6 +658,7 @@
   "TabletStepAccessControl": "출입 통제 설정",
   "TabletSystemPassword": "태블릿 비밀번호",
   "TakePhoto": "사진 찍기",
+  "TakeThePhoto": "Take the Photo",
   "Temperature": "온도",
   "TemperatureDisplayingUnit": "온도 단위",
   "TemperatureTriggerRule": "온도 트리거 규칙",
@@ -725,7 +728,7 @@
   "VisitorName": "방문자 이름",
   "VisitorReport": "방문자 보고서",
   "Wed": "수",
-  "Welcome": "환영 보드",
+  "Welcome": "환영",
   "Welcome_Mode": "환영 보드",
   "WelcomeGreeting": "환영합니다",
   "What": "무엇",
@@ -792,5 +795,8 @@
   "PleaseSelectCamera": "카메라를 선택해주세요",
   "NoRecognitionResults": "식별 정보 없음",
   "VisitorsAndStrangers": "방문객과 낯선 사람",
-  "PleaseSelect": "선택해주세요"
+  "PleaseSelect": "선택해주세요",
+  "ReTakePhoto": "사진 다시 찍기",
+  "next": "다음",
+  "Back": "뒤쪽에"
 }

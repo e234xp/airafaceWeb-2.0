@@ -449,6 +449,8 @@
   "PhoneNumber": "Số điện thoại",
   "PleaseEnter": "Vui lòng nhập",
   "PleaseEnterName": "Vui lòng nhập tên",
+  "PleaseHaveYourQRCodeToRegister": "Vui lòng có mã QR của bạn để đăng ký",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "Cổng",
   "Previous": "Trước",
   "PriorityIsEthernet": "(Ưu tiên mạng có dây)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "Cài đặt nhận dạng thẻ",
   "TabletsBasicTitleNameFaceAccess": "Cài đặt nhận dạng khuôn mặt",
   "TakePhoto": "Chụp hình",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Thông báo Telegram",
   "Temperature": "Nhiệt độ",
   "TemperatureDisplayingUnit": "Đơn vị nhiệt độ",
@@ -715,7 +718,7 @@
   "VisitorName": "Tên khách thăm quan",
   "VisitorReport": "Báo cáo khách thăm quan",
   "Wed": "Thứ Tư",
-  "Welcome": "Bảng chào đón",
+  "Welcome": "Chào mừng",
   "WelcomeGreeting": "Chào mừng",
   "Welcome_Mode": "Bảng chào đón",
   "What": "Cái gì",
@@ -806,5 +809,8 @@
   "PleaseSelectCamera": "Vui lòng chọn máy ảnh",
   "NoRecognitionResults": "Không có thông tin nhận dạng",
   "VisitorsAndStrangers": "du khách và người lạ",
-  "PleaseSelect": "Vui lòng chọn"
+  "PleaseSelect": "Vui lòng chọn",
+  "ReTakePhoto": "Chụp lại ảnh",
+  "next": "Kế tiếp",
+  "Back": "Mặt sau"
 }

@@ -460,6 +460,8 @@
   "PhoneNumber": "Número de Telefone",
   "placeholder": "por favor escolha",
   "PleaseEnterName": "Por favor, insira um nome",
+  "PleaseHaveYourQRCodeToRegister": "Por favor, tenha seu código QR para se registrar",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "PM": "PM",
   "Port": "Porta",
   "POST": "POST",
@@ -656,6 +658,7 @@
   "TabletStepAccessControl": "Configurações de controle de acesso",
   "TabletSystemPassword": "Senha do Tablet",
   "TakePhoto": "Tirar Foto",
+  "TakeThePhoto": "Take the Photo",
   "Temperature": "Temperatura",
   "TemperatureDisplayingUnit": "Unidade de Temperatura",
   "TemperatureTriggerRule": "Regras de Acionamento de Temperatura",
@@ -725,7 +728,7 @@
   "VisitorName": "Nome do Visitante",
   "VisitorReport": "Relatório de Visitante",
   "Wed": "Qua",
-  "Welcome": "Quadro de Boas-Vindas",
+  "Welcome": "Bem-vindo",
   "Welcome_Mode": "Quadro de Boas-Vindas",
   "WelcomeGreeting": "Bem-vindo",
   "What": "O quê",
@@ -792,5 +795,8 @@
   "PleaseSelectCamera": "Selecione a câmera",
   "NoRecognitionResults": "Nenhuma informação de identificação",
   "VisitorsAndStrangers": "visitantes e estranhos",
-  "PleaseSelect": "Selecione"
+  "PleaseSelect": "Selecione",
+  "ReTakePhoto": "Retirar a foto",
+  "next": "Próximo",
+  "Back": "Voltar"
 }

@@ -452,6 +452,8 @@
   "PhoneNumber": "電話號碼",
   "PleaseEnter": "請輸入",
   "PleaseEnterName": "請輸入人名",
+  "PleaseHaveYourQRCodeToRegister": "請使用 QR-code 進行報到",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "埠",
   "Previous": "上一步",
   "PriorityIsEthernet": "(有線網路優先)",
@@ -566,6 +568,7 @@
   "SummaryView": "群組模式",
   "Sun": "日",
   "SwitchCamera": "轉換鏡頭",
+  "ClickToSwitchCamera": "點擊切換鏡頭",
   "SynyMethodLocalTime": "與本地時間同步",
   "SynyMethodNtpServer": "與時間伺服器同步",
   "SystemLog": "系統日誌",
@@ -650,6 +653,7 @@
   "TabletsBasicTitleNameCardAccess": "卡片驗證設定",
   "TabletsBasicTitleNameFaceAccess": "人臉驗證設定",
   "TakePhoto": "拍攝照片",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Telegram 通知",
   "Temperature": "體溫",
   "TemperatureDisplayingUnit": "溫度顯示單位",
@@ -720,7 +724,7 @@
   "VisitorName": "訪客姓名",
   "VisitorReport": "訪客報表",
   "Wed": "三",
-  "Welcome": "迎賓看板",
+  "Welcome": "歡迎",
   "WelcomeGreeting": "歡迎詞",
   "Welcome_Mode": "迎賓看板",
   "What": "何事",
@@ -812,5 +816,8 @@
   "PleaseSelectCamera": "請選擇攝影機",
   "NoRecognitionResults": "無辨識資料",
   "VisitorsAndStrangers": "訪客及陌生人",
-  "PleaseSelect": "請選擇"
+  "PleaseSelect": "請選擇",
+  "ReTakePhoto": "重新拍攝",
+  "next": "下一步",
+  "Back": "返回"
 }

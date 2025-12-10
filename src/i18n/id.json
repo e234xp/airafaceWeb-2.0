@@ -449,6 +449,8 @@
   "PhoneNumber": "Nomor telepon",
   "PleaseEnter": "Harap masuk",
   "PleaseEnterName": "Silakan masukkan nama",
+  "PleaseHaveYourQRCodeToRegister": "Silakan miliki kode QR Anda untuk mendaftar",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "Port",
   "Previous": "Sebelumnya",
   "PriorityIsEthernet": "(Jaringan Kabel Lebih Diutamakan)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "Pengaturan identifikasi kartu",
   "TabletsBasicTitleNameFaceAccess": "Pengaturan pengenalan wajah",
   "TakePhoto": "Ambil foto",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Pemberitahuan Telegram",
   "Temperature": "Suhu",
   "TemperatureDisplayingUnit": "Satuan suhu",
@@ -715,7 +718,7 @@
   "VisitorName": "Nama Pengunjung",
   "VisitorReport": "Laporan Pengunjung",
   "Wed": "Rab",
-  "Welcome": "Papan Selamat Datang",
+  "Welcome": "Selamat datang",
   "WelcomeGreeting": "Selamat datang",
   "Welcome_Mode": "Papan Selamat Datang",
   "What": "Apa",
@@ -806,5 +809,8 @@
   "PleaseSelectCamera": "Silakan pilih kamera",
   "NoRecognitionResults": "Tidak ada informasi identitas",
   "VisitorsAndStrangers": "pengunjung dan orang asing",
-  "PleaseSelect": "Silakan pilih"
+  "PleaseSelect": "Silakan pilih",
+  "ReTakePhoto": "Ambil Ulang Fotonya",
+  "next": "Berikutnya",
+  "Back": "Kembali"
 }

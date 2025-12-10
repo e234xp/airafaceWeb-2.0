@@ -449,6 +449,8 @@
   "PhoneNumber": "หมายเลขโทรศัพท์",
   "PleaseEnter": "โปรดป้อน",
   "PleaseEnterName": "กรุณากรอกชื่อ",
+  "PleaseHaveYourQRCodeToRegister": "กรุณามีรหัส QR ของคุณเพื่อลงทะเบียน",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "ท่าเรือ",
   "Previous": "ก่อนหน้า",
   "PriorityIsEthernet": "(ต้องการเครือข่ายแบบใช้สาย)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "การตั้งค่าการระบุบัตร",
   "TabletsBasicTitleNameFaceAccess": "การตั้งค่าการจดจำใบหน้า",
   "TakePhoto": "ถ่ายภาพ",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "การแจ้งเตือนทางโทรเลข",
   "Temperature": "อุณหภูมิ",
   "TemperatureDisplayingUnit": "อุณหภูมิ",
@@ -715,7 +718,7 @@
   "VisitorName": "ชื่อผู้เยี่ยมชม",
   "VisitorReport": "รายงานผู้เยี่ยมชม",
   "Wed": "พุธ",
-  "Welcome": "บอร์ดต้อนรับ",
+  "Welcome": "ยินดีต้อนรับ",
   "WelcomeGreeting": "ยินดีต้อนรับ",
   "Welcome_Mode": "บอร์ดต้อนรับ",
   "What": "อะไร",
@@ -806,5 +809,8 @@
   "PleaseSelectCamera": "กรุณาเลือกกล้อง",
   "NoRecognitionResults": "ไม่มีข้อมูลระบุตัวตน",
   "VisitorsAndStrangers": "ผู้มาเยือนและคนแปลกหน้า",
-  "PleaseSelect": "กรุณาเลือก"
+  "PleaseSelect": "กรุณาเลือก",
+  "ReTakePhoto": "ถ่ายภาพใหม่",
+  "next": "ต่อไป",
+  "Back": "กลับ"
 }

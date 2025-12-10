@@ -452,6 +452,8 @@
   "PhoneNumber": "Phone Number",
   "PleaseEnter": "Please enter",
   "PleaseEnterName": "Please enter a name",
+  "PleaseHaveYourQRCodeToRegister": "Please have your QR-code to register",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "Port",
   "Previous": "Previous",
   "PriorityIsEthernet": "( Wired Network Preferred)",
@@ -566,6 +568,7 @@
   "SummaryView": "Group mode",
   "Sun": "Sun",
   "SwitchCamera": "Change lens",
+  "ClickToSwitchCamera": "Click to switch camera",
   "SynyMethodLocalTime": "Sync with local time",
   "SynyMethodNtpServer": "Sync with NTP server",
   "SystemLog": "System Log",
@@ -650,6 +653,7 @@
   "TabletsBasicTitleNameCardAccess": "Card identification settings",
   "TabletsBasicTitleNameFaceAccess": "Face recognition settings",
   "TakePhoto": "Take Photo",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Telegram Notification",
   "Temperature": "Temperature",
   "TemperatureDisplayingUnit": "Temperature Unit",
@@ -720,7 +724,7 @@
   "VisitorName": "Visitor Name",
   "VisitorReport": "Visitor Report",
   "Wed": "Wed",
-  "Welcome": "Welcome Board",
+  "Welcome": "Welcome",
   "WelcomeGreeting": "Welcome",
   "Welcome_Mode": "Welcome Board",
   "What": "What",
@@ -812,5 +816,8 @@
   "PleaseSelectCamera": "Please select camera",
   "NoRecognitionResults": "No identifying information",
   "VisitorsAndStrangers": "visitors and strangers",
-  "PleaseSelect": "Please select"
+  "PleaseSelect": "Please select",
+  "ReTakePhoto": "Retake the Photo",
+  "next": "Next",
+  "Back": "Back"
 }

@@ -449,6 +449,8 @@
   "PhoneNumber": "Numéro de téléphone",
   "PleaseEnter": "Veuillez entrer",
   "PleaseEnterName": "Veuillez saisir un nom",
+  "PleaseHaveYourQRCodeToRegister": "Merci d'avoir votre QR-code pour vous inscrire",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "Port",
   "Previous": "Précédent",
   "PriorityIsEthernet": "(Réseau câblé préféré)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "Paramètres d'identification de la carte",
   "TabletsBasicTitleNameFaceAccess": "Paramètres de reconnaissance du visage",
   "TakePhoto": "Prendre une photo",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "Notification de télégramme",
   "Temperature": "Température",
   "TemperatureDisplayingUnit": "Unité de température",
@@ -715,7 +718,7 @@
   "VisitorName": "Nom du visiteur",
   "VisitorReport": "Rapport des visiteurs",
   "Wed": "Mer",
-  "Welcome": "Panneau de bienvenue",
+  "Welcome": "Accueillir",
   "WelcomeGreeting": "Accueillir",
   "Welcome_Mode": "Panneau de bienvenue",
   "What": "Quoi",
@@ -799,5 +802,8 @@
   "PleaseSelectCamera": "Veuillez sélectionner une caméra",
   "NoRecognitionResults": "Aucune information d'identification",
   "VisitorsAndStrangers": "visiteurs et étrangers",
-  "PleaseSelect": "Veuillez sélectionner"
+  "PleaseSelect": "Veuillez sélectionner",
+  "ReTakePhoto": "Reprendre la photo",
+  "next": "Suivant",
+  "Back": "Dos"
 }

@@ -449,6 +449,8 @@
   "PhoneNumber": "電話番号",
   "PleaseEnter": "Please enter",
   "PleaseEnterName": "名前を入力してください",
+  "PleaseHaveYourQRCodeToRegister": "Please have your QR-code to register",
+  "PleaseLookAtTheCamera": "Please look at the camera",
   "Port": "ポート",
   "Previous": "前",
   "PriorityIsEthernet": "(有線ネットワークが好ましい)",
@@ -645,6 +647,7 @@
   "TabletsBasicTitleNameCardAccess": "カード識別設定",
   "TabletsBasicTitleNameFaceAccess": "顔認識設定",
   "TakePhoto": "撮影",
+  "TakeThePhoto": "Take the Photo",
   "TelegramNotify": "テレグラム通知",
   "Temperature": "温度",
   "TemperatureDisplayingUnit": "温度単位",
@@ -715,7 +718,7 @@
   "VisitorName": "ビジター名",
   "VisitorReport": "ビジター",
   "Wed": "水",
-  "Welcome": "ウェルカムボード",
+  "Welcome": "Welcome",
   "WelcomeGreeting": "いらっしゃいませ",
   "Welcome_Mode": "ウェルカム ボード",
   "What": "何",
@@ -806,5 +809,8 @@
   "PleaseSelectCamera": "Please select camera",
   "NoRecognitionResults": "No identifying information",
   "VisitorsAndStrangers": "visitors and strangers",
-  "PleaseSelect": "Please select"
+  "PleaseSelect": "Please select",
+  "ReTakePhoto": "Retake the Photo",
+  "next": "Next",
+  "Back": "Back"
 }
