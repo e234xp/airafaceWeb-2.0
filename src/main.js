@@ -221,6 +221,14 @@ const mainVue = new Vue({
     }
   },
   beforeMount() {
+    // 從 config.js 讀取並設定網頁標題 (改在這裡執行，避免影響登入流程)
+    try {
+      if (window.APP_CONFIG && window.APP_CONFIG.title) {
+        document.title = window.APP_CONFIG.title;
+      }
+    } catch (e) {
+      console.error('Failed to set title:', e);
+    }
   },
   mounted() {
   },

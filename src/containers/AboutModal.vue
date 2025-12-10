@@ -1,26 +1,16 @@
 <template>
   <div class="modal-main">
     <div class="about-modal">
-      <div
-        class="close-btn"
-        @click="$emit('close')"
-      >
-        <CIcon
-          name="cil-x"
-          height="24"
-        />
+      <div class="close-btn" @click="$emit('close')">
+        <CIcon name="cil-x" height="24" />
       </div>
 
       <div class="modal-header">
         <div class="logo-section">
-          <img
-            src="@/assets/img/aira-logo-white.svg"
-            alt="AiraFace Logo"
-            class="logo"
-          >
+          <img src="/img/logo/logo.png" alt="AiraFace Logo" class="logo" />
         </div>
         <div class="title-section">
-          <h2>{{ $t('About') }} airaFace</h2>
+          <h2>{{ $t('About') }}</h2>
         </div>
       </div>
 
@@ -105,7 +95,7 @@ export default {
   width: 480px;
   max-width: 90vw;
   border-radius: 8px;
-  border: 2px solid #B4BFC0;
+  border: 2px solid #b4bfc0;
   background: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
