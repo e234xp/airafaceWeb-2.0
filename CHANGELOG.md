@@ -116,7 +116,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 - chore: 3.0.0-beta.2 release [`6dcf544`](https://github.com/coreui/coreui-free-vue-admin-template/commit/6dcf544f8650eae5ce82e5cf7036ad267c2d6a79)
 - refactor: minor refactors, fixes, code clean and snapshots update [`cbeebb7`](https://github.com/coreui/coreui-free-vue-admin-template/commit/cbeebb7152218813126268181a253250b5e54b18)
-- chore:  update package.json file [`20a24e9`](https://github.com/coreui/coreui-free-vue-admin-template/commit/20a24e934d47849a3fdc147a7d5b4c30407b89b6)
+- chore: update package.json file [`20a24e9`](https://github.com/coreui/coreui-free-vue-admin-template/commit/20a24e934d47849a3fdc147a7d5b4c30407b89b6)
 - refactor: change header logo, delete obsolete images [`6657f03`](https://github.com/coreui/coreui-free-vue-admin-template/commit/6657f03a584a86222e7d82fe9ece7bf6418230a7)
 - fix: change coloured cards text color to white [`6c91472`](https://github.com/coreui/coreui-free-vue-admin-template/commit/6c91472ae574ff36baec9eb9bb995aa1038655b7)
 
@@ -145,3 +145,8 @@ All notable changes to this project will be documented in this file. Dates are d
 > 19 November 2019
 
 - chore: 3.0.0-beta.0 release: update dependencies [`f020186`](https://github.com/coreui/coreui-free-vue-admin-template/commit/f0201861520db3560794405da2606ba2473a1858)
+
+####
+
+如果要更換 logo,修改 dist/img/logo 中, airaLogo.png(qrcode 中間顯示的 logo), logo.png(大部分有 logo 的地方), favicon.ico(頁籤上的 logo)
+如果要更換頁籤名稱 修改 dist/config.js 內容

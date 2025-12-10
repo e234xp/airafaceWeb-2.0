@@ -175,7 +175,7 @@
       <!-- Footer -->
       <div class="dashboard-footer">
         <div />
-        <div class="powered-by">Powered by <img src="/logo-b.png" alt="aira" class="aira-logo" /></div>
+        <div class="powered-by">Powered by <img src="/img/logo/logo.png" alt="aira" class="aira-logo" /></div>
       </div>
 
       <!-- Settings Modal -->
