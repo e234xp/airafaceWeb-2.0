@@ -6,8 +6,7 @@
     <div
       v-if="displaySettings.enabledAdvertisingMode"
       ref="advertisingPanel"
-      class="ratio-content welcome-dashboard"
-      style="position: absolute; z-index: 100; background-color: black; width: 100%; height: 100%"
+      class="ratio-content welcome-dashboard advertising-panel"
     >
       <CCarousel
         animate
@@ -20,7 +19,7 @@
           :key="i"
         >
           <div
-            :style="[{ backgroundImage: 'url(' + page + ')' }, 'zoom: ' + zoomRatio + ' !important;']"
+            :style="{ backgroundImage: 'url(' + page + ')', zoom: zoomRatio }"
             class="advertising"
           />
         </CCarouselItem>
@@ -29,13 +28,12 @@
 
     <div
       ref="welcomePanel"
-      class="ratio-content welcome-dashboard"
-      style="position: absolute; z-index: 50"
+      class="ratio-content welcome-dashboard welcome-panel"
       :style="{ backgroundImage: 'url(' + displaySettings.background_image + ')' }"
     >
       <div
         class="welcome-logo-container"
-        :style="[{ zoom: zoomRatio + ' !important' }]"
+        :style="{ zoom: zoomRatio }"
       >
         <div
           class="welcome-logo"
@@ -43,7 +41,7 @@
         >
           <img
             :src="displaySettings.logo"
-            style="width: 100%; height: 100%; object-fit: contain"
+            class="welcome-logo-img"
           >
         </div>
         <div class="welcome-time">
@@ -53,7 +51,7 @@
 
       <div
         class="welcome-header"
-        :style="'zoom: ' + zoomRatio + ' !important;'"
+        :style="{ zoom: zoomRatio }"
       >
         <div class="welcome-message">
           {{ displaySettings.welcomeword }}
@@ -65,7 +63,7 @@
       <transition-group
         tag="div"
         class="welcome-cards-container card-list"
-        :style="'zoom: ' + zoomRatio + ' !important;'"
+        :style="{ zoom: zoomRatio }"
         name="list"
       >
         <div
@@ -76,22 +74,12 @@
           <img
             class="welcome-card-img"
             :src="`data:image/jpeg;base64,${showField(person, 'displayPhoto')}`"
-            style="border: 4px solid white; border-radius: 24px;"
           >
-          <div
-            class="welcome-card-text-box"
-            style="padding: 10px 0;"
-          >
-            <div
-              class="welcome-card-title"
-              style="font-weight: 800; font-size: 60px;"
-            >
+          <div class="welcome-card-text-box">
+            <div class="welcome-card-title">
               {{ showField(person, 'line1') }}
             </div>
-            <div
-              class="welcome-card-name"
-              style="font-weight: 600; font-size: 44px;"
-            >
+            <div class="welcome-card-name">
               {{ showField(person, 'line2') }}
             </div>
             <div class="welcome-card-department">
@@ -106,14 +94,13 @@
 
       <div
         class="welcome-subtitle"
-        :style="'zoom: ' + zoomRatio + ' !important;'"
+        :style="{ zoom: zoomRatio }"
       >
         {{ displaySettings.subtitle }}
       </div>
       <div
         v-show="isLoadSetting"
-        class="align-items-center"
-        style="color: white"
+        class="loading-text"
       >
         Loading...
       </div>
@@ -611,40 +598,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.welcome-logo-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 40px;
+// ====================
+// 廣告面板
+// ====================
+.advertising-panel {
+  position: absolute;
+  z-index: 100;
+  background-color: black;
   width: 100%;
-
-  .welcome-logo{
-    width: 360px;
-    height: auto;
-  }
-
-  .welcome-time {
-  font-family: 'Noto Sans';
-  color: white;
-  font-size: 4rem;
-  font-weight: 300;
-}
-}
-
-.welcome-message {
-  color: white;
-  font-style: italic;
-  font-weight: 200;
-  letter-spacing: -0.5px;
-  text-shadow: 0px 0px 12px #FF00B0, 0px 0px 6px #47EAFF;
-}
-
-.welcome-panel {
-  background-repeat: no-repeat;
-  background-size: 100%;
-  min-height: 100%;
-  min-width: 100%;
-  overflow: hidden;
+  height: 100%;
 }
 
 .advertising {
@@ -656,19 +618,140 @@ export default {
   overflow: hidden;
 }
 
-.card-list {
+// ====================
+// 主面板
+// ====================
+.welcome-panel {
+  position: absolute;
+  z-index: 50;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  min-height: 100%;
+  min-width: 100%;
   overflow: hidden;
-  padding: 0;
-  justify-content: center;
 }
 
-.card-list > div {
+// ====================
+// Logo 區塊
+// ====================
+.welcome-logo-container {
   display: flex;
-  float: left;
-  width: 430px;
-  height: 571px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  width: 100%;
+
+  .welcome-logo {
+    width: 360px;
+    height: auto;
+    cursor: pointer;
+
+    &-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .welcome-time {
+    font-family: 'Noto Sans';
+    color: white;
+    font-size: 4rem;
+    font-weight: 400;
+  }
 }
 
+// ====================
+// 標題區塊
+// ====================
+.welcome-header {
+  .welcome-message {
+    color: white;
+    font-style: italic;
+    font-weight: 200;
+    letter-spacing: -0.5px;
+    text-shadow: 0px 0px 12px #FF00B0, 0px 0px 6px #47EAFF;
+  }
+
+  .welcome-title {
+    color: white;
+  }
+}
+
+// ====================
+// 卡片列表
+// ====================
+.welcome-cards-container {
+  &.card-list {
+    overflow: hidden;
+    padding: 0;
+    justify-content: center;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      float: left;
+      width: 430px;
+      height: 571px;
+    }
+  }
+}
+
+.welcome-card {
+  &-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border: 4px solid white;
+    border-radius: 24px;
+  }
+
+  &-text-box {
+    padding: 10px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &-title {
+    font-weight: 800;
+    font-size: 60px;
+    color: white;
+  }
+
+  &-name {
+    font-weight: 600;
+    font-size: 44px;
+    color: white;
+  }
+
+  &-department,
+  &-remarks {
+    color: white;
+  }
+}
+
+// ====================
+// 副標題
+// ====================
+.welcome-subtitle {
+  color: white;
+}
+
+// ====================
+// 載入文字
+// ====================
+.loading-text {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+// ====================
+// 過場動畫
+// ====================
 .list-enter-active,
 .list-leave-active {
   transition: opacity 1s, transform 1s;
