@@ -18,7 +18,7 @@ global.webVersion = '2.1.5';
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.86'; // airaFace2
+const TEST_HOST = '192.168.15.102'; // airaFace2
 // const TEST_HOST = '192.168.10.51'; // airaTablet_mini
 // const TEST_HOST = '192.168.10.57'; // solution day
 // const TEST_HOST = '192.168.10.41'; // airaTablet_mini 2
