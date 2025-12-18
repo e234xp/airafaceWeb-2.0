@@ -255,7 +255,6 @@ export default {
         showStrangers: true,
       },
       timeInterval: null,
-      hls: null,
       peerConnection: null, // WebRTC 連接
       recognitionResults: [], // 所有辨識結果
       maxResults: 50, // 最多保留的結果數量
@@ -267,8 +266,8 @@ export default {
     // 動態生成 WebRTC URL
     webrtcUrl() {
       const TEST_MODE = process.env.NODE_ENV === 'development';
-      const HOST = TEST_MODE ? '192.168.10.86' : window.location.hostname;
-      return `https://${HOST}:8889/${this.selectedCameraUuid}/whep`;
+      const HOST = TEST_MODE ? '192.168.14.32' : window.location.hostname;
+      return `https://${HOST}/viewvideo/${this.selectedCameraUuid}/whep`;
     },
     // 判斷是否為單一區域模式（兩個都沒勾選）
     isSingleSection() {
@@ -467,7 +466,7 @@ export default {
         const { user, pass, ip_address, port, connection_info } = self.selectedCamera;
         self.rtspUrl = `rtsp://${user}:${pass}@${ip_address}:${port}${connection_info}`;
 
-        console.log('RTSP URL:', self.rtspUrl);
+        // console.log('RTSP URL:', self.rtspUrl);
       }
     },
     confirmSettings() {
@@ -507,7 +506,7 @@ export default {
       }
 
       try {
-        console.log('Initializing WebRTC connection to MediaMTX...');
+        // console.log('Initializing WebRTC connection to:', self.webrtcUrl);
 
         // 1. 建立 RTCPeerConnection
         const pc = new RTCPeerConnection({
@@ -518,7 +517,7 @@ export default {
 
         // 2. 處理接收到的遠端串流
         pc.ontrack = (event) => {
-          console.log('Received remote track:', event.track.kind);
+          // console.log('Received remote track:', event.track.kind);
           if (self.$refs.videoPlayer) {
             self.$refs.videoPlayer.srcObject = event.streams[0];
           }
@@ -526,9 +525,9 @@ export default {
 
         // 3. 監聽連線狀態
         pc.onconnectionstatechange = () => {
-          console.log('Connection state:', pc.connectionState);
+          // console.log('Connection state:', pc.connectionState);
           if (pc.connectionState === 'connected') {
-            console.log('WebRTC connection established');
+            // console.log('WebRTC connection established');
           } else if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
             console.error('WebRTC connection failed or disconnected');
             self.$fire({
@@ -548,23 +547,23 @@ export default {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
-        // 6. 透過 WHEP 協議發送 offer 到 MediaMTX
-        console.log('Sending WHEP request to:', self.webrtcUrl);
+        // 6. 透過 WHEP 協議發送 offer 到後端
+        // console.log('Sending WHEP request to:', self.webrtcUrl);
         const response = await fetch(self.webrtcUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/sdp',
           },
-          body: offer.sdp,
+          body: offer.sdp, // WHEP 協議直接傳送 SDP 字串
         });
 
         if (!response.ok) {
           throw new Error(`WHEP request failed: ${response.status} ${response.statusText}`);
         }
 
-        // 7. 接收 SDP answer
+        // 7. 接收 SDP answer（WHEP 回傳純文字 SDP）
         const answerSdp = await response.text();
-        console.log('Received answer from MediaMTX');
+        // console.log('Received WHEP answer from backend');
 
         // 8. 設定遠端描述
         await pc.setRemoteDescription({
@@ -572,7 +571,7 @@ export default {
           sdp: answerSdp,
         });
 
-        console.log('WebRTC setup complete, waiting for stream...');
+        // console.log('WebRTC setup complete, waiting for stream...');
       } catch (error) {
         console.error('Failed to initialize video player:', error);
         self.$fire({
