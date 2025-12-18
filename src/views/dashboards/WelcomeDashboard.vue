@@ -598,6 +598,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$welcome-anim-duration: 1.0s;
+
+// ====================
+// 主面板
+// ====================
+.welcome-dashboard {
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  overflow: hidden;
+}
+
 // ====================
 // 廣告面板
 // ====================
@@ -619,7 +632,7 @@ export default {
 }
 
 // ====================
-// 主面板
+// 主面板 (welcome-panel)
 // ====================
 .welcome-panel {
   position: absolute;
@@ -654,7 +667,7 @@ export default {
   }
 
   .welcome-time {
-    font-family: 'Noto Sans';
+    font-family: 'Noto Sans', sans-serif;
     color: white;
     font-size: 4rem;
     font-weight: 400;
@@ -665,7 +678,18 @@ export default {
 // 標題區塊
 // ====================
 .welcome-header {
+  width: 100%;
+  height: 325px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 160px;
+
   .welcome-message {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 88px;
+    line-height: 0.8em;
     color: white;
     font-style: italic;
     font-weight: 200;
@@ -674,14 +698,38 @@ export default {
   }
 
   .welcome-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 0.8em;
     color: white;
   }
+}
+
+// ====================
+// 副標題
+// ====================
+.welcome-subtitle {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 30px;
+  color: white;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 // ====================
 // 卡片列表
 // ====================
 .welcome-cards-container {
+  display: flex;
+  width: 100%;
+  height: 54%;
+  justify-content: start;
+  padding-left: 50px;
+  padding-right: 50px;
+
   &.card-list {
     overflow: hidden;
     padding: 0;
@@ -698,6 +746,13 @@ export default {
 }
 
 .welcome-card {
+  height: 571px;
+  width: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+
   &-img {
     width: 100%;
     height: auto;
@@ -713,31 +768,45 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 
   &-title {
+    font-family: 'Noto Sans', sans-serif;
+    text-overflow: ellipsis;
+    line-height: 0.8em;
     font-weight: 800;
     font-size: 60px;
     color: white;
+    margin-bottom: 28px;
   }
 
   &-name {
+    font-family: 'Noto Sans', sans-serif;
+    text-overflow: ellipsis;
+    line-height: 0.8em;
     font-weight: 600;
     font-size: 44px;
     color: white;
+    margin-bottom: 28px;
   }
 
-  &-department,
+  &-department {
+    font-family: 'Noto Sans', sans-serif;
+    text-overflow: ellipsis;
+    line-height: 0.8em;
+    color: #B1B1B1;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
   &-remarks {
+    font-family: 'Noto Sans', sans-serif;
+    text-overflow: ellipsis;
+    line-height: 0.8em;
     color: white;
   }
-}
-
-// ====================
-// 副標題
-// ====================
-.welcome-subtitle {
-  color: white;
 }
 
 // ====================
@@ -750,7 +819,7 @@ export default {
 }
 
 // ====================
-// 過場動畫
+// 過場動畫 (list)
 // ====================
 .list-enter-active,
 .list-leave-active {
@@ -774,5 +843,31 @@ export default {
 
 .list-leave-active {
   position: absolute;
+}
+
+// ====================
+// 過場動畫 (fade/shrink)
+// ====================
+.welcome-fade-out {
+  transition: opacity $welcome-anim-duration ease-out;
+  opacity: 0;
+}
+
+.welcome-fade-in {
+  animation: fade-in-anim 0.5s;
+}
+
+.shrink {
+  transition: all $welcome-anim-duration ease-out;
+  transform: translateX(-100%);
+}
+
+@keyframes fade-in-anim {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
