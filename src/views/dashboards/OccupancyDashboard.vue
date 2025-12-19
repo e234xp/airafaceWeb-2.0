@@ -411,6 +411,11 @@ export default {
 
           payload = mutation.payload;
 
+          // 檢查驗證類型：只處理已註冊人員 (type = 1)，忽略陌生人 (type = 0)
+          if (payload.type === 0) {
+            return;
+          }
+
           if (payload !== undefined) {
             person = payload.person || payload.person_info;
           }
