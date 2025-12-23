@@ -189,7 +189,7 @@ export default {
             self.obj_loading = null;
           }
           break;
-        case 'changeNotifications':
+        case 'changeNotifications': {
           if (mutation.payload.statusCode === '200') {
             console.log('created subscribe', 'mutation payload statusCode == 200');
             return;
@@ -200,7 +200,9 @@ export default {
           }
 
           if (payload !== undefined) {
-            person = payload.person || payload.person_info;
+            person = (typeof payload.person === 'object' && payload.person !== null)
+              ? payload.person
+              : payload.person_info;
           }
 
           if (person === undefined) {
@@ -208,15 +210,22 @@ export default {
             return;
           }
 
+          if (typeof person !== 'object' || person === null) {
+            return;
+          }
+
           person.snapshot_image = payload.snapshot || payload.face_image || person.snapshot_image;
 
-          self.checkRecord({
+          const recordData = {
             ...person,
             name: person.name || person.fullname,
-            uuid: payload.person_id || payload.person.uuid,
-            groups: payload.groups || payload.person.group_list,
-          });
+            uuid: payload.person_id || person.uuid,
+            groups: payload.groups || person.group_list,
+          };
+
+          self.checkRecord(recordData);
           break;
+        }
         default:
           break;
       }
