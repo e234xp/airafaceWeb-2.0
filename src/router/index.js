@@ -26,6 +26,7 @@ const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboa
 const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
 const AlcoholCheckinDashboard = () => import('@/views/dashboards/AlcoholCheckinDashboard.vue');
 const LiveVideoDashboard = () => import('@/views/dashboards/LiveVideoDashboard.vue');
+const HouseWarm = () => import('@/views/HouseWarm.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -769,6 +770,11 @@ function configRoutes() {
           ],
         },
       ],
+    },
+    {
+      path: '/housewarm',
+      name: 'HouseWarm',
+      component: HouseWarm,
     },
   ];
 }
