@@ -585,10 +585,22 @@ export default {
           ret = person.department;
           break;
         case 'REGISTER':
-          ret = person.register_image === '' ? emptyFace : person.register_image;
+          if (person.register_image && person.register_image !== '') {
+            ret = person.register_image;
+          } else if (person.display_image && person.display_image !== '') {
+            ret = person.display_image;
+          } else {
+            ret = emptyFace;
+          }
           break;
         case 'DISPLAY':
-          ret = person.display_image === '' ? emptyFace : person.display_image;
+          if (person.display_image && person.display_image !== '') {
+            ret = person.display_image;
+          } else if (person.register_image && person.register_image !== '') {
+            ret = person.register_image;
+          } else {
+            ret = emptyFace;
+          }
           break;
         case 'SNAPSHOT':
           ret = person.snapshot_image;

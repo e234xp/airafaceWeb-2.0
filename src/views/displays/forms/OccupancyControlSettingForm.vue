@@ -136,7 +136,7 @@
             <CCardHeader>{{ $t('PersonalDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
-                <CCol sm="3">
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('DisplayMode') }}
                   </div>
@@ -145,9 +145,9 @@
                     :value.sync="value_occupancySetting.displayCardMode"
                     :options="value_displayModeList"
                   />
-                </CCol>
+                </CCol> -->
 
-                <CCol sm="3">
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('DisplayPhoto') }}
                   </div>
@@ -157,7 +157,7 @@
                     :options="value_displayPhotoList"
                   />
                 </CCol>
-                <CCol sm="3">
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('DisplayAttribute') }} 1
                   </div>
@@ -168,7 +168,7 @@
                   />
                 </CCol>
 
-                <CCol sm="3">
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('DisplayAttribute') }} 2
                   </div>
@@ -207,7 +207,7 @@
             <CCardHeader>{{ $t('PageDisplay') }}</CCardHeader>
             <CCardBody>
               <CRow>
-                <CCol sm="3">
+                <!-- <CCol sm="3">
                   <div class="h5">
                     {{ $t('PageLayout') }}
                   </div>
@@ -216,8 +216,8 @@
                     :value.sync="value_occupancySetting.pageLayout"
                     :options="value_pageLayoutList"
                   />
-                </CCol>
-                <CCol sm="3">
+                </CCol> -->
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('DisplayChart') }}
                   </div>
@@ -227,7 +227,7 @@
                     :options="value_EnableList"
                   />
                 </CCol>
-                <CCol sm="3">
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('ResetTime') }}
                   </div>
@@ -237,7 +237,7 @@
                     :options="value_displayResetTime"
                   />
                 </CCol>
-                <CCol sm="3">
+                <CCol sm="4">
                   <div class="h5">
                     {{ $t('Duration') }}
                   </div>

@@ -783,10 +783,10 @@ export default {
         if (aPersonIndex >= 0) return -1;
         if (bPersonIndex >= 0) return 1;
 
-        // 都不在 person_list 中，按姓名排序
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
+        // 都不在 person_list 中，按 card_number 排序
+        const cardA = a.card_number || '';
+        const cardB = b.card_number || '';
+        return cardA.localeCompare(cardB);
       });
 
       switch (self.displaySettings.summaryBy) {
@@ -874,15 +874,9 @@ export default {
 
         group.total = group.persons.length;
         group.persons.sort((a, b) => {
-          let ret = 0;
-          if (a.name < b.name) {
-            ret = -1;
-          } else if (a.name > b.name) {
-            ret = 1;
-          } else {
-            ret = 0;
-          }
-          return ret;
+          const cardA = a.card_number || '';
+          const cardB = b.card_number || '';
+          return cardA.localeCompare(cardB);
         });
       });
     },
@@ -1806,20 +1800,32 @@ export default {
   }
 
   .person-info-box {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     .person-info-line1 {
+      width: 100%;
       font-weight: 500;
       font-size: 18px;
       color: white;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .person-name,
     .absent-person-name {
-      display: inline-block;
-      line-height: 100%;
+      width: 100%;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.2;
       color: white;
       font-weight: 700;
       font-size: 20px;
