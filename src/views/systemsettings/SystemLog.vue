@@ -31,8 +31,8 @@
             <vxe-table :data="value_dataItemsToShow" height="531" columns-height="100" stripe align="center"
               :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="mainTable">
               <vxe-table-column field="dateTime" :title="$t('Time')" width="30%" style="font: 10px" align="center" />
-              <vxe-table-column field="log_level" :title="$t('Level')" width="30%" align="center" />
-              <vxe-table-column field="data" :title="$t('Info')" width="40%" align="left" />
+              <vxe-table-column field="level" :title="$t('Level')" width="30%" align="center" />
+              <vxe-table-column field="message" :title="$t('Info')" width="40%" align="left" />
             </vxe-table>
           </div>
           <vxe-pager :layouts="[
@@ -180,8 +180,8 @@
           ? sourceData
           : sourceData.filter((item) => (
             item.dateTime.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || item.log_level.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || item.data.toLowerCase().indexOf(filter.toLowerCase()) > -1
+            || item.level.toLowerCase().indexOf(filter.toLowerCase()) > -1
+            || item.message.toLowerCase().indexOf(filter.toLowerCase()) > -1
           ));
         this.value_tablePage.totalResult = this.value_dataTotalLength; // filteredItems.length;
         const sliceList = filteredItems.slice(
