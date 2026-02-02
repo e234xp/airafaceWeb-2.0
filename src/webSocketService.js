@@ -70,7 +70,12 @@ webSocketsService.install = (Vue, options) => {
     Here we write our custom functions to not make a mess in one function
   */
   function handleNotification(params) {
-    localOptions.store.dispatch('setNotifications', params.data);
+    try {
+      JSON.parse(params.data);
+      localOptions.store.dispatch('setNotifications', params.data);
+    } catch (e) {
+      // 不是有效的 JSON，忽略
+    }
   }
 };
 
