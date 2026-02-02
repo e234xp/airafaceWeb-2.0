@@ -87,9 +87,6 @@ export default {
       const self = this;
 
       self.loading_percent = 0;
-      let shitf = 0;
-      let reset = true;
-      let thereIsMoreData = true;
       const startTime = new Date(dateOnDay);
       startTime.setHours(0, 0, 0, 0);
       const endTime = new Date(dateOnDay);
@@ -98,6 +95,41 @@ export default {
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
 
+      // 收集所有資料
+      const allData = [];
+      const manualClockInData = []; // querymanualclockinresult 的資料
+
+      // 先取得 AttendanceVerifyResult 資料
+      let shitf = 0;
+      let thereIsMoreData = true;
+      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
+        const ret = await self.$globalAttendanceVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+        const { error, data } = ret;
+
+        if (error == null) {
+          if (data.total_length && data.total_length > sliceSize + shitf) {
+            thereIsMoreData = true;
+            shitf += sliceSize;
+          } else thereIsMoreData = false;
+          self.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50;
+          if (data.data && data.data.length > 0) {
+            allData.push(...data.data);
+          }
+        } else {
+          thereIsMoreData = false;
+          self.$fire({
+            title: self.$t('NetworkLoss'),
+            text: '',
+            type: 'error',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+          });
+        }
+      }
+
+      // 再取得 ManualClockinResult 資料 (優先級最高)
+      shitf = 0;
+      thereIsMoreData = true;
       while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
         const ret = await self.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
@@ -109,43 +141,35 @@ export default {
           } else {
             thereIsMoreData = false;
           }
-
-          if (cb) cb(error, reset, true, data.data);
-          reset = false;
+          self.loading_percent = 50 + (thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50);
+          if (data.data && data.data.length > 0) {
+            manualClockInData.push(...data.data);
+          }
         } else {
           thereIsMoreData = false;
-          if (cb) cb(error, true, true, []);
         }
       }
 
-      shitf = 0;
-      reset = true;
-      thereIsMoreData = true;
-      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await self.$globalAttendanceVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
-        const { error, data } = ret;
+      // 合併資料：manualClockInData 優先級最高，會覆蓋 allData 中相同 uuid + 相同日期的記錄
+      // 先用 allData，然後用 manualClockInData 覆蓋
+      const mergedDataMap = new Map();
 
-        if (error == null) {
-          if (data.total_length && data.total_length > sliceSize + shitf) {
-            thereIsMoreData = true;
-            shitf += sliceSize;
-          } else thereIsMoreData = false;
-          self.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
-          if (cb) cb(error, reset, thereIsMoreData, data.data);
-          reset = false;
-        } else {
-          thereIsMoreData = false;
-          self.loading_percent = 100;
-          if (cb) cb(error, true, false, []);
-          self.$fire({
-            title: self.$t('NetworkLoss'),
-            text: '',
-            type: 'error',
-            timer: 3000,
-            confirmButtonColor: '#20a8d8',
-          });
-        }
-      }
+      // 先加入 allData
+      allData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      // 用 manualClockInData 覆蓋（優先級最高）
+      manualClockInData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      const mergedData = Array.from(mergedDataMap.values());
+
+      self.loading_percent = 100;
+      if (cb) cb(null, true, false, mergedData);
     },
     onFetchPersonAttendanceDataCallback(dateOnDay, uuidList, cb) {
       const self = this;

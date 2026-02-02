@@ -83,9 +83,6 @@ export default {
 
     async downloadPersonVerifyResultAsync(dateOnMonth, uuidList, sliceSize, cb) {
       this.loading_percent = 0;
-      let shitf = 0;
-      let reset = true;
-      let thereIsMoreData = true;
       const date = new Date(dateOnMonth);
 
       const startTime = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
@@ -93,29 +90,13 @@ export default {
       const startTimeMs = startTime.getTime();
       const endTimeMs = endTime.getTime();
 
-      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
-        const { error, data } = ret;
+      // 收集所有資料
+      const allData = [];
+      const manualClockInData = []; // querymanualclockinresult 的資料
 
-        if (error == null) {
-          if (data.total_length && data.total_length > sliceSize + shitf) {
-            thereIsMoreData = true;
-            shitf += sliceSize;
-          } else {
-            thereIsMoreData = false;
-          }
-
-          if (cb) cb(error, reset, true, data.data);
-          reset = false;
-        } else {
-          thereIsMoreData = false;
-          if (cb) cb(error, true, true, []);
-        }
-      }
-
-      shitf = 0;
-      reset = true;
-      thereIsMoreData = true;
+      // 先取得 AttendanceVerifyResult 資料
+      let shitf = 0;
+      let thereIsMoreData = true;
       while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
         const ret = await this.$globalAttendanceVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
@@ -125,13 +106,12 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
-          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
-          if (cb) cb(error, reset, thereIsMoreData, data.data);
-          reset = false;
+          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50;
+          if (data.data && data.data.length > 0) {
+            allData.push(...data.data);
+          }
         } else {
           thereIsMoreData = false;
-          this.loading_percent = 100;
-          if (cb) cb(error, true, false, []);
           this.$fire({
             title: this.$t('NetworkLoss'),
             text: '',
@@ -141,30 +121,13 @@ export default {
           });
         }
       }
-    },
-    onFetchPersonAttendanceDataCallback(dateOnMonth, uuidList, cb) {
-      this.flag_keepingDownloadPersonVerifyResult = true;
-      this.downloadPersonVerifyResultAsync(dateOnMonth, uuidList, 15000, cb);
-    },
 
-    async downloadSingleVerifyResultAsync(startData, endDate, uuidList, sliceSize, cb) {
-      this.loading_percent = 0;
-      let shitf = 0;
-      let reset = true;
-      let thereIsMoreData = true;
-      const start = new Date(startData);
-      const end = new Date(endDate);
-
-      const startTime = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0, 0);
-      const endTime = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59, 999);
-      const startTimeMs = startTime.getTime();
-      const endTimeMs = endTime.getTime();
-      while (this.flag_keepingDownloadSingleVerifyResult && thereIsMoreData) {
-        console.log('globalManualClockinResult 1', new Date());
-
+      // 再取得 ManualClockinResult 資料 (優先級最高)
+      shitf = 0;
+      thereIsMoreData = true;
+      while (this.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
         const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
-        console.log('globalManualClockinResult 2', new Date());
 
         if (error == null) {
           if (data.total_length && data.total_length > sliceSize + shitf) {
@@ -173,18 +136,57 @@ export default {
           } else {
             thereIsMoreData = false;
           }
-
-          if (cb) cb(error, reset, true, data.data);
-          reset = false;
+          this.loading_percent = 50 + (thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50);
+          if (data.data && data.data.length > 0) {
+            manualClockInData.push(...data.data);
+          }
         } else {
           thereIsMoreData = false;
-          if (cb) cb(error, true, true, []);
         }
       }
 
-      shitf = 0;
-      reset = true;
-      thereIsMoreData = true;
+      // 合併資料：manualClockInData 優先級最高，會覆蓋 allData 中相同 key 的記錄
+      const mergedDataMap = new Map();
+
+      // 先加入 allData
+      allData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      // 用 manualClockInData 覆蓋（優先級最高）
+      manualClockInData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      const mergedData = Array.from(mergedDataMap.values());
+
+      this.loading_percent = 100;
+      if (cb) cb(null, true, false, mergedData);
+    },
+    onFetchPersonAttendanceDataCallback(dateOnMonth, uuidList, cb) {
+      this.flag_keepingDownloadPersonVerifyResult = true;
+      this.downloadPersonVerifyResultAsync(dateOnMonth, uuidList, 15000, cb);
+    },
+
+    async downloadSingleVerifyResultAsync(startData, endDate, uuidList, sliceSize, cb) {
+      this.loading_percent = 0;
+      const start = new Date(startData);
+      const end = new Date(endDate);
+
+      const startTime = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0, 0);
+      const endTime = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59, 999);
+      const startTimeMs = startTime.getTime();
+      const endTimeMs = endTime.getTime();
+
+      // 收集所有資料
+      const allData = [];
+      const manualClockInData = []; // querymanualclockinresult 的資料
+
+      // 先取得 PersonVerifyResult 資料
+      let shitf = 0;
+      let thereIsMoreData = true;
       while (this.flag_keepingDownloadSingleVerifyResult && thereIsMoreData) {
         const ret = await this.$globalPersonVerifyResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
         const { error, data } = ret;
@@ -194,13 +196,12 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
-          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
-          if (cb) cb(error, reset, thereIsMoreData, data.data);
-          reset = false;
+          this.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50;
+          if (data.data && data.data.length > 0) {
+            allData.push(...data.data);
+          }
         } else {
           thereIsMoreData = false;
-          this.loading_percent = 100;
-          if (cb) cb(error, true, false, []);
           this.$fire({
             title: this.$t('NetworkLoss'),
             text: '',
@@ -210,6 +211,49 @@ export default {
           });
         }
       }
+
+      // 再取得 ManualClockinResult 資料 (優先級最高)
+      shitf = 0;
+      thereIsMoreData = true;
+      while (this.flag_keepingDownloadSingleVerifyResult && thereIsMoreData) {
+        const ret = await this.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
+        const { error, data } = ret;
+
+        if (error == null) {
+          if (data.total_length && data.total_length > sliceSize + shitf) {
+            thereIsMoreData = true;
+            shitf += sliceSize;
+          } else {
+            thereIsMoreData = false;
+          }
+          this.loading_percent = 50 + (thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50);
+          if (data.data && data.data.length > 0) {
+            manualClockInData.push(...data.data);
+          }
+        } else {
+          thereIsMoreData = false;
+        }
+      }
+
+      // 合併資料：manualClockInData 優先級最高，會覆蓋 allData 中相同 key 的記錄
+      const mergedDataMap = new Map();
+
+      // 先加入 allData
+      allData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      // 用 manualClockInData 覆蓋（優先級最高）
+      manualClockInData.forEach((item) => {
+        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
+        mergedDataMap.set(key, item);
+      });
+
+      const mergedData = Array.from(mergedDataMap.values());
+
+      this.loading_percent = 100;
+      if (cb) cb(null, true, false, mergedData);
     },
     onFetchSingleAttendanceDataCallback(startData, endDate, uuid, cb) {
       this.flag_keepingDownloadSingleVerifyResult = true;
