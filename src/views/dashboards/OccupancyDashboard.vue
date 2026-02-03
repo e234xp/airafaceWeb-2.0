@@ -25,11 +25,6 @@
         </div>
       </div>
 
-      <!-------------------  Title ------------------>
-      <h1 class="title">
-        House Warming Party
-      </h1>
-
       <!-------------------  Attendance - BEGIN ------------------>
       <div
         v-if="displaySettings.displayChart"
@@ -1591,19 +1586,6 @@ export default {
     min-width: 100%;
     display: flex;
     flex-direction: column;
-  }
-
-  .title {
-    font-family: 'Noto Sans';
-    font-size: 88px;
-    line-height: 0.8em;
-    color: white;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: -0.5px;
-    text-shadow: 0px 0px 12px #00afff, 0px 0px 6px #44c4ff;
-    text-align: center;
-    margin: 2.5rem 0;
   }
 
   .pager {
