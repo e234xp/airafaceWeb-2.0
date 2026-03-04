@@ -345,13 +345,13 @@
           style="background-size: 100% 100%; background-repeat: no-repeat; background-position: center;"
         >
           <tr>
-            <td height="46">
-              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px;">
+            <td height="80">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 3px 12px;">
                 <img
                   :src="`${value_welcomeSetting.logo}`"
-                  style="width:120px; height:45px;"
+                  style="height: 46px; width: auto; object-fit: contain;"
                 >
-                <div style="font-family: 'Noto Sans'; color: white; font-size: 24px; font-weight: 300;">
+                <div style="font-family: 'Noto Sans'; color: white; font-size: 20px; font-weight: 400;">
                   {{ currentTime }}
                 </div>
               </div>
@@ -360,16 +360,15 @@
           <tr>
             <td
               align="center"
-              valign="top"
-              height="30"
               style="
                 font-family: 'Noto Sans';
                 color: white;
-                font-size: 36px;
-                font-style:italic;
+                font-size: 27px;
+                font-style: italic;
                 font-weight: 200;
-                letter-spacing: 3%;
-                text-shadow: 0px 0px 12px #FF00B0, 0px 0px 6px #47EAFF;
+                letter-spacing: -0.5px;
+                text-shadow: 0px 0px 4px #FF00B0, 0px 0px 2px #47EAFF;
+                padding: 6px 0 6px 0;
               "
             >
               {{ value_welcomeSetting.welcomeword }}
@@ -378,9 +377,7 @@
           <tr>
             <td
               align="center"
-              valign="top"
-              height="30"
-              style="font-family: 'Noto Sans TC'; color: #FFFFFF;"
+              style="font-family: 'Noto Sans'; color: #FFFFFF; font-size: 22px; font-weight: 700; padding-bottom: 6px;"
             >
               {{ value_welcomeSetting.maintitle }}
             </td>
@@ -394,18 +391,18 @@
                 <span
                   v-for="(n, index) in value_welcomeSetting.numberOfDisplayPersons"
                   :key="`${uuidv4() + index}`"
-                  style="flex-direction: column; align-items: center; width: 135px;"
+                  style="display: inline-flex; flex-direction: column; align-items: center; width: 132px;"
                 >
                   <img
                     v-show="value_welcomeSetting.displayPhoto!='NONE'"
                     src="@/assets/img/welcomeSample.jpg"
                     width="95px"
                     height="95px"
-                    style="border: 1px solid white; border-radius: 12px;"
+                    style="border: 1px solid white; border-radius: 8px; object-fit: contain;"
                   >
                   <div
                     class="welcome-card-text-box1"
-                    style="padding: 10px 0;"
+                    style="padding: 3px 0;"
                   >
                     <div
                       v-show="value_welcomeSetting.line1!='NONE'"
@@ -414,17 +411,17 @@
                       {{ value_welcomeSetting.line1 }}</div>
                     <div
                       v-show="value_welcomeSetting.line2!='NONE'"
-                      style="color: white; font-weight: 600; font-size:14px"
+                      style="color: white; font-weight: 600; font-size: 14px"
                     >
                       {{ value_welcomeSetting.line2 }}</div>
                     <div
                       v-show="value_welcomeSetting.line3!='NONE'"
-                      style="color: white;"
+                      style="color: #B1B1B1; font-size: 9px; font-weight: 600;"
                     >
                       {{ value_welcomeSetting.line3 }}</div>
                     <div
                       v-show="value_welcomeSetting.line4!='NONE'"
-                      style="color: white; font-size:10px"
+                      style="color: white; font-size: 9px"
                     >
                       {{ value_welcomeSetting.line4 }}</div>
                   </div>
@@ -436,8 +433,7 @@
             <td
               align="center"
               valign="bottom"
-              style="font-family: 'Noto Sans TC';
-            color: #FFFFFF;"
+              style="font-family: 'Noto Sans'; color: #FFFFFF; font-size: 9px; font-weight: 500; padding: 5px 0;"
             >
               {{ value_welcomeSetting.subtitle }}
             </td>

@@ -272,25 +272,6 @@
             </td>
           </tr>
           <tr>
-            <td height="20">
-              <p
-                style="
-                  display: block;
-                  color: white;
-                  font-style: italic;
-                  font-size: 24px;
-                  font-weight: 400;
-                  letter-spacing: -0.5px;
-                  text-shadow: 0px 0px 12px #00afff, 0px 0px 6px #44c4ff;
-                  text-align: center;
-                  margin: 0;
-                "
-              >
-                House Warming Party
-              </p>
-            </td>
-          </tr>
-          <tr>
             <td
               align="center"
               valign="top"

@@ -660,9 +660,11 @@ $welcome-anim-duration: 1.0s;
   z-index: 50;
   background-repeat: no-repeat;
   background-size: 100%;
-  min-height: 100%;
-  min-width: 100%;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 // ====================
@@ -676,11 +678,12 @@ $welcome-anim-duration: 1.0s;
   width: 100%;
 
   .welcome-logo {
-    width: 360px;
-    height: auto;
+    width: auto;
+    height: 150px;
     cursor: pointer;
+    margin: 50px 0;
 
-    &-img {
+    img {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -700,12 +703,12 @@ $welcome-anim-duration: 1.0s;
 // ====================
 .welcome-header {
   width: 100%;
-  height: 325px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding-top: 160px;
+  gap: 20px;
+  padding: 20px 0;
 
   .welcome-message {
     font-family: 'Noto Sans', sans-serif;
@@ -716,6 +719,7 @@ $welcome-anim-duration: 1.0s;
     font-weight: 200;
     letter-spacing: -0.5px;
     text-shadow: 0px 0px 12px #FF00B0, 0px 0px 6px #47EAFF;
+    margin-bottom: 50px;
   }
 
   .welcome-title {
@@ -738,6 +742,7 @@ $welcome-anim-duration: 1.0s;
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 15px 0;
 }
 
 // ====================
@@ -746,7 +751,8 @@ $welcome-anim-duration: 1.0s;
 .welcome-cards-container {
   display: flex;
   width: 100%;
-  height: 54%;
+  flex: 1;
+  min-height: 0;
   justify-content: start;
   padding-left: 50px;
   padding-right: 50px;
@@ -755,28 +761,29 @@ $welcome-anim-duration: 1.0s;
     overflow: hidden;
     padding: 0;
     justify-content: center;
+    align-items: center;
 
     > div {
       display: flex;
       flex-direction: column;
-      float: left;
       width: 430px;
-      height: 571px;
+      height: 100%;
     }
   }
 }
 
 .welcome-card {
-  height: 571px;
   width: 430px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
 
   &-img {
-    width: 100%;
-    height: auto;
+    width: auto;
+    flex: 1;
+    min-height: 0;
     aspect-ratio: 1 / 1;
     object-fit: contain;
     border: 4px solid white;
