@@ -14,7 +14,16 @@
     min-width: 650px;
 }
 
+.step-progress__bar {
+    margin-bottom: 120px !important;
+}
+
 .step-progress__step-label {
     font-size: 16px !important;
-
+    white-space: normal !important;
+    width: 120px;
+    text-align: center;
+    margin-left: -60px;
+    left: 50% !important;
+    transform: none !important;
 }

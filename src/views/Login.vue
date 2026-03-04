@@ -91,7 +91,7 @@
               </CForm>
             </CCardBody>
             <CCardFooter>
-              <span style="color: gray; float: right"> {{ disp_versionInfo }}</span>
+              <span style="color: gray; float: right"> {{ $t('VersionNumber') }} : {{ disp_versionInfo }}</span>
             </CCardFooter>
           </CCard>
         </CCol>
@@ -218,7 +218,7 @@ export default {
       self.$globalGetSystemInfo((err, data) => {
         if (data) {
           // self.disp_versionNumber = data.fw_version;
-          self.disp_versionInfo = `${i18n.formatter.format('VersionNumber')} : ${
+          self.disp_versionInfo = `${
             data.fw_version === 'unknown' ? '' : `${data.fw_version}/`
           } ${global.webVersion}`;
           self.value_disbleLoginButton = false;
