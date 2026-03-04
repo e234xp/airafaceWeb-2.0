@@ -266,7 +266,7 @@ export default {
     // 動態生成 WebRTC URL
     webrtcUrl() {
       const TEST_MODE = process.env.NODE_ENV === 'development';
-      const HOST = TEST_MODE ? '192.168.14.32' : window.location.hostname;
+      const HOST = TEST_MODE ? '192.168.15.125' : window.location.hostname;
       return `https://${HOST}/viewvideo/${this.selectedCameraUuid}/whep`;
     },
     // 判斷是否為單一區域模式（兩個都沒勾選）

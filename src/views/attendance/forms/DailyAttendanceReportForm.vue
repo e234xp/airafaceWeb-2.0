@@ -28,10 +28,7 @@
           <CRow class="justify-content-between buttons-group">
             <div class="d-flex buttons-group-left">
               <div v-if="showDetailData()">
-                <CButton
-                  class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnReturnToAll()"
-                >
+                <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
                   <!-- <i class="fa fa-arrow-left"></i> -->
                   <div
                     class="btn-rwd-icon w-100 h-100 btn-p-md"
@@ -47,23 +44,15 @@
               </div>
               <template v-if="showAllData()">
                 <div>
-                  <CButton
-                    class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
-                    @click="clickOnReturnToAll()"
-                  >
+                  <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
                     <div
                       class="btn-rwd-icon w-100 h-100 btn-p-md"
                       data-coreui-toggle="tooltip"
                       title="show all records"
                     >
-                      <CIcon
-                        size="sm"
-                        name="cilPeople"
-                      />
+                      <CIcon size="sm" name="cilPeople" />
                     </div>
-                    <div class="btn-rwd-text btn-p-md">
-                      {{ $t('AllPerson') }} : {{ value_summary.total || 0 }}
-                    </div>
+                    <div class="btn-rwd-text btn-p-md">{{ $t('AllPerson') }} : {{ value_summary.total || 0 }}</div>
                   </CButton>
                 </div>
 
@@ -86,10 +75,7 @@
                 </div>
 
                 <div>
-                  <CButton
-                    class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
-                    @click="clickOnShowLatePerson()"
-                  >
+                  <CButton class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnShowLatePerson()">
                     <div
                       data-coreui-toggle="tooltip"
                       title="show late records"
@@ -133,10 +119,7 @@
                       title="show people with no records"
                       class="btn-rwd-icon w-100 h-100 btn-p-md"
                     >
-                      <CIcon
-                        size="sm"
-                        name="cilUserX"
-                      />
+                      <CIcon size="sm" name="cilUserX" />
                     </div>
                     <div class="btn-rwd-text btn-p-md">
                       {{ $t('NoRecord') }} : {{ value_tablePage.totalResult - (value_summary.total || 0) }}
@@ -187,10 +170,7 @@
         </CCol>
       </CCol>
     </div>
-    <CCard
-      v-if="showAllData()"
-      class="mt-3"
-    >
+    <CCard v-if="showAllData()" class="mt-3">
       <CCardBody>
         <div>
           <div id="dailyAttendanceReportForm">
@@ -218,24 +198,14 @@
                 width="10%"
                 align="left"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="clockDate"
-                :title="$t('Date')"
-                width="6%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="$t('Date')" width="6%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="working_time"
                 :title="$t('WorkingTime')"
                 width="10%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="over_time"
-                :title="$t('Overtime')"
-                width="10%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="over_time" :title="$t('Overtime')" width="10%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockinToShow"
@@ -258,21 +228,11 @@
                 type="html"
                 min-width="300"
               />
-              <vxe-table-column
-                field="details"
-                title=""
-                width="60"
-              >
+              <vxe-table-column field="details" title="" width="60">
                 <template #default="{ row }">
                   <!-- 只有當有 attendance_data_list 且長度 > 0 時才顯示按鈕 -->
-                  <div
-                    v-if="row.attendance_data_list && row.attendance_data_list.length"
-                    align="center"
-                  >
-                    <button
-                      class="btn btn-outline-primary btn-detail"
-                      @click="clickOnDetails(row)"
-                    >
+                  <div v-if="row.attendance_data_list && row.attendance_data_list.length" align="center">
+                    <button class="btn btn-outline-primary btn-detail" @click="clickOnDetails(row)">
                       <i class="fa fa-list" />
                     </button>
                   </div>
@@ -303,36 +263,21 @@
               :cell-style="cellStyle"
               :header-cell-style="headerCellStyle"
             >
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="id"
-                :title="$t('PersonId')"
-                width="12%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="$t('PersonId')" width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="nameToShow"
                 :title="$t('PersonName')"
                 width="12%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="groups"
-                :title="$t('Group')"
-                width="15%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="$t('Group')" width="15%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockMode"
                 :title="$t('ClockingMode')"
                 width="12%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="clockTime"
-                :title="$t('ClockTime')"
-                width="12%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="$t('ClockTime')" width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="temperature"
@@ -340,11 +285,7 @@
                 :title="$t('Temperature')"
                 width="12%"
               />
-              <vxe-table-column
-                field="showimage"
-                :title="$t('CapturedPhoto')"
-                type="html"
-              />
+              <vxe-table-column field="showimage" :title="$t('CapturedPhoto')" type="html" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="card_number"
@@ -371,25 +312,15 @@
         </div>
       </template>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
-          <CSelect
-            size="lg"
-            :value.sync="value_fileType"
-            :options="[`.txt`, `.csv`, `.xlsx`]"
-          />
+          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
@@ -405,19 +336,11 @@
               { label: `customize (TBD)`, value: '' },
             ]"
           />
-          <CInput
-            v-model="value_separator"
-            v-show="value_txtSeparator == ''"
-            type="text"
-            size="lg"
-          />
+          <CInput v-model="value_separator" v-show="value_txtSeparator == ''" type="text" size="lg" />
         </CCol>
       </CRow>
       <CRow v-if="false">
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('CapturedPhoto') }}
         </CCol>
         <CCol col="9">
@@ -435,52 +358,35 @@
       </CRow>
 
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="item in value_masterexportFields"
-              :key="item"
-            >
+            <li class="list-group-item" v-for="item in value_masterexportFields" :key="item">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 checked
                 @change="fieldChanged('MASTER', item, $event)"
-              >
+              />
               {{ value_masterfieldsforExport.find((field) => field.key === item).value }}
-              <CButton
-                style="float: right; width: 40px; min-width: unset"
-                @click="fieldMove('MASTER', item, -1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('MASTER', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton
-                style="float: right; width: 40px; min-width: unset"
-                @click="fieldMove('MASTER', item, 1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('MASTER', item, 1)">
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_masternotinExportList"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_masternotinExportList" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('MASTER', item, $event)"
-              >
+              />
               {{
                 value_masterfieldsforExport.find((field) => {
                   return;
@@ -493,19 +399,10 @@
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton
-            class="ml-1 btn-temp"
-            color="secondary"
-            @click="() => (flag_masterCollapse = false)"
-          >
+          <CButton class="ml-1 btn-temp" color="secondary" @click="() => (flag_masterCollapse = false)">
             {{ $t('Cancel') }}
           </CButton>
-          <CButton
-            class="ml-1 btn-temp"
-            color="primary"
-            @click="clickOnExport"
-            style="min-width: unset"
-          >
+          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset">
             {{ $t('Apply') }}
           </CButton>
         </footer>
@@ -519,25 +416,15 @@
         </div>
       </template>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
-          <CSelect
-            size="lg"
-            :value.sync="value_fileType"
-            :options="[`.txt`, `.csv`, `.xlsx`]"
-          />
+          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
@@ -553,19 +440,11 @@
               { label: `customize (TBD)`, value: '' },
             ]"
           />
-          <CInput
-            v-model="value_separator"
-            v-show="value_txtSeparator == ''"
-            type="text"
-            size="lg"
-          />
+          <CInput v-model="value_separator" v-show="value_txtSeparator == ''" type="text" size="lg" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('CapturedPhoto') }}
         </CCol>
         <CCol col="9">
@@ -583,52 +462,35 @@
       </CRow>
 
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_detailexportFields"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_detailexportFields" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 checked
                 @change="fieldChanged('DETAIL', item, $event)"
-              >
+              />
               {{ value_detailfieldsforExport.find((field) => field.key === item).value }}
-              <CButton
-                style="float: right; width: 40px; min-width: unset"
-                @click="fieldMove('DETAIL', item, -1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('DETAIL', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton
-                style="float: right; width: 40px; min-width: unset"
-                @click="fieldMove('DETAIL', item, 1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('DETAIL', item, 1)">
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_detailnotinExportList"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_detailnotinExportList" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('DETAIL', item, $event)"
-              >
+              />
               {{
                 value_detailfieldsforExport.find((field) => {
                   return;
@@ -641,19 +503,10 @@
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton
-            class="ml-1 btn-temp"
-            color="secondary"
-            @click="() => (flag_detailCollapse = false)"
-          >
+          <CButton class="ml-1 btn-temp" color="secondary" @click="() => (flag_detailCollapse = false)">
             {{ $t('Cancel') }}
           </CButton>
-          <CButton
-            class="ml-1 btn-temp"
-            color="primary"
-            @click="clickOnExport"
-            style="min-width: unset"
-          >
+          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset">
             {{ $t('Apply') }}
           </CButton>
         </footer>
@@ -848,14 +701,14 @@ export default {
 
               result.forEach((r) => {
                 if (r) {
-                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
+                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.name) >= 0) {
                     this.value_workingHourSettings.videoDeviceGroupIn =
                       this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
                     this.value_workingHourSettings.videoDeviceGroupIn =
                       this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
                   }
 
-                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
+                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.name) >= 0) {
                     this.value_workingHourSettings.videoDeviceGroupOut =
                       this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
                     this.value_workingHourSettings.videoDeviceGroupOut =
@@ -1312,8 +1165,8 @@ export default {
             if (item.attendanceStatusData.attendance_data.firstClockInRec) {
               item.clockin = item.attendanceStatusData.attendance_data.firstClockInRec.timestamp
                 ? dayjs(new Date(item.attendanceStatusData.attendance_data.firstClockInRec.timestamp)).format(
-                  'HH:mm:ss',
-                )
+                    'HH:mm:ss',
+                  )
                 : '';
 
               item.clockin_temperature = item.attendanceStatusData.attendance_data.firstClockInRec.temperature
@@ -1324,8 +1177,8 @@ export default {
             if (item.attendanceStatusData.attendance_data.lastClockOutRec) {
               item.clockout = item.attendanceStatusData.attendance_data.lastClockOutRec.timestamp
                 ? dayjs(new Date(item.attendanceStatusData.attendance_data.lastClockOutRec.timestamp)).format(
-                  'HH:mm:ss',
-                )
+                    'HH:mm:ss',
+                  )
                 : '';
 
               item.clockout_temperature = item.attendanceStatusData.attendance_data.lastClockOutRec.temperature
@@ -1447,7 +1300,7 @@ export default {
                       verify_uuid: d.verify_uuid,
                       timestamp: d.timestamp,
                       source_id: d.source_id,
-                      temperature: (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
+                      temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
                       verify_mode: d.verify_mode,
                       verify_mode_string: d.verify_mode_string,
                       verify_score: d.verify_score,
@@ -2059,10 +1912,11 @@ export default {
         filter.length === 0
           ? sourceData
           : sourceData.filter(
-            (item) => item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+              (item) =>
+                item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
                 item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
                 (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1),
-          );
+            );
 
       this.value_tablePage.totalResult = filteredItems.length;
 
@@ -2177,9 +2031,10 @@ export default {
         filter.length === 0
           ? sourceData
           : sourceData.filter(
-            (item) => item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+              (item) =>
+                item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
                 item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1,
-          );
+            );
       this.value_tablePageForDetailData.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
         (this.value_tablePageForDetailData.currentPage - 1) * this.value_tablePageForDetailData.pageSize,
@@ -2315,8 +2170,7 @@ export default {
                                 verify_uuid: d.verify_uuid,
                                 timestamp: d.timestamp,
                                 source_id: d.source_id,
-                                temperature:
-                                  (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
+                                temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
                                 verify_mode: d.verify_mode,
                                 verify_mode_string: d.verify_mode_string,
                                 verify_score: d.verify_score,
@@ -2396,8 +2250,7 @@ export default {
                               verify_uuid: d.verify_uuid,
                               timestamp: d.timestamp,
                               source_id: d.source_id,
-                              temperature:
-                                  (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
+                              temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
                               verify_mode: d.verify_mode,
                               verify_mode_string: d.verify_mode_string,
                               verify_score: d.verify_score,
@@ -2579,7 +2432,8 @@ export default {
 
         if (attRecList) {
           const passModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs &&
+            (attRec) =>
+              attRec.timestamp >= tDayStartTs &&
               attRec.timestamp <= tDayEndTs &&
               (attRec.verify_mode === 0 || attRec.verify_mode === 1 || attRec.verify_mode === 2),
           );
@@ -2739,63 +2593,13 @@ export default {
 
           // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6: overTime
           if (clockInStatus === _STATUS_NONE) {
-            if (passModeRecord.length > 0) {
-              const first = passModeRecord[0];
-              firstClockInRec = first;
-
-              clockInTimeStamp = firstClockInRec.timestamp;
-              if (definedClockinAdjustmentEnabled && firstClockInRec.timestamp < tDayStartTs + clockInTime) {
-                clockInTimeStamp = tDayStartTs + clockInTime;
-              }
-
-              if (definedClockinTimeLateEnabled) {
-                if (firstClockInRec.timestamp <= tDayStartTs + clockInTime + clockInTimeBuffer) {
-                  // show on time
-                  clockInStatus = _STATUS_SHOW_ON_TIME;
-                } else {
-                  // too late to show
-                  clockInStatus = _STATUS_LATE;
-                }
-              } else {
-                // show on time
-                clockInStatus = _STATUS_SHOW_ON_TIME;
-              }
-            } else if (!holiday && timeToCheckClockIn) {
+            if (!holiday && timeToCheckClockIn) {
               clockInStatus = _STATUS_NO_SHOW;
             }
           }
 
           if (timeToCheckClockOut && clockOutStatus === _STATUS_NONE) {
-            if (passModeRecord.length > 0) {
-              lastClockOutRec = passModeRecord[passModeRecord.length - 1];
-
-              clockOutTimeStamp = lastClockOutRec.timestamp;
-              if (definedClockoutAdjustmentEnabled && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
-                clockOutTimeStamp = tDayStartTs + clockOutTime;
-              }
-
-              if (definedClockoutTimeEarlyLeaveEnabled) {
-                if (lastClockOutRec.timestamp >= tDayStartTs + clockOutTime - clockOutTimeBuffer) {
-                  // leave on time
-                  clockOutStatus = _STATUS_LEAVE_ON_TIME;
-                } else {
-                  // too early to leave
-                  clockOutStatus = _STATUS_EARLY;
-                }
-              } else {
-                // leave on time
-                clockOutStatus = _STATUS_LEAVE_ON_TIME;
-              }
-
-              if (definedOvertimeEnabled) {
-                if (lastClockOutRec.timestamp >= tDayStartTs + overTime + overTimeBuffer) {
-                  overTimeStartStamp = tDayStartTs + overTime;
-                  overTimeEndStamp = lastClockOutRec.timestamp;
-
-                  if (overTimeEndStamp > tDayEndTs) overTimeEndStamp = tDayEndTs;
-                }
-              }
-            } else if (!holiday) {
+            if (!holiday) {
               clockOutStatus = _STATUS_NO_SHOW;
             }
           }
@@ -2805,7 +2609,8 @@ export default {
           if (
             i === idxSpecifiedDateToCheck &&
             (clockInStatus === _STATUS_NO_SHOW || clockOutStatus === _STATUS_NO_SHOW)
-          ) item.no_record += 1;
+          )
+            item.no_record += 1;
 
           returnData.attendance_data.clock_in_status.push(clockInStatus);
           returnData.attendance_data.clock_out_status.push(clockOutStatus);

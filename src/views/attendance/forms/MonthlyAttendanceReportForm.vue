@@ -28,10 +28,7 @@
           <CRow class="justify-content-between buttons-group">
             <div class="d-flex buttons-group-left">
               <div v-if="showDetailData()">
-                <CButton
-                  class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
-                  @click="clickOnReturnToAll()"
-                >
+                <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
                   <!-- <i class="fa fa-arrow-left"></i> -->
                   <div
                     class="btn-rwd-icon w-100 h-100 btn-p-md"
@@ -47,23 +44,15 @@
               </div>
               <template v-if="showAllData()">
                 <div>
-                  <CButton
-                    class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0"
-                    @click="clickOnReturnToAll()"
-                  >
+                  <CButton class="btn btn-outline-primary fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnReturnToAll()">
                     <div
                       class="btn-rwd-icon w-100 h-100 btn-p-md"
                       data-coreui-toggle="tooltip"
                       title="show all records"
                     >
-                      <CIcon
-                        size="sm"
-                        name="cilPeople"
-                      />
+                      <CIcon size="sm" name="cilPeople" />
                     </div>
-                    <div class="btn-rwd-text btn-p-md">
-                      {{ $t('AllPerson') }} : {{ value_summary.total || 0 }}
-                    </div>
+                    <div class="btn-rwd-text btn-p-md">{{ $t('AllPerson') }} : {{ value_summary.total || 0 }}</div>
                   </CButton>
                 </div>
 
@@ -86,10 +75,7 @@
                 </div>
 
                 <div>
-                  <CButton
-                    class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0"
-                    @click="clickOnShowLatePerson()"
-                  >
+                  <CButton class="btn btn-outline-danger fz-md mr-2 mb-3 btn-rwd p-0" @click="clickOnShowLatePerson()">
                     <div
                       data-coreui-toggle="tooltip"
                       title="show late records"
@@ -133,10 +119,7 @@
                       title="show people with no records"
                       class="btn-rwd-icon w-100 h-100 btn-p-md"
                     >
-                      <CIcon
-                        size="sm"
-                        name="cilUserX"
-                      />
+                      <CIcon size="sm" name="cilUserX" />
                     </div>
                     <div class="btn-rwd-text btn-p-md">
                       {{ $t('NoRecord') }} : {{ value_tablePage.totalResult - (value_summary.total || 0) }}
@@ -173,7 +156,11 @@
               <div>
                 <CButton
                   class="btn btn-outline-primary fz-md ml-2 nowrap-hidden"
-                  @click="value_attendanceDataListToReview == null ? flag_masterCollapse = !flag_masterCollapse : flag_detailCollapse = !flag_detailCollapse"
+                  @click="
+                    value_attendanceDataListToReview == null
+                      ? (flag_masterCollapse = !flag_masterCollapse)
+                      : (flag_detailCollapse = !flag_detailCollapse)
+                  "
                 >
                   {{ $t('Export') }}
                 </CButton>
@@ -183,10 +170,7 @@
         </CCol>
       </CCol>
     </div>
-    <CCard
-      v-if="showAllData()"
-      class="mt-3"
-    >
+    <CCard v-if="showAllData()" class="mt-3">
       <CCardBody>
         <div>
           <div id="monthlyAttendanceReportForm">
@@ -216,12 +200,7 @@
                 type="html"
                 width="10%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="clockDate"
-                :title="$t('Date')"
-                width="10%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="$t('Date')" width="10%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="workingTimeToShow"
@@ -244,20 +223,10 @@
                 min-width="400"
                 type="html"
               />
-              <vxe-table-column
-                field="details"
-                title=""
-                width="60"
-              >
+              <vxe-table-column field="details" title="" width="60">
                 <template #default="{ row }">
-                  <div
-                    v-if="row.attendance_data_list && row.attendance_data_list.length"
-                    align="center"
-                  >
-                    <button
-                      class="btn btn-outline-primary btn-detail"
-                      @click="clickOnDetails(row)"
-                    >
+                  <div v-if="row.attendance_data_list && row.attendance_data_list.length" align="center">
+                    <button class="btn btn-outline-primary btn-detail" @click="clickOnDetails(row)">
                       <i class="fa fa-list" />
                     </button>
                   </div>
@@ -266,15 +235,7 @@
             </vxe-table>
           </div>
           <vxe-pager
-            :layouts="[
-              'PrevJump',
-              'PrevPage',
-              'Number',
-              'NextPage',
-              'NextJump',
-              'FullJump',
-              'Total',
-            ]"
+            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
             :current-page="value_tablePage.currentPage"
             :page-size="value_tablePage.pageSize"
             :total="value_tablePage.totalResult"
@@ -296,36 +257,21 @@
               :cell-style="cellStyle"
               :header-cell-style="headerCellStyle"
             >
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="id"
-                :title="$t('PersonId')"
-                width="12%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="$t('PersonId')" width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="nameToShow"
                 :title="$t('PersonName')"
                 width="12%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="groups"
-                :title="$t('Group')"
-                width="15%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="$t('Group')" width="15%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockMode"
                 :title="$t('ClockingMode')"
                 width="12%"
               />
-              <vxe-table-column
-                :show-overflow="ellipsisMode"
-                field="clockTime"
-                :title="$t('ClockTime')"
-                width="12%"
-              />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="$t('ClockTime')" width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="temperature"
@@ -333,11 +279,7 @@
                 :title="$t('Temperature')"
                 width="12%"
               />
-              <vxe-table-column
-                field="showimage"
-                :title="$t('CapturedPhoto')"
-                type="html"
-              />
+              <vxe-table-column field="showimage" :title="$t('CapturedPhoto')" type="html" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="card_number"
@@ -347,15 +289,7 @@
             </vxe-table>
           </div>
           <vxe-pager
-            :layouts="[
-              'PrevJump',
-              'PrevPage',
-              'Number',
-              'NextPage',
-              'NextJump',
-              'FullJump',
-              'Total',
-            ]"
+            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
             :current-page="value_tablePageForDetailData.currentPage"
             :page-size="value_tablePageForDetailData.pageSize"
             :total="value_tablePageForDetailData.totalResult"
@@ -372,25 +306,15 @@
         </div>
       </template>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
-          <CSelect
-            size="lg"
-            :value.sync="value_fileType"
-            :options="[`.txt`, `.csv`, `.xlsx`]"
-          />
+          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
@@ -406,12 +330,7 @@
               { label: `customize (TBD)`, value: '' },
             ]"
           />
-          <CInput
-            v-model="value_separator"
-            v-show="value_txtSeparator ==''"
-            type="text"
-            size="lg"
-          />
+          <CInput v-model="value_separator" v-show="value_txtSeparator == ''" type="text" size="lg" />
         </CCol>
       </CRow>
       <!-- <CRow>
@@ -432,73 +351,55 @@
       </CRow> -->
 
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_masterexportFields"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_masterexportFields" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 checked
                 @change="fieldChanged('MASTER', item, $event)"
-              > {{ value_masterfieldsforExport.find(
-                (field) =>
-                {return field.key == item}).value }}
-              <CButton
-                style="float:right;width: 40px; min-width:unset;"
-                @click="fieldMove('MASTER', item, -1)"
-              >
+              />
+              {{
+                value_masterfieldsforExport.find((field) => {
+                  return field.key == item;
+                }).value
+              }}
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('MASTER', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton
-                style="float:right;width: 40px; min-width:unset;"
-                @click="fieldMove('MASTER', item, 1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('MASTER', item, 1)">
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_masternotinExportList"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_masternotinExportList" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('MASTER', item, $event)"
-              > {{ value_masterfieldsforExport.find((field) => {return
-                                                                field.key == item}).value }}
+              />
+              {{
+                value_masterfieldsforExport.find((field) => {
+                  return;
+                  field.key == item;
+                }).value
+              }}
             </li>
           </ul>
         </CCol>
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton
-            class="ml-1 btn-temp"
-            color="secondary"
-            @click="flag_masterCollapse=false"
-          >
+          <CButton class="ml-1 btn-temp" color="secondary" @click="flag_masterCollapse = false">
             {{ $t('Cancel') }}
           </CButton>
-          <CButton
-            class="ml-1 btn-temp"
-            color="primary"
-            @click="clickOnExport"
-            style="min-width: unset;"
-          >
+          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset">
             {{ $t('Apply') }}
           </CButton>
         </footer>
@@ -512,25 +413,15 @@
         </div>
       </template>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FileType') }}
         </CCol>
         <CCol col="9">
-          <CSelect
-            size="lg"
-            :value.sync="value_fileType"
-            :options="[`.txt`, `.csv`, `.xlsx`]"
-          />
+          <CSelect size="lg" :value.sync="value_fileType" :options="[`.txt`, `.csv`, `.xlsx`]" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('txtSeparator') }}
         </CCol>
         <CCol col="9">
@@ -546,19 +437,11 @@
               { label: `customize (TBD)`, value: '' },
             ]"
           />
-          <CInput
-            v-model="value_separator"
-            v-show="value_txtSeparator ==''"
-            type="text"
-            size="lg"
-          />
+          <CInput v-model="value_separator" v-show="value_txtSeparator == ''" type="text" size="lg" />
         </CCol>
       </CRow>
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('CapturedPhoto') }}
         </CCol>
         <CCol col="9">
@@ -569,82 +452,62 @@
             :options="[
               { label: $t('Excluded'), value: 'Excluded' },
               { label: $t('Embedded'), value: 'Embedded' },
-              { label: $t('Files'), value: 'Files' }
+              { label: $t('Files'), value: 'Files' },
             ]"
           />
         </CCol>
       </CRow>
 
       <CRow>
-        <CCol
-          col="3"
-          class="pt-2 label"
-        >
+        <CCol col="3" class="pt-2 label">
           {{ $t('FieldName') }}
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_detailexportFields"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_detailexportFields" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 checked
                 @change="fieldChanged('DETAIL', item, $event)"
-              > {{ value_detailfieldsforExport.find(
-                (field) =>
-                {return field.key == item}).value }}
-              <CButton
-                style="float:right;width: 40px; min-width:unset;"
-                @click="fieldMove('DETAIL', item, -1)"
-              >
+              />
+              {{
+                value_detailfieldsforExport.find((field) => {
+                  return field.key == item;
+                }).value
+              }}
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('DETAIL', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
-              <CButton
-                style="float:right;width: 40px; min-width:unset;"
-                @click="fieldMove('DETAIL', item, 1)"
-              >
+              <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('DETAIL', item, 1)">
                 <CIcon name="cil-arrow-thick-bottom" />
               </CButton>
             </li>
 
-            <li
-              class="list-group-item"
-              v-for="(item, index) in value_detailnotinExportList"
-              :key="index"
-            >
+            <li class="list-group-item" v-for="(item, index) in value_detailnotinExportList" :key="index">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('DETAIL', item, $event)"
-              > {{ value_detailfieldsforExport.find(
-                (field) =>
-                {return
-                 field.key == item}).value }}
+              />
+              {{
+                value_detailfieldsforExport.find((field) => {
+                  return;
+                  field.key == item;
+                }).value
+              }}
             </li>
           </ul>
         </CCol>
       </CRow>
       <template #footer-wrapper>
         <footer class="modal-footer">
-          <CButton
-            class="ml-1 btn-temp"
-            color="secondary"
-            @click="flag_detailCollapse=false"
-          >
+          <CButton class="ml-1 btn-temp" color="secondary" @click="flag_detailCollapse = false">
             {{ $t('Cancel') }}
           </CButton>
-          <CButton
-            class="ml-1 btn-temp"
-            color="primary"
-            @click="clickOnExport"
-            style="min-width: unset;"
-          >
+          <CButton class="ml-1 btn-temp" color="primary" @click="clickOnExport" style="min-width: unset">
             {{ $t('Apply') }}
           </CButton>
         </footer>
@@ -687,7 +550,6 @@ export default {
   },
   data() {
     return {
-
       obj_loading: null,
 
       flag_downloadingExecl: false,
@@ -697,8 +559,9 @@ export default {
       excelCounter: 0,
       exportNo: 0,
 
-      value_emptyPhoto: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAA'
-          + 'QAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
+      value_emptyPhoto:
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAA' +
+        'QAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==',
       value_dataItemsToShow: [],
       value_allTableItems: [],
       value_summary: {
@@ -758,9 +621,7 @@ export default {
         'noleaverecord',
       ],
 
-      value_masternotinExportList: [
-
-      ],
+      value_masternotinExportList: [],
 
       value_detailfieldsforExport: [
         { key: 'id', value: this.$t('PersonId') },
@@ -784,29 +645,16 @@ export default {
         'cardno',
       ],
 
-      value_detailnotinExportList: [
-
-      ],
+      value_detailnotinExportList: [],
 
       // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show // e74d7c
-      value_attendanceStatusColor: [
-        '#fff',
-        '#57bd37',
-        '#57bd37',
-        '#ee7447',
-        '#ee7447',
-        '#d8cde3',
-      ],
+      value_attendanceStatusColor: ['#fff', '#57bd37', '#57bd37', '#ee7447', '#ee7447', '#d8cde3'],
 
       value_specifiedMonth: new Date(),
       value_attendanceDataListToReview: null,
       value_dataItemsToShowDetailData: [],
       value_selectedMonth: 0,
-      value_selectedMonthName: [
-        this.$t('ThisMonth'),
-        this.$t('LastMonth'),
-        this.$t('Select'),
-      ],
+      value_selectedMonthName: [this.$t('ThisMonth'), this.$t('LastMonth'), this.$t('Select')],
       value_monthPicked: null,
       value_showAllPerson: `${this.$t('AllPerson')}: 0`,
       value_showLatePerson: `${this.$t('LatePerson')}: 0`,
@@ -838,7 +686,7 @@ export default {
       ...this.formData,
     };
   },
-  created() { },
+  created() {},
   mixins: [TableObserver],
   mounted() {
     this.$globalGetAttendanceSettings((err, data) => {
@@ -848,22 +696,28 @@ export default {
         this.value_workingHourSettings.videoDeviceGroupIn = [];
         this.value_workingHourSettings.videoDeviceGroupOut = [];
 
-        if ((this.value_workingHourSettings.video_device_group_in.length >= 1)
-            || (this.value_workingHourSettings.video_device_group_out.length >= 1)) {
+        if (
+          this.value_workingHourSettings.video_device_group_in.length >= 1 ||
+          this.value_workingHourSettings.video_device_group_out.length >= 1
+        ) {
           this.$globalFindVideoDeviceGroups('', 0, 2000, (error, response) => {
             if (error == null) {
               const { result } = response;
 
               result.forEach((r) => {
                 if (r) {
-                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.uuid) >= 0) {
-                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
-                    this.value_workingHourSettings.videoDeviceGroupIn = this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
+                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.name) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupIn =
+                      this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupIn =
+                      this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
                   }
 
-                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.uuid) >= 0) {
-                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
-                    this.value_workingHourSettings.videoDeviceGroupOut = this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
+                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.name) >= 0) {
+                    this.value_workingHourSettings.videoDeviceGroupOut =
+                      this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
+                    this.value_workingHourSettings.videoDeviceGroupOut =
+                      this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
                   }
                 }
               });
@@ -943,7 +797,8 @@ export default {
         this.refreshTableItems();
       } else {
         this.value_dataItemsToShowDetailData = this.generateFilteredDataForDetailData(
-          this.value_attendanceDataListToReview, this.value_searchingFilter,
+          this.value_attendanceDataListToReview,
+          this.value_searchingFilter,
         );
       }
     },
@@ -983,11 +838,12 @@ export default {
         case 2:
           this.$refs.datePicker.openPopup();
           break;
-        default: break;
+        default:
+          break;
       }
     },
     fieldChanged(mode, item, evt) {
-      if ((evt.target.checked) && (mode === 'MASTER')) {
+      if (evt.target.checked && mode === 'MASTER') {
         const idx1 = this.value_masterexportFields.indexOf(item);
         const idx2 = this.value_masternotinExportList.indexOf(item);
 
@@ -1008,7 +864,7 @@ export default {
           const popped = this.value_masternotinExportList.pop();
           this.value_masternotinExportList.push(popped);
         }
-      } else if ((evt.target.checked) && (mode === 'DETAIL')) {
+      } else if (evt.target.checked && mode === 'DETAIL') {
         const idx1 = this.value_detailexportFields.indexOf(item);
         const idx2 = this.value_detailnotinExportList.indexOf(item);
 
@@ -1029,7 +885,7 @@ export default {
           const popped = this.value_detailnotinExportList.pop();
           this.value_detailnotinExportList.push(popped);
         }
-      } else if ((!evt.target.checked) && (mode === 'MASTER')) {
+      } else if (!evt.target.checked && mode === 'MASTER') {
         const idx1 = this.value_masterexportFields.indexOf(item);
         const idx2 = this.value_masternotinExportList.indexOf(item);
 
@@ -1050,7 +906,7 @@ export default {
           const popped = this.value_masternotinExportList.pop();
           this.value_masternotinExportList.push(popped);
         }
-      } else if ((!evt.target.checked) && (mode === 'DETAIL')) {
+      } else if (!evt.target.checked && mode === 'DETAIL') {
         const idx1 = this.value_detailexportFields.indexOf(item);
         const idx2 = this.value_detailnotinExportList.indexOf(item);
 
@@ -1078,8 +934,8 @@ export default {
       if (mode === 'MASTER') {
         const idx = this.value_masterexportFields.indexOf(item);
 
-        if ((step === -1) && (idx === 0)) return;
-        if ((step === 1) && (idx === this.value_masterexportFields.length - 1)) return;
+        if (step === -1 && idx === 0) return;
+        if (step === 1 && idx === this.value_masterexportFields.length - 1) return;
 
         const temp = this.value_masterexportFields[idx];
         this.value_masterexportFields[idx] = this.value_masterexportFields[idx + step];
@@ -1092,8 +948,8 @@ export default {
       } else if (mode === 'DETAIL') {
         const idx = this.value_detailexportFields.indexOf(item);
 
-        if ((step === -1) && (idx === 0)) return;
-        if ((step === 1) && (idx === this.value_detailexportFields.length - 1)) return;
+        if (step === -1 && idx === 0) return;
+        if (step === 1 && idx === this.value_detailexportFields.length - 1) return;
 
         const temp = this.value_detailexportFields[idx];
         this.value_detailexportFields[idx] = this.value_detailexportFields[idx + step];
@@ -1282,11 +1138,16 @@ export default {
       }
 
       switch (this.value_fileType) {
-        case '.txt': this.exportMasterToTXTCSV(); break;
-        case '.csv': this.exportMasterToTXTCSV(); break;
+        case '.txt':
+          this.exportMasterToTXTCSV();
+          break;
+        case '.csv':
+          this.exportMasterToTXTCSV();
+          break;
         case '.xlsx':
         default:
-          this.exportMaterToExcel(); break;
+          this.exportMaterToExcel();
+          break;
       }
 
       this.flag_downloadingExecl = false;
@@ -1304,9 +1165,14 @@ export default {
 
           // eslint-disable-next-line no-await-in-loop
           const personResult = await new Promise((resolve) => {
-            this.onFetchPersonDataCallback(sliceShift, pageSize, this.value_searchingFilter, (error, personTableItems) => {
-              resolve({ error, personTableItems });
-            });
+            this.onFetchPersonDataCallback(
+              sliceShift,
+              pageSize,
+              this.value_searchingFilter,
+              (error, personTableItems) => {
+                resolve({ error, personTableItems });
+              },
+            );
           });
 
           if (personResult.error || !personResult.personTableItems) {
@@ -1347,7 +1213,7 @@ export default {
                       verify_uuid: d.verify_uuid,
                       timestamp: d.timestamp,
                       source_id: d.source_id,
-                      temperature: (d.temperature > 0) ? `${d.temperature.toFixed(1)}°C` : '',
+                      temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
                       verify_mode: d.verify_mode,
                       verify_mode_string: d.verify_mode_string,
                       verify_score: d.verify_score,
@@ -1360,7 +1226,10 @@ export default {
                 });
               }
 
-              personCopy.attendanceStatusData = this.generateAttendanceStatusData_V2(this.value_workingHourSettings, personCopy);
+              personCopy.attendanceStatusData = this.generateAttendanceStatusData_V2(
+                this.value_workingHourSettings,
+                personCopy,
+              );
 
               allPersonData.push(personCopy);
             });
@@ -1410,17 +1279,38 @@ export default {
 
       for (let i = 0; i < this.value_masterexportFields.length; i += 1) {
         switch (this.value_masterexportFields[i]) {
-          case 'id': columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 }); break;
-          case 'name': columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 }); break;
-          case 'group_list': columns.push({ header: this.$t('Group'), key: 'groups', width: 10 }); break;
-          case 'workingTime': columns.push({ header: this.$t('WorkingTime'), key: 'working_time', width: 10 }); break;
-          case 'overTime': columns.push({ header: this.$t('Overtime'), key: 'over_time', width: 10 }); break;
-          case 'norecord': columns.push({ header: this.$t('NoRecord'), key: 'norecord', width: 10 }); break;
-          case 'arrivallate': columns.push({ header: this.$t('LatePerson'), key: 'lateperson', width: 10 }); break;
-          case 'leaveearly': columns.push({ header: this.$t('LeaveEarly'), key: 'leaveearly', width: 10 }); break;
-          case 'noentryrecord': columns.push({ header: this.$t('NoEntryRecord'), key: 'noentryrecord', width: 10 }); break;
-          case 'noleaverecord': columns.push({ header: this.$t('NoLeaveRecord'), key: 'noleaverecord', width: 10 }); break;
-          default: break;
+          case 'id':
+            columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 });
+            break;
+          case 'name':
+            columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 });
+            break;
+          case 'group_list':
+            columns.push({ header: this.$t('Group'), key: 'groups', width: 10 });
+            break;
+          case 'workingTime':
+            columns.push({ header: this.$t('WorkingTime'), key: 'working_time', width: 10 });
+            break;
+          case 'overTime':
+            columns.push({ header: this.$t('Overtime'), key: 'over_time', width: 10 });
+            break;
+          case 'norecord':
+            columns.push({ header: this.$t('NoRecord'), key: 'norecord', width: 10 });
+            break;
+          case 'arrivallate':
+            columns.push({ header: this.$t('LatePerson'), key: 'lateperson', width: 10 });
+            break;
+          case 'leaveearly':
+            columns.push({ header: this.$t('LeaveEarly'), key: 'leaveearly', width: 10 });
+            break;
+          case 'noentryrecord':
+            columns.push({ header: this.$t('NoEntryRecord'), key: 'noentryrecord', width: 10 });
+            break;
+          case 'noleaverecord':
+            columns.push({ header: this.$t('NoLeaveRecord'), key: 'noleaverecord', width: 10 });
+            break;
+          default:
+            break;
         }
       }
 
@@ -1443,9 +1333,13 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+              item.groups = (item.group_list || [])
+                .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+                .join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+              item.groups = (JSON.parse(item.group_list) || [])
+                .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+                .join(', ');
             }
           } catch (ex) {
             item.groups = '';
@@ -1647,8 +1541,8 @@ export default {
         let total = 0;
         for (let j = 0; j < item3.attendanceStatusData.attendance_data.clock_in_status.length; j += 1) {
           if (
-            item3.attendanceStatusData.attendance_data.clock_in_status[j] === 5
-              && item3.attendanceStatusData.attendance_data.clock_out_status[j] === 5
+            item3.attendanceStatusData.attendance_data.clock_in_status[j] === 5 &&
+            item3.attendanceStatusData.attendance_data.clock_out_status[j] === 5
           ) {
             obj[`D${j + 1}`] = 'X';
             total += 1;
@@ -2024,7 +1918,7 @@ export default {
           const rec = item9.attendanceStatusData.attendance_data.clock_out_record[j];
 
           if (rec.timestamp) {
-            obj[`D${(j + 1)}`] = dayjs(rec.timestamp).format('HH:mm:ss');
+            obj[`D${j + 1}`] = dayjs(rec.timestamp).format('HH:mm:ss');
           }
         }
         worksheet.addRow(obj);
@@ -2090,9 +1984,13 @@ export default {
 
           try {
             if (Array.isArray(item.group_list)) {
-              item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+              item.groups = (item.group_list || [])
+                .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+                .join(', ');
             } else {
-              item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+              item.groups = (JSON.parse(item.group_list) || [])
+                .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+                .join(', ');
             }
           } catch (ex) {
             item.groups = '';
@@ -2104,17 +2002,38 @@ export default {
         const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_masterexportFields.length; i += 1) {
           switch (self.value_masterexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'workingTime': ln.push(`"${item.working_time}"`); break;
-            case 'overTime': ln.push(`"${item.over_time}"`); break;
-            case 'norecord': ln.push(`"${item.no_record}"`); break;
-            case 'arrivallate': ln.push(`"${item.late}"`); break;
-            case 'leaveearly': ln.push(`"${item.early}"`); break;
-            case 'noentryrecord': ln.push(`"${item.no_entry}"`); break;
-            case 'noleaverecord': ln.push(`"${item.no_leave}"`); break;
-            default: break;
+            case 'id':
+              ln.push(`"${item.id}"`);
+              break;
+            case 'name':
+              ln.push(`"${item.nameToShow}"`);
+              break;
+            case 'group_list':
+              ln.push(`"${item.groups}"`);
+              break;
+            case 'workingTime':
+              ln.push(`"${item.working_time}"`);
+              break;
+            case 'overTime':
+              ln.push(`"${item.over_time}"`);
+              break;
+            case 'norecord':
+              ln.push(`"${item.no_record}"`);
+              break;
+            case 'arrivallate':
+              ln.push(`"${item.late}"`);
+              break;
+            case 'leaveearly':
+              ln.push(`"${item.early}"`);
+              break;
+            case 'noentryrecord':
+              ln.push(`"${item.no_entry}"`);
+              break;
+            case 'noleaverecord':
+              ln.push(`"${item.no_leave}"`);
+              break;
+            default:
+              break;
           }
         }
         data += `${ln.join(separator)}\r\n`;
@@ -2134,10 +2053,7 @@ export default {
       zip.file(filename, blob);
 
       zip.generateAsync({ type: 'blob' }).then((content) => {
-        FileSaver.saveAs(
-          content,
-          `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.zip`,
-        );
+        FileSaver.saveAs(content, `Monthly_Attendance_${dayjs(self.value_specifiedMonth).format('YYYYMM')}.zip`);
       });
     },
 
@@ -2145,11 +2061,16 @@ export default {
       const self = this;
 
       switch (self.value_fileType) {
-        case '.txt': self.exportDetailToTXTCSV(); break;
-        case '.csv': self.exportDetailToTXTCSV(); break;
+        case '.txt':
+          self.exportDetailToTXTCSV();
+          break;
+        case '.csv':
+          self.exportDetailToTXTCSV();
+          break;
         case '.xlsx':
         default:
-          self.exportDetailToExcel(); break;
+          self.exportDetailToExcel();
+          break;
       }
     },
 
@@ -2181,15 +2102,32 @@ export default {
 
       for (let i = 0; i < this.value_detailexportFields.length; i += 1) {
         switch (this.value_detailexportFields[i]) {
-          case 'id': columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 }); break;
-          case 'name': columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 }); break;
-          case 'group_list': columns.push({ header: this.$t('Group'), key: 'groups', width: 10 }); break;
-          case 'mode': columns.push({ header: this.$t('ClockingMode'), key: 'clockMode', width: 10 }); break;
-          case 'clockTime': columns.push({ header: this.$t('ClockTime'), key: 'clockTime', width: 10 }); break;
-          case 'temperature': columns.push({ header: this.$t('Temperature'), key: 'temperature', width: 10 }); break;
-          case 'face_image': columns.push({ header: this.$t('CapturedPhoto'), key: 'face_image', width: 10 }); break;
-          case 'cardno': columns.push({ header: this.$t('CardNumber'), key: 'card_number', width: 10 }); break;
-          default: break;
+          case 'id':
+            columns.push({ header: this.$t('PersonId'), key: 'id', width: 10 });
+            break;
+          case 'name':
+            columns.push({ header: this.$t('PersonName'), key: 'nameToShow', width: 10 });
+            break;
+          case 'group_list':
+            columns.push({ header: this.$t('Group'), key: 'groups', width: 10 });
+            break;
+          case 'mode':
+            columns.push({ header: this.$t('ClockingMode'), key: 'clockMode', width: 10 });
+            break;
+          case 'clockTime':
+            columns.push({ header: this.$t('ClockTime'), key: 'clockTime', width: 10 });
+            break;
+          case 'temperature':
+            columns.push({ header: this.$t('Temperature'), key: 'temperature', width: 10 });
+            break;
+          case 'face_image':
+            columns.push({ header: this.$t('CapturedPhoto'), key: 'face_image', width: 10 });
+            break;
+          case 'cardno':
+            columns.push({ header: this.$t('CardNumber'), key: 'card_number', width: 10 });
+            break;
+          default:
+            break;
         }
       }
 
@@ -2231,11 +2169,15 @@ export default {
 
           try {
             if (Array.isArray(this.value_attendanceDataListToReview[idx].group_list)) {
-              this.value_attendanceDataListToReview[idx].groups = (this.value_attendanceDataListToReview[idx].group_list || [])
+              this.value_attendanceDataListToReview[idx].groups = (
+                this.value_attendanceDataListToReview[idx].group_list || []
+              )
                 .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
                 .join(', ');
             } else {
-              this.value_attendanceDataListToReview[idx].groups = (JSON.parse(this.value_attendanceDataListToReview[idx].group_list) || [])
+              this.value_attendanceDataListToReview[idx].groups = (
+                JSON.parse(this.value_attendanceDataListToReview[idx].group_list) || []
+              )
                 .filter((item) => !(item == 'All Person' || item == 'All Visitor'))
                 .join(', ');
             }
@@ -2259,7 +2201,9 @@ export default {
         if (pos >= 0) {
           if (self.value_snapshotFileType === 'Embedded' || self.value_snapshotFileType === 'Files') {
             if (self.value_attendanceDataListToReview[idx].face_image_id) {
-              const imageRet = await self.$globalFetchVerifyPhoto(self.value_attendanceDataListToReview[idx].face_image_id);
+              const imageRet = await self.$globalFetchVerifyPhoto(
+                self.value_attendanceDataListToReview[idx].face_image_id,
+              );
 
               if (imageRet && imageRet.data) {
                 if (self.value_snapshotFileType === 'Embedded') {
@@ -2271,7 +2215,9 @@ export default {
                   worksheet.lastRow.height = 60;
                   worksheet.addImage(
                     photoId,
-                    `${String.fromCharCode(66 + pos)}${worksheet.rowCount}:${String.fromCharCode(66 + pos)}${worksheet.rowCount}`,
+                    `${String.fromCharCode(66 + pos)}${worksheet.rowCount}:${String.fromCharCode(66 + pos)}${
+                      worksheet.rowCount
+                    }`,
                   );
                 }
 
@@ -2280,11 +2226,7 @@ export default {
                     .replace('/', '_')
                     .replace(' ', '_')
                     .replace(':', '_');
-                  snapshotFolder.file(
-                    `${self.exportNo}_${fileTime}.jpeg`,
-                    imageRet.data.face_image,
-                    { base64: true },
-                  );
+                  snapshotFolder.file(`${self.exportNo}_${fileTime}.jpeg`, imageRet.data.face_image, { base64: true });
                 }
               }
             }
@@ -2366,9 +2308,13 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+            item.groups = (item.group_list || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join(', ');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+            item.groups = (JSON.parse(item.group_list) || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join(', ');
           }
         } catch (ex) {
           item.groups = '';
@@ -2377,15 +2323,32 @@ export default {
         const ln = [`"${self.exportNo}"`];
         for (let i = 0; i < self.value_detailexportFields.length; i += 1) {
           switch (self.value_detailexportFields[i]) {
-            case 'id': ln.push(`"${item.id}"`); break;
-            case 'name': ln.push(`"${item.nameToShow}"`); break;
-            case 'group_list': ln.push(`"${item.groups}"`); break;
-            case 'mode': ln.push(`"${item.clockMode}"`); break;
-            case 'clockTime': ln.push(`"${item.clockTime}"`); break;
-            case 'temperature': ln.push(`"${item.temperature}"`); break;
-            case 'cardno': ln.push(`"${item.card_number}"`); break;
-            case 'face_image': ln.push(''); break;
-            default: break;
+            case 'id':
+              ln.push(`"${item.id}"`);
+              break;
+            case 'name':
+              ln.push(`"${item.nameToShow}"`);
+              break;
+            case 'group_list':
+              ln.push(`"${item.groups}"`);
+              break;
+            case 'mode':
+              ln.push(`"${item.clockMode}"`);
+              break;
+            case 'clockTime':
+              ln.push(`"${item.clockTime}"`);
+              break;
+            case 'temperature':
+              ln.push(`"${item.temperature}"`);
+              break;
+            case 'cardno':
+              ln.push(`"${item.card_number}"`);
+              break;
+            case 'face_image':
+              ln.push('');
+              break;
+            default:
+              break;
           }
         }
         data += `${ln.join(separator)}\r\n`;
@@ -2407,10 +2370,7 @@ export default {
       zip.file(filename, blob);
 
       zip.generateAsync({ type: 'blob' }).then((content) => {
-        FileSaver.saveAs(
-          content,
-          `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.zip`,
-        );
+        FileSaver.saveAs(content, `Attendance_${dayjs(self.value_specifiedMonth).format('MMDD')}_${personName}.zip`);
       });
     },
 
@@ -2458,19 +2418,31 @@ export default {
     generateFilteredDataForCurrentPage(sourceData) {
       // 處理當前頁的資料（後端已分頁,不需再切割）
       const self = this;
-      const daysInMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth() + 1, 0).getDate();
+      const daysInMonth = new Date(
+        self.value_specifiedMonth.getFullYear(),
+        self.value_specifiedMonth.getMonth() + 1,
+        0,
+      ).getDate();
 
       sourceData.forEach((pItem) => {
         const item = pItem;
-        item.attendanceStatusData = self.generateAttendanceStatusData_V2(self.value_workingHourSettings, item, daysInMonth);
+        item.attendanceStatusData = self.generateAttendanceStatusData_V2(
+          self.value_workingHourSettings,
+          item,
+          daysInMonth,
+        );
         item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, daysInMonth);
         item.person = `${item.name}<br>${item.id}`;
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
+            item.groups = (item.group_list || [])
+              .filter((group) => !(group === 'All Person' || group === 'All Visitor'))
+              .join('<br>');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((group) => !(group === 'All Person' || group === 'All Visitor')).join('<br>');
+            item.groups = (JSON.parse(item.group_list) || [])
+              .filter((group) => !(group === 'All Person' || group === 'All Visitor'))
+              .join('<br>');
           }
         } catch (ex) {
           item.groups = '';
@@ -2488,11 +2460,15 @@ export default {
     },
     generateFilteredData(sourceData, filter) {
       const self = this;
-      const filteredItems = filter.length === 0
-        ? sourceData
-        : sourceData.filter((item) => item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1));
+      const filteredItems =
+        filter.length === 0
+          ? sourceData
+          : sourceData.filter(
+              (item) =>
+                item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                (item.group_list && item.group_list.toString().toLowerCase().indexOf(filter.toLowerCase()) > -1),
+            );
 
       self.value_tablePage.totalResult = filteredItems.length;
 
@@ -2527,12 +2503,13 @@ export default {
           item.workingTimeToShow += `<br> ${this.$t('Overtime')} : ${self.formatDurationTime(totalOverTime)}`;
         }
 
-        item.attendanceStatusText = `${this.$t('NoRecord')} : ${item.no_record} <br>`
-            + `${this.$t('LatePerson')} : ${item.late} <br>`
-            + `${this.$t('LeaveEarly')} : ${item.early} <br>`
-            + `${this.$t('NoEntryRecord')} : ${item.no_entry} <br>`
-            + `${this.$t('NoLeaveRecord')} : ${item.no_leave} <br>`
-            + `${this.$t('OvertimeDays')} : ${item.overtime} <br>`;
+        item.attendanceStatusText =
+          `${this.$t('NoRecord')} : ${item.no_record} <br>` +
+          `${this.$t('LatePerson')} : ${item.late} <br>` +
+          `${this.$t('LeaveEarly')} : ${item.early} <br>` +
+          `${this.$t('NoEntryRecord')} : ${item.no_entry} <br>` +
+          `${this.$t('NoLeaveRecord')} : ${item.no_leave} <br>` +
+          `${this.$t('OvertimeDays')} : ${item.overtime} <br>`;
       });
       const sliceList = filteredItems.slice(
         (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize,
@@ -2545,23 +2522,25 @@ export default {
 
         if (item.attendance_data_list && item.attendance_data_list.length > 0) {
           item.details = [
-            '<div align=\'center\'>',
+            "<div align='center'>",
             `<button type='submit' class='btn btn-outline-primary btn-detail' id='${detailsButtonId}'>`,
-            '<i class=\'fa fa-list\'/></button></div>',
+            "<i class='fa fa-list'/></button></div>",
           ].join('');
         } else {
-          item.details = [
-            '<div align=\'center\'></div>',
-          ].join('');
+          item.details = ["<div align='center'></div>"].join('');
         }
 
         item.person = `${item.name}<br>${item.id}`;
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join('<br>');
+            item.groups = (item.group_list || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join('<br>');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join('<br>');
+            item.groups = (JSON.parse(item.group_list) || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join('<br>');
           }
         } catch (ex) {
           item.groups = '';
@@ -2570,30 +2549,34 @@ export default {
         item.clockDate = dayjs(self.value_specifiedMonth).format('MM/YYYY');
       });
 
-      self.value_showAllPerson = `${this.$t('AllPerson')}`
-          + ` : ${self.value_allTableItems.length}`;
+      self.value_showAllPerson = `${this.$t('AllPerson')}` + ` : ${self.value_allTableItems.length}`;
 
-      self.value_showLatePerson = `${this.$t('LatePerson')}`
-          + ` : ${self.value_allTableItems.filter((p) => p.late > 0).length}`;
+      self.value_showLatePerson =
+        `${this.$t('LatePerson')}` + ` : ${self.value_allTableItems.filter((p) => p.late > 0).length}`;
 
-      self.value_showLeaveEarlyPerson = `${this.$t('LeaveEarly')}`
-          + ` : ${self.value_allTableItems.filter((p) => p.early > 0).length}`;
+      self.value_showLeaveEarlyPerson =
+        `${this.$t('LeaveEarly')}` + ` : ${self.value_allTableItems.filter((p) => p.early > 0).length}`;
 
-      self.value_showNoRecordPerson = `${this.$t('NoRecord')}`
-          + ` : ${self.value_allTableItems.filter((p) => p.no_record > 0).length}`;
+      self.value_showNoRecordPerson =
+        `${this.$t('NoRecord')}` + ` : ${self.value_allTableItems.filter((p) => p.no_record > 0).length}`;
 
-      self.value_showGoodRecordsPerson = `${this.$t('GoodRecords')}`
-          + ` : ${self.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
+      self.value_showGoodRecordsPerson =
+        `${this.$t('GoodRecords')}` +
+        ` : ${self.value_allTableItems.filter((p) => p.early === 0 && p.late === 0 && p.no_record === 0).length}`;
 
       return Object.assign([], sliceList);
     },
 
     generateFilteredDataForDetailData(sourceData, filter) {
       const self = this;
-      const filteredItems = filter.length === 0
-        ? sourceData : sourceData.filter(
-          (item) => (item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 || item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1),
-        );
+      const filteredItems =
+        filter.length === 0
+          ? sourceData
+          : sourceData.filter(
+              (item) =>
+                item.id.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1,
+            );
       self.value_tablePageForDetailData.totalResult = filteredItems.length;
       const sliceList = filteredItems.slice(
         (self.value_tablePageForDetailData.currentPage - 1) * self.value_tablePageForDetailData.pageSize,
@@ -2632,9 +2615,13 @@ export default {
 
         try {
           if (Array.isArray(item.group_list)) {
-            item.groups = (item.group_list || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+            item.groups = (item.group_list || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join(', ');
           } else {
-            item.groups = (JSON.parse(item.group_list) || []).filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor')).join(', ');
+            item.groups = (JSON.parse(item.group_list) || [])
+              .filter((groupItem) => !(groupItem == 'All Person' || groupItem == 'All Visitor'))
+              .join(', ');
           }
         } catch (ex) {
           item.groups = '';
@@ -2643,9 +2630,10 @@ export default {
         const showimageId = item.face_image_id ? item.face_image_id.f + item.face_image_id.uuid : '';
 
         if (showimageId.length > 0) {
-          item.showimage = `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs`
-              + '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQI'
-              + 'HWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==\' width=\'100\' height=\'100\'>';
+          item.showimage =
+            `<img id='${showimageId}' src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs` +
+            '4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQI' +
+            "HWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==' width='100' height='100'>";
           self.$globalFetchVerifyPhoto(item.face_image_id, (error, data) => {
             if (error === null && data && data.face_image && data.face_image.length > 0) {
               item.imageb64 = data.face_image;
@@ -2693,70 +2681,75 @@ export default {
           const sliceShift = (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize;
           const sliceSize = self.value_tablePage.pageSize;
 
-          self.onFetchPersonDataCallback(sliceShift, sliceSize, self.value_searchingFilter, async (error, personTableItems, totalLength) => {
-            if (!error) {
-            // 設定總筆數
-              self.value_tablePage.totalResult = totalLength;
+          self.onFetchPersonDataCallback(
+            sliceShift,
+            sliceSize,
+            self.value_searchingFilter,
+            async (error, personTableItems, totalLength) => {
+              if (!error) {
+                // 設定總筆數
+                self.value_tablePage.totalResult = totalLength;
 
-              if (personTableItems && personTableItems.length >= 1) {
-                const uuidList = personTableItems.map((person) => person.uuid);
+                if (personTableItems && personTableItems.length >= 1) {
+                  const uuidList = personTableItems.map((person) => person.uuid);
 
-                self.onFetchPersonAttendanceDataCallback(
-                  self.value_specifiedMonth,
-                  uuidList,
-                  (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
-                    const currentPageItems = [];
+                  self.onFetchPersonAttendanceDataCallback(
+                    self.value_specifiedMonth,
+                    uuidList,
+                    (errorOnPersonVr, resetPersonVr, morePersonVr, personVrItems) => {
+                      const currentPageItems = [];
 
-                    personTableItems.forEach((person) => {
-                      const personCopy = { ...person };
-                      personCopy.attendance_data_list = [];
+                      personTableItems.forEach((person) => {
+                        const personCopy = { ...person };
+                        personCopy.attendance_data_list = [];
 
-                      if (personVrItems && personVrItems.length > 0) {
-                        const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
-                        dataListOnUuid.forEach((d) => {
-                          if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
-                            personCopy.attendance_data_list.push({
-                              id: d.id,
-                              name: d.name,
-                              department: personCopy.extra_info ? personCopy.extra_info.department : '',
-                              verify_uuid: d.verify_uuid,
-                              timestamp: d.timestamp,
-                              source_id: d.source_id,
-                              yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
-                              temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
-                              verify_mode: d.verify_mode,
-                              verify_mode_string: d.verify_mode_string,
-                              verify_score: d.verify_score,
-                              card_number: d.card_number,
-                              group_list: d.group_list,
-                              face_image_id: d.face_image_id,
-                            });
-                          }
-                        });
-                      }
+                        if (personVrItems && personVrItems.length > 0) {
+                          const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
+                          dataListOnUuid.forEach((d) => {
+                            if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
+                              personCopy.attendance_data_list.push({
+                                id: d.id,
+                                name: d.name,
+                                department: personCopy.extra_info ? personCopy.extra_info.department : '',
+                                verify_uuid: d.verify_uuid,
+                                timestamp: d.timestamp,
+                                source_id: d.source_id,
+                                yyyymmdd: dayjs(d.timestamp).format('YYYY-MM-DD'),
+                                temperature: d.temperature === 0 ? '' : `${d.temperature}°C`,
+                                verify_mode: d.verify_mode,
+                                verify_mode_string: d.verify_mode_string,
+                                verify_score: d.verify_score,
+                                card_number: d.card_number,
+                                group_list: d.group_list,
+                                face_image_id: d.face_image_id,
+                              });
+                            }
+                          });
+                        }
 
-                      currentPageItems.push(personCopy);
-                    });
+                        currentPageItems.push(personCopy);
+                      });
 
-                    // 處理當前頁資料並顯示
-                    self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
+                      // 處理當前頁資料並顯示
+                      self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
 
-                    if (self.obj_loading) self.obj_loading.hide();
-                    self.observeTableSize();
-                    if (cb) cb();
-                  },
-                );
+                      if (self.obj_loading) self.obj_loading.hide();
+                      self.observeTableSize();
+                      if (cb) cb();
+                    },
+                  );
+                } else {
+                  self.value_dataItemsToShow = [];
+                  if (self.obj_loading) self.obj_loading.hide();
+                  self.observeTableSize();
+                  if (cb) cb();
+                }
               } else {
-                self.value_dataItemsToShow = [];
                 if (self.obj_loading) self.obj_loading.hide();
-                self.observeTableSize();
                 if (cb) cb();
               }
-            } else {
-              if (self.obj_loading) self.obj_loading.hide();
-              if (cb) cb();
-            }
-          });
+            },
+          );
         } else {
           // 篩選模式：使用 summary 中的 UUID 列表
           const startIndex = (self.value_tablePage.currentPage - 1) * self.value_tablePage.pageSize;
@@ -2869,7 +2862,8 @@ export default {
 
       const definedClockoutTimeMin = workingHourSettings.defined_clockout_time_min || 0;
       const definedClockoutTimeBufferMins = workingHourSettings.defined_clockout_time_buffer_mins || 30;
-      const definedClockoutTimeEarlyLeaveEnabled = workingHourSettings.defined_clockout_time_early_leave_enabled || true;
+      const definedClockoutTimeEarlyLeaveEnabled =
+        workingHourSettings.defined_clockout_time_early_leave_enabled || true;
       const definedClockoutAdjustmentEnabled = workingHourSettings.defined_clockout_adjustment_enabled || false;
 
       const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled || true;
@@ -2917,8 +2911,24 @@ export default {
       const overTime = definedOvertimeTimeHour * msHour + definedOvertimeTimeMin * msMin;
       const overTimeBuffer = definedOvertimeMinimumMin * msMin;
 
-      const startTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth(), 1, 0, 0, 0, 0);
-      const endTimeOfMonth = new Date(self.value_specifiedMonth.getFullYear(), self.value_specifiedMonth.getMonth() + 1, 1, 0, 0, 0, 0);
+      const startTimeOfMonth = new Date(
+        self.value_specifiedMonth.getFullYear(),
+        self.value_specifiedMonth.getMonth(),
+        1,
+        0,
+        0,
+        0,
+        0,
+      );
+      const endTimeOfMonth = new Date(
+        self.value_specifiedMonth.getFullYear(),
+        self.value_specifiedMonth.getMonth() + 1,
+        1,
+        0,
+        0,
+        0,
+        0,
+      );
       const daysOnMonth = (endTimeOfMonth - startTimeOfMonth) / msDay;
 
       const returnData = {
@@ -2977,29 +2987,22 @@ export default {
 
         if (attRecList) {
           const passModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs
-                && attRec.timestamp <= tDayEndTs
-                && (attRec.verify_mode === 0 || attRec.verify_mode === 1 || attRec.verify_mode === 2),
+            (attRec) =>
+              attRec.timestamp >= tDayStartTs &&
+              attRec.timestamp <= tDayEndTs &&
+              (attRec.verify_mode === 0 || attRec.verify_mode === 1 || attRec.verify_mode === 2),
           );
           const clockInModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs
-                && attRec.timestamp <= tDayEndTs
-                && attRec.verify_mode === 3,
+            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 3,
           );
           const clockOutModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs
-                && attRec.timestamp <= tDayEndTs
-                && attRec.verify_mode === 4,
+            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 4,
           );
           const manualClockInRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs
-                && attRec.timestamp <= tDayEndTs
-                && attRec.verify_mode === 5,
+            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 5,
           );
           const manualClockOutRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs
-                && attRec.timestamp <= tDayEndTs
-                && attRec.verify_mode === 6,
+            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 6,
           );
 
           if (passModeRecord.length > 0) {
@@ -3146,72 +3149,21 @@ export default {
 
           // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6: overTime
           if (clockInStatus === _STATUS_NONE) {
-            if (passModeRecord.length > 0) {
-              const first = passModeRecord[0];
-              firstClockInRec = first;
-
-              clockInTimeStamp = firstClockInRec.timestamp;
-              if (definedClockinAdjustmentEnabled && firstClockInRec.timestamp < tDayStartTs + clockInTime) {
-                clockInTimeStamp = tDayStartTs + clockInTime;
-                firstClockInRec.timestamp = clockInTimeStamp;
-              }
-
-              if (definedClockinTimeLateEnabled) {
-                if (firstClockInRec.timestamp <= tDayStartTs + clockInTime + clockInTimeBuffer) {
-                  // show on time
-                  clockInStatus = _STATUS_SHOW_ON_TIME;
-                } else {
-                  // too late to show
-                  clockInStatus = _STATUS_LATE;
-                }
-              } else {
-                // show on time
-                clockInStatus = _STATUS_SHOW_ON_TIME;
-              }
-            } else if (!holiday && timeToCheckClockIn) {
+            if (!holiday && timeToCheckClockIn) {
               clockInStatus = _STATUS_NO_SHOW;
             }
           }
 
           if (timeToCheckClockOut && clockOutStatus === _STATUS_NONE) {
-            if (passModeRecord.length >= 2) {
-              lastClockOutRec = passModeRecord[passModeRecord.length - 1];
-
-              clockOutTimeStamp = lastClockOutRec.timestamp;
-              if (definedClockoutAdjustmentEnabled && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
-                clockOutTimeStamp = tDayStartTs + clockOutTime;
-                lastClockOutRec.timestamp = clockOutTimeStamp;
-              }
-
-              if (definedClockoutTimeEarlyLeaveEnabled) {
-                if (lastClockOutRec.timestamp >= tDayStartTs + clockOutTime - clockOutTimeBuffer) {
-                  // leave on time
-                  clockOutStatus = _STATUS_LEAVE_ON_TIME;
-                } else {
-                  // too early to leave
-                  clockOutStatus = _STATUS_EARLY;
-                }
-              } else {
-                // leave on time
-                clockOutStatus = _STATUS_LEAVE_ON_TIME;
-              }
-
-              if (definedOvertimeEnabled) {
-                if (lastClockOutRec.timestamp >= tDayStartTs + overTime + overTimeBuffer) {
-                  overTimeStartStamp = tDayStartTs + overTime;
-                  overTimeEndStamp = lastClockOutRec.timestamp;
-
-                  if (overTimeEndStamp > tDayEndTs) overTimeEndStamp = tDayEndTs;
-                }
-              }
-            } else if (!holiday) {
+            if (!holiday) {
               clockOutStatus = _STATUS_NO_SHOW;
             }
           }
 
           if (!holiday && clockInStatus === _STATUS_LATE) item.late += 1;
           if (!holiday && clockOutStatus === _STATUS_EARLY) item.early += 1;
-          if ((!holiday && clockInStatus === _STATUS_NO_SHOW) || clockOutStatus === _STATUS_NO_SHOW) item.no_record += 1;
+          if ((!holiday && clockInStatus === _STATUS_NO_SHOW) || clockOutStatus === _STATUS_NO_SHOW)
+            item.no_record += 1;
 
           if (!holiday && clockInStatus === _STATUS_NO_SHOW) item.no_entry += 1;
           if (!holiday && clockOutStatus === _STATUS_NO_SHOW) item.no_leave += 1;
@@ -3224,14 +3176,16 @@ export default {
           returnData.attendance_data.clock_out_status.push(clockOutStatus);
 
           let workingTime = 0;
-          if ((clockOutTimeStamp > 0) && (clockInTimeStamp > 0)) {
+          if (clockOutTimeStamp > 0 && clockInTimeStamp > 0) {
             workingTime = clockOutTimeStamp - clockInTimeStamp - breakTime;
           }
 
           returnData.attendance_data.working_time.push(workingTime > 0 ? workingTime : 0);
 
           returnData.attendance_data.over_time_record.push({ overTimeStartStamp, overTimeEndStamp });
-          returnData.attendance_data.over_time.push(overTimeEndStamp - overTimeStartStamp > 0 ? overTimeEndStamp - overTimeStartStamp : 0);
+          returnData.attendance_data.over_time.push(
+            overTimeEndStamp - overTimeStartStamp > 0 ? overTimeEndStamp - overTimeStartStamp : 0,
+          );
         }
       }
 
@@ -3272,31 +3226,23 @@ export default {
 
         let clockInStatusColor = attendanceNoStatusColor; // no show
         if (!isHoliday) {
-          clockInStatusColor = self.value_attendanceStatusColor[
-            attendanceData.attendance_data.clock_in_status[i]
-          ];
+          clockInStatusColor = self.value_attendanceStatusColor[attendanceData.attendance_data.clock_in_status[i]];
         } else if (attendanceData.attendance_data.clock_in_status[i] !== 5) {
-          clockInStatusColor = self.value_attendanceStatusColor[
-            attendanceData.attendance_data.clock_in_status[i]
-          ];
+          clockInStatusColor = self.value_attendanceStatusColor[attendanceData.attendance_data.clock_in_status[i]];
         }
         bodyDataStringClockIn += `<td style='opacity: 1.0;border: 1px solid ${tableBordderColor};'><div style='height:12px;background-color:${clockInStatusColor};'/></td>`;
 
         let clockOutStatusColor = attendanceNoStatusColor;
         if (!isHoliday) {
-          clockOutStatusColor = self.value_attendanceStatusColor[
-            attendanceData.attendance_data.clock_out_status[i]
-          ];
+          clockOutStatusColor = self.value_attendanceStatusColor[attendanceData.attendance_data.clock_out_status[i]];
         } else if (attendanceData.attendance_data.clock_out_status[i] !== 5) {
-          clockOutStatusColor = self.value_attendanceStatusColor[
-            attendanceData.attendance_data.clock_out_status[i]
-          ];
+          clockOutStatusColor = self.value_attendanceStatusColor[attendanceData.attendance_data.clock_out_status[i]];
         }
         bodyDataStringClockOut += `<td style="opacity: 1.0;border: 1px solid ${tableBordderColor};"><div style="height:12px;background-color:${clockOutStatusColor};"/></td>`;
       }
 
       return [
-        '<div class=\'d-flex justify-content-center w-100 my-2\' style=\'height:58px;\'>',
+        "<div class='d-flex justify-content-center w-100 my-2' style='height:58px;'>",
         `<table style='border:${tableBordderSize}px solid ${tableBordderColor};margin:10px;' class='scheduler-table'>`,
         `<thead><tr>${headerDataString}</tr></thead>`,
         `<tbody><tr>${bodyDataStringClockIn}</tr><tr>${bodyDataStringClockOut}</tr></tbody>`,
@@ -3309,20 +3255,20 @@ export default {
 </script>
 
 <style>
-  .alertModal_Title {
-    font-size: 2.4rem;
-  }
+.alertModal_Title {
+  font-size: 2.4rem;
+}
 
-  .list-group-item {
-    padding-left: 30px !important;
-    padding-top: 5px;
-    padding-right: 30px;
-    padding-bottom: 5px;
-    line-height: 40px;
-    font-size: 18px;
-  }
+.list-group-item {
+  padding-left: 30px !important;
+  padding-top: 5px;
+  padding-right: 30px;
+  padding-bottom: 5px;
+  line-height: 40px;
+  font-size: 18px;
+}
 
-  .form-check-input {
-    margin-top: 0.8rem;
-  }
+.form-check-input {
+  margin-top: 0.8rem;
+}
 </style>
