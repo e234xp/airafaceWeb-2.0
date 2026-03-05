@@ -26,7 +26,6 @@ const SelfCheckinDashboard = () => import('@/views/dashboards/SelfCheckinDashboa
 const GuardDashboard = () => import('@/views/dashboards/GuardDashboard.vue');
 const AlcoholCheckinDashboard = () => import('@/views/dashboards/AlcoholCheckinDashboard.vue');
 const LiveVideoDashboard = () => import('@/views/dashboards/LiveVideoDashboard.vue');
-const HouseWarm = () => import('@/views/HouseWarm.vue');
 
 /// ////////////////////////////////////////
 /// /////    Reports    ////////////////////
@@ -228,7 +227,9 @@ function configRoutes() {
           redirect: '/reports/personreport',
           name: 'Reports',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -253,7 +254,9 @@ function configRoutes() {
           redirect: '/attendance/persondailyattendancereport',
           name: 'Attendance',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -288,7 +291,9 @@ function configRoutes() {
           redirect: '/personsmanagement/addperson',
           name: 'PersonsManagement',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -408,7 +413,9 @@ function configRoutes() {
           redirect: '/displays/ModifyWelcomeControlSetting',
           name: 'DisplayControl',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -453,7 +460,9 @@ function configRoutes() {
           redirect: '/systemsettings/networksettings',
           name: 'SystemSettings',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -523,7 +532,9 @@ function configRoutes() {
           redirect: '/videodevice/cameralist',
           name: 'VideoDevice',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -588,7 +599,9 @@ function configRoutes() {
           redirect: '/outputdevice/IOboxsManagement',
           name: 'OutputDevice',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -653,7 +666,9 @@ function configRoutes() {
           redirect: '/notifications/linenotify',
           name: 'Notifications',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -708,7 +723,9 @@ function configRoutes() {
           redirect: '/accessrules/schedules',
           name: 'AccessRules',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -749,7 +766,9 @@ function configRoutes() {
           redirect: '/events/EventControlManagement',
           name: 'EventControl',
           component: {
-            render(c) { return c('router-view'); },
+            render(c) {
+              return c('router-view');
+            },
           },
           children: [
             {
@@ -770,11 +789,6 @@ function configRoutes() {
           ],
         },
       ],
-    },
-    {
-      path: '/housewarm',
-      name: 'HouseWarm',
-      component: HouseWarm,
     },
   ];
 }
