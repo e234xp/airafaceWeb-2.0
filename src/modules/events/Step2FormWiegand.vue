@@ -63,7 +63,7 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput size="lg" class="mt-2" v-model="form.specialCardNumber" />
+              <CInput size="lg" class="mt-2" v-model="form.special_card_number" />
             </td>
             <td />
           </tr>
