@@ -18,7 +18,7 @@ global.webVersion = '2.00.01.250624v';
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.10.156'; // airaFace2
+const TEST_HOST = '192.168.16.106'; // airaFace2
 // const TEST_HOST = '192.168.10.57'; // solution day
 
 const TEST_PORT = ''; // 測試mini的PORT
