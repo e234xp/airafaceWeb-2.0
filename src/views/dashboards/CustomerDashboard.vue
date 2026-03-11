@@ -1535,7 +1535,8 @@ export default {
             ? new Date(item.timestamp).toLocaleString('zh-TW', { hour12: false })
             : '無時間記錄';
 
-          const name = item.name || '未知';
+          const matchedPerson = this.persons.find((p) => p.uuid === item.uuid);
+          const name = matchedPerson?.name || item.name || '未知';
           const oriData = item.oriData || {};
           const newData = item.newData || {};
 
