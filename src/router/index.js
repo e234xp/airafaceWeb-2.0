@@ -32,6 +32,8 @@ const LiveVideoDashboard = () => import('@/views/dashboards/LiveVideoDashboard.v
 const PersonReport = () => import('@/views/reports/PersonReport.vue');
 const VisitorReport = () => import('@/views/reports/VisitorReport.vue');
 const Investigation = () => import('@/views/reports/Investigation.vue');
+const PresenceDetail = () => import('@/views/reports/PresenceDetail.vue');
+const PresenceDetailEvents = () => import('@/views/reports/PresenceDetailEvents.vue');
 
 /// ////////////////////////////////////////
 /// /////    Persons Management    /////////
@@ -246,6 +248,16 @@ function configRoutes() {
               path: 'investigation',
               name: 'Investigation',
               component: Investigation,
+            },
+            {
+              path: 'presencedetail',
+              name: 'PresenceDetail',
+              component: PresenceDetail,
+            },
+            {
+              path: 'presencedetailevents',
+              name: 'PresenceDetailEvents',
+              component: PresenceDetailEvents,
             },
           ],
         },

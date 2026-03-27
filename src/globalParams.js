@@ -18,12 +18,12 @@ global.webVersion = '2.1.6';
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.15.125'; // airaFace2
+const TEST_HOST = '192.168.14.114'; // airaFace2
 // const TEST_HOST = '192.168.10.51'; // airaTablet_mini
 // const TEST_HOST = '192.168.10.57'; // solution day
 // const TEST_HOST = '192.168.10.41'; // airaTablet_mini 2
 
-const TEST_PORT = ''; // 測試mini的PORT
+const TEST_PORT = '443'; // 測試mini的PORT
 const HOST = TEST_MODE ? TEST_HOST : window.location.hostname;
 const PORT = TEST_MODE ? TEST_PORT : window.location.port;
 const href = window.location.href.toLowerCase();
@@ -100,7 +100,7 @@ Vue.prototype.$profileLists = [
 ];
 
 global.usingHttps = href.includes('https://') || TEST_MODE;
-// global.usingHttps = false;
+//global.usingHttps = false;
 if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelite/verifyresults`;
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 // window.apiSocketPath = `ws://${HOST}:80/airafacelite/verifyresults`;
@@ -767,6 +767,30 @@ Vue.prototype.$globalSetDisplaySetting = (setting, cb) =>
 Vue.prototype.$globalGetPersonResult = (query, cb) =>
   new Promise((resolve) => {
     postJson('/airafacelite/querypersonverifyresult', query, (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+  });
+
+Vue.prototype.$globalSetPresenceDeviceDirection = (data, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/setpresencedevicedirection', data, (err, resData) => {
+      if (cb) cb(err, err ? null : resData);
+      resolve({ error: err, data: err ? null : resData });
+    });
+  });
+
+Vue.prototype.$globalQueryPresenceDetail = (query, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/querypresencedetail', query, (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+  });
+
+Vue.prototype.$globalQueryPresenceSummary = (query, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/querypresencesummary', query, (err, data) => {
       if (cb) cb(err, err ? null : data);
       resolve({ error: err, data: err ? null : data });
     });
