@@ -145,13 +145,13 @@
               width="8%"
               align="center"
             />
-            <vxe-table-column
-              field="imgRegisterPhoto"
-              :title="disp_registerPhoto"
-              width="10%"
-              align="center"
-              type="html"
-            />
+            <vxe-table-column :title="disp_registerPhoto" width="10%" align="center">
+              <template #default="{ row }">
+                <div style="width: 80px; height: 80px; display: inline-block">
+                  <img v-if="row.registerPhotoSrc" :src="row.registerPhotoSrc" width="80" height="80" />
+                </div>
+              </template>
+            </vxe-table-column>
             <vxe-table-column :title="disp_abnormalStatus" width="10%" align="center">
               <template #default="{ row }">
                 <span :class="['status-badge', row.isAbnormal ? 'status-abnormal' : 'status-normal']">
@@ -202,9 +202,6 @@ import TableObserver from '@/utils/TableObserver.vue';
 
 import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
-
-const VALUE_EMPTY_PHOTO =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADUlEQVQIHWM4ceLEfwAIDANYXmnp+AAAAABJRU5ErkJggg==';
 
 const defaultlState = () => ({
   obj_loading: null,
@@ -321,13 +318,6 @@ export default {
       this.fetchPageData(1);
     },
 
-    formatBase64ToImgTag(eleId, width, height, base64Str) {
-      if (base64Str && base64Str.length > 0) {
-        return `<img id='${eleId}' width='${width}' height='${height}' src='data:image/jpeg;base64,${base64Str}'>`;
-      }
-      return `<img id='${eleId}' width='${width}' height='${height}' src='${VALUE_EMPTY_PHOTO}'>`;
-    },
-
     formatSeconds(totalSeconds) {
       const hours = Math.floor(totalSeconds / 3600);
       const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -344,7 +334,7 @@ export default {
         isAbnormal: item.has_anomaly,
         inTotal: this.formatSeconds(item.in_total_seconds || 0),
         outTotal: this.formatSeconds(item.out_total_seconds || 0),
-        imgRegisterPhoto: this.formatBase64ToImgTag(`imgRegPhoto${item.uuid}`, 80, 80, ''),
+        registerPhotoSrc: '',
       };
     },
 
@@ -372,7 +362,7 @@ export default {
           const { data } = retResult;
           this.value_tablePage.totalResult = data.total_length || 0;
           this.value_abnormalCount = data.anomaly_count || 0;
-          this.value_totalCount = data.person_count || 0;
+          this.value_totalCount = data.total_length || 0;
 
           const items = (data.result || []).map((item) => this.formatResultItem(item));
           this.value_dataItemsToShow = Object.assign([], items);
@@ -382,9 +372,12 @@ export default {
             const row = this.value_dataItemsToShow[ii];
             if (row.uuid) {
               const photoRet = await this.$globalFetchPhoto(row.uuid);
-              const oldImg = document.getElementById(`imgRegPhoto${row.uuid}`);
-              if (oldImg && photoRet.data && photoRet.data.register_image && photoRet.data.register_image.length > 0) {
-                oldImg.src = `data:image/jpeg;base64,${photoRet.data.register_image}`;
+              if (photoRet.data && photoRet.data.register_image && photoRet.data.register_image.length > 0) {
+                this.$set(
+                  this.value_dataItemsToShow[ii],
+                  'registerPhotoSrc',
+                  `data:image/jpeg;base64,${photoRet.data.register_image}`,
+                );
               }
             }
           }

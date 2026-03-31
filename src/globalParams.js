@@ -780,6 +780,30 @@ Vue.prototype.$globalSetPresenceDeviceDirection = (data, cb) =>
     });
   });
 
+Vue.prototype.$globalQueryPresenceCandidates = (query, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/querypresencecandidates', query, (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+  });
+
+Vue.prototype.$globalCreatePresenceException = (data, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/createpresenceexception', data, (err, resData) => {
+      if (cb) cb(err, err ? null : resData);
+      resolve({ error: err, data: err ? null : resData });
+    });
+  });
+
+Vue.prototype.$globalDeletePresenceEvent = (data, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/deletepresenceevent', data, (err, resData) => {
+      if (cb) cb(err, err ? null : resData);
+      resolve({ error: err, data: err ? null : resData });
+    });
+  });
+
 Vue.prototype.$globalQueryPresenceDetail = (query, cb) =>
   new Promise((resolve) => {
     postJson('/airafacelite/querypresencedetail', query, (err, data) => {
