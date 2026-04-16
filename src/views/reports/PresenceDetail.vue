@@ -268,6 +268,21 @@ export default {
   },
   mixins: [TableObserver],
   async created() {
+    // 從詳細頁返回時會帶 value_listState，還原列表狀態
+    const restoredState = this.$route.params && this.$route.params.value_listState;
+    if (restoredState) {
+      this.value_specifiedDatetimeRange = [
+        new Date(restoredState.startTime),
+        new Date(restoredState.endTime),
+      ];
+      this.value_searchingFilter = restoredState.keyword || '';
+      this.value_tablePage.currentPage = restoredState.currentPage || 1;
+      this.value_tablePage.pageSize = restoredState.pageSize || 10;
+      this.flag_enableSearchButton = true;
+      this.fetchPageData(this.value_tablePage.currentPage);
+      return;
+    }
+
     const endTime = new Date();
     endTime.setHours(23, 59, 59, 999);
     const startTimeTimestamp = endTime.getTime() - 86400000 + 1;
@@ -397,12 +412,24 @@ export default {
     },
 
     clickOnViewDetail(row) {
+      const listState = {
+        startTime: this.value_specifiedDatetimeRange[0]
+          ? this.value_specifiedDatetimeRange[0].getTime()
+          : null,
+        endTime: this.value_specifiedDatetimeRange[1]
+          ? this.value_specifiedDatetimeRange[1].getTime()
+          : null,
+        keyword: this.value_searchingFilter,
+        currentPage: this.value_tablePage.currentPage,
+        pageSize: this.value_tablePage.pageSize,
+      };
       this.$router.push({
         name: 'PresenceDetailEvents',
         params: {
           value_returnRoutePath: 'PresenceDetail',
           value_returnRouteName: this.$t('Return'),
           item: row,
+          value_listState: listState,
         },
       });
     },

@@ -355,6 +355,7 @@ const defaultlState = () => ({
   value_personDate: '',
   value_personId: '',
   value_personName: '',
+  value_listState: null,
 
   value_inTotalSeconds: 0,
   value_outTotalSeconds: 0,
@@ -404,6 +405,7 @@ export default {
       cloneObject.value_personDate = item.date || '';
       cloneObject.value_personId = item.person_id || item.id || '';
       cloneObject.value_personName = item.name || '';
+      cloneObject.value_listState = this.$route.params.value_listState || null;
     }
 
     return cloneObject;
@@ -447,10 +449,14 @@ export default {
     },
 
     clickOnReturn() {
+      const params = {};
+      if (this.value_listState) {
+        params.value_listState = this.value_listState;
+      }
       if (this.value_returnRoutePath) {
-        this.$router.push({ name: this.value_returnRoutePath });
+        this.$router.push({ name: this.value_returnRoutePath, params });
       } else {
-        this.$router.push({ name: 'PresenceDetail' });
+        this.$router.push({ name: 'PresenceDetail', params });
       }
     },
 
@@ -609,7 +615,9 @@ export default {
 
       chart.setOption({
         tooltip: { formatter: tooltipFormatter },
-        grid: { left: 80, right: 20, top: 10, bottom: 30 },
+        grid: {
+          left: 80, right: 20, top: 10, bottom: 30,
+        },
         xAxis: {
           type: 'time',
           axisLabel: {
