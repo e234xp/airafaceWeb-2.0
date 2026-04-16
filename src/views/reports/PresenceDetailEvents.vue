@@ -57,6 +57,14 @@
             >
           </div>
           <div>
+            <CButton
+              class="btn btn-danger btn-w-normal mr-2"
+              size="lg"
+              :disabled="value_selectedRows.length === 0"
+              @click="clickOnBatchDelete()"
+            >
+              {{ $t('Delete') }}
+            </CButton>
             <CButton class="btn btn-primary btn-w-normal mr-2" size="lg" @click="clickOnExceptionHandling()">
               {{ disp_exceptionHandling }}
             </CButton>
@@ -83,7 +91,10 @@
             :header-cell-style="headerCellStyle"
             :row-class-name="rowClassName"
             ref="mainTable"
+            @checkbox-all="mainSelectAllEvent"
+            @checkbox-change="mainSelectChangeEvent"
           >
+            <vxe-table-column type="checkbox" width="5%" align="center" />
             <vxe-table-column
               field="timeFormatted"
               :title="disp_time"
@@ -352,6 +363,7 @@ const defaultlState = () => ({
 
   value_allEvents: [],
   value_dataItemsToShow: [],
+  value_selectedRows: [],
   value_tablePage: {
     currentPage: 1,
     pageSize: 10,
@@ -671,8 +683,49 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.value_tablePage.currentPage = currentPage;
       this.value_tablePage.pageSize = pageSize;
+      this.value_selectedRows = [];
       this.showPage(currentPage);
       this.resizeOneTable();
+    },
+
+    mainSelectAllEvent({ records }) {
+      this.value_selectedRows = records;
+    },
+
+    mainSelectChangeEvent({ records }) {
+      this.value_selectedRows = records;
+    },
+
+    clickOnBatchDelete() {
+      const rows = this.value_selectedRows;
+      if (rows.length === 0) return;
+
+      this.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
+        confirmButtonText: i18n.formatter.format('Confirm'),
+        cancelButtonText: i18n.formatter.format('Cancel'),
+        confirmButtonColor: '#20a8d8',
+        cancelButtonColor: '#f86c6b',
+      }).then(async () => {
+        let successCount = 0;
+        for (let i = 0; i < rows.length; i += 1) {
+          const ret = await this.$globalDeletePresenceEvent({
+            verify_uuid: rows[i].verify_uuid,
+            date: this.value_personDate,
+          });
+          if (!ret.error) successCount += 1;
+        }
+
+        this.$fire({
+          text: `${successCount} / ${rows.length} ${i18n.formatter.format('OperationSuccess')}`,
+          type: successCount > 0 ? 'success' : 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+          confirmButtonText: i18n.formatter.format('OK'),
+        });
+
+        this.value_selectedRows = [];
+        this.fetchAllData();
+      }).catch(() => {});
     },
 
     async clickOnExceptionHandling() {
