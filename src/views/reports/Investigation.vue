@@ -165,23 +165,24 @@
             @checkbox-all="selectAllEvent"
             @checkbox-change="selectChangeEvent"
           >
-            <vxe-table-column field="dateTime" :title="disp_dateTime" width="14%" align="center" />
-            <vxe-table-column field="source" :title="disp_source" width="10%" align="center" />
-            <vxe-table-column field="id" :title="disp_id" width="8%" align="center" />
-            <vxe-table-column field="name" :title="disp_name" align="center" width="8%" />
-            <vxe-table-column field="card_number" :title="disp_cardnumber" align="center" width="8%" />
-            <vxe-table-column field="groups" :title="disp_group_list" width="10%" align="center" />
+            <vxe-table-column field="dateTime" :title="disp_dateTime" sortable width="14%" align="center" />
+            <vxe-table-column field="source" :title="disp_source" sortable width="10%" align="center" />
+            <vxe-table-column field="id" :title="disp_id" sortable width="8%" align="center" />
+            <vxe-table-column field="name" :title="disp_name" sortable align="center" width="8%" />
+            <vxe-table-column field="card_number" :title="disp_cardnumber" sortable align="center" width="8%" />
+            <vxe-table-column field="groups" :title="disp_group_list" sortable width="10%" align="center" />
             <vxe-table-column
               v-if="$deviceProfile.supportTemperature"
               field="temperature"
               :title="disp_temperature"
+              sortable
               width="8%"
               align="center"
             />
-            <vxe-table-column field="clockMode" :title="disp_verify_mode" width="8%" align="center" />
-            <vxe-table-column field="score" :title="disp_verify_score" width="8%" align="center" />
+            <vxe-table-column field="clockMode" :title="disp_verify_mode" sortable width="8%" align="center" />
+            <vxe-table-column field="score" :title="disp_verify_score" sortable width="8%" align="center" />
             <vxe-table-column min-width="8%" field="showimage" :title="disp_face_image" type="html" />
-            <vxe-table-column min-width="8%" field="commands" :title="$t('Remarks')" align="center" />
+            <vxe-table-column min-width="8%" field="commands" :title="$t('Remarks')" sortable align="center" />
 
             <!-- <vxe-table-column :title="disp_face_image" min-width="10%">
               <template #default="{ row }">

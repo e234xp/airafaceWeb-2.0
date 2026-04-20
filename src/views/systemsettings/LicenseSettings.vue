@@ -69,16 +69,16 @@
             <div>
               <vxe-table :data="value_dataItemsToShow" height="398" columns-height="100" stripe align="center"
                 :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="mainTable">
-                <vxe-table-column show-overflow field="no" :title="$t('Seq')" min-width="100" align="left" />
-                <vxe-table-column show-overflow field="license_key" :title="$t('LicenseKey')" min-width="380"
+                <vxe-table-column show-overflow field="no" :title="$t('Seq')" sortable min-width="100" align="left" />
+                <vxe-table-column show-overflow field="license_key" :title="$t('LicenseKey')" sortable min-width="380"
                   align="left" />
-                <vxe-table-column show-overflow field="trial_days" :title="$t('TrialDays')" min-width="120"
+                <vxe-table-column show-overflow field="trial_days" :title="$t('TrialDays')" sortable min-width="120"
                   align="left" />
-                <vxe-table-column show-overflow field="local_end_time" :title="$t('ExpireDays')" min-width="250"
+                <vxe-table-column show-overflow field="local_end_time" :title="$t('ExpireDays')" sortable min-width="250"
                   align="left" />
-                <vxe-table-column show-overflow field="face_db_size" :title="$t('FaceDBSize')" min-width="160"
+                <vxe-table-column show-overflow field="face_db_size" :title="$t('FaceDBSize')" sortable min-width="160"
                   align="left" />
-                <vxe-table-column show-overflow field="channel_amount" :title="$t('Amounts')" min-width="100"
+                <vxe-table-column show-overflow field="channel_amount" :title="$t('Amounts')" sortable min-width="100"
                   align="left" />
                 <vxe-table-column show-overflow field="status_display" :title="$t('Status')" min-width="100"
                   align="center" type="html" />

@@ -31,7 +31,7 @@
                   <vxe-button type="text" icon="far fa-minus-square" @click="deleteItemEvent(row)" />
                 </template>
               </vxe-table-column>
-              <vxe-table-column show-overflow field="display_string" width="400px" />
+              <vxe-table-column show-overflow field="display_string" width="400px" sortable />
             </vxe-table>
           </CCol>
         </CRow>

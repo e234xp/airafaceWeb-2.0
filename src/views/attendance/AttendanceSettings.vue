@@ -260,7 +260,7 @@
                       <vxe-button type="text" icon="far fa-minus-square" @click="deleteHolidayEvent(row)" />
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column style="text-align: left" show-overflow field="display_string" width="auto" />
+                  <vxe-table-column style="text-align: left" show-overflow field="display_string" sortable width="auto" />
                 </vxe-table>
 
                 <vxe-pager class="h-theme-pager" :layouts="[
@@ -282,7 +282,7 @@
                       <vxe-button type="text" icon="far fa-minus-square" @click="deleteNonHolidayEvent(row)" />
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column show-overflow field="display_string" width="auto" />
+                  <vxe-table-column show-overflow field="display_string" sortable width="auto" />
                 </vxe-table>
 
                 <vxe-pager class="h-theme-pager" :layouts="[

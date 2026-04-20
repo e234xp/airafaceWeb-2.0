@@ -36,8 +36,8 @@
               <vxe-table id="AllTable" :data="value_allItemsToShow" style="height:528px" stripe show-header-overflow
                 :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="allTable" empty-text=" ">
                 <vxe-table-column type="" width="60" align="center" />
-                <vxe-table-column show-overflow field="id" :title="$t('PersonId')" width="180" align="left" />
-                <vxe-table-column show-overflow field="name" :title="$t('PersonName')" align="left" />
+                <vxe-table-column show-overflow field="id" :title="$t('PersonId')" sortable width="180" align="left" />
+                <vxe-table-column show-overflow field="name" :title="$t('PersonName')" sortable align="left" />
               </vxe-table>
               <vxe-pager :layouts="[ 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
                 :current-page="value_allTablePage.currentPage" :page-size="value_allTablePage.pageSize"

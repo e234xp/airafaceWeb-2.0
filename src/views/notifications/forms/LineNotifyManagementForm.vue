@@ -49,11 +49,11 @@
                 </template>
               </vxe-table-column> -->
 
-              <vxe-table-column field="name" width="20%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" />
+              <vxe-table-column field="name" width="20%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" sortable />
               <vxe-table-column field="access_token" width="20%" :show-overflow="ellipsisMode"
-                :title="$t('LineAccessToken')" />
+                :title="$t('LineAccessToken')" sortable />
 
-              <vxe-table-column field="fields" width="40%" :show-overflow="ellipsisMode" :title="$t('ContentField')">
+              <vxe-table-column field="fields" width="40%" :show-overflow="ellipsisMode" :title="$t('ContentField')" sortable>
                 <template #default="{ row }">
                   {{ displayFields(row) }}
                 </template>

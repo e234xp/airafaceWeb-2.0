@@ -127,6 +127,7 @@
                   show-overflow
                   field="id"
                   :title="$t('PersonId')"
+                  sortable
                   min-width="40%"
                   align="left"
                 />
@@ -134,6 +135,7 @@
                   show-overflow
                   field="name"
                   :title="$t('PersonName')"
+                  sortable
                   min-width="40%"
                   align="left"
                 />
@@ -218,6 +220,7 @@
                   show-overflow
                   field="id"
                   :title="$t('PersonId')"
+                  sortable
                   align="left"
                 />
                 <vxe-table-column
@@ -225,6 +228,7 @@
                   min-width="40%"
                   field="name"
                   :title="$t('PersonName')"
+                  sortable
                   align="left"
                 />
               </vxe-table>

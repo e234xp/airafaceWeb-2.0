@@ -64,12 +64,14 @@
                 :show-overflow="ellipsisMode"
                 field="name"
                 :title="disp_settingName"
+                sortable
                 min-width="16%"
               ></vxe-table-column>
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="event_control_type"
                 :title="disp_event_control_type"
+                sortable
                 min-width="16%"
               >
               </vxe-table-column>
@@ -78,6 +80,7 @@
                 field="remarks"
                 min-width="16%"
                 :title="disp_remarks"
+                sortable
               ></vxe-table-column>
               <vxe-table-column
                 min-width="12%"

@@ -25,11 +25,11 @@
 
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_outputDevices" width="30%"
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_outputDevices" sortable width="30%"
               align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" align="center"
+            <vxe-table-column :show-overflow="ellipsisMode" field="group" :title="disp_group" sortable align="center"
               width="auto"></vxe-table-column>
 
             <!-- <vxe-table-column field="enable" :title="disp_enable" min-width="12%">

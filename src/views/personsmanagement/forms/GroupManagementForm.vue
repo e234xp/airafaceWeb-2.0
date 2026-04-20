@@ -45,17 +45,17 @@
               @checkbox-change="selectChangeEvent" -->
 
               <vxe-table-column type="checkbox" width="10%" align="center" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="$t('GroupName')" width="16%"
+              <vxe-table-column :show-overflow="ellipsisMode" field="nameToShow" :title="$t('GroupName')" sortable width="16%"
                 align="center" />
               <vxe-table-column :show-overflow="ellipsisMode" field="numberOfPersonInGroup"
-                :title="$t('NumberOfPersonInGroup')" width="12%" align="center" />
+                :title="$t('NumberOfPersonInGroup')" sortable width="12%" align="center" />
               <vxe-table-column :show-overflow="ellipsisMode" field="numberOfVisitorInGroup"
-                :title="$t('NumberOfVisitorInGroup')" width="12%" align="center" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="remarks" width="14%" :title="$t('Remarks')"
+                :title="$t('NumberOfVisitorInGroup')" sortable width="12%" align="center" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="remarks" sortable width="14%" :title="$t('Remarks')"
                 align="left" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="auto"
+              <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" sortable width="auto"
                 align="center" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="createDate" :title="$t('CreateDate')" width="20%"
+              <vxe-table-column :show-overflow="ellipsisMode" field="createDate" :title="$t('CreateDate')" sortable width="20%"
                 align="center" />
               <vxe-table-column field="actionButton" title="" type="html" />
             </vxe-table>

@@ -53,10 +53,10 @@
                   </label>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="name" width="20%" :show-overflow="ellipsisMode" :title="$t('SettingName')" />
+              <vxe-table-column field="name" width="20%" :show-overflow="ellipsisMode" :title="$t('SettingName')" sortable />
               <vxe-table-column field="action_type" width="20%" :show-overflow="ellipsisMode"
-                :title="$t('EventControlType')" />
-              <vxe-table-column field="remarks" width="20%" :show-overflow="ellipsisMode" :title="$t('Note')" />
+                :title="$t('EventControlType')" sortable />
+              <vxe-table-column field="remarks" width="20%" :show-overflow="ellipsisMode" :title="$t('Note')" sortable />
 
               <vxe-table-column min-width="15%">
                 <template #default="{ row }">

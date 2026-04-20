@@ -46,14 +46,14 @@
                   <vxe-switch v-model="row.enable" v-on:change="activeStatusChange(row)"></vxe-switch>
                 </template>
               </vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_settingName"
+              <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_settingName" sortable
                 min-width="12%"></vxe-table-column>
-              <vxe-table-column :show-overflow="ellipsisMode" field="group_list" :title="disp_group"
+              <vxe-table-column :show-overflow="ellipsisMode" field="group_list" :title="disp_group" sortable
                 min-width="20%"></vxe-table-column>
               <vxe-table-column :show-overflow="ellipsisMode" field="access_control_type_name"
-                :title="disp_access_control_type" min-width="12%"></vxe-table-column>
+                :title="disp_access_control_type" sortable min-width="12%"></vxe-table-column>
               <vxe-table-column min-width="12%" :show-overflow="ellipsisMode" field="remarks"
-                :title="disp_remarks"></vxe-table-column>
+                :title="disp_remarks" sortable></vxe-table-column>
               <vxe-table-column field="actionButton" title="" min-width="12%" type="html" />
             </vxe-table>
           </div>

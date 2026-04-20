@@ -45,9 +45,9 @@
               @checkbox-change="selectChangeEvent" -->
 
               <vxe-table-column type="checkbox" width="10%" align="center" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="username" :title="$t('Account')" width="16%"
+              <vxe-table-column :show-overflow="ellipsisMode" field="username" :title="$t('Account')" sortable width="16%"
                 align="left" />
-              <vxe-table-column :show-overflow="ellipsisMode" field="maskpassword" :title="$t('Password')" width="16%"
+              <vxe-table-column :show-overflow="ellipsisMode" field="maskpassword" :title="$t('Password')" sortable width="16%"
                 :edit-render="{ type: 'default' }" align="left">
                 <template #edit="{ row }">
                   <vxe-input v-model="row.password" type="password" />

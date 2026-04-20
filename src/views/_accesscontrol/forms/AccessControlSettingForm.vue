@@ -134,6 +134,7 @@
                     show-overflow
                     field="display_string"
                     width="695"
+                    sortable
                   ></vxe-table-column>
                 </vxe-table>
                 <vxe-pager

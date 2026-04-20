@@ -44,6 +44,7 @@
             show-overflow
             field="deviceType"
             :title="$t('DeviceType')"
+            sortable
             min-width="40%"
             align="left"
           />
@@ -51,6 +52,7 @@
             show-overflow
             field="name"
             :title="$t('DeviceName')"
+            sortable
             min-width="40%"
             align="left"
           />
@@ -130,6 +132,7 @@
             show-overflow
             field="deviceType"
             :title="$t('DeviceType')"
+            sortable
             align="left"
           />
           <vxe-table-column
@@ -137,6 +140,7 @@
             min-width="40%"
             field="name"
             :title="$t('DeviceName')"
+            sortable
             align="left"
           />
         </vxe-table>

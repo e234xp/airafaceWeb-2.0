@@ -50,11 +50,11 @@
                   </label>
                 </template>
               </vxe-table-column> -->
-              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" />
-              <vxe-table-column field="host" width="10%" :show-overflow="ellipsisMode" :title="$t('HostAddress')" />
-              <vxe-table-column field="sender" width="10%" :show-overflow="ellipsisMode" :title="$t('SMTPSender')" />
-              <vxe-table-column field="subject" width="10%" :show-overflow="ellipsisMode" :title="$t('SMTPSubject')" />
-              <vxe-table-column field="fields" width="20%" :show-overflow="ellipsisMode" :title="$t('ContentField')">
+              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" sortable />
+              <vxe-table-column field="host" width="10%" :show-overflow="ellipsisMode" :title="$t('HostAddress')" sortable />
+              <vxe-table-column field="sender" width="10%" :show-overflow="ellipsisMode" :title="$t('SMTPSender')" sortable />
+              <vxe-table-column field="subject" width="10%" :show-overflow="ellipsisMode" :title="$t('SMTPSubject')" sortable />
+              <vxe-table-column field="fields" width="20%" :show-overflow="ellipsisMode" :title="$t('ContentField')" sortable>
                 <template #default="{ row }">
                   {{ displayFields(row) }}
                 </template>

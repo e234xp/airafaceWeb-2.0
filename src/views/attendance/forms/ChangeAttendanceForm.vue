@@ -40,15 +40,15 @@
         <div>
           <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable">
-            <vxe-table-column field="userName" :title="$t('PersonName')" align="center" width="10%" />
+            <vxe-table-column field="userName" :title="$t('PersonName')" sortable align="center" width="10%" />
 
-            <vxe-table-column field="groupList" :title="$t('Group')" align="center" width="20%" />
+            <vxe-table-column field="groupList" :title="$t('Group')" sortable align="center" width="20%" />
 
-            <vxe-table-column field="dateString" :title="$t('ForgetPunchDate')" width="20%" align="center" />
+            <vxe-table-column field="dateString" :title="$t('ForgetPunchDate')" sortable width="20%" align="center" />
 
-            <vxe-table-column field="clockIn" :title="$t('ClockIn')" width="25%" align="center" />
+            <vxe-table-column field="clockIn" :title="$t('ClockIn')" sortable width="25%" align="center" />
 
-            <vxe-table-column field="clockOut" :title="$t('ClockOut')" width="25%" align="center" />
+            <vxe-table-column field="clockOut" :title="$t('ClockOut')" sortable width="25%" align="center" />
           </vxe-table>
         </div>
       </CCardBody>

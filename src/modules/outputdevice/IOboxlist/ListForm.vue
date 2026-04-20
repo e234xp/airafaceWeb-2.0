@@ -54,14 +54,14 @@
               </template>
             </vxe-table-column> -->
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center"
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" sortable align="center"
               width="20%"></vxe-table-column>
 
             <!-- <vxe-table-column :show-overflow="ellipsisMode" field="status" :title="disp_status" width="auto"
               align="center">
             </vxe-table-column> -->
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" width="auto"
+            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" sortable width="auto"
               align="center">
             </vxe-table-column>
 

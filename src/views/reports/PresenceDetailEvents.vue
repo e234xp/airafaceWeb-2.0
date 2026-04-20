@@ -99,6 +99,7 @@
               field="timeFormatted"
               :title="disp_time"
               :show-overflow="ellipsisMode"
+              sortable
               width="12%"
               align="center"
             />
@@ -106,6 +107,7 @@
               field="employeeInfo"
               :title="disp_employee"
               :show-overflow="ellipsisMode"
+              sortable
               width="15%"
               align="center"
             />
@@ -113,10 +115,17 @@
               field="source_name"
               :title="disp_camera"
               :show-overflow="ellipsisMode"
+              sortable
               width="18%"
               align="center"
             />
-            <vxe-table-column :title="disp_direction" width="10%" align="center">
+            <vxe-table-column
+              field="presence_direction"
+              :title="disp_direction"
+              sortable
+              width="10%"
+              align="center"
+            >
               <template #default="{ row }">
                 <span :class="['direction-badge', row.presence_direction === 'IN' ? 'direction-in' : 'direction-out']">
                   {{ row.presence_direction }}

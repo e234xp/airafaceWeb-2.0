@@ -200,7 +200,7 @@
                 type="html"
                 width="10%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="$t('Date')" width="10%" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="$t('Date')" sortable width="10%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="workingTimeToShow"
@@ -257,26 +257,29 @@
               :cell-style="cellStyle"
               :header-cell-style="headerCellStyle"
             >
-              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="$t('PersonId')" width="12%" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="id" :title="$t('PersonId')" sortable width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="nameToShow"
                 :title="$t('PersonName')"
+                sortable
                 width="12%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="$t('Group')" width="15%" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="$t('Group')" sortable width="15%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockMode"
                 :title="$t('ClockingMode')"
+                sortable
                 width="12%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="$t('ClockTime')" width="12%" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="$t('ClockTime')" sortable width="12%" />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="temperature"
                 v-if="$deviceProfile.supportTemperature"
                 :title="$t('Temperature')"
+                sortable
                 width="12%"
               />
               <vxe-table-column field="showimage" :title="$t('CapturedPhoto')" type="html" />
@@ -284,6 +287,7 @@
                 :show-overflow="ellipsisMode"
                 field="card_number"
                 :title="$t('CardNumber')"
+                sortable
                 width="12%"
               />
             </vxe-table>

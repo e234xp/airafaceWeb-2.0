@@ -80,6 +80,7 @@
               :show-overflow="ellipsisMode"
               field="name"
               :title="disp_group"
+              sortable
               align="center"
               width="15%"
             />
@@ -88,6 +89,7 @@
               :show-overflow="ellipsisMode"
               field="camera_count"
               :title="disp_videoDevices"
+              sortable
               width="15%"
               align="center"
             />
@@ -96,6 +98,7 @@
               :show-overflow="ellipsisMode"
               field="outputDevices"
               :title="disp_outputDevices"
+              sortable
               width="15%"
               align="center"
             />
@@ -104,6 +107,7 @@
               :show-overflow="ellipsisMode"
               field="rules"
               :title="disp_rules"
+              sortable
               width="15%"
               align="center"
             />

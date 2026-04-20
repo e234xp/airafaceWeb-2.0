@@ -176,6 +176,7 @@
                 :show-overflow="ellipsisMode"
                 field="id"
                 :title="$t('PersonId')"
+                sortable
                 width="120px"
                 style="font: 10px"
               />
@@ -183,15 +184,17 @@
                 :show-overflow="ellipsisMode"
                 field="nameToShow"
                 :title="$t('PersonName')"
+                sortable
                 width="14%"
               />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="extra_info.department"
                 :title="$t('Department')"
+                sortable
                 width="14%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="groupToShow" :title="$t('Group')" width="14%" />
+              <vxe-table-column :show-overflow="ellipsisMode" field="groupToShow" :title="$t('Group')" sortable width="14%" />
 
               <!-- 註冊照片 -->
               <vxe-table-column width="170" field="imgRegisterPhoto" :title="$t('RegisterPhoto')" type="html" />

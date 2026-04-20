@@ -683,6 +683,7 @@
                         show-overflow
                         field="id"
                         :title="disp_id"
+                        sortable
                         width="180"
                         align="left"
                       />
@@ -690,6 +691,7 @@
                         show-overflow
                         field="name"
                         :title="disp_name"
+                        sortable
                         width="250"
                         align="left"
                       />
@@ -785,6 +787,7 @@
                         show-overflow
                         field="id"
                         :title="disp_id"
+                        sortable
                         width="180"
                         align="left"
                       />
@@ -792,6 +795,7 @@
                         show-overflow
                         field="name"
                         :title="disp_name"
+                        sortable
                         width="250"
                         align="left"
                       />
@@ -863,6 +867,7 @@
                     <vxe-table-column
                       show-overflow
                       field="display_string"
+                      sortable
                       width="400px"
                     />
                   </vxe-table>

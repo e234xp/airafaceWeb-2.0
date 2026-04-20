@@ -114,6 +114,7 @@
               field="date"
               :title="disp_date"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />
@@ -121,6 +122,7 @@
               field="id"
               :title="disp_personId"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />
@@ -128,6 +130,7 @@
               field="name"
               :title="disp_name"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />
@@ -135,6 +138,7 @@
               field="department"
               :title="disp_department"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />
@@ -142,6 +146,7 @@
               field="groups"
               :title="disp_group"
               :show-overflow="ellipsisMode"
+              sortable
               width="8%"
               align="center"
             />
@@ -163,6 +168,7 @@
               field="inTotal"
               :title="disp_inTotal"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />
@@ -170,6 +176,7 @@
               field="outTotal"
               :title="disp_outTotal"
               :show-overflow="ellipsisMode"
+              sortable
               width="10%"
               align="center"
             />

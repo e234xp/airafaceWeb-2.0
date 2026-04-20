@@ -66,7 +66,7 @@
               </template>
             </vxe-table-column> -->
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" align="center"
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_deviceName" sortable align="center"
               width="10%" />
 
             <vxe-table-column :show-overflow="ellipsisMode" :title="disp_status" width="15%" align="center">
@@ -75,7 +75,7 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" />
+            <vxe-table-column :show-overflow="ellipsisMode" field="ip_address" :title="disp_ipAddress" sortable />
 
             <vxe-table-column min-width="5%">
               <template #default="{ row }">

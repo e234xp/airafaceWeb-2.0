@@ -49,18 +49,18 @@
             :edit-config="{ trigger: 'manual', mode: 'row' }">
             <vxe-table-column type="checkbox" align="center" width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" align="center"
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="disp_group" sortable align="center"
               width="auto"></vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="iobox_count" :title="disp_videoDevices" width="auto"
+            <vxe-table-column :show-overflow="ellipsisMode" field="iobox_count" :title="disp_videoDevices" sortable width="auto"
               align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="wiegand_converter_count" :title="disp_outputDevices"
+            <vxe-table-column :show-overflow="ellipsisMode" field="wiegand_converter_count" :title="disp_outputDevices" sortable
               width="auto" align="center">
             </vxe-table-column>
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" width="auto"
+            <vxe-table-column :show-overflow="ellipsisMode" field="rules" :title="disp_rules" sortable width="auto"
               align="center">
             </vxe-table-column>
 

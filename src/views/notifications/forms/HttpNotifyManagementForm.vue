@@ -53,10 +53,10 @@
                 </template>
               </vxe-table-column> -->
 
-              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" />
-              <vxe-table-column field="url" width="30%" :show-overflow="ellipsisMode" :title="$t('HttpUrl')" />
+              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="$t('NotifyName')" sortable />
+              <vxe-table-column field="url" width="30%" :show-overflow="ellipsisMode" :title="$t('HttpUrl')" sortable />
 
-              <vxe-table-column field="fields" width="40%" :show-overflow="ellipsisMode" :title="$t('ContentField')">
+              <vxe-table-column field="fields" width="40%" :show-overflow="ellipsisMode" :title="$t('ContentField')" sortable>
                 <template #default="{ row }">
                   {{ displayFields(row) }}
                 </template>

@@ -50,8 +50,8 @@
                   </label>
                 </template>
               </vxe-table-column> -->
-              <vxe-table-column field="name" width="25%" :show-overflow="ellipsisMode" :title="disp_name" />
-              <vxe-table-column field="type" width="40%" :show-overflow="ellipsisMode" :title="disp_recurrent">
+              <vxe-table-column field="name" width="25%" :show-overflow="ellipsisMode" :title="disp_name" sortable />
+              <vxe-table-column field="type" width="40%" :show-overflow="ellipsisMode" :title="disp_recurrent" sortable>
                 <template #default="{ row }">
                   {{ row.type == 'recurrent' ? $t('ScheduleRecurrent'): $t('ScheduleNonrecurrent') }}
                 </template>

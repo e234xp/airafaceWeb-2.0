@@ -68,15 +68,17 @@
               field="dateTime"
               :title="disp_dateTime"
               :show-overflow="ellipsisMode"
+              sortable
               width="16%"
               align="center"
             />
-            <vxe-table-column field="source" :title="disp_source" width="10%" align="center" />
-            <vxe-table-column field="id" :title="disp_id" :show-overflow="ellipsisMode" width="13%" align="center" />
+            <vxe-table-column field="source" :title="disp_source" sortable width="10%" align="center" />
+            <vxe-table-column field="id" :title="disp_id" :show-overflow="ellipsisMode" sortable width="13%" align="center" />
             <vxe-table-column
               field="name"
               :title="disp_name"
               :show-overflow="ellipsisMode"
+              sortable
               width="13%"
               align="center"
             />
@@ -84,6 +86,7 @@
               field="groups"
               :title="disp_group_list"
               :show-overflow="ellipsisMode"
+              sortable
               width="16%"
               align="center"
             />
@@ -92,6 +95,7 @@
               field="temperature"
               :title="disp_temperature"
               :show-overflow="ellipsisMode"
+              sortable
               width="13%"
               align="center"
             />
@@ -99,6 +103,7 @@
               field="score"
               :title="disp_verify_score"
               :show-overflow="ellipsisMode"
+              sortable
               width="16%"
               align="center"
             />

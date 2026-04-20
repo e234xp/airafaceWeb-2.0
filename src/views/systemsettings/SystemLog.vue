@@ -30,9 +30,9 @@
           <div>
             <vxe-table :data="value_dataItemsToShow" height="531" columns-height="100" stripe align="center"
               :cell-style="cellStyle" :header-cell-style="headerCellStyle" ref="mainTable">
-              <vxe-table-column field="dateTime" :title="$t('Time')" width="30%" style="font: 10px" align="center" />
-              <vxe-table-column field="level" :title="$t('Level')" width="30%" align="center" />
-              <vxe-table-column field="message" :title="$t('Info')" width="40%" align="left" />
+              <vxe-table-column field="dateTime" :title="$t('Time')" sortable width="30%" style="font: 10px" align="center" />
+              <vxe-table-column field="level" :title="$t('Level')" sortable width="30%" align="center" />
+              <vxe-table-column field="message" :title="$t('Info')" sortable width="40%" align="left" />
             </vxe-table>
           </div>
           <vxe-pager :layouts="[

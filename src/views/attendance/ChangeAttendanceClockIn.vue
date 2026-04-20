@@ -44,19 +44,19 @@
         <div id="ChangeAttendanceClockIn">
           <vxe-table :data="value_dataItemsToShow" stripe align="center" :cell-style="cellStyle"
             :header-cell-style="headerCellStyle" ref="mainTable" :auto-resize="true" keep-source highlight-current-row>
-            <vxe-table-column :show-overflow="ellipsisMode" field="verify_mode_string" :title="$t('ChangeLogsType')"
+            <vxe-table-column :show-overflow="ellipsisMode" field="verify_mode_string" :title="$t('ChangeLogsType')" sortable
               align="center" width="10%" />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="$t('ChangeLogsTargetPerson')"
+            <vxe-table-column :show-overflow="ellipsisMode" field="name" :title="$t('ChangeLogsTargetPerson')" sortable
               align="center" width="20%" />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="$t('ChangeLogsNewTime')"
+            <vxe-table-column :show-overflow="ellipsisMode" field="timestamp" :title="$t('ChangeLogsNewTime')" sortable
               width="20%" align="center" />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="$t('ChangeLogsReason')" width="20%"
+            <vxe-table-column :show-overflow="ellipsisMode" field="remark" :title="$t('ChangeLogsReason')" sortable width="20%"
               align="center" />
 
-            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="$t('ChangeLogsModifier')"
+            <vxe-table-column :show-overflow="ellipsisMode" field="modifier" :title="$t('ChangeLogsModifier')" sortable
               width="30%" align="center" />
           </vxe-table>
         </div>

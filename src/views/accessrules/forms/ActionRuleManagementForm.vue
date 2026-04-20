@@ -50,7 +50,7 @@
                   </label>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="disp_name" />
+              <vxe-table-column field="name" width="10%" :show-overflow="ellipsisMode" :title="disp_name" sortable />
               <vxe-table-column field="condition" width="20%" :show-overflow="ellipsisMode" :title="disp_what"
                 type="html">
                 <template #default="{ row }">
