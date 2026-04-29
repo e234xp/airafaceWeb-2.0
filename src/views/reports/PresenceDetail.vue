@@ -84,6 +84,29 @@
                 {{ disp_exportExcel }} ({{ disp_withoutPhoto }})
               </CDropdownItem>
             </CDropdown>
+            <CButtonGroup class="ml-3 anomaly-filter-group">
+              <CButton
+                :color="value_anomalyFilter === null ? 'primary' : 'light'"
+                size="lg"
+                @click="changeAnomalyFilter(null)"
+              >
+                {{ disp_allLabel }}
+              </CButton>
+              <CButton
+                :color="value_anomalyFilter === false ? 'primary' : 'light'"
+                size="lg"
+                @click="changeAnomalyFilter(false)"
+              >
+                {{ disp_normalLabel }}
+              </CButton>
+              <CButton
+                :color="value_anomalyFilter === true ? 'primary' : 'light'"
+                size="lg"
+                @click="changeAnomalyFilter(true)"
+              >
+                {{ disp_abnormalLabel }}
+              </CButton>
+            </CButtonGroup>
           </div>
 
           <div class="d-flex align-items-center">
@@ -236,6 +259,7 @@ const defaultlState = () => ({
   disp_viewDetail: i18n.formatter.format('ViewDetail'),
   disp_normalLabel: i18n.formatter.format('Normal'),
   disp_abnormalLabel: i18n.formatter.format('Abnormal'),
+  disp_allLabel: i18n.formatter.format('All'),
   disp_abnormal: i18n.formatter.format('AbnormalCount'),
   disp_person: i18n.formatter.format('PersonCount'),
 
@@ -251,6 +275,9 @@ const defaultlState = () => ({
 
   value_abnormalCount: 0,
   value_totalCount: 0,
+
+  // null=全部, false=正常, true=異常
+  value_anomalyFilter: null,
 
   flag_showDeviceModal: false,
   value_deviceList: [],
@@ -285,6 +312,9 @@ export default {
       this.value_searchingFilter = restoredState.keyword || '';
       this.value_tablePage.currentPage = restoredState.currentPage || 1;
       this.value_tablePage.pageSize = restoredState.pageSize || 10;
+      if (restoredState.anomalyFilter !== undefined) {
+        this.value_anomalyFilter = restoredState.anomalyFilter;
+      }
       this.flag_enableSearchButton = true;
       this.fetchPageData(this.value_tablePage.currentPage);
       return;
@@ -340,6 +370,13 @@ export default {
       this.fetchPageData(1);
     },
 
+    changeAnomalyFilter(value) {
+      if (this.value_anomalyFilter === value) return;
+      this.value_anomalyFilter = value;
+      this.value_tablePage.currentPage = 1;
+      this.fetchPageData(1);
+    },
+
     formatSeconds(totalSeconds) {
       const hours = Math.floor(totalSeconds / 3600);
       const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -376,6 +413,9 @@ export default {
         slice_shift: shift,
         slice_length: this.value_tablePage.pageSize,
       };
+      if (this.value_anomalyFilter !== null) {
+        query.anomaly = this.value_anomalyFilter;
+      }
 
       try {
         const retResult = await this.$globalQueryPresenceSummary(query);
@@ -429,6 +469,7 @@ export default {
         keyword: this.value_searchingFilter,
         currentPage: this.value_tablePage.currentPage,
         pageSize: this.value_tablePage.pageSize,
+        anomalyFilter: this.value_anomalyFilter,
       };
       this.$router.push({
         name: 'PresenceDetailEvents',
@@ -534,6 +575,9 @@ export default {
           slice_shift: shift,
           slice_length: 10000,
         };
+        if (self.value_anomalyFilter !== null) {
+          query.anomaly = self.value_anomalyFilter;
+        }
         const retResult = await self.$globalQueryPresenceSummary(query);
         if (!retResult.error && retResult.data) {
           const { data } = retResult;

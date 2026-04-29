@@ -1,24 +1,12 @@
 <template>
-  <div
-    v-show="!isLoadSetting"
-    class="ratio-wrap ratio-wrap-16x9"
-  >
+  <div v-show="!isLoadSetting" class="ratio-wrap ratio-wrap-16x9">
     <div
       class="ratio-content dashboard dashboard--absolute"
       :style="{ backgroundImage: 'url(' + displaySettings.background_image + ')' }"
     >
-      <div
-        class="occupancy-logo-container"
-        :style="{ zoom: zoomRatio }"
-      >
-        <div
-          class="occupancy-logo"
-          @click="toLoginPage"
-        >
-          <img
-            :src="displaySettings.logo"
-            class="occupancy-logo-img"
-          >
+      <div class="occupancy-logo-container" :style="{ zoom: zoomRatio }">
+        <div class="occupancy-logo" @click="toLoginPage">
+          <img :src="displaySettings.logo" class="occupancy-logo-img" />
         </div>
         <div class="occupancy-time">
           {{ currentTime }}
@@ -26,10 +14,7 @@
       </div>
 
       <!-------------------  Attendance - BEGIN ------------------>
-      <div
-        v-if="displaySettings.displayChart"
-        class="attendance-top-box attendance-top-box--margin"
-      >
+      <div v-if="displaySettings.displayChart" class="attendance-top-box attendance-top-box--margin">
         <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
         <div class="attendance-statistics-box">
           <!-- 第 1 列：標籤 -->
@@ -49,9 +34,7 @@
               <div class="attendance-header-present">
                 {{ attendancePresent }}
               </div>
-              <div class="attendance-header-total">
-                / {{ attendanceTotal }}
-              </div>
+              <div class="attendance-header-total">/ {{ attendanceTotal }}</div>
             </div>
           </div>
 
@@ -59,10 +42,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center">
-                <CIcon
-                  name="cilSortDescending"
-                  class="attendance-sort-icon text-white"
-                />
+                <CIcon name="cilSortDescending" class="attendance-sort-icon text-white" />
                 <span class="fz-xxxl text-white fw-200 ff-noto-sans">{{ getSortByText }}</span>
               </div>
               <button class="btn-reset">
@@ -70,7 +50,7 @@
                   class="attendance-dropdown-arrow"
                   src="@/assets/img/dropdown_arrow_down.svg"
                   alt="dropdown_arrow_down"
-                >
+                />
               </button>
             </div>
           </div>
@@ -86,10 +66,7 @@
 
       <!-- 顯示人員資料列表 -->
       <div class="person-list-wrapper">
-        <transition
-          name="fade"
-          mode="out-in"
-        >
+        <transition name="fade" mode="out-in">
           <div
             :key="currentPageIndex"
             :style="{ 'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px` }"
@@ -105,12 +82,9 @@
                 v-show="displaySettings.displayPhoto != 'NONE'"
                 :class="['person-image', person.status === 1 ? 'absent-person-image' : '']"
                 :src="getImageSrc(person)"
-              >
+              />
               <div class="person-info-box">
-                <div
-                  v-show="displaySettings.displayCardMode == 'STANDARD'"
-                  class="person-info-line1"
-                >
+                <div v-show="displaySettings.displayCardMode == 'STANDARD'" class="person-info-line1">
                   {{ showField(person, displaySettings.line2) }} &nbsp;
                 </div>
                 <div
@@ -119,10 +93,7 @@
                 >
                   {{ getDisplayName(person) }}
                 </div>
-                <div
-                  v-if="person.status !== 1"
-                  class="d-flex align-items-end"
-                />
+                <div v-if="person.status !== 1" class="d-flex align-items-end" />
               </div>
             </div>
           </div>
@@ -131,37 +102,16 @@
 
       <!-- footer -->
       <div class="footer-box">
-        <div
-          v-show="isLoadSetting"
-          class="align-items-center loading-text"
-        >
-          Loading...
-        </div>
+        <div v-show="isLoadSetting" class="align-items-center loading-text">Loading...</div>
 
         <!-- 分頁按鈕 -->
         <div class="pager">
-          <button
-            class="pager-arrow-btn"
-            :disabled="currentPageIndex === 0"
-            @click="onClickPrev"
-          >
-            <img
-              class="pager-arrow-img"
-              src="@/assets/img/pager_left_arrow.svg"
-              alt="prev"
-            >
+          <button class="pager-arrow-btn" :disabled="currentPageIndex === 0" @click="onClickPrev">
+            <img class="pager-arrow-img" src="@/assets/img/pager_left_arrow.svg" alt="prev" />
           </button>
           <span class="pager-text">{{ currentPageIndex + 1 }}/{{ totalPageIndex + 1 }}</span>
-          <button
-            class="pager-arrow-btn"
-            :disabled="currentPageIndex === totalPageIndex"
-            @click="onClickNext"
-          >
-            <img
-              class="pager-arrow-img"
-              src="@/assets/img/pager_right_arrow.svg"
-              alt="next"
-            >
+          <button class="pager-arrow-btn" :disabled="currentPageIndex === totalPageIndex" @click="onClickNext">
+            <img class="pager-arrow-img" src="@/assets/img/pager_right_arrow.svg" alt="next" />
           </button>
         </div>
         <!-- 右下角 powered by aira 字樣 -->
@@ -177,10 +127,7 @@
         </div> -->
       </div>
     </div>
-    <div
-      v-if="loading"
-      class="loading"
-    >
+    <div v-if="loading" class="loading">
       <CSpinner color="primary" />
     </div>
   </div>
@@ -1603,7 +1550,7 @@ export default {
   width: 100%;
 
   .occupancy-logo {
-    width: 360px;
+    width: 120px;
     height: auto;
     cursor: pointer;
 

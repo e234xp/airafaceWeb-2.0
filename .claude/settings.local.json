@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n 'this\\\\.$globalGetAttendanceSummary\\\\|this\\\\.$globalAttendanceVerifyResult\\\\|this\\\\.$globalManualClockinResult\\\\|this\\\\.$globalFindPersonWithoutPhoto\\\\|this\\\\.$globalFetchVerifyPhoto\\\\|this\\\\.$globalFindVideoDeviceGroups\\\\|this\\\\.$globalGetAttendanceSettings' /Users/frontend/Desktop/airafaceWeb-2.0/src/views/attendance/forms/DailyAttendanceReportForm.vue)"
+    ]
+  }
+}

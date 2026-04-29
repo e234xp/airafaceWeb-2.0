@@ -9,27 +9,23 @@
 </template>
 
 <script>
-  import OccupancyControlSettingForm from './forms/OccupancyControlSettingForm.vue';
+import OccupancyControlSettingForm from './forms/OccupancyControlSettingForm.vue';
 
-  export default {
-    name: 'Modifyoccupancycontrolsetting',
-    components: { OccupancyControlSettingForm },
-    data() {
-      return {
-        value_returnRoutePath: this.$route.params.value_returnRoutePath
-          ? this.$route.params.value_returnRoutePath
-          : '',
-        value_returnRouteName: this.$route.params.value_returnRouteName
-          ? this.$route.params.value_returnRouteName
-          : '',
-      };
+export default {
+  name: 'Modifyoccupancycontrolsetting',
+  components: { OccupancyControlSettingForm },
+  data() {
+    return {
+      value_returnRoutePath: this.$route.params.value_returnRoutePath ? this.$route.params.value_returnRoutePath : '',
+      value_returnRouteName: this.$route.params.value_returnRouteName ? this.$route.params.value_returnRouteName : '',
+    };
+  },
+  methods: {
+    onFinish(modifiedSetting, cb) {
+      this.$globalSetDisplaySetting(modifiedSetting, (err, result) => {
+        if (cb) cb(err == null, result);
+      });
     },
-    methods: {
-      onFinish(modifiedSetting, cb) {
-        this.$globalSetDisplaySetting(modifiedSetting, (err, result) => {
-          if (cb) cb(err == null, result);
-        });
-      },
-    },
-  };
+  },
+};
 </script>
