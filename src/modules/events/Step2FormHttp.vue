@@ -19,12 +19,7 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput
-                size="lg"
-                placeholder=""
-                required
-                v-model="form.host"
-              />
+              <CInput size="lg" placeholder="" required v-model="form.host" />
             </td>
             <td class="table-td">
               <CSwitch
@@ -37,12 +32,7 @@
               />
             </td>
             <td class="table-td">
-              <CInput
-                class="mb-form-row"
-                size="lg"
-                placeholder=""
-                v-model="form.user"
-              />
+              <CInput class="mb-form-row" size="lg" placeholder="" v-model="form.user" />
             </td>
             <td class="table-td">
               <form>
@@ -55,18 +45,9 @@
                   v-model="form.pass"
                 >
                   <template #append-content>
-                    <CButton
-                      style="padding: 0.375rem 0.375rem;"
-                      @click="viewPassword"
-                    >
-                      <CIcon
-                        v-show="flag_view_password"
-                        src="/img/eye-slash.png"
-                      />
-                      <CIcon
-                        v-show="!flag_view_password"
-                        src="/img/eye.png"
-                      />
+                    <CButton style="padding: 0.375rem 0.375rem" @click="viewPassword">
+                      <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
+                      <CIcon v-show="!flag_view_password" src="/img/eye.png" />
                     </CButton>
                   </template>
                 </CInput>
@@ -78,14 +59,8 @@
             <th class="h5 w-25 table-th">
               {{ $t('Port') }}
             </th>
-            <th class="h5 w-25 table-th">
-              PATH
-            </th>
-            <th
-              v-if="form.method === 'GET'"
-              colspan="2"
-              class="h5 w-25 table-th"
-            >
+            <th class="h5 w-25 table-th">PATH</th>
+            <th v-if="form.method === 'GET'" colspan="2" class="h5 w-25 table-th">
               {{ $t('ShowCompleteUrl') }}
             </th>
           </tr>
@@ -94,7 +69,7 @@
               <CInput
                 size="lg"
                 placeholder=""
-                :is-valid="formPass.port = checkPort(form.port) === ''"
+                :is-valid="(formPass.port = checkPort(form.port) === '')"
                 :invalid-feedback="checkPort(form.port)"
                 v-model.number="form.port"
               />
@@ -110,16 +85,8 @@
                 @input="handlePathInput"
               />
             </td>
-            <td
-              colspan="2"
-              class="table-td"
-            >
-              <CInput
-                size="lg"
-                placeholder=""
-                readonly
-                :value="form.url"
-              />
+            <td colspan="2" class="table-td">
+              <CInput size="lg" placeholder="" readonly :value="form.url" />
             </td>
           </tr>
         </table>
@@ -128,14 +95,11 @@
 
     <CCard style="height: 31rem">
       <CCardBody>
-        <CRow style="height: 100%;">
+        <CRow style="height: 100%">
           <CCol sm="12">
             <CRow>
               <CCol sm="12">
-                <div
-                  class="h5"
-                  style="display: block; height: 25px; margin-bottom: 6px"
-                >
+                <div class="h5" style="display: block; height: 25px; margin-bottom: 6px">
                   {{ $t('Method') }}
                 </div>
                 <CSelect
@@ -151,10 +115,7 @@
                 <CForm style="position: relative; display: block; padding-bottom: 10px">
                   <CRow>
                     <CCol sm="3">
-                      <span
-                        class="h5"
-                        style="display: block"
-                      >
+                      <span class="h5" style="display: block">
                         {{ $t('FieldName') }}
                       </span>
                       <CInput
@@ -167,22 +128,14 @@
                     </CCol>
 
                     <CCol sm="4">
-                      <span
-                        class="h5"
-                        style="display: block"
-                      >
+                      <span class="h5" style="display: block">
                         {{ $t('FieldData') }}
                       </span>
                       <div style="position: relative; display: block; height: 40px">
                         <CSelect
                           id="defaultList"
                           size="lg"
-                          style="
-                              position: relative;
-                              display: block;
-                              margin-bottom: 0px;
-                              z-index: 10000;
-                            "
+                          style="position: relative; display: block; margin-bottom: 0px; z-index: 10000"
                           :filterable="true"
                           :options="value_defaultDataList"
                           :value.sync="value_selectedDefaultData"
@@ -212,26 +165,17 @@
                       </CButton>
                     </CCol>
 
-                    <CCol
-                      sm="2"
-                      style="flex: 0 0 14.666667%; max-width: 14.666667%"
-                    >
+                    <CCol sm="2" style="flex: 0 0 14.666667%; max-width: 14.666667%">
                       <span
                         class="h5"
-                        v-if="
-                          form.data_type === 'JSON' &&
-                            form.method === 'POST'
-                        "
+                        v-if="form.data_type === 'JSON' && form.method === 'POST'"
                         style="position: relative; display: block"
                       >
                         {{ $t('JSONType') }}
                       </span>
                       <span
                         class="h5"
-                        v-if="
-                          form.data_type === 'XML' &&
-                            form.method === 'POST'
-                        "
+                        v-if="form.data_type === 'XML' && form.method === 'POST'"
                         style="position: relative; display: block"
                       >
                         {{ $t('XMLType') }}
@@ -240,12 +184,7 @@
                         v-if="form.method === 'POST'"
                         class="float-right mr-3"
                         size="lg"
-                        style="
-                            position: relative;
-                            height: 45px;
-                            float: none !important;
-                            margin-bottom: 0px;
-                          "
+                        style="position: relative; height: 45px; float: none !important; margin-bottom: 0px"
                       >
                         <CButton
                           style="color: #20a8d8; border: 1px solid #20a8d8"
@@ -261,18 +200,10 @@
                     </CCol>
 
                     <CCol sm="12">
-                      <div
-                        v-if="form.method === 'GET'"
-                        class="h5"
-                        style="position: relative; margin-top: 10px"
-                      >
+                      <div v-if="form.method === 'GET'" class="h5" style="position: relative; margin-top: 10px">
                         {{ $t('QueryString') }}
                       </div>
-                      <div
-                        v-else
-                        class="h5"
-                        style="position: relative; margin-top: 10px"
-                      >
+                      <div v-else class="h5" style="position: relative; margin-top: 10px">
                         {{ $t('Body') }}
                       </div>
                       <CTextarea
@@ -281,7 +212,7 @@
                         rows="10"
                         placeholder=""
                         style="position: relative; width: 100%"
-                        :is-valid="formPass.body = checkBody(value_customTextarea) === ''"
+                        :is-valid="(formPass.body = checkBody(value_customTextarea) === '')"
                         :invalid-feedback="checkBody(value_customTextarea)"
                         :value="value_customTextarea"
                         @input="onChangeCustomText"
@@ -298,25 +229,17 @@
 
     <CCard>
       <CCardBody>
-        <CRow style="height: 100%;">
+        <CRow style="height: 100%">
           <CCol sm="12">
             <CRow>
               <CCol sm="12">
                 <CForm style="position: relative; display: block; padding-bottom: 10px">
                   <CRow>
                     <CCol sm="12">
-                      <div
-                        class="h5"
-                        style="position: relative; margin-top: 10px"
-                      >
+                      <div class="h5" style="position: relative; margin-top: 10px">
                         {{ $t('ExpansionField') }}
                       </div>
-                      <CTextarea
-                        size="lg"
-                        rows="9"
-                        :value="note"
-                        @input="$emit('update:note', $event)"
-                      />
+                      <CTextarea size="lg" rows="9" :value="note" @input="$emit('update:note', $event)" />
                     </CCol>
                   </CRow>
                 </CForm>
@@ -330,7 +253,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'Step2FormHttp',
   props: {
@@ -381,20 +303,13 @@ export default {
         { value: 'GET', label: this.$t('GET') },
         { value: 'POST', label: this.$t('POST') },
       ],
-      value_selectedDataType: [
-        this.$t('JSON'),
-        this.$t('XML'),
-      ],
+      value_selectedDataType: [this.$t('JSON'), this.$t('XML')],
       value_defaultDataList: [
         {
           label: this.$t('FieldData'),
           value: '',
           disabled: true,
         },
-        // {
-        //   label: `${this.$t('VerifiedTimeStamp')}  (String)`,
-        //   value: '##VerifiedTimeStamp##',
-        // },
         {
           label: `${this.$t('EventControlName')}  (String)`,
           value: '##RuleName##',
@@ -404,8 +319,16 @@ export default {
           value: '##VerifiedUuid##',
         },
         {
+          label: `${this.$t('VerifiedTimeStamp')}  (String)`,
+          value: '##VerifiedTimeStamp##',
+        },
+        {
           label: `${this.$t('VerifiedDateTime')}  (String)`,
           value: '##VerifiedDateTime##',
+        },
+        {
+          label: `${this.$t('VideoDeviceVideoSourceId')}  (String)`,
+          value: '##SourceDeviceId##',
         },
         {
           label: `${this.$t('VideoDeviceVideoSource')}  (String)`,
@@ -491,7 +414,9 @@ export default {
       } else {
         this.form.url = value;
       }
-      this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
+      this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${
+        this.value_customTextarea || ''
+      }`;
     },
 
     selectDateType(type) {
@@ -571,20 +496,26 @@ export default {
           newCustomData = `&${this.value_newFieldName}=${this.value_selectedDefaultData}`;
 
           this.value_customTextarea = `${this.value_customTextarea || ''}${newCustomData}`;
-          this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
+          this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${
+            this.value_customTextarea || ''
+          }`;
           break;
         case 'POST':
           switch (this.form.data_type) {
             case 'JSON':
               newCustomData = this.combineJSON(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea
+                ? `${this.value_customTextarea}\n${newCustomData}`
+                : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             case 'XML':
               newCustomData = this.combineXML(this.value_newFieldName, this.value_selectedDefaultData);
 
-              this.value_customTextarea = this.value_customTextarea ? `${this.value_customTextarea}\n${newCustomData}` : newCustomData;
+              this.value_customTextarea = this.value_customTextarea
+                ? `${this.value_customTextarea}\n${newCustomData}`
+                : newCustomData;
               this.form.custom_data = this.value_customTextarea;
               break;
             default:
@@ -602,7 +533,9 @@ export default {
       this.value_customTextarea = value;
 
       if (this.form.method === 'GET') {
-        this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${this.value_customTextarea || ''}`;
+        this.form.url = `${this.form.url.split('?')[0]}${(this.value_customTextarea || '') === '' ? '' : '?'}${
+          this.value_customTextarea || ''
+        }`;
       } else if (this.form.method === 'POST') {
         this.form.custom_data = this.value_customTextarea;
       }
