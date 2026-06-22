@@ -132,6 +132,8 @@
         },
         step2form: {
           roi: [{}, {}, {}, {}, {}],
+          naturalWidth: 0,
+          naturalHeight: 0,
         },
         step3form: {
           capture_interval: null,
