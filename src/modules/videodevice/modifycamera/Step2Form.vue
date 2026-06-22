@@ -183,6 +183,9 @@
         self.ratio = self.image.width / self.canvas.width;
         self.canvas.height = self.image.height / self.ratio;
 
+        self.localStep2form.naturalWidth = self.image.naturalWidth;
+        self.localStep2form.naturalHeight = self.image.naturalHeight;
+
         self.ctx.drawImage(self.image, 0, 0, self.canvas.width, self.canvas.height);
 
         // load ROI Info
