@@ -661,12 +661,12 @@ export default {
 
       // 繪製每個 ROI 框
       roiList.forEach((roi, index) => {
-        if (roi.x !== undefined && roi.y !== undefined && roi.w && roi.h) {
+        if (roi.x1 !== undefined && roi.y1 !== undefined && roi.x2 > roi.x1 && roi.y2 > roi.y1) {
           // 步驟1: ROI座標(基於1024px) -> 影片原始解析度
-          const videoX = roi.x * roiToVideoScale;
-          const videoY = roi.y * roiToVideoScale;
-          const videoW = roi.w * roiToVideoScale;
-          const videoH = roi.h * roiToVideoScale;
+          const videoX = roi.x1 * roiToVideoScale;
+          const videoY = roi.y1 * roiToVideoScale;
+          const videoW = (roi.x2 - roi.x1) * roiToVideoScale;
+          const videoH = (roi.y2 - roi.y1) * roiToVideoScale;
 
           // 步驟2: 影片原始解析度 -> 顯示尺寸，並加上偏移量
           const x = videoX * scaleX + offsetX;
