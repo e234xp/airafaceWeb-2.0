@@ -123,7 +123,7 @@ import zhTW from 'vxe-table/lib/locale/lang/zh-TW';
 import enUS from 'vxe-table/lib/locale/lang/en-US';
 import jaJP from 'vxe-table/lib/locale/lang/ja-JP';
 import esES from 'vxe-table/lib/locale/lang/es-ES';
-import viVN from 'vxe-table/lib/locale/lang/vi-VN';
+// import viVN from 'vxe-table/lib/locale/lang/vi-VN';
 
 export default {
   name: 'Login',
@@ -268,9 +268,6 @@ export default {
           Vue.prototype.$globalDatePickerLanguage = localeEs;
           break;
         case 'vi':
-          VXETable.setup({
-            i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(viVN, key), args),
-          });
           Vue.prototype.$globalDatePickerLanguage = localeVi;
           break;
         case 'fr':
