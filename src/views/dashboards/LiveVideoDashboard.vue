@@ -650,10 +650,12 @@ export default {
         offsetY = (containerHeight - displayHeight) / 2;
       }
 
-      // ROI 座標是基於設定頁面的 1024px 寬度 canvas 儲存的
-      // 需要先轉換到影片原始解析度，再縮放到顯示尺寸
-      const ROI_CANVAS_WIDTH = 1024;
-      const roiToVideoScale = video.videoWidth / ROI_CANVAS_WIDTH;
+      // ROI 座標是設定頁面以快照原始解析度 (naturalWidth / naturalHeight) 儲存的絕對值
+      // 若快照解析度與目前串流解析度不同，先換算到串流解析度
+      const roiBaseWidth = self.selectedCamera.naturalWidth || video.videoWidth;
+      const roiBaseHeight = self.selectedCamera.naturalHeight || video.videoHeight;
+      const roiToVideoScaleX = video.videoWidth / roiBaseWidth;
+      const roiToVideoScaleY = video.videoHeight / roiBaseHeight;
 
       // 計算從影片解析度到顯示尺寸的縮放比例
       const scaleX = displayWidth / video.videoWidth;
@@ -662,11 +664,11 @@ export default {
       // 繪製每個 ROI 框
       roiList.forEach((roi, index) => {
         if (roi.x1 !== undefined && roi.y1 !== undefined && roi.x2 > roi.x1 && roi.y2 > roi.y1) {
-          // 步驟1: ROI座標(基於1024px) -> 影片原始解析度
-          const videoX = roi.x1 * roiToVideoScale;
-          const videoY = roi.y1 * roiToVideoScale;
-          const videoW = (roi.x2 - roi.x1) * roiToVideoScale;
-          const videoH = (roi.y2 - roi.y1) * roiToVideoScale;
+          // 步驟1: ROI 座標(快照解析度) -> 影片原始解析度
+          const videoX = roi.x1 * roiToVideoScaleX;
+          const videoY = roi.y1 * roiToVideoScaleY;
+          const videoW = (roi.x2 - roi.x1) * roiToVideoScaleX;
+          const videoH = (roi.y2 - roi.y1) * roiToVideoScaleY;
 
           // 步驟2: 影片原始解析度 -> 顯示尺寸，並加上偏移量
           const x = videoX * scaleX + offsetX;

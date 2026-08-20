@@ -199,27 +199,15 @@ export default {
     self.image = document.createElement('img');
 
     self.image.onload = () => {
-      self.ratio = self.image.width / self.canvas.width;
-      self.canvas.height = self.image.height / self.ratio;
+      // 原始影像座標 → canvas 座標的縮放倍率
+      self.ratio = self.image.naturalWidth / self.canvas.width;
+      self.canvas.height = self.image.naturalHeight / self.ratio;
 
       self.localStep2form.naturalWidth = self.image.naturalWidth;
       self.localStep2form.naturalHeight = self.image.naturalHeight;
 
-      self.ctx.drawImage(self.image, 0, 0, self.canvas.width, self.canvas.height);
-
       // load ROI Info
-      for (let i = 0; i < self.localStep2form.roi.length; i += 1) {
-        const roi = self.localStep2form.roi[i];
-
-        if (roi.x2 - roi.x1 >= 1) {
-          self.ctx.beginPath();
-          self.ctx.lineWidth = 5;
-          self.ctx.strokeStyle = self.strokeStyle[i];
-          self.ctx.rect(roi.x1, roi.y1, roi.x2 - roi.x1, roi.y2 - roi.y1);
-          self.ctx.closePath();
-          self.ctx.stroke();
-        }
-      }
+      self.redrawCanvas();
 
       self.flag_snapshotReadly = true;
     };
@@ -254,7 +242,7 @@ export default {
 
       self.removeROI(self.activeIndex);
 
-      self.startPoint = { x: e.offsetX, y: e.offsetY };
+      self.startPoint = self.getImagePoint(e);
       self.ctx.beginPath();
       self.ctx.lineWidth = 5;
     });
@@ -263,25 +251,16 @@ export default {
       if (!isMouseActive) {
         return;
       }
-      console.log('mousemove 1', self.activeIndex);
 
       self.removeROI(self.activeIndex);
 
-      self.endPoint = { x: e.offsetX, y: e.offsetY };
+      self.endPoint = self.getImagePoint(e);
 
-      self.ctx.beginPath();
-      console.log('mousemove 2', self.activeIndex);
-
-      // 左上角 (x1, y1) 與右下角 (x2, y2)
+      // 原始影像的絕對座標：左上角 (x1, y1) 與右下角 (x2, y2)
       const x1 = Math.min(self.startPoint.x, self.endPoint.x);
       const y1 = Math.min(self.startPoint.y, self.endPoint.y);
       const x2 = Math.max(self.startPoint.x, self.endPoint.x);
       const y2 = Math.max(self.startPoint.y, self.endPoint.y);
-
-      self.ctx.strokeStyle = self.strokeStyle[self.activeIndex];
-      self.ctx.rect(x1, y1, x2 - x1, y2 - y1);
-      self.ctx.closePath();
-      self.ctx.stroke();
 
       self.localStep2form.roi[self.activeIndex] = {
         x1,
@@ -289,16 +268,62 @@ export default {
         x2,
         y2,
       };
-      console.log('ROI', self.localStep2form.roi);
+
+      // 繪製時換算回 canvas 座標
+      self.ctx.beginPath();
+      self.ctx.lineWidth = 5;
+      self.ctx.strokeStyle = self.strokeStyle[self.activeIndex];
+      self.ctx.rect(x1 / self.ratio, y1 / self.ratio, (x2 - x1) / self.ratio, (y2 - y1) / self.ratio);
+      self.ctx.closePath();
+      self.ctx.stroke();
     });
 
-    self.canvas.addEventListener('mouseup', (e) => {
-      console.log('mouseup', e.offsetX, e.offsetY);
-
+    self.canvas.addEventListener('mouseup', () => {
       isMouseActive = false;
     });
   },
   methods: {
+    // 將滑鼠事件位置換算為原始影像的絕對座標
+    // 以 getBoundingClientRect 為基準，canvas 被 CSS 縮放時仍然正確
+    getImagePoint(e) {
+      const self = this;
+
+      const rect = self.canvas.getBoundingClientRect();
+      const scaleX = self.image.naturalWidth / rect.width;
+      const scaleY = self.image.naturalHeight / rect.height;
+
+      return {
+        x: Math.round((e.clientX - rect.left) * scaleX),
+        y: Math.round((e.clientY - rect.top) * scaleY),
+      };
+    },
+
+    // 重繪快照與所有 ROI
+    // roi 存的是原始影像座標，繪製前需除以 ratio 換算回 canvas 座標
+    redrawCanvas() {
+      const self = this;
+
+      self.ctx.drawImage(self.image, 0, 0, self.canvas.width, self.canvas.height);
+
+      for (let i = 0; i < self.localStep2form.roi.length; i += 1) {
+        const roi = self.localStep2form.roi[i];
+
+        if (roi.x2 - roi.x1 >= 1) {
+          self.ctx.beginPath();
+          self.ctx.lineWidth = 5;
+          self.ctx.strokeStyle = self.strokeStyle[i];
+          self.ctx.rect(
+            roi.x1 / self.ratio,
+            roi.y1 / self.ratio,
+            (roi.x2 - roi.x1) / self.ratio,
+            (roi.y2 - roi.y1) / self.ratio,
+          );
+          self.ctx.closePath();
+          self.ctx.stroke();
+        }
+      }
+    },
+
     addROI(idx) {
       const self = this;
       self.activeIndex = idx;
@@ -310,19 +335,7 @@ export default {
 
       self.localStep2form.roi[self.activeIndex] = {};
 
-      self.ctx.drawImage(self.image, 0, 0, self.canvas.width, self.canvas.height);
-
-      for (let i = 0; i < self.localStep2form.roi.length; i += 1) {
-        const roi = self.localStep2form.roi[i];
-
-        if (roi.x2 - roi.x1 >= 1) {
-          self.ctx.beginPath();
-          self.ctx.strokeStyle = self.strokeStyle[i];
-          self.ctx.rect(roi.x1, roi.y1, roi.x2 - roi.x1, roi.y2 - roi.y1);
-          self.ctx.closePath();
-          self.ctx.stroke();
-        }
-      }
+      self.redrawCanvas();
     },
   },
 };
