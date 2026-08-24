@@ -378,6 +378,26 @@ export default {
         img.src = dataUrl;
       });
     },
+    // 取中央正方形，與畫面上 object-fit: cover 的預覽構圖一致
+    // source 可以是 <img> 或 <video>
+    drawCenteredSquare(source, sourceWidth, sourceHeight) {
+      const size = Math.min(sourceWidth, sourceHeight);
+      const sx = (sourceWidth - size) / 2;
+      const sy = (sourceHeight - size) / 2;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(source, sx, sy, size, size, 0, 0, size, size);
+
+      return canvas.toDataURL('image/jpeg');
+    },
+    async cropToSquare(dataUrl) {
+      const img = await this.loadImage(dataUrl);
+      return this.drawCenteredSquare(img, img.naturalWidth, img.naturalHeight);
+    },
     // 檢查照片中是否恰好有一張人臉，通過才回傳 true
     async validatePhoto(dataUrl) {
       try {
@@ -432,10 +452,13 @@ export default {
       if (this.isDetecting) return;
 
       try {
-        const image = this.$refs.webcam.capture();
-        if (!image) return;
+        const raw = this.$refs.webcam.capture();
+        if (!raw) return;
 
         this.isDetecting = true;
+
+        // 先裁成正方形，讓人臉偵測與後續儲存都與預覽構圖一致
+        const image = await this.cropToSquare(raw);
         if (!(await this.validatePhoto(image))) return;
 
         this.applyPhoto(image);
@@ -474,15 +497,10 @@ export default {
     },
     captureFromVideo() {
       const video = this.$refs.videoPreview;
-      if (!video) return null;
+      if (!video || !video.videoWidth || !video.videoHeight) return null;
 
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      // 不翻轉，直接捕捉
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      return canvas.toDataURL('image/jpeg');
+      // 不翻轉，直接捕捉中央正方形
+      return this.drawCenteredSquare(video, video.videoWidth, video.videoHeight);
     },
     async uploadPhotoToTracker(faceImage) {
       // 未設定 VUE_APP_TRACKER_UPLOAD_URL 即不啟用相簿上傳
