@@ -79,6 +79,7 @@
           </div>
           <div
             class="step2-take-photo-btn gradient-btn"
+            :class="{ 'btn-busy': isDetecting }"
             @click="onTakePhoto"
           >
             {{ $t('TakeThePhoto') }}
@@ -105,6 +106,7 @@
               </div>
               <div
                 class="retake-btn"
+                :class="{ 'btn-busy': isDetecting }"
                 @click="onReTake"
               >
                 {{ $t('ReTakePhoto') }}
@@ -150,9 +152,10 @@
           </div>
           <div
             class="next-btn gradient-btn"
+            :class="{ 'btn-busy': isSubmitting }"
             @click="onNext"
           >
-            Next
+            {{ $t('Next') }}
           </div>
         </div>
       </template>
@@ -200,7 +203,16 @@
 <script>
 import { QrcodeStream } from 'vue-qrcode-reader';
 import { WebCam } from 'vue-web-cam';
+import Axios from 'axios';
+import * as faceapi from 'face-api.js';
 import i18n from '@/i18n';
+
+// airaTracker 相簿上傳設定
+// 由 .env.local 提供，未設定 URL 時整個上傳功能自動停用
+const TRACKER_UPLOAD_URL = process.env.VUE_APP_TRACKER_UPLOAD_URL || '';
+const TRACKER_SESSION_ID = process.env.VUE_APP_TRACKER_SESSION_ID || '';
+const TRACKER_ALBUM_ID = process.env.VUE_APP_TRACKER_ALBUM_ID || '';
+const TRACKER_UPLOAD_TIMEOUT = 10000;
 
 export default {
   name: 'SelfCheckinDashboard',
@@ -225,6 +237,9 @@ export default {
       errMsg: '',
       currentTime: '',
       timeInterval: null,
+      faceModelReady: null,
+      isDetecting: false,
+      isSubmitting: false,
     };
   },
   computed: {
@@ -315,31 +330,37 @@ export default {
     },
     async onDecode(decode) {
       let isErr = true;
-      const { uuid } = JSON.parse(decode);
-      if (uuid) {
-        const { data } = await this.$globalFindVisitor(uuid, 0, 20);
-        if (data.message === 'ok') {
-          const [item] = data.visitor_list;
-          this.visitor = item;
-          // if (this.visitor.card_number === '') {
-          //   this.$message.error(i18n.formatter.format('NoCardMsg'));
-          //   // this.errMsg = i18n.formatter.format('NoCardMsg');
-          // }
-          if (this.visitor.expire_date !== 0 && this.visitor.expire_date < Date.now()) {
-            this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
-            // this.errMsg = i18n.formatter.format('QRcodeExpiredMsg');
-          } else if (this.visitor.begin_date !== 0 && this.visitor.begin_date > Date.now()) {
-            this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
-            // this.errMsg = i18n.formatter.format('QRcodeExpiredMsg');
+
+      try {
+        // QR code 內容不一定是本系統的 JSON，解析失敗要能繼續掃描
+        const { uuid } = JSON.parse(decode);
+        if (uuid) {
+          const { data } = await this.$globalFindVisitor(uuid, 0, 20);
+          if (data.message === 'ok') {
+            const [item] = data.visitor_list;
+            this.visitor = item;
+            // if (this.visitor.card_number === '') {
+            //   this.$message.error(i18n.formatter.format('NoCardMsg'));
+            // }
+            if (this.visitor.expire_date !== 0 && this.visitor.expire_date < Date.now()) {
+              this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
+            } else if (this.visitor.begin_date !== 0 && this.visitor.begin_date > Date.now()) {
+              this.$message.error(i18n.formatter.format('QRcodeExpiredMsg'));
+            } else {
+              this.currentStep = 2;
+              isErr = false;
+            }
           } else {
-            this.currentStep = 2;
-            isErr = false;
+            this.$message.error(i18n.formatter.format('NoInfoMsg'));
           }
         } else {
           this.$message.error(i18n.formatter.format('NoInfoMsg'));
-          // this.errMsg = i18n.formatter.format('NoInfoMsg');
         }
-      } else this.$message.error(i18n.formatter.format('NoInfoMsg')); // this.errMsg = i18n.formatter.format('NoInfoMsg');
+      } catch (e) {
+        console.error('QR code 解析失敗:', e);
+        this.$message.error(i18n.formatter.format('NoInfoMsg'));
+      }
+
       if (isErr) this.onRefresh();
     },
     onRefresh() {
@@ -349,32 +370,83 @@ export default {
         this.errMsg = '';
       }, 2000);
     },
-    onReTake() {
+    loadImage(dataUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('image decode failed'));
+        img.src = dataUrl;
+      });
+    },
+    // 檢查照片中是否恰好有一張人臉，通過才回傳 true
+    async validatePhoto(dataUrl) {
+      try {
+        await this.faceModelReady;
+
+        const img = await this.loadImage(dataUrl);
+        const detections = await faceapi.detectAllFaces(
+          img,
+          new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 }),
+        );
+
+        if (detections.length === 0) {
+          this.$message.error(i18n.formatter.format('NoFaceDetectedMsg'));
+          return false;
+        }
+
+        if (detections.length > 1) {
+          this.$message.error(i18n.formatter.format('MultipleFacesMsg'));
+          return false;
+        }
+
+        return true;
+      } catch (e) {
+        console.error('人臉偵測失敗:', e);
+        this.$message.error(i18n.formatter.format('FaceDetectFailedMsg'));
+        return false;
+      }
+    },
+    applyPhoto(image) {
+      this.imageList = [image];
+      this.visitor.register_image = image.replaceAll('data:image/jpeg;base64,', '');
+      this.visitor.display_image = image.replaceAll('data:image/jpeg;base64,', '');
+    },
+    async onReTake() {
+      if (this.isDetecting) return;
+
       try {
         const image = this.captureFromVideo();
-        if (image) {
-          this.imageList = [image];
-          this.visitor.register_image = image.replaceAll('data:image/jpeg;base64,', '');
-          this.visitor.display_image = image.replaceAll('data:image/jpeg;base64,', '');
-        }
+        if (!image) return;
+
+        this.isDetecting = true;
+        if (!(await this.validatePhoto(image))) return;
+
+        this.applyPhoto(image);
       } catch (e) {
         console.error('重新拍照失敗:', e);
+      } finally {
+        this.isDetecting = false;
       }
     },
     async onTakePhoto() {
+      if (this.isDetecting) return;
+
       try {
         const image = this.$refs.webcam.capture();
-        if (image) {
-          this.imageList = [image];
-          this.visitor.register_image = image.replaceAll('data:image/jpeg;base64,', '');
-          this.visitor.display_image = image.replaceAll('data:image/jpeg;base64,', '');
-          this.currentStep = 3;
-          // 在 Step 3 啟動 video 預覽
-          await this.$nextTick();
-          this.startVideoPreview();
-        }
+        if (!image) return;
+
+        this.isDetecting = true;
+        if (!(await this.validatePhoto(image))) return;
+
+        this.applyPhoto(image);
+        this.currentStep = 3;
+        // 在 Step 3 啟動 video 預覽
+        await this.$nextTick();
+        this.startVideoPreview();
       } catch (e) {
         console.error('拍照失敗:', e);
+      } finally {
+        this.isDetecting = false;
       }
     },
     async startVideoPreview() {
@@ -412,12 +484,46 @@ export default {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       return canvas.toDataURL('image/jpeg');
     },
+    async uploadPhotoToTracker(faceImage) {
+      // 未設定 VUE_APP_TRACKER_UPLOAD_URL 即不啟用相簿上傳
+      if (!TRACKER_UPLOAD_URL || !faceImage) return;
+
+      try {
+        await Axios.post(
+          TRACKER_UPLOAD_URL,
+          {
+            albumId: TRACKER_ALBUM_ID,
+            face_image: faceImage,
+          },
+          {
+            headers: { sessionId: TRACKER_SESSION_ID },
+            timeout: TRACKER_UPLOAD_TIMEOUT,
+          },
+        );
+      } catch (e) {
+        // 相簿上傳失敗不中斷訪客報到流程
+        console.error('上傳照片至 airaTracker 失敗:', e);
+      }
+    },
     onNext() {
+      if (this.isSubmitting) return;
+
+      this.isSubmitting = true;
       this.stopVideoPreview();
-      this.$globalModifyVisitor({ uuid: this.visitor.uuid, data: this.visitor }, (error, result) => {
-        if (!error && result.message === 'ok') {
+
+      this.$globalModifyVisitor({ uuid: this.visitor.uuid, data: this.visitor }, async (error, result) => {
+        if (!error && result && result.message === 'ok') {
+          // 傳含 data URI 前綴的原始照片（imageList[0] 即畫面上顯示的那張）
+          await this.uploadPhotoToTracker(this.imageList[0]);
+          this.isSubmitting = false;
           this.currentStep = 4;
           this.onCountDown();
+        } else {
+          console.error('訪客報到失敗:', error);
+          this.isSubmitting = false;
+          this.$message.error(i18n.formatter.format('CheckinFailedMsg'));
+          // 失敗時留在確認頁，重新啟動預覽讓使用者可以重拍或再送出一次
+          this.startVideoPreview();
         }
       });
     },
@@ -477,6 +583,9 @@ export default {
     this.timeInterval = setInterval(() => {
       this.updateTime();
     }, 1000);
+
+    // 先開始載入人臉偵測模型，拍照時再 await 這個 promise
+    this.faceModelReady = faceapi.nets.tinyFaceDetector.loadFromUri('/models');
   },
   beforeDestroy() {
     clearInterval(this.cdTimer);
@@ -498,6 +607,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 人臉偵測或送出進行中：擋掉重複點擊
+.btn-busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 // Common gradient button style
 .gradient-btn {
   padding: 15px 60px;
