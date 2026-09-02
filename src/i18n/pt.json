@@ -446,6 +446,8 @@
   "Normal": "Normal",
   "NormalTemperatureOnly": "Apenas Temperatura Normal",
   "NoSpaceNeigherRepeat": "Não pode ser duplicado",
+  "UpTo20Characters": "Até 20 caracteres",
+  "AccountNameRequired": "O nome da conta é obrigatório",
   "NoSuchPersonFound": "Nenhuma pessoa encontrada",
   "Note": "Nota",
   "NotificationHttp": "Comando HTTP",

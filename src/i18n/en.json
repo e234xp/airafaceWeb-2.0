@@ -457,6 +457,8 @@
   "Normal": "Normal",
   "NormalTemperatureOnly": "Normal Temperature Only",
   "NoSpaceNeigherRepeat": "Cannot be duplicated",
+  "UpTo20Characters": "Up to 20 characters",
+  "AccountNameRequired": "Account name is required",
   "Note": "Note",
   "NotificationHttp": "HTTP Command",
   "NotificationInfo": "Notification Info",

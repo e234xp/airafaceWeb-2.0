@@ -453,6 +453,8 @@
   "Normal": "Normal",
   "NormalTemperatureOnly": "Hanya Suhu Normal",
   "NoSpaceNeigherRepeat": "Tidak dapat diduplikasi",
+  "UpTo20Characters": "Maksimal 20 karakter",
+  "AccountNameRequired": "Nama akun wajib diisi",
   "Note": "Catatan",
   "NotificationHttp": "Perintah HTTP",
   "NotificationInfo": "Informasi Notifikasi",

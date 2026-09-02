@@ -453,6 +453,8 @@
   "Normal": "ปกติ",
   "NormalTemperatureOnly": "อุณหภูมิปกติเท่านั้น",
   "NoSpaceNeigherRepeat": "ไม่สามารถทำซ้ำได้",
+  "UpTo20Characters": "สูงสุด 20 ตัวอักษร",
+  "AccountNameRequired": "จำเป็นต้องระบุชื่อบัญชี",
   "Note": "บันทึก",
   "NotificationHttp": "คำสั่ง http",
   "NotificationInfo": "ข้อมูลการแจ้งเตือน",

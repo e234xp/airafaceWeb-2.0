@@ -453,6 +453,8 @@
   "Normal": "Bình thường",
   "NormalTemperatureOnly": "Chỉ nhiệt độ bình thường",
   "NoSpaceNeigherRepeat": "Không thể trùng lặp",
+  "UpTo20Characters": "Tối đa 20 ký tự",
+  "AccountNameRequired": "Tên tài khoản là bắt buộc",
   "Note": "Ghi chú",
   "NotificationHttp": "Lệnh HTTP",
   "NotificationInfo": "Thông tin thông báo",

@@ -453,6 +453,8 @@
   "Normal": "通常",
   "NormalTemperatureOnly": "溫度正常時時のみ",
   "NoSpaceNeigherRepeat": "複製することはできません",
+  "UpTo20Characters": "最大20文字まで",
+  "AccountNameRequired": "アカウント名は必須です",
   "Note": "注記",
   "NotificationHttp": "HTTPコマンド",
   "NotificationInfo": "通知情報",

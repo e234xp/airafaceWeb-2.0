@@ -453,6 +453,8 @@
   "Normal": "Normal",
   "NormalTemperatureOnly": "Sadece Normal Sıcaklık",
   "NoSpaceNeigherRepeat": "Kopyalanamaz",
+  "UpTo20Characters": "En fazla 20 karakter",
+  "AccountNameRequired": "Hesap adı zorunludur",
   "Note": "Not",
   "NotificationHttp": "HTTP Komutu",
   "NotificationInfo": "Bildirim Bilgileri",

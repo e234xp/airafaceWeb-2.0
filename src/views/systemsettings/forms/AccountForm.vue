@@ -31,7 +31,7 @@
               <td class="table-td">
                 <CInput class="mb-form-row" size="lg" :invalid-feedback="flag_accountNamePass" value=""
                   v-model="value_accountName" placeholder="" :is-valid="accountNameValidator" required
-                  :disabled="flag_modifyMode" />
+                  maxlength="20" :disabled="flag_modifyMode" />
               </td>
               <td class="table-td">
                 <CInput class="mb-form-row" size="lg" :type="flag_view_password ? 'text' : 'password'"
@@ -260,15 +260,10 @@
       },
       accountNameValidator(val) {
         this.flag_accountNamePass = '';
-        if (/^[a-zA-Z0-9]+$/.test(val)) this.flag_accountNamePass = '';
-        else this.flag_accountNamePass = this.$t('NoEmptyNoSpaceNoSpecial');
-
-        if (this.flag_accountNamePass === '') {
-          this.value_account_list.forEach((account) => {
-            if (account.username.toLowerCase() === val.toLowerCase()) {
-              this.flag_accountNamePass = this.$t('NoSpaceNeigherRepeat');
-            }
-          });
+        if (val.length < 1) {
+          this.flag_accountNamePass = this.$t('AccountNameRequired');
+        } else if (val.length > 20) {
+          this.flag_accountNamePass = this.$t('UpTo20Characters');
         }
         return this.flag_accountNamePass === '';
       },
