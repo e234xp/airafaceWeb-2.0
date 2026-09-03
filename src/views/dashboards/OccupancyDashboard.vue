@@ -70,12 +70,12 @@
           <div
             :key="currentPageIndex"
             :style="{ 'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px` }"
-            :class="[getGridStyleByAmount(), 'd-flex', 'flex-wrap', 'person-list-container']"
+            class="grid-5 d-flex flex-wrap person-list-container"
           >
             <div
               v-for="(person, index) in currentPersons"
               :key="index"
-              :class="['person-card', person.status === 1 ? 'absent-person-card' : '', getStyleByAmount()]"
+              :class="['person-card', person.status === 1 ? 'absent-person-card' : '']"
               :style="'zoom: ' + zoomRatio + ' !important; border-left: 4px solid ' + getGroupColor(person) + ';'"
             >
               <img
@@ -134,1330 +134,504 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-import { mapState } from 'vuex';
-
 import { airaLogoWhite as airaLogo } from '@/utils';
 import { backgroundImage } from '@/utils/welcomeMode';
 
-import occupancyModel from '@/models/OccupancyDashboardModel.vue';
 import chartHelper from '@/utils/ChartHelper.vue';
+import OccupancySocket from '@/utils/OccupancySocket';
 
 const emptyFace = '/img/empty-face.svg';
 
+const SLOT_COUNT = 24;
+
+// 進入看板時要清掉預設 padding 的 CoreUI 外殼元素
+const CONTAINER_RESETS = [
+  ['.c-main', 'c-main-reset'],
+  ['.c-header', 'c-header-reset'],
+  ['.c-footer', 'c-footer-reset'],
+  ['.container-fluid', 'container-fluid-reset'],
+];
+
+// 需要跟著 zoomRatio 縮放的區塊
+const ZOOM_TARGETS = ['.attendance-top-box', '.footer-box'];
+
 export default {
   name: 'OccupancyDashboard',
-
+  mixins: [chartHelper],
   data() {
     return {
-      unSubscribe: null,
-      obj_loading: null,
-
+      loading: false,
       isLoadSetting: true,
       zoomRatio: 0,
 
-      idleTime: null,
-      currentDate: '',
       currentTime: '',
       currentTimeLooper: null,
 
-      params_entryChannels: [],
-      params_leaveChannels: [],
+      socket: null,
 
+      // 後端回傳的資料
       persons: [],
-      groupPersons: [],
-      entryPersons: [],
-      leavePersons: [],
+      groups: [],
+      hourly: [],
 
-      hourlyPersonInData: new Map(),
-      hourlyPersonOutData: new Map(),
-      hourlyPresentData: new Map(),
+      // 卡片分頁
+      currentPersons: [],
+      currentPageIndex: 0,
+      displayAmount: 20,
+      totalPageIndex: 0,
+      showPageProgressTimer: null,
+      countdownStartTime: null,
 
-      chartBarAmount: 24,
+      // 圖表
       chartLabels: [],
       chartDataIn: [],
       chartDataOut: [],
       chartDataPresent: [],
 
-      // 分頁：
-      currentPageIndex: 0,
-      displayAmount: 24,
-      dispPageIndexStart: 0,
-      dispPageIndexEnd: 0,
-
-      // progressDotAmount: 5,
-      // autoChangePageTimer: null,
-      showPageProgressTimer: null,
-      countdownStartTime: null,
-      countdownCurrentTime: null,
-      pageProgressPercentage: '0%',
-      totalPageIndex: 0,
-      // previousArrowEnabled: false,
-      // nextArrowEnabled: true,
-
-      // rawData: [],
-      currentPersons: [],
-
-      // personStatus: {},
+      // 目前沒有資料來源，保留以維持左上角版面
+      attendanceGroupTitle: '',
 
       displaySettings: {
         displayMode: 'OCCUPANCY',
         background_image: backgroundImage,
         logo: airaLogo,
 
-        mode: 0, // 0: 標準模式 | 1: 精簡模式
-        showDuration: 10000,
-        // temperatureUnit: 'C', // 度 C | 度 F
-
-        // Summary View
-        enableSummaryView: false,
         summaryBy: 'GROUP',
-        summaryPatrolTime: 10,
-        patrolidleTime: 60,
 
-        // Personal View
         displayGroup: ['All Person'],
         displayCardMode: 'STANDARD',
         displayPhoto: 'REGISTER',
         line1: 'NAME',
         line2: 'NONE',
 
-        // Page Layout
         pageLayout: 'LARGE',
         displayChart: true,
         dailyResetTime: '00',
         personPatrolTime: 5,
       },
-
-      // ------------ Attendance 的變數 -------------
-      // orderBy: 0, // 0: 依群組名稱排序 | 1: 依人數排序
-      // isDetailMode: false,
-      attendanceTitle: i18n.formatter.format('CAPACITY'),
-      attendanceGroupTitle: '',
-      currentGroups: [],
-
-      // isAttendance: true,
-      currentGroup: '',
-
-      refreshKey: 1,
     };
   },
-  mixins: [occupancyModel, chartHelper],
   computed: {
-    ...mapState(['deviceName']),
     attendancePresent() {
-      const self = this;
-      let presentArray = [];
-
-      if (self.persons) {
-        presentArray = self.persons.filter((p) => p.status === 0);
-      }
-
-      return presentArray.length;
+      return this.persons.filter((p) => p.status === 0).length;
     },
     attendanceTotal() {
       return this.persons.length;
     },
     getSortByText() {
-      const self = this;
-      switch (self.displaySettings.summaryBy) {
+      switch (this.displaySettings.summaryBy) {
         case 'DEPARTMENT':
-          return self.$t('SortByDepartment');
+          return this.$t('SortByDepartment');
         case 'JOBTITLE':
-          return self.$t('SortByJobTitle');
+          return this.$t('SortByJobTitle');
         case 'GROUP':
         default:
-          return self.$t('SortByGroupName');
+          return this.$t('SortByGroupName');
       }
     },
   },
   watch: {
-    currentPageIndex(newIndex) {
-      const self = this;
-
-      self.displayAmount = self.setupPageLayoutAmount();
-
-      const beginIndex = self.displayAmount * newIndex;
-
-      self.currentPersons = self.persons.slice(beginIndex, beginIndex + self.displayAmount);
-
-      self.currentPersons.forEach((item) => {
-        const person = item;
-        if (
-          person.register_image ===
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg=='
-        ) {
-          self.$globalFetchPhoto(person.uuid, (err, data) => {
-            if (err == null && data) {
-              if (data.display_image !== '') {
-                person.display_image = data.display_image;
-              } else {
-                person.display_image = emptyFace;
-              }
-
-              if (data.register_image !== '') {
-                person.register_image = data.register_image;
-              } else {
-                person.register_image = emptyFace;
-              }
-            }
-          });
-        }
-      });
-
-      self.countdownStartTime = new Date();
-      self.countdownCurrentTime = new Date();
-
-      self.dispPageIndexStart = newIndex - 4;
-      if (self.dispPageIndexStart < 0) {
-        self.dispPageIndexStart = 0;
-      }
-
-      if (self.totalPageIndex >= 9) {
-        if (self.dispPageIndexStart >= self.totalPageIndex - 8) {
-          self.dispPageIndexStart = self.totalPageIndex - 8;
-        }
-      }
-
-      self.dispPageIndexEnd = self.dispPageIndexStart + 8;
-      if (self.dispPageIndexEnd >= self.totalPageIndex) {
-        self.dispPageIndexEnd = self.totalPageIndex;
-      }
-
-      setTimeout(() => {
-        self.zoomViews();
-      }, 100);
+    currentPageIndex() {
+      this.refreshCurrentPage();
     },
   },
+
   async created() {
-    const self = this;
-
-    this.unSubscribe = this.$store.subscribe(async (mutation) => {
-      let payload = {};
-      let person = {};
-      let result = {};
-      switch (mutation.type) {
-        case 'changeWebSocket':
-          if (mutation.payload === 0) {
-            if (!self.obj_loading) self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-          } else if (self.obj_loading) {
-            self.obj_loading.hide();
-            self.obj_loading = null;
-          }
-          break;
-        case 'changeNotifications':
-          if (mutation.payload.statusCode === '200') {
-            // console.log('created subscribe', 'mutation payload statusCode == 200');
-            return;
-          }
-
-          payload = mutation.payload;
-
-          // 檢查驗證類型：只處理已註冊人員 (type = 1)，忽略陌生人 (type = 0)
-          if (payload.type === 0) {
-            return;
-          }
-
-          if (payload !== undefined) {
-            person = payload.person || payload.person_info;
-          }
-
-          if (person === undefined) {
-            // console.log('created subscribe', 'payload.person === undefined');
-            return;
-          }
-
-          result = {
-            card_facility_code: person.card_facility_code,
-            card_number: person.card_number,
-            face_image_id: payload.face_image,
-            group_list: payload.groups || person.group_list,
-            high_temperature: payload.is_high_temperature,
-            id: payload.person_id || person.id,
-            name: person.fullname || person.name,
-            source_id: payload.source_id || payload.channel || '',
-            temperature: payload.foreHead_temperature,
-            timestamp: payload.timestamp,
-            uuid: payload.person_id || person.uuid,
-            verify_mode: payload.verify_mode,
-            target_score: 0,
-            verify_mode_string: '',
-            verify_score: 0,
-            verify_uuid: '',
-          };
-
-          self.applyVerifyToPerson([result]);
-          self.groupPersons.forEach((elem) => {
-            const element = elem;
-            const present = element.persons.filter((p) => p.punchMode === 3);
-            element.present = present.length;
-          });
-          self.refreshKey *= -1;
-
-          self.refreshBarChart();
-          self.refreshDoughnutChart();
-          break;
-        default:
-          break;
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      self.zoomViews();
-    });
-
-    window.addEventListener('mousemove', () => {
-      self.idleTime = Date.now();
-    });
-    window.addEventListener('mousedown', () => {
-      self.idleTime = Date.now();
-    });
-    window.addEventListener('keydown', () => {
-      self.idleTime = Date.now();
-    });
-
-    self.isLoadSetting = false;
-  },
-
-  async mounted() {
-    const self = this;
-
-    self.isLoadSetting = true;
-
-    // 1.0 Load Display Config
-    const { data: display } = await self.$globalGetDisplaySetting();
-    self.displaySettings = { ...self.displaySettings, ...display.OCCUPANCY };
-
-    if (self.displaySettings.dailyResetTime.length === 2) {
-      self.displaySettings.dailyResetTime += ':00';
+    const { data: display } = await this.$globalGetDisplaySetting();
+    if (display && display.OCCUPANCY) {
+      this.displaySettings = { ...this.displaySettings, ...display.OCCUPANCY };
     }
 
-    // 1.5 Load Attendance Config
-    const setting = await self.$globalGetAttendanceSettings();
-    const videoDeviceGroupIn = setting.data.video_device_group_in;
-    const videoDeviceGroupOut = setting.data.video_device_group_out;
+    this.initHourly();
+    this.initViews();
+    this.isLoadSetting = false;
 
-    const {
-      data: { list: cameraList },
-    } = await this.$globalFindCameras('', 0, 3000);
-    const {
-      data: { data_list: tabletList },
-    } = await this.$globalGetTabletList('', 0, 3000);
-
-    self.$globalFindVideoDeviceGroups('', 0, 3000, (err, data) => {
-      let result = [];
-      if (data) {
-        result = data.result || [];
-      }
-
-      let entryChannels = [];
-      let leaveChannels = [];
-      result.forEach((g) => {
-        if (videoDeviceGroupIn.indexOf(g.name) >= 0) {
-          entryChannels = entryChannels.concat(g.camera_uuid_list);
-          entryChannels = entryChannels.concat(g.tablet_uuid_list);
-        }
-
-        if (videoDeviceGroupOut.indexOf(g.name) >= 0) {
-          leaveChannels = leaveChannels.concat(g.camera_uuid_list);
-          leaveChannels = leaveChannels.concat(g.tablet_uuid_list);
-        }
-      });
-
-      self.params_entryChannels = Array.from(new Set(entryChannels));
-      self.params_leaveChannels = Array.from(new Set(leaveChannels));
-
-      self.params_entryChannels = self.params_entryChannels.map((id) => {
-        const camera = cameraList.find((c) => c.uuid === id);
-        const tablet = tabletList.find((c) => c.uuid === id);
-        if (camera) return `${id}${camera.name}`;
-        if (tablet) return `${id}${tablet.identity}`;
-        return id;
-      });
-
-      self.params_leaveChannels = self.params_leaveChannels.map((id) => {
-        const camera = cameraList.find((c) => c.uuid === id);
-        const tablet = tabletList.find((c) => c.uuid === id);
-        if (camera) return `${id}${camera.name}`;
-        if (tablet) return `${id}${tablet.identity}`;
-        return id;
-      });
-    });
-
-    // 2.0 initial Group Person
-    await self.initialGroupPerson();
-
-    // 3.0 initial Views
-    self.initViews();
-
-    // 4.0 先關閉 Loading 狀態
-    self.isLoadSetting = false;
-
-    // 等待 DOM 完全渲染後再計算頁面佈局
-    self.$nextTick(() => {
-      // 先計算 zoomRatio，再計算頁面佈局
-      self.zoomViews();
-
-      // 使用 requestAnimationFrame 確保瀏覽器已完成佈局計算
-      requestAnimationFrame(() => {
-        self.refreshData();
-
-        if (self.totalPageIndex >= 1) {
-          self.resetAutoChangePageTimer();
-        }
-      });
-    });
-
-    // 5.0 defind query startTS
-    const nowHM = `${`00${new Date().getHours()}`.slice(-2)}:${`00${new Date().getMinutes()}`.slice(-2)}`;
-
-    let startTS = new Date().setHours(
-      self.displaySettings.dailyResetTime.split(':')[0],
-      self.displaySettings.dailyResetTime.split(':')[1],
-      0,
-      0,
-    );
-    if (nowHM < self.displaySettings.dailyResetTime) {
-      startTS -= 86400000;
-    }
-
-    const endTS = new Date() - 1000;
+    await this.loadDashboard('all');
 
     this.$nextTick(() => {
-      self.initBarChart();
-      self.initDoughnutChart();
-    });
+      this.zoomViews();
+      this.initBarChart();
+      this.initDoughnutChart();
 
-    // 6.0 Load Last Data
-    self.setupVerifyData(startTS, endTS, (verifyData) => {
-      self.applyVerifyToPerson(verifyData);
-      self.groupPersons.forEach((elem) => {
-        const element = elem;
-        const present = element.persons.filter((p) => p.punchMode === 3);
-        element.present = present.length;
-      });
-      self.refreshKey *= -1;
+      requestAnimationFrame(() => {
+        this.refreshCurrentPage();
+        this.refreshCharts();
 
-      this.$nextTick(() => {
-        self.refreshBarChart();
-        self.refreshDoughnutChart();
+        if (this.totalPageIndex >= 1) this.resetAutoChangePageTimer();
       });
     });
 
-    // 7.0 start Looper
-    self.setupCurrentTimeLooper();
+    this.setupCurrentTimeLooper();
+    this.connectSocket();
   },
 
   destroyed() {
-    const self = this;
+    this.toggleContainerReset(false);
+    window.removeEventListener('resize', this.zoomViews);
 
-    const mainElement = document.querySelector('.c-main');
-    const headerElement = document.querySelector('.c-header');
-    const footerElement = document.querySelector('.c-footer');
-    const containerElement = document.querySelector('.container-fluid');
-
-    if (mainElement) mainElement.classList.remove('c-main-reset');
-    if (headerElement) headerElement.classList.remove('c-header-reset');
-    if (footerElement) footerElement.classList.remove('c-footer-reset');
-    if (containerElement) containerElement.classList.remove('container-fluid-reset');
-
-    // if (self.autoChangePageTimer) {
-    //   clearInterval(self.autoChangePageTimer);
-    //   self.autoChangePageTimer = null;
-    // }
-
-    if (self.showPageProgressTimer) {
-      clearInterval(self.showPageProgressTimer);
-      self.showPageProgressTimer = null;
+    if (this.showPageProgressTimer) {
+      clearInterval(this.showPageProgressTimer);
+      this.showPageProgressTimer = null;
     }
 
-    if (self.currentTimeLooper) {
-      clearInterval(self.currentTimeLooper);
-      self.currentTimeLooper = null;
+    if (this.currentTimeLooper) {
+      clearInterval(this.currentTimeLooper);
+      this.currentTimeLooper = null;
     }
 
-    this.unSubscribe();
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
   },
+
   methods: {
+    // ---------------- 時段換算 ----------------
+
+    // dailyResetTime 可能是 '06' 或 '06:00'
+    resetHour() {
+      const raw = String(this.displaySettings.dailyResetTime || '00');
+      const hour = parseInt(raw.split(':')[0], 10);
+      return Number.isNaN(hour) ? 0 : hour;
+    },
+
+    // 圖表以 dailyResetTime 為起點，slot 0 即重置時刻那一小時
+    currentSlot() {
+      return (new Date().getHours() - this.resetHour() + SLOT_COUNT) % SLOT_COUNT;
+    },
+
+    slotToHour(slot) {
+      return (slot + this.resetHour()) % SLOT_COUNT;
+    },
+
+    initHourly() {
+      this.hourly = Array.from({ length: SLOT_COUNT }, (_, slot) => ({
+        slot,
+        hour: this.slotToHour(slot),
+        in: 0,
+        out: 0,
+        present: null,
+      }));
+    },
+
+    // ---------------- 資料載入 ----------------
+
+    // range 帶 'all' 取完整 24 筆 hourly，不帶則只更新當前時段
+    async loadDashboard(range) {
+      this.loading = true;
+
+      const { error, data } = await this.$globalQueryOccupancyDashboard(range);
+
+      this.loading = false;
+
+      if (error || !data) {
+        console.error('載入 Occupancy 看板資料失敗:', error);
+        return;
+      }
+
+      this.applyPersons(data.persons || []);
+      this.groups = data.groups || [];
+
+      if (range === 'all') this.initHourly();
+      this.applyHourly(data.hourly || []);
+
+      this.refreshCurrentPage();
+      this.refreshCharts();
+    },
+
+    // persons 依後端排序後的順序顯示，前端不再排序。
+    // 照片不隨此 API 回傳，翻頁時才懶載入，重載時保留已抓到的圖避免閃爍。
+    applyPersons(list) {
+      const cache = new Map();
+      this.persons.forEach((p) => {
+        if (p.lastImage) cache.set(p.uuid, p.lastImage);
+      });
+
+      this.persons = list.map((p) => ({
+        ...p,
+        display_image: '',
+        register_image: '',
+        lastImage: cache.get(p.uuid) || '',
+      }));
+    },
+
+    // 依 slot 覆蓋，不分辨是 1 筆還是 24 筆
+    applyHourly(list) {
+      list.forEach((item) => {
+        const { slot } = item;
+        if (slot === undefined || slot < 0 || slot >= SLOT_COUNT) return;
+
+        this.$set(this.hourly, slot, {
+          slot,
+          hour: item.hour === undefined ? this.slotToHour(slot) : item.hour,
+          in: item.in || 0,
+          out: item.out || 0,
+          present: item.present === undefined ? null : item.present,
+        });
+      });
+    },
+
+    // ---------------- WebSocket ----------------
+
+    connectSocket() {
+      this.socket = new OccupancySocket(window.occupancySocketPath, {
+        onUpdate: (payload) => this.applySocketUpdate(payload),
+        // 斷線期間的事件無法補回，重連後重載完整 24 筆
+        onReconnect: () => this.loadDashboard('all'),
+        onStatus: (online) => {
+          this.loading = !online;
+        },
+      });
+
+      this.socket.connect();
+    },
+
+    applySocketUpdate(payload) {
+      if (!payload || !payload.counted) return;
+
+      const person = this.persons.find((p) => p.uuid === payload.person_uuid);
+      if (person) person.status = payload.status;
+
+      const cell = this.hourly[this.currentSlot()];
+      if (cell) {
+        if (payload.direction === 'in') cell.in += 1;
+        else cell.out += 1;
+
+        cell.present = this.attendancePresent;
+      }
+
+      // groups 的 present 未在此更新，待下一次整點重載校正。
+      // 分組維度可能是部門或職稱，前端無法單憑 payload 判斷該人屬於哪一組。
+
+      this.refreshCharts();
+    },
+
+    // ---------------- 圖表 ----------------
+
+    initBarChart() {
+      this.syncChartData();
+      const ctx = document.getElementById('attendance-chart-canvas');
+      this.setupDashboardChart(
+        ctx,
+        this.chartLabels,
+        this.chartDataIn,
+        this.chartDataOut,
+        this.chartDataPresent,
+        this.currentSlot(),
+      );
+    },
+
+    initDoughnutChart() {
+      const ctx = document.getElementById('doughnut-chart-canvas');
+      this.setupAttendanceDoughnutChart(ctx, [0, 0], true);
+    },
+
+    syncChartData() {
+      this.chartLabels = this.hourly.map((h) => h.hour);
+      this.chartDataIn = this.hourly.map((h) => h.in);
+      this.chartDataOut = this.hourly.map((h) => -h.out);
+      this.chartDataPresent = this.hourly.map((h) => h.present);
+    },
+
+    refreshCharts() {
+      this.refreshBarChart();
+      this.refreshDoughnutChart();
+    },
+
+    refreshBarChart() {
+      this.syncChartData();
+
+      if (!this.chartLabels.length) return;
+
+      const ctx = document.getElementById('attendance-chart-canvas');
+      this.setupDashboardChart(
+        ctx,
+        this.chartLabels,
+        this.chartDataIn,
+        this.chartDataOut,
+        this.chartDataPresent,
+        this.currentSlot(),
+      );
+    },
+
+    refreshDoughnutChart() {
+      const present = this.attendancePresent;
+      const absent = this.persons.length - present;
+
+      const ctx = document.getElementById('doughnut-chart-canvas');
+      this.setupAttendanceDoughnutChart(ctx, [present, absent], true);
+    },
+
+    // ---------------- 分頁 ----------------
+
+    // 每頁卡片數依容器高度動態計算，螢幕越高一頁越多人
+    setupPageLayoutAmount() {
+      const columns = 5;
+      const cardHeight = 104;
+      const cardMargin = 12;
+      const zoomRatio = this.zoomRatio || 1;
+      const cardTotalHeight = (cardHeight + cardMargin) * zoomRatio;
+
+      const listWrapper = document.querySelector('.person-list-wrapper');
+      if (listWrapper) {
+        const rows = Math.floor(listWrapper.clientHeight / cardTotalHeight) || 4;
+        return columns * rows;
+      }
+
+      return 20;
+    },
+
+    refreshCurrentPage() {
+      this.displayAmount = this.setupPageLayoutAmount();
+      this.totalPageIndex = Math.max(Math.ceil(this.persons.length / this.displayAmount) - 1, 0);
+
+      if (this.currentPageIndex > this.totalPageIndex) {
+        this.currentPageIndex = 0;
+        return; // watch 會再進來一次
+      }
+
+      const begin = this.currentPageIndex * this.displayAmount;
+      this.currentPersons = this.persons.slice(begin, begin + this.displayAmount);
+
+      this.fetchPhotosForCurrentPage();
+    },
+
+    // 只抓當前頁、且還沒有照片的人
+    fetchPhotosForCurrentPage() {
+      this.currentPersons.forEach((item) => {
+        const person = item;
+        if (person.lastImage || person.display_image || person.register_image) return;
+
+        this.$globalFetchPhoto(person.uuid, (err, data) => {
+          if (err || !data) return;
+
+          person.display_image = data.display_image || '';
+          person.register_image = data.register_image || '';
+        });
+      });
+    },
+
+    resetAutoChangePageTimer() {
+      if (this.showPageProgressTimer) clearInterval(this.showPageProgressTimer);
+
+      this.countdownStartTime = new Date();
+
+      this.showPageProgressTimer = setInterval(() => {
+        if (this.totalPageIndex <= 0) return;
+
+        const elapsed = new Date() - this.countdownStartTime;
+        const duration = this.displaySettings.personPatrolTime * 1000;
+
+        if (elapsed >= duration) {
+          this.countdownStartTime = new Date();
+          this.currentPageIndex = this.currentPageIndex === this.totalPageIndex ? 0 : this.currentPageIndex + 1;
+        }
+      }, 1000);
+    },
+
+    onClickPrev() {
+      if (this.currentPageIndex === 0) return;
+      this.currentPageIndex -= 1;
+      this.resetAutoChangePageTimer();
+    },
+
+    onClickNext() {
+      if (this.currentPageIndex === this.totalPageIndex) return;
+      this.currentPageIndex += 1;
+      this.resetAutoChangePageTimer();
+    },
+
+    // ---------------- 時鐘 ----------------
+
+    setupCurrentTimeLooper() {
+      this.updateCurrentTime();
+
+      this.currentTimeLooper = setInterval(() => {
+        const now = new Date();
+        this.updateCurrentTime(now);
+
+        // 整點：讓圖表推進一格。跨越 dailyResetTime 時是新的一輪，需重取 24 筆
+        if (now.getMinutes() === 0 && now.getSeconds() === 0) {
+          this.loadDashboard(this.currentSlot() === 0 ? 'all' : null);
+        }
+      }, 1000);
+    },
+
+    updateCurrentTime(date) {
+      const now = date || new Date();
+      const hour = String(now.getHours()).padStart(2, '0');
+      const minute = String(now.getMinutes()).padStart(2, '0');
+      this.currentTime = `${hour}:${minute}`;
+    },
+
+    // ---------------- 卡片顯示 ----------------
+
     getImageSrc(personData) {
-      // 需要排除的 placeholder 圖片
-      const transparentPlaceholder =
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==';
+      const isPlaceholder = (img) => !img || typeof img === 'object' || img === emptyFace;
 
-      const isPlaceholder = (img) => {
-        if (!img || typeof img === 'object') return true;
-        if (img === transparentPlaceholder) return true;
-        if (img === emptyFace) return true;
-        return false;
-      };
-
-      const registerImg = isPlaceholder(personData.register_image) ? '' : personData.register_image;
-      const displayImg = isPlaceholder(personData.display_image) ? '' : personData.display_image;
-
-      // 預設顯示 display_image，沒有才顯示 register_image，都沒有就顯示空白人像 icon
-      const b64 = displayImg || registerImg || personData.lastImage;
+      const b64 = (!isPlaceholder(personData.display_image) && personData.display_image)
+        || (!isPlaceholder(personData.register_image) && personData.register_image)
+        || personData.lastImage;
 
       if (b64 && !isPlaceholder(b64)) {
         this.$set(personData, 'lastImage', b64);
         return `data:image/png;base64,${b64}`;
       }
-      // 都沒有照片時顯示空白人像 SVG
+
       return emptyFace;
-    },
-    range(start, end) {
-      let ret = [];
-
-      if (start <= end) {
-        ret = Array(end - start + 1)
-          .fill()
-          .map((val, i) => start + i);
-      }
-
-      return ret;
     },
 
     getDisplayName(person) {
-      const self = this;
-
       let retName = '';
-      if (self.displaySettings.line1 === 'NAME') {
-        retName = person.name;
-      } else if (self.displaySettings.line1 === 'PARTIALNAME') {
-        retName = self.showField(person, 'PARTIALNAME');
-      }
 
-      if (self.displaySettings.displayCardMode === 'COMPACT') {
-        if (retName.charCodeAt(0) > 256) {
-          if (retName.length > 3) {
-            retName = `${retName.substring(0, 3)}...`;
-          }
-        }
+      if (this.displaySettings.line1 === 'NAME') retName = person.name;
+      else if (this.displaySettings.line1 === 'PARTIALNAME') retName = this.showField(person, 'PARTIALNAME');
 
-        if (retName.length > 6) {
+      if (this.displaySettings.displayCardMode === 'COMPACT') {
+        if (retName.charCodeAt(0) > 256 && retName.length > 3) {
+          retName = `${retName.substring(0, 3)}...`;
+        } else if (retName.length > 6) {
           retName = `${retName.substring(0, 6)}...`;
         }
       }
+
       return retName;
     },
 
-    async initialGroupPerson() {
-      const self = this;
-
-      // 先取得群組資料（包含 person_list 排序）
-      await self.setupGroupData();
-
-      const raw = await self.setupPersonData();
-
-      self.persons = raw.map((item) => {
-        const person = { ...item };
-        // 如果有物件格式就拆成字串
-        if (typeof person.register_image === 'object') {
-          person.register_image = '';
-        }
-        if (typeof person.display_image === 'object') {
-          person.display_image = '';
-        }
-        // 新增快取欄位，初始設空
-        person.lastImage = '';
-        return person;
-      });
-
-      for (let i = self.persons.length - 1; i >= 0; i -= 1) {
-        const r = self.persons[i];
-        let inDisplayGroup = false;
-
-        // 檢查人員的群組是否在顯示設定中的群組中
-        if (r.group_list && Array.isArray(r.group_list)) {
-          inDisplayGroup = r.group_list.some((value) => self.displaySettings.displayGroup.indexOf(value) >= 0);
-        }
-
-        if (!inDisplayGroup) {
-          self.persons.splice(i, 1);
-        }
-      }
-
-      // 建立群組名稱到 person_list 的對應表
-      const groupPersonListMap = {};
-      self.groupData.forEach((g) => {
-        groupPersonListMap[g.groupName] = g.person_list || [];
-      });
-
-      // sort person by group order, then by person_list order within group
-      self.persons.sort((a, b) => {
-        // 取得人員所屬群組在 displayGroup 中的最小索引，以及對應的群組名稱
-        const getGroupInfo = (person) => {
-          if (!person.group_list || !Array.isArray(person.group_list)) {
-            return { index: 999, groupName: null };
-          }
-          let minIndex = 999;
-          let primaryGroup = null;
-          person.group_list.forEach((group) => {
-            const idx = self.displaySettings.displayGroup.indexOf(group);
-            if (idx >= 0 && idx < minIndex) {
-              minIndex = idx;
-              primaryGroup = group;
-            }
-          });
-          return { index: minIndex, groupName: primaryGroup };
-        };
-
-        const aGroupInfo = getGroupInfo(a);
-        const bGroupInfo = getGroupInfo(b);
-
-        // 先按群組順序排序
-        if (aGroupInfo.index !== bGroupInfo.index) {
-          return aGroupInfo.index - bGroupInfo.index;
-        }
-
-        // 同一群組內按 person_list 順序排序
-        const { groupName } = aGroupInfo;
-        const personList = groupPersonListMap[groupName] || [];
-
-        // person_list 裡存的是物件 { uuid, id, name }，需要用 findIndex 比對 uuid
-        const aPersonIndex = personList.findIndex((p) => p.uuid === a.uuid);
-        const bPersonIndex = personList.findIndex((p) => p.uuid === b.uuid);
-
-        // 如果都在 person_list 中，按 person_list 順序
-        if (aPersonIndex >= 0 && bPersonIndex >= 0) {
-          return aPersonIndex - bPersonIndex;
-        }
-        // 如果只有一個在 person_list 中，在 list 中的排前面
-        if (aPersonIndex >= 0) return -1;
-        if (bPersonIndex >= 0) return 1;
-
-        // 都不在 person_list 中，按 card_number 排序
-        const cardA = a.card_number || '';
-        const cardB = b.card_number || '';
-        return cardA.localeCompare(cardB);
-      });
-
-      switch (self.displaySettings.summaryBy) {
-        case 'DEPARTMENT':
-          self.groupPersons = [];
-
-          self.persons.forEach((p) => {
-            const person = p;
-
-            const depart = person.extra_info.department || '';
-
-            const gp = self.groupPersons.find((g) => g.groupName === depart);
-            person.punchMode = 0;
-            if (gp) {
-              gp.persons.push(person);
-              gp.total += 1;
-            } else {
-              self.groupPersons.push({
-                groupName: depart,
-                persons: [person],
-                present: 0,
-                total: 1,
-              });
-            }
-          });
-
-          break;
-        case 'JOBTITLE':
-          self.groupPersons = [];
-
-          self.persons.forEach((p) => {
-            const person = p;
-
-            const title = person.extra_info.title || '';
-
-            const gp = self.groupPersons.find((g) => g.groupName === title);
-            person.punchMode = 0;
-            if (gp) {
-              gp.persons.push(person);
-              gp.total += 1;
-            } else {
-              self.groupPersons.push({
-                groupName: title,
-                persons: [person],
-                present: 0,
-                total: 1,
-              });
-            }
-          });
-          break;
-        case 'GROUP':
-        default:
-          self.groupPersons = [];
-
-          self.persons.forEach((p) => {
-            const person = p;
-
-            const groupList = person.group_list || [];
-
-            for (let j = 0; j < groupList.length; j += 1) {
-              const group = groupList[j];
-
-              const gp = self.groupPersons.find((g) => g.groupName === group);
-
-              person.punchMode = 0;
-              if (gp) {
-                gp.persons.push(person);
-                gp.total += 1;
-              } else if (self.displaySettings.displayGroup.indexOf(group) >= 0) {
-                self.groupPersons.push({
-                  groupName: group,
-                  persons: [person],
-                  present: 0,
-                  total: 1,
-                });
-              }
-            }
-          });
-          break;
-      }
-
-      // 3.0 from Persons tp GroupPersons
-      self.groupPersons.forEach((pGroup) => {
-        const group = pGroup;
-
-        group.total = group.persons.length;
-        group.persons.sort((a, b) => {
-          const cardA = a.card_number || '';
-          const cardB = b.card_number || '';
-          return cardA.localeCompare(cardB);
-        });
-      });
-    },
-
-    PartialName(pPerson) {
-      const person = pPerson;
-
-      person.partialName = '';
-
-      if (person.name.charCodeAt(0) > 256) {
-        // '李***瑋'
-        person.partialName = `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
-      } else {
-        // J. Lee
-        const pNames = `${person.name} `.split(' ');
-        person.partialName = pNames[0].charAt(0);
-
-        if (pNames.length >= 3) {
-          person.partialName += `. ${pNames[pNames.length - 2]}`;
-        }
-      }
-
-      return person.partialName;
-    },
-
     showField(person, field) {
-      let ret = '';
-
       switch (field) {
         case 'ID':
-          ret = person.id;
-          break;
+          return person.id;
         case 'NAME':
-          ret = person.name;
-          break;
-        case 'PARTIALNAME':
+          return person.name;
+        case 'PARTIALNAME': {
           if (person.name.charCodeAt(0) > 256) {
-            // '李***瑋'
-            ret = `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
-          } else {
-            // J. Lee
-            const pNames = `${person.name} `.split(' ');
-            ret = pNames[0].charAt(0);
-
-            if (pNames.length >= 3) {
-              ret += `. ${pNames[pNames.length - 2]}`;
-            }
+            // 李***瑋
+            return `${person.name.charAt(0)}***${person.name.charAt(person.name.length - 1)}`;
           }
-          break;
+          // J. Lee
+          const pNames = `${person.name} `.split(' ');
+          let ret = pNames[0].charAt(0);
+          if (pNames.length >= 3) ret += `. ${pNames[pNames.length - 2]}`;
+          return ret;
+        }
         case 'GROUP':
-          ret = (person.group_list || []).join(', ');
-          break;
+          return (person.group_list || []).join(', ');
         case 'JOBTITLE':
-          ret = person.title;
-          ret = person.extra_info ? person.extra_info.title : '';
-          break;
+          return person.title || '';
         case 'DEPARTMENT':
-          ret = person.extra_info ? person.extra_info.department : '';
-          break;
-        case 'REGISTER':
-          ret = person.register_image;
-          break;
-        case 'DISPLAY':
-          ret = person.display_image;
-          break;
-        case 'SNAPSHOT':
-          ret = person.snapshot_image;
-          break;
+          return person.department || '';
         case 'NONE':
-          break;
+          return '';
         default:
-          ret = emptyFace;
-          break;
-      }
-      return ret;
-    },
-
-    toLoginPage() {
-      const self = this;
-      self.flag_login = false;
-      self.value_username = '';
-      self.$globalLogout();
-
-      this.$router.push('/');
-    },
-
-    refreshData() {
-      const self = this;
-
-      self.displayAmount = self.setupPageLayoutAmount();
-
-      // 直接顯示所有人員資料
-      self.currentPersons = self.persons.slice(
-        self.currentPageIndex * self.displayAmount,
-        (self.currentPageIndex + 1) * self.displayAmount,
-      );
-
-      self.totalPageIndex = Math.ceil(self.persons.length / self.displayAmount) - 1;
-
-      self.currentPersons.forEach((item) => {
-        const person = item;
-
-        if (
-          person.register_image ===
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg=='
-        ) {
-          self.$globalFetchPhoto(person.uuid, (err, data) => {
-            if (err == null && data) {
-              if (data.display_image !== '') {
-                person.display_image = data.display_image;
-              } else {
-                person.display_image = emptyFace;
-              }
-
-              if (data.register_image !== '') {
-                person.register_image = data.register_image;
-              } else {
-                person.register_image = emptyFace;
-              }
-            }
-          });
-        }
-      });
-
-      self.dispPageIndexStart = self.currentPageIndex - 4;
-      if (self.dispPageIndexStart < 0) {
-        self.dispPageIndexStart = 0;
-      }
-
-      if (self.totalPageIndex >= 9) {
-        if (self.dispPageIndexStart >= self.totalPageIndex - 8) {
-          self.dispPageIndexStart = self.totalPageIndex - 8;
-        }
-      }
-
-      self.dispPageIndexEnd = self.dispPageIndexStart + 8;
-      if (self.dispPageIndexEnd >= self.totalPageIndex) {
-        self.dispPageIndexEnd = self.totalPageIndex;
+          return '';
       }
     },
 
-    refreshDoughnutChart() {
-      // from attendancePresent and persons
-
-      const self = this;
-
-      const normal = self.attendancePresent;
-      const absent = self.persons.length - self.attendancePresent;
-
-      const ctx = document.getElementById('doughnut-chart-canvas');
-
-      self.setupAttendanceDoughnutChart(ctx, [normal, absent], true);
-    },
-
-    refreshBarChart() {
-      // console.log('refreshBarChart ============================');
-
-      const self = this;
-
-      const hourlyData = self.getHourlyPresentData();
-
-      if (hourlyData) {
-        self.chartDataIn = hourlyData.PersonIn;
-        self.chartDataOut = hourlyData.PersonOut;
-        self.chartDataPresent = hourlyData.PersonPresent;
-      }
-
-      if (self.chartLabels.length) {
-        const ctx = document.getElementById('attendance-chart-canvas');
-
-        self.setupDashboardChart(ctx, self.chartLabels, self.chartDataIn, self.chartDataOut, self.chartDataPresent);
-      }
-    },
-
-    setupCurrentTimeLooper() {
-      const self = this;
-
-      self.currentTimeLooper = setInterval(async () => {
-        const now = new Date();
-        const hour = String(now.getHours()).padStart(2, '0');
-        const minute = String(now.getMinutes()).padStart(2, '0');
-        self.currentDate = now.toLocaleDateString();
-
-        self.currentTime = `${hour}:${minute}`;
-
-        if (now.getMinutes() === 0 && now.getSeconds() === 0) {
-          self.refreshBarChart();
-        }
-      }, 1000);
-    },
-
-    //  merge Person and Verify Date
-    applyVerifyToPerson(data) {
-      const self = this;
-
-      let passModeRecord = [];
-      let clockModeRecord = [];
-
-      if (data.length >= 1) {
-        passModeRecord = data.filter(
-          (attRec) => attRec.uuid !== undefined && attRec.verify_mode !== 3 && attRec.verify_mode !== 4,
-        );
-        clockModeRecord = data.filter((attRec) => attRec.verify_mode === 3 || attRec.verify_mode === 4);
-
-        // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
-        for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (self.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
-            const ppp = passModeRecord.splice(i, 1);
-            if (ppp) {
-              ppp[0].verify_mode = 3;
-              clockModeRecord.push(ppp[0]);
-            }
-          } else if (self.params_leaveChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
-            const ppp = passModeRecord.splice(i, 1);
-            if (ppp) {
-              ppp[0].verify_mode = 4;
-              clockModeRecord.push(ppp[0]);
-            }
-          }
-        }
-
-        // 處理進出人員狀態 clockModeRecord
-        if (clockModeRecord.length >= 1) {
-          clockModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-
-          for (let i = 0; i < clockModeRecord.length; i += 1) {
-            const record = clockModeRecord[i];
-            const { uuid } = record;
-            const mode = record.verify_mode;
-
-            const hour = new Date(record.timestamp).getHours();
-
-            const person = self.persons.find((r) => r.uuid === uuid);
-
-            if (person != null && record.group_list.indexOf('All Visitor') >= 0) {
-              person.display_image = record.face_image_id;
-            }
-
-            switch (mode) {
-              case 3:
-                {
-                  // 人員進入
-                  if (person) {
-                    // clockinRecord
-                    person.clockinRecord = record;
-
-                    // presentRecord
-                    if (person.presentRecord) {
-                      const last = person.presentRecord[person.presentRecord.length - 1];
-                      if (last.out) {
-                        // 如果人員最後一筆紀錄是 out，就插入一筆新的紀錄 in
-                        person.presentRecord.push({
-                          in: hour,
-                        });
-                      }
-                    } else {
-                      // 如果人員之前沒有任何紀錄，也插入一筆新的紀錄 in
-                      person.presentRecord = [];
-                      person.presentRecord.push({
-                        in: hour,
-                      });
-                    }
-                  }
-
-                  // hourlyPersonInData => Map()<hour, uuid[]>
-                  // 更新 hourlyPersonInData
-                  const hValue = self.hourlyPersonInData.get(hour) || [];
-                  hValue.push(uuid);
-
-                  self.hourlyPersonInData.set(hour, hValue);
-                }
-                break;
-              case 4:
-                {
-                  // clockoutRecord
-                  if (person) {
-                    person.clockoutRecord = record;
-
-                    // presentRecord
-                    if (person.presentRecord) {
-                      const last = person.presentRecord[person.presentRecord.length - 1];
-                      if (!last.out) {
-                        // 補上人員的 out 時間點
-                        person.presentRecord[person.presentRecord.length - 1].out = hour;
-                      }
-                    }
-                  }
-
-                  // hourlyPersonOutData => Map()<hour, uuid[]>
-                  // 更新 hourlyPersonOutData
-                  const hValue = self.hourlyPersonOutData.get(hour) || [];
-                  hValue.push(uuid);
-
-                  self.hourlyPersonOutData.set(hour, hValue);
-                }
-                break;
-              default:
-                break;
-            }
-
-            if (person) {
-              if (!person.clockinRecord && !person.clockoutRecord) {
-                // 沒有 in & 沒有 out
-                person.punchMode = 0;
-                person.status = 1;
-              } else if (!person.clockinRecord && person.clockoutRecord) {
-                // 沒有 in & 有 out
-                person.punchMode = 0;
-                person.status = 1;
-              }
-              if (person.clockinRecord && !person.clockoutRecord) {
-                // 有 in & 沒有 out
-                person.punchMode = 3;
-                person.status = 0;
-              }
-              if (person.clockinRecord && person.clockoutRecord) {
-                // 有 in & 有 out
-                if (person.clockinRecord.timestamp < person.clockoutRecord.timestamp) {
-                  // in < out
-                  person.punchMode = 4;
-                  person.status = 1;
-                } else {
-                  // in >= out
-                  person.punchMode = 3;
-                  person.status = 0;
-                }
-              }
-            }
-          }
-
-          for (let i = 0; i < self.persons.length; i += 1) {
-            const person = self.persons[i];
-
-            if (person.presentRecord) {
-              for (let j = 0; j < person.presentRecord.length; j += 1) {
-                const present = person.presentRecord[j];
-
-                const hourIn = present.in;
-                const hourOut = present.out;
-
-                if (hourIn && hourOut) {
-                  for (let k = hourIn; k < hourOut; k += 1) {
-                    const hValue = self.hourlyPresentData.get(k) || [];
-
-                    if (hValue.indexOf(person.uuid) < 0) {
-                      hValue.push(person.uuid);
-                    }
-
-                    self.hourlyPresentData.set(k, hValue);
-                  }
-                }
-              }
-            }
-          }
-
-          self.entryPersons = self.persons.filter((p) => p.status === 0);
-          self.leavePersons = self.persons.filter((p) => p.status === 1);
-        } else if (passModeRecord.length >= 1) {
-          passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-
-          for (let i = 0; i < passModeRecord.length; i += 1) {
-            const record = passModeRecord[i];
-
-            const { uuid } = record;
-
-            const hour = new Date(record.timestamp).getHours();
-            const person = self.persons.find((r) => r.uuid === uuid);
-
-            if (person && record.group_list.indexOf('All Visitor') >= 0) {
-              person.display_image = record.face_image_id;
-            }
-
-            if (person) person.clockinRecord = record;
-
-            if (person) {
-              if (person.clockinRecord) {
-                person.punchMode = 3;
-                person.status = 0;
-              }
-
-              if (person.punchMode === 3) {
-                const hValue = self.hourlyPersonInData.get(hour) || [];
-                hValue.push(uuid);
-
-                self.hourlyPersonInData.set(hour, hValue);
-              }
-
-              if (!person.presentRecord) {
-                person.presentRecord = [];
-                person.presentRecord.push({
-                  in: hour,
-                });
-              }
-            }
-          }
-
-          for (let i = 0; i < self.persons.length; i += 1) {
-            const person = self.persons[i];
-
-            if (person.presentRecord) {
-              const present = person.presentRecord[0];
-
-              if (present.in) {
-                for (let k = present.in; k <= 23; k += 1) {
-                  const hValue = self.hourlyPresentData.get(k) || [];
-
-                  if (hValue.indexOf(person.uuid) < 0) {
-                    hValue.push(person.uuid);
-                  }
-
-                  self.hourlyPresentData.set(k, hValue);
-                }
-              }
-            }
-          }
-
-          self.entryPersons = self.persons.filter((p) => p.status === 0);
-          self.leavePersons = self.persons.filter((p) => p.status === 1);
-        }
-      }
-    },
-
-    getHourlyPresentData() {
-      const PersonIn = Array(24).fill(0);
-      const PersonOut = Array(24).fill(0);
-      const PersonPresent = Array(24).fill(0);
-
-      this.hourlyPersonInData.forEach((v, k) => {
-        PersonIn[k] += v.length;
-      });
-
-      this.hourlyPersonOutData.forEach((v, k) => {
-        PersonOut[k] += v.length * -1;
-      });
-
-      this.hourlyPresentData.forEach((v, k) => {
-        PersonPresent[k] += v.length;
-      });
-
-      return {
-        PersonIn,
-        PersonOut,
-        PersonPresent,
-      };
-    },
-
-    setupPageLayoutAmount() {
-      // 動態計算每頁可放幾張卡片
-      const self = this;
-      const columns = 5; // 固定 5 欄
-      const cardHeight = 104; // 卡片高度（卡片本身已有 zoom 屬性）
-      const cardMargin = 12; // 卡片間距
-      // 卡片有 zoom 屬性，所以實際佔用高度要乘以 zoomRatio
-      const zoomRatio = self.zoomRatio || 1;
-      const cardTotalHeight = (cardHeight + cardMargin) * zoomRatio;
-
-      // 取得卡片列表容器的可用高度
-      const listWrapper = document.querySelector('.person-list-wrapper');
-      if (listWrapper) {
-        const availableHeight = listWrapper.clientHeight;
-        // 確保至少能顯示完整的行數
-        const rows = Math.floor(availableHeight / cardTotalHeight) || 4;
-        return columns * rows;
-      }
-
-      // 預設 5x4 = 20
-      return 20;
-    },
-
-    initViews() {
-      const self = this;
-      const mainElement = document.querySelector('.c-main');
-      const headerElement = document.querySelector('.c-header');
-      const footerElement = document.querySelector('.c-footer');
-      const containerElement = document.querySelector('.container-fluid');
-
-      // 把 coreUI 套件的一些預設元件的樣式清除掉
-      if (mainElement) mainElement.classList.add('c-main-reset');
-      if (headerElement) headerElement.classList.add('c-header-reset');
-      if (footerElement) footerElement.classList.add('c-footer-reset');
-      if (containerElement) containerElement.classList.add('container-fluid-reset');
-
-      setTimeout(() => {
-        self.zoomViews();
-      }, 168);
-    },
-
-    resetAutoChangePageTimer() {
-      const self = this;
-
-      if (self.showPageProgressTimer) {
-        clearInterval(self.showPageProgressTimer);
-      }
-
-      self.countdownStartTime = new Date();
-      self.countdownCurrentTime = new Date();
-
-      // 每 1000 毫秒更新進度條
-      self.showPageProgressTimer = setInterval(() => {
-        if (self.totalPageIndex > 0) {
-          self.countdownCurrentTime = new Date();
-
-          const base = self.displaySettings.personPatrolTime;
-
-          const percentage = (100 * (self.countdownCurrentTime - self.countdownStartTime)) / (base * 1000);
-          self.pageProgressPercentage = `${percentage}%`;
-
-          if (percentage >= 100) {
-            self.pageProgressPercentage = '0%';
-            if (self.currentPageIndex === self.totalPageIndex) {
-              self.currentPageIndex = 0;
-            } else {
-              self.currentPageIndex += 1;
-            }
-          }
-        }
-      }, 1000);
-    },
-
-    zoomViews() {
-      const self = this;
-      const dashboard = document.querySelector('.dashboard');
-      if (dashboard) {
-        const width = dashboard.clientWidth;
-        const height = dashboard.clientHeight;
-
-        const rW = width / 1920;
-        const rH = height / 1080;
-        self.zoomRatio = Math.min(rW, rH);
-
-        const dW = width - 1920 * self.zoomRatio;
-        const dH = height - 1080 * self.zoomRatio;
-
-        dashboard.style.paddingTop = `${Math.floor(dH / 2)}px`;
-        dashboard.style.paddingBottom = `${Math.floor(dH / 2)}px`;
-        dashboard.style.paddingLeft = `${Math.floor(dW / 2)}px`;
-        dashboard.style.paddingRight = `${Math.floor(dW / 2)}px`;
-
-        const dateTimeElement = document.querySelector('.current-date-time');
-        const chartElement = document.querySelector('#chart-canvas');
-        const summaryBox = document.querySelector('.summary-box');
-        const headerElement = document.querySelector('.dashboard-header');
-        const dividerElement = document.querySelector('.dashboard-divider');
-        const footerBoxElement = document.querySelector('.footer-box');
-        const attendanceTopElement = document.querySelector('.attendance-top-box');
-
-        // 將下列 views 進行 zoom
-        if (dateTimeElement) self.setZoom(dateTimeElement);
-        if (chartElement) self.setZoom(chartElement);
-        if (summaryBox) self.setZoom(summaryBox);
-        if (headerElement) self.setZoom(headerElement);
-        if (dividerElement) self.setZoom(dividerElement);
-        if (footerBoxElement) self.setZoom(footerBoxElement);
-        if (attendanceTopElement) self.setZoom(attendanceTopElement);
-      }
-    },
-
-    setZoom(element) {
-      // console.log('setZoom ============================');
-
-      const self = this;
-      element.style.setProperty('zoom', self.zoomRatio, 'important');
-    },
-
-    initBarChart() {
-      const self = this;
-
-      self.chartLabels = Array.from(Array(self.chartBarAmount).keys());
-      self.chartDataIn = Array(self.chartBarAmount).fill(0);
-      self.chartDataOut = Array(self.chartBarAmount).fill(0);
-      self.chartDataPresent = Array(self.chartBarAmount).fill(0);
-
-      const ctx = document.getElementById('attendance-chart-canvas');
-
-      self.setupDashboardChart(ctx, self.chartLabels, self.chartDataIn, self.chartDataOut, self.chartDataPresent);
-    },
-
-    initDoughnutChart() {
-      const self = this;
-
-      const ctx = document.getElementById('doughnut-chart-canvas');
-      self.setupAttendanceDoughnutChart(ctx, [0, 0], true);
-    },
-
-    changePage(selectedIndex) {
-      const self = this;
-      self.currentPageIndex = selectedIndex;
-      self.countdownStartTime = new Date();
-      self.countdownCurrentTime = new Date();
-      self.resetAutoChangePageTimer();
-    },
-
-    formatEpochTime(epochTime) {
-      const date = new Date(epochTime);
-      const hour = String(date.getHours()).padStart(2, '0');
-      const minute = String(date.getMinutes()).padStart(2, '0');
-
-      return `${hour}:${minute}`;
-    },
-
-    onClickPrev() {
-      const self = this;
-      if (self.currentPageIndex === 0) return;
-
-      self.currentPageIndex -= 1;
-      self.resetAutoChangePageTimer();
-    },
-
-    onClickNext() {
-      const self = this;
-      if (self.currentPageIndex === self.totalPageIndex) return;
-
-      self.currentPageIndex += 1;
-      self.resetAutoChangePageTimer();
-    },
-
-    onClickPagerDot(index) {
-      const self = this;
-      self.currentPageIndex = index;
-      self.resetAutoChangePageTimer();
-    },
-
-    getStyleByAmount() {
-      // 固定使用 person-card 樣式
-      return 'person-card';
-    },
-
-    getGridStyleByAmount() {
-      // 固定使用 grid-5 樣式 (一行5張)
-      return 'grid-5';
-    },
-
+    // TODO: 群組顏色目前寫死，自訂群組名稱不會有顏色，待搬到顯示設定
     getGroupColor(person) {
-      // 缺席的人用白色
-      if (person.status === 1) {
-        return '#FFFFFF';
-      }
+      if (person.status === 1) return '#FFFFFF';
 
-      // 根據群組名稱取得對應顏色
       const groupColors = {
         Employee: '#FF9D72',
         Partner: '#44C961',
@@ -1465,26 +639,52 @@ export default {
         來賓: '#F066FC',
       };
 
-      // 取得人員所屬群組中，在 displayGroup 順序最前面的群組
-      if (person.group_list && Array.isArray(person.group_list)) {
-        let minIndex = 999;
-        let primaryGroup = null;
+      return groupColors[person.primary_group] || '#FFFFFF';
+    },
 
-        person.group_list.forEach((group) => {
-          const idx = this.displaySettings.displayGroup.indexOf(group);
-          if (idx >= 0 && idx < minIndex) {
-            minIndex = idx;
-            primaryGroup = group;
-          }
-        });
+    // ---------------- 版面 ----------------
 
-        if (primaryGroup && groupColors[primaryGroup]) {
-          return groupColors[primaryGroup];
-        }
-      }
+    initViews() {
+      this.toggleContainerReset(true);
 
-      // 預設白色
-      return '#FFFFFF';
+      // 等 DOM 排版完成再量尺寸
+      setTimeout(() => this.zoomViews(), 168);
+
+      window.addEventListener('resize', this.zoomViews);
+    },
+
+    // CoreUI 外殼的預設 padding 會擋住全螢幕版面，進入看板時清掉、離開時還原
+    toggleContainerReset(on) {
+      CONTAINER_RESETS.forEach(([selector, className]) => {
+        const element = document.querySelector(selector);
+        if (element) element.classList[on ? 'add' : 'remove'](className);
+      });
+    },
+
+    // 版面以 1920x1080 為基準等比縮放並置中。
+    // 用 CSS zoom 而非 transform: scale，因為 setupPageLayoutAmount() 需要
+    // 縮放後的實際 clientHeight 來計算每頁卡片數。
+    zoomViews() {
+      const dashboard = document.querySelector('.dashboard');
+      if (!dashboard) return;
+
+      const { clientWidth: width, clientHeight: height } = dashboard;
+
+      this.zoomRatio = Math.min(width / 1920, height / 1080);
+
+      const padX = Math.floor((width - 1920 * this.zoomRatio) / 2);
+      const padY = Math.floor((height - 1080 * this.zoomRatio) / 2);
+      dashboard.style.padding = `${padY}px ${padX}px`;
+
+      ZOOM_TARGETS.forEach((selector) => {
+        const element = document.querySelector(selector);
+        if (element) element.style.setProperty('zoom', this.zoomRatio, 'important');
+      });
+    },
+
+    toLoginPage() {
+      this.$globalLogout();
+      this.$router.push('/');
     },
   },
 };

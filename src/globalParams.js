@@ -105,7 +105,12 @@ if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelit
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 // window.apiSocketPath = `ws://${HOST}:80/airafacelite/verifyresults`;
 
-console.log('globalParams.js', window.apiSocketPath);
+// Occupancy 看板專用通道，只推送進出判定結果（counted / direction / person_uuid / status）
+// TODO: 端點名稱待後端確認
+const OCCUPANCY_WS_SCHEME = global.usingHttps ? 'wss' : 'ws';
+window.occupancySocketPath = `${OCCUPANCY_WS_SCHEME}://${HOST}:${PORT}/airafacelite/occupancyupdates`;
+
+//console.log('globalParams.js', window.apiSocketPath);
 
 function apiServerPath() {
   if (global.usingHttps) {
@@ -1432,7 +1437,7 @@ Vue.prototype.$globalRemoveEventHandle = (uuid, cb) =>
 
 Vue.prototype.$globalCameraSnapshot = (setting, cb) =>
   new Promise((resolve) => {
-    console.log('Vue.prototype.$globalCameraSnapsho');
+    //console.log('Vue.prototype.$globalCameraSnapsho');
     postJson('/airafacelite/getcamerasnapshot', setting, (err, data) => {
       if (cb) cb(err, data);
       resolve({ error: err, data });
@@ -1623,5 +1628,20 @@ Vue.prototype.$globalGetAttendanceSummary = (startTime, endTime, cb) =>
     postJson('/airafacelite/getattendancesummary', query, (err, data) => {
       if (cb) cb(err, err ? null : data);
       resolve({ error: err, data: err ? null : data });
+    });
+  });
+
+// Occupancy 看板：一次取得統計、分組與人員清單
+// range 帶 'all' 時回傳完整 24 筆 hourly，不帶時僅回傳當前時段 1 筆
+// 查詢區間由後端依 dailyResetTime 自行判斷，前端不傳 start_time / end_time
+Vue.prototype.$globalQueryOccupancyDashboard = (range, cb) =>
+  new Promise((resolve) => {
+    const query = { with_image: false };
+    if (range) query.range = range;
+
+    postJson('/airafacelite/getoccupancydata', query, (err, data) => {
+      const result = err || !data ? null : data.result;
+      if (cb) cb(err, result);
+      resolve({ error: err, data: result });
     });
   });

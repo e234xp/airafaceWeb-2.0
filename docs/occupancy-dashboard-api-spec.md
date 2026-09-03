@@ -60,27 +60,27 @@ POST /airafacelite/queryoccupancydashboard
 
 ### Request
 
+前端不傳查詢區間，由後端依 `dailyResetTime` 自行判斷當前是哪一輪。
+
 ```json
-{
-  "start_time": 1755400000000,
-  "end_time": 1755480000000,
-  "with_image": false
-}
+{ "range": "all" }
 ```
 
 | 欄位 | 型別 | 說明 |
 |---|---|---|
-| `start_time` | int64 | 當日重置時間的 epoch ms。前端依 `dailyResetTime` 計算，若當前時間早於重置時間則減 86400000（`OccupancyDashboard.vue:513-522`） |
-| `end_time` | int64 | 查詢結束時間，通常為「現在 - 1 秒」 |
+| `range` | string | `"all"` 時回傳完整 24 筆 `hourly`；未帶時僅回傳當前時段 1 筆。詳見 §3.2 |
 | `with_image` | bool | 固定 `false`，見 §5 |
 
-**設定值由後端自行讀取，前端不重複傳送：**
+**所有設定值由後端自行讀取，前端不傳送：**
 
 | 設定 | 來源 API | 用途 |
 |---|---|---|
+| `dailyResetTime` | `getdashboardsettings` → `OCCUPANCY` | **判斷查詢區間的起訖**（取代原本前端傳入的 `start_time` / `end_time`） |
 | `displayGroup` | `getdashboardsettings` → `OCCUPANCY` | 過濾要顯示的人員群組 |
 | `video_device_group_in` | `getattendancesettings` | 判定進場通道 |
 | `video_device_group_out` | `getattendancesettings` | 判定離場通道 |
+
+> 查詢區間交由後端計算後，前端 `OccupancyDashboard.vue:511-524` 整段（`startTS` / `endTS` 的推算）可移除，`dailyResetTime` 的格式與字串比較問題（§6.3）也一併由後端承接。
 
 ### Response
 
@@ -127,14 +127,52 @@ POST /airafacelite/queryoccupancydashboard
 
 #### `hourly`
 
-固定 24 筆，`hour` 為 `0` ~ `23`。
+> ⚠️ 目前實作的 `in` / `out` / `present` 三個欄位皆有誤，詳見 **§9**。
+
+**兩種回傳模式**：
+
+| 情境 | Request | 回傳筆數 |
+|---|---|---|
+| 初次載入看板 | `{ "range": "all" }` | 完整 24 筆 |
+| 每個整點 | 不帶 `range` | 僅當前時段 1 筆 |
+| WebSocket 重連後 | `{ "range": "all" }` | 完整 24 筆（見 §7.4） |
+| 跨越 `dailyResetTime` | `{ "range": "all" }` | 完整 24 筆（新的一輪） |
+
+**單筆回傳時仍請以陣列包覆並帶 `slot`**，前端統一以「依 `slot` 覆蓋對應位置」處理，不需分辨筆數：
+
+```json
+"hourly": [
+  { "slot": 4, "hour": 10, "in": 12, "out": 3, "present": 41 }
+]
+```
+
+**陣列順序即圖表由左到右的順序**，以 `dailyResetTime` 為起點，而非時鐘 0 點。
+
+以 `dailyResetTime = 06:00` 為例：
+
+| `slot` | `hour` | 對應時間 |
+|---|---|---|
+| 0 | 6 | 當日 06:00 |
+| 1 | 7 | 當日 07:00 |
+| … | … | … |
+| 17 | 23 | 當日 23:00 |
+| 18 | 0 | **隔日** 00:00 |
+| … | … | … |
+| 23 | 5 | 隔日 05:00 |
+
+換算公式：`slot = (時鐘小時 - 重置小時 + 24) % 24`
 
 | 欄位 | 型別 | 說明 |
 |---|---|---|
-| `hour` | int | 小時（0-23） |
+| `slot` | int | `0` ~ `23`，圖表由左至右的位置。陣列索引即為此值 |
+| `hour` | int | 時鐘小時（0-23），僅供 X 軸標籤顯示 |
 | `in` | int | 該小時的進場**人次** |
 | `out` | int | 該小時的離場**人次**，回傳正整數即可，前端負責轉負值繪圖（`OccupancyDashboard.vue:1254`） |
-| `present` | int | 該小時的在場**人數**（同一人同小時只計一次） |
+| `present` | int\|null | 該小時的在場**人數**（同一人同小時只計一次）。**尚未到達的時段給 `null`**，不要給 `0` |
+
+**`present` 為何不能用 `0` 表示未到達**：`0` 在圖表上會畫成「在場人數歸零」，看起來像所有人都離開了；`null` 才會讓 chart.js 正確斷線。
+
+**`present` 具有延續性**：某小時完全沒有人進出時，`present` 應延續前一小時的值，而非 `0`。例如 10:00 有 50 人在場、11:00 無任何進出，則 11:00 的 `present` 仍為 `50`。
 
 #### `groups`
 
@@ -236,6 +274,22 @@ POST /airafacelite/queryoccupancydashboard
 
 現行機制為：`with_image: false` 只取資料，前端翻頁時才對當前頁的人員呼叫 `$globalFetchPhoto(uuid)` 懶載入（`OccupancyDashboard.vue:284-296`）。此設計維持不變，`persons` 陣列才能保持輕量。
 
+### 訪客照片來源變更
+
+**現行行為**：訪客卡片顯示的是「最近一次刷臉當下的影像」，來自 WebSocket payload 的 `face_image`（`OccupancyDashboard.vue:1056`、`1190`）：
+
+```js
+if (person != null && record.group_list.indexOf('All Visitor') >= 0) {
+  person.display_image = record.face_image_id;
+}
+```
+
+**變更後**：新 WebSocket 通道不提供影像，訪客改用註冊照，無註冊照則顯示空白人像。
+
+前端 `getImageSrc()` 的優先序（`display_image` → `register_image` → 空白人像 SVG）本身不需修改，僅須移除上述兩處指派——該邏輯位於 `applyVerifyToPerson()` 內，整個函式本就會被刪除。
+
+> ⚠️ **訪客通常沒有註冊照**，變更後訪客卡片多半會顯示空白人像。此為已知取捨，建議事先向使用者說明。
+
 ---
 
 ## 6. 待確認事項
@@ -254,100 +308,160 @@ POST /airafacelite/queryoccupancydashboard
 
 **需確認**：兩條分支是否應統一為同一套規則。
 
-### 6.3 跨日資料
+### 6.3 跨日資料與 `dailyResetTime` 格式
 
-`start_time` 由前端依 `dailyResetTime` 計算，可能落在前一日。需確認後端查詢區間的處理方式與現行一致。
+`start_time` 由前端依 `dailyResetTime` 計算，可能落在前一日（`OccupancyDashboard.vue:511-522`）。
+
+搬移時須注意兩點：
+
+**格式不固定**：`dailyResetTime` 可能是 `"06"`（兩字元）或 `"06:00"`。前端在 `OccupancyDashboard.vue:431-433` 有補齊處理：
+
+```js
+if (self.displaySettings.dailyResetTime.length === 2) {
+  self.displaySettings.dailyResetTime += ':00';
+}
+```
+
+**現行使用字串比較**：`nowHM < dailyResetTime` 依賴兩邊皆為零補位的 `HH:MM`。若出現 `"6:00"` 這類未補零的值，字典序比較會得到錯誤結果（例如 `"09:00" < "6:00"` 為 true，將錯誤地往回推一天）。
+
+**建議**：後端改用數值（分鐘數或 timestamp）比較，不要沿用字串比較。
+
+> 查詢區間已改由後端依 `dailyResetTime` 自行判斷（見 §3 Request），因此上述兩個問題**由後端承接**。前端仍需讀取 `dailyResetTime` 以計算 `currentSlot()`（WebSocket 更新時判斷要更新哪一格），但不再參與查詢區間的推算。
+
+### 6.4 跨午夜的在場區間未被計入
+
+`OccupancyDashboard.vue:1163`：
+
+```js
+for (let k = hourIn; k < hourOut; k += 1)
+```
+
+當某人於 22:00 進場、隔日 02:00 離場時，`hourIn = 22`、`hourOut = 2`，迴圈條件一開始即不成立，**完全不執行**——該人員的在場時段一格都不會被計入 `hourlyPresentData`。
+
+夜班或跨午夜停留的情境會整批遺漏。
+
+**需確認**：改用 §3 的 `slot` 座標系後（以 `dailyResetTime` 為起點），跨午夜的區間即可正常表示。請確認後端以 `slot` 而非時鐘小時進行區間填充。
 
 ---
 
 ## 7. WebSocket 即時更新
 
-現行做法：收到即時驗證推播時，前端呼叫 `applyVerifyToPerson([result])` 做增量更新（`OccupancyDashboard.vue:389`）。統計邏輯搬至後端後，前端不再具備增量計算能力。
+現行做法：收到即時驗證推播時，前端呼叫 `applyVerifyToPerson([result])` 做增量更新（`OccupancyDashboard.vue:389`）。統計邏輯搬至後端後，前端不再具備進出判定能力。
 
-**採用方案：後端於推播時附帶算好的結果片段**，前端僅做覆蓋，不重打 API。
+**採用方案：職責分離。**
 
-> 曾評估「收到推播後 debounce 3~5 秒重打全量 API」，但該做法會使後端在有活動期間持續全量重算，成本不合理，故不採用。
+| 工作 | 說明 | 由誰負責 |
+|---|---|---|
+| **進出判定** | 需套用 `verify_mode` 規則、比對進出通道群組、展開裝置 uuid | **後端**（原本即需計算） |
+| **彙總計數** | 統計 `status === 0` 的人數、對應時段 `in` / `out` 累加 | **前端**（純計數，不含業務邏輯） |
 
-### 7.1 核心原則：推絕對值，不推增量
+後端**不需要在每次事件時重算整個看板**，僅需推送既有的判定結果。全量計算維持每小時一次，且整點僅計算當前時段。
 
-看板長時間掛載不重整，WebSocket 必然會遇到斷線與漏訊息。
+> 曾評估兩個方案後不採用：
+> 1. **後端每次事件重算完整 summary/hourly/groups** — 後端計算成本過高。
+> 2. **前端收到推播後 throttle 重打全量 API** — 即時性與後端負擔難以兼顧；throttle 設為 15 秒仍等同每分鐘 4 次全量計算。
 
-- 若推增量（`present: +1`），漏一則訊息數字即永久錯誤，且無從察覺。
-- 若推絕對值，漏訊息後下一則到達時數字即自動修正。
+### 7.1 通道與 Payload 格式
 
-後端本身即維護當前狀態，推送時填入當前值即可，不增加計算成本。
-
-### 7.2 Payload 格式
-
-現行 `verifyresults` 通道已有其他看板（GuardDashboard 等）使用，且 `payload.type` 已用於區分陌生人（`0`）與註冊人員（`1`），不宜再作為訊息類型欄位。
-
-**建議在現有驗證推播 payload 上附掛 `occupancy` 區塊**，不解析此區塊的看板可直接忽略，無須變更通道或影響既有功能。
+後端將**另開一條專用通道**推送 Occupancy 所需的判定結果，現行 `verifyresults` 通道維持不變。
 
 ```json
 {
-  "occupancy": {
-    "seq": 1042,
-    "server_time": 1755480000000,
-    "counted": true,
-
-    "person": {
-      "uuid": "5f8a...",
-      "status": 0,
-      "punch_mode": 3,
-      "last_in_time": 1755430000000,
-      "last_out_time": null
-    },
-
-    "summary": { "present": 88, "total": 152 },
-
-    "groups": [
-      { "name": "Employee", "present": 41, "total": 60 }
-    ],
-
-    "hourly": [
-      { "hour": 9,  "in": 12, "out": 3, "present": 41 },
-      { "hour": 10, "in": 0,  "out": 0, "present": 40 }
-    ]
-  }
+  "counted": true,
+  "direction": "in",
+  "person_uuid": "5f8a...",
+  "status": 0
 }
 ```
 
 | 欄位 | 型別 | 說明 |
 |---|---|---|
-| `seq` | int | 遞增序號，每日重置時歸零。前端記錄最後接收值，**發現跳號即重新呼叫全量 API 補齊**。此為斷線容錯的關鍵機制 |
-| `server_time` | int64 | 伺服器時間戳 |
 | `counted` | bool | 此事件是否計入統計。`source_id` 不屬於任何進出通道、人員不在 `displayGroup` 內、或為陌生人時給 `false`，前端直接忽略。使「哪些事件算數」的判斷完全留在後端 |
-| `person` | object | 僅該名人員的最新狀態，欄位定義同 §3.4 |
-| `groups` | array | **僅受影響的分組**，通常 1 筆 |
-| `hourly` | array | **僅受影響的小時格**，可能超過 1 筆。例如某人 09:00 進場、11:00 離場，該離場事件會同時改變第 9、10 兩格的 `present` |
+| `direction` | string | `"in"` 進場 / `"out"` 離場。判定規則同 §4.1 |
+| `person_uuid` | string | 對應 `persons[].uuid` |
+| `status` | int | 該人員最新狀態：`0` 在場 / `1` 離場。判定規則同 §4.2 |
 
-### 7.3 前端處理流程
+這四個欄位皆為後端在寫入驗證紀錄時既有的資訊，不需額外運算。
 
-收到後僅做覆蓋，不進行任何計算：
+**新通道需一併提供**：
 
-1. 以 `uuid` 找到對應人員，覆蓋 `status` / `punch_mode`
-2. `summary` 整個覆蓋
-3. `groups` 依 `name` 對應覆蓋
-4. `hourly` 依 `hour` 對應覆蓋
-5. 重繪圖表
+| 項目 | 原因 |
+|---|---|
+| 連線狀態事件 | 前端需在斷線時蓋上遮罩，避免看板默默顯示過期數字（現行機制見 `OccupancyDashboard.vue:340-347`） |
+| 心跳格式定義 | 現行通道以 `statusCode: '200'` 表示心跳，前端收到即跳過。新通道請沿用或明確告知格式 |
 
-`applyVerifyToPerson()` 及其相關的進出配對邏輯可完全移除。
+> 本通道**不含影像欄位**，訪客照片改用註冊照，詳見 §5。
 
-### 7.4 必要的補償機制
+### 7.2 前端處理流程
 
-| 機制 | 做法 | 必要性 |
-|---|---|---|
-| **斷線補償** | WebSocket `onopen` 重連時、或偵測 `seq` 跳號時，重新呼叫全量 API | **必要**。現行 `webSocketService.js:42` 已有自動重連（1~3 秒遞增），但重連後無補資料機制，斷線期間的事件會全數遺失 |
-| **每日重置** | 前端排定 timer 於 `dailyResetTime` 重新呼叫全量 API；或由後端推送 `"reset": true` | **必要**，二擇一即可 |
-| **低頻對帳** | 前端每 10~15 分鐘重新呼叫一次全量 API | 建議。相較 3 秒一次約為 1/200 成本，可修正任何累積誤差 |
+```js
+const o = payload;
+if (!o || !o.counted) return;
 
-### 7.5 成本比較
+// 1. 更新該人員狀態
+const person = this.persons.find((p) => p.uuid === o.person_uuid);
+if (person) person.status = o.status;
 
-| 方案 | 後端計算頻率 | 傳輸量 |
-|---|---|---|
-| debounce 3 秒重打全量 | 有活動期間每 3 秒全量重算 | 每次數十 KB |
-| **socket 推送片段** | 每筆事件計算一次增量（原本即需處理） | 每則約 300 bytes |
-| ＋15 分鐘對帳 | 每小時 4 次全量 | 每次數十 KB |
+// 2. 當前時段進出人次累加
+const slot = this.currentSlot();
+if (o.direction === 'in') this.hourly[slot].in += 1;
+else this.hourly[slot].out += 1;
+
+// 3. 重新計數在場人數
+const present = this.persons.filter((p) => p.status === 0).length;
+this.hourly[slot].present = present;
+
+// 4. 該人員所屬分組的 present 一併更新
+```
+
+無事件重播、無進出配對、無通道比對。第 3 步為 O(n)，人數規模在數百時可忽略。
+
+`applyVerifyToPerson()` 及其相關的進出配對邏輯（`OccupancyDashboard.vue:1014-1242`）可完全移除。
+
+同時，以下四支 API 在看板端不再需要呼叫——其用途僅為展開進出通道的裝置 uuid，該工作已移至後端：
+
+- `getattendancesettings`
+- `findvideodevicegroups`
+- `findcameras`
+- `gettabletlist`
+
+`currentSlot()` 仍需 `dailyResetTime`，該值從 `getdashboardsettings` 取得（看板本來就會讀）。
+
+### 7.3 整點重新呼叫全量 API
+
+於每個整點重新呼叫本 API（**不帶 `range`**，僅取得當前時段 1 筆），目的為**圖表推進**——時間進入新的時段，即使無人進出，圖表仍需增加一格。
+
+現行 `setupCurrentTimeLooper()`（`OccupancyDashboard.vue:1007`）已有整點觸發判斷，沿用即可。
+
+### 7.4 對帳缺口與補償
+
+由於整點呼叫僅回傳當前時段，**歷史時段的偏差不會被修正**。
+
+情境：WebSocket 斷線 3 小時，期間有人員進出。重連後，該 3 小時的 `in` / `out` / `present` 將永久停留在錯誤數值，直到隔日重置。
+
+**補償方式**：於下列時機改帶 `range: "all"` 重新載入完整 24 筆。
+
+| 時機 | 原因 |
+|---|---|
+| WebSocket **重連成功**時 | 補齊斷線期間的所有偏差 |
+| 跨越 `dailyResetTime` | 進入新的一輪，24 格全部重來 |
+
+正常運作下 WebSocket 不會斷線，此補償極少觸發，成本可忽略。
+
+**前提**：`summary` / `persons` / `groups` 三塊在每次呼叫時**皆須完整回傳**，不可比照 `hourly` 縮減。若 `persons` 也採增量，前端將完全失去對帳能力。
+
+### 7.5 每日重置
+
+跨越 `dailyResetTime` 時所有統計歸零，圖表回到 `slot 0`。此時點需以 `range: "all"` 重新載入。
+
+### 7.6 後端計算頻率
+
+| 時機 | 後端動作 |
+|---|---|
+| 看板開啟 | 全量計算 1 次（24 筆） |
+| 每個整點 | 計算當前時段 1 筆 |
+| WebSocket 重連 | 全量計算 1 次（24 筆） |
+| 有人進出 | **不重算**，僅推送 4 個既有欄位 |
 
 ---
 
@@ -357,6 +471,91 @@ POST /airafacelite/queryoccupancydashboard
 |---|---|---|
 | 初次載入 Request 數 | 隨紀錄量成長，可能十餘支 | 固定 1 支 |
 | 初次載入傳輸量 | 整天原始事件，可達數 MB | 數十 KB |
-| 即時更新 | 收原始事件，前端重算 | 收算好的片段，約 300 bytes／則 |
-| 前端運算 | O(n) 事件重播 + 分組統計 + 排序 | 無，僅負責覆蓋與繪製 |
+| 即時更新 | 收原始事件，前端做完整進出判定與重播 | 收判定結果，前端僅計數 |
+| 後端計算頻率 | 不涉及 | 開啟時 1 次全量；整點僅算當前時段；事件推播不重算 |
+| 查詢區間推算 | 前端計算 `startTS` / `endTS` 並傳送 | 後端依 `dailyResetTime` 自行判斷 |
+| 前端運算 | O(n) 事件重播 + 進出配對 + 分組統計 + 排序 | 僅 O(n) 計數 |
+| 看板端須呼叫的設定 API | `getattendancesettings`、`findvideodevicegroups`、`findcameras`、`gettabletlist` | 皆不需要 |
 | 邏輯維護點 | 前端多分支 | 後端單一實作 |
+
+---
+
+## 9. 實作回饋：目前回傳資料的問題
+
+以下依 2026-09-03 實測回傳整理。三項皆需修正，否則畫面數字錯誤。
+
+### 9.1 `hourly` 的 `in` / `out` 量級異常
+
+實際回傳：
+
+```json
+{ "summary": { "present": 3, "total": 29 } }
+
+"hourly": [
+  { "hour": 0,  "in": 39242, "out": 0, "present": 39242 },
+  { "hour": 1,  "in": 40867, "out": 0, "present": 40867 },
+  { "hour": 11, "in": 41612, "out": 1, "present": 41611 },
+  { "hour": 13, "in": 35899, "out": 0, "present": 35899 },
+  { "hour": 14, "in": 0,     "out": 0, "present": 0 }
+]
+```
+
+**問題**：系統總人數僅 29 人，單一小時不可能有 39242 人次進場，且 0~13 點每格皆為四萬左右。
+
+**研判原因**：查詢區間未生效——後端可能未依 `dailyResetTime` 限制範圍，而將資料庫全部歷史紀錄依 `getHours()` 分組，導致多年資料累積於 24 個格子中。
+
+**佐證**：14 點之後全為 0——該時段尚未到達，任何年份皆無資料，符合「跨年份累積」的特徵。
+
+**應為**：僅統計當前這一輪的紀錄，即自 `dailyResetTime` 起算的 24 小時區間內。
+
+### 9.2 `present` 的定義錯誤
+
+比對兩筆資料可反推目前的計算方式：
+
+| `hour` | `in` | `out` | 回傳 `present` | 推論 |
+|---|---|---|---|---|
+| 0 | 39242 | 0 | 39242 | = `in − out` |
+| 11 | 41612 | 1 | 41611 | = `in − out` |
+
+**問題**：目前 `present` 計算為「該小時進出人次的淨差」。
+
+**應為**：該小時的**在場人數**——每個人的 `in → out` 區間覆蓋到該小時即計一次，同一人同小時只計一次（見 §4.3）。此數值上限為 `summary.total`（本例為 29），不可能達到數萬。
+
+**注意**：此問題與 §9.1 獨立。即使時間區間修正後，`in − out` 的算法仍然錯誤。
+
+### 9.3 `groups` 混入裝置群組
+
+實際回傳：
+
+```json
+"groups": [
+  { "name": "All Cameras",   "present": 0, "total": 0 },
+  { "name": "All Tablets",   "present": 0, "total": 0 },
+  { "name": "Video Group-3", "present": 0, "total": 0 },
+  { "name": "Video Group-4", "present": 0, "total": 0 },
+  { "name": "All Person",    "present": 3, "total": 25 },
+  { "name": "employee",      "present": 2, "total": 6 }
+]
+```
+
+**問題**：前四筆為攝影機／平板的**裝置群組**，非人員群組，`total` 皆為 0。
+
+**應為**：僅回傳人員群組，依 §3 `groups` 的 `summaryBy` 維度計算。
+
+### 9.4 已確認正確的部分
+
+以下項目實測無誤，供後端確認修改時不要動到：
+
+| 項目 | 驗證方式 |
+|---|---|
+| `summary.present` | 回傳 3，`persons` 中 `status: 0` 者確為 3 人 ✓ |
+| `summary.total` | 回傳 29，與 `persons` 筆數一致 ✓ |
+| `status` 判定 | Tulip 的 `last_out_time`(1788406984613) < `last_in_time`(1788413202437)，`status: 0` 正確 ✓ |
+| `primary_group` | 有正確填入 ✓ |
+| `is_visitor` | 訪客標記正確 ✓ |
+
+### 9.5 `groups.total` 不可加總
+
+`All Person`(25)、`admin`(6)、`employee`(6) 等群組互有重疊，一名人員屬於幾個群組即在幾個群組中各計一次。
+
+各群組分別顯示人數時此行為正確，但**不可將各組 `total` 相加當作總人數**。總人數請一律使用 `summary.total`。

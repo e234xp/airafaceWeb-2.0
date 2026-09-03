@@ -22,10 +22,13 @@ export default {
 
   methods: {
 
-    setupDashboardChart(ctx, chartLabels, chartDataIn, chartDataOut, chartDataPresent) {
+    // currentIndex：目前進行中的格子索引。
+    // 省略時沿用時鐘小時（CapacityDashboard 的既有行為）；
+    // OccupancyDashboard 以 dailyResetTime 為起點，需傳入自行換算的 slot。
+    setupDashboardChart(ctx, chartLabels, chartDataIn, chartDataOut, chartDataPresent, currentIndex) {
       const self = this;
 
-      self.currentHour = new Date().getHours();
+      self.currentHour = currentIndex === undefined ? new Date().getHours() : currentIndex;
 
       const yMax = Math.max(...chartDataIn) * 1.25;
       const yMin = Math.min(...chartDataOut) * 1.25;
