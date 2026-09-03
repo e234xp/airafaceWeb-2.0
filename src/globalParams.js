@@ -18,12 +18,12 @@ global.webVersion = '2.1.6';
 const TEST_MODE = process.env.NODE_ENV === 'development';
 // const TEST_HOST = '192.168.10.95'; // airaTablet_plus
 // const TEST_HOST = '192.168.10.46'; // airaTablet_xs
-const TEST_HOST = '192.168.14.21'; // airaFace2
+const TEST_HOST = '192.168.14.32'; // airaFace2
 // const TEST_HOST = '192.168.10.51'; // airaTablet_mini
 // const TEST_HOST = '192.168.10.57'; // solution day
 // const TEST_HOST = '192.168.10.41'; // airaTablet_mini 2
 
-const TEST_PORT = '443'; // 測試mini的PORT
+const TEST_PORT = '441'; // 測試mini的PORT
 const HOST = TEST_MODE ? TEST_HOST : window.location.hostname;
 const PORT = TEST_MODE ? TEST_PORT : window.location.port;
 const href = window.location.href.toLowerCase();
@@ -105,10 +105,9 @@ if (global.usingHttps) window.apiSocketPath = `wss://${HOST}:${PORT}/airafacelit
 else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 // window.apiSocketPath = `ws://${HOST}:80/airafacelite/verifyresults`;
 
-// Occupancy 看板專用通道，只推送進出判定結果（counted / direction / person_uuid / status）
-// TODO: 端點名稱待後端確認
+// 看板專用通道，一則訊息帶 occupancy / capacity / guard 三個區塊的進出判定結果
 const OCCUPANCY_WS_SCHEME = global.usingHttps ? 'wss' : 'ws';
-window.occupancySocketPath = `${OCCUPANCY_WS_SCHEME}://${HOST}:${PORT}/airafacelite/occupancyupdates`;
+window.occupancySocketPath = `${OCCUPANCY_WS_SCHEME}://${HOST}:${PORT}/airafacelite/verifyondashboard`;
 
 //console.log('globalParams.js', window.apiSocketPath);
 

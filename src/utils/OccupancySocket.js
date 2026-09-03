@@ -4,9 +4,13 @@
  * 與 webSocketService.js 分開的原因：後者是單例，整個 app 共用一條連線並固定
  * dispatch 到 store 的 setNotifications，無法再掛第二條通道。
  *
- * 推播格式（僅四個欄位，不含影像）：
- *   { counted, direction, person_uuid, status }
- * 心跳沿用既有慣例，帶 statusCode: '200'。
+ * 推播格式：一則訊息同時帶多個看板的判定結果，各自一個區塊
+ *   {
+ *     occupancy: { counted, direction, person_uuid, status },
+ *     capacity:  { ... },
+ *     guard:     { ... }
+ *   }
+ * 訂閱端自行取用需要的區塊。心跳沿用既有慣例，帶 statusCode: '200'。
  */
 export default class OccupancySocket {
   /**

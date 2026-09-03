@@ -152,8 +152,16 @@ const CONTAINER_RESETS = [
   ['.container-fluid', 'container-fluid-reset'],
 ];
 
-// 需要跟著 zoomRatio 縮放的區塊
-const ZOOM_TARGETS = ['.attendance-top-box', '.footer-box'];
+// 可以直接用 CSS zoom 縮放的區塊（內部沒有需要滑鼠互動的 canvas）
+const ZOOM_TARGETS = ['.attendance-statistics-box', '.footer-box'];
+
+// 圖表區各元素在 1920x1080 基準下的尺寸，縮放時改設實際 px 而非用 zoom
+const CHART_BOX = {
+  height: 240,
+  marginX: 20,
+  marginBottom: 25,
+  chartWidth: 1363,
+};
 
 export default {
   name: 'OccupancyDashboard',
@@ -355,10 +363,15 @@ export default {
       }));
     },
 
-    // 依 slot 覆蓋，不分辨是 1 筆還是 24 筆
+    // 依格子覆蓋，不分辨是 1 筆還是 24 筆。
+    // 優先用 hour 反推位置：hour 是絕對的時鐘小時，slot 則依賴前後端對
+    // dailyResetTime 的認知一致，用 hour 換算才不會整批錯位。
     applyHourly(list) {
       list.forEach((item) => {
-        const { slot } = item;
+        const slot = item.hour === undefined
+          ? item.slot
+          : (item.hour - this.resetHour() + SLOT_COUNT) % SLOT_COUNT;
+
         if (slot === undefined || slot < 0 || slot >= SLOT_COUNT) return;
 
         this.$set(this.hourly, slot, {
@@ -386,15 +399,17 @@ export default {
       this.socket.connect();
     },
 
+    // 一則推播同時帶 occupancy / capacity / guard 三個看板的判定結果，這裡只取 occupancy
     applySocketUpdate(payload) {
-      if (!payload || !payload.counted) return;
+      const update = payload && payload.occupancy;
+      if (!update || !update.counted) return;
 
-      const person = this.persons.find((p) => p.uuid === payload.person_uuid);
-      if (person) person.status = payload.status;
+      const person = this.persons.find((p) => p.uuid === update.person_uuid);
+      if (person) person.status = update.status;
 
       const cell = this.hourly[this.currentSlot()];
       if (cell) {
-        if (payload.direction === 'in') cell.in += 1;
+        if (update.direction === 'in') cell.in += 1;
         else cell.out += 1;
 
         cell.present = this.attendancePresent;
@@ -680,6 +695,26 @@ export default {
         const element = document.querySelector(selector);
         if (element) element.style.setProperty('zoom', this.zoomRatio, 'important');
       });
+
+      this.resizeChartBox();
+    },
+
+    // 長條圖不能用 CSS zoom：chart.js 以 offsetX 判斷滑鼠落在哪一根柱子，
+    // 而 zoom 會讓 offsetX 與 canvas 內部座標對不上，tooltip 會指到別根柱子。
+    // 因此改為直接設定縮放後的實際尺寸，讓 canvas 維持在未縮放的座標系。
+    resizeChartBox() {
+      const ratio = this.zoomRatio;
+
+      const topBox = document.querySelector('.attendance-top-box');
+      if (topBox) {
+        topBox.style.height = `${CHART_BOX.height * ratio}px`;
+        topBox.style.marginLeft = `${CHART_BOX.marginX * ratio}px`;
+        topBox.style.marginRight = `${CHART_BOX.marginX * ratio}px`;
+        topBox.style.marginBottom = `${CHART_BOX.marginBottom * ratio}px`;
+      }
+
+      const chartWrap = document.querySelector('.attendance-chart-canvas-wrap');
+      if (chartWrap) chartWrap.style.width = `${CHART_BOX.chartWidth * ratio}px`;
     },
 
     toLoginPage() {

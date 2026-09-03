@@ -363,16 +363,36 @@ for (let k = hourIn; k < hourOut; k += 1)
 
 ### 7.1 通道與 Payload 格式
 
-後端將**另開一條專用通道**推送 Occupancy 所需的判定結果，現行 `verifyresults` 通道維持不變。
+後端將**另開一條專用通道**推送判定結果，現行 `verifyresults` 通道維持不變。
+
+一則推播**同時帶多個看板的判定結果**，各自一個區塊，訂閱端自行取用需要的部分：
 
 ```json
 {
-  "counted": true,
-  "direction": "in",
-  "person_uuid": "5f8a...",
-  "status": 0
+  "occupancy": {
+    "counted": true,
+    "direction": "in",
+    "person_uuid": "3257c8e0-89a2-4f93-b394-2061f708d24b",
+    "status": 0
+  },
+  "capacity": {
+    "counted": true,
+    "direction": "in",
+    "person_uuid": "3257c8e0-89a2-4f93-b394-2061f708d24b",
+    "status": 0
+  },
+  "guard": {
+    "counted": false,
+    "direction": "",
+    "person_uuid": "",
+    "status": 0
+  }
 }
 ```
+
+Occupancy 看板只讀取 `occupancy` 區塊；該區塊不存在或 `counted` 為 `false` 時直接忽略整則訊息。
+
+各區塊的欄位定義相同：
 
 | 欄位 | 型別 | 說明 |
 |---|---|---|
@@ -395,7 +415,8 @@ for (let k = hourIn; k < hourOut; k += 1)
 ### 7.2 前端處理流程
 
 ```js
-const o = payload;
+// 一則推播同時帶三個看板的結果，只取 occupancy
+const o = payload && payload.occupancy;
 if (!o || !o.counted) return;
 
 // 1. 更新該人員狀態
