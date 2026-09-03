@@ -17,12 +17,22 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CSelect size="lg" class="font-control mt-2" :filterable="true" :value.sync="form.brand"
-                :options="value_brandList" />
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :filterable="true"
+                :value.sync="form.brand"
+                :options="value_brandList"
+              />
             </td>
             <td class="table-td">
-              <CSelect size="lg" class="font-control mt-2" :filterable="true" :value.sync="form.model"
-                :options="value_modelList" />
+              <CSelect
+                size="lg"
+                class="font-control mt-2"
+                :filterable="true"
+                :value.sync="form.model"
+                :options="value_modelList"
+              />
             </td>
           </tr>
         </table>
@@ -46,12 +56,24 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput size="lg" class="mt-2" required :invalid-feedback="checkIpAddr(form.host)"
-                :is-valid="formPass.host = checkIpAddr(form.host) === ''" v-model="form.host" />
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :invalid-feedback="checkIpAddr(form.host)"
+                :is-valid="formPass.host = checkIpAddr(form.host) === ''"
+                v-model="form.host"
+              />
             </td>
             <td class="table-td">
-              <CInput size="lg" class="mt-2" required :invalid-feedback="checkPort(form.port)"
-                :is-valid="formPass.port = checkPort(form.port) === ''" v-model.number="form.port" />
+              <CInput
+                size="lg"
+                class="mt-2"
+                required
+                :invalid-feedback="checkPort(form.port)"
+                :is-valid="formPass.port = checkPort(form.port) === ''"
+                v-model.number="form.port"
+              />
             </td>
           </tr>
 
@@ -65,14 +87,32 @@
           </tr>
           <tr class="table-tr">
             <td class="table-td">
-              <CInput size="lg" class="mt-2" v-model="form.user" />
+              <CInput
+                size="lg"
+                class="mt-2"
+                v-model="form.user"
+              />
             </td>
             <td class="table-td">
-              <CInput size="lg" class="mt-2" :type="flag_view_password ? 'text' : 'password'" v-model="form.pass">
+              <CInput
+                size="lg"
+                class="mt-2"
+                :type="flag_view_password ? 'text' : 'password'"
+                v-model="form.pass"
+              >
                 <template #append-content>
-                  <CButton @click="viewPassword" style="padding: 0.375rem 0.375rem;">
-                    <CIcon v-show="flag_view_password" src="/img/eye-slash.png" />
-                    <CIcon v-show="!flag_view_password" src="/img/eye.png" />
+                  <CButton
+                    @click="viewPassword"
+                    style="padding: 0.375rem 0.375rem;"
+                  >
+                    <CIcon
+                      v-show="flag_view_password"
+                      src="/img/eye-slash.png"
+                    />
+                    <CIcon
+                      v-show="!flag_view_password"
+                      src="/img/eye.png"
+                    />
                   </CButton>
                 </template>
               </CInput>
@@ -84,7 +124,10 @@
 
     <!-- Digital OutPut 1 -->
     <template v-if="form.iopoint && form.iopoint.length > 0">
-      <CCard v-for="idx in [0, 1]" :key="idx">
+      <CCard
+        v-for="idx in [0, 1]"
+        :key="idx"
+      >
         <CCardHeader>
           <span class="h3">{{ `${$t('DigitalOutput')} #${idx + 1}` }}</span>
         </CCardHeader>
@@ -100,14 +143,25 @@
             </tr>
             <tr class="table-tr">
               <td class="table-td">
-                <CSelect size="lg" class="font-control mt-2" :filterable="true" :placeholder="$t('placeholder')"
-                  :disabled="!form.iopoint[idx].enable" :value.sync="form.iopoint[idx].trigger"
-                  :options="value_deviceTrigger" />
+                <CSelect
+                  size="lg"
+                  class="font-control mt-2"
+                  :filterable="true"
+                  :placeholder="$t('placeholder')"
+                  :value.sync="form.iopoint[idx].trigger"
+                  :options="value_deviceTrigger"
+                />
               </td>
               <td class="table-td">
-                <CInput size="lg" class="mt-2" pattern="[0-9]*" required :disabled="!form.iopoint[idx].enable"
+                <CInput
+                  size="lg"
+                  class="mt-2"
+                  pattern="[0-9]*"
+                  required
                   :is-valid="formPass.delay = checkDelay(form.iopoint[idx].delay) === ''"
-                  :invalid-feedback="checkDelay(form.iopoint[idx].delay)" v-model.number="form.iopoint[idx].delay" />
+                  :invalid-feedback="checkDelay(form.iopoint[idx].delay)"
+                  v-model.number="form.iopoint[idx].delay"
+                />
               </td>
             </tr>
           </table>
@@ -119,55 +173,55 @@
 
 <script>
 
-  export default {
-    name: 'Step2FormIO',
-    props: {
-      checkPort: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      checkIpAddr: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      checkDelay: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      isNotEmptyValidator: {
-        type: Function,
-        required: true,
-        default: () => '',
-      },
-      form: {
-        type: Object,
-        required: true,
-        default: () => ({}),
-      },
-      formPass: {
-        type: Object,
-        required: true,
-        default: () => ({}),
-      },
+export default {
+  name: 'Step2FormIO',
+  props: {
+    checkPort: {
+      type: Function,
+      required: true,
+      default: () => '',
     },
-    data() {
-      return {
-        value_deviceGroupsList: ['A', 'B'],
-        value_brandList: ['airaIO box'],
-        value_modelList: ['TCP-KP-C2'],
-        value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
-        value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
+    checkIpAddr: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
+    checkDelay: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
+    isNotEmptyValidator: {
+      type: Function,
+      required: true,
+      default: () => '',
+    },
+    form: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+    formPass: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
+  },
+  data() {
+    return {
+      value_deviceGroupsList: ['A', 'B'],
+      value_brandList: ['airaIO box'],
+      value_modelList: ['TCP-KP-C2'],
+      value_deviceDefaultValue: [{ label: '0', value: false }, { label: '1', value: true }],
+      value_deviceTrigger: [{ label: '0', value: false }, { label: '1', value: true }],
 
-        flag_view_password: false,
-      };
+      flag_view_password: false,
+    };
+  },
+  methods: {
+    viewPassword() {
+      this.flag_view_password = !this.flag_view_password;
     },
-    methods: {
-      viewPassword() {
-        this.flag_view_password = !this.flag_view_password;
-      },
-    },
-  };
+  },
+};
 </script>
