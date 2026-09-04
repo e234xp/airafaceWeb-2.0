@@ -1657,3 +1657,17 @@ Vue.prototype.$globalQueryCapacityDashboard = (range, cb) =>
       resolve({ error: err, data: result });
     });
   });
+
+// Guard 看板：除 summary / hourly / persons 外，另帶陌生人清單 strangers
+// 進出通道取 GUARD 顯示設定的 deviceIn / deviceOut，與考勤設定無關
+Vue.prototype.$globalQueryGuardDashboard = (range, cb) =>
+  new Promise((resolve) => {
+    const query = { with_image: false };
+    if (range) query.range = range;
+
+    postJson('/airafacelite/getguarddata', query, (err, data) => {
+      const result = err || !data ? null : data.result;
+      if (cb) cb(err, result);
+      resolve({ error: err, data: result });
+    });
+  });

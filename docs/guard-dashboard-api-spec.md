@@ -406,6 +406,18 @@ this.refreshBarChart();
 
 ## 8. 待確認事項
 
+> **實作現況（2026-09-04）**：後端已提供 `getguarddata` 與 `guard` 區塊推播，前端已改接。與本文的差異如下，前端皆已相容：
+>
+> | 項目 | 本文提案 | 實際回傳 | 前端處理 |
+> |---|---|---|---|
+> | `hourly[].present` | Guard 可省略 | 有回傳 | 忽略 |
+> | `groups` | Guard 不需要 | 有回傳 | 忽略 |
+> | `persons[].primary_group` / `punch_mode` | Guard 不需要 | 有回傳 | 忽略 |
+> | 陌生人抓拍照（推播） | §8.2 兩案擇一 | 走替代方案，直接內嵌 base64 `snapshot`，不帶 `face_image_id` | 推播用 `snapshot`，REST 的歷史資料仍以 `face_image_id` 懶載入 |
+> | 推播的包法 | `{ occupancy, capacity, guard }` | 觀察到只帶 `guard` 區塊本身的扁平物件 | 取不到 `payload.guard` 就把整包當 `guard` 區塊 |
+>
+> `strangers[].nearest_person`（§3）已如提案回傳 `uuid` / `id` / `name`，歷史紀錄點「備註」也能顯示相似人員了。
+
 ### 8.1 左上角數字的定義
 
 `GuardDashboard.vue:53-57` 的標籤是 `HourlyNumberOfAdmission`（時段進場人數），但綁定的值是 `entryPersons.length`（目前在場人數），兩者不一致。

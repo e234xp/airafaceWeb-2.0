@@ -78,7 +78,7 @@
                 :image="parseImage(item)"
                 :name="parseLine1(item)"
                 :depart="parseLine2(item)"
-                :time="item.clockinRecord.timestamp"
+                :time="item.last_in_time"
                 v-for="item in currentPersons"
                 :key="item.uuid"
               />
@@ -102,7 +102,7 @@
                 <div class="chart-btn fz-lg" style="padding: 0 16px" @click="onCancelAll">
                   {{ $t('Cancel') }}
                 </div>
-                <div>{{ selectedStrangers.length }} / {{ entryStrangers.length }} {{ $t('Selected') }}</div>
+                <div>{{ selectedStrangers.length }} / {{ strangers.length }} {{ $t('Selected') }}</div>
                 <div
                   class="chart-btn fz-lg"
                   :class="[selectedStrangers.length === 0 ? 'disabled' : '']"
@@ -124,7 +124,7 @@
             <div class="grid-2-6" style="height: 240px">
               <FaceCard
                 type="unknown"
-                :image="item.face_image"
+                :image="item.face_image || emptyFace"
                 :time="item.timestamp"
                 :selected="isSelected(item.verify_uuid)"
                 @ack="onAck(item.verify_uuid)"
@@ -163,7 +163,7 @@
                 :image="parseImage(item)"
                 :name="parseLine1(item)"
                 :depart="parseLine2(item)"
-                :time="item.clockinRecord.timestamp"
+                :time="item.last_in_time"
                 v-for="item in currentPersons"
                 :key="item.uuid"
               />
@@ -190,7 +190,7 @@
                 <div class="chart-btn fz-lg" style="padding: 0 16px" @click="onCancelAll">
                   {{ $t('Cancel') }}
                 </div>
-                <div>{{ selectedStrangers.length }} / {{ entryStrangers.length }} 已選</div>
+                <div>{{ selectedStrangers.length }} / {{ strangers.length }} {{ $t('Selected') }}</div>
                 <div
                   class="chart-btn fz-lg"
                   :class="[selectedStrangers.length === 0 ? 'disabled' : '']"
@@ -222,7 +222,7 @@
             >
               <FaceCard
                 type="unknown"
-                :image="item.face_image"
+                :image="item.face_image || emptyFace"
                 :time="item.timestamp"
                 :selected="isSelected(item.verify_uuid)"
                 @ack="onAck(item.verify_uuid)"
@@ -270,18 +270,26 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 import { airaLogoWhite as airaLogo, defaultPhotoImage } from '@/utils';
 import { backgroundImage } from '@/utils/welcomeMode';
 
-import occupancyModel from '@/models/OccupancyDashboardModel.vue';
 import chartHelper from '@/utils/ChartHelper.vue';
+import OccupancySocket from '@/utils/OccupancySocket';
 
 import FaceCard from './components/FaceCard.vue';
 import GuardRegionTitle from './components/GuardRegionTitle.vue';
 import GuardAckModal from './components/GuardAckModal.vue';
 import CameraVideo from './components/CameraVideo.vue';
+
+const SLOT_COUNT = 24;
+
+// 進入看板時要清掉預設 padding 的 CoreUI 外殼元素
+const CONTAINER_RESETS = [
+  ['.c-main', 'c-main-reset'],
+  ['.c-header', 'c-header-reset'],
+  ['.c-footer', 'c-footer-reset'],
+  ['.container-fluid', 'container-fluid-reset'],
+];
 
 export default {
   name: 'GuardDashboard',
@@ -293,47 +301,39 @@ export default {
     CameraVideo,
   },
 
+  mixins: [chartHelper],
+
   data() {
     return {
       emptyFace: defaultPhotoImage,
-      unSubscribe: null,
-      obj_loading: null,
 
+      loading: false,
       isLoadSetting: true,
       zoomRatio: 0,
 
-      // idleTime: null,
       currentDate: '',
       currentTime: '',
       currentTimeLooper: null,
 
-      params_entryChannels: [],
-      params_leaveChannels: [],
+      socket: null,
 
+      // 後端回傳的資料
       persons: [],
-      entryStrangers: [],
+      strangers: [],
+      hourly: [],
 
-      hourlyPersonInData: new Map(),
-      hourlyPersonOutData: new Map(),
-
-      chartBarAmount: 24,
+      // 圖表
       chartLabels: [],
       chartDataIn: [],
       chartDataOut: [],
 
-      isShowGroup: true,
-      // 分頁：
+      // 分頁：兩個區塊共用同一個每頁筆數，展開時才放大
       currentPageIndex: 0,
       strangerPageIndex: 0,
       displayAmount: 12,
       expandAmount: 42,
       normalAmount: 12,
 
-      showPageProgressTimer: null,
-      totalPageIndex: 0,
-
-      // currentPersons: [],
-      // currentStrangers: [],
       selectedStrangers: [],
       ackedStrangers: [],
 
@@ -349,6 +349,7 @@ export default {
         line2: 'NONE', // NONE, JOBTITLE, GROUP, DEPARTMENT, TEMPERATURE
 
         dailyResetTime: '00:00',
+        strangerMaxItem: 100,
 
         deviceIn: '',
         deviceOut: '',
@@ -357,261 +358,338 @@ export default {
       showAckModal: false,
       autoAck: false,
       expandFlag: '',
-
-      stream: null,
-
-      deviceIn: {},
-      deviceOut: {},
-
-      authKey: '',
-      emptyImg:
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==',
     };
   },
-  mixins: [occupancyModel, chartHelper],
+
   computed: {
-    ...mapState(['deviceName']),
+    // 在場：依最後進場時間由新到舊
     entryPersons() {
-      return this.persons
-        .filter((p) => p.status === 0)
-        .sort((a, b) => b.clockinRecord.timestamp - a.clockinRecord.timestamp);
+      return this.persons.filter((p) => p.status === 0).sort((a, b) => (b.last_in_time || 0) - (a.last_in_time || 0));
     },
+
     currentPersons() {
       const beginIndex = this.displayAmount * this.currentPageIndex;
       return this.entryPersons.slice(beginIndex, beginIndex + this.displayAmount);
     },
+
     currentPageTotal() {
-      return Math.ceil(this.entryPersons.length / this.displayAmount) - 1;
+      return Math.ceil(this.entryPersons.length / this.displayAmount);
     },
+
     currentStrangers() {
       const beginIndex = this.displayAmount * this.strangerPageIndex;
-      return this.entryStrangers.slice(beginIndex, beginIndex + this.displayAmount);
+      return this.strangers.slice(beginIndex, beginIndex + this.displayAmount);
     },
+
     strangerPageTotal() {
-      return Math.ceil(this.entryStrangers.length / this.displayAmount) - 1;
+      return Math.ceil(this.strangers.length / this.displayAmount);
     },
   },
-  // Tulip
-  async created() {
-    const self = this;
 
-    this.unSubscribe = this.$store.subscribe(async (mutation) => {
-      let payload = {};
-      let person = {};
-      let result = {};
-      // console.log(mutation);
-      switch (mutation.type) {
-        case 'changeWebSocket':
-          if (mutation.payload === 0) {
-            if (!self.obj_loading) self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-          } else if (self.obj_loading) {
-            self.obj_loading.hide();
-            self.obj_loading = null;
-          }
-          break;
-        case 'changeNotifications':
-          if (mutation.payload.statusCode === '200') {
-            console.log('created subscribe', 'mutation payload statusCode == 200');
-            return;
-          }
+  watch: {
+    // 照片一律懶載入，只抓當前頁；換頁、展開、即時推播都會讓這兩個 computed 重算
+    currentPersons() {
+      this.fetchPersonPhotos();
+    },
 
-          payload = mutation.payload;
-          if (payload.merged) return;
-
-          if (payload.type === 0) {
-            console.log('payload', payload);
-            self.applyVerifyToStranger([
-              {
-                ...payload,
-                verify_uuid: payload.verify_face_id,
-                face_image: payload.snapshot,
-                source_id: payload.source_id || payload.channel || '',
-                verify_score: payload.score,
-                nearest_person: payload.person,
-              },
-            ]);
-            // this.refreshStranger();
-          }
-
-          if (payload.type === 1) {
-            // console.log('========== changeNotifications');
-            // console.log(payload);
-
-            person = payload.person || payload.person_info;
-
-            if (person === undefined) {
-              console.log('created subscribe', 'payload.person === undefined');
-              return;
-            }
-
-            result = {
-              card_facility_code: person.card_facility_code,
-              card_number: person.card_number,
-              face_image_id: payload.face_image,
-              group_list: payload.groups || person.group_list,
-              high_temperature: payload.is_high_temperature,
-              id: payload.person_id || person.id,
-              name: person.fullname || person.name,
-              source_id: payload.source_id || payload.channel || '',
-              temperature: payload.foreHead_temperature,
-              timestamp: payload.timestamp,
-              uuid: payload.person_id || person.uuid,
-              verify_mode: payload.verify_mode,
-              target_score: 0,
-              verify_mode_string: '',
-              verify_score: 0,
-              verify_uuid: '',
-            };
-
-            self.applyVerifyToPerson([result]);
-            this.refreshData();
-            self.refreshBarChart();
-          }
-          break;
-        default:
-          break;
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      self.zoomViews();
-    });
-
-    self.isLoadSetting = false;
+    currentStrangers() {
+      this.fetchStrangerPhotos();
+    },
   },
 
-  // Tulip
   async mounted() {
-    this.isLoadSetting = true;
-
-    // 1.0 Load Display Config
     const { data: display } = await this.$globalGetDisplaySetting();
-    this.displaySettings = { ...this.displaySettings, ...display.GUARD };
-
-    if (this.displaySettings.dailyResetTime.length === 2) {
-      this.displaySettings.dailyResetTime += ':00';
+    if (display && display.GUARD) {
+      this.displaySettings = { ...this.displaySettings, ...display.GUARD };
     }
 
-    const {
-      data: { list: cameraList },
-    } = await this.$globalFindCameras('', 0, 3000);
-    const {
-      data: { data_list: tabletList },
-    } = await this.$globalGetTabletList('', 0, 3000);
-
-    this.params_entryChannels.push(this.displaySettings.deviceIn);
-    this.params_leaveChannels.push(this.displaySettings.deviceOut);
-
-    this.params_entryChannels = this.params_entryChannels.map((id) => {
-      const camera = cameraList.find((c) => c.uuid === id);
-      const tablet = tabletList.find((c) => c.uuid === id);
-      if (camera) return `${id}${camera.name}`;
-      if (tablet) return `${id}${tablet.identity}`;
-      return id;
-    });
-
-    this.params_leaveChannels = this.params_leaveChannels.map((id) => {
-      const camera = cameraList.find((c) => c.uuid === id);
-      const tablet = tabletList.find((c) => c.uuid === id);
-      if (camera) return `${id}${camera.name}`;
-      if (tablet) return `${id}${tablet.identity}`;
-      return id;
-    });
-
-    console.log(this.params_entryChannels);
-    console.log(this.params_leaveChannels);
-
-    await this.initialGroupPerson();
-
-    // 4.0 initial Views
+    this.initHourly();
     this.initViews();
-
-    // 5.0 display Layout
-    // this.refreshData();
-
     this.isLoadSetting = false;
 
-    // 6.0 defind query startTS
-    const nowHM = `${`00${new Date().getHours()}`.slice(-2)}:${`00${new Date().getMinutes()}`.slice(-2)}`;
+    // 圖表建立時就要拿到 zoomRatio，Chart.js 的滑鼠座標校正只在建立當下綁定
+    this.zoomViews();
 
-    let startTS = new Date().setHours(
-      this.displaySettings.dailyResetTime.split(':')[0],
-      this.displaySettings.dailyResetTime.split(':')[1],
-      0,
-      0,
-    );
-    if (nowHM < this.displaySettings.dailyResetTime) {
-      startTS -= 86400000;
-    }
-
-    const endTS = new Date() - 1000;
-
-    // 7.0 Load Verify Data
-    this.setupVerifyData(startTS, endTS, (verifyData) => {
-      // console.log(verifyData);
-      this.applyVerifyToPerson(verifyData);
-      this.refreshData();
-      this.refreshBarChart();
-    });
-
-    // 7.0 Load Stranger Data
-    this.setupStrangerData(
-      startTS,
-      endTS,
-      this.displaySettings.deviceIn,
-      this.displaySettings.strangerMaxItem,
-      (strangerData) => {
-        this.applyVerifyToStranger(
-          strangerData.filter((d) => d.merged === undefined || d.merged === false).filter((d) => !d.commands),
-        );
-        this.refreshStranger();
-      },
-    );
-
-    // 8.0 start Looper
-    this.setupCurrentTimeLooper();
+    await this.loadDashboard('all');
 
     this.$nextTick(() => {
       this.zoomViews();
-      this.initBarChart();
+      this.refreshBarChart();
     });
+
+    this.setupCurrentTimeLooper();
+    this.connectSocket();
   },
 
   destroyed() {
-    const self = this;
-    console.log('destroyed ============================');
+    this.toggleContainerReset(false);
+    window.removeEventListener('resize', this.zoomViews);
 
-    const mainElement = document.querySelector('.c-main');
-    const headerElement = document.querySelector('.c-header');
-    const footerElement = document.querySelector('.c-footer');
-    const containerElement = document.querySelector('.container-fluid');
-
-    if (mainElement) mainElement.classList.remove('c-main-reset');
-    if (headerElement) headerElement.classList.remove('c-header-reset');
-    if (footerElement) footerElement.classList.remove('c-footer-reset');
-    if (containerElement) containerElement.classList.remove('container-fluid-reset');
-
-    if (self.currentTimeLooper) {
-      clearInterval(self.currentTimeLooper);
-      self.currentTimeLooper = null;
+    if (this.currentTimeLooper) {
+      clearInterval(this.currentTimeLooper);
+      this.currentTimeLooper = null;
     }
 
-    this.unSubscribe();
-
-    window.removeEventListener('resize', () => {
-      self.zoomViews();
-    });
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
   },
+
   methods: {
+    // ---------------- 時段換算 ----------------
+
+    // dailyResetTime 可能是 '06' 或 '06:00'
+    resetHour() {
+      const raw = String(this.displaySettings.dailyResetTime || '00');
+      const hour = parseInt(raw.split(':')[0], 10);
+      return Number.isNaN(hour) ? 0 : hour;
+    },
+
+    // 圖表以 dailyResetTime 為起點，slot 0 即重置時刻那一小時
+    currentSlot() {
+      return (new Date().getHours() - this.resetHour() + SLOT_COUNT) % SLOT_COUNT;
+    },
+
+    slotToHour(slot) {
+      return (slot + this.resetHour()) % SLOT_COUNT;
+    },
+
+    initHourly() {
+      this.hourly = Array.from({ length: SLOT_COUNT }, (_, slot) => ({
+        slot,
+        hour: this.slotToHour(slot),
+        in: 0,
+        out: 0,
+      }));
+    },
+
+    // ---------------- 資料載入 ----------------
+
+    // range 帶 'all' 取完整 24 筆 hourly，不帶則只更新當前時段
+    async loadDashboard(range) {
+      this.loading = true;
+
+      const { error, data } = await this.$globalQueryGuardDashboard(range);
+
+      this.loading = false;
+
+      if (error || !data) {
+        console.error('載入 Guard 看板資料失敗:', error);
+        return;
+      }
+
+      this.applyPersons(data.persons || []);
+      this.applyStrangers(data.strangers || []);
+
+      if (range === 'all') this.initHourly();
+      this.applyHourly(data.hourly || []);
+
+      this.refreshBarChart();
+    },
+
+    // 照片不隨此 API 回傳，翻頁時才懶載入，重載時保留已抓到的圖避免閃爍
+    applyPersons(list) {
+      const cache = new Map();
+      this.persons.forEach((p) => {
+        if (p.register_image || p.display_image) {
+          cache.set(p.uuid, { register_image: p.register_image, display_image: p.display_image });
+        }
+      });
+
+      this.persons = list.map((p) => ({
+        ...p,
+        register_image: '',
+        display_image: '',
+        ...cache.get(p.uuid),
+      }));
+    },
+
+    // 即時推播進來的陌生人已內嵌快照，重載時要保住，否則會再抓一次抓拍照
+    applyStrangers(list) {
+      const cache = new Map();
+      this.strangers.forEach((s) => {
+        if (s.face_image) cache.set(s.verify_uuid, s.face_image);
+      });
+
+      this.strangers = list.map((s) => ({
+        ...s,
+        face_image: cache.get(s.verify_uuid) || '',
+      }));
+
+      this.trimStrangers();
+    },
+
+    // 依格子覆蓋，不分辨是 1 筆還是 24 筆。
+    // 優先用 hour 反推位置：hour 是絕對的時鐘小時，slot 則依賴前後端對
+    // dailyResetTime 的認知一致，用 hour 換算才不會整批錯位。
+    applyHourly(list) {
+      list.forEach((item) => {
+        const slot = item.hour === undefined ? item.slot : (item.hour - this.resetHour() + SLOT_COUNT) % SLOT_COUNT;
+
+        if (slot === undefined || slot < 0 || slot >= SLOT_COUNT) return;
+
+        this.$set(this.hourly, slot, {
+          slot,
+          hour: item.hour === undefined ? this.slotToHour(slot) : item.hour,
+          in: item.in || 0,
+          // 長條圖是堆疊圖，out 一律取正值
+          out: Math.abs(item.out || 0),
+        });
+      });
+    },
+
+    // ---------------- WebSocket ----------------
+
+    connectSocket() {
+      this.socket = new OccupancySocket(window.occupancySocketPath, {
+        onUpdate: (payload) => this.applySocketUpdate(payload),
+        // 斷線期間的事件無法補回，重連後重載完整 24 筆
+        onReconnect: () => this.loadDashboard('all'),
+        onStatus: (online) => {
+          this.loading = !online;
+        },
+      });
+
+      this.socket.connect();
+    },
+
+    // 一則推播可能同時帶 occupancy / capacity / guard 三個看板的判定結果，
+    // 也可能只推 guard 區塊本身，取不到 guard 就把整包當 guard 區塊看
+    applySocketUpdate(payload) {
+      const update = payload && payload.guard;
+      if (!update || !update.counted) return;
+
+      if (update.type === 'stranger') {
+        this.applyStrangerUpdate(update);
+        return;
+      }
+
+      // 未帶 type 視為人員事件
+      const person = this.persons.find((p) => p.uuid === update.person_uuid);
+      if (person) {
+        person.status = update.status;
+
+        // 卡片要顯示進場時間，清單也依此排序；沒有這個值排序會跳動
+        if (update.direction === 'in' && update.last_in_time) {
+          person.last_in_time = update.last_in_time;
+        }
+        if (update.direction === 'out') {
+          person.last_out_time = update.last_out_time || update.timestamp || Date.now();
+        }
+      }
+
+      const cell = this.hourly[this.currentSlot()];
+      if (cell) {
+        if (update.direction === 'in') cell.in += 1;
+        else cell.out += 1;
+      }
+
+      this.refreshBarChart();
+    },
+
+    applyStrangerUpdate(update) {
+      const stranger = {
+        ...update,
+        // 即時推播直接內嵌快照，歷史資料只有 face_image_id，翻頁時才懶載入
+        face_image: update.snapshot || update.face_image || '',
+      };
+
+      // 同一張 base64 留兩份會多佔一倍記憶體
+      delete stranger.snapshot;
+
+      this.strangers.unshift(stranger);
+      this.trimStrangers();
+    },
+
+    // 陌生人清單只保留 strangerMaxItem 筆。每筆都帶一張 base64 快照，
+    // 看板是 24 小時連續跑的，不設上限記憶體會無限成長。
+    trimStrangers() {
+      const max = this.displaySettings.strangerMaxItem || 100;
+
+      // 後端已依 timestamp 由新到舊排序，砍尾即砍最舊的。
+      // Vue 2 偵測不到 arr.length = n，必須用 splice 才會觸發更新；
+      // 被移除的物件（含 face_image 的 base64）失去參照後由 GC 回收。
+      if (this.strangers.length > max) {
+        this.strangers.splice(max);
+      }
+
+      // 被裁掉的項目若還留在勾選清單裡會變成幽靈選取，
+      // onBatchAck() 的 find() 會拿到 undefined。
+      if (this.selectedStrangers.length >= 1) {
+        const alive = new Set(this.strangers.map((d) => d.verify_uuid));
+        const kept = this.selectedStrangers.filter((id) => alive.has(id));
+        if (kept.length !== this.selectedStrangers.length) this.selectedStrangers = kept;
+      }
+
+      // 裁切後總頁數可能變少，目前停留的頁碼要收回範圍內
+      const lastPage = Math.max(this.strangerPageTotal - 1, 0);
+      if (this.strangerPageIndex > lastPage) this.strangerPageIndex = lastPage;
+    },
+
+    // ---------------- 圖表 ----------------
+
+    syncChartData() {
+      this.chartLabels = this.hourly.map((h) => h.hour);
+      this.chartDataIn = this.hourly.map((h) => h.in);
+      this.chartDataOut = this.hourly.map((h) => h.out);
+    },
+
+    refreshBarChart() {
+      this.syncChartData();
+
+      this.setupGuardDashboardChart(
+        this.$refs.canvas,
+        this.chartLabels,
+        this.chartDataIn,
+        this.chartDataOut,
+        this.currentSlot(),
+        this.zoomRatio,
+      );
+    },
+
+    // ---------------- 照片懶載入 ----------------
+
+    fetchPersonPhotos() {
+      if (this.displaySettings.displayPhoto === 'NONE') return;
+
+      this.currentPersons.forEach((item) => {
+        const person = item;
+        if (person.register_image || person.display_image) return;
+
+        this.$globalFetchPhoto(person.uuid, (err, data) => {
+          if (err || !data) return;
+
+          // 沒有照片的人也要寫入預設圖，否則每次清單重算都會再抓一次
+          person.register_image = data.register_image || this.emptyFace;
+          person.display_image = data.display_image || '';
+        });
+      });
+    },
+
+    fetchStrangerPhotos() {
+      this.currentStrangers.forEach((item) => {
+        const stranger = item;
+        if (stranger.face_image || !stranger.face_image_id) return;
+
+        this.$globalFetchVerifyPhoto(stranger.face_image_id, (err, data) => {
+          if (err || !data) return;
+
+          stranger.face_image = data.face_image || this.emptyFace;
+        });
+      });
+    },
+
+    // ---------------- 分頁 ----------------
+
     onCurrentPrev() {
       if (this.currentPageIndex === 0) return;
       this.currentPageIndex -= 1;
     },
 
     onCurrentNext() {
-      if (this.currentPageIndex === this.currentPageTotal - 1) return;
+      if (this.currentPageIndex >= this.currentPageTotal - 1) return;
       this.currentPageIndex += 1;
-      this.refreshData();
     },
 
     onStrangerPrev() {
@@ -620,19 +698,8 @@ export default {
     },
 
     onStrangerNext() {
-      if (this.strangerPageIndex === this.strangerPageTotal - 1) return;
+      if (this.strangerPageIndex >= this.strangerPageTotal - 1) return;
       this.strangerPageIndex += 1;
-      this.refreshStranger();
-    },
-
-    isSelected(id) {
-      return this.selectedStrangers.indexOf(id) >= 0;
-    },
-
-    onClose() {
-      this.showAckModal = false;
-      // ackedStrangers 內含快照與註冊照的 base64，關閉後就沒有用途了
-      this.ackedStrangers = [];
     },
 
     onExpand(flag) {
@@ -648,19 +715,26 @@ export default {
         this.displayAmount = this.expandAmount;
         if (flag === 'current') {
           this.currentPageIndex = Math.floor((this.currentPageIndex * this.normalAmount) / this.expandAmount);
-          this.refreshData();
         }
         if (flag === 'stranger') {
           this.strangerPageIndex = Math.floor((this.strangerPageIndex * this.normalAmount) / this.expandAmount);
-          this.refreshStranger();
         }
       }
+
       this.expandFlag = flag;
+
+      // 收合後圖表區塊才重新顯示，canvas 尺寸變了要重畫
       if (this.expandFlag === '') {
         this.$nextTick(() => {
           this.refreshBarChart();
         });
       }
+    },
+
+    // ---------------- 陌生人備註／確認 ----------------
+
+    isSelected(id) {
+      return this.selectedStrangers.indexOf(id) >= 0;
     },
 
     onSelect(uuid) {
@@ -669,113 +743,101 @@ export default {
       else this.selectedStrangers.splice(idx, 1);
     },
 
-    onAck(id) {
-      const person = this.currentStrangers.find((item) => item.verify_uuid === id);
-      if (!person) return;
-      if (!person.nearest_person || !person.nearest_person.person_info) {
-        this.ackedStrangers = [person];
-        this.showAckModal = true;
-        return;
-      }
-      const uuid = person.person_id || person.nearest_person.person_info.uuid;
-      const nearIdx = this.persons.findIndex((item) => item.uuid === uuid);
-      if (nearIdx < 0) {
-        this.ackedStrangers = [person];
-        this.showAckModal = true;
-        return;
-      }
-      const near = this.persons[nearIdx];
-      if (
-        !near.display_image ||
-        near.display_image === '' ||
-        near.display_image === this.emptyImg ||
-        !near.register_image ||
-        near.register_image === '' ||
-        near.register_image === this.emptyImg
-      ) {
-        this.$globalFetchPhoto(uuid, (err, data) => {
-          if (err == null && data) {
-            if (data.display_image !== '') {
-              this.persons[nearIdx].display_image = data.display_image;
-            } else {
-              this.persons[nearIdx].display_image = this.emptyFace;
-            }
-
-            if (data.register_image !== '') {
-              this.persons[nearIdx].register_image = data.register_image;
-            } else {
-              this.persons[nearIdx].register_image = this.emptyFace;
-            }
-            near.display_image = this.persons[nearIdx].display_image;
-            near.register_image = this.persons[nearIdx].register_image;
-          }
-          this.ackedStrangers = [{ ...person, near }];
-          this.showAckModal = true;
-        });
-      } else {
-        this.ackedStrangers = [{ ...person, near }];
-        this.showAckModal = true;
-      }
-    },
-
-    onBatchAck(auto = false) {
-      this.autoAck = auto;
-      if (this.selectedStrangers.length === 1) {
-        this.onAck(this.selectedStrangers[0]);
-        return;
-      }
-      this.ackedStrangers = this.selectedStrangers.map((id) =>
-        this.entryStrangers.find((item) => item.verify_uuid === id),
-      );
-      this.showAckModal = true;
-    },
-
-    async onConfirm(command) {
-      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
-      const list = this.ackedStrangers.map((item) => ({
-        timestamp: item.timestamp,
-        verify_uuid: item.verify_uuid,
-      }));
-      const payload = {
-        records: list,
-        commands: command,
-      };
-      const {
-        data: { message },
-      } = await this.$globalAddCommand(payload);
-      if (message) {
-        list.forEach((item) => {
-          const { verify_uuid: uuid } = item;
-          const idx = this.selectedStrangers.indexOf(uuid);
-          if (idx >= 0) {
-            this.selectedStrangers.splice(idx, 1);
-          }
-          const index = this.entryStrangers.findIndex((d) => d.verify_uuid === uuid);
-          if (index >= 0) {
-            this.entryStrangers.splice(index, 1);
-          }
-        });
-        // 移除後總頁數可能變少，順便收回頁碼與殘留的勾選
-        this.trimStrangers();
-        this.refreshStranger();
-        this.showAckModal = false;
-        this.ackedStrangers = [];
-        this.obj_loading.hide();
-      }
-    },
-
     onSelectAll() {
-      const list = this.currentStrangers.map((d) => d.verify_uuid);
-      list.forEach((id) => {
-        const index = this.selectedStrangers.indexOf(id);
-        if (index < 0) this.selectedStrangers.push(id);
+      this.currentStrangers.forEach((d) => {
+        if (this.selectedStrangers.indexOf(d.verify_uuid) < 0) this.selectedStrangers.push(d.verify_uuid);
       });
     },
 
     onCancelAll() {
-      this.selectedStrangers.length = 0;
       this.selectedStrangers = [];
     },
+
+    // 相似人員由後端直接帶 id / name，只差一張註冊照
+    onAck(id) {
+      const stranger = this.strangers.find((item) => item.verify_uuid === id);
+      if (!stranger) return;
+
+      const near = stranger.nearest_person;
+      if (!near || !near.uuid) {
+        this.ackedStrangers = [stranger];
+        this.showAckModal = true;
+        return;
+      }
+
+      // 相似人員可能已離場，不一定在當前頁，照片沿用人員清單當快取
+      const cached = this.persons.find((p) => p.uuid === near.uuid);
+      if (cached && cached.register_image) {
+        this.openAckModal(stranger, { ...near, register_image: cached.register_image });
+        return;
+      }
+
+      this.$globalFetchPhoto(near.uuid, (err, data) => {
+        const image = (!err && data && data.register_image) || '';
+        if (cached && image) cached.register_image = image;
+
+        this.openAckModal(stranger, { ...near, register_image: image || this.emptyFace });
+      });
+    },
+
+    openAckModal(stranger, near) {
+      this.ackedStrangers = [{ ...stranger, near }];
+      this.showAckModal = true;
+    },
+
+    onBatchAck(auto = false) {
+      this.autoAck = auto;
+
+      if (this.selectedStrangers.length === 1) {
+        this.onAck(this.selectedStrangers[0]);
+        return;
+      }
+
+      this.ackedStrangers = this.selectedStrangers.map((id) => this.strangers.find((s) => s.verify_uuid === id));
+      this.showAckModal = true;
+    },
+
+    onClose() {
+      this.showAckModal = false;
+      // ackedStrangers 內含快照與註冊照的 base64，關閉後就沒有用途了
+      this.ackedStrangers = [];
+    },
+
+    async onConfirm(command) {
+      this.loading = true;
+
+      const list = this.ackedStrangers.map((item) => ({
+        timestamp: item.timestamp,
+        verify_uuid: item.verify_uuid,
+      }));
+
+      const {
+        data: { message },
+      } = await this.$globalAddCommand({ records: list, commands: command });
+
+      this.loading = false;
+
+      if (!message) return;
+
+      // 已備註／確認過的紀錄後端不再回傳，前端同步移除
+      list.forEach((item) => {
+        const { verify_uuid: uuid } = item;
+
+        const selectedIdx = this.selectedStrangers.indexOf(uuid);
+        if (selectedIdx >= 0) this.selectedStrangers.splice(selectedIdx, 1);
+
+        const idx = this.strangers.findIndex((d) => d.verify_uuid === uuid);
+        if (idx >= 0) this.strangers.splice(idx, 1);
+      });
+
+      // 移除後總頁數可能變少，順便收回頁碼與殘留的勾選
+      this.trimStrangers();
+
+      this.showAckModal = false;
+      this.ackedStrangers = [];
+    },
+
+    // ---------------- 卡片顯示 ----------------
 
     parseLine1(item) {
       switch (this.displaySettings.line1) {
@@ -794,11 +856,11 @@ export default {
         case 'ID':
           return item.id;
         case 'DEPARTMENT':
-          return item.extra_info.department;
+          return item.department || '';
         case 'JOBTITLE':
-          return item.extra_info.title;
+          return item.title || '';
         case 'GROUP':
-          return item.group_list.filter((g) => g !== 'All Person' && g !== 'All Visitor')[0];
+          return (item.group_list || []).filter((g) => g !== 'All Person' && g !== 'All Visitor')[0] || '';
         case 'NONE':
         default:
           return '';
@@ -806,407 +868,81 @@ export default {
     },
 
     parseImage(item) {
-      switch (this.displaySettings.displayPhoto) {
-        case 'REGISTER':
-          return item.register_image;
-        case 'DISPLAY':
-          return item.display_image;
-        case 'NONE':
-        default:
-          return undefined;
-      }
+      if (this.displaySettings.displayPhoto === 'NONE') return this.emptyFace;
+
+      const image =
+        this.displaySettings.displayPhoto === 'DISPLAY'
+          ? item.display_image || item.register_image
+          : item.register_image || item.display_image;
+
+      return image || this.emptyFace;
     },
 
     toLoginPage() {
-      this.flag_login = false;
-      this.value_username = '';
       this.$globalLogout();
-
       this.$router.push('/');
     },
 
-    // Tulip
-    refreshData() {
-      this.currentPersons.forEach((item) => {
-        const { register_image: image, uuid } = item;
-        const idx = this.persons.findIndex((p) => p.uuid === uuid);
-
-        if (
-          image ===
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVR4nGP4//8/AwAI/AL+p5qgoAAAAABJRU5ErkJggg==' &&
-          idx >= 0
-        ) {
-          this.$globalFetchPhoto(uuid, (err, data) => {
-            if (err == null && data) {
-              if (data.display_image !== '') {
-                this.persons[idx].display_image = data.display_image;
-              } else {
-                this.persons[idx].display_image = this.emptyFace;
-              }
-
-              if (data.register_image !== '') {
-                this.persons[idx].register_image = data.register_image;
-              } else {
-                this.persons[idx].register_image = this.emptyFace;
-              }
-            }
-          });
-        }
-      });
-    },
-
-    refreshStranger() {
-      this.currentStrangers.forEach((item) => {
-        const { face_image: image, verify_uuid: uuid, face_image_id: payload } = item;
-        const idx = this.entryStrangers.findIndex((p) => p.verify_uuid === uuid);
-
-        if (!image) {
-          this.$globalFetchVerifyPhoto(payload, (err, data) => {
-            if (data) this.$set(this.entryStrangers[idx], 'face_image', data.face_image);
-          });
-        }
-      });
-    },
-
-    // Tulip
-    refreshBarChart() {
-      const hourlyData = this.getHourlyPresentData();
-
-      if (hourlyData) {
-        this.chartDataIn = hourlyData.PersonIn;
-        this.chartDataOut = hourlyData.PersonOut;
-      }
-
-      // const ctx = document.getElementById('attendance-chart-canvas');
-
-      this.setupGuardDashboardChart(
-        this.$refs.canvas,
-        this.chartLabels,
-        this.chartDataIn,
-        this.chartDataOut,
-        this.zoomRatio,
-      );
-    },
-
-    //  merge Person and Verify Date
-    applyVerifyToPerson(data) {
-      // console.log('============  applyVerifyToPerson');
-      // console.log(data);
-      const self = this;
-
-      let passModeRecord = [];
-      const clockModeRecord = [];
-
-      const filter = data.filter((item) => {
-        const temp = typeof item.group_list === 'string' ? item.group_list : JSON.stringify(item.group_list);
-        return !this.displaySettings.displayGroup.every((g) => temp.indexOf(g) < 0);
-      });
-
-      if (filter.length >= 1) {
-        passModeRecord = filter.filter(
-          (attRec) => attRec.uuid !== undefined && attRec.verify_mode !== 3 && attRec.verify_mode !== 4,
-        );
-        // clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
-
-        // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
-        for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (self.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
-            const ppp = passModeRecord.splice(i, 1);
-            if (ppp) {
-              ppp[0].verify_mode = 3;
-              clockModeRecord.push(ppp[0]);
-            }
-          } else if (self.params_leaveChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
-            const ppp = passModeRecord.splice(i, 1);
-            if (ppp) {
-              ppp[0].verify_mode = 4;
-              clockModeRecord.push(ppp[0]);
-            }
-          }
-        }
-        // 處理進出人員狀態 clockModeRecord
-        if (clockModeRecord.length >= 1) {
-          clockModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-
-          for (let i = 0; i < clockModeRecord.length; i += 1) {
-            const record = clockModeRecord[i];
-            const { uuid } = record;
-            const mode = record.verify_mode;
-
-            const hour = new Date(record.timestamp).getHours();
-
-            const person = self.persons.find((r) => r.uuid === uuid);
-
-            if (person && record.group_list.indexOf('All Visitor') >= 0) {
-              person.display_image = ''; // record.face_image_id;
-            }
-
-            switch (mode) {
-              case 3:
-                // 人員進入
-                if (person) {
-                  // presentRecord
-                  if (person.presentRecord) {
-                    const last = person.presentRecord[person.presentRecord.length - 1];
-                    if (last.out) {
-                      // 如果人員最後一筆紀錄是 out，就插入一筆新的紀錄 in
-                      person.presentRecord.push({
-                        in: hour,
-                      });
-                      person.clockinRecord = record;
-                    }
-                  } else {
-                    // 如果人員之前沒有任何紀錄，也插入一筆新的紀錄 in
-                    person.presentRecord = [
-                      {
-                        in: hour,
-                      },
-                    ];
-                    person.clockinRecord = record;
-                  }
-                  // hourlyPersonInData => Map()<hour, uuid[]>
-                  // 更新 hourlyPersonInData
-                  const hValue = self.hourlyPersonInData.get(hour) || [];
-                  hValue.push(uuid);
-
-                  self.hourlyPersonInData.set(hour, hValue);
-                }
-                break;
-              case 4:
-                // 人員離開
-                if (person) {
-                  // presentRecord
-                  if (person.presentRecord) {
-                    const last = person.presentRecord[person.presentRecord.length - 1];
-                    if (!last.out) {
-                      // 補上人員的 out 時間點
-                      person.presentRecord[person.presentRecord.length - 1].out = hour;
-                      person.clockoutRecord = record;
-                    }
-                  }
-
-                  // hourlyPersonOutData => Map()<hour, uuid[]>
-                  // 更新 hourlyPersonOutData
-                  const hValue = self.hourlyPersonOutData.get(hour) || [];
-                  hValue.push(uuid);
-
-                  self.hourlyPersonOutData.set(hour, hValue);
-                }
-                break;
-              default:
-                break;
-            }
-
-            if (person) {
-              if (!person.clockinRecord && !person.clockoutRecord) {
-                // 沒有 in & 沒有 out
-                person.punchMode = 0;
-                person.status = 1;
-              } else if (!person.clockinRecord && person.clockoutRecord) {
-                // 沒有 in & 有 out
-                person.punchMode = 0;
-                person.status = 1;
-              }
-              if (person.clockinRecord && !person.clockoutRecord) {
-                // 有 in & 沒有 out
-                person.punchMode = 3;
-                person.status = 0;
-              }
-              if (person.clockinRecord && person.clockoutRecord) {
-                // 有 in & 有 out
-                if (person.clockinRecord.timestamp < person.clockoutRecord.timestamp) {
-                  // in < out
-                  person.punchMode = 4;
-                  person.status = 1;
-                } else {
-                  // in >= out
-                  person.punchMode = 3;
-                  person.status = 0;
-                }
-              }
-            }
-          }
-
-          // self.entryPersons = self.persons.filter((p) => p.status === 0);
-          // self.leavePersons = self.persons.filter((p) => p.status === 1);
-
-          // console.log('c persons', self.persons);
-          // console.log('c entryPersons', self.entryPersons);
-          // console.log('c leavePersons', self.leavePersons);
-        }
-      }
-    },
-
-    applyVerifyToStranger(data) {
-      console.log('data', data);
-      if (data.length >= 1) {
-        const clockModeRecord = [];
-        const passModeRecord = data.filter((attRec) => attRec.verify_mode !== 3 && attRec.verify_mode !== 4);
-        // clockModeRecord = data.filter((attRec) => (attRec.verify_mode === 3 || attRec.verify_mode === 4));
-        // 檢查 passModeRecord 裡面的 person 是 in or out，然後 push 至 clockModeRecord
-        for (let i = passModeRecord.length - 1; i >= 0; i -= 1) {
-          if (this.params_entryChannels.findIndex((id) => id.indexOf(passModeRecord[i].source_id) >= 0) >= 0) {
-            const ppp = passModeRecord.splice(i, 1);
-            if (ppp) {
-              ppp[0].verify_mode = 3;
-              clockModeRecord.push(ppp[0]);
-            }
-          }
-        }
-
-        if (clockModeRecord.length >= 1) {
-          this.entryStrangers.push(...clockModeRecord);
-          this.entryStrangers.sort((a, b) => b.timestamp - a.timestamp);
-          this.trimStrangers();
-        }
-      }
-    },
-
-    // 陌生人清單只保留 strangerMaxItem 筆。socket 每推一筆就帶一張 base64 快照進來，
-    // 看板是 24 小時連續跑的，不設上限記憶體會無限成長。
-    trimStrangers() {
-      const max = this.displaySettings.strangerMaxItem || 100;
-
-      // 已依 timestamp 由新到舊排序，砍尾即砍最舊的。
-      // Vue 2 偵測不到 arr.length = n，必須用 splice 才會觸發更新；
-      // 被移除的物件（含 face_image 的 base64）失去參照後由 GC 回收。
-      if (this.entryStrangers.length > max) {
-        this.entryStrangers.splice(max);
-      }
-
-      // 被裁掉的項目若還留在勾選清單裡會變成幽靈選取，
-      // onBatchAck() 的 find() 會拿到 undefined。
-      if (this.selectedStrangers.length >= 1) {
-        const alive = new Set(this.entryStrangers.map((d) => d.verify_uuid));
-        const kept = this.selectedStrangers.filter((id) => alive.has(id));
-        if (kept.length !== this.selectedStrangers.length) this.selectedStrangers = kept;
-      }
-
-      // 裁切後總頁數可能變少，目前停留的頁碼要收回範圍內
-      const lastPage = Math.max(this.strangerPageTotal, 0);
-      if (this.strangerPageIndex > lastPage) this.strangerPageIndex = lastPage;
-    },
-
-    getHourlyPresentData() {
-      const PersonIn = Array(24).fill(0);
-      const PersonOut = Array(24).fill(0);
-
-      this.hourlyPersonInData.forEach((v, k) => {
-        PersonIn[k] += v.length;
-      });
-
-      this.hourlyPersonOutData.forEach((v, k) => {
-        PersonOut[k] += v.length;
-      });
-
-      return {
-        PersonIn,
-        PersonOut,
-      };
-    },
-
-    async initialGroupPerson() {
-      this.persons = await this.setupPersonData();
-
-      for (let i = this.persons.length - 1; i >= 0; i -= 1) {
-        const person = this.persons[i];
-        let inDisplayGroup = false;
-
-        // 檢查人員的群組是否在顯示設定中的群組中
-        if (person.group_list && Array.isArray(person.group_list)) {
-          inDisplayGroup = person.group_list.some((value) => this.displaySettings.displayGroup.indexOf(value) >= 0);
-        }
-
-        if (!inDisplayGroup) {
-          this.persons.splice(i, 1);
-        }
-      }
-    },
+    // ---------------- 時鐘 ----------------
 
     setupCurrentTimeLooper() {
-      this.currentTimeLooper = setInterval(async () => {
+      this.updateCurrentTime();
+
+      this.currentTimeLooper = setInterval(() => {
         const now = new Date();
-        const hour = String(now.getHours()).padStart(2, '0');
-        const minute = String(now.getMinutes()).padStart(2, '0');
-        this.currentDate = now.toLocaleDateString();
-        this.currentTime = `${hour}:${minute}`;
+        this.updateCurrentTime(now);
+
+        // 整點：讓圖表推進一格。跨越 dailyResetTime 時是新的一輪，需重取 24 筆
+        if (now.getMinutes() === 0 && now.getSeconds() === 0) {
+          this.loadDashboard(this.currentSlot() === 0 ? 'all' : null);
+        }
       }, 1000);
     },
 
-    initViews() {
-      // const self = this;
-      const mainElement = document.querySelector('.c-main');
-      const headerElement = document.querySelector('.c-header');
-      const footerElement = document.querySelector('.c-footer');
-      const containerElement = document.querySelector('.container-fluid');
+    updateCurrentTime(date) {
+      const now = date || new Date();
+      const hour = String(now.getHours()).padStart(2, '0');
+      const minute = String(now.getMinutes()).padStart(2, '0');
 
-      // 把 coreUI 套件的一些預設元件的樣式清除掉
-      if (mainElement) mainElement.classList.add('c-main-reset');
-      if (headerElement) headerElement.classList.add('c-header-reset');
-      if (footerElement) footerElement.classList.add('c-footer-reset');
-      if (containerElement) containerElement.classList.add('container-fluid-reset');
+      this.currentDate = now.toLocaleDateString();
+      this.currentTime = `${hour}:${minute}`;
+    },
+
+    // ---------------- 版面 ----------------
+
+    initViews() {
+      this.toggleContainerReset(true);
+
+      // 等 DOM 排版完成再量尺寸
+      setTimeout(() => this.zoomViews(), 168);
+
+      window.addEventListener('resize', this.zoomViews);
+    },
+
+    // CoreUI 外殼的預設 padding 會擋住全螢幕版面，進入看板時清掉、離開時還原
+    toggleContainerReset(on) {
+      CONTAINER_RESETS.forEach(([selector, className]) => {
+        const element = document.querySelector(selector);
+        if (element) element.classList[on ? 'add' : 'remove'](className);
+      });
     },
 
     zoomViews() {
-      const self = this;
       const dashboard = document.querySelector('.dashboard');
-      if (dashboard) {
-        const width = dashboard.clientWidth;
-        const height = dashboard.clientHeight;
+      if (!dashboard) return;
 
-        const rW = width / 1920;
-        const rH = height / 1080;
-        self.zoomRatio = Math.min(rW, rH);
+      const { clientWidth: width, clientHeight: height } = dashboard;
 
-        const dW = width - 1920 * self.zoomRatio;
-        const dH = height - 1080 * self.zoomRatio;
+      this.zoomRatio = Math.min(width / 1920, height / 1080);
 
-        dashboard.style.paddingTop = `${Math.floor(dH / 2)}px`;
-        dashboard.style.paddingBottom = `${Math.floor(dH / 2)}px`;
-        dashboard.style.paddingLeft = `${Math.floor(dW / 2)}px`;
-        dashboard.style.paddingRight = `${Math.floor(dW / 2)}px`;
+      const padX = Math.floor((width - 1920 * this.zoomRatio) / 2);
+      const padY = Math.floor((height - 1080 * this.zoomRatio) / 2);
+      dashboard.style.padding = `${padY}px ${padX}px`;
 
-        const dateTimeElement = document.querySelector('.current-date-time');
-        const chartElement = document.querySelector('#chart-canvas');
-        const summaryBox = document.querySelector('.summary-box');
-        const headerElement = document.querySelector('.dashboard-header');
-        const dividerElement = document.querySelector('.guard-divider');
-        // const contentElement = document.querySelector('.guard-content');
-        const footerBoxElement = document.querySelector('.footer-box');
-        const attendanceTopElement = document.querySelector('.attendance-top-box');
-
-        // 將下列 views 進行 zoom
-        if (dateTimeElement) self.setZoom(dateTimeElement);
-        if (chartElement) self.setZoom(chartElement);
-        if (summaryBox) self.setZoom(summaryBox);
-        if (headerElement) self.setZoom(headerElement);
-        if (dividerElement) self.setZoom(dividerElement);
-        // if (contentElement) self.setZoom(contentElement);
-        if (footerBoxElement) self.setZoom(footerBoxElement);
-        if (attendanceTopElement) self.setZoom(attendanceTopElement);
-      }
-    },
-
-    // Tulip
-    setZoom(element) {
-      // console.log('setZoom ============================');
-
-      const self = this;
-      element.style.setProperty('zoom', self.zoomRatio, 'important');
-    },
-
-    initBarChart() {
-      this.chartLabels = Array.from(Array(this.chartBarAmount).keys());
-      this.chartDataIn = Array(this.chartBarAmount).fill(0);
-      this.chartDataOut = Array(this.chartBarAmount).fill(0);
-
-      this.setupGuardDashboardChart(
-        this.$refs.canvas,
-        this.chartLabels,
-        this.chartDataIn,
-        this.chartDataOut,
-        this.zoomRatio,
-      );
+      ['.current-date-time', '.dashboard-header', '.guard-divider', '.footer-box'].forEach((selector) => {
+        const element = document.querySelector(selector);
+        if (element) element.style.setProperty('zoom', this.zoomRatio, 'important');
+      });
     },
   },
 };
