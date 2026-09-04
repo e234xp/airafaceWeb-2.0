@@ -1644,3 +1644,16 @@ Vue.prototype.$globalQueryOccupancyDashboard = (range, cb) =>
       resolve({ error: err, data: result });
     });
   });
+
+// Capacity 看板：格式與 getoccupancydata 相同，差別在後端依 CAPACITY 的顯示設定計算
+Vue.prototype.$globalQueryCapacityDashboard = (range, cb) =>
+  new Promise((resolve) => {
+    const query = { with_image: false };
+    if (range) query.range = range;
+
+    postJson('/airafacelite/getcapacitydata', query, (err, data) => {
+      const result = err || !data ? null : data.result;
+      if (cb) cb(err, result);
+      resolve({ error: err, data: result });
+    });
+  });
