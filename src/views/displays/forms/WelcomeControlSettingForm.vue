@@ -365,9 +365,8 @@
                 color: white;
                 font-size: 27px;
                 font-style: italic;
-                font-weight: 200;
+                font-weight: 400;
                 letter-spacing: -0.5px;
-                text-shadow: 0px 0px 4px #FF00B0, 0px 0px 2px #47EAFF;
                 padding: 6px 0 6px 0;
               "
             >

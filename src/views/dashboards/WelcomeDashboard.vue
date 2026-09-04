@@ -449,11 +449,13 @@ export default {
         }
 
         if (p) {
+          r.name = r.name || p.fullname || p.name;
+          r.employeeno = r.employeeno || p.id;
           r.register_image = p.register_image;
           r.display_image = p.display_image;
-          r.group_list = p.groups;
-          r.title = p.extra_info.title;
-          r.department = p.extra_info.department;
+          r.group_list = p.group_list || r.groups || [];
+          r.title = p.extra_info ? p.extra_info.title : '';
+          r.department = p.extra_info ? p.extra_info.department : '';
         }
       }
 
@@ -681,7 +683,7 @@ $welcome-anim-duration: 1.0s;
     width: auto;
     height: 150px;
     cursor: pointer;
-    margin: 50px 0;
+    margin-top: 20px;
 
     img {
       width: 100%;
@@ -708,7 +710,7 @@ $welcome-anim-duration: 1.0s;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 20px 0;
+  padding-bottom: 20px;
 
   .welcome-message {
     font-family: 'Noto Sans', sans-serif;
@@ -716,10 +718,9 @@ $welcome-anim-duration: 1.0s;
     line-height: 0.8em;
     color: white;
     font-style: italic;
-    font-weight: 200;
+    font-weight: 400;
     letter-spacing: -0.5px;
-    text-shadow: 0px 0px 12px #FF00B0, 0px 0px 6px #47EAFF;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
   }
 
   .welcome-title {
@@ -791,7 +792,7 @@ $welcome-anim-duration: 1.0s;
   }
 
   &-text-box {
-    padding: 10px 0;
+    padding: 5px 0;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -806,7 +807,7 @@ $welcome-anim-duration: 1.0s;
     font-weight: 800;
     font-size: 60px;
     color: white;
-    margin-bottom: 28px;
+    margin-bottom: 15px;
   }
 
   &-name {
@@ -816,7 +817,7 @@ $welcome-anim-duration: 1.0s;
     font-weight: 600;
     font-size: 44px;
     color: white;
-    margin-bottom: 28px;
+    margin-bottom: 15px;
   }
 
   &-department {
@@ -826,7 +827,7 @@ $welcome-anim-duration: 1.0s;
     color: #B1B1B1;
     font-size: 28px;
     font-weight: 600;
-    margin-bottom: 28px;
+    margin-bottom: 15px;
   }
 
   &-remarks {
@@ -834,6 +835,7 @@ $welcome-anim-duration: 1.0s;
     text-overflow: ellipsis;
     line-height: 0.8em;
     color: white;
+    font-size: 28px;
   }
 }
 
