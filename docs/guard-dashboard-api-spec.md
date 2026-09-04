@@ -109,7 +109,7 @@ POST /airafacelite/getguarddata
       {
         "verify_uuid": "9c1e...",
         "timestamp": 1755431200000,
-        "face_image_id": "af31...",
+        "face_image_id": { "f": "20260904", "uuid": "af31..." },
         "verify_score": 0.72,
         "nearest_person": {
           "uuid": "5f8a...",
@@ -179,14 +179,20 @@ POST /airafacelite/getguarddata
 |---|---|---|
 | `verify_uuid` | string | 主鍵；卡片 `:key`、勾選狀態、`addcommands` 的 records 欄位 |
 | `timestamp` | int64 | 卡片顯示時間、`addcommands` 的 records 欄位 |
-| `face_image_id` | string | 抓拍照的懶載入 id，前端以 `fetchverifyphoto` 取得（見 §5） |
+| `face_image_id` | object | 抓拍照的懶載入 id，前端整包當作 `fetchverifyphoto` 的 request body（見 §5）。維持現行 `querystrangerverifyresult` 的 `{ f, uuid }` 結構即可，**不要改成字串** |
 | `verify_score` | float | 確認視窗顯示的相似度，前端以 `(score * 100).toFixed(0)` 呈現百分比 |
 | `nearest_person` | object\|null | 最相似的既有人員；無相似人員時給 `null` |
 | `nearest_person.uuid` | string | 前端以 `fetchphoto` 取該人的註冊照 |
 | `nearest_person.id` | string | 確認視窗顯示 |
 | `nearest_person.name` | string | 確認視窗顯示 |
 
-> **`nearest_person` 請直接帶 `id` / `name`，不要只給 uuid。** 現行前端是拿 uuid 回頭在 `persons` 陣列裡找（`GuardDashboard.vue:678`），找不到就退化成無相似人員；直接帶欄位可移除這層耦合。
+> ⚠️ **`nearest_person` 是本次新增的欄位，現行 `querystrangerverifyresult` 並不回傳。**
+>
+> 這一欄目前**只存在於舊 WebSocket 通道**：`verifyresults` 推播 `type === 0` 時帶的 `payload.person`，被前端改名成 `nearest_person`（`GuardDashboard.vue:429`）。REST 撈回的陌生人紀錄沒有任何人員身分資訊——同一支 API 在調查報表頁的用法可以佐證，`Investigation.vue:894-899` 針對陌生人紀錄把 `id` / `name` / `card_number` / `groups` 全部塞成空字串。
+>
+> 造成的現況缺陷：**只有看板開著時即時推播進來的陌生人**，點「備註」才看得到相似人員；`setupStrangerData()` 載入的歷史紀錄（含重新整理頁面後的全部紀錄）一律顯示 `--`。本次要求 `strangers[].nearest_person` 就是為了補這個洞。
+
+> **請直接帶 `id` / `name`，不要只給 uuid。** 現行前端是拿 uuid 回頭在 `persons` 陣列裡找（`GuardDashboard.vue:678`），找不到就退化成無相似人員；直接帶欄位可移除這層耦合，也不必要求 `persons` 一定涵蓋該人。
 
 ---
 
@@ -243,7 +249,7 @@ POST /airafacelite/getguarddata
 | 影像 | 取得方式 | 時機 |
 |---|---|---|
 | 在場人員卡片 | `fetchphoto`（帶 `persons[].uuid`） | 前端翻頁時，只抓當前頁 |
-| 陌生人卡片 | `fetchverifyphoto`（帶 `strangers[].face_image_id`） | 前端翻頁時，只抓當前頁 |
+| 陌生人卡片 | `fetchverifyphoto`（`strangers[].face_image_id` 整個物件當 request body） | 前端翻頁時，只抓當前頁 |
 | 確認視窗的相似人員註冊照 | `fetchphoto`（帶 `nearest_person.uuid`） | 開啟確認視窗時 |
 
 此設計與現行 `refreshData()` / `refreshStranger()` 的懶載入機制相同，不需變更。
@@ -307,7 +313,7 @@ POST /airafacelite/getguarddata
     "counted": true,
     "verify_uuid": "9c1e...",
     "timestamp": 1755431200000,
-    "face_image_id": "af31...",
+    "face_image_id": { "f": "20260904", "uuid": "af31..." },
     "verify_score": 0.72,
     "nearest_person": { "uuid": "5f8a...", "id": "E001", "name": "李小瑋" }
   }
@@ -334,7 +340,9 @@ POST /airafacelite/getguarddata
 
 #### `type === "stranger"` 的欄位
 
-欄位定義同 §3 `strangers` 的各欄位。前端收到後直接 unshift 進陌生人清單，並以 `face_image_id` 懶載入抓拍照。
+欄位定義同 §3 `strangers` 的各欄位（`face_image_id` 同樣是 `{ f, uuid }` 物件）。前端收到後直接 unshift 進陌生人清單，並以 `face_image_id` 懶載入抓拍照。
+
+> 這是**唯一**同時涵蓋即時與歷史兩條路徑的欄位組合。舊通道的 `payload.person` 只在推播時存在，改用本通道後，`nearest_person` 由 §3 的 REST 與此處的推播共同供應，兩條路徑的資料形狀一致。
 
 > **`counted` 的判定**：陌生人事件僅在 `source_id === deviceIn` 時給 `true`（與 §3 `strangers` 的過濾條件一致，離場通道的陌生人不顯示）。
 
@@ -411,9 +419,9 @@ this.refreshBarChart();
 
 ### 8.2 陌生人抓拍照的傳遞方式
 
-本文 §5 / §7.1 採 **`face_image_id` + 懶載入**，與人員照片一致，可維持通道輕量。
+本文 §5 / §7.1 採 **`face_image_id` + 懶載入**，與人員照片一致，可維持通道輕量。此欄沿用現行 `querystrangerverifyresult` 的 `{ f, uuid }` 物件結構，前端整包丟給 `fetchverifyphoto` 當 request body（`GuardDashboard.vue:858`、`Investigation.vue:891`），**請勿改成字串**。
 
-替代方案：推播時直接內嵌 base64 `face_image`。優點是陌生人卡片立即顯示、省一次往返；陌生人事件頻率遠低於人員進出，成本可接受。
+替代方案：推播時直接內嵌 base64 `face_image`。優點是陌生人卡片立即顯示、省一次往返；陌生人事件頻率遠低於人員進出，成本可接受。舊通道原本就是這樣做的（`payload.snapshot`）。
 
 **需後端評估**推播當下是否已持有影像。若已在記憶體中，直接內嵌反而更簡單。兩案擇一即可，前端皆可配合。
 
