@@ -373,6 +373,7 @@
   "limitNumbers": "Sayısal olmalı",
   "limitNumbers1000up": "1000 ile 600000 arasında olmalıdır",
   "limitNumbers100up": "100 ile 1000 arasında olmalıdır",
+  "limitNumbers1to30": "1 ile 30 arasında olmalıdır",
   "LineAccessToken": "Mesaj kanalı erişim belirteci",
   "LineGroupId": "Mesaj kanalı Grup Kimliği",
   "LineNotify": "HAT Bildirimi",

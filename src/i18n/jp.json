@@ -373,6 +373,7 @@
   "limitNumbers": "数値でなければなりません",
   "limitNumbers1000up": "1000から600000の範囲",
   "limitNumbers100up": "100から1000の範囲",
+  "limitNumbers1to30": "1から30の範囲",
   "LineAccessToken": "メッセージチャネルのアクセストークン",
   "LineGroupId": "メッセージチャネルのグループID",
   "LineNotify": "LINE 通知",

@@ -363,6 +363,7 @@
   "limitNumbers": "숫자여야 합니다",
   "limitNumbers1000up": "1000에서 600000 사이여야 합니다",
   "limitNumbers100up": "100에서 1000 사이여야 합니다",
+  "limitNumbers1to30": "1에서 30 사이여야 합니다",
   "LineAccessToken": "LINE 채널 액세스 토큰",
   "LineNotify": "LINE 알림",
   "LineNotifyManagement": "LINE 알림",

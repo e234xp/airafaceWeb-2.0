@@ -373,6 +373,7 @@
   "limitNumbers": "Harus numerik",
   "limitNumbers1000up": "Harus berkisar antara 1000 hingga 600000",
   "limitNumbers100up": "Harus berkisar antara 100 hingga 1000",
+  "limitNumbers1to30": "Harus berkisar antara 1 hingga 30",
   "LineAccessToken": "Token akses saluran pesan",
   "LineGroupId": "ID Grup saluran pesan",
   "LineNotify": "Notifikasi LINE",

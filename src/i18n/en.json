@@ -376,6 +376,7 @@
   "limitNumbers": "Must be numeric",
   "limitNumbers1000up": "Should range from 1000 to 600000",
   "limitNumbers100up": "Should range from 100 to 1000",
+  "limitNumbers1to30": "Should range from 1 to 30",
   "LineAccessToken": "Message Channel access token",
   "LineGroupId": "Message Channel Group Id",
   "LineNotify": "LINE Notification",

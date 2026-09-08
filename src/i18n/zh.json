@@ -376,6 +376,7 @@
   "limitNumbers": "限制輸入數字",
   "limitNumbers1000up": "限制輸入數字1000~600000",
   "limitNumbers100up": "限制輸入數字100~1000",
+  "limitNumbers1to30": "限制輸入數字1~30",
   "LineAccessToken": "聊天室權杖",
   "LineGroupId": "通知群組",
   "LineNotify": "LINE 通知",

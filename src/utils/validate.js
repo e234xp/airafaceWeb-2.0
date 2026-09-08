@@ -59,7 +59,7 @@ function checkIpAddr(str) {
 
 function checkDelay(value) {
   if (value < 1 || value > 30) {
-    return i18n.formatter.format('disp_limitNumber1to30');
+    return i18n.formatter.format('limitNumbers1to30');
   }
   return '';
 }

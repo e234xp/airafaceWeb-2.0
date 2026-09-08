@@ -368,6 +368,7 @@
   "limitNumbers": "Doit être numérique",
   "limitNumbers1000up": "Devrait varier de 1000 à 600000",
   "limitNumbers100up": "Devrait varier de 100 à 1000",
+  "limitNumbers1to30": "Devrait varier de 1 à 30",
   "LineAccessToken": "Jeton d'accès au canal de messagerie",
   "LineGroupId": "Identifiant du groupe du canal de messagerie",
   "LineNotify": "Notification de ligne",

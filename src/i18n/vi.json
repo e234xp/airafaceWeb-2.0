@@ -373,6 +373,7 @@
   "limitNumbers": "Phải là số",
   "limitNumbers1000up": "Nên nằm trong khoảng từ 1000 đến 600000",
   "limitNumbers100up": "Nên nằm trong khoảng từ 100 đến 1000",
+  "limitNumbers1to30": "Nên nằm trong khoảng từ 1 đến 30",
   "LineAccessToken": "Mã thông báo truy cập kênh tin nhắn",
   "LineGroupId": "ID nhóm kênh tin nhắn",
   "LineNotify": "Thông báo LINE",

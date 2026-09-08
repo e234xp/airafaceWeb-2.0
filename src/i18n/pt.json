@@ -363,6 +363,7 @@
   "limitNumbers": "Deve ser numérico",
   "limitNumbers1000up": "Deve variar de 1000 a 600000",
   "limitNumbers100up": "Deve variar de 100 a 1000",
+  "limitNumbers1to30": "Deve variar de 1 a 30",
   "LineAccessToken": "Token de acesso do canal LINE",
   "LineNotify": "Notificação LINE",
   "LineNotifyManagement": "Notificação LINE",
