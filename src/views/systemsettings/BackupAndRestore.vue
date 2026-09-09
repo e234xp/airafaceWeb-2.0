@@ -51,12 +51,12 @@
               <label v-if="!value_selectedDbFile" class="btn btn-primary btn-w-normal fz-lg"
                 style="margin-bottom: 0 !important;">
                 {{ $t('ChooseFile') }}
-                <input ref="uploadFile" type="file" id="file" :multiple="false" accept=".dbf" style="display: none"
+                <input ref="uploadFile" type="file" id="file" :multiple="false" accept=".zip,.dbf" style="display: none"
                   @change="onUploadFiles" :disabled="flag_uploading">
               </label>
               <label v-else class="btn btn-primary btn-w-normal fz-lg" style="margin-bottom: 0 !important;">
                 {{ $t('ChooseAnotherFile') }}
-                <input ref="uploadFile" type="file" id="newfile" :multiple="false" accept=".dbf" style="display: none"
+                <input ref="uploadFile" type="file" id="newfile" :multiple="false" accept=".zip,.dbf" style="display: none"
                   @change="onReUploadFiles" :disabled="flag_uploading">
               </label>
               <CButton class="btn btn-primary btn-w-normal fz-lg ml-5" @click="clickOnUpload"
@@ -170,8 +170,10 @@
         let error = null;
         const token = this.$globalGetTokenString();
         this.flag_downloading = true;
+        // config 必須放第三個參數。原本併在 data 的位置，responseType 不會生效，
+        // 備份檔（zip）會被當文字以 UTF-8 解碼後才寫入 blob，存下來的檔案打不開
         await client
-          .post(`${this.$globalDownloadDbPath()}?token=${token}`, {
+          .post(`${this.$globalDownloadDbPath()}?token=${token}`, null, {
             responseType: 'blob',
             onDownloadProgress: (progressEvent) => {
               const total = parseFloat(progressEvent.total);
@@ -180,10 +182,10 @@
             },
           })
           .then((response) => {
-            const blob = new Blob([response.data], {});
+            const blob = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `airatabletlite_db_backup_${this.yyyy_mm_dd_HH_MM_SS(new Date())}.dbf`;
+            link.download = `airatabletlite_db_backup_${this.yyyy_mm_dd_HH_MM_SS(new Date())}.zip`;
             link.click();
             URL.revokeObjectURL(link.href);
           })
@@ -215,10 +217,10 @@
             },
           })
           .then((response) => {
-            const blob = new Blob([response.data], {});
+            const blob = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `airatabletlite_db_backup_${this.yyyy_mm_dd_HH_MM_SS(new Date())}.dbf`;
+            link.download = `airatabletlite_db_backup_${this.yyyy_mm_dd_HH_MM_SS(new Date())}.zip`;
             link.click();
             URL.revokeObjectURL(link.href);
           })
