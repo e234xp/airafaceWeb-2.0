@@ -808,6 +808,16 @@ Vue.prototype.$globalDeletePresenceEvent = (data, cb) =>
     });
   });
 
+// 進出紀錄時間軸：一次取得區間統計與連續的在／不在辦公室區段
+// 區段首尾相接，但只涵蓋第一筆 IN 到最後一筆 OUT，兩端的非上班時間由前端補
+Vue.prototype.$globalQueryPresenceTimeline = (query, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/querypresencepersonstatus', query, (err, data) => {
+      if (cb) cb(err, err ? null : data);
+      resolve({ error: err, data: err ? null : data });
+    });
+  });
+
 Vue.prototype.$globalQueryPresenceDetail = (query, cb) =>
   new Promise((resolve) => {
     postJson('/airafacelite/querypresencedetail', query, (err, data) => {

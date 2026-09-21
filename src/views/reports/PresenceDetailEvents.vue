@@ -14,57 +14,112 @@
       <div style="height: 35px" />
     </div>
 
+    <!-- 查詢條件 -->
+    <CRow class="align-items-end mb-3 ml-0">
+      <div class="mr-3">
+        <label class="d-block mb-1">{{ disp_startTime }}</label>
+        <CSelect
+          class="mb-0"
+          size="lg"
+          :value.sync="value_startHour"
+          :options="value_startHourOptions"
+        />
+      </div>
+      <div class="mr-3">
+        <label class="d-block mb-1">{{ disp_endTime }}</label>
+        <CSelect
+          class="mb-0"
+          size="lg"
+          :value.sync="value_endHour"
+          :options="value_endHourOptions"
+        />
+      </div>
+      <div class="mr-3">
+        <label class="d-block mb-1">{{ disp_outOfficeTime }}</label>
+        <CSelect
+          class="mb-0"
+          size="lg"
+          :value.sync="value_awayThresholdMinutes"
+          :options="value_awayThresholdOptions"
+        />
+      </div>
+      <CButton class="btn btn-primary btn-w-normal" size="lg" @click="clickOnSubmit()">
+        {{ disp_submit }}
+      </CButton>
+    </CRow>
+
+    <div class="d-flex mb-3">
+      <div class="presence-stat-box mr-2">
+        <div class="presence-stat-title">
+          {{ disp_inOfficeTime }}
+        </div>
+        <div class="presence-stat-value">
+          {{ value_inTotalFormatted }}
+        </div>
+      </div>
+      <div class="presence-stat-box">
+        <div class="presence-stat-title">
+          {{ disp_outOfficeTime }}
+        </div>
+        <div class="presence-stat-value">
+          {{ value_outTotalFormatted }}
+        </div>
+      </div>
+    </div>
+
     <!-- 時間軸 -->
     <CCard>
       <CCardBody>
-        <div class="d-flex align-items-center">
-          <div class="flex-grow-1 mr-4">
-            <div class="h5 mb-2">
-              {{ disp_timeline }}
-            </div>
-            <div ref="timelineChart" style="width: 100%; height: 160px;" />
+        <div class="h5 mb-4">
+          {{ disp_timeline }}
+        </div>
+        <div class="d-flex align-items-start">
+          <div class="timeline-label">
+            {{ disp_segment }}
           </div>
-          <div class="d-flex align-items-center">
-            <div class="presence-stat-box mr-2">
-              <div class="presence-stat-title">
-                {{ disp_inOfficeTime }}
-              </div>
-              <div class="presence-stat-value">
-                {{ value_inTotalFormatted }}
-              </div>
+          <div class="flex-grow-1">
+            <div class="timeline-track">
+              <div
+                v-for="(seg, idx) in value_timelineSegments"
+                :key="`${seg.start}-${idx}`"
+                :class="['timeline-seg', `timeline-seg-${seg.state}`,
+                         seg.tiny ? 'timeline-seg-tiny' : '',
+                         value_selectedSegmentIndex === idx ? 'timeline-seg-active' : '']"
+                :style="{ left: seg.left, width: seg.width }"
+                :title="seg.tooltip"
+                @click="clickOnSegment(seg, idx)"
+              />
             </div>
-            <div class="presence-stat-box">
-              <div class="presence-stat-title">
-                {{ disp_outOfficeTime }}
-              </div>
-              <div class="presence-stat-value">
-                {{ value_outTotalFormatted }}
-              </div>
+            <div class="timeline-axis">
+              <span
+                v-for="tick in value_axisTicks"
+                :key="tick.label"
+                class="timeline-tick"
+                :style="{ left: tick.left }"
+              >{{ tick.label }}</span>
+            </div>
+            <div v-if="!value_selectedRange" class="text-muted mt-2">
+              {{ disp_selectSegmentForDetail }}
             </div>
           </div>
         </div>
       </CCardBody>
     </CCard>
 
-    <!-- 事件列表 -->
-    <CCard>
+    <!-- 事件列表：點了非上班時間以外的區段才出現 -->
+    <CCard v-if="value_selectedRange">
       <CCardBody>
         <CRow class="justify-content-between align-items-center mb-3">
           <div>
             <span class="h5">{{ disp_eventList }}</span>
+            <span class="text-muted ml-2">
+              {{ value_selectedRangeText }}
+            </span>
             <span class="text-muted ml-2"
               >{{ disp_totalRecords }}{{ value_tablePage.totalResult }}{{ disp_records }}</span
             >
           </div>
           <div>
-            <CButton
-              class="btn btn-danger btn-w-normal mr-2"
-              size="lg"
-              :disabled="value_selectedRows.length === 0"
-              @click="clickOnBatchDelete()"
-            >
-              {{ $t('Delete') }}
-            </CButton>
             <CButton class="btn btn-primary btn-w-normal mr-2" size="lg" @click="clickOnExceptionHandling()">
               {{ disp_exceptionHandling }}
             </CButton>
@@ -91,16 +146,13 @@
             :header-cell-style="headerCellStyle"
             :row-class-name="rowClassName"
             ref="mainTable"
-            @checkbox-all="mainSelectAllEvent"
-            @checkbox-change="mainSelectChangeEvent"
           >
-            <vxe-table-column type="checkbox" width="5%" align="center" />
             <vxe-table-column
               field="timeFormatted"
               :title="disp_time"
               :show-overflow="ellipsisMode"
               sortable
-              width="12%"
+              width="15%"
               align="center"
             />
             <vxe-table-column
@@ -108,7 +160,7 @@
               :title="disp_employee"
               :show-overflow="ellipsisMode"
               sortable
-              width="15%"
+              width="20%"
               align="center"
             />
             <vxe-table-column
@@ -116,14 +168,14 @@
               :title="disp_camera"
               :show-overflow="ellipsisMode"
               sortable
-              width="18%"
+              width="25%"
               align="center"
             />
             <vxe-table-column
               field="presence_direction"
               :title="disp_direction"
               sortable
-              width="10%"
+              width="15%"
               align="center"
             >
               <template #default="{ row }">
@@ -132,7 +184,7 @@
                 </span>
               </template>
             </vxe-table-column>
-            <vxe-table-column :title="disp_snapshot" width="20%" align="center">
+            <vxe-table-column :title="disp_snapshot" width="25%" align="center">
               <template #default="{ row }">
                 <div style="width:80px;height:80px;display:inline-block;">
                   <img
@@ -142,13 +194,6 @@
                     height="80"
                   />
                 </div>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column :title="$t('Delete')" min-width="10%" align="center">
-              <template #default="{ row }">
-                <vxe-button class="btn btn-in-cell-danger btn-in-cell" @click="clickOnDelete(row)">
-                  {{ $t('Delete') }}
-                </vxe-button>
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -163,150 +208,55 @@
       </CCardBody>
     </CCard>
 
-    <!-- 例外處理 Modal -->
+    <!-- 例外處理 Modal：手動補一筆 IN 紀錄，時間必須落在所選區段內 -->
     <CModal
       :show.sync="flag_showExceptionModal"
       :centered="true"
       :close-on-backdrop="false"
-      size="xl"
+      size="lg"
     >
       <template #header>
-        <h5 class="mb-0">{{ disp_exceptionHandling }}</h5>
+        <h5 class="mb-0">
+          {{ disp_exceptionHandling }}
+        </h5>
       </template>
 
-      <div>
-        <div class="h6 mb-3">{{ disp_filter }}</div>
-        <CRow class="align-items-end mb-3">
-          <CCol col="2">
-            <label class="d-block mb-1">{{ disp_date }}</label>
-            <div class="form-control form-control-lg" style="background-color: #e4e7ea;">
-              {{ value_personDate }}
-            </div>
-          </CCol>
-          <CCol col="2">
-            <label class="d-block mb-1">{{ disp_startTime }}</label>
-            <date-picker
-              v-model="exc_startTimeValue"
-              type="time"
-              format="HH:mm"
-              :lang="this.$globalDatePickerLanguage"
-              style="width: 100%;"
-            />
-          </CCol>
-          <CCol col="2">
-            <label class="d-block mb-1">{{ disp_endTime }}</label>
-            <date-picker
-              v-model="exc_endTimeValue"
-              type="time"
-              format="HH:mm"
-              :lang="this.$globalDatePickerLanguage"
-              style="width: 100%;"
-            />
-          </CCol>
-          <CCol col="4">
-            <label class="d-block mb-1">{{ disp_camera }}</label>
-            <multiselect
-              v-model="exc_selectedDevices"
-              :options="exc_deviceOptions"
-              :multiple="true"
-              :taggable="true"
-              :hide-selected="true"
-              label="name"
-              track-by="uuid"
-              placeholder=""
-              :show-no-options="false"
-            />
-          </CCol>
-          <CCol col="2">
-            <CButton
-              class="btn btn-primary btn-w-normal"
-              size="lg"
-              @click="clickOnExcSearch()"
-            >
-              {{ disp_search }}
-            </CButton>
-          </CCol>
-        </CRow>
-
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div>
-            <span class="h6">{{ disp_captureList }}</span>
-            <span class="text-muted ml-2">{{ disp_totalRecords }}{{ exc_totalLength }}{{ disp_records }}</span>
+      <CRow class="align-items-end">
+        <CCol col="3">
+          <label class="d-block mb-1">{{ disp_direction }}</label>
+          <div class="form-control form-control-lg exc-readonly">
+            <span class="direction-badge direction-in">IN</span>
           </div>
-          <CButton
-            color="primary"
-            variant="outline"
-            size="lg"
-            @click="clickOnBatchAdd()"
-            :disabled="exc_selectedRows.length === 0"
-          >
-            {{ disp_batchAdd }}
-          </CButton>
-        </div>
-
-        <vxe-table
-          :data="exc_dataItemsToShow"
-          stripe
-          align="center"
-          :cell-style="cellStyle"
-          :header-cell-style="headerCellStyle"
-          ref="excTable"
-          @checkbox-all="excSelectAllEvent"
-          @checkbox-change="excSelectChangeEvent"
-        >
-          <vxe-table-column type="checkbox" width="5%" align="center" />
-          <vxe-table-column
-            field="timeFormatted"
-            :title="disp_time"
-            width="20%"
-            align="center"
+        </CCol>
+        <CCol col="4">
+          <label class="d-block mb-1">{{ disp_date }}</label>
+          <div class="form-control form-control-lg exc-readonly">
+            {{ value_personDate }}
+          </div>
+        </CCol>
+        <CCol col="5">
+          <label class="d-block mb-1">{{ disp_time }}</label>
+          <date-picker
+            v-model="exc_timeValue"
+            type="time"
+            format="HH:mm:ss"
+            :show-second="true"
+            :lang="$globalDatePickerLanguage"
+            :clearable="false"
+            style="width: 100%;"
           />
-          <vxe-table-column
-            field="source_name"
-            :title="disp_camera"
-            width="25%"
-            align="center"
-          />
-          <vxe-table-column :title="disp_snapshot" width="20%" align="center">
-            <template #default="{ row }">
-              <div style="width:60px;height:60px;display:inline-block;">
-                <img
-                  v-if="row.snapshotSrc"
-                  :src="row.snapshotSrc"
-                  width="60"
-                  height="60"
-                />
-              </div>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column :title="disp_operation" min-width="20%" align="center">
-            <template #default="{ row }">
-              <CButton
-                class="btn btn-primary"
-                size="sm"
-                @click="clickOnAddSingle(row)"
-              >
-                + {{ disp_addRecord }}
-              </CButton>
-            </template>
-          </vxe-table-column>
-        </vxe-table>
-
-        <vxe-pager
-          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-          :current-page="exc_tablePage.currentPage"
-          :page-size="exc_tablePage.pageSize"
-          :total="exc_tablePage.totalResult"
-          @page-change="excHandlePageChange"
-        />
+        </CCol>
+      </CRow>
+      <div class="text-muted mt-2">
+        {{ disp_timeMustBeInSegment }}{{ value_selectedRangeText }}
       </div>
 
       <template #footer>
         <CButton color="secondary" @click="flag_showExceptionModal = false">
           {{ $t('Cancel') }}
         </CButton>
-        <CButton color="primary" @click="flag_showExceptionModal = false">
-          {{ disp_close }}
+        <CButton color="primary" @click="clickOnAddException()">
+          {{ disp_addRecord }}
         </CButton>
       </template>
     </CModal>
@@ -320,14 +270,22 @@ import TableObserver from '@/utils/TableObserver.vue';
 
 import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
-import * as echarts from 'echarts';
-import Multiselect from 'vue-multiselect';
-import '@/airacss/vue-multiselect.css';
 
 const dayjs = require('dayjs');
 
+// 時間軸刻度數量（0~24 時剛好每 3 小時一格）
+const AXIS_TICK_COUNT = 8;
+
+// 佔比低於這個值的區段一律以最小寬度呈現（時間軸約 1200px 寬，0.4% 差不多 5px）
+const TINY_SEGMENT_RATIO = 0.004;
+
+// 不在辦公室時間的門檻選項（分鐘）
+const AWAY_THRESHOLD_OPTIONS = [10, 20, 30, 60];
+
 const defaultlState = () => ({
   obj_loading: null,
+  // 同時有多層查詢在跑時，遮罩只開一個、全部結束才收
+  value_loadingCount: 0,
 
   disp_return: i18n.formatter.format('Return'),
   disp_header: i18n.formatter.format('PresenceDetail'),
@@ -341,22 +299,20 @@ const defaultlState = () => ({
   disp_exceptionHandling: i18n.formatter.format('ExceptionHandling'),
   disp_inOfficeTime: i18n.formatter.format('InOfficeTime'),
   disp_outOfficeTime: i18n.formatter.format('OutOfficeTime'),
+  disp_submit: i18n.formatter.format('Submit'),
+  disp_segment: i18n.formatter.format('Segment'),
+  disp_selectSegmentForDetail: i18n.formatter.format('SelectSegmentForDetail'),
 
   disp_time: i18n.formatter.format('Time'),
   disp_employee: i18n.formatter.format('Employee'),
   disp_camera: i18n.formatter.format('Camera'),
   disp_direction: i18n.formatter.format('Direction'),
   disp_snapshot: i18n.formatter.format('Snapshot'),
-  disp_filter: i18n.formatter.format('Filter'),
   disp_date: i18n.formatter.format('Date'),
   disp_startTime: i18n.formatter.format('StartTime'),
   disp_endTime: i18n.formatter.format('EndTime'),
-  disp_search: i18n.formatter.format('Search'),
-  disp_captureList: i18n.formatter.format('CaptureList'),
-  disp_batchAdd: i18n.formatter.format('BatchAdd'),
   disp_addRecord: i18n.formatter.format('AddRecord'),
-  disp_operation: i18n.formatter.format('Operation'),
-  disp_close: i18n.formatter.format('Close'),
+  disp_timeMustBeInSegment: i18n.formatter.format('TimeMustBeInSegment'),
 
   value_returnRoutePath: '',
   value_returnRouteName: '',
@@ -368,39 +324,37 @@ const defaultlState = () => ({
 
   value_inTotalSeconds: 0,
   value_outTotalSeconds: 0,
-  value_inTotalFormatted: '0h 00m',
-  value_outTotalFormatted: '0h 00m',
+  value_inTotalFormatted: '0s',
+  value_outTotalFormatted: '0s',
+
+  // 查詢條件（送出時才寫進 value_queried*，畫面一律依已查詢的區間渲染，
+  // 避免改了下拉還沒送出，時間軸就先跟著位移）
+  value_startHour: 0,
+  value_endHour: 24,
+  value_queriedStartHour: 0,
+  value_queriedEndHour: 24,
+  value_awayThresholdMinutes: AWAY_THRESHOLD_OPTIONS[0],
+
+  // 後端回傳的原始區段，首尾相接，只涵蓋第一筆 IN 到最後一筆 OUT
+  value_records: [],
+  value_selectedSegmentIndex: -1,
+  value_selectedRange: null,
 
   value_allEvents: [],
   value_dataItemsToShow: [],
-  value_selectedRows: [],
   value_tablePage: {
     currentPage: 1,
     pageSize: 10,
     totalResult: 0,
   },
 
-  timelineChart: null,
-
-  // 例外處理
+  // 例外處理：只補一筆 IN 紀錄，方向與日期固定，僅時間可調
   flag_showExceptionModal: false,
-  exc_startTimeValue: (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })(),
-  exc_endTimeValue: (() => { const d = new Date(); d.setHours(23, 59, 0, 0); return d; })(),
-  exc_selectedDevices: [],
-  exc_deviceOptions: [],
-  exc_dataItemsToShow: [],
-  exc_selectedRows: [],
-  exc_totalLength: 0,
-  exc_tablePage: {
-    currentPage: 1,
-    pageSize: 5,
-    totalResult: 0,
-  },
+  exc_timeValue: null,
 });
 
 export default {
   name: 'PresenceDetailEvents',
-  components: { Multiselect },
   data() {
     const cloneObject = {};
     Object.assign(cloneObject, defaultlState(), this.formData);
@@ -421,6 +375,94 @@ export default {
   },
   computed: {
     ...mapState(['ellipsisMode']),
+
+    value_startHourOptions() {
+      return this.hourOptions(0, 23);
+    },
+
+    value_endHourOptions() {
+      return this.hourOptions(1, 24);
+    },
+
+    // 專案把 vue-i18n 的 formatter 換成只查 key 的版本（src/i18n/index.js），
+    // 沒有 interpolate，$t 的參數不會生效，佔位符只能自己代入
+    value_awayThresholdOptions() {
+      return AWAY_THRESHOLD_OPTIONS.map((minutes) => ({
+        value: minutes,
+        label: i18n.formatter.format('AwayOverMinutes').replace('{minutes}', minutes),
+      }));
+    },
+
+    value_windowStart() {
+      return this.hourToEpoch(this.value_queriedStartHour);
+    },
+
+    value_windowEnd() {
+      return this.hourToEpoch(this.value_queriedEndHour);
+    },
+
+    // 後端只給第一筆 IN 到最後一筆 OUT，兩端的非上班時間由前端補灰。
+    // 整天沒資料時後端不回記錄，補出來就是一整條灰的。
+    value_timelineSegments() {
+      const windowStart = this.value_windowStart;
+      const windowEnd = this.value_windowEnd;
+      const total = windowEnd - windowStart;
+      if (total <= 0) return [];
+
+      const thresholdMs = this.value_awayThresholdMinutes * 60000;
+      const records = this.value_records;
+      const head = records.length ? records[0].start : windowEnd;
+      const tail = records.length ? records[records.length - 1].end : windowEnd;
+
+      const segments = [];
+      if (head > windowStart) segments.push({ start: windowStart, end: head, state: 'off' });
+
+      records.forEach((record) => {
+        const duration = record.end - record.start;
+        let state = 'in';
+        // 紅色（超時）純粹是長度比門檻，由前端判定，改下拉不用重打 API
+        if (record.isSlacking) state = duration >= thresholdMs ? 'away-over' : 'away';
+
+        segments.push({ start: record.start, end: record.end, state });
+      });
+
+      if (tail < windowEnd) segments.push({ start: tail, end: windowEnd, state: 'off' });
+
+      return segments.map((seg) => {
+        const ratio = (seg.end - seg.start) / total;
+
+        return {
+          ...seg,
+          left: `${((seg.start - windowStart) / total) * 100}%`,
+          width: `${ratio * 100}%`,
+          // 短到換算後不足幾個像素的區段，交給 CSS 撐到最小寬度並疊到上層，
+          // 否則會被後面相鄰的區段蓋掉（區段是絕對定位、依時間排在 DOM 裡）
+          tiny: ratio < TINY_SEGMENT_RATIO,
+          tooltip: this.segmentTooltip(seg),
+        };
+      });
+    },
+
+    value_axisTicks() {
+      const startMinutes = this.value_queriedStartHour * 60;
+      const totalMinutes = (this.value_queriedEndHour - this.value_queriedStartHour) * 60;
+      if (totalMinutes <= 0) return [];
+
+      return Array.from({ length: AXIS_TICK_COUNT + 1 }, (unused, idx) => {
+        const minutes = startMinutes + (totalMinutes * idx) / AXIS_TICK_COUNT;
+        const hh = String(Math.floor(minutes / 60)).padStart(2, '0');
+        const mm = String(Math.round(minutes % 60)).padStart(2, '0');
+
+        return { label: `${hh}:${mm}`, left: `${(idx / AXIS_TICK_COUNT) * 100}%` };
+      });
+    },
+
+    value_selectedRangeText() {
+      if (!this.value_selectedRange) return '';
+
+      const { start, end } = this.value_selectedRange;
+      return `${dayjs(start).format('HH:mm:ss')} — ${dayjs(end).format('HH:mm:ss')}`;
+    },
   },
   mixins: [TableObserver],
   created() {
@@ -428,16 +470,10 @@ export default {
       this.$router.push({ name: 'PresenceDetail' });
       return;
     }
-    this.fetchAllData();
+    this.fetchTimeline();
   },
   mounted() {
     this.observeTableSize();
-  },
-  beforeDestroy() {
-    if (this.timelineChart) {
-      this.timelineChart.dispose();
-      this.timelineChart = null;
-    }
   },
   methods: {
     headerCellStyle() {
@@ -447,10 +483,33 @@ export default {
       return 'fontSize:18px;';
     },
 
+    // fetchTimeline() 內會再呼叫 fetchSegmentEvents()，兩層各自開關遮罩的話，
+    // 內層會把 obj_loading 的參照蓋掉，外層那個遮罩就永遠關不掉了
+    showLoading() {
+      this.value_loadingCount += 1;
+      if (!this.obj_loading) {
+        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+      }
+    },
+
+    hideLoading() {
+      this.value_loadingCount = Math.max(this.value_loadingCount - 1, 0);
+      if (this.value_loadingCount > 0 || !this.obj_loading) return;
+
+      this.obj_loading.hide();
+      this.obj_loading = null;
+    },
+
+    // 依長度決定精度：短到只有幾秒的區段若只顯示到分鐘會變成 0h 00m，看不出差別
     formatSeconds(totalSeconds) {
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      return `${hours}h ${String(minutes).padStart(2, '0')}m`;
+      const seconds = Math.max(Math.round(totalSeconds || 0), 0);
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const rest = seconds % 60;
+
+      if (hours > 0) return `${hours}h ${String(minutes).padStart(2, '0')}m`;
+      if (minutes > 0) return `${minutes}m ${String(rest).padStart(2, '0')}s`;
+      return `${rest}s`;
     },
 
     rowClassName({ row }) {
@@ -469,12 +528,142 @@ export default {
       }
     },
 
-    async fetchAllData() {
-      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+    hourOptions(from, to) {
+      return Array.from({ length: to - from + 1 }, (unused, idx) => {
+        const hour = from + idx;
+        return { value: hour, label: `${String(hour).padStart(2, '0')}:00` };
+      });
+    },
+
+    // 查詢區間固定在當日之內，不跨日；24 點即隔天 00:00
+    hourToEpoch(hour) {
+      const date = new Date(this.value_personDate);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime() + hour * 3600000;
+    },
+
+    segmentStateText(state) {
+      switch (state) {
+        case 'in':
+          return this.$t('InOffice');
+        case 'away':
+          return this.$t('OutOffice');
+        case 'away-over':
+          return this.$t('AwayExceeded');
+        default:
+          return this.$t('OffDuty');
+      }
+    },
+
+    segmentTooltip(seg) {
+      const range = `${dayjs(seg.start).format('HH:mm:ss')} — ${dayjs(seg.end).format('HH:mm:ss')}`;
+      const duration = this.formatSeconds(Math.round((seg.end - seg.start) / 1000));
+
+      return `${this.segmentStateText(seg.state)}\n${range}\n${duration}`;
+    },
+
+    // summary 的 in_total_seconds / out_total_seconds 名為 seconds，實際回的是毫秒
+    // （與 timeline 的 duration 同單位），後端確認維持此行為，取用時一律換算
+    msToSeconds(value) {
+      return Math.round((value || 0) / 1000);
+    },
+
+    clickOnSubmit() {
+      if (this.value_endHour <= this.value_startHour) {
+        this.$fire({
+          text: i18n.formatter.format('InvalidTimeRange'),
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+          confirmButtonText: i18n.formatter.format('OK'),
+        });
+        return;
+      }
+
+      this.fetchTimeline();
+    },
+
+    // 送出：取回整個區間的統計與時間軸區段。事件明細要點區段才查
+    async fetchTimeline() {
+      this.showLoading();
+
+      this.value_queriedStartHour = this.value_startHour;
+      this.value_queriedEndHour = this.value_endHour;
+
+      const query = {
+        uuid: this.value_personUuid,
+        start_time: this.value_windowStart,
+        end_time: this.value_windowEnd,
+      };
+
+      try {
+        const retResult = await this.$globalQueryPresenceTimeline(query);
+
+        if (!retResult.error && retResult.data) {
+          const { data } = retResult;
+
+          if (data.summary) {
+            this.value_inTotalSeconds = this.msToSeconds(data.summary.in_total_seconds);
+            this.value_outTotalSeconds = this.msToSeconds(data.summary.out_total_seconds);
+            this.value_inTotalFormatted = this.formatSeconds(this.value_inTotalSeconds);
+            this.value_outTotalFormatted = this.formatSeconds(this.value_outTotalSeconds);
+          }
+
+          this.value_records = (data.timeline || []).slice().sort((a, b) => a.start - b.start);
+
+          this.restoreSelectedSegment();
+        }
+      } catch (ex) {
+        console.log(ex);
+      }
+
+      this.hideLoading();
+    },
+
+    // 重新載入後區段邊界可能變動，找得到原本選取的區間才留著，否則清空明細
+    restoreSelectedSegment() {
+      if (!this.value_selectedRange) return;
+
+      const { start, end } = this.value_selectedRange;
+      const idx = this.value_timelineSegments.findIndex((seg) => seg.start === start && seg.end === end);
+
+      if (idx < 0) {
+        this.clearSegmentSelection();
+        return;
+      }
+
+      this.value_selectedSegmentIndex = idx;
+      this.fetchSegmentEvents();
+    },
+
+    clearSegmentSelection() {
+      this.value_selectedSegmentIndex = -1;
+      this.value_selectedRange = null;
+      this.value_allEvents = [];
+      this.value_tablePage.currentPage = 1;
+      this.value_tablePage.totalResult = 0;
+      this.showPage(1);
+    },
+
+    clickOnSegment(seg, idx) {
+      this.value_selectedSegmentIndex = idx;
+      this.value_selectedRange = { start: seg.start, end: seg.end };
+      this.value_tablePage.currentPage = 1;
+
+      this.fetchSegmentEvents();
+    },
+
+    // 點區段：只查該區段時間範圍內的事件
+    async fetchSegmentEvents() {
+      if (!this.value_selectedRange) return;
+
+      this.showLoading();
 
       const query = {
         uuid: this.value_personUuid,
         date: this.value_personDate,
+        start_time: this.value_selectedRange.start,
+        end_time: this.value_selectedRange.end,
         slice_shift: 0,
         slice_length: 99999,
       };
@@ -483,18 +672,7 @@ export default {
         const retResult = await this.$globalQueryPresenceDetail(query);
 
         if (!retResult.error && retResult.data) {
-          const { data } = retResult;
-
-          // 更新 summary 資訊
-          if (data.summary) {
-            this.value_inTotalSeconds = data.summary.in_total_seconds || 0;
-            this.value_outTotalSeconds = data.summary.out_total_seconds || 0;
-            this.value_inTotalFormatted = this.formatSeconds(this.value_inTotalSeconds);
-            this.value_outTotalFormatted = this.formatSeconds(this.value_outTotalSeconds);
-          }
-
-          // 格式化全部事件資料
-          this.value_allEvents = (data.events || []).map((evt) => ({
+          this.value_allEvents = (retResult.data.events || []).map((evt) => ({
             ...evt,
             timeFormatted: dayjs(evt.timestamp).format('HH:mm:ss'),
             employeeInfo: `${evt.person_id} · ${evt.name}`,
@@ -502,10 +680,7 @@ export default {
 
           this.value_tablePage.totalResult = this.value_allEvents.length;
 
-          // 用全部事件建立時間軸
-          this.buildTimeline(this.value_allEvents);
-
-          // 如果當前頁超出範圍，回到第一頁
+          // 刪除紀錄後筆數可能變少，當前頁要收回範圍內
           const maxPage = Math.ceil(this.value_allEvents.length / this.value_tablePage.pageSize) || 1;
           if (this.value_tablePage.currentPage > maxPage) {
             this.value_tablePage.currentPage = maxPage;
@@ -516,7 +691,7 @@ export default {
         console.log(ex);
       }
 
-      if (this.obj_loading) this.obj_loading.hide();
+      this.hideLoading();
     },
 
     showPage(page) {
@@ -543,333 +718,55 @@ export default {
       }
     },
 
-    buildTimeline(events) {
-      if (this.timelineChart) {
-        this.timelineChart.dispose();
-        this.timelineChart = null;
-      }
-      if (!events || events.length === 0 || !this.$refs.timelineChart) return;
-
-      const sortedEvents = [...events].sort((a, b) => a.timestamp - b.timestamp);
-      const anomalyColor = '#d32f2f';
-      const colorMap = { IN: '#81c784', OUT: '#ffb74d' };
-
-      // 合併連續同方向事件為區段
-      const segments = [];
-      let segStart = sortedEvents[0];
-      let segDir = segStart.presence_direction;
-      let segAnomaly = segStart.is_anomaly;
-
-      for (let i = 1; i < sortedEvents.length; i += 1) {
-        const evt = sortedEvents[i];
-        if (evt.presence_direction !== segDir) {
-          segments.push({
-            start: segStart.timestamp,
-            end: evt.timestamp,
-            dir: segDir,
-            anomaly: segAnomaly,
-          });
-          segStart = evt;
-          segDir = evt.presence_direction;
-          segAnomaly = evt.is_anomaly;
-        } else {
-          segAnomaly = segAnomaly || evt.is_anomaly;
-        }
-      }
-      const lastEnd = sortedEvents[sortedEvents.length - 1].timestamp;
-      segments.push({
-        start: segStart.timestamp,
-        end: lastEnd < segStart.timestamp + 2000 ? segStart.timestamp + 2000 : lastEnd,
-        dir: segDir,
-        anomaly: segAnomaly,
-      });
-
-      // tooltip
-      const tooltipFormatter = (params) => {
-        const d = params.data;
-        if (d && d.evt_direction !== undefined) {
-          const dir = d.evt_direction;
-          const flag = d.evt_anomaly ? ' <span style="color:#d32f2f;font-weight:bold">(異常)</span>' : '';
-          return `<b style="color:${colorMap[dir] || '#333'}">${dir}</b>${flag}<br/>${d.evt_time}<br/>${d.evt_source}`;
-        }
-        const v = params.value;
-        if (!v || v[3] === undefined) return '';
-        const dir = v[3];
-        const s = dayjs(v[1]).format('HH:mm:ss');
-        const e = dayjs(v[2]).format('HH:mm:ss');
-        const flag = v[4] ? ' <span style="color:#d32f2f;font-weight:bold">(異常)</span>' : '';
-        return `<b style="color:${colorMap[dir]}">${dir}</b>${flag}<br/>${s} — ${e}`;
-      };
-
-      // 事件行：scatter 點標記
-      const evtScatterData = sortedEvents.map((evt) => ({
-        value: [evt.timestamp, '事件'],
-        itemStyle: {
-          color: evt.is_anomaly ? anomalyColor : (colorMap[evt.presence_direction] || '#ccc'),
-        },
-        evt_direction: evt.presence_direction,
-        evt_time: dayjs(evt.timestamp).format('HH:mm:ss'),
-        evt_source: evt.source_name || '',
-        evt_anomaly: evt.is_anomaly,
-      }));
-
-      // 區段行（y=1 對應 '區段'）
-      const segBarData = segments.map((seg) => ({
-        value: ['區段', seg.start, seg.end, seg.dir, seg.anomaly],
-        itemStyle: { color: colorMap[seg.dir] || '#ccc' },
-      }));
-
-      const chart = echarts.init(this.$refs.timelineChart);
-      this.timelineChart = chart;
-
-      chart.setOption({
-        tooltip: { formatter: tooltipFormatter },
-        grid: {
-          left: 80, right: 20, top: 10, bottom: 30,
-        },
-        xAxis: {
-          type: 'time',
-          axisLabel: {
-            formatter(val) {
-              return dayjs(val).format('HH:mm:ss');
-            },
-            fontSize: 11,
-          },
-          splitLine: { show: false },
-        },
-        yAxis: {
-          type: 'category',
-          data: ['事件', '區段'],
-          axisLabel: { fontSize: 12, color: '#666' },
-          axisTick: { show: false },
-          axisLine: { show: false },
-        },
-        series: [
-          // 區段色塊
-          {
-            type: 'custom',
-            renderItem(params, api) {
-              const startCoord = api.coord([api.value(1), api.value(0)]);
-              const endCoord = api.coord([api.value(2), api.value(0)]);
-              const barHeight = api.size([0, 1])[1] * 0.45;
-              const hasAnomaly = api.value(4);
-              const rect = echarts.graphic.clipRectByRect(
-                {
-                  x: startCoord[0],
-                  y: startCoord[1] - barHeight / 2,
-                  width: Math.max(endCoord[0] - startCoord[0], 6),
-                  height: barHeight,
-                },
-                {
-                  x: params.coordSys.x,
-                  y: params.coordSys.y,
-                  width: params.coordSys.width,
-                  height: params.coordSys.height,
-                },
-              );
-              if (!rect) return null;
-              return {
-                type: 'rect',
-                shape: { ...rect, r: 4 },
-                style: {
-                  ...api.style(),
-                  stroke: hasAnomaly ? anomalyColor : 'transparent',
-                  lineWidth: hasAnomaly ? 2 : 0,
-                },
-              };
-            },
-            encode: { x: [1, 2], y: 0 },
-            data: segBarData,
-          },
-          // 事件點標記（窄長條）
-          {
-            type: 'scatter',
-            symbol: 'path://M-1,-4.5Q-1,-5,0,-5Q1,-5,1,-4.5L1,4.5Q1,5,0,5Q-1,5,-1,4.5Z',
-            symbolSize: [8, 24],
-            z: 10,
-            data: evtScatterData,
-          },
-        ],
-      });
-
-      window.addEventListener('resize', () => {
-        if (this.timelineChart) this.timelineChart.resize();
-      });
-    },
-
     handlePageChange({ currentPage, pageSize }) {
       this.value_tablePage.currentPage = currentPage;
       this.value_tablePage.pageSize = pageSize;
-      this.value_selectedRows = [];
       this.showPage(currentPage);
       this.resizeOneTable();
     },
 
-    mainSelectAllEvent({ records }) {
-      this.value_selectedRows = records;
+    // 例外處理：手動補一筆 IN 紀錄。日期與方向固定，只讓使用者挑時間
+    clickOnExceptionHandling() {
+      if (!this.value_selectedRange) return;
+
+      this.exc_timeValue = new Date(this.value_selectedRange.start);
+      this.flag_showExceptionModal = true;
     },
 
-    mainSelectChangeEvent({ records }) {
-      this.value_selectedRows = records;
-    },
+    async clickOnAddException() {
+      if (!this.value_selectedRange || !this.exc_timeValue) return;
 
-    clickOnBatchDelete() {
-      const rows = this.value_selectedRows;
-      if (rows.length === 0) return;
+      // 日期固定為該人員的這一天，只取使用者調整的時分秒
+      const target = new Date(this.value_personDate);
+      target.setHours(
+        this.exc_timeValue.getHours(),
+        this.exc_timeValue.getMinutes(),
+        this.exc_timeValue.getSeconds(),
+        0,
+      );
 
-      this.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
-        confirmButtonText: i18n.formatter.format('Confirm'),
-        cancelButtonText: i18n.formatter.format('Cancel'),
-        confirmButtonColor: '#20a8d8',
-        cancelButtonColor: '#f86c6b',
-      }).then(async () => {
-        let successCount = 0;
-        for (let i = 0; i < rows.length; i += 1) {
-          const ret = await this.$globalDeletePresenceEvent({
-            verify_uuid: rows[i].verify_uuid,
-            date: this.value_personDate,
-          });
-          if (!ret.error) successCount += 1;
-        }
+      const timestamp = target.getTime();
+      const { start, end } = this.value_selectedRange;
 
+      if (timestamp < start || timestamp > end) {
         this.$fire({
-          text: `${successCount} / ${rows.length} ${i18n.formatter.format('OperationSuccess')}`,
-          type: successCount > 0 ? 'success' : 'error',
+          text: `${this.disp_timeMustBeInSegment}${this.value_selectedRangeText}`,
+          type: 'error',
           timer: 3000,
           confirmButtonColor: '#20a8d8',
           confirmButtonText: i18n.formatter.format('OK'),
         });
-
-        this.value_selectedRows = [];
-        this.fetchAllData();
-      }).catch(() => {});
-    },
-
-    async clickOnExceptionHandling() {
-      this.exc_dataItemsToShow = [];
-      this.exc_selectedRows = [];
-      this.exc_totalLength = 0;
-      this.exc_tablePage.currentPage = 1;
-      this.exc_tablePage.totalResult = 0;
-      const startD = new Date();
-      startD.setHours(0, 0, 0, 0);
-      this.exc_startTimeValue = startD;
-      const endD = new Date();
-      endD.setHours(23, 59, 0, 0);
-      this.exc_endTimeValue = endD;
-      this.exc_selectedDevices = [];
-
-      // 抓取有設定 IN/OUT 的設備
-      const [cameraRet, tabletRet] = await Promise.all([
-        this.$globalFindCameras('', 0, 3000),
-        this.$globalGetTabletList('', 0, 3000),
-      ]);
-
-      const devices = [];
-      if (cameraRet.data && cameraRet.data.list) {
-        cameraRet.data.list.forEach((cam) => {
-          if (cam.presence_direction && cam.presence_direction !== 'NONE') {
-            devices.push({ uuid: cam.uuid, name: cam.name });
-          }
-        });
+        return;
       }
-      if (tabletRet.data && tabletRet.data.data_list) {
-        tabletRet.data.data_list.forEach((tab) => {
-          if (tab.presence_direction && tab.presence_direction !== 'NONE') {
-            devices.push({ uuid: tab.uuid, name: tab.name });
-          }
-        });
-      }
-      this.exc_deviceOptions = devices;
-      this.flag_showExceptionModal = true;
-    },
 
-    clickOnExcSearch() {
-      this.exc_tablePage.currentPage = 1;
-      this.exc_selectedRows = [];
-      this.excFetchPage(1);
-    },
-
-    async excFetchPage(page) {
-      const dateStr = this.value_personDate;
-      const startDate = new Date(dateStr);
-      startDate.setHours(this.exc_startTimeValue.getHours(), this.exc_startTimeValue.getMinutes(), 0, 0);
-      const endDate = new Date(dateStr);
-      endDate.setHours(this.exc_endTimeValue.getHours(), this.exc_endTimeValue.getMinutes(), 59, 999);
-
-      const sourceIds = this.exc_selectedDevices.map((d) => d.uuid);
-      const shift = (page - 1) * this.exc_tablePage.pageSize;
-
-      const query = {
-        start_time: startDate.getTime(),
-        end_time: endDate.getTime(),
-        source_ids: sourceIds,
-        uuid: this.value_personUuid,
-        slice_shift: shift,
-        slice_length: this.exc_tablePage.pageSize,
-      };
-
-      try {
-        const ret = await this.$globalQueryPresenceCandidates(query);
-        if (!ret.error && ret.data) {
-          this.exc_totalLength = ret.data.total_length || 0;
-          this.exc_tablePage.totalResult = ret.data.total_length || 0;
-
-          this.exc_dataItemsToShow = (ret.data.events || ret.data.result || []).map((evt) => ({
-            ...evt,
-            timeFormatted: dayjs(evt.timestamp).format('HH:mm:ss'),
-            snapshotSrc: '',
-          }));
-
-          // 非同步載入當頁照片
-          for (let ii = 0; ii < this.exc_dataItemsToShow.length; ii += 1) {
-            const row = this.exc_dataItemsToShow[ii];
-            if (row.face_image_id) {
-              const dataImage = await this.$globalFetchVerifyPhoto(row.face_image_id);
-              if (dataImage.error == null && dataImage.data && dataImage.data.face_image) {
-                this.$set(this.exc_dataItemsToShow[ii], 'snapshotSrc', `data:image/jpeg;base64,${dataImage.data.face_image}`);
-              }
-            }
-          }
-        }
-      } catch (ex) {
-        console.log(ex);
-      }
-    },
-
-    excHandlePageChange({ currentPage, pageSize }) {
-      this.exc_tablePage.currentPage = currentPage;
-      this.exc_tablePage.pageSize = pageSize;
-      this.exc_selectedRows = [];
-      this.excFetchPage(currentPage);
-    },
-
-    excSelectAllEvent({ records }) {
-      this.exc_selectedRows = records;
-    },
-
-    excSelectChangeEvent({ records }) {
-      this.exc_selectedRows = records;
-    },
-
-    async clickOnAddSingle(row) {
+      this.showLoading();
       const ret = await this.$globalCreatePresenceException({
-        verify_uuid: row.verify_uuid,
         uuid: this.value_personUuid,
-        date: this.value_personDate,
+        timestamp,
       });
-      if (!ret.error) {
-        this.$fire({
-          text: i18n.formatter.format('OperationSuccess'),
-          type: 'success',
-          timer: 2000,
-          confirmButtonColor: '#20a8d8',
-          confirmButtonText: i18n.formatter.format('OK'),
-        });
-        // 重新抓例外處理清單和事件列表
-        this.excFetchPage(this.exc_tablePage.currentPage);
-        this.fetchAllData();
-      } else {
+      this.hideLoading();
+
+      if (ret.error) {
         this.$fire({
           text: i18n.formatter.format('OperationFailed'),
           type: 'error',
@@ -877,67 +774,23 @@ export default {
           confirmButtonColor: '#20a8d8',
           confirmButtonText: i18n.formatter.format('OK'),
         });
-      }
-    },
-
-    async clickOnBatchAdd() {
-      const rows = this.exc_selectedRows;
-      if (rows.length === 0) return;
-
-      let successCount = 0;
-      for (let i = 0; i < rows.length; i += 1) {
-        const ret = await this.$globalCreatePresenceException({
-          verify_uuid: rows[i].verify_uuid,
-          uuid: this.value_personUuid,
-          date: this.value_personDate,
-        });
-        if (!ret.error) successCount += 1;
+        return;
       }
 
       this.$fire({
-        text: `${successCount} / ${rows.length} ${i18n.formatter.format('OperationSuccess')}`,
-        type: successCount > 0 ? 'success' : 'error',
-        timer: 3000,
+        text: i18n.formatter.format('OperationSuccess'),
+        type: 'success',
+        timer: 2000,
         confirmButtonColor: '#20a8d8',
         confirmButtonText: i18n.formatter.format('OK'),
       });
 
-      // 重新抓例外處理清單和事件列表
-      this.exc_selectedRows = [];
-      this.excFetchPage(this.exc_tablePage.currentPage);
-      this.fetchAllData();
-    },
+      this.flag_showExceptionModal = false;
 
-    clickOnDelete(row) {
-      this.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
-        confirmButtonText: i18n.formatter.format('Confirm'),
-        cancelButtonText: i18n.formatter.format('Cancel'),
-        confirmButtonColor: '#20a8d8',
-        cancelButtonColor: '#f86c6b',
-      }).then(async () => {
-        const ret = await this.$globalDeletePresenceEvent({
-          verify_uuid: row.verify_uuid,
-          date: this.value_personDate,
-        });
-        if (!ret.error) {
-          this.$fire({
-            text: i18n.formatter.format('OperationSuccess'),
-            type: 'success',
-            timer: 3000,
-            confirmButtonColor: '#20a8d8',
-            confirmButtonText: i18n.formatter.format('OK'),
-          });
-          this.fetchAllData();
-        } else {
-          this.$fire({
-            text: i18n.formatter.format('OperationFailed'),
-            type: 'error',
-            timer: 3000,
-            confirmButtonColor: '#20a8d8',
-            confirmButtonText: i18n.formatter.format('OK'),
-          });
-        }
-      }).catch(() => {});
+      // 補了紀錄之後區段會重新切分，原本選取的範圍不一定還存在，
+      // 先收起事件列表再重載時間軸與統計
+      this.clearSegmentSelection();
+      this.fetchTimeline();
     },
 
     async exportExcel(withPhoto) {
@@ -1012,6 +865,90 @@ export default {
   font-size: 22px;
   font-weight: bold;
   color: #333;
+}
+
+/* Timeline */
+.timeline-label {
+  width: 72px;
+  flex: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  line-height: 28px;
+  text-align: right;
+  padding-right: 16px;
+}
+
+.timeline-track {
+  position: relative;
+  height: 28px;
+  border-radius: 4px;
+  background: #dde1e6;
+  overflow: hidden;
+}
+
+.timeline-seg {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  cursor: pointer;
+  /* 極短的區段換算成百分比會小於 1px，補一個最小寬度才看得到也點得到。
+     區段是絕對定位，加寬不會把後面的區段推走 */
+  min-width: 5px;
+}
+
+/* 靠 min-width 撐出來的區段要疊在上層，否則會被後面相鄰的區段整個蓋掉。
+   一般區段都比 5px 寬得多，被它多壓到的幾個像素看不出來 */
+.timeline-seg-tiny {
+  z-index: 2;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.timeline-seg:hover {
+  filter: brightness(0.94);
+}
+
+.timeline-seg-off {
+  background: #dde1e6;
+}
+
+.timeline-seg-in {
+  background: #4caf50;
+}
+
+.timeline-seg-away {
+  background: #ffc107;
+}
+
+.timeline-seg-away-over {
+  background: #e53935;
+}
+
+/* 選取框用深色內框，四種底色上都看得出來；外框會被 track 的 overflow 裁掉 */
+.timeline-seg-active {
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+.timeline-axis {
+  position: relative;
+  height: 20px;
+  margin-top: 6px;
+}
+
+.timeline-tick {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* 例外處理 Modal 裡固定不可改的欄位 */
+.exc-readonly {
+  background-color: #e4e7ea;
+  display: flex;
+  align-items: center;
 }
 
 /* Direction badge */
