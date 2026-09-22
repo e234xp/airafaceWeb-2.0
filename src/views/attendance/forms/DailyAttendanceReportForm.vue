@@ -198,7 +198,13 @@
                 width="10%"
                 align="left"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockDate" :title="$t('Date')" sortable width="6%" />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="clockDate"
+                :title="$t('Date')"
+                sortable
+                width="6%"
+              />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="working_time"
@@ -206,7 +212,13 @@
                 sortable
                 width="10%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="over_time" :title="$t('Overtime')" sortable width="10%" />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="over_time"
+                :title="$t('Overtime')"
+                sortable
+                width="10%"
+              />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockinToShow"
@@ -272,7 +284,13 @@
                 sortable
                 width="12%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="groups" :title="$t('Group')" sortable width="15%" />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="groups"
+                :title="$t('Group')"
+                sortable
+                width="15%"
+              />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="clockMode"
@@ -280,7 +298,13 @@
                 sortable
                 width="12%"
               />
-              <vxe-table-column :show-overflow="ellipsisMode" field="clockTime" :title="$t('ClockTime')" sortable width="12%" />
+              <vxe-table-column
+                :show-overflow="ellipsisMode"
+                field="clockTime"
+                :title="$t('ClockTime')"
+                sortable
+                width="12%"
+              />
               <vxe-table-column
                 :show-overflow="ellipsisMode"
                 field="temperature"
@@ -376,7 +400,7 @@
                 checked
                 @change="fieldChanged('MASTER', item, $event)"
               />
-              {{ value_masterfieldsforExport.find((field) => field.key === item).value }}
+              {{ fieldLabel('MASTER', item) }}
               <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('MASTER', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
@@ -385,19 +409,14 @@
               </CButton>
             </li>
 
-            <li class="list-group-item" v-for="(item, index) in value_masternotinExportList" :key="index">
+            <li class="list-group-item" v-for="item in value_masternotinExportList" :key="item">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('MASTER', item, $event)"
               />
-              {{
-                value_masterfieldsforExport.find((field) => {
-                  return;
-                  field.key == item;
-                }).value
-              }}
+              {{ fieldLabel('MASTER', item) }}
             </li>
           </ul>
         </CCol>
@@ -472,7 +491,7 @@
         </CCol>
         <CCol col="9">
           <ul class="list-group">
-            <li class="list-group-item" v-for="(item, index) in value_detailexportFields" :key="index">
+            <li class="list-group-item" v-for="item in value_detailexportFields" :key="item">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
@@ -480,7 +499,7 @@
                 checked
                 @change="fieldChanged('DETAIL', item, $event)"
               />
-              {{ value_detailfieldsforExport.find((field) => field.key === item).value }}
+              {{ fieldLabel('DETAIL', item) }}
               <CButton style="float: right; width: 40px; min-width: unset" @click="fieldMove('DETAIL', item, -1)">
                 <CIcon name="cil-arrow-thick-top" />
               </CButton>
@@ -489,19 +508,14 @@
               </CButton>
             </li>
 
-            <li class="list-group-item" v-for="(item, index) in value_detailnotinExportList" :key="index">
+            <li class="list-group-item" v-for="item in value_detailnotinExportList" :key="item">
               <input
                 class="form-check-input me-1"
                 type="checkbox"
                 value="item"
                 @change="fieldChanged('DETAIL', item, $event)"
               />
-              {{
-                value_detailfieldsforExport.find((field) => {
-                  return;
-                  field.key == item;
-                }).value
-              }}
+              {{ fieldLabel('DETAIL', item) }}
             </li>
           </ul>
         </CCol>
@@ -798,6 +812,12 @@ export default {
     },
   },
   methods: {
+    // 抓拍照 id 要同時有 f 與 uuid 才查得到。例外處理補的紀錄是空物件 {}，
+    // 空物件是 truthy，直接送 fetchverifyphoto 後端會回 400
+    hasFaceImage(faceImageId) {
+      return Boolean(faceImageId && faceImageId.f && faceImageId.uuid);
+    },
+
     triggerSearch() {
       // 只有當搜尋關鍵字真的改變時才觸發
       if (this.value_searchingFilterInput !== this.value_searchingFilter) {
@@ -835,6 +855,15 @@ export default {
           break;
       }
     },
+    // 取欄位的顯示名稱。找不到時回空字串，避免 render 期間拋錯
+    // 導致整個 modal 停止更新（按鈕會跟著失效）
+    fieldLabel(mode, key) {
+      const list = mode === 'MASTER' ? this.value_masterfieldsforExport : this.value_detailfieldsforExport;
+      const field = list.find((item) => item.key === key);
+
+      return field ? field.value : '';
+    },
+
     fieldChanged(mode, item, evt) {
       if (evt.target.checked && mode === 'MASTER') {
         const idx1 = this.value_masterexportFields.indexOf(item);
@@ -1625,7 +1654,7 @@ export default {
         const pos = this.value_detailexportFields.indexOf('face_image');
         if (pos >= 0) {
           if (this.value_snapshotFileType === 'Embedded' || this.value_snapshotFileType === 'Files') {
-            if (this.value_attendanceDataListToReview[idx].face_image_id) {
+            if (this.hasFaceImage(this.value_attendanceDataListToReview[idx].face_image_id)) {
               const imageRet = await this.$globalFetchVerifyPhoto(
                 this.value_attendanceDataListToReview[idx].face_image_id,
               );
@@ -2089,7 +2118,7 @@ export default {
           item.groups = '';
         }
 
-        const showimageId = item.face_image_id ? item.face_image_id.f + item.face_image_id.uuid : '';
+        const showimageId = this.hasFaceImage(item.face_image_id) ? item.face_image_id.f + item.face_image_id.uuid : '';
 
         if (showimageId.length > 0) {
           item.showimage =

@@ -190,6 +190,12 @@ const mainVue = new Vue({
       i18n: (
         key, args,
       ) => XEUtils.toFormatString(XEUtils.get(browserLanguage, key), args),
+      // 有 type="html" 欄位的表格，vxe-table 要求欄與列都以 key 追蹤，
+      // 否則 innerHTML 儲存格重繪時可能更新錯位，開發模式也會一直印錯誤
+      table: {
+        columnConfig: { useKey: true },
+        rowConfig: { useKey: true },
+      },
     });
 
     try {
