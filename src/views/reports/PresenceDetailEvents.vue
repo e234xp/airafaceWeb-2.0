@@ -160,7 +160,7 @@
               :title="disp_employee"
               :show-overflow="ellipsisMode"
               sortable
-              width="20%"
+              width="18%"
               align="center"
             />
             <vxe-table-column
@@ -168,14 +168,14 @@
               :title="disp_camera"
               :show-overflow="ellipsisMode"
               sortable
-              width="25%"
+              width="22%"
               align="center"
             />
             <vxe-table-column
               field="presence_direction"
               :title="disp_direction"
               sortable
-              width="15%"
+              width="12%"
               align="center"
             >
               <template #default="{ row }">
@@ -184,7 +184,7 @@
                 </span>
               </template>
             </vxe-table-column>
-            <vxe-table-column :title="disp_snapshot" width="25%" align="center">
+            <vxe-table-column :title="disp_snapshot" width="20%" align="center">
               <template #default="{ row }">
                 <div style="width:80px;height:80px;display:inline-block;">
                   <img
@@ -193,6 +193,21 @@
                     width="80"
                     height="80"
                   />
+                </div>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column :title="disp_remarks" width="13%" align="center">
+              <template #default="{ row }">
+                <div v-if="row.type === 'manual'" class="d-flex align-items-center justify-content-center">
+                  <span class="manual-remark">{{ disp_exceptionHandling }}</span>
+                  <button
+                    type="button"
+                    class="manual-remark-delete ml-2"
+                    :title="$t('Delete')"
+                    @click="clickOnDeleteException(row)"
+                  >
+                    <CIcon name="cil-trash" size="lg" />
+                  </button>
                 </div>
               </template>
             </vxe-table-column>
@@ -308,6 +323,7 @@ const defaultlState = () => ({
   disp_camera: i18n.formatter.format('Camera'),
   disp_direction: i18n.formatter.format('Direction'),
   disp_snapshot: i18n.formatter.format('Snapshot'),
+  disp_remarks: i18n.formatter.format('Remarks'),
   disp_date: i18n.formatter.format('Date'),
   disp_startTime: i18n.formatter.format('StartTime'),
   disp_endTime: i18n.formatter.format('EndTime'),
@@ -597,7 +613,7 @@ export default {
       };
 
       try {
-        const retResult = await this.$globalQueryPresenceTimeline(query);
+        const retResult = await this.$globalQueryPresenceStatus(query);
 
         if (!retResult.error && retResult.data) {
           const { data } = retResult;
@@ -706,10 +722,57 @@ export default {
       this.loadPagePhotos();
     },
 
+    // 刪除例外處理補上的那筆 IN 紀錄
+    clickOnDeleteException(row) {
+      this.$confirm('', i18n.formatter.format('ConfirmToDelete'), 'question', {
+        confirmButtonText: i18n.formatter.format('Confirm'),
+        cancelButtonText: i18n.formatter.format('Cancel'),
+        confirmButtonColor: '#20a8d8',
+        cancelButtonColor: '#f86c6b',
+      }).then(async () => {
+        this.showLoading();
+        const ret = await this.$globalDeletePresenceException({
+          timestamp: row.timestamp,
+          uuid: this.value_personUuid,
+          verify_uuid: row.verify_uuid,
+        });
+        this.hideLoading();
+
+        if (ret.error) {
+          this.$fire({
+            text: i18n.formatter.format('OperationFailed'),
+            type: 'error',
+            timer: 3000,
+            confirmButtonColor: '#20a8d8',
+            confirmButtonText: i18n.formatter.format('OK'),
+          });
+          return;
+        }
+
+        this.$fire({
+          text: i18n.formatter.format('OperationSuccess'),
+          type: 'success',
+          timer: 2000,
+          confirmButtonColor: '#20a8d8',
+          confirmButtonText: i18n.formatter.format('OK'),
+        });
+
+        // 少了一筆 IN，區段會重新切分。原本選取的範圍若還在，
+        // fetchTimeline() 內會自行還原並重抓該段明細，否則收起事件列表
+        this.fetchTimeline();
+      }).catch(() => {});
+    },
+
+    // 例外處理補出來的紀錄沒有抓拍照，face_image_id 是空物件 {}。
+    // 空物件是 truthy，直接丟給 fetchverifyphoto 後端會回 400
+    hasFaceImage(faceImageId) {
+      return Boolean(faceImageId) && typeof faceImageId === 'object' && Object.keys(faceImageId).length > 0;
+    },
+
     async loadPagePhotos() {
       for (let ii = 0; ii < this.value_dataItemsToShow.length; ii += 1) {
         const row = this.value_dataItemsToShow[ii];
-        if (row.face_image_id) {
+        if (this.hasFaceImage(row.face_image_id)) {
           const dataImage = await this.$globalFetchVerifyPhoto(row.face_image_id);
           if (dataImage.error == null && dataImage.data && dataImage.data.face_image) {
             this.$set(this.value_dataItemsToShow[ii], 'snapshotSrc', `data:image/jpeg;base64,${dataImage.data.face_image}`);
@@ -820,7 +883,7 @@ export default {
           direction: evt.presence_direction,
         });
 
-        if (withPhoto && evt.face_image_id) {
+        if (withPhoto && self.hasFaceImage(evt.face_image_id)) {
           const dataImage = await self.$globalFetchVerifyPhoto(evt.face_image_id);
           if (dataImage.error == null && dataImage.data && dataImage.data.face_image) {
             const photoId = workbook.addImage({
@@ -942,6 +1005,33 @@ export default {
   font-size: 12px;
   color: #666;
   white-space: nowrap;
+}
+
+/* 手動補的例外紀錄，在備註欄以紅字標示 */
+.manual-remark {
+  color: #d32f2f;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.manual-remark-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  flex: none;
+  cursor: pointer;
+  color: #d32f2f;
+  background: #fdecea;
+  border: 1px solid #d32f2f;
+  border-radius: 4px;
+}
+
+.manual-remark-delete:hover {
+  color: #fff;
+  background: #d32f2f;
 }
 
 /* 例外處理 Modal 裡固定不可改的欄位 */

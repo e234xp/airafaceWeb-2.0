@@ -810,7 +810,16 @@ Vue.prototype.$globalDeletePresenceEvent = (data, cb) =>
 
 // 進出紀錄時間軸：一次取得區間統計與連續的在／不在辦公室區段
 // 區段首尾相接，但只涵蓋第一筆 IN 到最後一筆 OUT，兩端的非上班時間由前端補
-Vue.prototype.$globalQueryPresenceTimeline = (query, cb) =>
+// 刪除例外處理補上的那筆紀錄
+Vue.prototype.$globalDeletePresenceException = (data, cb) =>
+  new Promise((resolve) => {
+    postJson('/airafacelite/deletepresenceexception', data, (err, resData) => {
+      if (cb) cb(err, err ? null : resData);
+      resolve({ error: err, data: err ? null : resData });
+    });
+  });
+
+Vue.prototype.$globalQueryPresenceStatus = (query, cb) =>
   new Promise((resolve) => {
     postJson('/airafacelite/querypresencepersonstatus', query, (err, data) => {
       if (cb) cb(err, err ? null : data);
