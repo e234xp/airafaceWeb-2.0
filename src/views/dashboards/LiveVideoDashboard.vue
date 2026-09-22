@@ -267,7 +267,9 @@ export default {
     webrtcUrl() {
       const TEST_MODE = process.env.NODE_ENV === 'development';
       const HOST = TEST_MODE ? '192.168.14.21' : window.location.hostname;
-      return `https://${HOST}/viewvideo/${this.selectedCameraUuid}/whep`;
+      // 跟著網頁本身的協定走：http 頁面打 https 會遇到憑證問題，https 頁面打 http 則會被瀏覽器當成混合內容擋掉
+      const PROTOCOL = window.location.protocol === 'https:' ? 'https' : 'http';
+      return `${PROTOCOL}://${HOST}/viewvideo/${this.selectedCameraUuid}/whep`;
     },
     // 判斷是否為單一區域模式（兩個都沒勾選）
     isSingleSection() {
