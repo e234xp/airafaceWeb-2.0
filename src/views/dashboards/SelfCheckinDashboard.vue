@@ -68,12 +68,12 @@
             {{ $t('PleaseLookAtTheCamera') }}
           </div>
           <div class="step2-webcam-container">
-            <WebCam
-              ref="webcam"
-              :device-id="selectedDeviceId"
-              @cameras="onCameras"
-              @started="onStart"
-              @click="switchCamera"
+            <!-- 與第三步共用同一條鏡頭串流，只是掛在不同的 <video> 上 -->
+            <video
+              ref="videoPreview"
+              autoplay
+              playsinline
+              muted
               class="mirror step2-webcam"
             />
           </div>
@@ -202,7 +202,6 @@
 
 <script>
 import { QrcodeStream } from 'vue-qrcode-reader';
-import { WebCam } from 'vue-web-cam';
 import Axios from 'axios';
 import * as faceapi from 'face-api.js';
 import i18n from '@/i18n';
@@ -214,19 +213,23 @@ const TRACKER_SESSION_ID = process.env.VUE_APP_TRACKER_SESSION_ID || '';
 const TRACKER_ALBUM_ID = process.env.VUE_APP_TRACKER_ALBUM_ID || '';
 const TRACKER_UPLOAD_TIMEOUT = 10000;
 
+// 拍照鏡頭開啟失敗時的重試次數與間隔。
+// 從 QR 掃描切到拍照時，有些平板還沒放開鏡頭，馬上開會失敗
+const CAMERA_OPEN_RETRY = 5;
+const CAMERA_RETRY_DELAY = 500;
+
 export default {
   name: 'SelfCheckinDashboard',
   components: {
     QrcodeStream,
-    WebCam,
   },
   data() {
     return {
       display: {},
       currentStep: 1,
-      cameraList: [],
       selectedCamera: 'auto',
-      selectedDeviceId: '',
+      // 第二、三步共用的鏡頭串流
+      videoStream: null,
       visitor: {},
       paddingX: 0,
       imageList: [],
@@ -309,25 +312,6 @@ export default {
         }
       }
     },
-    async onCameras() {
-      const idx = this.cameraList.findIndex(
-        (item) => item.label.toLowerCase().indexOf('front') >= 0 || item.label.toLowerCase().indexOf('face') >= 0,
-      );
-      this.selectedDeviceId = this.cameraList[idx < 0 ? this.cameraList.length - 1 : idx].value;
-    },
-    onStart() {
-      this.startTimer(500);
-    },
-    async startTimer(t) {
-      setTimeout(() => {
-        try {
-          const image = this.$refs.webcam.capture();
-          if (image) this.imageList.push(image);
-        } catch (e) {
-          console.error('startTimer error:', e);
-        }
-      }, t || 500);
-    },
     async onDecode(decode) {
       let isErr = true;
 
@@ -349,6 +333,8 @@ export default {
             } else {
               this.currentStep = 2;
               isErr = false;
+              // 等第二步的 <video> 渲染出來再開鏡頭
+              this.$nextTick(() => this.startVideoPreview());
             }
           } else {
             this.$message.error(i18n.formatter.format('NoInfoMsg'));
@@ -393,10 +379,6 @@ export default {
       ctx.drawImage(source, sx, sy, size, size, 0, 0, size, size);
 
       return canvas.toDataURL('image/jpeg');
-    },
-    async cropToSquare(dataUrl) {
-      const img = await this.loadImage(dataUrl);
-      return this.drawCenteredSquare(img, img.naturalWidth, img.naturalHeight);
     },
     // 檢查照片中是否恰好有一張人臉，通過才回傳 true
     async validatePhoto(dataUrl) {
@@ -452,47 +434,62 @@ export default {
       if (this.isDetecting) return;
 
       try {
-        const raw = this.$refs.webcam.capture();
-        if (!raw) return;
+        // 直接截中央正方形，讓人臉偵測與後續儲存都與預覽構圖一致
+        const image = this.captureFromVideo();
+        if (!image) return;
 
         this.isDetecting = true;
-
-        // 先裁成正方形，讓人臉偵測與後續儲存都與預覽構圖一致
-        const image = await this.cropToSquare(raw);
         if (!(await this.validatePhoto(image))) return;
 
         this.applyPhoto(image);
         this.currentStep = 3;
-        // 在 Step 3 啟動 video 預覽
+        // 第三步沿用同一條串流，不重開鏡頭，只換到新的 <video> 上
         await this.$nextTick();
-        this.startVideoPreview();
+        this.attachVideoStream();
       } catch (e) {
         console.error('拍照失敗:', e);
       } finally {
         this.isDetecting = false;
       }
     },
-    async startVideoPreview() {
+    // facingMode 不加 exact：有前鏡頭就用前鏡頭，沒有就由瀏覽器挑一顆。
+    // 不必先列舉 deviceId，也就不會遇到還沒授權時 id 全是空字串的問題
+    async openCameraStream(retry = 0) {
       try {
-        // 如果有 selectedDeviceId 就使用，否則使用預設的前置鏡頭
-        const constraints = {
-          video: this.selectedDeviceId ? { deviceId: { exact: this.selectedDeviceId } } : { facingMode: 'user' },
-        };
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        if (this.$refs.videoPreview) {
-          this.$refs.videoPreview.srcObject = stream;
-        }
+        return await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
       } catch (e) {
-        console.error('無法啟動攝影機預覽:', e);
-        // 如果指定的攝影機失敗，嘗試使用任何可用的攝影機
+        // 使用者拒絕授權，重試也沒用
+        if (e.name === 'NotAllowedError' || retry >= CAMERA_OPEN_RETRY) throw e;
+
+        await new Promise((resolve) => setTimeout(resolve, CAMERA_RETRY_DELAY));
+        return this.openCameraStream(retry + 1);
+      }
+    },
+    async startVideoPreview() {
+      if (!this.videoStream) {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          if (this.$refs.videoPreview) {
-            this.$refs.videoPreview.srcObject = stream;
+          const stream = await this.openCameraStream();
+
+          // 開鏡頭期間使用者可能已離開拍照流程，或同時被呼叫了兩次，多的那條要馬上關掉
+          const inPhotoStep = this.currentStep === 2 || this.currentStep === 3;
+          if (!inPhotoStep || this.videoStream) {
+            stream.getTracks().forEach((track) => track.stop());
+          } else {
+            this.videoStream = stream;
           }
-        } catch (e2) {
-          console.error('完全無法啟動攝影機:', e2);
+        } catch (e) {
+          console.error('無法啟動攝影機預覽:', e);
+          return;
         }
+      }
+
+      this.attachVideoStream();
+    },
+    // 第二、三步各有自己的 <video>（都叫 videoPreview），換步驟後要重新掛上串流
+    attachVideoStream() {
+      const video = this.$refs.videoPreview;
+      if (video && this.videoStream && video.srcObject !== this.videoStream) {
+        video.srcObject = this.videoStream;
       }
     },
     captureFromVideo() {
@@ -546,9 +543,11 @@ export default {
       });
     },
     stopVideoPreview() {
-      if (this.$refs.videoPreview && this.$refs.videoPreview.srcObject) {
-        const tracks = this.$refs.videoPreview.srcObject.getTracks();
-        tracks.forEach((track) => track.stop());
+      if (this.videoStream) {
+        this.videoStream.getTracks().forEach((track) => track.stop());
+        this.videoStream = null;
+      }
+      if (this.$refs.videoPreview) {
         this.$refs.videoPreview.srcObject = null;
       }
     },
@@ -563,9 +562,9 @@ export default {
     },
     onBack() {
       clearInterval(this.cdTimer);
+      this.stopVideoPreview();
       this.imageList = [];
       this.imageList.length = 0;
-      this.selectedDeviceId = '';
       this.currentStep = 1;
     },
     toLoginPage() {
@@ -580,12 +579,7 @@ export default {
     try {
       navigator.mediaDevices
         .enumerateDevices()
-        .then((devices) => {
-          devices.forEach((device) => {
-            if (device.kind === 'videoinput' && device.label.indexOf('IR') <= -1) {
-              this.cameraList.push({ value: device.deviceId, label: device.label });
-            }
-          });
+        .then(() => {
           this.selectedCamera = 'front';
         })
         .catch((err) => {
@@ -607,6 +601,8 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.cdTimer);
+    // 在拍照步驟直接離開頁面時，鏡頭要關掉，否則會一直亮著
+    this.stopVideoPreview();
     if (this.timeInterval) {
       clearInterval(this.timeInterval);
     }
