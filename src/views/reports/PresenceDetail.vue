@@ -84,29 +84,6 @@
                 {{ disp_exportExcel }} ({{ disp_withoutPhoto }})
               </CDropdownItem>
             </CDropdown>
-            <CButtonGroup class="ml-3 anomaly-filter-group">
-              <CButton
-                :color="value_anomalyFilter === null ? 'primary' : 'light'"
-                size="lg"
-                @click="changeAnomalyFilter(null)"
-              >
-                {{ disp_allLabel }}
-              </CButton>
-              <CButton
-                :color="value_anomalyFilter === false ? 'primary' : 'light'"
-                size="lg"
-                @click="changeAnomalyFilter(false)"
-              >
-                {{ disp_normalLabel }}
-              </CButton>
-              <CButton
-                :color="value_anomalyFilter === true ? 'primary' : 'light'"
-                size="lg"
-                @click="changeAnomalyFilter(true)"
-              >
-                {{ disp_abnormalLabel }}
-              </CButton>
-            </CButtonGroup>
           </div>
 
           <div class="d-flex align-items-center">
@@ -115,8 +92,6 @@
                 <CIcon name="cil-search" />
               </template>
             </CInput>
-            <span class="badge-summary badge-abnormal ml-3"> {{ disp_abnormal }}{{ value_abnormalCount }} </span>
-            <span class="badge-summary badge-total ml-2"> {{ disp_person }}{{ value_totalCount }} </span>
           </div>
         </CRow>
       </CCol>
@@ -180,18 +155,12 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column :title="disp_abnormalStatus" width="10%" align="center">
-              <template #default="{ row }">
-                <span :class="['status-badge', row.isAbnormal ? 'status-abnormal' : 'status-normal']">
-                  {{ row.isAbnormal ? disp_abnormalLabel : disp_normalLabel }}
-                </span>
-              </template>
-            </vxe-table-column>
             <vxe-table-column
               field="inTotal"
               :title="disp_inTotal"
               :show-overflow="ellipsisMode"
               sortable
+              sort-by="in_total_seconds"
               width="10%"
               align="center"
             />
@@ -200,6 +169,7 @@
               :title="disp_outTotal"
               :show-overflow="ellipsisMode"
               sortable
+              sort-by="out_total_seconds"
               width="10%"
               align="center"
             />
@@ -252,16 +222,10 @@ const defaultlState = () => ({
   disp_department: i18n.formatter.format('Department'),
   disp_group: i18n.formatter.format('GroupName'),
   disp_registerPhoto: i18n.formatter.format('RegisterPhoto'),
-  disp_abnormalStatus: i18n.formatter.format('AbnormalStatus'),
   disp_inTotal: i18n.formatter.format('InTotal'),
   disp_outTotal: i18n.formatter.format('OutTotal'),
   disp_detailRecord: i18n.formatter.format('DetailRecord'),
   disp_viewDetail: i18n.formatter.format('ViewDetail'),
-  disp_normalLabel: i18n.formatter.format('Normal'),
-  disp_abnormalLabel: i18n.formatter.format('Abnormal'),
-  disp_allLabel: i18n.formatter.format('All'),
-  disp_abnormal: i18n.formatter.format('AbnormalCount'),
-  disp_person: i18n.formatter.format('PersonCount'),
 
   value_searchingFilter: '',
   value_specifiedDatetimeRange: [],
@@ -272,12 +236,6 @@ const defaultlState = () => ({
     pageSize: 10,
     totalResult: 0,
   },
-
-  value_abnormalCount: 0,
-  value_totalCount: 0,
-
-  // null=全部, false=正常, true=異常
-  value_anomalyFilter: null,
 
   flag_showDeviceModal: false,
   value_deviceList: [],
@@ -312,9 +270,6 @@ export default {
       this.value_searchingFilter = restoredState.keyword || '';
       this.value_tablePage.currentPage = restoredState.currentPage || 1;
       this.value_tablePage.pageSize = restoredState.pageSize || 10;
-      if (restoredState.anomalyFilter !== undefined) {
-        this.value_anomalyFilter = restoredState.anomalyFilter;
-      }
       this.flag_enableSearchButton = true;
       this.fetchPageData(this.value_tablePage.currentPage);
       return;
@@ -370,17 +325,17 @@ export default {
       this.fetchPageData(1);
     },
 
-    changeAnomalyFilter(value) {
-      if (this.value_anomalyFilter === value) return;
-      this.value_anomalyFilter = value;
-      this.value_tablePage.currentPage = 1;
-      this.fetchPageData(1);
-    },
-
+    // 精度規則與詳細頁相同：不滿一小時顯示到秒，不滿一分鐘只顯示秒。
+    // 列表 API 的 in_total_seconds / out_total_seconds 單位確實是秒（詳細頁的 summary 是毫秒），不用換算
     formatSeconds(totalSeconds) {
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      return `${hours}h ${String(minutes).padStart(2, '0')}m`;
+      const seconds = Math.max(Math.round(totalSeconds || 0), 0);
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const rest = seconds % 60;
+
+      if (hours > 0) return `${hours}h ${String(minutes).padStart(2, '0')}m`;
+      if (minutes > 0) return `${minutes}m ${String(rest).padStart(2, '0')}s`;
+      return `${rest}s`;
     },
 
     formatResultItem(item) {
@@ -390,7 +345,6 @@ export default {
         id: item.person_id,
         department: item.department || '',
         groups,
-        isAbnormal: item.has_anomaly,
         inTotal: this.formatSeconds(item.in_total_seconds || 0),
         outTotal: this.formatSeconds(item.out_total_seconds || 0),
         registerPhotoSrc: '',
@@ -413,9 +367,6 @@ export default {
         slice_shift: shift,
         slice_length: this.value_tablePage.pageSize,
       };
-      if (this.value_anomalyFilter !== null) {
-        query.anomaly = this.value_anomalyFilter;
-      }
 
       try {
         const retResult = await this.$globalQueryPresenceSummary(query);
@@ -423,8 +374,6 @@ export default {
         if (!retResult.error && retResult.data) {
           const { data } = retResult;
           this.value_tablePage.totalResult = data.total_length || 0;
-          this.value_abnormalCount = data.anomaly_count || 0;
-          this.value_totalCount = data.total_length || 0;
 
           const items = (data.result || []).map((item) => this.formatResultItem(item));
           this.value_dataItemsToShow = Object.assign([], items);
@@ -469,7 +418,6 @@ export default {
         keyword: this.value_searchingFilter,
         currentPage: this.value_tablePage.currentPage,
         pageSize: this.value_tablePage.pageSize,
-        anomalyFilter: this.value_anomalyFilter,
       };
       this.$router.push({
         name: 'PresenceDetailEvents',
@@ -575,9 +523,6 @@ export default {
           slice_shift: shift,
           slice_length: 10000,
         };
-        if (self.value_anomalyFilter !== null) {
-          query.anomaly = self.value_anomalyFilter;
-        }
         const retResult = await self.$globalQueryPresenceSummary(query);
         if (!retResult.error && retResult.data) {
           const { data } = retResult;
@@ -605,7 +550,6 @@ export default {
         { header: self.disp_name, key: 'name', width: 15 },
         { header: self.disp_department, key: 'department', width: 15 },
         { header: self.disp_group, key: 'groups', width: 15 },
-        { header: self.disp_abnormalStatus, key: 'abnormalStatus', width: 15 },
         { header: self.disp_inTotal, key: 'inTotal', width: 15 },
         { header: self.disp_outTotal, key: 'outTotal', width: 15 },
         { header: self.disp_registerPhoto, key: 'photo', width: 15 },
@@ -620,7 +564,6 @@ export default {
           name: item.name,
           department: item.department,
           groups: item.groups,
-          abnormalStatus: item.isAbnormal ? self.disp_abnormalLabel : self.disp_normalLabel,
           inTotal: item.inTotal,
           outTotal: item.outTotal,
         });
@@ -633,7 +576,7 @@ export default {
               extension: 'jpeg',
             });
             worksheet.lastRow.height = 60;
-            worksheet.addImage(photoId, `I${worksheet.rowCount}:I${worksheet.rowCount}`);
+            worksheet.addImage(photoId, `H${worksheet.rowCount}:H${worksheet.rowCount}`);
           }
         }
       }
@@ -648,47 +591,6 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.status-badge {
-  display: inline-block;
-  padding: 4px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status-normal {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.status-abnormal {
-  background-color: #fff3e0;
-  color: #e65100;
-}
-
-.badge-summary {
-  display: inline-block;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 15px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.badge-abnormal {
-  background-color: #fff3e0;
-  color: #e65100;
-  border: 1px solid #ffcc80;
-}
-
-.badge-total {
-  background-color: #e8eaf6;
-  color: #283593;
-  border: 1px solid #9fa8da;
-}
-</style>
 
 <style>
 .mx-input {
