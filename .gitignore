@@ -31,3 +31,6 @@ src/views/widgets/._WidgetsBrand.vue
 src/views/widgets/._WidgetsDropdown.vue
 dist.zip
 node_modules.zip
+
+# Claude Code 個人本機設定
+.claude/settings.local.json
