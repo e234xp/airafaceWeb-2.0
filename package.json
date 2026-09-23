@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "start": "npm run serve",
     "build": "vue-cli-service build --mode production",
+    "deploy": "bash ./scripts/deploy.sh",
     "i18n2csv": "node ./scripts/i18n2csv.js",
     "csv2i18n": "node ./scripts/csv2i18n.js"
   },
