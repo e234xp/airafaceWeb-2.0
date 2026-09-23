@@ -182,11 +182,7 @@
             <vxe-table-column field="clockMode" :title="disp_verify_mode" sortable width="8%" align="center" />
             <vxe-table-column field="score" :title="disp_verify_score" sortable width="8%" align="center" />
             <vxe-table-column min-width="8%" field="showimage" :title="disp_face_image" type="html" />
-            <vxe-table-column
-              min-width="10%"
-              title="(x1, y1, x2, y2)"
-              align="center"
-            >
+            <vxe-table-column min-width="10%" title="(x1, y1, x2, y2)" align="center">
               <template #default="{ row }">
                 <span v-if="row.pos">"{{ row.pos.x1 }}, {{ row.pos.y1 }}, {{ row.pos.x2 }}, {{ row.pos.y2 }}"</span>
               </template>
@@ -972,7 +968,6 @@ export default {
     },
 
     generateFilteredData(sourceData) {
-      console.log('sourceData', sourceData);
       const self = this;
 
       const sliceList = sourceData;
