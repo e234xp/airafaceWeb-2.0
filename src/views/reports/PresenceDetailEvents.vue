@@ -120,7 +120,12 @@
             >
           </div>
           <div>
-            <CButton class="btn btn-primary btn-w-normal mr-2" size="lg" @click="clickOnExceptionHandling()">
+            <CButton
+              class="btn btn-primary btn-w-normal mr-2"
+              size="lg"
+              :disabled="!value_canHandleException"
+              @click="clickOnExceptionHandling()"
+            >
               {{ disp_exceptionHandling }}
             </CButton>
             <CDropdown
@@ -479,6 +484,12 @@ export default {
       const { start, end } = this.value_selectedRange;
       return `${dayjs(start).format('HH:mm:ss')} — ${dayjs(end).format('HH:mm:ss')}`;
     },
+
+    // 只有離開的區段（黃、紅）才需要補 IN 紀錄；在辦公室（綠）與非上班時間（灰）不開放例外處理
+    value_canHandleException() {
+      const seg = this.value_timelineSegments[this.value_selectedSegmentIndex];
+      return !!seg && (seg.state === 'away' || seg.state === 'away-over');
+    },
   },
   mixins: [TableObserver],
   created() {
@@ -790,7 +801,7 @@ export default {
 
     // 例外處理：手動補一筆 IN 紀錄。日期與方向固定，只讓使用者挑時間
     clickOnExceptionHandling() {
-      if (!this.value_selectedRange) return;
+      if (!this.value_selectedRange || !this.value_canHandleException) return;
 
       this.exc_timeValue = new Date(this.value_selectedRange.start);
       this.flag_showExceptionModal = true;
