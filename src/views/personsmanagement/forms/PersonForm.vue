@@ -541,10 +541,17 @@ export default {
       });
     },
     async detectFaceAndGetHeadBox(img, cb) {
-      const detection = await faceapi.detectSingleFace(
+      let detection = await faceapi.detectSingleFace(
         img,
         new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 }),
       );
+      // 預設 inputSize 416 對「臉佔畫面比例大」的照片分數偏低，偵測不到時改用 608 再試一次
+      if (!detection) {
+        detection = await faceapi.detectSingleFace(
+          img,
+          new faceapi.TinyFaceDetectorOptions({ inputSize: 608, scoreThreshold: 0.4 }),
+        );
+      }
       return new Promise((resolve) => {
         let box = null;
         if (detection) {
