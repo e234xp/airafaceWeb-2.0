@@ -8,7 +8,15 @@
     "build": "vue-cli-service build --mode production",
     "deploy": "bash ./scripts/deploy.sh",
     "i18n2csv": "node ./scripts/i18n2csv.js",
-    "csv2i18n": "node ./scripts/csv2i18n.js"
+    "csv2i18n": "node ./scripts/csv2i18n.js",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report e2e/reports/html",
+    "e2e:case": "node e2e/tools/run-case.cjs",
+    "e2e:parallel": "node e2e/tools/run-parallel.cjs",
+    "e2e:probe": "node e2e/tools/probe-page.cjs",
+    "e2e:budget": "node e2e/tools/run-case.cjs --status"
   },
   "dependencies": {
     "@coreui/coreui": "^3.4.0",
@@ -61,6 +69,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
+    "@playwright/test": "^1.63.0",
     "@vue/cli-plugin-babel": "~4.5.4",
     "@vue/cli-plugin-eslint": "~4.5.4",
     "@vue/cli-plugin-unit-jest": "^4.5.11",
