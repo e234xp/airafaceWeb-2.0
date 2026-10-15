@@ -355,7 +355,7 @@
         <CCol col="9">
           <CSelect
             size="lg"
-            :disabled="value_fileType == '.xlsx'"
+            :disabled="value_fileType != '.txt'"
             :value.sync="value_txtSeparator"
             :options="[
               { label: `comma (,)`, value: ',' },
@@ -454,7 +454,7 @@
         <CCol col="9">
           <CSelect
             size="lg"
-            :disabled="value_fileType == '.xlsx'"
+            :disabled="value_fileType != '.txt'"
             :value.sync="value_txtSeparator"
             :options="[
               { label: `comma (,)`, value: ',' },
