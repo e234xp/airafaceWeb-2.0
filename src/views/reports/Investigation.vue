@@ -480,6 +480,14 @@ export default {
               item.groups = '';
             }
 
+            // 類別為陌生人時只列出時間、分數、抓拍照片，其餘欄位為空（後端會帶最像人員的資料，不顯示）
+            if (this.value_searchTypes === 'Stranger') {
+              item.id = '';
+              item.name = '';
+              item.card_number = '';
+              item.groups = '';
+            }
+
             if (item.verify_mode) {
               switch (item.verify_mode) {
                 case 1:
