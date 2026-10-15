@@ -391,7 +391,7 @@ export default {
             self.shownPersons.length < self.displaySettings.numberOfDisplayPersons &&
             self.waitingPersons.length >= 1
           ) {
-            const element = self.waitingPerson.shift();
+            const element = self.waitingPersons.shift();
 
             element.expireTime = now + 5000;
             self.shownPersons.push(element);
@@ -501,7 +501,7 @@ export default {
       }
 
       // shownPersons not full add to shownPersons
-      if (!bADD && self.shownPersons.length <= 3) {
+      if (!bADD && self.shownPersons.length < self.displaySettings.numberOfDisplayPersons) {
         const inList = self.shownPersons.find((item) => item.uuid === r.uuid);
         if (!inList) {
           r.expireTime = new Date().valueOf() + self.displaySettings.showDuration;
