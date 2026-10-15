@@ -744,6 +744,11 @@ export default {
       this.value_detailfieldsforExport.push({ key: 'temperature', value: this.$t('Temperature') });
       this.value_detailexportFields.push('temperature');
     }
+    // 月曆的日期／詳細按鈕是 vxe-table 以 HTML 欄位稍後渲染的，用事件委派處理點擊，避免綁定時元素還不存在而失效
+    this.$el.addEventListener('click', this.onCalendarClick);
+  },
+  beforeDestroy() {
+    if (this.$el) this.$el.removeEventListener('click', this.onCalendarClick);
   },
   computed: {
     ...mapState(['ellipsisMode']),
@@ -790,6 +795,20 @@ export default {
     },
   },
   methods: {
+    onCalendarClick(e) {
+      const target = e.target && e.target.closest ? e.target.closest('[id^="actionOnDayDetails_"], [id^="actionOnDetails_"]') : null;
+      if (!target || !this.showAllData()) return;
+      const { id } = target;
+      if (id.indexOf('actionOnDayDetails_') === 0) {
+        const rest = id.slice('actionOnDayDetails_'.length);
+        const cut = rest.lastIndexOf('_');
+        const item = this.value_dataItemsToShow.find((x) => x.uuid === rest.slice(0, cut));
+        if (item) this.clickOnDatDetails(item, Number(rest.slice(cut + 1)));
+      } else {
+        const item = this.value_dataItemsToShow.find((x) => x.uuid === id.slice('actionOnDetails_'.length));
+        if (item) this.clickOnDetails(item);
+      }
+    },
     // 抓拍照 id 要同時有 f 與 uuid 才查得到。例外處理補的紀錄是空物件 {}，
     // 空物件是 truthy，直接送 fetchverifyphoto 後端會回 400
     hasFaceImage(faceImageId) {
