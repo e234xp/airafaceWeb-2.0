@@ -564,6 +564,9 @@ export default {
             y: headY,
             width: headWidthToHunt,
             height: headWidthToHunt,
+            // 偵測到的臉本身的尺寸（最小臉部尺寸 200x200 以此判斷，不是放大後的頭部框）
+            faceWidth: detection.box.width,
+            faceHeight: detection.box.height,
           };
         }
         if (cb) cb(box);
@@ -721,7 +724,7 @@ export default {
             if (box) {
               this.flag_imageHaveClearFace = true;
 
-              if (box.width < 200 || box.height < 200) {
+              if (box.faceWidth < 200 || box.faceHeight < 200) {
                 this.flag_minFaceResolution = false;
               } else {
                 this.flag_minFaceResolution = true;
