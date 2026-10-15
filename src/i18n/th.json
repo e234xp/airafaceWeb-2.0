@@ -871,5 +871,13 @@
   "XMLType": "รูปแบบ xml",
   "Yes": "ใช่",
   "Yesterday": "เมื่อวาน",
-  "VideoDeviceVideoSourceId": "รหัสแหล่งที่มาของรูปภาพ"
+  "VideoDeviceVideoSourceId": "รหัสแหล่งที่มาของรูปภาพ",
+  "ImportFailurePersonInfo": "ข้อมูลบุคคลที่นำเข้าไม่สำเร็จ :",
+  "ImportComplete": "นำเข้าเสร็จสิ้น",
+  "ImportCompletePhotoPartialFailed": "นำเข้าเสร็จสิ้น แต่บางรูปภาพไม่ได้อัปโหลด",
+  "ImportCompletePartialFailed": "นำเข้าเสร็จสิ้น แต่บางข้อมูลนำเข้าไม่สำเร็จ",
+  "PhotoNotUploadedHint": "สร้างข้อมูลบุคคลต่อไปนี้แล้ว แต่ยังไม่ได้อัปโหลดรูปภาพ โปรดอัปโหลดใหม่ที่หน้าแก้ไข:",
+  "PhotoFaceNotFoundShort": "ไม่สามารถตรวจจับใบหน้าได้",
+  "PhotoFaceTooSmallShort": "พื้นที่ใบหน้าเล็กเกินไป",
+  "ImportAllFailed": "นำเข้าไม่สำเร็จ"
 }

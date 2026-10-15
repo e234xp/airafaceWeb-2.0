@@ -858,5 +858,13 @@
   "XMLType": "XML 형식",
   "Yes": "예",
   "Yesterday": "어제",
-  "VideoDeviceVideoSourceId": "이미지 소스 ID"
+  "VideoDeviceVideoSourceId": "이미지 소스 ID",
+  "ImportFailurePersonInfo": "가져오기에 실패한 인원 정보 :",
+  "ImportComplete": "가져오기 완료",
+  "ImportCompletePhotoPartialFailed": "가져오기 완료, 일부 사진이 업로드되지 않았습니다",
+  "ImportCompletePartialFailed": "가져오기 완료, 일부 데이터 가져오기 실패",
+  "PhotoNotUploadedHint": "다음 인원 정보는 생성되었지만 사진이 업로드되지 않았습니다. 편집 페이지에서 다시 업로드하세요:",
+  "PhotoFaceNotFoundShort": "얼굴을 인식할 수 없음",
+  "PhotoFaceTooSmallShort": "얼굴 영역이 너무 작음",
+  "ImportAllFailed": "가져오기 실패"
 }

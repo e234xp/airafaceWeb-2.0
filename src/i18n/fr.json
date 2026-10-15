@@ -864,5 +864,13 @@
   "XMLType": "Format XML",
   "Yes": "Oui",
   "Yesterday": "Hier",
-  "VideoDeviceVideoSourceId": "Identifiant de la source de l'image"
+  "VideoDeviceVideoSourceId": "Identifiant de la source de l'image",
+  "ImportFailurePersonInfo": "Données de personnes en échec :",
+  "ImportComplete": "Importation terminée",
+  "ImportCompletePhotoPartialFailed": "Importation terminée, certaines photos n'ont pas été téléversées",
+  "ImportCompletePartialFailed": "Importation terminée, certains enregistrements ont échoué",
+  "PhotoNotUploadedHint": "Les personnes suivantes ont été créées, mais leurs photos n'ont pas été téléversées. Veuillez les téléverser à nouveau depuis la page de modification :",
+  "PhotoFaceNotFoundShort": "Visage non détecté",
+  "PhotoFaceTooSmallShort": "Zone du visage trop petite",
+  "ImportAllFailed": "Échec de l'importation"
 }

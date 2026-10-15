@@ -858,5 +858,13 @@
   "XMLType": "Formato XML",
   "Yes": "Sim",
   "Yesterday": "Ontem",
-  "VideoDeviceVideoSourceId": "ID da fonte da imagem"
+  "VideoDeviceVideoSourceId": "ID da fonte da imagem",
+  "ImportFailurePersonInfo": "Dados de pessoas com falha:",
+  "ImportComplete": "Importação concluída",
+  "ImportCompletePhotoPartialFailed": "Importação concluída, algumas fotos não foram enviadas",
+  "ImportCompletePartialFailed": "Importação concluída, alguns registros falharam",
+  "PhotoNotUploadedHint": "As seguintes pessoas foram criadas, mas suas fotos não foram enviadas. Envie-as novamente na página de edição:",
+  "PhotoFaceNotFoundShort": "Rosto não detectado",
+  "PhotoFaceTooSmallShort": "Área do rosto muito pequena",
+  "ImportAllFailed": "Falha na importação"
 }

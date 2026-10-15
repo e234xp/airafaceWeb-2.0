@@ -878,5 +878,13 @@
   "XMLType": "XML 格式",
   "Yes": "是",
   "Yesterday": "昨日",
-  "VideoDeviceVideoSourceId": "影像來源id"
+  "VideoDeviceVideoSourceId": "影像來源id",
+  "ImportFailurePersonInfo": "匯入失敗的人員資料 :",
+  "ImportComplete": "匯入完成",
+  "ImportCompletePhotoPartialFailed": "匯入完成，部分照片未上傳",
+  "ImportCompletePartialFailed": "匯入完成，部分資料匯入失敗",
+  "PhotoNotUploadedHint": "以下人員資料已建立，但照片未上傳，請至編輯頁重新上傳：",
+  "PhotoFaceNotFoundShort": "無法辨識人臉",
+  "PhotoFaceTooSmallShort": "臉部範圍過小",
+  "ImportAllFailed": "匯入失敗"
 }

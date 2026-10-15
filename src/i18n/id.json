@@ -871,5 +871,13 @@
   "XMLType": "Format XML",
   "Yes": "Ya",
   "Yesterday": "Kemarin",
-  "VideoDeviceVideoSourceId": "ID sumber gambar"
+  "VideoDeviceVideoSourceId": "ID sumber gambar",
+  "ImportFailurePersonInfo": "Data personel yang gagal diimpor:",
+  "ImportComplete": "Impor selesai",
+  "ImportCompletePhotoPartialFailed": "Impor selesai, beberapa foto tidak terunggah",
+  "ImportCompletePartialFailed": "Impor selesai, beberapa data gagal diimpor",
+  "PhotoNotUploadedHint": "Personel berikut telah dibuat, tetapi fotonya tidak terunggah. Silakan unggah ulang di halaman edit:",
+  "PhotoFaceNotFoundShort": "Wajah tidak terdeteksi",
+  "PhotoFaceTooSmallShort": "Area wajah terlalu kecil",
+  "ImportAllFailed": "Impor gagal"
 }

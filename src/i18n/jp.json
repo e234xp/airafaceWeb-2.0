@@ -871,5 +871,13 @@
   "XMLType": "XML タイプ",
   "Yes": "はい",
   "Yesterday": "昨日",
-  "VideoDeviceVideoSourceId": "Image source id"
+  "VideoDeviceVideoSourceId": "Image source id",
+  "ImportFailurePersonInfo": "インポートに失敗した人員情報 :",
+  "ImportComplete": "インポート完了",
+  "ImportCompletePhotoPartialFailed": "インポート完了、一部の写真がアップロードされませんでした",
+  "ImportCompletePartialFailed": "インポート完了、一部のデータのインポートに失敗しました",
+  "PhotoNotUploadedHint": "以下の人員情報は作成されましたが、写真はアップロードされていません。編集ページで再アップロードしてください：",
+  "PhotoFaceNotFoundShort": "顔を認識できません",
+  "PhotoFaceTooSmallShort": "顔の範囲が小さすぎます",
+  "ImportAllFailed": "インポートに失敗しました"
 }

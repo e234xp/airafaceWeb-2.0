@@ -878,5 +878,13 @@
   "XMLType": "XML Format",
   "Yes": "Yes",
   "Yesterday": "Yesterday",
-  "VideoDeviceVideoSourceId": "Image source id"
+  "VideoDeviceVideoSourceId": "Image source id",
+  "ImportFailurePersonInfo": "Failed person info:",
+  "ImportComplete": "Import Complete",
+  "ImportCompletePhotoPartialFailed": "Import complete, some photos were not uploaded",
+  "ImportCompletePartialFailed": "Import complete, some records failed",
+  "PhotoNotUploadedHint": "The following persons were created, but their photos were not uploaded. Please re-upload them on the edit page:",
+  "PhotoFaceNotFoundShort": "Unable to detect a face",
+  "PhotoFaceTooSmallShort": "Face area too small",
+  "ImportAllFailed": "Import Failed"
 }
