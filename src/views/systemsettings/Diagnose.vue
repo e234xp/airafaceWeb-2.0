@@ -308,6 +308,12 @@ export default {
           this.diagnosticComplete = true;
           clearInterval(this.diagnosticTimer);
           this.diagnosticTimer = null;
+          // 取得最後一批紀錄後，在最後一筆加上「診斷已完成」
+          await this.queryDiagnosticResults();
+          this.diagnosticLogs = [
+            ...this.diagnosticLogs,
+            { timestamp: Date.now(), serviceName: 'diagnose', type: 'INFO', message: '診斷已完成' },
+          ];
           this.$fire({
             title: this.$t('Successful'),
             text: '診斷已完成',
