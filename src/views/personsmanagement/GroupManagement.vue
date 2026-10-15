@@ -59,9 +59,34 @@
           });
         }
       },
-      async removeGroupAsync(uuid, cb) {
+      // 刪除群組後，把已刪除的群組從各看板設定的群組清單移除（看板設定存的是群組名稱）
+      async removeGroupsFromDashboardSettings(names) {
+        if (!names || names.length === 0) return;
+        const ret = await this.$globalGetDisplaySetting();
+        if (ret.error || !ret.data) return;
+        const settings = ret.data;
+        let changed = false;
+        Object.keys(settings).forEach((key) => {
+          const board = settings[key];
+          if (!board || typeof board !== 'object') return;
+          ['displayGroup', 'priorityGroup'].forEach((field) => {
+            if (!Array.isArray(board[field])) return;
+            const left = board[field].filter((g) => names.indexOf(g) < 0);
+            if (left.length !== board[field].length) {
+              board[field] = left;
+              changed = true;
+            }
+          });
+        });
+        if (changed) await this.$globalSetDisplaySetting(settings);
+      },
+      async removeGroupAsync(uuid, cb, names) {
         const ret = await this.$globalRemoveGroup(uuid);
         const { error } = ret;
+        if (!error) {
+          await this.removeGroupsFromDashboardSettings(names);
+          await this.removeGroupsFromEvents(names);
+        }
         if (error) {
           if (cb) cb(false);
           this.$fire({
@@ -102,7 +127,7 @@
             confirmButtonColor: '#20a8d8',
             cancelButtonColor: '#f86c6b',
           }).then(() => {
-            this.removeGroupAsync(uuidListToDel, cb);
+            this.removeGroupAsync(uuidListToDel, cb, items.map((item) => item.name));
           }).catch(() => {
             if (cb) cb(false);
           });
