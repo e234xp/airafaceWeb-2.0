@@ -177,7 +177,7 @@
         },
         rules: {
           name: 'nonEmpty',
-          ip_address: 'nonEmpty',
+          ip_address: 'ipv4',
           port: 'port',
           index: 'index',
           syscode: 'syscode',
