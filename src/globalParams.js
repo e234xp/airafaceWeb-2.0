@@ -31,7 +31,7 @@ const href = window.location.href.toLowerCase();
 const listParmeters = { uuid: '', slice_shift: 0, slice_length: 2500 };
 Vue.use(webSocketService, { store, reconnectInterval: 1000 });
 
-Vue.prototype.$t = (str) => i18n.formatter.format(str);
+// Vue.prototype.$t = (str) => i18n.formatter.format(str);
 
 export default {};
 

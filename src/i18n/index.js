@@ -32,21 +32,33 @@ const messages = {
   pt,
 };
 
+// const i18n = new VueI18n({
+//   locale,
+//   messages,
+// });
+
+// i18n.formatter = {
+//   format: (message) => {
+//     const ret = i18n.messages[i18n.locale][message];
+//     return ret ?? `!${message}`;
+//     // if(ret) {
+//     //     return ret
+//     // } else {
+//     //     return message
+//     // }
+//   },
+// };
 const i18n = new VueI18n({
   locale,
   messages,
+  missing: (_locale, key) => `!${key}`,
 });
 
-i18n.formatter = {
-  format: (message) => {
-    const ret = i18n.messages[i18n.locale][message];
-    return ret ?? `!${message}`;
-    // if(ret) {
-    //     return ret
-    // } else {
-    //     return message
-    // }
-  },
+// 保留 vue-i18n 原本的 formatter.interpolate()
+// 只增加舊程式需要的 format()
+i18n.formatter.format = (message) => {
+  const ret = messages[i18n.locale]?.[message];
+  return ret ?? `!${message}`;
 };
 
 export default i18n;
