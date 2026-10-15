@@ -7,12 +7,15 @@
     object-fit: cover;
 }
 
+// 看板維持固定比例（預設 16:9）：在視窗內取最大且置中，不足處留白
 .ratio-wrap {
-    position: relative;
-    width:100vw;
-    height: 100vh;
-    // height: clamp(0px, 100vw * var(--r), 100vh);
-    // width: clamp(0px, 100vh * var(--r), 100vw);
+    --r: calc(16 / 9);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: #{'min(100vw, calc(100vh * var(--r)))'};
+    height: #{'min(100vh, calc(100vw / var(--r)))'};
 }
 
 .ratio-wrap-16x9 {
