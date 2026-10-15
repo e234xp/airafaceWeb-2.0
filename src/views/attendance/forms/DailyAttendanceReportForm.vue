@@ -2567,7 +2567,7 @@ export default {
             lastClockOutRec = manualClockOutRecord[manualClockOutRecord.length - 1];
 
             clockOutTimeStamp = lastClockOutRec.timestamp;
-            if (definedClockoutAdjustmentEnabled && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
+            if ((definedClockoutAdjustmentEnabled || definedOvertimeEnabled) && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
               clockOutTimeStamp = tDayStartTs + clockOutTime;
             }
 
@@ -2596,7 +2596,7 @@ export default {
             lastClockOutRec = clockOutModeRecord[clockOutModeRecord.length - 1];
 
             clockOutTimeStamp = lastClockOutRec.timestamp;
-            if (definedClockoutAdjustmentEnabled && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
+            if ((definedClockoutAdjustmentEnabled || definedOvertimeEnabled) && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
               clockOutTimeStamp = tDayStartTs + clockOutTime;
             }
 
