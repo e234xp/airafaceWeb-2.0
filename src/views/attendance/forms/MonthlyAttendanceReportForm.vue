@@ -2867,7 +2867,7 @@ export default {
         workingHourSettings.defined_clockout_time_early_leave_enabled || true;
       const definedClockoutAdjustmentEnabled = workingHourSettings.defined_clockout_adjustment_enabled || false;
 
-      const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled || true;
+      const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled !== false;
       const definedOvertimeTimeMin = workingHourSettings.defined_overtime_time_min || 0;
       const definedOvertimeMinimumMin = workingHourSettings.defined_overtime_minimum_min || 0;
 
