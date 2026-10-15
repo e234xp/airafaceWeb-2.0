@@ -176,14 +176,12 @@
         this.resizeOneTable();
       },
       generateFilteredData(sourceData, filter) {
+        const keyword = filter.toLowerCase();
+        const hit = (v) => String(v == null ? '' : v).toLowerCase().indexOf(keyword) > -1;
         const filteredItems = filter.length == 0
           ? sourceData
-          : sourceData.filter((item) => (
-            item.dateTime.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || item.level.toLowerCase().indexOf(filter.toLowerCase()) > -1
-            || item.message.toLowerCase().indexOf(filter.toLowerCase()) > -1
-          ));
-        this.value_tablePage.totalResult = this.value_dataTotalLength; // filteredItems.length;
+          : sourceData.filter((item) => hit(item.dateTime) || hit(item.level) || hit(item.message));
+        this.value_tablePage.totalResult = filter.length == 0 ? this.value_dataTotalLength : filteredItems.length;
         const sliceList = filteredItems.slice(
           (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize,
           this.value_tablePage.currentPage * this.value_tablePage.pageSize,
