@@ -25,8 +25,8 @@
                 <span class="h2">{{ value_currentDeviceTimeString }}</span>
               </CRow>
             </CCol>
-            <div style="height:60px;" />
-            <CRow>
+            <div v-if="flag_showTimeSettingArea" style="height:60px;" />
+            <CRow v-if="flag_showTimeSettingArea">
               <CCol sm="3">
                 <div class="h5">
                   {{ $t('NtpServer') }}
@@ -43,8 +43,8 @@
               </CCol>
             </CRow>
           </CCol>
-          <div style="height:30px;" />
-          <CCol sm="12">
+          <div v-if="flag_showTimeSettingArea" style="height:30px;" />
+          <CCol v-if="flag_showTimeSettingArea" sm="12">
             <CRow>
               <CCol sm="3">
                 <div class="h5">
@@ -81,6 +81,8 @@
       return {
         param_cardStyle: 'height: 25rem;',
 
+        // 規格：UI 無設定區域，自動使用系統網路與時區（timedatectl），因此預設不顯示 NTP／時區設定
+        flag_showTimeSettingArea: false,
         value_ntpServerIpAddress: '',
 
         flag_applying: false,
