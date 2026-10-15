@@ -208,12 +208,18 @@ function postJson(cgi, jsondata, cb) {
           router.push({ path: '/' });
           if (cb) cb('error', null);
         } else if (response.status !== 200) {
-          response.json().then((errJson) => {
-            // throw 讓錯誤進入 catch 區塊
-            const err = errJson?.message || 'Bad response from server';
-            if (cb) cb(err, null);
-            // throw new Error(errJson?.message || 'Bad response from server');
-          });
+          response
+            .json()
+            .then((errJson) => {
+              // throw 讓錯誤進入 catch 區塊
+              const err = errJson?.message || 'Bad response from server';
+              if (cb) cb(err, null);
+              // throw new Error(errJson?.message || 'Bad response from server');
+            })
+            .catch(() => {
+              // body 不是 JSON（例如 500 純文字、代理回的 HTML 錯誤頁）也要回呼，避免畫面卡在 loading
+              if (cb) cb('Bad response from server', null);
+            });
           // throw new Error('Bad response from server');
           // throw new Error(response.json());
         } else return response.json();
