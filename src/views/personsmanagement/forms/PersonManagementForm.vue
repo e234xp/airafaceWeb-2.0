@@ -586,7 +586,7 @@ export default {
       });
 
       snapshotFolder.file(
-        'A-0001.jpeg',
+        'A-0001.jpg',
         'iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABKVBMVEX///8nquEmIjT/0rRQTVwnqeEmITPpwKf+0rMkIDImrOQoIzX/07ImIz' +
           'b80bT/1LElHC3/2Ljg8vrq9/z/27r3y68UquQnseslGCgmhrPS7fhPvu/3/P6/5PUbGS7swKU1kLxGRliq3PKh1/E6t+wnotclSGPI5/a33v' +
           'N3x+xmxfCEz++Qz+0mlsglFCMmeKEmK0AlNk0mY4dZuuQzLDkWFi4mWXklRV8mfagRESoABifYsp1SREq2loZvXFwlDh1ptNXJyL6ZgXjpzr' +
@@ -654,7 +654,7 @@ export default {
         { base64: true },
       );
       snapshotFolder.file(
-        'A-0001_d.jpeg',
+        'A-0001_D.jpg',
         'iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAflBMVEX///8AAAD29vb5+fnZ2dnh4eHq6urHx8fy8vKOjo7l5eXo6OhycnJRUV' +
           'Fubm7d3d1CQkK9vb2Xl5dWVlZkZGRHR0ezs7MlJSU+Pj51dXWenp6QkJDPz89paWkuLi6oqKgUFBQ2NjYbGxt/f38pKSleXl60tLQ4ODgNDQ' +
           '19fX3mQiMZAAAJ7UlEQVR4nO1d13bbOhAMKRZRsnqzerPi+P9/8EZOfK0yIHYBLMCcg3mnxCGA7dj98SMiIiIiIiIiIiIiIiIiIiKCg1YrLT' +
@@ -708,7 +708,7 @@ export default {
         remarks: '',
       });
       snapshotFolder.file(
-        'A-0002.jpeg',
+        'A-0002.jpg',
         '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGB' +
           'YUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCA' +
           'BkAGQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1' +
@@ -1263,14 +1263,14 @@ export default {
 
             if (photoRet.data && photoRet.data.register_image.length > 0) {
               const fileNameR = salf.value_selectedItems[idx].id;
-              snapshotFolder.file(`${fileNameR}.jpeg`, photoRet.data.register_image, {
+              snapshotFolder.file(`${fileNameR}.jpg`, photoRet.data.register_image, {
                 base64: true,
               });
             }
 
             if (photoRet.data && photoRet.data.display_image.length > 0) {
               const fileNameD = `${salf.value_selectedItems[idx].id}_D`;
-              snapshotFolder.file(`${fileNameD}.jpeg`, photoRet.data.display_image, {
+              snapshotFolder.file(`${fileNameD}.jpg`, photoRet.data.display_image, {
                 base64: true,
               });
             }
@@ -1370,14 +1370,14 @@ export default {
 
             if (photoRet.data && photoRet.data.register_image.length > 0) {
               const fileNameR = salf.value_allTableItems[idx].id;
-              snapshotFolder.file(`${fileNameR}.jpeg`, photoRet.data.register_image, {
+              snapshotFolder.file(`${fileNameR}.jpg`, photoRet.data.register_image, {
                 base64: true,
               });
             }
 
             if (photoRet.data && photoRet.data.display_image.length > 0) {
               const fileNameD = `${salf.value_allTableItems[idx].id}_D`;
-              snapshotFolder.file(`${fileNameD}.jpeg`, photoRet.data.display_image, {
+              snapshotFolder.file(`${fileNameD}.jpg`, photoRet.data.display_image, {
                 base64: true,
               });
             }
