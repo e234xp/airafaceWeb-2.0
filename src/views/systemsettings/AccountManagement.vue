@@ -127,7 +127,7 @@
       });
     },
     watch: {
-      value_searchingFilter: () => {
+      value_searchingFilter() {
         this.value_tablePage.currentPage = 1;
         this.value_dataItemsToShow = this.generateFilteredData(
           this.value_allTableItems,
