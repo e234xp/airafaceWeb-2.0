@@ -80,6 +80,23 @@
         });
         if (changed) await this.$globalSetDisplaySetting(settings);
       },
+      // 刪除群組後，把已刪除的群組從各事件（Email、HTTP、I/O…）套用的人員群組清單移除（事件存的是群組名稱）
+      async removeGroupsFromEvents(names) {
+        if (!names || names.length === 0) return;
+        const ret = await this.$globalGetEventList('', ['http', 'line', 'telegram', 'mail', 'wiegand', 'iobox']);
+        const list = ret && ret.data && ret.data.list;
+        if (ret.error || !Array.isArray(list)) return;
+        const affected = list.filter((event) => Array.isArray(event.group_list) && event.group_list.some((g) => names.indexOf(g) >= 0));
+        await Promise.all(
+          affected.map((event) => this.$globalModifyEventHandle({
+            uuid: event.uuid,
+            data: {
+              ...event,
+              group_list: event.group_list.filter((g) => names.indexOf(g) < 0),
+            },
+          })),
+        );
+      },
       async removeGroupAsync(uuid, cb, names) {
         const ret = await this.$globalRemoveGroup(uuid);
         const { error } = ret;
