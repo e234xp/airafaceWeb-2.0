@@ -1,0 +1,3722 @@
+[
+ {
+  "id": "LOGIN-001",
+  "title": "IP 輸入開啟 airaFace 登入畫面",
+  "source": "R4",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-002",
+  "title": "最高權限管理者以正確帳密登入系統設定模式",
+  "source": "R5",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-003",
+  "title": "開啟記住帳號密碼後登出，登入頁顯示上一次登入的帳密",
+  "source": "R6",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-004",
+  "title": "輸入錯誤的使用者名稱，跳出錯誤提示",
+  "source": "R7",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-005",
+  "title": "輸入錯誤密碼，跳出錯誤提示",
+  "source": "R8",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-006",
+  "title": "語言選擇：English",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-007",
+  "title": "語言選擇：日本語",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-008",
+  "title": "語言選擇：繁體中文",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-009",
+  "title": "語言選擇：แบบไทย (泰文)",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-010",
+  "title": "語言選擇：Español",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-011",
+  "title": "語言選擇：Tiếng Việt",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-012",
+  "title": "語言選擇：Bahasa Indonesia",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-013",
+  "title": "語言選擇：土耳其語",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-014",
+  "title": "語言選擇：Français",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-015",
+  "title": "語言選擇：韓文",
+  "source": "R9",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-016",
+  "title": "系統模式選項：系統設定模式，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-017",
+  "title": "系統模式選項：迎賓看板，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-018",
+  "title": "系統模式選項：點名看板，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-019",
+  "title": "系統模式選項：容留看板，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-020",
+  "title": "系統模式選項：保全模式，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-021",
+  "title": "系統模式選項：自助報到，登入後進入正確頁面",
+  "source": "R10",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-022",
+  "title": "1920x1080 解析度下登入畫面無文字/操作項被截掉或跑版",
+  "source": "R11",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-023",
+  "title": "忘記密碼：Admin 帳號 + 授權碼 + 新密碼可成功變更密碼",
+  "source": "R12",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGIN-024",
+  "title": "忘記密碼：非 Admin 帳號 + 授權碼 + 新密碼出現警告訊息",
+  "source": "R12",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGOUT-001",
+  "title": "登入後點擊右上角帳戶按下登出，成功登出並返回登入頁",
+  "source": "R14",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-001",
+  "title": "日出勤：清單、頁數、筆數、欄位、顏色與時數規則",
+  "source": "R16",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-002",
+  "title": "日出勤：右上角關鍵字搜尋人員",
+  "source": "R16",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-003",
+  "title": "日出勤：快速 filter（全部/正常/遲到/早退/無打卡紀錄）",
+  "source": "R16",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-004",
+  "title": "日出勤匯出：xlsx 格式",
+  "source": "R17",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-005",
+  "title": "日出勤匯出：txt 格式（可選分隔符號）",
+  "source": "R17",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-006",
+  "title": "日出勤匯出：csv 格式",
+  "source": "R17",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-007",
+  "title": "該日人員通行資料：點擊人員最右方按鈕進入頁面並可返回上一頁",
+  "source": "R18",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-008",
+  "title": "該日人員通行資料：欄位與由早到晚排序",
+  "source": "R18",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-009",
+  "title": "該日人員通行資料：匯出該人員該日日報表（xlsx 可選不列入/內嵌/檔案）",
+  "source": "R18",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-010",
+  "title": "該日人員通行資料：關鍵字搜尋",
+  "source": "R18",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-011",
+  "title": "月出勤：清單、頁數、筆數、欄位、顏色與時數規則",
+  "source": "R19",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-012",
+  "title": "月出勤：右上角關鍵字搜尋人員",
+  "source": "R19",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-013",
+  "title": "月出勤：快速 filter",
+  "source": "R19",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-014",
+  "title": "月出勤匯出：xlsx 格式",
+  "source": "R20",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-015",
+  "title": "月出勤匯出：txt 格式（可選分隔符號）",
+  "source": "R20",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-016",
+  "title": "月出勤匯出：csv 格式",
+  "source": "R20",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-017",
+  "title": "該月人員通行資料：點擊人員最右方按鈕進入頁面並可返回上一頁",
+  "source": "R21",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-018",
+  "title": "該月人員通行資料：欄位與由早到晚排序",
+  "source": "R21",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-019",
+  "title": "該月人員通行資料：匯出該人員該月月報表",
+  "source": "R21",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-020",
+  "title": "該月人員通行資料：關鍵字搜尋",
+  "source": "R21",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-021",
+  "title": "月曆色塊：點選月曆日期顯示當日詳細人臉（月出勤>月出勤狀態月曆>點選日期>詳細出席）",
+  "source": "R22",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-022",
+  "title": "出勤設定：新增簽到與簽退之設備群組",
+  "source": "R23",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-023",
+  "title": "出勤設定：指定假日與非假日區間",
+  "source": "R23",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-024",
+  "title": "出勤設定：設定上下班/休息/加班時間並正確顯示出席狀態（遲到、早退）",
+  "source": "R23",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-025",
+  "title": "出勤設定：UI 文字顯示",
+  "source": "R24",
+  "method": "MIX:PW+MAN",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "ATT-026",
+  "title": "出勤操作：選取職員與日期（日期不可為未來、當天可），顯示對應資料",
+  "source": "R25",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-027",
+  "title": "出勤操作：選取補上班卡或下班卡並選取時間",
+  "source": "R25",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-028",
+  "title": "出勤操作：事由不可為空（預設忘記簽到/簽退）",
+  "source": "R25",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-029",
+  "title": "出勤操作：儲存後須根據最晚操作補打卡計算出勤",
+  "source": "R25",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-030",
+  "title": "出勤操作記錄查詢：預設帶入近 7 天資料且可變更時段",
+  "source": "R26",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-031",
+  "title": "出勤操作記錄查詢：列出補打卡紀錄（班別、時間、人員、產生紀錄的人員與時間）",
+  "source": "R26",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-032",
+  "title": "出勤操作記錄查詢：選定時間區間的人員清單、頁數、筆數、顯示欄位",
+  "source": "R26",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-033",
+  "title": "出勤操作記錄查詢：目標對象搜尋文字功能",
+  "source": "R26",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-034",
+  "title": "出勤操作記錄查詢：變更出勤記錄可選定日期編輯人員上下班時間且更新成功",
+  "source": "R26",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-035",
+  "title": "通行模式：未選定上下班識別簽到設備時的上班/下班判定",
+  "source": "R27",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-036",
+  "title": "通行模式：已選定上下班識別簽到設備（clock-in / clock-out 群組）時的上班/下班判定",
+  "source": "R28",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-037",
+  "title": "打卡鐘模式：有上下班打卡紀錄以打卡紀錄為主，無才採用通行紀錄",
+  "source": "R29",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-038",
+  "title": "打卡鐘模式：多筆上下班打卡紀錄以最新一筆為主",
+  "source": "R29",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-039",
+  "title": "現行規則：A 君有上班卡、無下班卡 → 有上班卡紀錄、無下班卡紀錄",
+  "source": "R30",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-040",
+  "title": "現行規則：B 君無上班卡、無下班卡 → 使用通行模式計算上班/下班",
+  "source": "R30",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-041",
+  "title": "上班判定優先順序（補上班卡最新/其他、刷上班卡最早/其他、通行第一筆）",
+  "source": "R31",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-042",
+  "title": "下班判定順序（補下班卡最新/其他、刷下班卡最晚/其他、通行最後一筆）",
+  "source": "R32",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-043",
+  "title": "考勤狀態驗證：遲到（上班紀錄晚於表定上班時間+緩衝時間）",
+  "source": "R33",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-044",
+  "title": "考勤狀態驗證：早退（下班紀錄早於表定下班時間-緩衝時間）",
+  "source": "R34",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-045",
+  "title": "上班時數：勾選最早上班時間以表定上班時間計",
+  "source": "R35",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-046",
+  "title": "上班時數：勾選最晚下班時間以表定下班時間計",
+  "source": "R35",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-047",
+  "title": "上班時數：勾選計算加班時取下班紀錄與表定下班時間較早者",
+  "source": "R35",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "ATT-048",
+  "title": "上班時數：上班時數 = 下班記錄 - 上班記錄 - 休息時間",
+  "source": "R35",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-049",
+  "title": "加班時數：未勾選計算加班，加班時數 = 0",
+  "source": "R36",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-050",
+  "title": "加班時數：下班紀錄早於加班起算時間+加班緩衝時間，加班時數 = 0",
+  "source": "R36",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-051",
+  "title": "加班時數：加班時數 = 下班紀錄 - 加班起算時間",
+  "source": "R36",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATT-052",
+  "title": "根據考勤設定作動：更改考勤設定後出勤狀態立即改變（例：上班時間 7:00 改 8:00，7:30 打卡）",
+  "source": "R37",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-001",
+  "title": "人員報表：指定時間範圍、由近而遠、欄位、每頁最多 10 筆",
+  "source": "R39",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-002",
+  "title": "人員報表：搜尋文字功能",
+  "source": "R39",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-003",
+  "title": "人員報表匯出：含照片（壓縮檔含 snapshot 資料夾照片）",
+  "source": "R40",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-004",
+  "title": "人員報表匯出：不含照片（壓縮檔不含照片及資料夾）",
+  "source": "R40",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-005",
+  "title": "人員報表：上方搜尋框快速尋找人員",
+  "source": "R40",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-006",
+  "title": "人員報表 filter 搜尋：輸入人員關鍵字並檢查是否有關鍵字以外人員",
+  "source": "R41",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-007",
+  "title": "訪客報表：指定時間範圍、由近而遠、欄位、每頁最多 10 筆",
+  "source": "R42",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-008",
+  "title": "訪客報表：訪客編號、訪客姓名、群組搜尋與包含輸入文字的項目",
+  "source": "R42",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-009",
+  "title": "訪客報表匯出：含照片",
+  "source": "R43",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-010",
+  "title": "訪客報表匯出：不含照片",
+  "source": "R43",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-011",
+  "title": "訪客報表：上方搜尋框快速尋找訪客",
+  "source": "R43",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RPT-012",
+  "title": "訪客報表 filter 搜尋：輸入關鍵字並檢查是否有關鍵字以外人員",
+  "source": "R44",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-001",
+  "title": "調查：依時間區間、類別、群組、關鍵字由近而遠列出符合紀錄",
+  "source": "R45",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-002",
+  "title": "調查：群組包含人員、訪客、陌生人",
+  "source": "R45",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-003",
+  "title": "調查：類別為陌生人時列出時間、分數、抓拍照片，其餘欄位為空",
+  "source": "R45",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-004",
+  "title": "雙因子/刷卡：開啟雙因子辨識，刷陌生卡>臉部辨識，辨識失敗陌生人顯示抓拍",
+  "source": "R46",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-005",
+  "title": "雙因子/刷卡：（雙因子關閉）刷陌生卡，陌生人顯示卡號",
+  "source": "R46",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-006",
+  "title": "調查匯出：含照片",
+  "source": "R47",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-007",
+  "title": "調查匯出：不含照片",
+  "source": "R47",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "INV-008",
+  "title": "調查 filter 搜尋：輸入人員關鍵字並檢查是否有關鍵字以外人員",
+  "source": "R48",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-001",
+  "title": "進出紀錄列表：搜尋人員，列表僅有該人員且頁面順暢",
+  "source": "R49",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "TRK-002",
+  "title": "影像設備管理：設定群組 IN/OUT 後辨識，顯示設備名稱與設定相同",
+  "source": "R50",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-003",
+  "title": "詳細資料頁：時間篩選（10/20/30/60 分鐘以上、自訂起訖時間，預設 10 分鐘以上）",
+  "source": "R51",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "TRK-004",
+  "title": "例外處理：設定不在辦公室時間辨識，增加 IN/OUT 記錄，不在辦公室時間 < N 分鐘區塊顏色變化",
+  "source": "R52",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-005",
+  "title": "時間軸顯示：非上班為灰色（時間 < 當天第一筆 IN 或 > 最後一筆 OUT）",
+  "source": "R53",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-006",
+  "title": "時間軸顯示：在辦公室為綠色（IN→OUT）",
+  "source": "R53",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-007",
+  "title": "時間軸顯示：不在辦公室為黃色（OUT→IN，且長度 > N 分鐘）",
+  "source": "R53",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TRK-008",
+  "title": "時間軸顯示：不在辦公室超時為紅色（OUT→IN，長度 >= N 分鐘）",
+  "source": "R53",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "TRK-009",
+  "title": "進出紀錄匯出",
+  "source": "R54",
+  "method": "PW",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "TRK-010",
+  "title": "查看詳細：時間軸列出進出時間與長度",
+  "source": "R55",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-001",
+  "title": "人員列表：清單、每頁最多 10 筆與分頁、顯示欄位",
+  "source": "R57",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-002",
+  "title": "人員列表：快速搜尋（人員編號、姓名、部門、群組）",
+  "source": "R57",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-003",
+  "title": "人員列表：刪除人員資料",
+  "source": "R57",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-004",
+  "title": "新增人員：進入新增頁，編號/姓名必填，錯誤訊息標示於欄位下方且有錯誤無法進行下一步",
+  "source": "R58",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-005",
+  "title": "新增人員：註冊照片（選擇/拍攝）顯示，限制 10MB、最小臉 200x200 px、含清楚正臉",
+  "source": "R58",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-006",
+  "title": "新增人員：顯示用照片（可非人臉、最大 10MB）",
+  "source": "R58",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-007",
+  "title": "新增人員：按下註冊後於人員列表呈現新增資料",
+  "source": "R58",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-008",
+  "title": "新增人員：生效/失效日期符合現況",
+  "source": "R58",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "PPL-009",
+  "title": "新增人員：人臉/卡片可不輸入，且辨識資料正確",
+  "source": "R58",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-010",
+  "title": "人員（使用 webcam 註冊人臉）：HTTPS 下拍攝照片或使用已有照片註冊成功",
+  "source": "R59",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-011",
+  "title": "人員批次匯入/出：下載範本",
+  "source": "R60",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-012",
+  "title": "人員批次匯入/出：依範本匯入 Excel 與照片，成功後顯示於人員列表",
+  "source": "R60",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-013",
+  "title": "人員批次匯入/出：匯出（zip 含 excel、snapshot 資料夾 id.jpg / id_D.jpg）",
+  "source": "R60",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-014",
+  "title": "人員批次匯入/出：匯入包含不同語言（中、日、泰、法、西）的文件",
+  "source": "R60",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-015",
+  "title": "人員批次匯入：AIRA 資料集匯入",
+  "source": "R60",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "PPL-016",
+  "title": "編輯人員：進入編輯頁，可修改姓名/部門/職稱，無法變更人員編號，錯誤訊息標示於欄位下方",
+  "source": "R61",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-017",
+  "title": "編輯人員：修改人員照片或重新拍攝（10MB、最小臉 200x200 px、含清楚正臉）",
+  "source": "R61",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-018",
+  "title": "編輯人員：修改顯示用照片（最大 10MB）",
+  "source": "R61",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "PPL-019",
+  "title": "編輯人員：人員列表呈現更新後資料",
+  "source": "R61",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-001",
+  "title": "訪客列表：清單、每頁最多 10 筆、顯示欄位（含 QRCode）",
+  "source": "R62",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-002",
+  "title": "訪客列表：搜尋（人員編號、姓名、部門、群組）",
+  "source": "R62",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-003",
+  "title": "訪客列表：刪除訪客資料",
+  "source": "R62",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-004",
+  "title": "新增訪客：進入新增頁，編號/姓名必填，不可設定為 Admin，錯誤訊息標示於欄位下方",
+  "source": "R63",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-005",
+  "title": "新增訪客：註冊照片（選擇/拍攝）、限制 10MB、最小臉 200x200 px、含清楚正臉",
+  "source": "R63",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-006",
+  "title": "新增訪客：顯示用照片（可非人臉、最大 10MB）",
+  "source": "R63",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-007",
+  "title": "新增訪客：按下註冊後於列表呈現新增資料",
+  "source": "R63",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-008",
+  "title": "新增訪客：生效/失效日期符合現況",
+  "source": "R63",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "VIS-009",
+  "title": "新增訪客：人臉/卡片辨識資料正確",
+  "source": "R63",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-010",
+  "title": "訪客（使用 webcam 註冊人臉）：HTTPS 下拍攝照片或使用已有照片註冊成功",
+  "source": "R64",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-011",
+  "title": "編輯訪客：進入編輯頁，可修改姓名/部門/職稱，無法變更訪客編號，不可設為 Admin",
+  "source": "R65",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-012",
+  "title": "編輯訪客：修改照片或重新拍攝",
+  "source": "R65",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-013",
+  "title": "編輯訪客：修改顯示用照片",
+  "source": "R65",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-014",
+  "title": "編輯訪客：訪客列表呈現更新後資料",
+  "source": "R65",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-015",
+  "title": "訪客匯入：下載範本（內含 QRcode）",
+  "source": "R66",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-016",
+  "title": "訪客匯入：依範本匯入 Excel 與照片，成功後於訪客列表呈現",
+  "source": "R66",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-017",
+  "title": "訪客匯出：zip 含 excel、snapshot（id.jpg / id_D.jpg）、qrcode 資料夾（id.jpeg）",
+  "source": "R66",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-018",
+  "title": "訪客資料集匯入功能",
+  "source": "R66",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "VIS-019",
+  "title": "訪客通知信：針對選取訪客寄送 Email 夾帶 qrcode 照片（需設定 SMTP）",
+  "source": "R67",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-020",
+  "title": "訪客通知信：未填寫 email 的訪客不會寄出",
+  "source": "R67",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-021",
+  "title": "訪客通知信：email 主旨為 {id}-{姓名}",
+  "source": "R67",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-022",
+  "title": "訪客通知信：email 內容依序為 id、姓名、手機、部門、職稱、Email",
+  "source": "R67",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VIS-023",
+  "title": "訪客通知信：email 夾帶附件且附件為 qrcode 照片",
+  "source": "R67",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-001",
+  "title": "群組列表：清單、頁數、筆數、每頁最多 10 筆、顯示欄位",
+  "source": "R68",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-002",
+  "title": "群組列表：預設群組（All person / All visitor）僅可檢視，無法刪除或編輯",
+  "source": "R68",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-003",
+  "title": "群組列表：群組名稱、建立時間搜尋與包含輸入文字的項目",
+  "source": "R68",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-004",
+  "title": "群組列表：刪除群組資料",
+  "source": "R68",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-005",
+  "title": "新增群組：群組名稱必填、備註，新增後顯示於列表",
+  "source": "R69",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-006",
+  "title": "新增群組：自人員或訪客列表選擇人員加入此群組",
+  "source": "R69",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-007",
+  "title": "編輯群組：修改備註、隸屬人員，確認後於群組頁面看到更新資料",
+  "source": "R70",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-008",
+  "title": "刪除群組：勾選單一或全選刪除",
+  "source": "R71",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-009",
+  "title": "刪除群組：單一項目右方刪除按鈕刪除",
+  "source": "R71",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-010",
+  "title": "刪除群組：預設群組（All person、All visitors）不可被刪除",
+  "source": "R71",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-011",
+  "title": "刪除群組後檢查關聯：人員確實移除群組綁定",
+  "source": "R72",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-012",
+  "title": "刪除群組後檢查關聯：Email 通知",
+  "source": "R72",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-013",
+  "title": "刪除群組後檢查關聯：迎賓看板",
+  "source": "R72",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-014",
+  "title": "刪除群組後檢查關聯：點名看板",
+  "source": "R72",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "GRP-015",
+  "title": "刪除群組後檢查關聯：容留看板",
+  "source": "R72",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-001",
+  "title": "攝影機列表：清單、頁數、筆數、顯示欄位、授權數量與使用數量",
+  "source": "R74",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-002",
+  "title": "攝影機列表：搜尋文字功能",
+  "source": "R74",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-003",
+  "title": "攝影機列表：顯示狀態（線上/斷線）與 IP 正確",
+  "source": "R74",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-004",
+  "title": "攝影機列表：影像來源 RTSP/RTP 確認",
+  "source": "R74",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-005",
+  "title": "攝影機列表：編輯入口與勾選刪除（單一/多項/全選）",
+  "source": "R74",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-006",
+  "title": "新增攝影機：進入新增頁，IP 必填，按完成後列表呈現新設備",
+  "source": "R75",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-007",
+  "title": "新增攝影機：新增/移除 ROI，ROIs（辨識區域）功能",
+  "source": "R75",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-008",
+  "title": "新增攝影機：ROI 可不設定，且至多 5 個",
+  "source": "R75",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-009",
+  "title": "新增攝影機：可詳細設定臉部偵測的數值",
+  "source": "R75",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-010",
+  "title": "新增攝影機：檢查 deb 中 ffmpeg 是否正確安裝（sudo apt install ffmpeg）",
+  "source": "R75",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-011",
+  "title": "編輯攝影機：修改設備名稱、群組等，列表呈現更新後資料",
+  "source": "R76",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-012",
+  "title": "刪除攝影機：勾選單一/多項/全選刪除，並可切換分頁",
+  "source": "R77",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-013",
+  "title": "人臉擷取閾值預設值：最小人臉尺寸 = 0（不限制）",
+  "source": "R78",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-014",
+  "title": "人臉擷取閾值預設值：辨識分數閾值 = 0.3",
+  "source": "R78",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-015",
+  "title": "人臉擷取閾值預設值：人臉擷取時間 = 500 ms",
+  "source": "R78",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-016",
+  "title": "人臉擷取閾值預設值：防偽 = 高",
+  "source": "R78",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-017",
+  "title": "辨識門檻值：高 = 0.5、中 = 0.3（預設）、低 = 0.1",
+  "source": "R79",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "CAM-018",
+  "title": "辨識門檻值：拉桿每次調整 0.1，選項介於 0.3 - 0.9",
+  "source": "R79",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "CAM-019",
+  "title": "辨識門檻值：cameras.db 內參數與前端一致",
+  "source": "R79",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-020",
+  "title": "人臉合併[人員]：啟用人員合併並設定合併時長，該秒數區間辨識相同人員合併",
+  "source": "R80",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-021",
+  "title": "人臉合併[人員]：保全 Dashboard 顯示合併效果",
+  "source": "R80",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-022",
+  "title": "人臉合併[人員]：報表內調查中合併",
+  "source": "R80",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-023",
+  "title": "人臉合併[人員]：事件規則與通知觸發合併",
+  "source": "R80",
+  "method": "MIX:PW+HW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-024",
+  "title": "人臉合併[陌生人]：啟用陌生人合併並設定合併時長，該秒數區間辨識相同人員合併",
+  "source": "R81",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-025",
+  "title": "人臉合併[陌生人]：設定合併分數越高越難合併",
+  "source": "R81",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-026",
+  "title": "人臉合併[陌生人]：保全 Dashboard 顯示合併效果",
+  "source": "R81",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-027",
+  "title": "人臉合併[陌生人]：報表內調查中合併",
+  "source": "R81",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "CAM-028",
+  "title": "人臉合併[陌生人]：事件規則與通知觸發合併",
+  "source": "R81",
+  "method": "MIX:PW+HW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-001",
+  "title": "平板頁面：設備群組列表、頁數、筆數、顯示欄位",
+  "source": "R82",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-002",
+  "title": "平板頁面：搜尋文字功能",
+  "source": "R82",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-003",
+  "title": "平板頁面：平板顯示狀態與 IP 正確",
+  "source": "R82",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-004",
+  "title": "平板頁面：可連接 Tablet、mini，不支援 Plus",
+  "source": "R82",
+  "method": "HW",
+  "feasibility": "N",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-005",
+  "title": "平板頁面：新增影像設備群組",
+  "source": "R82",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-006",
+  "title": "平板頁面：編輯群組與勾選刪除（單一/多項/全選）",
+  "source": "R82",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-007",
+  "title": "新增平板：進入新增頁，IP 必填，按完成後列表呈現新設備",
+  "source": "R83",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-008",
+  "title": "新增平板：新增/移除 ROI",
+  "source": "R83",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-009",
+  "title": "新增平板：可詳細設定臉部偵測的數值",
+  "source": "R83",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-010",
+  "title": "新增平板：上方搜尋框快速尋找設備群組",
+  "source": "R83",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-011",
+  "title": "編輯平板：修改設備名稱、群組等，列表呈現更新後資料",
+  "source": "R84",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-012",
+  "title": "刪除平板：勾選單一/多項/全選刪除，並可切換分頁",
+  "source": "R85",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-013",
+  "title": "刪除平板：刪除時檢查關聯設定（攝影機、平板、規則與考勤設定）",
+  "source": "R85",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-014",
+  "title": "平板設定：可套用雙因子驗證，平板報到功能確認",
+  "source": "R86",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-015",
+  "title": "平板設定：解除綁定功能",
+  "source": "R86",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-016",
+  "title": "平板設定：可刷卡變更卡的格式，使用正確卡的格式可成功",
+  "source": "R87",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-017",
+  "title": "平板設定：打卡模式套用且與容留或點名模式連動，clock in/out 進出相符",
+  "source": "R88",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TAB-018",
+  "title": "平板設定：檢查 tablet.db 與 F12 response 設定與前端一致，且平板行為相符",
+  "source": "R89",
+  "method": "MIX:PW+SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-001",
+  "title": "影像設備群組：新增群組成功",
+  "source": "R90",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-002",
+  "title": "影像設備群組：編輯群組（名稱、群組等），列表呈現更新後資料",
+  "source": "R90",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-003",
+  "title": "影像設備群組：攝影機跟平板可放在同群組",
+  "source": "R90",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-004",
+  "title": "影像設備群組：可留空（不指定群組），選項不應包含預設群組（all cameras、all tablets）",
+  "source": "R90",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-005",
+  "title": "影像設備群組：清單顯示與搜尋文字功能",
+  "source": "R90",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-006",
+  "title": "影像設備群組刪除：單一/全選刪除且確實移除群組綁定",
+  "source": "R91",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DGRP-007",
+  "title": "影像設備群組刪除：預設群組無法刪除",
+  "source": "R91",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-001",
+  "title": "事件頁面：顯示已設定事件、頁數、筆數、顯示欄位",
+  "source": "R93",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-002",
+  "title": "事件頁面：搜尋文字功能",
+  "source": "R93",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-003",
+  "title": "新增事件：依事件填入資訊與排程後完成建立",
+  "source": "R94",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-004",
+  "title": "新增事件：在正確時間、正確方式辨識可正確觸發開關",
+  "source": "R94",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-005",
+  "title": "編輯事件：名稱可編輯並更新成功",
+  "source": "R95",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-006",
+  "title": "編輯事件：調整排程後可正確觸發事件",
+  "source": "R95",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-007",
+  "title": "刪除事件：關閉事件可刪除（單一/多選）",
+  "source": "R96",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVT-008",
+  "title": "刪除事件：正在被使用的規則不能刪除",
+  "source": "R96",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LINE-001",
+  "title": "Line 通知：設定事件（類別 LINE 通知、套用群組、通知內容、時間排程）並確認群組收到通知",
+  "source": "R98",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LINE-002",
+  "title": "Line 通知內容語系：發送內文語系可設定（僅欄位標題）",
+  "source": "R99",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LINE-003",
+  "title": "Line 通知欄位：設定不顯示 ID、顯示時間",
+  "source": "R100",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LINE-004",
+  "title": "Line 通知欄位：設定顯示群組（不應重複）",
+  "source": "R100",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LINE-005",
+  "title": "Line 通知欄位：現在無抓拍照片",
+  "source": "R100",
+  "method": "MIX:PW+EXT",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-001",
+  "title": "Email 通知：設定事件（類別電子郵件通知、SMTP、主旨、收件者、通知內容、排程）並確認收到郵件",
+  "source": "R101",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-002",
+  "title": "Email 設定：Host Address 為 IP 或 DNS（符合 regx）",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-003",
+  "title": "Email 設定：Port 0~65535",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-004",
+  "title": "Email 設定：Sender 不為空文字",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-005",
+  "title": "Email 設定：Username 為 Email 帳號（符合 regx）",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-006",
+  "title": "Email 設定：Password 不為空文字",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-007",
+  "title": "Email 設定：Subject 不為空文字",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-008",
+  "title": "Email 設定：To 至少選 1 個 user group",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-009",
+  "title": "Email 設定：CC 可為空",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-010",
+  "title": "Email 設定：BCC 可為空",
+  "source": "R102",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "暫不測"
+ },
+ {
+  "id": "MAIL-011",
+  "title": "Email 通知內容語系：發送內文語系可設定（僅欄位標題）",
+  "source": "R103",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-012",
+  "title": "Email 通知欄位：設定傳送擷取到的照片",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-013",
+  "title": "Email 通知欄位：設定傳送註冊時的照片",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-014",
+  "title": "Email 通知欄位：設定傳送顯示用的照片",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-015",
+  "title": "Email 通知欄位：設定傳送註冊照片，但人員無註冊照片（透過刷卡通行）",
+  "source": "R104",
+  "method": "MIX:PW+HW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-016",
+  "title": "Email 通知欄位：設定傳送顯示用照片，但人員無顯示用照片",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-017",
+  "title": "Email 通知欄位：設定不顯示 ID、顯示時間",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-018",
+  "title": "Email 通知欄位：設定顯示群組（不應重複）",
+  "source": "R104",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MAIL-019",
+  "title": "Email 通知：抓拍、註冊、顯示用照片只能至多三選一傳送",
+  "source": "R105",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "HTTP-001",
+  "title": "HTTP 指令 GET（Nx < 6.1）：設定事件並確認 NX 辨識人員後收到通知（帶圖片）",
+  "source": "R106",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "HTTP-002",
+  "title": "HTTP 指令 POST（Nx 6.1）：設定事件並確認通知接收成功（帶圖片）",
+  "source": "R107",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "TG-001",
+  "title": "Telegram：設定 bot token 通知並確認群組收到通知",
+  "source": "R108",
+  "method": "MIX:PW+EXT",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "IO-001",
+  "title": "I/O：輸入名稱、type I/O、指定群組與影像來源，設定接點裝置事件通知並接收成功",
+  "source": "R109",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "IO-002",
+  "title": "I/O：指定 Brand/Model",
+  "source": "R110",
+  "method": "MIX:PW+SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "IO-003",
+  "title": "I/O：連線 IP 不可為空且須符合格式、port 不可為空且須為合格數字",
+  "source": "R110",
+  "method": "MIX:PW+SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "IO-004",
+  "title": "I/O：帳號密碼可為空",
+  "source": "R110",
+  "method": "MIX:PW+SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "IO-005",
+  "title": "I/O：syslog 格式（connect / connecting / trigger / triggerActions）、斷線重連不影響 CPU",
+  "source": "R110",
+  "method": "MIX:SSH+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "IO-006",
+  "title": "I/O：指定觸發時間、選取日期範圍並可「+」加入特定日期",
+  "source": "R111",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "IO-007",
+  "title": "I/O 連線觸發：連接 I/O 辨識是否動作，syslog 顯示設定/連線/發送狀態",
+  "source": "R112",
+  "method": "MIX:SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WG-001",
+  "title": "韋根轉換器：連接讀卡機，設定卡號後掃臉，讀卡機顯示該卡號並可收到發送卡號",
+  "source": "R113",
+  "method": "HW",
+  "feasibility": "N",
+  "status": "可進入實作"
+ },
+ {
+  "id": "EVREL-001",
+  "title": "事件設定關聯：一筆事件觸發一個通知，刪除不影響其他事件",
+  "source": "R114",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-001",
+  "title": "迎賓模式頁面：顯示步驟設定，完成後登入迎賓模式人員辨識成功即顯示相關資訊",
+  "source": "R116",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-002",
+  "title": "迎賓 Step 1 公司信息：背景圖片、商標圖檔、公司名稱設定",
+  "source": "R117",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-003",
+  "title": "迎賓 Step 2 數位看板：形象廣告照片與輪播間隔、標題、字體設定",
+  "source": "R118",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-004",
+  "title": "迎賓 Step 3 人員信息：啟用人員訊息遮蔽（遮蔽人員編號及姓名）",
+  "source": "R119",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-005",
+  "title": "迎賓 Step 3 人員信息：更改人員資訊欄位與照片（不顯示/註冊/抓拍/顯示照片）",
+  "source": "R119",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-006",
+  "title": "迎賓 Step 3 人員信息：顯示屬性 1~4 指定 Attribute",
+  "source": "R119",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-007",
+  "title": "迎賓 Step 3 人員信息：輪巡時間（秒）",
+  "source": "R119",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-008",
+  "title": "迎賓 Step 3 人員信息：顯示人數",
+  "source": "R119",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-009",
+  "title": "迎賓看板：直接縮放瀏覽器，維持等比例 16:9",
+  "source": "R120",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "WEL-010",
+  "title": "迎賓看板：拉入 Nx 前端，維持等比例 16:9",
+  "source": "R120",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-001",
+  "title": "點名模式頁面：顯示步驟設定，完成後進入點名看板結果與設定一致",
+  "source": "R121",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-002",
+  "title": "點名看板：背景圖與 logo 自訂",
+  "source": "R122",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-003",
+  "title": "點名看板顯示自訂：group display（沒有變化）",
+  "source": "R123",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-004",
+  "title": "點名看板顯示自訂：person display（標準/緊湊）",
+  "source": "R123",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-005",
+  "title": "點名看板顯示自訂：page display（排版 Small/Large、顯示圖表 True/False）",
+  "source": "R123",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-006",
+  "title": "點名看板顯示自訂：預覽圖會根據設定而改變",
+  "source": "R123",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-007",
+  "title": "點名看板顯示自訂：page 依設定的 8 種顯示模式",
+  "source": "R123",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "ATB-008",
+  "title": "點名看板計算人數：圖表顯示與否（依設定）",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-009",
+  "title": "點名看板計算人數：依人數進出以每小時為單位繪製圖表",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-010",
+  "title": "點名看板計算人數：進場人次（同一人進入兩次算 2）",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-011",
+  "title": "點名看板計算人數：離場人次（同一人離開兩次算 2）",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-012",
+  "title": "點名看板計算人數：場內人數（同一人在場內算 1，以該小時最後一筆資料為準）",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-013",
+  "title": "點名看板計算人數：平板或攝影機設定 clock in/out 來源，進入顯示 +1、離開顯示 -1",
+  "source": "R124",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-014",
+  "title": "點名看板群組顯示：group 顯示（顯示來源群組，預設 all person）",
+  "source": "R125",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-015",
+  "title": "點名看板群組顯示：group 跳轉",
+  "source": "R125",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-016",
+  "title": "點名看板群組顯示：點選某 group 改顯示該 group 的成員",
+  "source": "R125",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-017",
+  "title": "點名看板群組顯示：該 group 成員的跳轉",
+  "source": "R125",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-018",
+  "title": "點名看板群組顯示：自動返回 group 顯示（可設定時長或 disable）",
+  "source": "R125",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-019",
+  "title": "點名看板人員顯示與來源：依設定顯示對應成員（來源群組、顯示方式）",
+  "source": "R126",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-020",
+  "title": "點名看板人員顯示與來源：跳轉",
+  "source": "R126",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-021",
+  "title": "點名看板 RWD：直接縮放瀏覽器維持等比例 16:9",
+  "source": "R127",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ATB-022",
+  "title": "點名看板 RWD：拉入 Nx 前端維持等比例 16:9",
+  "source": "R127",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-001",
+  "title": "容留看板頁面：步驟設定（須開啟打卡鐘模式），進為綠色外框、出為藍色外框、中間顯示場內人數",
+  "source": "R128",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-002",
+  "title": "容留看板：更改背景圖片、商標圖檔",
+  "source": "R129",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-003",
+  "title": "容留看板：公司名稱、字體顏色、字體、字體大小",
+  "source": "R129",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-004",
+  "title": "容留看板人員資訊：啟用後遮蔽人員編號及姓名",
+  "source": "R130",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-005",
+  "title": "容留看板人員資訊：可選擇人員編號、姓名、部門、職稱、群組、不顯示、註冊照片",
+  "source": "R130",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-006",
+  "title": "容留看板 RWD：直接縮放瀏覽器維持等比例 16:9",
+  "source": "R131",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-007",
+  "title": "容留看板 RWD：拉入 Nx 前端維持等比例 16:9",
+  "source": "R131",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-008",
+  "title": "容留看板：增加總人數顯示及其設定",
+  "source": "R132",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "OCC-009",
+  "title": "容留看板：隱藏離開人數顯示及其設定",
+  "source": "R132",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-001",
+  "title": "保全模式 RWD：此版本不支援，不隨畫面尺寸改變而變",
+  "source": "R134",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-002",
+  "title": "保全模式頁面：顯示步驟設定，完成後進入保全模式結果一致",
+  "source": "R135",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-003",
+  "title": "保全模式頁面：進出設備來源設定不得重複（防呆）",
+  "source": "R135",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-004",
+  "title": "保全 Step 1 公司訊息：背景圖預設黑底、logo 為白底 aira，可設定背景圖與 logo",
+  "source": "R136",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-005",
+  "title": "保全 Step 2 人員訊息：多選人員群組、顯示用照片、顯示資訊 1&2 套用並呈現",
+  "source": "R137",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-006",
+  "title": "保全 Step 2 人員訊息：頁面顯示重置時間如期生效，每日該時間清空所有資訊",
+  "source": "R137",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-007",
+  "title": "保全 Step 2 人員訊息：人員與陌生人進出狀態依進出攝影機設定，場內人員如實呈現",
+  "source": "R137",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-008",
+  "title": "保全攝影機人員合併：Dashboard 人員合併閾值（default 0.6）設定，攝影機人員合併成功",
+  "source": "R138",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-009",
+  "title": "保全攝影機人員合併：合併閾值越高判定越嚴格，合併數少",
+  "source": "R138",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-010",
+  "title": "保全攝影機陌生人合併：陌生人合併閾值（default 0.6）設定，合併成功",
+  "source": "R139",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-011",
+  "title": "保全攝影機陌生人合併：合併閾值越高判定越嚴格，合併數少",
+  "source": "R139",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-012",
+  "title": "人員事件合併：開啟後系統設定模式調查中人員合併",
+  "source": "R140",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-013",
+  "title": "人員事件合併：事件規則合併",
+  "source": "R141",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-014",
+  "title": "人員事件合併：通知合併",
+  "source": "R142",
+  "method": "MIX:PW+HW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-015",
+  "title": "陌生人事件合併：開啟後系統設定模式調查中陌生人合併",
+  "source": "R143",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-016",
+  "title": "陌生人事件合併：事件規則合併",
+  "source": "R144",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-017",
+  "title": "陌生人事件合併：通知合併",
+  "source": "R145",
+  "method": "MIX:PW+HW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-018",
+  "title": "保全 Step 3 面板操作：執行保全模式，可展開場內人員",
+  "source": "R146",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-019",
+  "title": "保全 Step 3 面板操作：展開陌生人員並執行選取/批量選取/註解/批量註解",
+  "source": "R146",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-020",
+  "title": "保全 Step 3 面板操作：人員可選擇顯示照片與資訊並與系統設定相同",
+  "source": "R146",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-021",
+  "title": "保全 Step 3 面板操作：陌生人顯示抓拍照片",
+  "source": "R146",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-022",
+  "title": "保全備註：勾選人員可填寫備註，於報表中備註顯示",
+  "source": "R147",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-023",
+  "title": "保全備註：勾選或確認人員為人員/訪客/陌生人，該人員於調查報表中顯示",
+  "source": "R148",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SEC-024",
+  "title": "保全重開維持當前人員狀態：人員與陌生人在視窗重啟後維持當前出席狀態",
+  "source": "R149",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-001",
+  "title": "自助報到：上傳商標、QR code 背景圖後，點選顯示框可翻轉鏡頭",
+  "source": "R151",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-002",
+  "title": "自助報到：上傳商標、QR code 背景圖後，掃描 QRcode 會跳出人員",
+  "source": "R151",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-003",
+  "title": "自助報到：上傳商標、QR code 背景圖後，銜接拍照頁面",
+  "source": "R151",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-004",
+  "title": "自助報到拍照註冊人臉：上傳人臉圖後點選 Face 訪客",
+  "source": "R152",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-005",
+  "title": "自助報到拍照註冊人臉：人臉是否為拍照上傳照片",
+  "source": "R152",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-006",
+  "title": "自助報到平板拍照：選擇已加入的平板為來源，點選顯示框可翻轉鏡頭（鏡頭翻轉）",
+  "source": "R153",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-007",
+  "title": "自助報到平板拍照：點選拍照可上傳照片，訪客頁面照片變更",
+  "source": "R153",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-008",
+  "title": "自助報到刷臉驗證：使用平板刷臉，確認設定完成且刷臉結果與設定一致（訪客報表紀錄）",
+  "source": "R154",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-009",
+  "title": "即時影像模式：使用 HTTPS 開啟 video mode，選擇攝影機顯示畫面並顯示即時人員、陌生人",
+  "source": "R155",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "KIO-010",
+  "title": "即時影像模式：使用 HTTP 開啟 video mode 應無法連線",
+  "source": "R156",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-001",
+  "title": "Central Management：設定中央管理，啟用後由 airaManager 進行控制",
+  "source": "R158",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-002",
+  "title": "Data Retention：資料保存時間預設 60 days",
+  "source": "R159",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "SYS-003",
+  "title": "Data Retention：硬碟空間預設 50G",
+  "source": "R159",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "SYS-004",
+  "title": "Data Retention：陌生人保存預設 7 天",
+  "source": "R159",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "SYS-005",
+  "title": "Data Retention：資料保存時間、容量需依照設定檔留存",
+  "source": "R159",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-006",
+  "title": "Data Retention：系統應自我保護，預留儲存空間",
+  "source": "R159",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-007",
+  "title": "SMTP Setting：SMTP 設定功能正常，發送 Email 確實接收無誤",
+  "source": "R160",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-008",
+  "title": "模型設定：設定大模型，重新上傳人員，辨識準確度應達 90%",
+  "source": "R161",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SYS-009",
+  "title": "模型設定：設定小模型，重新上傳人員，辨識準確度應達 90%",
+  "source": "R162",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "ACCT-001",
+  "title": "帳號管理：已有帳號清單、頁數、筆數、顯示欄位",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-002",
+  "title": "帳號管理：搜尋文字功能",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-003",
+  "title": "帳號管理：新增帳號（帳號、密碼、權限）並可登入使用",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-004",
+  "title": "帳號管理：編輯並儲存變更更新密碼成功；登出重新登入需輸入新密碼（舊密碼失效）",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-005",
+  "title": "帳號管理：刪除勾選帳號",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-006",
+  "title": "Poweruser：可使用一般設定、時間設置、網路設定、備份與還原",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-007",
+  "title": "Poweruser：帳號管理僅能變更自己的密碼，不能新增/刪除其他帳號，不能自殺",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-008",
+  "title": "User：僅能使用出勤/報表頁面",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "ACCT-009",
+  "title": "User：可到帳號管理變更自己的密碼，但不能自殺",
+  "source": "R163",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "TIME-001",
+  "title": "時間設置：系統時間同步 timedatectl，系統與設備時間確認一致（UI 無設定區域）",
+  "source": "R164",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-001",
+  "title": "備份：產生備份檔並下載",
+  "source": "R165",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-002",
+  "title": "還原：選擇檔案上傳還原資料庫",
+  "source": "R165",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-003",
+  "title": "還原後重新開機可運作",
+  "source": "R165",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-004",
+  "title": "還原後：系統日誌延續還原前的日誌",
+  "source": "R166",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-005",
+  "title": "還原後：人員群組與照片正確（人員群組與人員數量）",
+  "source": "R167",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-006",
+  "title": "還原後：訪客群組與照片正確（訪客群組與訪客數量）",
+  "source": "R168",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-007",
+  "title": "還原後：影像設備群組正確（設備群組與設備數量）",
+  "source": "R169",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-008",
+  "title": "還原後：HTTP Event 沿用設定且可發送（Nx 可接收 Event）",
+  "source": "R170",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-009",
+  "title": "還原後：Line Event 沿用設定且可發送",
+  "source": "R171",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-010",
+  "title": "還原後：Email 沿用設定且可發送",
+  "source": "R172",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "BK-011",
+  "title": "還原後：授權沿用，授權不被清空",
+  "source": "R173",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-001",
+  "title": "軟體更新後設定資料沿用：系統日誌延續，日誌不變",
+  "source": "R174",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-002",
+  "title": "軟體更新後設定資料沿用：人員群組不變",
+  "source": "R175",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-003",
+  "title": "軟體更新後設定資料沿用：訪客群組不變（原文「查看客群組」）",
+  "source": "R176",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-004",
+  "title": "軟體更新後設定資料沿用：影像設備群組不變",
+  "source": "R177",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-005",
+  "title": "軟體更新後設定資料沿用：HTTP Event 沿用設定且可發送",
+  "source": "R178",
+  "method": "MIX:SSH+PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-006",
+  "title": "軟體更新後設定資料沿用：Line Event 沿用設定且可發送",
+  "source": "R179",
+  "method": "MIX:SSH+PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-007",
+  "title": "軟體更新後設定資料沿用：Email 沿用設定且可發送",
+  "source": "R180",
+  "method": "MIX:SSH+PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "UPD-008",
+  "title": "軟體更新後設定資料沿用：檢查授權沿用",
+  "source": "R181",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "LIC-001",
+  "title": "新增錯誤授權：填入隨意字串，不影響後續正確授權啟用",
+  "source": "R182",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-002",
+  "title": "新增錯誤授權：填入已被註冊的 license",
+  "source": "R182",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-003",
+  "title": "新增錯誤授權：填入其他產品的 license（如 airaTrack），版本錯誤有提示訊息",
+  "source": "R182",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-004",
+  "title": "授權清單：已啟用的授權名單顯示資料正確",
+  "source": "R183",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-005",
+  "title": "試用版啟動按鍵：可選開始試用，試用一次後無法再試用，加上正式授權後也會停用",
+  "source": "R184",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-006",
+  "title": "試用版啟動按鍵：檢查 /usr/bin/af 或刪除 /usr/bin/af 可啟動新測試授權",
+  "source": "R184",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-007",
+  "title": "超過授權數時無法再新增設備（攝影機/平板），授權數 = 攝影機 + 平板數量",
+  "source": "R185",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-008",
+  "title": "正式授權（設備數量）為累加：輸入 2 個以上授權碼可疊加，已啟用的不可再使用",
+  "source": "R186",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-009",
+  "title": "正式授權啟用試用版失效：根據授予的全新授權碼輸入可啟用成功",
+  "source": "R187",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-010",
+  "title": "正式授權啟用試用版失效：試用版即刻失效，且不可再次啟用授權",
+  "source": "R187",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-011",
+  "title": "試用授權效期：90 天效期，功能正常，攝影機啟用，辨識與資料寫入正常",
+  "source": "R188",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LIC-012",
+  "title": "軟體更新授權：進行軟體更新不影響原有授權",
+  "source": "R189",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGS-001",
+  "title": "系統日誌：選擇查詢期間，正確顯示系統操作、頁數、筆數、顯示欄位",
+  "source": "R190",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOGS-002",
+  "title": "系統日誌：關鍵字（資訊欄）搜尋",
+  "source": "R190",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RST-001",
+  "title": "重啟服務：重新執行並被系統自動登出，重新開啟 client 可正常使用所有功能",
+  "source": "R191",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RST-002",
+  "title": "重新開機：電腦重開，重開後 service 正常，辨識與調查寫入正常，I/O 連線狀態正常",
+  "source": "R192",
+  "method": "MIX:PW+SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RST-003",
+  "title": "系統重設：清除既有資料回復軟體預設，人員/訪客/攝影機/群組/事件清除",
+  "source": "R193",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-001",
+  "title": "設備診斷：選項為攝影機＆平板所有設備，先攝影機清單後平板清單",
+  "source": "R194",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-002",
+  "title": "設備診斷：選項為單選",
+  "source": "R194",
+  "method": "PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-003",
+  "title": "設備診斷：未選擇設備前，診斷和匯出 sysLog 按鈕 disable",
+  "source": "R194",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-004",
+  "title": "設備診斷：選定設備後診斷按鈕 enable，匯出 sysLog 維持 disable",
+  "source": "R194",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-005",
+  "title": "Diagnose 按鈕：未選定設備時按鈕為 disable",
+  "source": "R195",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-006",
+  "title": "Diagnose 按鈕：選定設備尚未診斷時按鈕為 enable",
+  "source": "R195",
+  "method": "PW",
+  "feasibility": "Y",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-007",
+  "title": "Diagnose 按鈕：點擊後系統開始診斷，按鈕為 disable",
+  "source": "R195",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-008",
+  "title": "Diagnose 按鈕：點擊後服務重啟（dataServer sysServer mediaConnector）",
+  "source": "R195",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-009",
+  "title": "Diagnose 按鈕：診斷結束後按鈕恢復為 enable",
+  "source": "R195",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-010",
+  "title": "診斷區：開始診斷後依 Log 文件項目逐項依序檢測",
+  "source": "R196",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "DIAG-011",
+  "title": "診斷區：五分鐘內系統持續運作即持續顯示診斷紀錄（不論成功或失敗）",
+  "source": "R196",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-012",
+  "title": "診斷區：五分鐘一到，最後一筆紀錄一律顯示診斷完成",
+  "source": "R196",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-013",
+  "title": "診斷區：系統運作失敗時每個節點的錯誤情境有明確錯誤文案",
+  "source": "R196",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "DIAG-014",
+  "title": "診斷匯出：Export sysLog 按鈕匯出這五分鐘內完整 sysLog（.log 檔）",
+  "source": "R197",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-015",
+  "title": "空間：點選 Diagnose 顯示剩餘空間（總空間、已使用空間、圖示依已使用百分比）",
+  "source": "R198",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-016",
+  "title": "空間：檢查前端 default 刪除資料留最少 50G，空間保留與設定值一致",
+  "source": "R199",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-017",
+  "title": "空間：使用大量人臉寫入硬碟，df -h 檢查硬碟滿時 default 刪資料需刪到有 50GB 或設定空間",
+  "source": "R199",
+  "method": "MIX:SSH+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-018",
+  "title": "空間：刪除失敗會造成無法寫資料",
+  "source": "R199",
+  "method": "MIX:SSH+HW",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "DIAG-019",
+  "title": "Data retention：retention 與設定值相同（Maindisk space 50GB、NonVerifyResult 7 日、PersonVerifyResult 60 日）",
+  "source": "R200",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-020",
+  "title": "Data retention：df -h 檢查與設定一致",
+  "source": "R200",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "DIAG-021",
+  "title": "Data retention：檢查 db 資料夾（summaryverifyresult、nonverifyresult、personverifyresult 及照片）是否有刪除且編輯時間與設定時間一樣",
+  "source": "R200",
+  "method": "MIX:PW+SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "VER-001",
+  "title": "mediaConnector 版本：./mediaConnector -v，ffmpeg rtsp 可正常解析，調查有資料，人臉比對效能（前置 index 一分鐘、後續一秒比對一百萬張）",
+  "source": "R201",
+  "method": "MIX:SSH+HW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "VER-002",
+  "title": "關於：Main Service 版本顯示",
+  "source": "R202",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "VER-003",
+  "title": "關於：System Service 版本顯示",
+  "source": "R202",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "VER-004",
+  "title": "關於：Data Service 版本顯示",
+  "source": "R202",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "VER-005",
+  "title": "關於：Media Service 版本顯示（GPU backend、v.2.00.19）",
+  "source": "R202",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "HWCHK-001",
+  "title": "硬體環境檢查：記憶體 size 至少 16GB",
+  "source": "R203",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "HWCHK-002",
+  "title": "硬體環境檢查：硬碟空間至少 100GB",
+  "source": "R203",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "HWCHK-003",
+  "title": "硬體環境檢查：四個項目皆滿足才可安裝 deb",
+  "source": "R203",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "HWCHK-004",
+  "title": "硬體環境檢查：檢查完畢提供使用者檢查明細並以規定文案告知不符合項目",
+  "source": "R203",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SVC-001",
+  "title": "face.data.service：systemctl status 為 active (running)、PID 不變、數量 x1",
+  "source": "R204",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SVC-002",
+  "title": "face.data.service：call 診斷會使 main.service restart",
+  "source": "R204",
+  "method": "MIX:SSH+PW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SVC-003",
+  "title": "face.media.service：systemctl status",
+  "source": "R205",
+  "method": "SSH",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "SVC-004",
+  "title": "face.report.service：systemctl status",
+  "source": "R206",
+  "method": "SSH",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "SVC-005",
+  "title": "face.main.service：systemctl status",
+  "source": "R207",
+  "method": "SSH",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "SVC-006",
+  "title": "face.system.service：程序數量 x min:2 max:Core/2",
+  "source": "R208",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "SVC-007",
+  "title": "./mediaConnector：程序數量 x active channels",
+  "source": "R209",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "SVC-008",
+  "title": "face.mediamtx.service：程序數量 x1",
+  "source": "R210",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "LOG-001",
+  "title": "LOG：查看 /var/syslog 應只有 syslog",
+  "source": "R211",
+  "method": "SSH",
+  "feasibility": "P",
+  "status": "暫不測"
+ },
+ {
+  "id": "MGR-001",
+  "title": "airaManager 同步：Manager 人員群組傳進 Face2 群組",
+  "source": "R214",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MGR-002",
+  "title": "airaManager 回傳人員辨識結果：manager 顯示調查與 Face 相同結果",
+  "source": "R215",
+  "method": "MIX:PW+EXT+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MGR-003",
+  "title": "airaManager：出勤/調查/陌生人紀錄傳回 manager",
+  "source": "R216",
+  "method": "MIX:PW+EXT+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MGR-004",
+  "title": "airaManager 斷線回填：網路斷線後重新連線，辨識後人員資料由 Face 同步至 manager",
+  "source": "R217",
+  "method": "MIX:PW+EXT+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MGR-005",
+  "title": "airaManager 結束同步清空人員：關閉中央管理後 Face 人員與訪客應清除",
+  "source": "R218",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MGR-006",
+  "title": "airaManager 同步清空人員：開啟中央管理清空 Face 人員（開啟中央管理後 Face 人員與訪客應清除）",
+  "source": "R219",
+  "method": "MIX:PW+EXT",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-001",
+  "title": "Tablet 斷線重連：平板網路斷線後重連，device/tablet 狀態顯示啟用，辨識成功並有調查紀錄",
+  "source": "R221",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-002",
+  "title": "Tablet 繼電器：辨識人員，顯示驗證成功、調查有紀錄、繼電器作動亮燈",
+  "source": "R222",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-003",
+  "title": "Tablet 人員辨識：顯示驗證成功、調查有該裝置紀錄、人員紀錄人臉",
+  "source": "R223",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-004",
+  "title": "Tablet 訪客辨識：顯示驗證成功、調查有該裝置紀錄、訪客紀錄人臉",
+  "source": "R224",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-005",
+  "title": "Tablet 陌生人：非人員與訪客辨識顯示驗證失敗，調查有紀錄、陌生人紀錄人臉",
+  "source": "R225",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-006",
+  "title": "Tablet 刷卡：人員填入卡片號碼，刷卡成功寫入人員卡號，調查卡號與輸入一致",
+  "source": "R226",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-007",
+  "title": "Tablet 刷卡：開啟繼電器開門功能、設定人員卡號、刷卡顯示成功、繼電器作用",
+  "source": "R227",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-008",
+  "title": "Tablet 雙因子認證：人員先刷臉再刷卡辨識成功，紀錄寫入刷卡與人臉",
+  "source": "R228",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-009",
+  "title": "Tablet 雙因子認證：人員先刷臉再陌生卡辨識失敗，紀錄寫入調查陌生人",
+  "source": "R229",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "T980-010",
+  "title": "Tablet 雙因子認證：辨識成功繼電器作用（亮燈）",
+  "source": "R230",
+  "method": "MIX:PW+HW",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "RECOG-001",
+  "title": "精準度測試 I（辨識閾值參數）：匯入人員，使用人員與陌生人辨識，無判斷錯誤",
+  "source": "R232",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-002",
+  "title": "精準度測試 II：正常光源",
+  "source": "R233",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-003",
+  "title": "精準度測試 II：低光源",
+  "source": "R234",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-004",
+  "title": "精準度測試 II：視角（人臉 45 度角）",
+  "source": "R235",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-005",
+  "title": "精準度測試 III（人員遮蔽）：眼鏡 0.9/0.6",
+  "source": "R236",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-006",
+  "title": "精準度測試 III（人員遮蔽）：口罩 0.6/0.6",
+  "source": "R237",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-007",
+  "title": "精準度測試 III（人員遮蔽）：眼鏡 0.9/0.6（與第 236 列文字重複）",
+  "source": "R238",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-008",
+  "title": "精準度測試 III（人員遮蔽）：眼鏡+口罩 0.6/0.6",
+  "source": "R239",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-009",
+  "title": "精準度測試 III（人員遮蔽）：眼鏡+帽子 0.5/0.5",
+  "source": "R240",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "RECOG-010",
+  "title": "精準度測試 III（人員遮蔽）：帽子+口罩+眼鏡（高遮蔽 x）",
+  "source": "R241",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "ANTI-001",
+  "title": "防偽測試：開啟防偽功能，照片/平板播影片方式驗證是否通過（綠框代表偵測到人臉）",
+  "source": "R242",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "ANTI-002",
+  "title": "防偽 = 0：關閉",
+  "source": "R243",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "ANTI-003",
+  "title": "防偽 = 0.1（低，預設，手機顯示照片應能被擋下）",
+  "source": "R244",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "ANTI-004",
+  "title": "防偽 = 0.3（高，A4 照片特定角度可過）",
+  "source": "R245",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "ANTI-005",
+  "title": "防偽 = 0.6（極高，可擋下印刷照片）",
+  "source": "R246",
+  "method": "MIX:HW+MAN",
+  "feasibility": "N",
+  "status": "暫不測"
+ },
+ {
+  "id": "MISC-001",
+  "title": "大量上傳照片：單張照片上限由 10MB 調整為 20MB",
+  "source": "R248",
+  "method": "MIX:PW+API",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MISC-002",
+  "title": "大量上傳照片：上傳照片的 model 更新",
+  "source": "R248",
+  "method": "MIX:PW+API",
+  "feasibility": "T",
+  "status": "暫不測"
+ },
+ {
+  "id": "MISC-003",
+  "title": "大量上傳照片：批次上傳流程效能，一次上傳 1 萬筆在 10 分鐘內完成（目標）",
+  "source": "R248",
+  "method": "MIX:PW+API",
+  "feasibility": "P",
+  "status": "可進入實作"
+ },
+ {
+  "id": "MISC-004",
+  "title": "大量人臉上傳工具：60 萬張人臉人員資料上傳，應對此情境",
+  "source": "R249",
+  "method": "MIX:API+SSH",
+  "feasibility": "T",
+  "status": "暫不測"
+ }
+]
