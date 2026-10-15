@@ -66,13 +66,13 @@
                   <div class="h5">
                     {{ $t('ClockInChannel') }}
                   </div>
-                  <CSelect size="lg" :value.sync="value_guardSetting.deviceIn" :options="value_deviceList" />
+                  <CSelect size="lg" :value.sync="value_guardSetting.deviceIn" :options="deviceInList" />
                 </CCol>
                 <CCol sm="4">
                   <div class="h5">
                     {{ $t('ClockOutChannel') }}
                   </div>
-                  <CSelect size="lg" :value.sync="value_guardSetting.deviceOut" :options="value_deviceList" />
+                  <CSelect size="lg" :value.sync="value_guardSetting.deviceOut" :options="deviceOutList" />
                 </CCol>
               </CRow>
             </CCardBody>
