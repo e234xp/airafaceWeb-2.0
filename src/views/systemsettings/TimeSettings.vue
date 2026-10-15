@@ -112,7 +112,9 @@
         if (!error && list) {
           const l = [];
           list.forEach((tz) => {
-            l.push({ value: tz.timezone_id, label: `${tz.timezone_id} (${tz.timezone_offset_display})` });
+            // 後端可能回傳物件（含 timezone_id、timezone_offset_display）或單純的時區名稱字串
+            if (typeof tz === 'string') l.push({ value: tz, label: tz });
+            else l.push({ value: tz.timezone_id, label: `${tz.timezone_id} (${tz.timezone_offset_display})` });
           });
           this.value_avaiableTimezoneListToShow = l;
           this.refreshDeviceTimeInfo(() => {
@@ -162,10 +164,12 @@
           if (error) {
             this.value_deviceTimezone = window.Intl.DateTimeFormat().resolvedOptions().timeZone;
           } else {
-            this.value_ntpServerIpAddress = info.ntp_server;
-            this.value_selectedTimezone = info.time_zone;
-            this.value_deviceTimezone = info.time_zone;
-            this.value_ntpServerActivate = info.enable_auto_time;
+            // 後端未回傳時區、NTP 資訊時（只有 timestamp）以瀏覽器時區代替，避免裝置時間空白、時區顯示 undefined
+            const fallbackTimezone = window.Intl.DateTimeFormat().resolvedOptions().timeZone;
+            this.value_ntpServerIpAddress = info.ntp_server || '';
+            this.value_selectedTimezone = info.time_zone || fallbackTimezone;
+            this.value_deviceTimezone = info.time_zone || fallbackTimezone;
+            this.value_ntpServerActivate = !!info.enable_auto_time;
             this.value_currentDeviceTime = info.timestamp;
           }
           if (cb) cb();
