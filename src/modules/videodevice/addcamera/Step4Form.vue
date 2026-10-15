@@ -153,11 +153,14 @@
             if (!Object.keys(this.step4form).includes(key)) return;
             this.localStep4form[key] = value;
           });
+          this.$emit('updateStep4form', { ...this.localStep4form });
         },
         deep: true,
         immediate: true,
       },
     },
-    created() { },
+    created() {
+      this.localStep4form = { ...this.step4form, ...this.localStep4form };
+    },
   };
 </script>
