@@ -477,12 +477,12 @@
       },
 
       portValidator(val) {
-        this.flag_portPass = checkPort(val);
+        this.flag_portPass = checkPort(val, 0);
         return this.flag_portPass === '';
       },
 
       senderValidator(val) {
-        this.flag_senderPass = val.length === 0 ? this.$t('NoEmptyNoSpaceOnly') : '';
+        this.flag_senderPass = val.replace(/\s/g, '').length === 0 ? this.$t('NoEmptyNoSpaceOnly') : '';
         return this.flag_senderPass === '';
       },
 
