@@ -107,6 +107,7 @@
                     </CCol>
                     <CCol col="10">
                       <CInputFile
+                        :key="`personInfo${value_fileInputKey}`"
                         :lazy="false"
                         @change="personInfoListener"
                         :disabled="isLocal()"
@@ -119,7 +120,11 @@
                       {{ $t('UploadFile') }}
                     </CCol>
                     <CCol col="10">
-                      <CInputFile :lazy="false" :multiple="true" @change="photoListener" :disabled="isLocal()" />
+                      <CInputFile
+                        :key="`photo${value_fileInputKey}`"
+                        :lazy="false"
+                        :multiple="true"
+                        @change="photoListener" :disabled="isLocal()" />
                     </CCol>
                   </CRow>
                   <CRow>
@@ -134,18 +139,6 @@
                       </CButton>
                     </CCol>
 
-                    <CCol col="10" class="pt-2 label">
-                      <div style="float: left; font-size: 20px; padding-top: inherit">
-                        {{ $t('SuccessRecords') }} : {{ value_successRecords }} / {{ $t('FailRecords') }} :
-                        {{ value_failRecords }} / {{ $t('TotalRecords') }} : {{ value_totalRecords }}
-                      </div>
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol col="4" class="pt-2 label">
-                      {{ $t('ImportFailure') }}
-                    </CCol>
-                    <CCol col="12" ref="importFailure" />
                   </CRow>
                 </CCardBody>
               </CCard>
@@ -298,6 +291,12 @@ export default {
       value_successRecords: 0,
       value_failRecords: 0,
       value_totalRecords: 0,
+      value_failedPersonIds: [],
+      value_fileInputKey: 0,
+
+      value_photoSuccessRecords: 0,
+      value_photoTotalRecords: 0,
+      value_failedPhotos: [],
 
       value_excelFileImpport: [],
       value_fileImporting: false,
@@ -815,6 +814,8 @@ export default {
         me.value_totalRecords = me.value_excelFileImpport.length;
         me.value_successRecords = 0;
         me.value_failRecords = 0;
+        me.value_failedPersonIds = [];
+        me.resetPhotoRecords();
       };
       myReader.readAsArrayBuffer(this.xlsxFile);
     },
@@ -836,6 +837,109 @@ export default {
           }
         } else console.log('====== photoListener =====> file size is too large', e.size);
       }
+    },
+
+    showImportSummary() {
+      // Id 和檔名是使用者自己的資料，放進 html 前要跳脫
+      const htmlEntities = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      };
+      const escape = (text) => `${text}`.replace(/[&<>"']/g, (c) => htmlEntities[c]);
+      const counts = (success, fail, total) => {
+        const successText = `${this.$t('SuccessRecords')} : ${success}`;
+        const failText = `${this.$t('FailRecords')} : ${fail}`;
+        return `${successText} / ${failText} / ${this.$t('TotalRecords')} : ${total}`;
+      };
+
+      const lines = [
+        `<b>${this.$t('PersonInfoFile')}</b>`,
+        counts(this.value_successRecords, this.value_failRecords, this.value_totalRecords),
+      ];
+      if (this.value_failedPersonIds.length > 0) {
+        lines.push(`${this.$t('ImportFailurePersonInfo')} ${this.value_failedPersonIds.map(escape).join(', ')}`);
+      }
+      if (this.value_photoTotalRecords > 0) {
+        lines.push(
+          '',
+          `<b>${this.$t('UploadFile')}</b>`,
+          counts(this.value_photoSuccessRecords, this.value_failedPhotos.length, this.value_photoTotalRecords),
+        );
+        if (this.value_failedPhotos.length > 0) {
+          lines.push(this.$t('PhotoNotUploadedHint'));
+          this.value_failedPhotos.forEach((x) => lines.push(`${escape(x.id)}（${escape(x.fileName)}）：${x.reason}`));
+        }
+      }
+
+      // 人員資料全部失敗才用紅叉；部分失敗或只有照片失敗時已有資料寫入，用黃色驚嘆號，避免使用者以為整批沒匯入
+      let type = 'success';
+      let title = this.$t('ImportComplete');
+      if (this.value_failRecords > 0 && this.value_successRecords === 0) {
+        type = 'error';
+        title = this.$t('ImportAllFailed');
+      } else if (this.value_failRecords > 0) {
+        type = 'warning';
+        title = this.$t('ImportCompletePartialFailed');
+      } else if (this.value_failedPhotos.length > 0) {
+        type = 'warning';
+        title = this.$t('ImportCompletePhotoPartialFailed');
+      }
+
+      return this.$fire({
+        title,
+        html: `<div style="text-align: left">${lines.join('<br>')}</div>`,
+        type,
+        confirmButtonColor: '#20a8d8',
+      });
+    },
+
+    resetImportForm() {
+      this.xlsxFile = null;
+      this.value_excelFileImpport = [];
+      this.value_totalRecords = 0;
+      this.value_successRecords = 0;
+      this.value_failRecords = 0;
+      this.value_failedPersonIds = [];
+      this.resetPhotoRecords();
+      // 換 key 讓 CInputFile 重建，清掉已選的檔名
+      this.value_fileInputKey += 1;
+    },
+
+    resetPhotoRecords() {
+      this.value_photoSuccessRecords = 0;
+      this.value_photoTotalRecords = 0;
+      this.value_failedPhotos = [];
+    },
+
+    // 人員資料與註冊照片分開統計。人員資料失敗的那筆只算在人員資料，照片不另外算；
+    // 人員資料成功時，後端 feature 回人臉錯誤代表資料已建立但照片沒存
+    recordImportResult(pItem, error, result) {
+      const localItem = pItem;
+
+      if (error !== null) {
+        this.value_failRecords += 1;
+        this.value_failedPersonIds.push(localItem.Id);
+      } else {
+        this.value_successRecords += 1;
+
+        if (localItem.regfile) {
+          const featureErrorReasons = {
+            'face not found': this.$t('PhotoFaceNotFoundShort'),
+            'face too small': this.$t('PhotoFaceTooSmallShort'),
+          };
+          const reason = featureErrorReasons[result && result.feature];
+
+          this.value_photoTotalRecords += 1;
+          if (reason) this.value_failedPhotos.push({ id: localItem.Id, fileName: localItem.regfile.name, reason });
+          else this.value_photoSuccessRecords += 1;
+        }
+      }
+
+      delete localItem.photoImage;
+      delete localItem.dispImage;
     },
 
     async generateEXIFrontImage(file) {
@@ -937,11 +1041,8 @@ export default {
           if (me.formData.type === 'Person') {
             if (idx < 0) {
               me.$globalCreatePerson(data, async (error, result) => {
+                me.recordImportResult(localItem, error, result);
                 if (error === null) {
-                  me.value_successRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-
                   if (localItem.Group) {
                     const groups = localItem.Group.split('|') || [];
                     for (let i = 0; i < groups.length; i += 1) {
@@ -961,13 +1062,6 @@ export default {
                       }
                     }
                   }
-                } else {
-                  me.$refs.importFailure.innerHTML +=
-                    (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
-
-                  me.value_failRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
                 }
 
                 resolve(true);
@@ -1004,12 +1098,9 @@ export default {
                   },
                 },
               };
-              me.$globalModifyPerson(dataForModify, async (error) => {
+              me.$globalModifyPerson(dataForModify, async (error, result) => {
+                me.recordImportResult(localItem, error, result);
                 if (error === null) {
-                  me.value_successRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-
                   if (localItem.Group) {
                     const groups = localItem.Group.split('|') || [];
                     for (let i = 0; i < groups.length; i += 1) {
@@ -1029,13 +1120,6 @@ export default {
                       }
                     }
                   }
-                } else {
-                  me.$refs.importFailure.innerHTML +=
-                    (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
-
-                  me.value_failRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
                 }
 
                 resolve(true);
@@ -1043,20 +1127,8 @@ export default {
             }
           } else if (me.formData.type === 'Visitor') {
             if (idx < 0) {
-              me.$globalCreateVisitor(data, (error) => {
-                if (error === null) {
-                  me.value_successRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-                } else {
-                  me.$refs.importFailure.innerHTML +=
-                    (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
-
-                  me.value_failRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-                }
-
+              me.$globalCreateVisitor(data, (error, result) => {
+                me.recordImportResult(localItem, error, result);
                 resolve(true);
               });
             } else {
@@ -1091,20 +1163,8 @@ export default {
                   },
                 },
               };
-              me.$globalModifyVisitor(dataForModify, (error) => {
-                if (error === null) {
-                  me.value_successRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-                } else {
-                  me.$refs.importFailure.innerHTML +=
-                    (me.$refs.importFailure.innerHTML === '' ? '' : ', ') + localItem.Id;
-
-                  me.value_failRecords += 1;
-                  delete localItem.photoImage;
-                  delete localItem.dispImage;
-                }
-
+              me.$globalModifyVisitor(dataForModify, (error, result) => {
+                me.recordImportResult(localItem, error, result);
                 resolve(true);
               });
             }
@@ -1209,6 +1269,11 @@ export default {
       me.onImport(me.value_fileImporting);
 
       me.refreshTableItems();
+
+      // 跳窗彙整結果，按確定後收回下拉並清空，下次展開是乾淨的
+      await me.showImportSummary();
+      me.flag_collapse = false;
+      me.resetImportForm();
     },
     async clickOnExport(withPhoto) {
       const salf = this;

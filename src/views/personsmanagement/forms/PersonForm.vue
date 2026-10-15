@@ -220,7 +220,6 @@
 
               <div
                 class="h5"
-                :class="flag_minFaceResolution ? '' : 'invalid-feedback'"
                 style="text-align: right; display: block !important"
               >
                 {{ $t('FaceMinimumResolution') }}
@@ -228,7 +227,6 @@
 
               <div
                 class="h5"
-                :class="flag_imageHaveClearFace ? '' : 'invalid-feedback'"
                 style="text-align: right; display: block !important"
               >
                 {{ $t('ImageHaveClearFace') }}
@@ -463,8 +461,6 @@ export default {
 
       flag_maxRegisterFileSize: true,
       flag_maxDisplayFileSize: true,
-      flag_minFaceResolution: true,
-      flag_imageHaveClearFace: true,
 
       value_constraintsList: [],
       value_selectedConstraints: null,
@@ -541,10 +537,17 @@ export default {
       });
     },
     async detectFaceAndGetHeadBox(img, cb) {
-      const detection = await faceapi.detectSingleFace(
+      let detection = await faceapi.detectSingleFace(
         img,
         new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 }),
       );
+      // 預設 inputSize 416 對「臉佔畫面比例大」的照片分數偏低，偵測不到時改用 608 再試一次
+      if (!detection) {
+        detection = await faceapi.detectSingleFace(
+          img,
+          new faceapi.TinyFaceDetectorOptions({ inputSize: 608, scoreThreshold: 0.4 }),
+        );
+      }
       return new Promise((resolve) => {
         let box = null;
         if (detection) {
@@ -667,6 +670,20 @@ export default {
               if (this.obj_loading) this.obj_loading.hide();
               if (result && result.message === 'ok') {
                 this.flag_currentSetp = 2;
+                // 人員已建立，但後端 engine 取不到照片特徵時提醒使用者
+                const featureErrorText = {
+                  'face not found': this.$t('PhotoFaceNotFound'),
+                  'face too small': this.$t('PhotoFaceTooSmall'),
+                }[result.feature];
+                if (featureErrorText) {
+                  this.$fire({
+                    title: this.$t(this.modifyMode ? 'ModifySuccessPhotoUploadFailed' : 'RegisterSuccessPhotoUploadFailed'),
+                    text: featureErrorText,
+                    type: 'error',
+                    timer: 3000,
+                    confirmButtonColor: '#20a8d8',
+                  });
+                }
               } else {
                 // this.$alert( this.disp_registerFailed + ' : ' + ( result && result.message ? result.message : 'network loss') );
                 this.$fire({
@@ -715,36 +732,43 @@ export default {
       };
       input.click();
     },
+    // 檢查人臉擷取框，不合格時跳視窗提醒並回傳 false
+    checkFaceBox(box) {
+      let errorText = '';
+      if (!box) {
+        errorText = this.$t('NoFaceDetected');
+      } else if (box.faceWidth < 200 || box.faceHeight < 200) {
+        errorText = this.$t('FaceDetailNotRecognized');
+      }
+      if (errorText) {
+        this.$fire({
+          text: errorText,
+          type: 'error',
+          timer: 3000,
+          confirmButtonColor: '#20a8d8',
+        });
+        return false;
+      }
+      return true;
+    },
     clickOnPickRegisterPhoto() {
       this.flag_isPickingRegisterPhoto = true;
       this.selectPhotoFromFile('REGISTER', (img) => {
         if (img) {
           // this.obj_loading = this.$loading.show( {container: this.$refs.formContainer});
           this.detectFaceAndGetHeadBox(img, (box) => {
-            if (box) {
-              this.flag_imageHaveClearFace = true;
-
-              if (box.faceWidth < 200 || box.faceHeight < 200) {
-                this.flag_minFaceResolution = false;
-              } else {
-                this.flag_minFaceResolution = true;
+            if (this.checkFaceBox(box)) {
+              try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                this.value_photoToRegister = dataUrl.replace(/^data:image\/[a-z]+;base64,/, '');
+                this.value_photoToRegisterToShow = dataUrl;
+              } catch (e) {
+                console.log('drawImage', e);
               }
-
-              if (this.flag_minFaceResolution) {
-                try {
-                  const canvas = document.createElement('canvas');
-                  canvas.width = img.width;
-                  canvas.height = img.height;
-                  canvas.getContext('2d').drawImage(img, 0, 0);
-                  const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
-                  this.value_photoToRegister = dataUrl.replace(/^data:image\/[a-z]+;base64,/, '');
-                  this.value_photoToRegisterToShow = dataUrl;
-                } catch (e) {
-                  console.log('drawImage', e);
-                }
-              }
-            } else {
-              this.flag_imageHaveClearFace = false;
             }
             // if( this.obj_loading ) this.obj_loading.hide();
           });
@@ -771,7 +795,7 @@ export default {
             console.log('Webcam.reset', e);
           }
           this.detectFaceAndGetHeadBox(img, (box) => {
-            if (box) {
+            if (this.checkFaceBox(box)) {
               try {
                 // 建立原始大小的 canvas (傳給後端)
                 const canvasOriginal = document.createElement('canvas');
