@@ -1457,12 +1457,12 @@ export default {
         for (let i = 0; i < filter.length; i += 1) {
           const item = filter[i];
           const data = {
-            subject: `${item.card_number}-${item.name}`,
+            subject: `${item.id}-${item.name}`,
             to: [item.extra_info.email],
             cc: [],
             bcc: [],
             body: `
-              No: ${item.card_number} \n
+              No: ${item.id} \n
               Full Name: ${item.name} \n
               Mobile: ${item.extra_info.phone_number} \n
               Department: ${item.extra_info.department} \n
