@@ -755,6 +755,25 @@ export default {
         zip.file('PersonsTemplate.xlsx', blob);
       });
 
+      // 訪客範本內含 QRcode 範例（qrcode 資料夾，檔名為訪客編號，格式同匯出）
+      if (this.formData.type === 'Visitor') {
+        const qrcodeFolder = zip.folder('qrcode');
+        const qrCanvas = this.$refs.qrcode;
+        for (const sampleId of ['A-0001', 'A-0002']) {
+          // eslint-disable-next-line no-await-in-loop
+          await QrCodeWithLogo.toCanvas({
+            canvas: qrCanvas,
+            content: JSON.stringify({ uuid: sampleId }),
+            width: 220,
+            height: 220,
+            logo: { src: '/img/logo/airaLogo.png', radius: 1 },
+          });
+          qrcodeFolder.file(`${sampleId}.jpeg`, qrCanvas.toDataURL().replace('data:image/png;base64,', ''), {
+            base64: true,
+          });
+        }
+      }
+
       zip.generateAsync({ type: 'blob' }).then((content) => {
         FileSaver.saveAs(content, 'PersonsList.zip');
       });
