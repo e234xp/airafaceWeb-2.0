@@ -34,3 +34,9 @@ node_modules.zip
 
 # Claude Code 個人本機設定
 .claude/settings.local.json
+
+e2e/reports/
+e2e/.auth/
+e2e/evidence/
+playwright-report
+.playwright-mcp
