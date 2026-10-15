@@ -5,8 +5,17 @@
       :style="{ backgroundImage: 'url(' + displaySettings.background_image + ')' }"
     >
       <div class="occupancy-logo-container" :style="{ zoom: zoomRatio }">
-        <div class="occupancy-logo" @click="toLoginPage">
-          <img :src="displaySettings.logo" class="occupancy-logo-img" />
+        <div class="d-flex align-items-center">
+          <!-- 圖表停用時左上角統計區不顯示，返回箭頭改放在 logo 旁 -->
+          <button v-if="isInGroupPersons && !displaySettings.displayChart" class="btn-reset" @click="returnToAllGroups">
+            <img src="@/assets/img/attendance_return_arrow.svg" class="attendance-return-arrow" alt="return" />
+          </button>
+          <div class="occupancy-logo" @click="toLoginPage">
+            <img :src="displaySettings.logo" class="occupancy-logo-img" />
+          </div>
+          <div v-if="!displaySettings.displayChart" class="attendance-title">
+            {{ attendanceGroupTitle }}
+          </div>
         </div>
         <div class="occupancy-time">
           {{ currentTime }}
@@ -18,7 +27,10 @@
         <!-- Attendance - 總覽 - 左上角統計數據的區塊 -->
         <div class="attendance-statistics-box">
           <!-- 第 1 列：標籤 -->
-          <div class="attendance-header-tag">
+          <div class="attendance-header-tag d-flex align-items-center">
+            <button v-if="isInGroupPersons" class="btn-reset" @click="returnToAllGroups">
+              <img src="@/assets/img/attendance_return_arrow.svg" class="attendance-return-arrow" alt="return" />
+            </button>
             <div>
               {{ attendanceGroupTitle }}
             </div>
@@ -64,11 +76,35 @@
 
       <!-------------------  Attendance - END ------------------>
 
-      <!-- 顯示人員資料列表 -->
+      <!-- 顯示人員資料列表 / 群組模式時的分組卡片 -->
       <div class="person-list-wrapper">
         <transition name="fade" mode="out-in">
           <div
-            :key="currentPageIndex"
+            v-if="isShowGroup"
+            :key="`group-${currentPageIndex}`"
+            :style="{ 'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px` }"
+            class="grid-6 person-list-container"
+          >
+            <button
+              v-for="group in currentGroups"
+              :key="group.name"
+              class="btn-reset group-card-button"
+              @click="onClickGroup(group)"
+            >
+              <div class="group-card group-card--tile" :style="'zoom: ' + zoomRatio + ' !important;'">
+                <div class="attendance-group-card-name">
+                  {{ groupLabel(group.name) }}
+                </div>
+                <div>
+                  <span class="group-card-present-number">{{ group.present }}</span>
+                  <span class="group-card-total-number">/ {{ group.total }}</span>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            v-else
+            :key="`person-${currentGroup}-${currentPageIndex}`"
             :style="{ 'margin-left': `${20 * zoomRatio}px`, 'margin-right': `${20 * zoomRatio}px` }"
             class="grid-5 d-flex flex-wrap person-list-container"
           >
@@ -144,6 +180,9 @@ const emptyFace = '/img/empty-face.svg';
 
 const SLOT_COUNT = 24;
 
+// 群組模式下視為使用者還在操作的事件，閒置超過 patrolidleTime 才自動回分組畫面
+const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
+
 // 進入看板時要清掉預設 padding 的 CoreUI 外殼元素
 const CONTAINER_RESETS = [
   ['.c-main', 'c-main-reset'],
@@ -182,6 +221,12 @@ export default {
       groups: [],
       hourly: [],
 
+      // 群組模式：先顯示分組卡片，點擊後才進入該組人員
+      isShowGroup: false,
+      currentGroup: '',
+      currentGroups: [],
+      idleTime: Date.now(),
+
       // 卡片分頁
       currentPersons: [],
       currentPageIndex: 0,
@@ -196,15 +241,15 @@ export default {
       chartDataOut: [],
       chartDataPresent: [],
 
-      // 目前沒有資料來源，保留以維持左上角版面
-      attendanceGroupTitle: '',
-
       displaySettings: {
         displayMode: 'OCCUPANCY',
         background_image: backgroundImage,
         logo: airaLogo,
 
+        enableSummaryView: false,
         summaryBy: 'GROUP',
+        summaryPatrolTime: 10,
+        patrolidleTime: 60,
 
         displayGroup: ['All Person'],
         displayCardMode: 'STANDARD',
@@ -220,11 +265,59 @@ export default {
     };
   },
   computed: {
+    // 群組模式下已點進某一組
+    isInGroupPersons() {
+      return this.displaySettings.enableSummaryView && !this.isShowGroup;
+    },
+    attendanceGroupTitle() {
+      return this.isInGroupPersons ? this.groupLabel(this.currentGroup) : '';
+    },
+    // 依 summaryBy 由前端從 persons 分組，人員 status 隨 socket 更新時在場數會跟著變。
+    // GROUP 只列 displayGroup 內的群組並照其順序；部門、職稱照人員出現的順序。
+    summaryGroups() {
+      const { summaryBy, displayGroup } = this.displaySettings;
+      const groupMap = new Map();
+
+      if (summaryBy === 'DEPARTMENT' || summaryBy === 'JOBTITLE') {
+        const field = summaryBy === 'DEPARTMENT' ? 'department' : 'title';
+        this.persons.forEach((p) => {
+          const name = p[field] || '';
+          if (!groupMap.has(name)) groupMap.set(name, []);
+          groupMap.get(name).push(p);
+        });
+      } else {
+        (displayGroup || []).forEach((name) => groupMap.set(name, []));
+        this.persons.forEach((p) => {
+          (p.group_list || []).forEach((name) => {
+            if (groupMap.has(name)) groupMap.get(name).push(p);
+          });
+        });
+      }
+
+      return [...groupMap]
+        .filter(([, persons]) => persons.length > 0)
+        .map(([name, persons]) => ({
+          name,
+          persons,
+          present: persons.filter((p) => p.status === 0).length,
+          total: persons.length,
+        }));
+    },
+    // 目前要列出卡片的人員：一般模式為全部，群組模式為點進的那一組
+    viewPersons() {
+      if (!this.displaySettings.enableSummaryView) return this.persons;
+      const group = this.summaryGroups.find((g) => g.name === this.currentGroup);
+      return group ? group.persons : [];
+    },
+    // 左上角數字：在分組畫面或一般模式顯示全部，點進某組時只算該組
+    headerPersons() {
+      return this.isInGroupPersons ? this.viewPersons : this.persons;
+    },
     attendancePresent() {
-      return this.persons.filter((p) => p.status === 0).length;
+      return this.headerPersons.filter((p) => p.status === 0).length;
     },
     attendanceTotal() {
-      return this.persons.length;
+      return this.headerPersons.length;
     },
     getSortByText() {
       switch (this.displaySettings.summaryBy) {
@@ -249,6 +342,7 @@ export default {
     if (display && display.OCCUPANCY) {
       this.displaySettings = { ...this.displaySettings, ...display.OCCUPANCY };
     }
+    this.isShowGroup = this.displaySettings.enableSummaryView;
 
     this.initHourly();
     this.initViews();
@@ -265,7 +359,8 @@ export default {
         this.refreshCurrentPage();
         this.refreshCharts();
 
-        if (this.totalPageIndex >= 1) this.resetAutoChangePageTimer();
+        // 只有一頁時計時器不會翻頁；點進群組後頁數會變，因此一律啟動
+        this.resetAutoChangePageTimer();
       });
     });
 
@@ -276,6 +371,7 @@ export default {
   destroyed() {
     this.toggleContainerReset(false);
     window.removeEventListener('resize', this.zoomViews);
+    ACTIVITY_EVENTS.forEach((name) => window.removeEventListener(name, this.markActive));
 
     if (this.showPageProgressTimer) {
       clearInterval(this.showPageProgressTimer);
@@ -412,11 +508,12 @@ export default {
         if (update.direction === 'in') cell.in += 1;
         else cell.out += 1;
 
-        cell.present = this.attendancePresent;
+        // 長條圖是全部人員的統計，不受目前點進哪一組影響
+        cell.present = this.persons.filter((p) => p.status === 0).length;
       }
 
-      // groups 的 present 未在此更新，待下一次整點重載校正。
-      // 分組維度可能是部門或職稱，前端無法單憑 payload 判斷該人屬於哪一組。
+      // 分組卡片是 summaryGroups 的切片，需重切一次才會顯示新的在場數
+      if (this.isShowGroup) this.refreshCurrentPage();
 
       this.refreshCharts();
     },
@@ -471,7 +568,7 @@ export default {
 
     refreshDoughnutChart() {
       const present = this.attendancePresent;
-      const absent = this.persons.length - present;
+      const absent = this.attendanceTotal - present;
 
       const ctx = document.getElementById('doughnut-chart-canvas');
       this.setupAttendanceDoughnutChart(ctx, [present, absent], true);
@@ -481,9 +578,7 @@ export default {
 
     // 每頁卡片數依容器高度動態計算，螢幕越高一頁越多人
     setupPageLayoutAmount() {
-      const columns = 5;
-      const cardHeight = 104;
-      const cardMargin = 12;
+      const [columns, cardHeight, cardMargin] = this.isShowGroup ? [6, 152, 9] : [5, 104, 12];
       const zoomRatio = this.zoomRatio || 1;
       const cardTotalHeight = (cardHeight + cardMargin) * zoomRatio;
 
@@ -497,8 +592,10 @@ export default {
     },
 
     refreshCurrentPage() {
+      const items = this.isShowGroup ? this.summaryGroups : this.viewPersons;
+
       this.displayAmount = this.setupPageLayoutAmount();
-      this.totalPageIndex = Math.max(Math.ceil(this.persons.length / this.displayAmount) - 1, 0);
+      this.totalPageIndex = Math.max(Math.ceil(items.length / this.displayAmount) - 1, 0);
 
       if (this.currentPageIndex > this.totalPageIndex) {
         this.currentPageIndex = 0;
@@ -506,9 +603,45 @@ export default {
       }
 
       const begin = this.currentPageIndex * this.displayAmount;
-      this.currentPersons = this.persons.slice(begin, begin + this.displayAmount);
+      const pageItems = items.slice(begin, begin + this.displayAmount);
 
+      if (this.isShowGroup) {
+        this.currentGroups = pageItems;
+        return;
+      }
+
+      this.currentPersons = pageItems;
       this.fetchPhotosForCurrentPage();
+    },
+
+    // 分組畫面與人員畫面切換時，頁碼、卡片、左上角數字與輪巡計時都要重來
+    switchView(isShowGroup, groupName) {
+      this.isShowGroup = isShowGroup;
+      this.currentGroup = groupName;
+      this.currentPageIndex = 0;
+      this.idleTime = Date.now();
+
+      this.refreshCurrentPage();
+      this.refreshDoughnutChart();
+      this.resetAutoChangePageTimer();
+    },
+
+    onClickGroup(group) {
+      if (group.total <= 0) return;
+      this.switchView(false, group.name);
+    },
+
+    returnToAllGroups() {
+      this.switchView(true, '');
+    },
+
+    markActive() {
+      this.idleTime = Date.now();
+    },
+
+    // 沒填部門或職稱的人歸在名稱為空字串的組
+    groupLabel(name) {
+      return name || this.$t('Uncategorized');
     },
 
     // 只抓當前頁、且還沒有照片的人
@@ -535,7 +668,10 @@ export default {
         if (this.totalPageIndex <= 0) return;
 
         const elapsed = new Date() - this.countdownStartTime;
-        const duration = this.displaySettings.personPatrolTime * 1000;
+        const patrolTime = this.isShowGroup
+          ? this.displaySettings.summaryPatrolTime
+          : this.displaySettings.personPatrolTime;
+        const duration = patrolTime * 1000;
 
         if (elapsed >= duration) {
           this.countdownStartTime = new Date();
@@ -564,6 +700,11 @@ export default {
       this.currentTimeLooper = setInterval(() => {
         const now = new Date();
         this.updateCurrentTime(now);
+
+        const idleLimit = this.displaySettings.patrolidleTime * 1000;
+        if (this.isInGroupPersons && idleLimit > 0 && Date.now() - this.idleTime > idleLimit) {
+          this.returnToAllGroups();
+        }
 
         // 整點：讓圖表推進一格。跨越 dailyResetTime 時是新的一輪，需重取 24 筆
         if (now.getMinutes() === 0 && now.getSeconds() === 0) {
@@ -666,6 +807,7 @@ export default {
       setTimeout(() => this.zoomViews(), 168);
 
       window.addEventListener('resize', this.zoomViews);
+      ACTIVITY_EVENTS.forEach((name) => window.addEventListener(name, this.markActive));
     },
 
     // CoreUI 外殼的預設 padding 會擋住全螢幕版面，進入看板時清掉、離開時還原
@@ -1036,9 +1178,18 @@ export default {
   line-height: 0.7em;
 }
 
-.group-card-6x4,
-.group-card-6x5 {
-  width: 302px;
+.grid-6 {
+  display: grid !important;
+  gap: 0.7%;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.group-card-button {
+  width: 100%;
+  cursor: pointer;
+}
+
+.group-card--tile {
   height: 152px;
   background: #37393c;
   padding: 16px;
