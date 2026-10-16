@@ -548,7 +548,6 @@ export default {
   },
   data() {
     return {
-      obj_loading: null,
 
       flag_downloadingExecl: false,
       flag_masterCollapse: false,
@@ -1247,9 +1246,8 @@ export default {
     },
 
     async exportMaterToExcel() {
-      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
-      const allData = await this.fetchAllPersonData();
-      if (this.obj_loading) this.obj_loading.hide();
+      const loader = this.$loading.show({ container: this.$refs.formContainer });
+      const allData = await this.fetchAllPersonData().finally(() => loader.hide());
 
       if (!allData || allData.length === 0) {
         this.$fire({
@@ -1943,9 +1941,8 @@ export default {
       const self = this;
 
       // 先載入全部資料
-      self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
-      const allData = await self.fetchAllPersonData();
-      if (self.obj_loading) self.obj_loading.hide();
+      const loader = self.$loading.show({ container: self.$refs.formContainer });
+      const allData = await self.fetchAllPersonData().finally(() => loader.hide());
 
       if (!allData || allData.length === 0) {
         self.$fire({
@@ -2658,7 +2655,8 @@ export default {
       const self = this;
 
       if (self.onFetchPersonDataCallback) {
-        self.obj_loading = self.$loading.show({ container: self.$refs.formContainer });
+        // loading 句柄只存在於本次呼叫的閉包內，連續呼叫時各自關閉各自的
+        const loader = self.$loading.show({ container: self.$refs.formContainer });
 
         // 先呼叫 getattendancesummary 取得統計資料
         const date = new Date(self.value_specifiedMonth);
@@ -2736,19 +2734,19 @@ export default {
                       // 處理當前頁資料並顯示
                       self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
 
-                      if (self.obj_loading) self.obj_loading.hide();
+                      loader.hide();
                       self.observeTableSize();
                       if (cb) cb();
                     },
                   );
                 } else {
                   self.value_dataItemsToShow = [];
-                  if (self.obj_loading) self.obj_loading.hide();
+                  loader.hide();
                   self.observeTableSize();
                   if (cb) cb();
                 }
               } else {
-                if (self.obj_loading) self.obj_loading.hide();
+                loader.hide();
                 if (cb) cb();
               }
             },
@@ -2761,7 +2759,7 @@ export default {
 
           if (currentPageUuids.length === 0) {
             self.value_dataItemsToShow = [];
-            if (self.obj_loading) self.obj_loading.hide();
+            loader.hide();
             self.observeTableSize();
             if (cb) cb();
             return;
@@ -2819,14 +2817,14 @@ export default {
                     // 處理當前頁資料並顯示
                     self.value_dataItemsToShow = self.generateFilteredDataForCurrentPage(currentPageItems);
 
-                    if (self.obj_loading) self.obj_loading.hide();
+                    loader.hide();
                     self.observeTableSize();
                     if (cb) cb();
                   },
                 );
               } else {
                 self.value_dataItemsToShow = [];
-                if (self.obj_loading) self.obj_loading.hide();
+                loader.hide();
                 self.observeTableSize();
                 if (cb) cb();
               }

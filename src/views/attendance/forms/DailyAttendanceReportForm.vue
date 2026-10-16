@@ -551,7 +551,6 @@ import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
 
 import JsZip from 'jszip';
-
 /* eslint-disable no-undef */
 const dayjs = require('dayjs');
 /* eslint-enable no-undef */
@@ -574,7 +573,6 @@ export default {
   },
   data() {
     return {
-      obj_loading: null,
 
       flag_downloadingExecl: false,
       flag_masterCollapse: false,
@@ -1089,9 +1087,8 @@ export default {
 
     async exportMaterToExcel() {
       // 先載入全部資料
-      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
-      const allData = await this.fetchAllPersonData();
-      if (this.obj_loading) this.obj_loading.hide();
+      const loader = this.$loading.show({ container: this.$refs.formContainer });
+      const allData = await this.fetchAllPersonData().finally(() => loader.hide());
 
       if (!allData || allData.length === 0) {
         this.$fire({
@@ -1334,9 +1331,8 @@ export default {
 
     async exportMasterToTXTCSV() {
       // 先載入全部資料
-      this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
-      const allData = await this.fetchAllPersonData();
-      if (this.obj_loading) this.obj_loading.hide();
+      const loader = this.$loading.show({ container: this.$refs.formContainer });
+      const allData = await this.fetchAllPersonData().finally(() => loader.hide());
 
       if (!allData || allData.length === 0) {
         this.$fire({
@@ -2108,7 +2104,8 @@ export default {
     },
     async refreshTableItems(cb) {
       if (this.onFetchPersonDataCallback) {
-        this.obj_loading = this.$loading.show({ container: this.$refs.formContainer });
+        // loading 句柄只存在於本次呼叫的閉包內，連續呼叫時各自關閉各自的
+        const loader = this.$loading.show({ container: this.$refs.formContainer });
 
         // 先呼叫 getattendancesummary 取得統計資料
         const startTime = new Date(this.value_specifiedDate);
@@ -2132,7 +2129,6 @@ export default {
           // 全部模式：使用原本的分頁查詢
           const sliceShift = (this.value_tablePage.currentPage - 1) * this.value_tablePage.pageSize;
           const sliceSize = this.value_tablePage.pageSize;
-
           this.onFetchPersonDataCallback(
             sliceShift,
             sliceSize,
@@ -2142,6 +2138,7 @@ export default {
                 // 設定總筆數
                 this.value_tablePage.totalResult = totalLength;
 
+  
                 if (personTableItems && personTableItems.length >= 1) {
                   const uuidList = personTableItems.map((person) => person.uuid);
 
@@ -2169,20 +2166,19 @@ export default {
 
                       // 處理當前頁資料並顯示
                       this.value_dataItemsToShow = this.generateFilteredDataForCurrentPage(currentPageItems);
-
-                      if (this.obj_loading) this.obj_loading.hide();
+                      loader.hide();
                       this.observeTableSize();
                       if (cb) cb();
                     },
                   );
                 } else {
                   this.value_dataItemsToShow = [];
-                  if (this.obj_loading) this.obj_loading.hide();
+                  loader.hide();
                   this.observeTableSize();
                   if (cb) cb();
                 }
               } else {
-                if (this.obj_loading) this.obj_loading.hide();
+                loader.hide();
                 if (cb) cb();
               }
             },
@@ -2195,7 +2191,7 @@ export default {
 
           if (currentPageUuids.length === 0) {
             this.value_dataItemsToShow = [];
-            if (this.obj_loading) this.obj_loading.hide();
+            loader.hide();
             this.observeTableSize();
             if (cb) cb();
             return;
@@ -2236,14 +2232,14 @@ export default {
                     // 處理當前頁資料並顯示
                     this.value_dataItemsToShow = this.generateFilteredDataForCurrentPage(currentPageItems);
 
-                    if (this.obj_loading) this.obj_loading.hide();
+                    loader.hide();
                     this.observeTableSize();
                     if (cb) cb();
                   },
                 );
               } else {
                 this.value_dataItemsToShow = [];
-                if (this.obj_loading) this.obj_loading.hide();
+                loader.hide();
                 this.observeTableSize();
                 if (cb) cb();
               }
