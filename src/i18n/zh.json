@@ -887,5 +887,7 @@
   "PhotoNotUploadedHint": "以下人員資料已建立，但照片未上傳，請至編輯頁重新上傳：",
   "PhotoFaceNotFoundShort": "無法辨識人臉",
   "PhotoFaceTooSmallShort": "臉部範圍過小",
-  "ImportAllFailed": "匯入失敗"
+  "ImportAllFailed": "匯入失敗",
+  "ImportExcelRow": "第 {row} 列",
+  "ImportMissingRequiredFields": "{label}（缺少{fields}）"
 }

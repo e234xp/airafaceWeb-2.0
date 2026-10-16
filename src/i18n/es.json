@@ -880,5 +880,7 @@
   "PhotoNotUploadedHint": "Se crearon las siguientes personas, pero sus fotos no se subieron. Vuelva a subirlas en la página de edición:",
   "PhotoFaceNotFoundShort": "No se detectó un rostro",
   "PhotoFaceTooSmallShort": "Área del rostro demasiado pequeña",
-  "ImportAllFailed": "Error en la importación"
+  "ImportAllFailed": "Error en la importación",
+  "ImportExcelRow": "Fila {row}",
+  "ImportMissingRequiredFields": "{label} (falta {fields})"
 }

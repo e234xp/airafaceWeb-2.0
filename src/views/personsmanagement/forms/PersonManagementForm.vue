@@ -291,7 +291,7 @@ export default {
       value_successRecords: 0,
       value_failRecords: 0,
       value_totalRecords: 0,
-      value_failedPersonIds: [],
+      value_failedPersons: [],
       value_fileInputKey: 0,
 
       value_photoSuccessRecords: 0,
@@ -814,7 +814,7 @@ export default {
         me.value_totalRecords = me.value_excelFileImpport.length;
         me.value_successRecords = 0;
         me.value_failRecords = 0;
-        me.value_failedPersonIds = [];
+        me.value_failedPersons = [];
         me.resetPhotoRecords();
       };
       myReader.readAsArrayBuffer(this.xlsxFile);
@@ -859,8 +859,8 @@ export default {
         `<b>${this.$t('PersonInfoFile')}</b>`,
         counts(this.value_successRecords, this.value_failRecords, this.value_totalRecords),
       ];
-      if (this.value_failedPersonIds.length > 0) {
-        lines.push(`${this.$t('ImportFailurePersonInfo')} ${this.value_failedPersonIds.map(escape).join(', ')}`);
+      if (this.value_failedPersons.length > 0) {
+        lines.push(`${this.$t('ImportFailurePersonInfo')} ${this.value_failedPersons.map(escape).join(', ')}`);
       }
       if (this.value_photoTotalRecords > 0) {
         lines.push(
@@ -902,7 +902,7 @@ export default {
       this.value_totalRecords = 0;
       this.value_successRecords = 0;
       this.value_failRecords = 0;
-      this.value_failedPersonIds = [];
+      this.value_failedPersons = [];
       this.resetPhotoRecords();
       // 換 key 讓 CInputFile 重建，清掉已選的檔名
       this.value_fileInputKey += 1;
@@ -914,14 +914,47 @@ export default {
       this.value_failedPhotos = [];
     },
 
+    isEmptyCell(value) {
+      return value === undefined || value === null || `${value}`.trim() === '';
+    },
+
+    // Excel 的日期儲存格會讀成 Date 物件（cellDates），文字儲存格則是 '2026-10-07' 這類字串；
+    // 都轉成當地時間當天 00:00 的毫秒，沒填或無法解析回 0
+    parseImportDate(value) {
+      if (value instanceof Date) {
+        // SheetJS 轉換可能差幾秒（例如前一天 23:59:59），加半天後取日期，四捨五入到最近的一天
+        const date = new Date(value.getTime() + 12 * 60 * 60 * 1000);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      }
+      if (this.isEmptyCell(value)) return 0;
+      return new Date(`${value}`.trim().replaceAll('-', '/')).getTime() || 0;
+    },
+
+    // 編號或姓名沒填就不打 API，回傳失敗清單要顯示的文字；都有填回傳空字串
+    checkImportRequiredFields(item) {
+      const isEmpty = this.isEmptyCell;
+      const isVisitor = this.formData.type === 'Visitor';
+
+      const missingFields = [];
+      if (isEmpty(item.Id)) missingFields.push(this.$t(isVisitor ? 'VisitorId' : 'PersonId'));
+      if (isEmpty(item.Fullname)) missingFields.push(this.$t(isVisitor ? 'VisitorName' : 'PersonName'));
+      if (missingFields.length === 0) return '';
+
+      // 沒有編號時用 Excel 列號辨識；sheet_to_json 的 __rowNum__ 從 0 起算（標題列為 0），Excel 列號要 +1
+      // eslint-disable-next-line no-underscore-dangle
+      const label = isEmpty(item.Id) ? this.$t('ImportExcelRow', { row: item.__rowNum__ + 1 }) : item.Id;
+      return this.$t('ImportMissingRequiredFields', { label, fields: missingFields.join(', ') });
+    },
+
     // 人員資料與註冊照片分開統計。人員資料失敗的那筆只算在人員資料，照片不另外算；
     // 人員資料成功時，後端 feature 回人臉錯誤代表資料已建立但照片沒存
-    recordImportResult(pItem, error, result) {
+    // failText：失敗清單要顯示的文字，沒給就用 Id
+    recordImportResult(pItem, error, result, failText) {
       const localItem = pItem;
 
       if (error !== null) {
         this.value_failRecords += 1;
-        this.value_failedPersonIds.push(localItem.Id);
+        this.value_failedPersons.push(failText || localItem.Id);
       } else {
         this.value_successRecords += 1;
 
@@ -1004,15 +1037,18 @@ export default {
 
         if (localItem == null) resolve(true);
 
+        const missingFieldsText = me.checkImportRequiredFields(localItem);
+        if (missingFieldsText) {
+          me.recordImportResult(localItem, 'missing required fields', null, missingFieldsText);
+          resolve(true);
+          return;
+        }
+
         const proformEnroll = () => {
-          const beginDate =
-            localItem['Begin Date'] && localItem['Begin Date'].length > 0
-              ? new Date(localItem['Begin Date'].replaceAll('-', '/')).getTime()
-              : 0;
-          const expireDate =
-            localItem['Expire Date'] && localItem['Expire Date'].length > 0
-              ? new Date(localItem['Expire Date'].replaceAll('-', '/')).getTime()
-              : 0;
+          const beginDate = me.parseImportDate(localItem['Begin Date']);
+          const expireDate = me.parseImportDate(localItem['Expire Date']);
+          // 群組欄只填數字時 Excel 會讀成數字，先轉字串再拆
+          const groupList = me.isEmptyCell(localItem.Group) ? [] : `${localItem.Group}`.split('|');
 
           localItem.Id = localItem.Id.toString();
 
@@ -1024,7 +1060,7 @@ export default {
             card_number: `${localItem['Card Number'] || ''}`,
             begin_date: beginDate || 0,
             expire_date: expireDate || 0,
-            group_list: localItem.Group ? localItem.Group.split('|') : [],
+            group_list: groupList,
             as_admin: false,
             display_image: localItem.dispImage ? localItem.dispImage : '',
             register_image: localItem.photoImage ? localItem.photoImage : '',
@@ -1043,10 +1079,9 @@ export default {
               me.$globalCreatePerson(data, async (error, result) => {
                 me.recordImportResult(localItem, error, result);
                 if (error === null) {
-                  if (localItem.Group) {
-                    const groups = localItem.Group.split('|') || [];
-                    for (let i = 0; i < groups.length; i += 1) {
-                      const g = groups[i];
+                  if (groupList.length > 0) {
+                    for (let i = 0; i < groupList.length; i += 1) {
+                      const g = groupList[i];
 
                       if (me.value_personGroupList.indexOf(g) < 0) {
                         const data1 = {
@@ -1101,10 +1136,9 @@ export default {
               me.$globalModifyPerson(dataForModify, async (error, result) => {
                 me.recordImportResult(localItem, error, result);
                 if (error === null) {
-                  if (localItem.Group) {
-                    const groups = localItem.Group.split('|') || [];
-                    for (let i = 0; i < groups.length; i += 1) {
-                      const g = groups[i];
+                  if (groupList.length > 0) {
+                    for (let i = 0; i < groupList.length; i += 1) {
+                      const g = groupList[i];
 
                       if (me.value_personGroupList.indexOf(g) < 0) {
                         const data1 = {
