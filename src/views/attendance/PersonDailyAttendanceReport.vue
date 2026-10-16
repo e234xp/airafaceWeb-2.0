@@ -97,9 +97,8 @@ export default {
 
       // 收集所有資料
       const allData = [];
-      const manualClockInData = []; // querymanualclockinresult 的資料
 
-      // 先取得 AttendanceVerifyResult 資料
+      // 取得 AttendanceVerifyResult 資料（後端每人每天回上班、下班各一筆）
       let shitf = 0;
       let thereIsMoreData = true;
       while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
@@ -111,7 +110,7 @@ export default {
             thereIsMoreData = true;
             shitf += sliceSize;
           } else thereIsMoreData = false;
-          self.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50;
+          self.loading_percent = thereIsMoreData ? ((shitf / data.total_length) * 100).toFixed(0) : 100;
           if (data.data && data.data.length > 0) {
             allData.push(...data.data);
           }
@@ -127,49 +126,8 @@ export default {
         }
       }
 
-      // 再取得 ManualClockinResult 資料 (優先級最高)
-      shitf = 0;
-      thereIsMoreData = true;
-      while (self.flag_keepingDownloadPersonVerifyResult && thereIsMoreData) {
-        const ret = await self.$globalManualClockinResult(uuidList, startTimeMs, endTimeMs, shitf, sliceSize);
-        const { error, data } = ret;
-
-        if (error == null) {
-          if (data.total_length && data.total_length > sliceSize + shitf) {
-            thereIsMoreData = true;
-            shitf += sliceSize;
-          } else {
-            thereIsMoreData = false;
-          }
-          self.loading_percent = 50 + (thereIsMoreData ? ((shitf / data.total_length) * 50).toFixed(0) : 50);
-          if (data.data && data.data.length > 0) {
-            manualClockInData.push(...data.data);
-          }
-        } else {
-          thereIsMoreData = false;
-        }
-      }
-
-      // 合併資料：manualClockInData 優先級最高，會覆蓋 allData 中相同 uuid + 相同日期的記錄
-      // 先用 allData，然後用 manualClockInData 覆蓋
-      const mergedDataMap = new Map();
-
-      // 先加入 allData
-      allData.forEach((item) => {
-        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
-        mergedDataMap.set(key, item);
-      });
-
-      // 用 manualClockInData 覆蓋（優先級最高）
-      manualClockInData.forEach((item) => {
-        const key = item.verify_uuid || `${item.uuid}_${item.timestamp}`;
-        mergedDataMap.set(key, item);
-      });
-
-      const mergedData = Array.from(mergedDataMap.values());
-
       self.loading_percent = 100;
-      if (cb) cb(null, true, false, mergedData);
+      if (cb) cb(null, true, false, allData);
     },
     onFetchPersonAttendanceDataCallback(dateOnDay, uuidList, cb) {
       const self = this;

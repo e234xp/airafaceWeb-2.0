@@ -536,6 +536,17 @@
 <script>
 import { mapState } from 'vuex';
 import TableObserver from '@/utils/TableObserver.vue';
+import {
+  STATUS,
+  buildRules,
+  filterByDay,
+  pickInOut,
+  fillNoShow,
+  isHoliday as isHolidayDate,
+  calcWorkingMs,
+  calcOvertimeMs,
+  formatDuration,
+} from '@/utils/attendanceCalc';
 import FileSaver from 'file-saver';
 import Excel from 'exceljs/dist/exceljs.min';
 
@@ -693,8 +704,6 @@ export default {
         definedBreakTimeMins: 60, //
         specifiedHolidays: [{ date_time: 0 }],
         specifiedNonHolidays: [{ date_time: 0 }],
-        videoDeviceGroupIn: [],
-        videoDeviceGroupOut: [],
       },
 
       ...this.formData,
@@ -707,37 +716,6 @@ export default {
     self.$globalGetAttendanceSettings((err, data) => {
       if (!err) {
         self.value_workingHourSettings = data;
-        self.value_workingHourSettings.videoDeviceGroupIn = [];
-        self.value_workingHourSettings.videoDeviceGroupOut = [];
-
-        if (
-          self.value_workingHourSettings.video_device_group_in.length >= 1 ||
-          self.value_workingHourSettings.video_device_group_out.length >= 1
-        ) {
-          self.$globalFindVideoDeviceGroups('', 0, 2000, (error, response) => {
-            if (error == null) {
-              const { result } = response;
-
-              result.forEach((r) => {
-                if (r) {
-                  if (this.value_workingHourSettings.video_device_group_in.indexOf(r.name) >= 0) {
-                    this.value_workingHourSettings.videoDeviceGroupIn =
-                      this.value_workingHourSettings.videoDeviceGroupIn.concat(r.camera_uuid_list);
-                    this.value_workingHourSettings.videoDeviceGroupIn =
-                      this.value_workingHourSettings.videoDeviceGroupIn.concat(r.tablet_uuid_list);
-                  }
-
-                  if (this.value_workingHourSettings.video_device_group_out.indexOf(r.name) >= 0) {
-                    this.value_workingHourSettings.videoDeviceGroupOut =
-                      this.value_workingHourSettings.videoDeviceGroupOut.concat(r.camera_uuid_list);
-                    this.value_workingHourSettings.videoDeviceGroupOut =
-                      this.value_workingHourSettings.videoDeviceGroupOut.concat(r.tablet_uuid_list);
-                  }
-                }
-              });
-            }
-          });
-        }
       }
 
       if (this.value_workingHourSettings == null) {
@@ -759,8 +737,6 @@ export default {
           definedBreakTimeMins: 60,
           specifiedHolidays: [{ date_time: 0 }],
           specifiedNonHolidays: [{ date_time: 0 }],
-          videoDeviceGroupIn: [],
-          videoDeviceGroupOut: [],
         };
       }
       this.refreshTableItems();
@@ -1328,21 +1304,7 @@ export default {
                 const dataListOnUuid = attendanceResult.personVrItems.filter((vr) => vr.uuid === person.uuid);
                 dataListOnUuid.forEach((d) => {
                   if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
-                    personCopy.attendance_data_list.push({
-                      id: d.id,
-                      name: d.name,
-                      verify_uuid: d.verify_uuid,
-                      timestamp: d.timestamp,
-                      source_id: d.source_id,
-                      temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
-                      verify_mode: d.verify_mode,
-                      verify_mode_string: d.verify_mode_string,
-                      verify_score: d.verify_score,
-                      card_number: d.card_number,
-                      group_list: d.group_list,
-                      face_image_id: d.face_image_id,
-                      modifier_time: d.modifier_time,
-                    });
+                    personCopy.attendance_data_list.push(this.mapAttendanceRecord(d));
                   }
                 });
               }
@@ -1847,29 +1809,28 @@ export default {
       return ret;
     },
 
+    // 後端紀錄 → 表格使用的欄位（clockInStatus／clockOutStatus 標明該筆是上班或下班）
+    mapAttendanceRecord(d) {
+      return {
+        id: d.id,
+        name: d.name,
+        verify_uuid: d.verify_uuid,
+        timestamp: d.timestamp,
+        source_id: d.source_id,
+        temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
+        verify_mode: d.verify_mode,
+        verify_mode_string: d.verify_mode_string,
+        verify_score: d.verify_score,
+        card_number: d.card_number,
+        group_list: d.group_list,
+        face_image_id: d.face_image_id,
+        modifier_time: d.modifier_time,
+        clockInStatus: d.clockInStatus,
+        clockOutStatus: d.clockOutStatus,
+      };
+    },
     formatDurationTime(timestamp) {
-      let ret = timestamp;
-
-      let t = Math.floor(ret / 1000);
-      const s = t - 60 * Math.floor(t / 60);
-      t -= s;
-      t /= 60;
-
-      let m = 0;
-      if (t > 0) {
-        m = t - 60 * Math.floor(t / 60);
-        t -= m;
-      }
-
-      let h = 0;
-      if (t > 0) h = Math.floor(t / 60);
-
-      if (h <= 0 && m <= 0) ret = '';
-      else {
-        ret = `${`00${h}`.slice(-2)}:${`00${m}`.slice(-2)}`;
-      }
-
-      return ret;
+      return formatDuration(timestamp);
     },
     generateFilteredDataForCurrentPage(sourceData) {
       // 處理當前頁的資料（後端已分頁,不需再切割）
@@ -2198,21 +2159,7 @@ export default {
                           const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
                           dataListOnUuid.forEach((d) => {
                             if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
-                              personCopy.attendance_data_list.push({
-                                id: d.id,
-                                name: d.name,
-                                verify_uuid: d.verify_uuid,
-                                timestamp: d.timestamp,
-                                source_id: d.source_id,
-                                temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
-                                verify_mode: d.verify_mode,
-                                verify_mode_string: d.verify_mode_string,
-                                verify_score: d.verify_score,
-                                card_number: d.card_number,
-                                group_list: d.group_list,
-                                face_image_id: d.face_image_id,
-                                modifier_time: d.modifier_time,
-                              });
+                              personCopy.attendance_data_list.push(this.mapAttendanceRecord(d));
                             }
                           });
                         }
@@ -2278,21 +2225,7 @@ export default {
                         const dataListOnUuid = personVrItems.filter((vr) => vr.uuid === person.uuid);
                         dataListOnUuid.forEach((d) => {
                           if (!personCopy.attendance_data_list.find((att) => att.verify_uuid === d.verify_uuid)) {
-                            personCopy.attendance_data_list.push({
-                              id: d.id,
-                              name: d.name,
-                              verify_uuid: d.verify_uuid,
-                              timestamp: d.timestamp,
-                              source_id: d.source_id,
-                              temperature: d.temperature > 0 ? `${d.temperature.toFixed(1)}°C` : '',
-                              verify_mode: d.verify_mode,
-                              verify_mode_string: d.verify_mode_string,
-                              verify_score: d.verify_score,
-                              card_number: d.card_number,
-                              group_list: d.group_list,
-                              face_image_id: d.face_image_id,
-                              modifier_time: d.modifier_time,
-                            });
+                            personCopy.attendance_data_list.push(this.mapAttendanceRecord(d));
                           }
                         });
                       }
@@ -2338,331 +2271,47 @@ export default {
 
     generateAttendanceStatusData_V2(workingHourSettings, pItem) {
       const item = pItem;
+      const rules = buildRules(workingHourSettings);
 
-      // const { definedClockinTimeHour, definedClockoutTimeHour, definedOvertimeTimeHour } = workingHourSettings;
-      const definedClockinTimeHour = workingHourSettings.defined_clockin_time_hour || 9;
-      const definedClockoutTimeHour = workingHourSettings.defined_clockout_time_hour || 18;
-      const definedOvertimeTimeHour = workingHourSettings.defined_overtime_time_hour || 18;
+      const date = this.value_specifiedDate;
+      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      const idx = date.getDate() - 1;
+      const days = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+      const zeros = () => Array(days).fill(0);
 
-      const definedClockinTimeMin = workingHourSettings.defined_clockin_time_min || 0;
-      const definedClockinTimeBufferMins = workingHourSettings.defined_clockin_time_buffer_mins || 30;
-      const definedClockinTimeLateEnabled = workingHourSettings.defined_clockin_time_late_enabled || true;
-      const definedClockinAdjustmentEnabled = workingHourSettings.defined_clockin_adjustment_enabled || false;
-
-      const definedClockoutTimeMin = workingHourSettings.defined_clockout_time_min || 0;
-      const definedClockoutTimeBufferMins = workingHourSettings.defined_clockout_time_buffer_mins || 30;
-      const definedClockoutTimeEarlyLeaveEnabled =
-        workingHourSettings.defined_clockout_time_early_leave_enabled || true;
-      const definedClockoutAdjustmentEnabled = workingHourSettings.defined_clockout_adjustment_enabled || false;
-
-      const definedOvertimeEnabled = workingHourSettings.defined_overtime_enabled !== false;
-      const definedOvertimeTimeMin = workingHourSettings.defined_overtime_time_min || 0;
-      const definedOvertimeMinimumMin = workingHourSettings.defined_overtime_minimum_min || 0;
-
-      const definedBreakTimeMin = workingHourSettings.defined_break_time_mins || 60;
-
-      // const { specifiedHolidays, specifiedNonHolidays } = workingHourSettings;
-      const specifiedHolidays = workingHourSettings.specified_holidays || [];
-      const specifiedNonHolidays = workingHourSettings.specified_non_holidays || [];
-
-      const videoGroupIn = workingHourSettings.videoDeviceGroupIn || [];
-      const videoGroupOut = workingHourSettings.videoDeviceGroupOut || [];
-
-      const attRecList = item.attendance_data_list ? item.attendance_data_list : [];
-
-      // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6 : no entry, 7: no leave, 8: overtime
-      const _STATUS_NONE = 0;
-      const _STATUS_SHOW_ON_TIME = 1;
-      const _STATUS_LEAVE_ON_TIME = 2;
-      const _STATUS_LATE = 3;
-      const _STATUS_EARLY = 4;
-      const _STATUS_NO_SHOW = 5;
-
-      const msDay = 86400000;
-      const msHour = 3600000;
-      const msMin = 60000;
-
-      const clockInTime = definedClockinTimeHour * msHour + definedClockinTimeMin * msMin;
-      const clockInTimeBuffer = definedClockinTimeBufferMins * msMin;
-      const clockOutTime = definedClockoutTimeHour * msHour + definedClockoutTimeMin * msMin;
-      const clockOutTimeBuffer = definedClockoutTimeBufferMins * msMin;
-
-      const breakTime = definedBreakTimeMin * msMin;
-      const overTime = definedOvertimeTimeHour * msHour + definedOvertimeTimeMin * msMin;
-      const overTimeBuffer = definedOvertimeMinimumMin * msMin;
-
-      const startTimeOfMonth = new Date(
-        this.value_specifiedDate.getFullYear(),
-        this.value_specifiedDate.getMonth(),
-        1,
-        0,
-        0,
-        0,
-        0,
-      );
-      const endTimeOfMonth = new Date(
-        this.value_specifiedDate.getFullYear(),
-        this.value_specifiedDate.getMonth() + 1,
-        1,
-        0,
-        0,
-        0,
-        0,
-      );
-      const daysOnMonth = (endTimeOfMonth - startTimeOfMonth) / msDay;
+      // 後端每人每天只回上班、下班各一筆，clockInStatus／clockOutStatus 標明是哪一筆
+      const { inRec, outRec } = pickInOut(filterByDay(item.attendance_data_list || [], dayStart));
 
       const returnData = {
         date: {
-          days: daysOnMonth,
-          monthly_holiday_index: [],
+          days,
+          monthly_holiday_index: zeros(),
         },
         attendance_data: {
-          clock_in_status: [],
-          clock_out_status: [],
-          firstClockInRec: {},
-          lastClockOutRec: {},
-          working_time: [],
-          over_time: [],
+          clock_in_status: zeros(),
+          clock_out_status: zeros(),
+          firstClockInRec: inRec || {},
+          lastClockOutRec: outRec || {},
+          working_time: zeros(),
+          over_time: zeros(),
         },
       };
-      const idxSpecifiedDateToCheck = this.value_specifiedDate.getDate() - 1;
-      for (let i = 0; i < daysOnMonth; i += 1) {
-        const tDayStart = new Date(startTimeOfMonth.getTime() + i * msDay);
-        const tDayStartTs = tDayStart.getTime();
-        const tDayEndTs = tDayStartTs + msDay - 1;
-        const timeToCheckClockIn = tDayStartTs + clockInTime < Date.now();
-        const timeToCheckClockOut = tDayStartTs + clockOutTime < Date.now();
-        // const timeToCheckOverTime = tDayStartTs + overTime < Date.now();
+      const data = returnData.attendance_data;
 
-        let holiday = false;
-        if (specifiedHolidays) {
-          for (let j = 0; j < specifiedHolidays.length; j += 1) {
-            if (specifiedHolidays[j].date_time >= tDayStartTs && specifiedHolidays[j].date_time <= tDayEndTs) {
-              holiday = true;
-              break;
-            }
-          }
-        }
+      const holiday = isHolidayDate(
+        dayStart,
+        workingHourSettings.specified_holidays,
+        workingHourSettings.specified_non_holidays,
+      );
+      returnData.date.monthly_holiday_index[idx] = holiday ? 1 : 0;
 
-        if (holiday === false) {
-          const dayIdx = tDayStart.getDay();
-          if (dayIdx === 0 || dayIdx === 6) holiday = true;
-        }
+      // 顏色直接使用後端狀態；平日已過表定時間仍沒有紀錄 → 缺席（紫色）
+      const now = Date.now();
+      data.clock_in_status[idx] = fillNoShow(inRec ? inRec.clockInStatus : STATUS.NONE, dayStart + rules.clockIn, now, holiday);
+      data.clock_out_status[idx] = fillNoShow(outRec ? outRec.clockOutStatus : STATUS.NONE, dayStart + rules.clockOut, now, holiday);
 
-        if (specifiedNonHolidays) {
-          for (let k = 0; k < specifiedNonHolidays.length; k += 1) {
-            if (specifiedNonHolidays[k].date_time >= tDayStartTs && specifiedNonHolidays[k].date_time <= tDayEndTs) {
-              holiday = false;
-              break;
-            }
-          }
-        }
-
-        if (holiday) {
-          returnData.date.monthly_holiday_index.push(1);
-        } else {
-          returnData.date.monthly_holiday_index.push(0);
-        }
-
-        if (attRecList) {
-          const passModeRecord = attRecList.filter(
-            (attRec) =>
-              attRec.timestamp >= tDayStartTs &&
-              attRec.timestamp <= tDayEndTs &&
-              (attRec.verify_mode === 0 || attRec.verify_mode === 1 || attRec.verify_mode === 2),
-          );
-          const clockInModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 3,
-          );
-          const clockOutModeRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 4,
-          );
-          const manualClockInRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 5,
-          );
-          const manualClockOutRecord = attRecList.filter(
-            (attRec) => attRec.timestamp >= tDayStartTs && attRec.timestamp <= tDayEndTs && attRec.verify_mode === 6,
-          );
-
-          if (passModeRecord.length > 0) {
-            for (let index = passModeRecord.length - 1; index >= passModeRecord.length - 2; index -= 1) {
-              const rec = passModeRecord[index];
-
-              if (rec) {
-                if (videoGroupIn.indexOf(rec.source_id) >= 0) {
-                  clockInModeRecord.push(rec);
-                  passModeRecord.splice(index, 1);
-                } else if (videoGroupOut.indexOf(rec.source_id) >= 0) {
-                  clockOutModeRecord.push(rec);
-                  passModeRecord.splice(index, 1);
-                }
-              }
-            }
-          }
-
-          passModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-          clockInModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-          clockOutModeRecord.sort((a, b) => a.timestamp - b.timestamp);
-          manualClockInRecord.sort((a, b) => a.modifier_time - b.modifier_time);
-          manualClockOutRecord.sort((a, b) => a.modifier_time - b.modifier_time);
-
-          let clockInStatus = _STATUS_NONE;
-          let clockOutStatus = _STATUS_NONE;
-          let firstClockInRec = null;
-          let lastClockOutRec = null;
-
-          let clockInTimeStamp = 0;
-          let clockOutTimeStamp = 0;
-          let overTimeStartStamp = 0;
-          let overTimeEndStamp = 0;
-          if (!item.late) item.late = 0;
-          if (!item.early) item.early = 0;
-          if (!item.no_record) item.no_record = 0;
-
-          // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6: overTime
-          if (manualClockInRecord.length > 0) {
-            firstClockInRec = manualClockInRecord[manualClockInRecord.length - 1];
-
-            clockInTimeStamp = firstClockInRec.timestamp;
-            if (definedClockinAdjustmentEnabled && firstClockInRec.timestamp < tDayStartTs + clockInTime) {
-              clockInTimeStamp = tDayStartTs + clockInTime;
-            }
-
-            if (definedClockinTimeLateEnabled) {
-              if (firstClockInRec.timestamp <= tDayStartTs + clockInTime + clockInTimeBuffer) {
-                // show on time
-                clockInStatus = _STATUS_SHOW_ON_TIME;
-              } else {
-                // too late to show
-                clockInStatus = _STATUS_LATE;
-              }
-            } else {
-              // show on time
-              clockInStatus = _STATUS_SHOW_ON_TIME;
-            }
-          } else if (clockInModeRecord.length > 0) {
-            const first = clockInModeRecord[0];
-            firstClockInRec = first;
-
-            clockInTimeStamp = firstClockInRec.timestamp;
-            if (definedClockinAdjustmentEnabled && firstClockInRec.timestamp < tDayStartTs + clockInTime) {
-              clockInTimeStamp = tDayStartTs + clockInTime;
-            }
-
-            if (definedClockinTimeLateEnabled) {
-              if (firstClockInRec.timestamp <= tDayStartTs + clockInTime + clockInTimeBuffer) {
-                // show on time
-                clockInStatus = _STATUS_SHOW_ON_TIME;
-              } else {
-                // too late to show
-                clockInStatus = _STATUS_LATE;
-              }
-            } else {
-              // show on time
-              clockInStatus = _STATUS_SHOW_ON_TIME;
-            }
-          }
-
-          if (manualClockOutRecord.length > 0) {
-            lastClockOutRec = manualClockOutRecord[manualClockOutRecord.length - 1];
-
-            clockOutTimeStamp = lastClockOutRec.timestamp;
-            if ((definedClockoutAdjustmentEnabled || definedOvertimeEnabled) && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
-              clockOutTimeStamp = tDayStartTs + clockOutTime;
-            }
-
-            if (definedClockoutTimeEarlyLeaveEnabled) {
-              if (lastClockOutRec.timestamp >= tDayStartTs + clockOutTime - clockOutTimeBuffer) {
-                // leave on time
-                clockOutStatus = _STATUS_LEAVE_ON_TIME;
-              } else {
-                // too early to leave
-                clockOutStatus = _STATUS_EARLY;
-              }
-            } else {
-              // leave on time
-              clockOutStatus = _STATUS_LEAVE_ON_TIME;
-            }
-
-            if (definedOvertimeEnabled) {
-              if (lastClockOutRec.timestamp >= tDayStartTs + overTime + overTimeBuffer) {
-                overTimeStartStamp = tDayStartTs + overTime;
-                overTimeEndStamp = lastClockOutRec.timestamp;
-
-                if (overTimeEndStamp > tDayEndTs) overTimeEndStamp = tDayEndTs;
-              }
-            }
-          } else if (clockOutModeRecord.length > 0) {
-            lastClockOutRec = clockOutModeRecord[clockOutModeRecord.length - 1];
-
-            clockOutTimeStamp = lastClockOutRec.timestamp;
-            if ((definedClockoutAdjustmentEnabled || definedOvertimeEnabled) && lastClockOutRec.timestamp > tDayStartTs + clockOutTime) {
-              clockOutTimeStamp = tDayStartTs + clockOutTime;
-            }
-
-            if (definedClockoutTimeEarlyLeaveEnabled) {
-              if (lastClockOutRec.timestamp >= tDayStartTs + clockOutTime - clockOutTimeBuffer) {
-                // leave on time
-                clockOutStatus = _STATUS_LEAVE_ON_TIME;
-              } else {
-                // too early to leave
-                clockOutStatus = _STATUS_EARLY;
-              }
-            } else {
-              // leave on time
-              clockOutStatus = _STATUS_LEAVE_ON_TIME;
-            }
-
-            if (definedOvertimeEnabled) {
-              if (lastClockOutRec.timestamp >= tDayStartTs + overTime + overTimeBuffer) {
-                overTimeStartStamp = tDayStartTs + overTime;
-                overTimeEndStamp = lastClockOutRec.timestamp;
-
-                if (overTimeEndStamp > tDayEndTs) overTimeEndStamp = tDayEndTs;
-
-                // console.log('overtime', overTimeStartStamp, overTimeEndStamp);
-              }
-            }
-          }
-
-          // 0 : no status, 1 : show on time, 2 : leave on time, 3 : too late to show, 4 : too early to leave, 5 : no show, 6: overTime
-          if (clockInStatus === _STATUS_NONE) {
-            if (!holiday && timeToCheckClockIn) {
-              clockInStatus = _STATUS_NO_SHOW;
-            }
-          }
-
-          if (timeToCheckClockOut && clockOutStatus === _STATUS_NONE) {
-            if (!holiday) {
-              clockOutStatus = _STATUS_NO_SHOW;
-            }
-          }
-
-          if (i === idxSpecifiedDateToCheck && clockInStatus === _STATUS_LATE) item.late += 1;
-          if (i === idxSpecifiedDateToCheck && clockOutStatus === _STATUS_EARLY) item.early += 1;
-          if (
-            i === idxSpecifiedDateToCheck &&
-            (clockInStatus === _STATUS_NO_SHOW || clockOutStatus === _STATUS_NO_SHOW)
-          )
-            item.no_record += 1;
-
-          returnData.attendance_data.clock_in_status.push(clockInStatus);
-          returnData.attendance_data.clock_out_status.push(clockOutStatus);
-          if (firstClockInRec) returnData.attendance_data.firstClockInRec = firstClockInRec;
-          if (lastClockOutRec) returnData.attendance_data.lastClockOutRec = lastClockOutRec;
-
-          let workingTime = 0;
-          if (clockOutTimeStamp > 0 && clockInTimeStamp > 0) {
-            workingTime = clockOutTimeStamp - clockInTimeStamp - breakTime;
-          }
-
-          returnData.attendance_data.working_time.push(workingTime > 0 ? workingTime : 0);
-
-          returnData.attendance_data.over_time.push(
-            overTimeEndStamp - overTimeStartStamp > 0 ? overTimeEndStamp - overTimeStartStamp : 0,
-          );
-        }
-      }
+      data.working_time[idx] = calcWorkingMs(inRec && inRec.timestamp, outRec && outRec.timestamp, dayStart, rules);
+      data.over_time[idx] = calcOvertimeMs(outRec && outRec.timestamp, dayStart, rules);
 
       return returnData;
     },
