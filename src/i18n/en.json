@@ -889,5 +889,6 @@
   "PhotoFaceTooSmallShort": "Face area too small",
   "ImportAllFailed": "Import Failed",
   "ImportExcelRow": "Row {row}",
-  "ImportMissingRequiredFields": "{label} (missing {fields})"
+  "ImportMissingRequiredFields": "{label} (missing {fields})",
+  "VideoReconnecting": "Video connection lost. Reconnecting…"
 }

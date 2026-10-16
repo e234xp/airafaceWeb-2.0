@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "顔の範囲が小さすぎます",
   "ImportAllFailed": "インポートに失敗しました",
   "ImportExcelRow": "{row} 行目",
-  "ImportMissingRequiredFields": "{label}（{fields}がありません）"
+  "ImportMissingRequiredFields": "{label}（{fields}がありません）",
+  "VideoReconnecting": "映像の接続が切れました。再接続しています…"
 }

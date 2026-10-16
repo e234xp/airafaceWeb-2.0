@@ -889,5 +889,6 @@
   "PhotoFaceTooSmallShort": "臉部範圍過小",
   "ImportAllFailed": "匯入失敗",
   "ImportExcelRow": "第 {row} 列",
-  "ImportMissingRequiredFields": "{label}（缺少{fields}）"
+  "ImportMissingRequiredFields": "{label}（缺少{fields}）",
+  "VideoReconnecting": "影像連線中斷，正在重新連線…"
 }

@@ -869,5 +869,6 @@
   "PhotoFaceTooSmallShort": "얼굴 영역이 너무 작음",
   "ImportAllFailed": "가져오기 실패",
   "ImportExcelRow": "{row}행",
-  "ImportMissingRequiredFields": "{label} ({fields} 누락)"
+  "ImportMissingRequiredFields": "{label} ({fields} 누락)",
+  "VideoReconnecting": "영상 연결이 끊어졌습니다. 다시 연결하는 중…"
 }
