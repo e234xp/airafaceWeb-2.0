@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "Vùng khuôn mặt quá nhỏ",
   "ImportAllFailed": "Nhập thất bại",
   "ImportExcelRow": "Dòng {row}",
-  "ImportMissingRequiredFields": "{label} (thiếu {fields})"
+  "ImportMissingRequiredFields": "{label} (thiếu {fields})",
+  "VideoReconnecting": "Mất kết nối video. Đang kết nối lại…"
 }

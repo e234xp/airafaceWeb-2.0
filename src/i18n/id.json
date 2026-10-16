@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "Area wajah terlalu kecil",
   "ImportAllFailed": "Impor gagal",
   "ImportExcelRow": "Baris {row}",
-  "ImportMissingRequiredFields": "{label} ({fields} kosong)"
+  "ImportMissingRequiredFields": "{label} ({fields} kosong)",
+  "VideoReconnecting": "Koneksi video terputus. Menyambungkan ulang…"
 }

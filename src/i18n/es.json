@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "Área del rostro demasiado pequeña",
   "ImportAllFailed": "Error en la importación",
   "ImportExcelRow": "Fila {row}",
-  "ImportMissingRequiredFields": "{label} (falta {fields})"
+  "ImportMissingRequiredFields": "{label} (falta {fields})",
+  "VideoReconnecting": "Se perdió la conexión de video. Reconectando…"
 }

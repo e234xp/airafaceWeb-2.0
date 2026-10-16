@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "พื้นที่ใบหน้าเล็กเกินไป",
   "ImportAllFailed": "นำเข้าไม่สำเร็จ",
   "ImportExcelRow": "แถวที่ {row}",
-  "ImportMissingRequiredFields": "{label} (ไม่มี{fields})"
+  "ImportMissingRequiredFields": "{label} (ไม่มี{fields})",
+  "VideoReconnecting": "การเชื่อมต่อวิดีโอขาดหาย กำลังเชื่อมต่อใหม่…"
 }

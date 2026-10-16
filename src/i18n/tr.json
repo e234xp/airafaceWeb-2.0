@@ -882,5 +882,6 @@
   "PhotoFaceTooSmallShort": "Yüz alanı çok küçük",
   "ImportAllFailed": "İçe aktarma başarısız",
   "ImportExcelRow": "Satır {row}",
-  "ImportMissingRequiredFields": "{label} ({fields} eksik)"
+  "ImportMissingRequiredFields": "{label} ({fields} eksik)",
+  "VideoReconnecting": "Video bağlantısı kesildi. Yeniden bağlanılıyor…"
 }
