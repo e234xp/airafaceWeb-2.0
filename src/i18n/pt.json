@@ -867,5 +867,7 @@
   "PhotoNotUploadedHint": "As seguintes pessoas foram criadas, mas suas fotos não foram enviadas. Envie-as novamente na página de edição:",
   "PhotoFaceNotFoundShort": "Rosto não detectado",
   "PhotoFaceTooSmallShort": "Área do rosto muito pequena",
-  "ImportAllFailed": "Falha na importação"
+  "ImportAllFailed": "Falha na importação",
+  "ImportExcelRow": "Linha {row}",
+  "ImportMissingRequiredFields": "{label} (falta {fields})"
 }

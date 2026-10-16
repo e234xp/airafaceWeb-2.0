@@ -880,5 +880,7 @@
   "PhotoNotUploadedHint": "Aşağıdaki kişiler oluşturuldu ancak fotoğrafları yüklenmedi. Lütfen düzenleme sayfasından yeniden yükleyin:",
   "PhotoFaceNotFoundShort": "Yüz algılanamadı",
   "PhotoFaceTooSmallShort": "Yüz alanı çok küçük",
-  "ImportAllFailed": "İçe aktarma başarısız"
+  "ImportAllFailed": "İçe aktarma başarısız",
+  "ImportExcelRow": "Satır {row}",
+  "ImportMissingRequiredFields": "{label} ({fields} eksik)"
 }

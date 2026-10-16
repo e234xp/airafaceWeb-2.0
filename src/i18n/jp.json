@@ -880,5 +880,7 @@
   "PhotoNotUploadedHint": "以下の人員情報は作成されましたが、写真はアップロードされていません。編集ページで再アップロードしてください：",
   "PhotoFaceNotFoundShort": "顔を認識できません",
   "PhotoFaceTooSmallShort": "顔の範囲が小さすぎます",
-  "ImportAllFailed": "インポートに失敗しました"
+  "ImportAllFailed": "インポートに失敗しました",
+  "ImportExcelRow": "{row} 行目",
+  "ImportMissingRequiredFields": "{label}（{fields}がありません）"
 }

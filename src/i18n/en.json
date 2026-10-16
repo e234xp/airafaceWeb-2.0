@@ -887,5 +887,7 @@
   "PhotoNotUploadedHint": "The following persons were created, but their photos were not uploaded. Please re-upload them on the edit page:",
   "PhotoFaceNotFoundShort": "Unable to detect a face",
   "PhotoFaceTooSmallShort": "Face area too small",
-  "ImportAllFailed": "Import Failed"
+  "ImportAllFailed": "Import Failed",
+  "ImportExcelRow": "Row {row}",
+  "ImportMissingRequiredFields": "{label} (missing {fields})"
 }
