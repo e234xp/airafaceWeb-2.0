@@ -14,7 +14,7 @@ const args = process.argv.slice(2);
 const dd = args.indexOf('--');
 const pass = dd >= 0 ? args.slice(dd + 1) : [];
 const own = dd >= 0 ? args.slice(0, dd) : args;
-const ALL = ['g-dash', 'g-per', 'g-sys', 'g-att', 'g-dev', 'g-ro', 'g-login']; // 預估耗時由長到短
+const ALL = ['g-dash', 'g-per', 'g-sys', 'g-dev', 'g-ro', 'g-login']; // 預估耗時由長到短（g-att：出勤腳本已依使用者 2026-10-19 決定刪除，後端彙總更新不即時）
 const pick = (own.find((a) => a.startsWith('--groups=')) || '').split('=')[1];
 const groups = pick ? pick.split(',') : ALL;
 const jobs = Number((own.find((a) => a.startsWith('--jobs=')) || '--jobs=3').split('=')[1]);

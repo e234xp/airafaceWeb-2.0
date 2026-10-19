@@ -107,9 +107,12 @@ test.describe('EVT', () => {
       }),
     },
     async ({ page }) => {
-      test.setTimeout(180000);
+      test.setTimeout(420000);
+      // 規格沒有定義可搜尋哪些欄位；以「設定名稱」為準。
+      // 不依賴環境裡既有的事件名稱：先自己建立名稱含 test、http、smtp 的事件，再搜尋（事件在 afterEach 清除）
+      const { pg, dg } = await makeScope(page);
+      for (const keyword of ['test', 'http', 'smtp']) await createEventViaUI(page, trackE(uniqueEventName(keyword)), pg, dg);
       // 每個關鍵字都從重新載入的頁面開始搜尋
-      // 規格沒有定義可搜尋哪些欄位；以「設定名稱」為準（既有事件名稱含 test、http、mail 等字樣）
       for (const keyword of ['test', 'http', 'smtp']) {
         await freshSearch(page, keyword);
         const rows = await eventRowTexts(page);
@@ -213,6 +216,10 @@ test.describe('EVT', () => {
     async ({ page }) => {
       test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
+      // 既有（非 e2e-）事件，測完必須原封不動；不寫死環境裡的特定事件名稱
+      await gotoEvents(page);
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith(EVT_PREFIX));
+      expect(keepBefore.length, '環境中沒有既有事件可供比對').toBeGreaterThan(0);
       const names = ['d1', 'd2', 'd3'].map((t) => trackE(uniqueEventName(t)));
       for (const n of names) await createEventViaUI(page, n, pg, dg);
       // 關閉三個事件（開關切到關閉）
@@ -231,13 +238,15 @@ test.describe('EVT', () => {
       for (const n of names.slice(1)) await eventRow(page, n).first().locator('.vxe-cell--checkbox').click();
       await page.locator('button.btn-danger').first().click();
       await page.locator('.el-message-box__btns .el-button--primary').click();
-      await expect(eventRow(page, EVT_PREFIX)).toHaveCount(0, { timeout: 20000 });
+      // 只驗證自己建立的三個事件（環境裡可能有其他測項留下的 e2e- 事件，不可假設全部清空）
+      for (const n of names) await expect(eventRow(page, n)).toHaveCount(0, { timeout: 20000 });
       // 重新載入：三個都不在；既有事件仍在
       await freshSearch(page, EVT_PREFIX);
-      expect(await eventRowTexts(page)).toEqual([]);
+      const left = await eventRowTexts(page);
+      for (const n of names) expect(left.some((r) => r.includes(n)), `${n} 重新載入後仍在列表中`).toBe(false);
       await gotoEvents(page);
       const all = await readAllRows(page, false);
-      expect(all.some((r) => r.startsWith('TG-test'))).toBe(true);
+      expect(all.filter((r) => !r.startsWith(EVT_PREFIX)), '既有事件在刪除測試事件後應原封不動').toEqual(keepBefore);
     },
   );
 

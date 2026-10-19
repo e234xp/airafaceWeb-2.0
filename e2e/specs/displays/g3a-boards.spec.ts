@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import {
+  injectRecognitions,
   appGetSettings,
   appSetSettings,
   openDashboardSettings,
@@ -110,7 +111,17 @@ test.describe('G3-A 看板', () => {
       expect(steps, '設定頁沒有顯示步驟').toMatch(/1\s*公司資訊.*2\s*數位看板.*3\s*人員資訊.*4\s*完成/);
       const s = (await readDashboard(page, 'WELCOME')) as Record<string, string>;
       const names = await knownNames(page);
-      await loadBoard(page, BOARDS.WELCOME, async () => { const t0 = await bodyText(page); return names.some((n) => t0.includes(n)); });
+      // 人員卡片需要即時辨識事件：載入看板後模擬辨識（不依賴環境當下有沒有人被辨識，也不需要真人在鏡頭前）
+      let injected = false;
+      await loadBoard(page, BOARDS.WELCOME, async () => {
+        if (!injected) {
+          injected = true;
+          await page.waitForTimeout(2500);
+          await injectRecognitions(page);
+        }
+        const t0 = await bodyText(page);
+        return names.some((n) => t0.includes(n));
+      });
       const t = await bodyText(page);
       obs(`看板文字：${t.slice(0, 160)}`);
       for (const k of ['welcomeword', 'maintitle', 'subtitle']) expect(t, `看板沒有顯示設定的 ${k}「${s[k]}」`).toContain(s[k]);

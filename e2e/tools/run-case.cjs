@@ -42,5 +42,6 @@ if (blocked.length) {
 // 不經 shell，避免正規表示式的反斜線被吃掉
 const cli = require.resolve('@playwright/test/cli');
 const grep = ids.length ? ['-g', ids.map((i) => '\\[' + i + '\\]').join('|')] : [];
-const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,./e2e/tools/budget-reporter.cjs', ...grep], { stdio: 'inherit', env: { ...process.env, E2E_VIA_RUNNER: '1' } });
+const workers = args.filter((a) => /^--workers=\d+$/.test(a)); // 一次跑多項時可降低並行數，避免開發伺服器被壓垮
+const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,./e2e/tools/budget-reporter.cjs', ...workers, ...grep], { stdio: 'inherit', env: { ...process.env, E2E_VIA_RUNNER: '1' } });
 process.exit(r.status ?? 1);

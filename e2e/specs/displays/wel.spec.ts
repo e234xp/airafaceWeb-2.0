@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { csvAnnotations } from '../../helpers/csvSource';
-import { appGetSettings, readDashboard, restoreDashboard, snapshotDashboard } from '../../helpers/dashboard';
+import { injectRecognitions, appGetSettings, readDashboard, restoreDashboard, snapshotDashboard } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 
 // 來源 E2E-TEST-PLAN.md；模組 WEL（CSV 第 116~119 列：#10.1 迎賓看板設定 Step 1~3）。
@@ -49,11 +49,19 @@ async function saveFromStep3(page: Page) {
   await page.waitForTimeout(1500);
 }
 
-async function boardSettingsAndPage(page: Page) {
+let lastInjected: string[] = []; // 最近一次模擬辨識的人員姓名（供姓名遮蔽等判定計算預期值）
+
+/** needCard=false：只驗看板的背景、商標、標題等，不需要人員卡片。needCard=true：模擬辨識事件讓卡片出現（見 injectRecognitions）。 */
+async function boardSettingsAndPage(page: Page, needCard = true) {
   const w = (await readDashboard(page, KEY)) as Record<string, unknown>;
   await page.goto('/#/welcomemode');
   await page.reload();
-  await page.locator('.welcome-card').first().waitFor({ timeout: 20000 });
+  if (needCard) {
+    await page.locator('.welcome-logo-img').first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2500); // 等看板載入顯示設定與群組
+    lastInjected = await injectRecognitions(page);
+    await page.locator('.welcome-card').first().waitFor({ timeout: 20000 });
+  } else await page.locator('.welcome-logo-img').first().waitFor({ timeout: 20000 });
   await page.waitForTimeout(1500);
   return w;
 }
@@ -94,7 +102,7 @@ test.describe('WEL', () => {
       await next(page).click();
       await saveFromStep3(page);
       // 後端設定與看板畫面一致
-      const w = (await boardSettingsAndPage(page)) as { background_image: string; logo: string };
+      const w = (await boardSettingsAndPage(page, false)) as { background_image: string; logo: string };
       expect(w.background_image).not.toBe(before.background_image);
       expect(w.logo).not.toBe(before.logo);
       // 看板上任何元素以背景圖或圖片方式套用了新的背景圖（比對圖檔內容片段）
@@ -127,9 +135,13 @@ test.describe('WEL', () => {
     async ({ page }) => {
       test.setTimeout(240000);
       await openSettings(page);
-      const before = (await readDashboard(page, KEY)) as { advertising: unknown[]; advertisingDuration: number };
+      const before = (await readDashboard(page, KEY)) as { advertising: unknown[]; advertisingDuration: number; enabledAdvertisingMode?: boolean };
       await next(page).click();
       await page.getByText('輪巡時間').first().waitFor();
+      // 形象廣告模式關閉時（問候語模式）輪巡時間與照片欄位是停用的：先開啟，測完再還原，不假設環境的初始模式
+      const adSwitch = page.locator('.card-header', { hasText: '形象廣告模式' }).locator('.c-switch').first();
+      const adWasOn = before.enabledAdvertisingMode !== false;
+      if (!adWasOn) await adSwitch.click();
       const duration = String(before.advertisingDuration === 20 ? 25 : 20);
       const interval = page.locator('input[type=text]:visible').first();
       await interval.fill(duration);
@@ -148,6 +160,11 @@ test.describe('WEL', () => {
       await next(page).click();
       await page.getByText('輪巡時間').first().waitFor();
       await expect(page.locator('input[type=text]:visible').first()).toHaveValue(duration);
+      if (!adWasOn) {
+        await adSwitch.click();
+        await next(page).click();
+        await saveFromStep3(page);
+      }
     },
   );
 
@@ -179,10 +196,19 @@ test.describe('WEL', () => {
       await saveFromStep3(page);
       const w = (await boardSettingsAndPage(page)) as Record<string, string>;
       expect(Object.values(w).includes(chosen), `後端設定沒有保留 ${chosen}`).toBe(true);
-      // 看板上的姓名：「部分姓名」會顯示縮寫（例如 Frank Li → F. Li、Tulip → T），與下一行的完整姓名（顯示資訊 2）不同
-      const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-      test.info().annotations.push({ type: '觀察', description: `選「部分姓名」後看板文字：${text.slice(0, 160)}` });
-      expect(text, '選「部分姓名」後看板沒有出現縮寫姓名（例如 F. Li）').toMatch(/[A-Z][.] [A-Z][a-z]+/);
+      // 看板上的姓名：產品規則（WelcomeDashboard.vue PARTIALNAME）英文姓名取名字首字母，兩個字以上再加「. 最後一個字」
+      // （Frank Li → F. Li、Yu Chin → Y. Chin、Frank → F）；預期值由模擬辨識的人員姓名計算，不假設環境有哪些人員
+      const partialOf = (n: string) => {
+        const p = n.trim().split(/\s+/);
+        return p.length >= 2 ? `${p[0][0]}. ${p[p.length - 1]}` : p[0][0];
+      };
+      const expected = lastInjected.map(partialOf);
+      const titles = async () => (await page.locator('.welcome-card-title').allInnerTexts()).map((t) => t.trim());
+      test.info().annotations.push({ type: '觀察', description: `模擬辨識人員：${lastInjected.join('、')}；預期縮寫：${expected.join('、')}` });
+      await expect
+        .poll(async () => (await titles()).some((t) => expected.includes(t)), { timeout: 15000, message: `選「部分姓名」後看板第一行沒有出現縮寫姓名（預期其中之一：${expected.join('、')}）` })
+        .toBe(true);
+      for (const t of await titles()) expect(lastInjected, `第一行不應顯示完整姓名：${t}`).not.toContain(t);
     },
   );
 

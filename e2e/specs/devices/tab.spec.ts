@@ -134,15 +134,22 @@ test.describe('TAB', () => {
     async ({ page }) => {
       test.setTimeout(180000);
       // 1) 只有既有平板（皆有 IP）時：依名稱、IP、不存在的關鍵字搜尋，結果只含符合者
+      // 不寫死環境裡的特定平板：取清單中第一台既有（非 e2e-）平板的名稱與 IP 來搜尋
       await gotoTablets(page);
-      await searchTablets(page, 'Tablet-21');
+      const keep = (await readAllRows(page, false)).find((r) => !r.startsWith('e2e-'));
+      expect(keep, '環境中沒有既有平板可供搜尋比對').toBeTruthy();
+      const keepName = (keep as string).split(/\s+/)[0];
+      const keepIp = /\d+\.\d+\.\d+\.\d+/.exec(keep as string)?.[0] ?? '';
+      await searchTablets(page, keepName);
       const rows2 = await readAllRows(page, false);
       expect(rows2.length).toBeGreaterThan(0);
-      for (const r of rows2) expect(r.toLowerCase()).toContain('tablet-21');
-      await searchTablets(page, '192.168.14.102');
-      const rows3 = await readAllRows(page, false);
-      expect(rows3.length).toBeGreaterThan(0);
-      for (const r of rows3) expect(r).toContain('192.168.14.102');
+      for (const r of rows2) expect(r.toLowerCase()).toContain(keepName.toLowerCase());
+      if (keepIp) {
+        await searchTablets(page, keepIp);
+        const rows3 = await readAllRows(page, false);
+        expect(rows3.length).toBeGreaterThan(0);
+        for (const r of rows3) expect(r).toContain(keepIp);
+      }
       await searchTablets(page, `e2e-no-such-${Date.now()}`);
       expect(await tabletRowTexts(page)).toEqual([]);
       // 2) 邊界觀察（不影響判定）：清單中有「沒有 IP」的平板（新增後尚未連線）時，搜尋是否仍正常
@@ -202,6 +209,9 @@ test.describe('TAB', () => {
     },
     async ({ page }) => {
       test.setTimeout(300000);
+      await gotoTablets(page);
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有平板，測完必須原封不動
+      expect(keepBefore.length, '環境中沒有既有平板可供比對').toBeGreaterThan(0);
       const names = ['b1', 'b2', 'b3'].map((t) => track(uniqueTabletName(t)));
       for (const n of names) await createTabletViaUI(page, n);
       await openEdit(page, names[0]);
@@ -218,8 +228,8 @@ test.describe('TAB', () => {
       await page.locator('.el-message-box__btns .el-button--primary').click();
       await expect(tabletRow(page, 'e2e-')).toHaveCount(0, { timeout: 20000 });
       await gotoTablets(page);
-      await searchTablets(page, 'Tablet-21');
-      await expect(tabletRow(page, 'Tablet-21').first()).toBeVisible();
+      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-'));
+      expect(keepAfter, '既有平板在刪除測試平板後應原封不動').toEqual(keepBefore);
     },
   );
 
@@ -378,6 +388,9 @@ test.describe('TAB', () => {
     },
     async ({ page }) => {
       test.setTimeout(300000);
+      await gotoTablets(page);
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有平板，測完必須原封不動
+      expect(keepBefore.length, '環境中沒有既有平板可供比對').toBeGreaterThan(0);
       const names = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6'].map((t) => track(uniqueTabletName(t)));
       for (const n of names) await createTabletViaUI(page, n);
       await gotoTablets(page);
@@ -412,8 +425,8 @@ test.describe('TAB', () => {
       await page.locator('.el-message-box__btns .el-button--primary').click();
       await expect(tabletRow(page, 'e2e-')).toHaveCount(0, { timeout: 30000 });
       await gotoTablets(page);
-      await searchTablets(page, 'Tablet-21');
-      await expect(tabletRow(page, 'Tablet-21').first()).toBeVisible();
+      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-'));
+      expect(keepAfter, '既有平板在刪除測試平板後應原封不動').toEqual(keepBefore);
     },
   );
 

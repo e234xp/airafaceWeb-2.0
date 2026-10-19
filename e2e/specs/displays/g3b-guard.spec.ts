@@ -68,8 +68,10 @@ test.describe('SEC 保全設定與看板一致', () => {
       const labels = await selectOptions(selIn);
       obs(`簽到設備 ${labels.find((o) => o.value === vIn)?.label}、簽退設備 ${labels.find((o) => o.value === vOut)?.label}`);
       expect(vIn, '簽到與簽退原本就是同一個設備，無法互換驗證').not.toBe(vOut);
-      await selIn.selectOption(vOut);
+      // 簽到與簽退的設備清單互相排除已選的設備（同一台不能同時是簽到與簽退），所以互換要先清空簽到，再依序設定
+      await selIn.selectOption('');
       await selOut.selectOption(vIn);
+      await selIn.selectOption(vOut);
       await saveStep2(page);
       await loadBoard(page, ready);
       const b = await readChart();

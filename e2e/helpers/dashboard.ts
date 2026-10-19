@@ -1,4 +1,4 @@
-import { Browser, Page } from '@playwright/test';
+import { Browser, Page, expect } from '@playwright/test';
 import { ADMIN_STORAGE_PATH } from './accounts';
 
 // 看板設定 helper。所有看板（WELCOME、OCCUPANCY、CAPACITY、GUARD…）的設定存在同一份 settings，
@@ -96,3 +96,27 @@ export const boardHasImage = (page: Page, needle: string) =>
       getComputedStyle(e).backgroundImage.includes(n) || (e instanceof HTMLImageElement && e.src.includes(n)) || getComputedStyle(e, '::before').backgroundImage.includes(n);
     return Array.from(document.querySelectorAll('*')).some(hit);
   }, needle);
+
+
+/**
+ * 模擬即時辨識事件：把一筆「人員被辨識」的訊息送進前端的 store（與 WebSocket 收到 /verifyresults 訊息後
+ * 呼叫的 setNotifications 同一條路徑）。訊息帶真實存在人員的 uuid，看板再向後端查該人員的真實資料。
+ * 這樣不需要真人站在鏡頭前，也不依賴環境當下有沒有辨識事件。多字姓名的人員排在前面（供姓名遮蔽判斷）。
+ */
+export async function injectRecognitions(page: Page, count = 4) {
+  const injected = await page.evaluate(async (n) => {
+    const root = (Array.from(document.querySelectorAll('*')).find((e) => (e as unknown as { __vue__?: unknown }).__vue__) as unknown as { __vue__: { $root: any } }).__vue__.$root;
+    const res = await root.$globalFindPersonWithoutPhoto('', 0, 3000, '');
+    const list = ((res.data && res.data.person_list) || []) as Array<{ uuid: string; name: string; group_list: string | string[] }>;
+    const groupsOf = (p: { group_list: string | string[] }) => (typeof p.group_list === 'string' ? JSON.parse(p.group_list || '[]') : p.group_list || []);
+    const cand = list.filter((p) => !/^e2e/i.test(p.name) && groupsOf(p).length > 0);
+    cand.sort((a, b) => Number(/\s/.test(b.name.trim())) - Number(/\s/.test(a.name.trim())));
+    const picked = cand.slice(0, n);
+    for (const p of picked) {
+      root.$store.dispatch('setNotifications', JSON.stringify({ type: 1, person: { name: p.name }, person_id: p.uuid, groups: groupsOf(p) }));
+    }
+    return picked.map((p) => p.name);
+  }, count);
+  expect(injected.length, '環境中沒有可用的既有人員可供模擬辨識').toBeGreaterThan(0);
+  return injected;
+}
