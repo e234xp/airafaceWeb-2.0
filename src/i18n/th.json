@@ -880,5 +880,8 @@
   "PhotoNotUploadedHint": "สร้างข้อมูลบุคคลต่อไปนี้แล้ว แต่ยังไม่ได้อัปโหลดรูปภาพ โปรดอัปโหลดใหม่ที่หน้าแก้ไข:",
   "PhotoFaceNotFoundShort": "ไม่สามารถตรวจจับใบหน้าได้",
   "PhotoFaceTooSmallShort": "พื้นที่ใบหน้าเล็กเกินไป",
-  "ImportAllFailed": "นำเข้าไม่สำเร็จ"
+  "ImportAllFailed": "นำเข้าไม่สำเร็จ",
+  "ImportExcelRow": "แถวที่ {row}",
+  "ImportMissingRequiredFields": "{label} (ไม่มี{fields})",
+  "VideoReconnecting": "การเชื่อมต่อวิดีโอขาดหาย กำลังเชื่อมต่อใหม่…"
 }

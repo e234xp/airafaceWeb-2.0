@@ -867,5 +867,8 @@
   "PhotoNotUploadedHint": "다음 인원 정보는 생성되었지만 사진이 업로드되지 않았습니다. 편집 페이지에서 다시 업로드하세요:",
   "PhotoFaceNotFoundShort": "얼굴을 인식할 수 없음",
   "PhotoFaceTooSmallShort": "얼굴 영역이 너무 작음",
-  "ImportAllFailed": "가져오기 실패"
+  "ImportAllFailed": "가져오기 실패",
+  "ImportExcelRow": "{row}행",
+  "ImportMissingRequiredFields": "{label} ({fields} 누락)",
+  "VideoReconnecting": "영상 연결이 끊어졌습니다. 다시 연결하는 중…"
 }

@@ -880,5 +880,8 @@
   "PhotoNotUploadedHint": "Personel berikut telah dibuat, tetapi fotonya tidak terunggah. Silakan unggah ulang di halaman edit:",
   "PhotoFaceNotFoundShort": "Wajah tidak terdeteksi",
   "PhotoFaceTooSmallShort": "Area wajah terlalu kecil",
-  "ImportAllFailed": "Impor gagal"
+  "ImportAllFailed": "Impor gagal",
+  "ImportExcelRow": "Baris {row}",
+  "ImportMissingRequiredFields": "{label} ({fields} kosong)",
+  "VideoReconnecting": "Koneksi video terputus. Menyambungkan ulang…"
 }

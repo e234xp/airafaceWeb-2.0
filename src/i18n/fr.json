@@ -873,5 +873,8 @@
   "PhotoNotUploadedHint": "Les personnes suivantes ont été créées, mais leurs photos n'ont pas été téléversées. Veuillez les téléverser à nouveau depuis la page de modification :",
   "PhotoFaceNotFoundShort": "Visage non détecté",
   "PhotoFaceTooSmallShort": "Zone du visage trop petite",
-  "ImportAllFailed": "Échec de l'importation"
+  "ImportAllFailed": "Échec de l'importation",
+  "ImportExcelRow": "Ligne {row}",
+  "ImportMissingRequiredFields": "{label} ({fields} manquant)",
+  "VideoReconnecting": "Connexion vidéo perdue. Reconnexion…"
 }

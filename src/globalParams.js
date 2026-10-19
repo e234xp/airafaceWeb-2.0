@@ -109,6 +109,9 @@ else window.apiSocketPath = `ws://${HOST}:${PORT}/airafacelite/verifyresults`;
 const OCCUPANCY_WS_SCHEME = global.usingHttps ? 'wss' : 'ws';
 window.occupancySocketPath = `${OCCUPANCY_WS_SCHEME}://${HOST}:${PORT}/airafacelite/verifyondashboard`;
 
+// API 連的設備位址，其他直接連設備的功能（例如即時影像的 WebRTC）也用這個，開發模式才會跟著 TEST_HOST
+Vue.prototype.$globalApiHost = HOST;
+
 //console.log('globalParams.js', window.apiSocketPath);
 
 function apiServerPath() {

@@ -880,5 +880,8 @@
   "PhotoNotUploadedHint": "Các nhân sự sau đã được tạo nhưng ảnh chưa được tải lên. Vui lòng tải lại ở trang chỉnh sửa:",
   "PhotoFaceNotFoundShort": "Không nhận diện được khuôn mặt",
   "PhotoFaceTooSmallShort": "Vùng khuôn mặt quá nhỏ",
-  "ImportAllFailed": "Nhập thất bại"
+  "ImportAllFailed": "Nhập thất bại",
+  "ImportExcelRow": "Dòng {row}",
+  "ImportMissingRequiredFields": "{label} (thiếu {fields})",
+  "VideoReconnecting": "Mất kết nối video. Đang kết nối lại…"
 }

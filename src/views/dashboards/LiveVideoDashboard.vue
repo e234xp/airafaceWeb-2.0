@@ -42,6 +42,11 @@
             <video ref="videoPlayer" class="video-player" autoplay muted playsinline @loadedmetadata="onVideoLoaded" />
             <!-- ROI 畫框圖層 -->
             <canvas ref="roiCanvas" class="roi-overlay" />
+            <!-- 斷線自動重連中 -->
+            <div v-if="isReconnecting" class="video-reconnecting-overlay">
+              <div class="video-reconnecting-spinner" />
+              <p>{{ $t('VideoReconnecting') }}</p>
+            </div>
           </div>
           <div v-else class="no-camera-selected">
             <p>{{ $t('PleaseSelectCamera') }}</p>
@@ -256,6 +261,11 @@ export default {
       },
       timeInterval: null,
       peerConnection: null, // WebRTC 連接
+      connectSeq: 0, // 每次建立連線 +1，用來忽略舊連線或已取消連線的非同步結果
+      isReconnecting: false, // 斷線自動重連中，畫面顯示遮罩
+      reconnectAttempts: 0, // 連續重連次數，決定下次等待多久
+      reconnectTimer: null,
+      disconnectTimer: null,
       recognitionResults: [], // 所有辨識結果
       maxResults: 50, // 最多保留的結果數量
       isConfirmed: false, // 是否已確認設定
@@ -265,8 +275,8 @@ export default {
   computed: {
     // 動態生成 WebRTC URL
     webrtcUrl() {
-      const TEST_MODE = process.env.NODE_ENV === 'development';
-      const HOST = TEST_MODE ? '192.168.14.21' : window.location.hostname;
+      // 跟 API 連同一台設備（開發模式為 globalParams 的 TEST_HOST）
+      const HOST = this.$globalApiHost;
       // 跟著網頁本身的協定走：http 頁面打 https 會遇到憑證問題，https 頁面打 http 則會被瀏覽器當成混合內容擋掉
       const PROTOCOL = window.location.protocol === 'https:' ? 'https' : 'http';
       return `${PROTOCOL}://${HOST}/viewvideo/${this.selectedCameraUuid}/whep`;
@@ -496,6 +506,7 @@ export default {
 
       // 初始化視訊播放
       self.$nextTick(() => {
+        self.reconnectAttempts = 0;
         self.initVideoPlayer();
       });
     },
@@ -507,9 +518,15 @@ export default {
         return;
       }
 
-      try {
-        // console.log('Initializing WebRTC connection to:', self.webrtcUrl);
+      // 重連或重新確認設定時，先關掉舊連線，避免連線越積越多
+      self.clearReconnectTimers();
+      self.closePeerConnection();
+      self.connectSeq += 1;
+      const seq = self.connectSeq;
+      // await 回來時若已有更新的連線，或頁面已離開，就不再繼續
+      const isStale = () => seq !== self.connectSeq;
 
+      try {
         // 1. 建立 RTCPeerConnection
         const pc = new RTCPeerConnection({
           iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
@@ -519,26 +536,15 @@ export default {
 
         // 2. 處理接收到的遠端串流
         pc.ontrack = (event) => {
-          // console.log('Received remote track:', event.track.kind);
           if (self.$refs.videoPlayer) {
             self.$refs.videoPlayer.srcObject = event.streams[0];
           }
         };
 
-        // 3. 監聽連線狀態
+        // 3. 監聽連線狀態，斷線時自動重連
         pc.onconnectionstatechange = () => {
-          // console.log('Connection state:', pc.connectionState);
-          if (pc.connectionState === 'connected') {
-            // console.log('WebRTC connection established');
-          } else if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
-            console.error('WebRTC connection failed or disconnected');
-            self.$fire({
-              text: '影片連線失敗，請重試',
-              type: 'error',
-              timer: 3000,
-              confirmButtonColor: '#20a8d8',
-            });
-          }
+          if (isStale()) return;
+          self.onConnectionStateChange(pc.connectionState);
         };
 
         // 4. 添加 transceiver（接收模式）
@@ -548,9 +554,9 @@ export default {
         // 5. 建立 SDP offer
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
+        if (isStale()) return;
 
         // 6. 透過 WHEP 協議發送 offer 到後端
-        // console.log('Sending WHEP request to:', self.webrtcUrl);
         const response = await fetch(self.webrtcUrl, {
           method: 'POST',
           headers: {
@@ -558,6 +564,7 @@ export default {
           },
           body: offer.sdp, // WHEP 協議直接傳送 SDP 字串
         });
+        if (isStale()) return;
 
         if (!response.ok) {
           throw new Error(`WHEP request failed: ${response.status} ${response.statusText}`);
@@ -565,39 +572,93 @@ export default {
 
         // 7. 接收 SDP answer（WHEP 回傳純文字 SDP）
         const answerSdp = await response.text();
-        // console.log('Received WHEP answer from backend');
+        if (isStale()) return;
 
         // 8. 設定遠端描述
         await pc.setRemoteDescription({
           type: 'answer',
           sdp: answerSdp,
         });
-
-        // console.log('WebRTC setup complete, waiting for stream...');
       } catch (error) {
+        if (isStale()) return;
+        // 串流伺服器重啟中、網路暫時不通等，都等一下再試
         console.error('Failed to initialize video player:', error);
-        self.$fire({
-          text: `影片播放初始化失敗: ${error.message}`,
-          type: 'error',
-          timer: 5000,
-          confirmButtonColor: '#20a8d8',
-        });
+        self.scheduleReconnect();
       }
     },
-    destroyVideoPlayer() {
+    onConnectionStateChange(state) {
       const self = this;
 
-      // 清理 WebRTC 連接
+      if (state === 'connected') {
+        self.clearReconnectTimers();
+        self.reconnectAttempts = 0;
+        self.isReconnecting = false;
+      } else if (state === 'disconnected') {
+        // disconnected 可能幾秒內自己恢復，等 5 秒還沒恢復才重連
+        console.warn('WebRTC disconnected, waiting to recover');
+        self.isReconnecting = true;
+        if (!self.disconnectTimer) {
+          self.disconnectTimer = setTimeout(() => {
+            self.disconnectTimer = null;
+            self.scheduleReconnect();
+          }, 5000);
+        }
+      } else if (state === 'failed') {
+        console.error('WebRTC connection failed, reconnecting');
+        self.scheduleReconnect();
+      }
+    },
+    // 間隔 1、2、4、8… 秒，最長 30 秒，不限次數，直到連上為止
+    scheduleReconnect() {
+      const self = this;
+
+      if (self.reconnectTimer) return;
+
+      self.isReconnecting = true;
+      if (self.disconnectTimer) {
+        clearTimeout(self.disconnectTimer);
+        self.disconnectTimer = null;
+      }
+      self.closePeerConnection();
+
+      const delay = Math.min(1000 * 2 ** self.reconnectAttempts, 30000);
+      self.reconnectAttempts += 1;
+      self.reconnectTimer = setTimeout(() => {
+        self.reconnectTimer = null;
+        self.initVideoPlayer();
+      }, delay);
+    },
+    clearReconnectTimers() {
+      if (this.reconnectTimer) {
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = null;
+      }
+      if (this.disconnectTimer) {
+        clearTimeout(this.disconnectTimer);
+        this.disconnectTimer = null;
+      }
+    },
+    closePeerConnection() {
+      const self = this;
+
       if (self.peerConnection) {
-        console.log('Closing WebRTC connection');
+        // 先拿掉事件，避免關閉時再觸發狀態變化
+        self.peerConnection.onconnectionstatechange = null;
+        self.peerConnection.ontrack = null;
         self.peerConnection.close();
         self.peerConnection = null;
       }
 
-      // 清理 video element
       if (self.$refs.videoPlayer) {
         self.$refs.videoPlayer.srcObject = null;
       }
+    },
+    destroyVideoPlayer() {
+      // 離開頁面或登出：停止重連，並讓還在進行中的連線作廢
+      this.connectSeq += 1;
+      this.clearReconnectTimers();
+      this.closePeerConnection();
+      this.isReconnecting = false;
     },
     onVideoLoaded() {
       const self = this;
@@ -996,6 +1057,39 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.video-reconnecting-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 20px;
+  /* 蓋住影像與 ROI（5），但在攝影機名稱（10）下面，斷線時仍看得出是哪台 */
+  z-index: 8;
+}
+
+.video-reconnecting-spinner {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: video-reconnecting-spin 1s linear infinite;
+}
+
+@keyframes video-reconnecting-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .roi-overlay {
