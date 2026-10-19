@@ -2405,7 +2405,7 @@ export default {
           item,
           daysInMonth,
         );
-        item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, daysInMonth);
+        item.attendanceStatus = self.generateAttendanceStatusTable(item.attendanceStatusData, item.uuid);
 
         // 整月上班時數、加班時數（每天的結果相加）與文字統計
         const sum = (list) => list.reduce((total, ms) => total + ms, 0);
