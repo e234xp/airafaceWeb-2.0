@@ -273,7 +273,7 @@ export default {
           : sourceData.filter(
               (item) =>
                 item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
-                item.ip_address.toLowerCase().indexOf(filter.toLowerCase()) > -1,
+                (item.ip_address || '').toLowerCase().indexOf(filter.toLowerCase()) > -1,
             );
       self.value_tablePage.totalResult = filteredItems.length;
 
