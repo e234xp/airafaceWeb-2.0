@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import {
   GROUP_PREFIX,
@@ -196,8 +196,14 @@ test.describe('GRP', () => {
       // 名稱必填：空白時錯誤訊息標示於欄位下方，無法下一步
       await expect(next(page)).toBeDisabled();
       await expect(nameError(page)).toBeVisible();
-      // 名稱重複（既有群組 admin）：無法下一步
-      await inputs.nth(0).fill('admin');
+      // 名稱重複（系統現有的任一群組）：無法下一步。不指定特定群組名稱，取後端現有群組清單的第一個
+      const existing = await page.evaluate(async () => {
+        const root = (Array.from(document.querySelectorAll('*')).find((x) => (x as unknown as { __vue__?: unknown }).__vue__) as unknown as { __vue__: { $root: { $globalGetGroupList: () => Promise<{ group_list: Array<{ name: string }> }> } } }).__vue__.$root;
+        const r = await root.$globalGetGroupList();
+        return (r.group_list || []).map((g) => g.name)[0] || '';
+      });
+      expect(existing, '系統沒有任何現有群組可用來測試名稱重複').not.toBe('');
+      await inputs.nth(0).fill(existing);
       await expect(next(page)).toBeDisabled();
       // 名稱含特殊字元：無法下一步
       await inputs.nth(0).fill('e2e-特殊字元!');

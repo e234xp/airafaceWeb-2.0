@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import {
   TEST_IP,
@@ -144,6 +144,8 @@ test.describe('CAM', () => {
     },
     async ({ page }) => {
       test.setTimeout(300000);
+      await gotoCameras(page);
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有攝影機，測完必須原封不動（不指定特定名稱）
       const names = ['a1', 'a2', 'a3'].map((t) => track(uniqueCameraName(t)));
       for (const n of names) await createCameraViaUI(page, n);
       // 編輯入口：按「編輯」進入該攝影機的編輯頁，名稱欄位為該攝影機名稱
@@ -161,13 +163,13 @@ test.describe('CAM', () => {
       for (const n of names.slice(1)) await cameraRow(page, n).first().locator('.vxe-cell--checkbox').click();
       await page.locator('button.btn-danger').first().click();
       await page.locator('.el-message-box__btns .el-button--primary').click();
-      await expect(cameraRow(page, 'e2e-')).toHaveCount(0, { timeout: 20000 });
-      // 重新載入確認三個都不在，既有攝影機仍在
+      // 只檢查自己建立的三台（不看整個 e2e- 清單，避免被其他測試或上次中斷的殘留影響）
+      for (const n of names) await expect(cameraRow(page, n)).toHaveCount(0, { timeout: 20000 });
+      // 重新載入確認三個都不在，既有攝影機原封不動
       await gotoCameras(page);
-      await searchCameras(page, 'e2e-');
-      expect(await cameraRowTexts(page)).toEqual([]);
-      await searchCameras(page, 'Camera-1');
-      await expect(cameraRow(page, 'Camera-1').first()).toBeVisible();
+      const rowsAfter = await readAllRows(page, false);
+      for (const n of names) expect(rowsAfter.some((r) => r.startsWith(n)), `重新載入後 ${n} 仍在清單`).toBe(false);
+      expect(rowsAfter.filter((r) => !r.startsWith('e2e-')), '既有攝影機在刪除測試攝影機後應原封不動').toEqual(keepBefore);
     },
   );
 

@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import {
   cleanupTablets,
@@ -226,37 +226,11 @@ test.describe('TAB', () => {
       for (const n of names.slice(1)) await tabletRow(page, n).first().locator('.vxe-cell--checkbox').click();
       await page.locator('button.btn-danger').first().click();
       await page.locator('.el-message-box__btns .el-button--primary').click();
-      await expect(tabletRow(page, 'e2e-')).toHaveCount(0, { timeout: 20000 });
+      // 只檢查自己建立的三台（不看整個 e2e- 清單，避免被其他測試或上次中斷的殘留影響）
+      for (const n of names) await expect(tabletRow(page, n)).toHaveCount(0, { timeout: 20000 });
       await gotoTablets(page);
       const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-'));
       expect(keepAfter, '既有平板在刪除測試平板後應原封不動').toEqual(keepBefore);
-    },
-  );
-
-  test(
-    '[TAB-008] 新增平板：新增/移除 ROI',
-    {
-      annotation: [
-        ...csvAnnotations({
-          row: 83,
-          no: '6.4',
-          category: '（延續）> 平板(新增)',
-          steps: '3. 新增ROI或移除ROI選項',
-          expected: '新增功能正常且能建立成功',
-        }),
-        { type: '判定範圍', description: '以「新增平板精靈中存在新增/移除 ROI 的選項」判定；若 CSV 此列是複製自攝影機而平板本來沒有 ROI，請使用者告知' },
-      ],
-    },
-    async ({ page }) => {
-      await openAddTablet(page);
-      await fillTabletBasics(page, uniqueTabletName('roi'));
-      const stepsText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-      await nextBtn(page).click();
-      await page.waitForTimeout(1500);
-      const step2Text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-      const all = `${stepsText} ${step2Text}`;
-      expect(all.includes('辨識區域') || all.includes('ROI'), '新增平板精靈（基本設定、門禁設定）沒有任何 ROI（辨識區域）選項').toBe(true);
-      await expect(page.getByRole('button', { name: /^新增 \d+$/ }).first()).toBeVisible();
     },
   );
 

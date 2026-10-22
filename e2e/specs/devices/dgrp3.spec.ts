@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupCameras, createCameraViaUI, uniqueCameraName } from '../../helpers/cameras';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, uniqueDeviceGroupName } from '../../helpers/dgroups';
@@ -42,9 +42,10 @@ test(
   },
   async ({ page }) => {
     test.setTimeout(280000);
-    const cam = uniqueCameraName('dg3');
+    // 攝影機與平板的設備名稱不可重複（後端：Name existed. type: tablet），兩邊用不同標籤
+    const cam = uniqueCameraName('dg3c');
     cameras.push(cam);
-    const tab = uniqueTabletName('dg3');
+    const tab = uniqueTabletName('dg3t');
     tablets.push(tab);
     const group = uniqueDeviceGroupName('dg3');
     groups.push(group);

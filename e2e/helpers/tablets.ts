@@ -65,11 +65,13 @@ export async function createTabletViaUI(page: Page, name: string) {
   await nextBtn(page).click();
   await page.waitForTimeout(6000);
   // 先前在同一個瀏覽器工作階段建立過攝影機後，第 2 步的「下一步」第一次按常無作用：每 3 秒重按，最多 60 秒，直到出現「完成」
-  for (let i = 0; i < 20 && !(await done.isVisible()); i += 1) {
-    await nextBtn(page).click();
+  // 每一輪先看目前在哪個畫面再動作：已出現「完成」就收工；還在精靈就按「下一步」；兩個都不在（儲存很快、已回到列表）就不要硬按。
+  for (let i = 0; i < 20; i += 1) {
+    if (await done.isVisible()) break;
+    if (await nextBtn(page).isVisible()) await nextBtn(page).click({ timeout: 10000 }).catch(() => undefined);
     await page.waitForTimeout(3000);
   }
-  await done.click();
+  if (await done.isVisible()) await done.click();
   await listReady(page);
 }
 

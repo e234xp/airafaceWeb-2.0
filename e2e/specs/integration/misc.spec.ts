@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from '../../helpers/test';
 
 // 骨架（自動產生）：來源 E2E-TEST-PLAN.md；模組 MISC，共 4 個 Test ID。
 // 目前全部為 test.fixme（尚未實作）。實作時不得改動 Test ID 與標題前綴；assertion 只能依 Plan 的預期結果。

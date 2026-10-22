@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { adminCredentials, fillCredentials, loginForm, logout, openLoginPage } from '../../helpers/auth';
 

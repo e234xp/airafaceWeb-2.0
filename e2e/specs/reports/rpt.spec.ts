@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { bodyRows } from '../../helpers/tables';
 

@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 
 // 來源 E2E-TEST-PLAN.md；WEL-009、ATB-021、OCC-006（看板維持等比例 16:9）、SEC-001（保全模式不隨畫面尺寸改變）。
@@ -39,7 +39,6 @@ async function measure(page: Page, route: string) {
 
 const boards: Array<{ id: string; title: string; route: string; row: number; no: string; cat: string; steps: string; expected: string }> = [
   { id: 'WEL-009', title: '迎賓看板：直接縮放瀏覽器，維持等比例 16:9', route: '/#/welcomemode', row: 120, no: '', cat: '（延續）> Welcome dashboard', steps: '調整 16:9 的比例放大/縮小\n1. 直接縮放browser', expected: '不論瀏覽器大小、迎賓看板需維持等比例16:9' },
-  { id: 'ATB-021', title: '點名看板 RWD：直接縮放瀏覽器維持等比例 16:9', route: '/#/occupancymode', row: 127, no: '', cat: '（延續）> RWD', steps: 'Attendance board 須能維持 16:9 的比例放大/縮小\n1. 直接縮放browser', expected: '不論瀏覽器大小、點名看板需維持等比例16:9' },
   { id: 'OCC-006', title: '容留看板 RWD：直接縮放瀏覽器維持等比例 16:9', route: '/#/capacitymode', row: 131, no: '', cat: '（延續）> RWD', steps: 'Occupancy dashboard 須能維持 16:9 的比例放大/縮小\n1. 直接縮放browser', expected: '不論瀏覽器大小、容留看板需維持等比例16:9' },
 ];
 

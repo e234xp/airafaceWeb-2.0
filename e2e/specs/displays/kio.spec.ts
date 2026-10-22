@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 
 // 來源 E2E-TEST-PLAN.md；模組 KIO（自助報到／即時影像模式，CSV 第 149~156 列：#10.5）。

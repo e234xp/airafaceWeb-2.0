@@ -1,4 +1,4 @@
-import { test, expect, Page, Browser } from '@playwright/test';
+import { test, expect, Page, Browser } from '../../helpers/test';
 import { resolve } from 'node:path';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { importViaUI } from '../../helpers/personsIo';

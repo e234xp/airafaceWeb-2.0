@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { shot } from '../../helpers/evidence';
 import { TEST_PASSWORD, ADMIN_STORAGE_PATH, cleanupAccounts, createAccountViaUI, expectLoginFails, expectLoginSucceeds, freshContext, loginAs, uniqueAccountName } from '../../helpers/accounts';

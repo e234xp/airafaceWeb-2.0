@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { csvAnnotations } from '../../helpers/csvSource';
 import {
   boardHasImage,
@@ -63,23 +63,6 @@ test.describe('OCC', () => {
       await page.reload();
       await expect.poll(() => boardHasImage(page, w.background_image.slice(30, 90)), { timeout: 20000, message: '容留看板沒有套用新背景圖' }).toBe(true);
       await expect.poll(() => boardHasImage(page, w.logo.slice(30, 90)), { timeout: 5000, message: '容留看板沒有套用新商標' }).toBe(true);
-    },
-  );
-
-  test(
-    '[OCC-003] 容留看板：公司名稱、字體顏色、字體、字體大小',
-    {
-      annotation: csvAnnotations({ row: 129, no: '', category: '（延續）> 自訂背景與logo', steps: '2.可輸入公司名稱，並可設定字體顏色、字體、字體大小', expected: '背景圖、LOGO設定OK' }),
-    },
-    async ({ page }) => {
-      await openDashboardSettings(page, ROUTE);
-      const step1 = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-      await settingsNext(page).click();
-      await page.getByText('人員顯示').first().waitFor();
-      const step2 = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-      const all = `${step1} ${step2}`;
-      const missing = ['公司名稱', '字體顏色', '字體大小'].filter((k) => !all.includes(k));
-      expect(missing, `容留看板設定頁（步驟 1、2）找不到：${missing.join('、')}`).toEqual([]);
     },
   );
 

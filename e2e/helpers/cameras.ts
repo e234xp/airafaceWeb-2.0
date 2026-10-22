@@ -58,11 +58,13 @@ export async function createCameraViaUI(page: Page, name: string, ip = TEST_IP) 
   await expect(nextBtn(page)).toBeEnabled();
   // 辨識區域 → 人臉擷取閾值 → 人臉合併 → 完成：每按一次等畫面換頁，最後一步的「下一步」會儲存並出現「完成」
   const done = page.getByRole('button', { name: '完成' });
-  for (let i = 0; i < 8 && !(await done.isVisible()); i += 1) {
-    await nextBtn(page).click();
-    await page.waitForTimeout(800);
+  // 每一輪先看目前在哪個畫面再動作（最多約 60 秒，後端儲存慢時要等）：已出現「完成」就收工；還在精靈就按「下一步」。
+  for (let i = 0; i < 60; i += 1) {
+    if (await done.isVisible()) break;
+    if (await nextBtn(page).isVisible()) await nextBtn(page).click({ timeout: 10000 }).catch(() => undefined);
+    await page.waitForTimeout(1000);
   }
-  await done.click();
+  if (await done.isVisible()) await done.click();
   await listReady(page);
 }
 

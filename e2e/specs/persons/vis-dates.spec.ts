@@ -1,4 +1,4 @@
-import { Page, expect, test } from '@playwright/test';
+import { Page, expect, test } from '../../helpers/test';
 import { readFileSync } from 'node:fs';
 import { gotoPersons } from '../../helpers/persons';
 import { bodyRows, typeSearch } from '../../helpers/tables';

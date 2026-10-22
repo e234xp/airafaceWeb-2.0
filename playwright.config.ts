@@ -16,13 +16,12 @@ export const ADMIN_STORAGE = 'e2e/.auth/admin.json';
 const PARALLEL = process.env.E2E_PARALLEL === '1';
 const withAdmin = { storageState: ADMIN_STORAGE };
 const groupProjects = [
-  { name: 'g-dash', testMatch: /specs[\\/]displays[\\/].*\.spec\.ts/, use: withAdmin }, // 看板設定（全系統共用）
-  { name: 'g-att', testMatch: /specs[\\/]attendance[\\/].*\.spec\.ts/, use: withAdmin }, // 出勤設定（全系統共用）
-  { name: 'g-dev', testMatch: /specs[\\/]devices[\\/].*\.spec\.ts/, testIgnore: /nx-(setup|pos)/, use: withAdmin }, // 攝影機／平板／影像設備群組清單
-  { name: 'g-per', testMatch: /specs[\\/](persons|events-notify)[\\/].*\.spec\.ts/, use: withAdmin }, // 人員／訪客／群組／事件／通知清單
-  { name: 'g-sys', testMatch: /specs[\\/](system|infra|integration)[\\/].*\.spec\.ts/, use: withAdmin }, // 系統設定、帳號、診斷
-  { name: 'g-ro', testMatch: /specs[\\/]reports[\\/].*\.spec\.ts/, use: withAdmin }, // 報表（唯讀）
-  { name: 'g-login', testMatch: /specs[\\/]login[\\/].*\.spec\.ts/ }, // 登入登出（各自登入）
+  { name: 'boards', testMatch: /specs[\\/]displays[\\/].*\.spec\.ts/, use: withAdmin }, // 各種看板（看板設定全系統共用）
+  { name: 'devices', testMatch: /specs[\\/]devices[\\/].*\.spec\.ts/, use: withAdmin }, // 攝影機／平板／影像設備群組清單
+  { name: 'people-events', testMatch: /specs[\\/](persons|events-notify)[\\/].*\.spec\.ts/, use: withAdmin }, // 人員／訪客／群組／事件／通知清單
+  { name: 'system', testMatch: /specs[\\/](system|infra|integration)[\\/].*\.spec\.ts/, use: withAdmin }, // 系統設定、帳號、診斷
+  { name: 'reports', testMatch: /specs[\\/]reports[\\/].*\.spec\.ts/, use: withAdmin }, // 調查、報表、進出紀錄（唯讀）
+  { name: 'login', testMatch: /specs[\\/]login[\\/].*\.spec\.ts/ }, // 登入登出（各自登入）
 ];
 
 export default defineConfig({

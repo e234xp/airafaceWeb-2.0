@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '../../helpers/test';
 import { readFileSync } from 'node:fs';
 import { csvAnnotations } from '../../helpers/csvSource';
 import { TMP_DIR, writeFile } from '../../helpers/files';
