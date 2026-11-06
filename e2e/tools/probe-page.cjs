@@ -11,6 +11,7 @@
 // 安全規則：精靈的最後一個「下一步」（從倒數第二步到「完成」）會儲存，所以最多只按 N-2 次下一步，永遠不按「完成」「儲存變更」「註冊」。
 // 輸出：e2e/reports/probe/<name>.md（每一步的欄位、下拉選項、勾選框、按鈕、驗證訊息、未翻譯鍵值）
 const fs = require('fs');
+require('./auth-refresh.cjs').requireNode();
 const { chromium } = require('@playwright/test');
 if (fs.existsSync('.env.e2e.local')) process.loadEnvFile('.env.e2e.local');
 const arg = (k) => (process.argv.find((a) => a.startsWith(`--${k}=`)) || '').split('=').slice(1).join('=');

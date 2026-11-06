@@ -11,7 +11,9 @@
 // 各組啟動會錯開幾秒；若某組一啟動就因行程錯誤結束（沒跑任何測項），會自動重試一次，並在摘要標示「未執行」，
 // 不會跟「有測項失敗」混在一起。
 const fs = require('fs');
-const { spawn, spawnSync } = require('child_process');
+const { spawn } = require('child_process');
+const { requireNode, ensureFreshAuth } = require('./auth-refresh.cjs');
+requireNode();
 if (fs.existsSync('.env.e2e.local')) process.loadEnvFile('.env.e2e.local');
 const cli = require.resolve('@playwright/test/cli');
 const args = process.argv.slice(2);
@@ -24,12 +26,6 @@ const groups = pick ? pick.split(',') : ALL;
 const jobs = Number((own.find((a) => a.startsWith('--jobs=')) || '--jobs=3').split('=')[1]);
 const STAGGER_MS = 5000; // 同時啟動的各組之間錯開，避免一起建立／整理輸出資料夾而互相撞到
 const env = { ...process.env, E2E_PARALLEL: '1', E2E_VIA_RUNNER: '1' };
-
-const setup = spawnSync(process.execPath, [cli, 'test', '--project=setup', '--reporter=line'], { stdio: 'inherit', env });
-if (setup.status !== 0) {
-  console.error('登入（setup）失敗，停止。');
-  process.exit(setup.status ?? 1);
-}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = {};
@@ -58,6 +54,13 @@ const runOnce = (g) =>
 const startupCrash = (r) => r.code !== 0 && r.passed + r.failed + r.skipped === 0;
 const run = async (g, delayMs) => {
   if (delayMs) await sleep(delayMs);
+  // 每組開始前確認登入狀態還新（整批跑很久時，後面的組不會拿到過期的 token）
+  const auth = await ensureFreshAuth({ env, label: `[${g}] ` });
+  if (auth !== 0) {
+    console.error(`[${g}] 登入（setup）失敗，這組不執行。`);
+    results[g] = { code: auth, sec: 0, passed: 0, failed: 0, skipped: 0, retried: false, notRun: true, text: '' };
+    return;
+  }
   let r = await runOnce(g);
   let retried = false;
   if (startupCrash(r)) {

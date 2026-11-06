@@ -7,6 +7,7 @@
 // 必須在 Results 記錄卡點與建議、標 ⏱️，然後做下一項。
 const fs = require('fs');
 const { spawnSync } = require('child_process');
+require('./auth-refresh.cjs').requireNode();
 if (fs.existsSync('.env.e2e.local')) process.loadEnvFile('.env.e2e.local');
 const MAX = Number(process.env.E2E_CASE_MAX_ATTEMPTS || 5);
 const CAP_MS = Number(process.env.E2E_CASE_STUCK_TIMEOUT_MINUTES || 5) * 60000;

@@ -8,7 +8,20 @@ import { IS_MOCK, installMockFallback, resetMockUses, takeMockUses } from '../mo
 export * from '@playwright/test';
 export { expect, IS_MOCK };
 
-export const test = base.extend<{ _mockReport: void }, { _mockBrowser: void }>({
+// 看板測項暫停（2026-10-27 決定）：預設跳過 specs/displays/ 全部測項與依賴看板設定的 GRP-013／014／015，
+// 報告會顯示「跳過」與原因。原因是 14.21 的 setdashboardsettings（儲存看板設定）要 20～100 秒，且部分項目需要持續的人員辨識事件。
+// 要恢復：.env.e2e.local 設 E2E_INCLUDE_BOARDS=true。
+const INCLUDE_BOARDS = process.env.E2E_INCLUDE_BOARDS === 'true';
+const isBoardTest = (file: string, title: string) => /specs[\\/]displays[\\/]/.test(file) || /\[GRP-01[345]\]/.test(title);
+
+export const test = base.extend<{ _mockReport: void; _boardsPaused: void }, { _mockBrowser: void }>({
+  _boardsPaused: [
+    async ({}, use, testInfo) => {
+      testInfo.skip(!INCLUDE_BOARDS && isBoardTest(testInfo.file, testInfo.title), '看板測項暫停（E2E_INCLUDE_BOARDS=true 可恢復）');
+      await use();
+    },
+    { auto: true },
+  ],
   _mockBrowser: [
     async ({ browser }, use) => {
       if (IS_MOCK) {

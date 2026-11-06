@@ -15,6 +15,7 @@
     "e2e:report": "playwright show-report e2e/reports/html",
     "e2e:case": "node e2e/tools/run-case.cjs",
     "e2e:parallel": "node e2e/tools/run-parallel.cjs",
+    "e2e:no-boards": "node e2e/tools/run-parallel.cjs --groups=people-events,system,devices,reports,login --jobs=1",
     "e2e:probe": "node e2e/tools/probe-page.cjs",
     "e2e:budget": "node e2e/tools/run-case.cjs --status"
   },

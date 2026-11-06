@@ -32,6 +32,10 @@ export default defineConfig({
   retries: 0,
   reporter: [['list'], ['html', { outputFolder: './e2e/reports/html', open: 'never' }], ['./e2e/tools/budget-reporter.cjs']],
   use: {
+    viewport: {
+    width: 1920,
+    height: 1080,
+    },
     baseURL: process.env.E2E_BASE_URL,
     // 單一動作（點擊、輸入、導覽）最多等 30 秒：腳本寫錯時盡快失敗，不要把整個測項的 5 分鐘停損額度耗在一個卡住的動作上
     actionTimeout: 30000,

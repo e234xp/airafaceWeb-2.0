@@ -25,11 +25,14 @@ AiraFace 管理介面（airafaceWeb）的 Playwright 端對端測試。
 | `npm run e2e:case -- --reset <ID>` | 清除該項的嘗試次數記帳 | 環境錯誤造成失敗、或使用者同意加碼時 |
 | `npm run e2e:budget` | 列出每個測項的嘗試次數、累計耗時、是否通過（等同 `e2e:case -- --status`） | 想知道哪些測項快用完停損額度 |
 | `npm run e2e:parallel` | 依共用資料把測項分成 6 組，組內序列、組間平行（預設同時 3 組，各組啟動錯開 5 秒；某組一啟動就當掉會自動重試一次，摘要會分開列出各組通過／失敗／跳過，啟動失敗標「未執行」）。分組：`boards`（各種看板）、`people-events`（人員、訪客、群組、事件、通知）、`system`（帳號、診斷、日誌、授權等）、`devices`（攝影機、平板、設備群組）、`reports`（調查、報表、進出紀錄）、`login`（登入登出） | 回歸測試，要確認整體狀態時 |
+| `npm run e2e:no-boards` | 跑除了看板（`boards` 組，即 `specs/displays/` 全部檔案）以外的 5 組，一次一組（`--jobs=1`，避免壓垮後端） | 看板暫停或看板環境沒資料時，驗證其餘所有測項 |
 | `npm run e2e:parallel -- --groups=boards,devices --jobs=2` | 只跑指定分組、限制同時組數 | 只想回歸某幾組 |
 | `npm run e2e:parallel -- -- -g "\[CAM-0"` | 「`--`」後面的參數原樣傳給 Playwright（例：只跑名稱符合的測項） | 挑特定測項平行跑 |
 | `npm run e2e:probe -- --route=<路由>` | 寫新測項前，把頁面或精靈的欄位、下拉選項、按鈕列出來，唯讀，輸出到 `reports/probe/<name>.md`。選項：`--add` 先按「新增」、`--fill` 填測試值、`--name=` 指定檔名 | 新增腳本前探查頁面，不用逐項試錯 |
 
 `e2e:case` 與 `e2e:parallel` 的停損、記帳、環境變數（`E2E_CASE_MAX_ATTEMPTS`、`E2E_CASE_STUCK_TIMEOUT_MINUTES`）由 `tools/run-case.cjs`、`tools/budget-reporter.cjs` 處理。
+
+**登入狀態會過期（整批跑很久時）：** 後端 token 簽發後約 2 小時失效，而 setup 只登入一次、所有測項共用 `e2e/.auth/admin.json`。整批超過 2 小時，後面的測項會變成登入頁而整組失敗（2026-10-22 的整批就是這樣，報表組 26 項＋登入組 2 項）。所以 `e2e:parallel`／`e2e:no-boards` 在**每一組開始前**會檢查登入狀態檔，超過 30 分鐘就自動重新登入（`tools/auth-refresh.cjs`；多組同時需要時排隊，檔案先寫暫存檔再改名，不會被讀到一半）。限制：單一組本身若超過約 90 分鐘仍可能過期；直接用 `npm run e2e`（單一行程）整批跑超過 2 小時也不在保護範圍內。工具啟動時也會檢查 Node 版本（需 20.12 以上），不足時直接說明，不會丟出 `process.loadEnvFile is not a function`。
 
 ## 更新 Results 之後
 
