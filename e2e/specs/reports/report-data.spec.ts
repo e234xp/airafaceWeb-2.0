@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   PERSON_REPORT,
   VISITOR_REPORT,
@@ -32,13 +31,6 @@ test.describe('RPT（G1）', () => {
     '[RPT-001] 人員報表：指定時間範圍、由近而遠、欄位、每頁最多 10 筆',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 39,
-          no: '4.1',
-          category: '人員報表 > 人員報表',
-          steps: '1. 指定時間範圍搜尋、由近而遠列出辨識到人員的紀錄\n2. 欄位: 時間、人員編號、人員姓名、群組、分數、抓拍照片\n3. 每頁最多10筆',
-          expected: '1.正確顯示選定時間區間所有的人員清單、頁數、筆數、顯示欄位',
-        }),
         { type: '判定範圍', description: '畫面表頭另有規格未列的「人員資訊來源」，且「群組」顯示為「群組名稱」，列為觀察；為避免拖垮後端，時間範圍縮到最新一筆所在的那一分鐘' },
       ],
     },
@@ -71,13 +63,6 @@ test.describe('RPT（G1）', () => {
       `[${id}] 人員報表匯出：${withPhoto ? '含照片（壓縮檔含 snapshot 資料夾照片）' : '不含照片（壓縮檔不含照片及資料夾）'}`,
       {
         annotation: [
-          ...csvAnnotations({
-            row: 40,
-            no: '',
-            category: '（延續）> 匯出',
-            steps: withPhoto ? '1. 含照片 匯出壓縮檔中含照片 (在 snapshot 資料夾下)' : '2. 不含照片: 匯出壓縮檔中不包含照片及資料夾',
-            expected: '根據設定匯出正確資料',
-          }),
           { type: '判定範圍', description: '為避免大量下載照片，時間範圍縮到最新一筆所在的那一秒' },
         ],
       },
@@ -131,17 +116,11 @@ test.describe('RPT（G1）', () => {
 
   test(
     '[RPT-005] 人員報表：上方搜尋框快速尋找人員',
-    {
-      annotation: csvAnnotations({ row: 40, no: '', category: '（延續）> 匯出', steps: '3.點選並輸入上方搜尋框內容，可針對人員進行快速尋找', expected: '〔使用者確認 2026-10-07〕搜尋結果僅含符合關鍵字者' }),
-    },
     async ({ page }) => keywordTest(page, 'id'),
   );
 
   test(
     '[RPT-006] 人員報表 filter 搜尋：輸入人員關鍵字並檢查是否有關鍵字以外人員',
-    {
-      annotation: csvAnnotations({ row: 41, no: '', category: '（延續）> filter搜尋', steps: '1.輸入人員關鍵字\n2.檢查是否有關鍵字以外人員', expected: '1.輸入人員關鍵字 2.檢查是否有關鍵字以外人員\n〔使用者確認 2026-10-07〕搜尋結果僅含符合關鍵字者' }),
-    },
     async ({ page }) => keywordTest(page, 'name'),
   );
 
@@ -156,7 +135,6 @@ test.describe('RPT（G1）', () => {
   for (const [id, title, row, no, cat, steps] of visitorCases) {
     test(
       `[${id}] ${title}`,
-      { annotation: csvAnnotations({ row, no, category: cat, steps, expected: id === 'RPT-007' ? '1.正確顯示選定時間區間所有的訪客清單、頁數、筆數、顯示欄位' : id === 'RPT-009' || id === 'RPT-010' ? '根據設定匯出正確資料' : '〔使用者確認 2026-10-07〕搜尋結果僅含符合關鍵字者' }) },
       async ({ page }) => {
         test.setTimeout(120000);
         await requireVisitorData(page);

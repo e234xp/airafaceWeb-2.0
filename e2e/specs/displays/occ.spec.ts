@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   boardHasImage,
   openDashboardSettings,
@@ -14,7 +13,7 @@ import {
 } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 
-// 來源 E2E-TEST-PLAN.md；模組 OCC＝容留看板（CSV 第 128~131 列：#10.3）。設定頁 /displays/modifycapacitycontrolsetting，設定資料 key＝CAPACITY。
+// 來源 E2E-TEST-PLAN.md；模組 OCC＝容留看板（#10.3）。設定頁 /displays/modifycapacitycontrolsetting，設定資料 key＝CAPACITY。
 // 本檔實作「適合自動化（Y）」的 4 項（OCC-002~005）；其餘維持 test.fixme。
 // 容留看板設定為全系統共用設定：每個測項前取得 CAPACITY 快照，結束（含失敗／逾時）以獨立 Admin 環境還原。
 
@@ -43,9 +42,6 @@ const INFO2 = 2;
 test.describe('OCC', () => {
   test(
     '[OCC-002] 容留看板：更改背景圖片、商標圖檔',
-    {
-      annotation: csvAnnotations({ row: 129, no: '', category: '（延續）> 自訂背景與logo', steps: '1.可更改背景圖片、商標圖檔', expected: '背景圖、LOGO設定OK' }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       await openDashboardSettings(page, ROUTE);
@@ -70,7 +66,6 @@ test.describe('OCC', () => {
     '[OCC-004] 容留看板人員資訊：啟用後遮蔽人員編號及姓名',
     {
       annotation: [
-        ...csvAnnotations({ row: 130, no: '', category: '（延續）> 人員資訊', steps: '1.可啟用後可遮蔽人員編號及姓名', expected: '人員、頁面顯示資訊設定OK' }),
         { type: '判定範圍', description: '畫面沒有獨立的遮蔽開關，以「顯示資訊 1 選部分姓名」視為遮蔽（同 WEL-004）；沒有遮蔽人員編號的選項。看板需有人員資料才能檢查姓名文字，沒有資料時標記未驗證' },
       ],
     },
@@ -95,16 +90,14 @@ test.describe('OCC', () => {
         return;
       }
       test.info().annotations.push({ type: '觀察', description: `看板姓名文字：${names.slice(0, 8).join('、')}` });
-      // 中文姓名為「李***瑋」；英文姓名為縮寫（Allen→A、Yu Chin→Y. Chin），所以兩種形式都算遮蔽
-      for (const n of names) expect(/[*＊●○•]/.test(n) || /^[A-Z]\.?( [A-Za-z]+)?$/.test(n), `啟用「部分姓名」後看板仍顯示完整姓名：${n}`).toBe(true);
+      // 中文姓名為「李***瑋」；英文姓名為縮寫（Allen→A、Yu Chin→Y. Chin）。縮寫的首字母沿用原姓名的大小寫，
+      // 姓名是小寫開頭（例如 test→t）時縮寫也是小寫，所以首字母大小寫都算遮蔽
+      for (const n of names) expect(/[*＊●○•]/.test(n) || /^[A-Za-z]\.?( [A-Za-z]+)?$/.test(n), `啟用「部分姓名」後看板仍顯示完整姓名：${n}`).toBe(true);
     },
   );
 
   test(
     '[OCC-005] 容留看板人員資訊：可選擇人員編號、姓名、部門、職稱、群組、不顯示、註冊照片',
-    {
-      annotation: csvAnnotations({ row: 130, no: '', category: '（延續）> 人員資訊', steps: '2.可選擇人員編號、人員姓名、部門、職稱、群組、不顯示、註冊照片等', expected: '人員、頁面顯示資訊設定OK' }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await gotoStep2(page);

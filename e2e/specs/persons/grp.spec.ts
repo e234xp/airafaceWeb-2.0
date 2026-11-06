@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   GROUP_PREFIX,
   cleanupGroups,
@@ -16,7 +15,7 @@ import {
 import { Kind, cleanupPersons, createPersonViaUI, gotoPersons, searchPersons, personRowTexts, uniquePersonId } from '../../helpers/persons';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 GRP（CSV 第 68~71 列：#5.11 列表、#5.12 新增、#5.13 編輯、#5.14 刪除）。
+// 來源 E2E-TEST-PLAN.md；模組 GRP（#5.11 列表、#5.12 新增、#5.13 編輯、#5.14 刪除）。
 // 本檔實作「適合自動化（Y）」的 10 項（GRP-001~010）；GRP-011~015（刪除後檢查關聯）維持 test.fixme。
 // 群組名稱不可含特殊字元（含連字號），測試群組以「e2e」開頭；人員／訪客以「e2e-」開頭。afterEach 先清群組再清人員／訪客。
 
@@ -49,15 +48,6 @@ async function newPerson(page: Page, kind: Kind, tag: string) {
 test.describe('GRP', () => {
   test(
     '[GRP-001] 群組列表：清單、頁數、筆數、每頁最多 10 筆、顯示欄位',
-    {
-      annotation: csvAnnotations({
-        row: 68,
-        no: '5.11',
-        category: '群組 > 群組(列表)',
-        steps: '1.進入群組\n2.檢視群組清單、資料筆數、頁數',
-        expected: '1.正確顯示所有的群組清單、頁數、筆數、顯示欄位\n4. 每頁最多 10筆\n5. 顯示欄位: [選擇]、群組名稱、人員數量、訪客數量、備註、建立時間、[操作]',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       await gotoGroups(page);
@@ -85,15 +75,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-002] 群組列表：預設群組（All person / All visitor）僅可檢視，無法刪除或編輯',
-    {
-      annotation: csvAnnotations({
-        row: 68,
-        no: '5.11',
-        category: '群組 > 群組(列表)',
-        steps: '1.進入群組\n2.檢視群組清單、資料筆數、頁數',
-        expected: '2.預設群組僅可檢視:顯示所有人員群組的清單\n6. All person, All visitor 為系統內建群組，無法被刪除或編輯 (只能檢視)',
-      }),
-    },
     async ({ page }) => {
       await gotoGroups(page);
       for (const n of ['All Person', 'All Visitor']) {
@@ -115,15 +96,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-003] 群組列表：群組名稱、建立時間搜尋與包含輸入文字的項目',
-    {
-      annotation: csvAnnotations({
-        row: 68,
-        no: '5.11',
-        category: '群組 > 群組(列表)',
-        steps: '3.使用搜尋功能查詢',
-        expected: '7.在群組名稱、建立時間搜尋與包含輸入文字的項目',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const name = trackGroup(uniqueGroupName('s'));
@@ -149,15 +121,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-004] 群組列表：刪除群組資料',
-    {
-      annotation: csvAnnotations({
-        row: 68,
-        no: '5.11',
-        category: '群組 > 群組(列表)',
-        steps: '4.刪除群組資料',
-        expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕4.刪除群組資料',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const name = trackGroup(uniqueGroupName('d'));
@@ -180,15 +143,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-005] 新增群組：群組名稱必填、備註，新增後顯示於列表',
-    {
-      annotation: csvAnnotations({
-        row: 69,
-        no: '5.12',
-        category: '（延續）> 群組(新增)',
-        steps: '1. 點選 新增部門，可以進入新增頁面\n2. 群組名稱(必填)、備註\n4. 新增後，顯示此群組在列表中',
-        expected: '新增群組功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       await openCreateGroup(page);
@@ -228,15 +182,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-006] 新增群組：自人員或訪客列表選擇人員加入此群組',
-    {
-      annotation: csvAnnotations({
-        row: 69,
-        no: '5.12',
-        category: '（延續）> 群組(新增)',
-        steps: '3. 可自人員或訪客列表中，選擇人員加入此群組',
-        expected: '新增群組功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const pid = await newPerson(page, 'person', 'gp');
@@ -258,15 +203,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-007] 編輯群組：修改備註、隸屬人員，確認後於群組頁面看到更新資料',
-    {
-      annotation: csvAnnotations({
-        row: 70,
-        no: '5.13',
-        category: '（延續）> 群組(編輯)',
-        steps: '1. 點選編輯符號，進入編輯頁面\n2. 修改備註、隸屬人員\n3.按下確認按鈕，可以在【群組】頁面看到更新後的資料',
-        expected: '編輯群組功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const p1 = await newPerson(page, 'person', 'ge1');
@@ -292,13 +228,6 @@ test.describe('GRP', () => {
     '[GRP-008] 刪除群組：勾選單一或全選刪除',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 71,
-          no: '5.14',
-          category: '（延續）> 群組(刪除)',
-          steps: '1.選取方框後，可單一、全選來進行刪除',
-          expected: '刪除群組資料功能正常',
-        }),
         { type: '安全措施', description: '「全選」前先以搜尋把清單限縮為 e2e 測試群組；按刪除前先確認被勾選的列全部是 e2e 開頭，否則中止，避免刪到既有群組' },
       ],
     },
@@ -338,15 +267,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-009] 刪除群組：單一項目右方刪除按鈕刪除',
-    {
-      annotation: csvAnnotations({
-        row: 71,
-        no: '5.14',
-        category: '（延續）> 群組(刪除)',
-        steps: '2.可選擇單一項目右方的刪除按鈕進行刪除',
-        expected: '刪除群組資料功能正常',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const a = trackGroup(uniqueGroupName('r1'));
@@ -363,15 +283,6 @@ test.describe('GRP', () => {
 
   test(
     '[GRP-010] 刪除群組：預設群組（All person、All visitors）不可被刪除',
-    {
-      annotation: csvAnnotations({
-        row: 71,
-        no: '5.14',
-        category: '（延續）> 群組(刪除)',
-        steps: '3.預設群組不可被刪除(All person、All visitors)',
-        expected: '刪除群組資料功能正常',
-      }),
-    },
     async ({ page }) => {
       await gotoGroups(page);
       for (const n of ['All Person', 'All Visitor']) {

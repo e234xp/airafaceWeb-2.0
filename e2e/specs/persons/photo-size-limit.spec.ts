@@ -1,6 +1,5 @@
 import { test, expect, Page } from '../../helpers/test';
 import { readFileSync } from 'node:fs';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { TMP_DIR, writeFile } from '../../helpers/files';
 import { cleanupPersons, fillPersonForm, openAddPerson } from '../../helpers/persons';
 
@@ -68,7 +67,6 @@ test(
   '[MISC-001] 大量上傳照片：單張照片上限由 10MB 調整為 20MB',
   {
     annotation: [
-      ...csvAnnotations({ row: 248, no: '', category: '其他 > 大量上傳照片', steps: '使用20MB照片上傳1萬筆', expected: '現有的照片大小為 10 MB，調整為 20 MB' }),
       { type: '判定範圍', description: '只驗證單張照片上限：15MB、25MB 皆被接受（使用者確認已無大小限制）；「1 萬筆批次上傳」的效能見 MISC-003，未驗證' },
     ],
   },

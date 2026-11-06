@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { bodyRows } from '../../helpers/tables';
 
 // 報表頁 helper。人員報表資料量大（約 150 萬筆），查詢一律先縮小時間範圍。
@@ -38,15 +37,6 @@ test.describe("RPT", () => {
   // 建議執行方式：PW｜可行性：Y｜本輪處置：可進入實作
   test(
     "[RPT-002] 人員報表：搜尋文字功能",
-    {
-      annotation: csvAnnotations({
-        row: 39,
-        no: '4.1',
-        category: '人員報表 > 人員報表',
-        steps: '1. 指定時間範圍搜尋、由近而遠列出辨識到人員的紀錄\n2. 欄位: 時間、人員編號、人員姓名、群組、分數、抓拍照片\n3. 每頁最多10筆',
-        expected: '2.搜尋文字功能正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       await openReport(page, '/#/reports/personreport');
@@ -78,15 +68,6 @@ test.describe("RPT", () => {
   // 建議執行方式：PW｜可行性：Y｜本輪處置：可進入實作
   test(
     "[RPT-008] 訪客報表：訪客編號、訪客姓名、群組搜尋與包含輸入文字的項目",
-    {
-      annotation: csvAnnotations({
-        row: 42,
-        no: '4.2',
-        category: '訪客報表 > 訪客報表',
-        steps: '4.在訪客編號、訪客姓名、群組搜尋與包含輸入文字的項目',
-        expected: '2.搜尋文字功能正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       await openReport(page, '/#/reports/visitorreport');

@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { execFileSync } from 'node:child_process';
 import { cleanupTablets, createTabletViaUI, gotoTablets, nextBtn, searchTablets, tabletRow, uniqueTabletName } from '../../helpers/tablets';
 
@@ -42,7 +41,6 @@ test.describe('TAB 門禁設定', () => {
     '[TAB-014] 平板設定：可套用雙因子驗證',
     {
       annotation: [
-        ...csvAnnotations({ row: 86, no: '', category: '（延續）> 平板設定', steps: '可套用雙因子驗證', expected: '1.平板報到功能確認' }),
         { type: '判定範圍', description: '只驗證前端「雙因子認證（需要人臉和卡片）」可設為「是」並儲存保留；平板報到功能需要實體平板，未驗證' },
       ],
     },
@@ -66,7 +64,6 @@ test.describe('TAB 門禁設定', () => {
     '[TAB-016] 平板設定：可變更卡的格式，使用正確卡的格式可成功',
     {
       annotation: [
-        ...csvAnnotations({ row: 87, no: '', category: '（延續）> （空白）', steps: '可刷卡變更卡的格式', expected: '使用正確卡的格式可成功' }),
         { type: '判定範圍', description: '只驗證前端「卡片規格」可改為不同格式（26／34／64-bit）並儲存保留；刷卡成功與否需要實體平板與卡片，未驗證' },
       ],
     },

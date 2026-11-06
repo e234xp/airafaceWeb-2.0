@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupCameras, createCameraViaUI, openAddCamera, uniqueCameraName } from '../../helpers/cameras';
 import {
   DG_PREFIX,
@@ -15,7 +14,7 @@ import {
 import { openAddTablet } from '../../helpers/tablets';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 DGRP（CSV 第 90~91 列：#6.6 影像設備群組新增／編輯、刪除）。
+// 來源 E2E-TEST-PLAN.md；模組 DGRP（#6.6 影像設備群組新增／編輯、刪除）。
 // 本檔實作「適合自動化（Y）」的 6 項（DGRP-001、002、004、005、006、007）；DGRP-003 為部分自動化，維持 fixme。
 // 測試群組／攝影機以 e2e- 開頭；afterEach 先清群組再清攝影機。既有群組（All Cameras、All Tablets、Video Group-*、test）不會被修改或刪除。
 // 預設群組（All Cameras、All Tablets）絕不按「確定」刪除：只讀取按鈕狀態，或在確認視窗按「取消」。
@@ -55,15 +54,6 @@ async function openEdit(page: Page, name: string) {
 test.describe('DGRP', () => {
   test(
     '[DGRP-001] 影像設備群組：新增群組成功',
-    {
-      annotation: csvAnnotations({
-        row: 90,
-        no: '6.6',
-        category: '（延續）> 影像設備群組(新增/編輯)',
-        steps: '1. 點選新增可以進入建立群組畫面',
-        expected: '4.新增功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const cam = trackC(uniqueCameraName('dg'));
@@ -80,15 +70,6 @@ test.describe('DGRP', () => {
 
   test(
     '[DGRP-002] 影像設備群組：編輯群組（名稱、群組等），列表呈現更新後資料',
-    {
-      annotation: csvAnnotations({
-        row: 90,
-        no: '6.6',
-        category: '（延續）> 影像設備群組(新增/編輯)',
-        steps: '2. 點選 編輯 可以進入影像設備資料編輯頁面\n3. 可以修改設備名稱、群組等資訊\n4. 在【影像設備】列表可以呈現更新後的群組資料',
-        expected: '5.編輯功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const cam = trackC(uniqueCameraName('dg'));
@@ -118,13 +99,6 @@ test.describe('DGRP', () => {
     '[DGRP-004] 影像設備群組：可留空（不指定群組），選項不應包含預設群組（all cameras、all tablets）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 90,
-          no: '6.6',
-          category: '（延續）> 影像設備群組(新增/編輯)',
-          steps: '5.可留空 (沒有指定群組)\n   - 選項中不應包含預設群組 (all cameras, all tablets)',
-          expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕同步驟',
-        }),
         { type: '判定範圍', description: '「選項」解讀為新增攝影機／平板時的「設備群組」下拉選單；「可留空」以不選群組即可建立成功判定' },
       ],
     },
@@ -148,15 +122,6 @@ test.describe('DGRP', () => {
 
   test(
     '[DGRP-005] 影像設備群組：清單顯示與搜尋文字功能',
-    {
-      annotation: csvAnnotations({
-        row: 90,
-        no: '6.6',
-        category: '（延續）> 影像設備群組(新增/編輯)',
-        steps: '4. 在【影像設備】列表可以呈現更新後的群組資料',
-        expected: '2.正確顯示所有的清單、頁數、筆數、顯示欄位\n3.搜尋文字功能正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       const name = trackG(uniqueDeviceGroupName('s'));
@@ -201,13 +166,6 @@ test.describe('DGRP', () => {
     '[DGRP-006] 影像設備群組刪除：單一/全選刪除且確實移除群組綁定',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 91,
-          no: '',
-          category: '（延續）> 影像設備群組(刪除)',
-          steps: '選取方框後，可單一、全選來進行設備刪除',
-          expected: '1.刪除功能正常且確實移除群組綁定',
-        }),
         { type: '安全措施', description: '全選前先搜尋 e2e- 限縮清單，並確認被勾選的列全是 e2e- 開頭才按刪除，避免刪到預設或既有群組' },
       ],
     },
@@ -261,13 +219,6 @@ test.describe('DGRP', () => {
     '[DGRP-007] 影像設備群組刪除：預設群組無法刪除',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 91,
-          no: '',
-          category: '（延續）> 影像設備群組(刪除)',
-          steps: '選取方框後，可單一、全選來進行設備刪除',
-          expected: '2.預設群組無法刪除',
-        }),
         { type: '安全措施', description: '絕不對預設群組按「確定」刪除：單列只讀取按鈕狀態；勾選預設群組後按上方刪除，只在確認視窗按「取消」' },
       ],
     },

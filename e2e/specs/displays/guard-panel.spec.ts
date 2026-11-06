@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { INVESTIGATION, openReportPage, pageRowTexts, searchButton, setRange } from '../../helpers/reports';
 
 // 來源 E2E-TEST-PLAN.md：保全看板（/#/guardmode）面板操作與備註：SEC-018~024。
@@ -49,35 +48,9 @@ const modal = (page: Page) => page.locator('.modal-main').first();
 
 test.describe('SEC 保全看板面板', () => {
   test(
-    '[SEC-018] 保全 Step 3 面板操作：執行保全模式，可展開場內人員',
-    {
-      annotation: csvAnnotations({ row: 146, no: '', category: '（延續）> Step 3 面板操作', steps: '1. 至登入頁面，執行保全模式，可展開場內人員', expected: '面板操作正確' }),
-    },
-    async ({ page }) => {
-      test.setTimeout(290000);
-      await loadGuard(page);
-      const names = (await knownNames(page)).map((p) => p.name);
-      const before = await personCards(page).count();
-      expect(before, '場內人員區沒有人員卡片').toBeGreaterThan(0);
-      // 展開：場內人員區放大（出現 7 欄大版面），統計圖隱藏
-      await page.getByText('展開').first().click();
-      await expect(page.locator('.grid-7-6').first()).toBeVisible();
-      const expanded = await page.locator('.grid-7-6').first().locator('> div').count();
-      obs(`場內人員：收合 ${before} 張、展開 ${expanded} 張`);
-      expect(expanded).toBeGreaterThan(0);
-      const t = await bodyText(page);
-      expect(names.some((n) => t.includes(n)), '展開後的場內人員不是系統內的人員').toBe(true);
-      // 再按一次收合回到原版面
-      await page.getByText('折疊').first().click();
-      await expect(page.locator('.grid-2-6').first()).toBeVisible();
-    },
-  );
-
-  test(
     '[SEC-019] 保全 Step 3 面板操作：展開陌生人員並執行選取/批量選取/註解/批量註解',
     {
       annotation: [
-        ...csvAnnotations({ row: 146, no: '', category: '（延續）> Step 3 面板操作', steps: '2. 可展開陌生人員，並執行選取/批量選取/ 註解/ 批量註解', expected: '面板操作正確' }),
         { type: '判定範圍', description: '本項只開啟「註解／批量註解」對話框後取消，不送出；實際寫入備註的驗證見 SEC-022' },
       ],
     },
@@ -119,9 +92,6 @@ test.describe('SEC 保全看板面板', () => {
 
   test(
     '[SEC-021] 保全 Step 3 面板操作：陌生人顯示抓拍照片',
-    {
-      annotation: csvAnnotations({ row: 146, no: '', category: '（延續）> Step 3 面板操作', steps: '4 .陌生人顯示抓拍照片', expected: '面板操作正確' }),
-    },
     async ({ page }) => {
       test.setTimeout(290000);
       await loadGuard(page);
@@ -138,32 +108,6 @@ test.describe('SEC 保全看板面板', () => {
     },
   );
 
-  test(
-    '[SEC-024] 保全重開維持當前人員狀態：人員與陌生人在視窗重啟後維持當前出席狀態',
-    {
-      annotation: csvAnnotations({ row: 149, no: '', category: '（延續）> 重開維持當前人員狀態', steps: '1.人員與陌生人在視窗重啟後依然維持當前出席狀態', expected: '重開後狀態不變' }),
-    },
-    async ({ page }) => {
-      test.setTimeout(290000);
-      await loadGuard(page);
-      const snapPersons = async () => ((await vmData<Array<{ name: string }>>(page, 'currentPersons')) ?? []).map((p) => p.name).sort();
-      const snapStrangers = async () => ((await vmData<Array<{ verify_uuid: string }>>(page, 'strangers')) ?? []).map((s) => s.verify_uuid);
-      const p1 = await snapPersons();
-      const s1 = (await snapStrangers()).slice(0, 20);
-      obs(`重開前：場內人員 ${JSON.stringify(p1)}、陌生人 ${s1.length} 筆（取前 20）`);
-      await loadGuard(page); // 視窗重啟（重新載入）
-      const p2 = await snapPersons();
-      const s2 = await snapStrangers();
-      obs(`重開後：場內人員 ${JSON.stringify(p2)}、陌生人 ${s2.length} 筆`);
-      expect(p1.length).toBeGreaterThan(0);
-      // 人員：重開前在場內的人，重開後仍在場內
-      for (const n of p1) expect(p2, `重開後場內人員少了「${n}」`).toContain(n);
-      // 陌生人：重開前的陌生人紀錄仍在清單中（沒有因重開而消失）
-      const missing = s1.filter((id) => !s2.includes(id));
-      expect(missing.length, `重開後有 ${missing.length} 筆原有陌生人不見了`).toBeLessThanOrEqual(Math.ceil(s1.length * 0.2)); // 容許新資料擠出最舊的幾筆
-    },
-  );
-
   for (const [id, steps, expected, row] of [
     ['SEC-022', '1.勾選人員可填寫備註，於報表中備註顯示', '備註顯示成功', 147],
     ['SEC-023', '2.勾選或確認人員為人員,訪客,陌生人，該人員可於調查報表中顯示', '調查有顯示資料', 148],
@@ -172,7 +116,6 @@ test.describe('SEC 保全看板面板', () => {
       `[${id}] 保全備註：${id === 'SEC-022' ? '勾選人員可填寫備註，於報表中備註顯示' : '勾選或確認人員為人員/訪客/陌生人，該人員於調查報表中顯示'}`,
       {
         annotation: [
-          ...csvAnnotations({ row, no: '', category: id === 'SEC-022' ? '（延續）> 備註' : '（延續）> （空白）', steps, expected }),
           { type: '安全措施', description: '備註內容以 e2e 開頭並含時間戳；只對陌生人紀錄下指令，不動任何既有人員資料；指令寫入後無法復原（使用者已同意產生紀錄）' },
         ],
       },

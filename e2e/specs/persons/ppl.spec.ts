@@ -2,7 +2,6 @@ import { test, expect, Page } from '../../helpers/test';
 import JSZip from 'jszip';
 import * as ExcelJS from 'exceljs';
 import { existsSync, readFileSync } from 'node:fs';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { MB, TMP_DIR, makePng, writeFile } from '../../helpers/files';
 import {
   FormField,
@@ -19,7 +18,7 @@ import {
 import { buildImportFiles, downloadTemplate, editPersonViaUI, importViaUI } from '../../helpers/personsIo';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 PPL（CSV 第 57~61 列：#5.1 列表、#5.2 新增、#5.4 批次匯入/出、#5.5 編輯）。
+// 來源 E2E-TEST-PLAN.md；模組 PPL（#5.1 列表、#5.2 新增、#5.4 批次匯入/出、#5.5 編輯）。
 // 本檔實作「適合自動化（Y）」的 13 項；其餘維持 test.fixme（部分自動化／暫不測）。
 // 測試人員編號一律 e2e- 開頭；afterEach 以獨立 Admin 環境清理。既有人員（如 A-001）不會被修改或刪除。
 
@@ -77,15 +76,6 @@ async function expectOversizeDisplayPhotoRejected(page: Page) {
 test.describe('PPL', () => {
   test(
     '[PPL-001] 人員列表：清單、每頁最多 10 筆與分頁、顯示欄位',
-    {
-      annotation: csvAnnotations({
-        row: 57,
-        no: '5.1',
-        category: '人員 > 人員(列表)',
-        steps: '1.進入人員查看\n2.檢視人員清單、顯示欄位、資料筆數、頁數',
-        expected: '1. 顯示所有人員的清單\n2. 每頁最多 10筆、超過則會分頁\n3. 顯示欄位: [選擇]、人員編號、人員姓名、部門、群組、註冊的照片、顯示用的照片、[編輯]、[刪除]',
-      }),
-    },
     async ({ page }) => {
       await gotoPersons(page);
       // 3. 顯示欄位：選擇（勾選）、人員編號、人員姓名、部門、群組、註冊的照片、顯示用的照片、編輯、刪除
@@ -112,15 +102,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-002] 人員列表：快速搜尋（人員編號、姓名、部門、群組）',
-    {
-      annotation: csvAnnotations({
-        row: 57,
-        no: '5.1',
-        category: '人員 > 人員(列表)',
-        steps: '3.使用搜尋功能查詢',
-        expected: '4.快速搜尋:人員編號、人員姓名、部門、群組搜尋與包含輸入文字的項目',
-      }),
-    },
     async ({ page }) => {
       const tok = token();
       const id = track(`e2e-s-${tok}`);
@@ -152,15 +133,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-003] 人員列表：刪除人員資料',
-    {
-      annotation: csvAnnotations({
-        row: 57,
-        no: '5.1',
-        category: '人員 > 人員(列表)',
-        steps: '4.刪除人員資料',
-        expected: '5.刪除人員資料功能正常',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const id = track(`e2e-d-${token()}`);
@@ -185,15 +157,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-004] 新增人員：進入新增頁，編號/姓名必填，錯誤訊息標示於欄位下方且有錯誤無法進行下一步',
-    {
-      annotation: csvAnnotations({
-        row: 58,
-        no: '5.2',
-        category: '（延續）> 人員(新增)',
-        steps: '1. 點選新增人員功能，可以進入新增人員頁面\n2. 填入編號(必填)與人員姓名(必填)與其他資訊\n    - 直接標示錯誤訊息於欄位下方，有錯誤時無法進行下一步',
-        expected: '1.新增人員功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       await openAddPerson(page);
       await expect(page).toHaveURL(/addperson/);
@@ -224,13 +187,6 @@ test.describe('PPL', () => {
     '[PPL-006] 新增人員：顯示用照片（可非人臉、最大 10MB）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 58,
-          no: '5.2',
-          category: '（延續）> 人員(新增)',
-          steps: '4. 顯示用照片可以不是人臉照\n   - 最大檔案大小: 10MB',
-          expected: '1.新增人員功能正常且能建立成功',
-        }),
         { type: '判定範圍', description: '規格只寫「最大檔案大小 10MB」，未寫超過時的行為；本測項以「超過 10MB 的檔案不應被接受（預覽不變或出現錯誤提示）」判定' },
       ],
     },
@@ -260,15 +216,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-007] 新增人員：按下註冊後於人員列表呈現新增資料',
-    {
-      annotation: csvAnnotations({
-        row: 58,
-        no: '5.2',
-        category: '（延續）> 人員(新增)',
-        steps: '5. 按下註冊後，在【人員】列表可以呈現新增後的人員資料',
-        expected: '1.新增人員功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       const tok = token();
       const id = track(`e2e-n-${tok}`);
@@ -284,16 +231,57 @@ test.describe('PPL', () => {
   );
 
   test(
+    '[PPL-008] 新增人員：生效/失效日期符合現況',
+    {
+      annotation: [
+        { type: '判定範圍', description: '規格未定義「符合現況」的標準；依使用者 2026-11-02 決定，只驗生效／失效日期有資料且為標準日期（YYYY-MM-DD），並與輸入值一致' },
+      ],
+    },
+    async ({ page }) => {
+      const tok = token();
+      const id = track(`e2e-dt-${tok}`);
+      // 生效日設在未來，列表才會顯示「生效於」；失效日在更後面，人員不會變成已失效
+      const dayOffset = (days: number) => {
+        const d = new Date();
+        d.setDate(d.getDate() + days);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      };
+      const beginDate = dayOffset(7);
+      const expireDate = dayOffset(30);
+      const standardDate = /^\d{4}-\d{2}-\d{2}$/;
+
+      await openAddPerson(page);
+      await fillPersonForm(page, { id, name: `e2e日期${tok}` });
+      await formInput(page, 'beginDate').fill(beginDate);
+      await formInput(page, 'expireDate').fill(expireDate);
+      await nextButton(page).click();
+      await page.getByRole('button', { name: '註冊' }).click();
+      await expect(page.getByText('註冊完成')).toBeVisible();
+      await page.getByRole('button', { name: '完成' }).click();
+
+      // 列表：未生效的人員會顯示「生效於 : 日期」，日期為標準格式且等於輸入值
+      await gotoPersons(page);
+      await searchPersons(page, id);
+      const rows = await personRowTexts(page);
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toContain(`生效於 : ${beginDate}`);
+
+      // 編輯頁：生效／失效日期欄位有資料、為標準日期，且與輸入值一致
+      await bodyRows(page).filter({ hasText: id }).first().getByRole('button', { name: '編輯' }).click();
+      await formInput(page, 'id').waitFor();
+      const savedBegin = await formInput(page, 'beginDate').inputValue();
+      const savedExpire = await formInput(page, 'expireDate').inputValue();
+      expect(savedBegin).toMatch(standardDate);
+      expect(savedExpire).toMatch(standardDate);
+      expect(savedBegin).toBe(beginDate);
+      expect(savedExpire).toBe(expireDate);
+    },
+  );
+
+  test(
     '[PPL-011] 人員批次匯入/出：下載範本',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 60,
-          no: '5.4',
-          category: '（延續）> 人員(批次匯入/出)',
-          steps: '1. 點選 下載範本，可以取得人員資料Excel 範本，依照範本內的範例依序將人員清單填入\n   - 若人員有一個以上的部門或群組，將以「|」區隔；\n   - 註冊照片名稱: 人員編號.jpg，顯示照片名稱: 人員編號_D.jpg',
-          expected: '1.下載範本功能OK',
-        }),
         { type: '判定範圍', description: '「範例照片檔名須為 人員編號.jpg／人員編號_D.jpg」是否適用於範本內的範例檔，規格未明確指出；以 expect.soft 判定並在 Results 備註請使用者確認' },
       ],
     },
@@ -325,15 +313,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-012] 人員批次匯入/出：依範本匯入 Excel 與照片，成功後顯示於人員列表',
-    {
-      annotation: csvAnnotations({
-        row: 60,
-        no: '5.4',
-        category: '（延續）> 人員(批次匯入/出)',
-        steps: '1. 點選 下載範本…\n2. 點選 選擇檔案 上傳人員資料Excel\n3. 點選 匯入，將人員資料Excel 以及照片匯入\n4. 點選 選擇檔案 上傳人員照片\n5. 人員匯入的結果成功後，顯示於人員列表中',
-        expected: '2.根據範本格式匯入檔案功能OK',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const tok = token();
@@ -360,15 +339,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-013] 人員批次匯入/出：匯出（zip 含 excel、snapshot 資料夾 id.jpg / id_D.jpg）',
-    {
-      annotation: csvAnnotations({
-        row: 60,
-        no: '5.4',
-        category: '（延續）> 人員(批次匯入/出)',
-        steps: '6. 點選 匯出，可獲得人員清單與照片\n8. 點選匯出後，會透過瀏覽器下載壓縮檔(zip)\n9. 壓縮檔案中包含一份 excel 為人員的資料，及snapshot 資料夾、內含註冊 (id.jpg)、顯示用 (id_D.jpg) 照片',
-        expected: '3.匯出檔案規格內容正確\nAIRA 資料集做匯入',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const tok = token();
@@ -414,15 +384,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-014] 人員批次匯入/出：匯入包含不同語言（中、日、泰、法、西）的文件',
-    {
-      annotation: csvAnnotations({
-        row: 60,
-        no: '5.4',
-        category: '（延續）> 人員(批次匯入/出)',
-        steps: '7.匯入包含不同語言的文件(中、日、泰、法、西)',
-        expected: '2.根據範本格式匯入檔案功能OK',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const tok = token();
@@ -453,15 +414,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-016] 編輯人員：進入編輯頁，可修改姓名/部門/職稱，無法變更人員編號，錯誤訊息標示於欄位下方',
-    {
-      annotation: csvAnnotations({
-        row: 61,
-        no: '5.5',
-        category: '（延續）> 人員(編輯)',
-        steps: '1. 點選 編輯 可以進入人員資料編輯頁面\n2. 可修改人員姓名、部門、職稱等資訊，無法變更人員編號\n    - 直接標示錯誤訊息於欄位下方，有錯誤時無法進行下一步',
-        expected: '編輯人員功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       const tok = token();
       const id = track(`e2e-e-${tok}`);
@@ -502,13 +454,6 @@ test.describe('PPL', () => {
     '[PPL-018] 編輯人員：修改顯示用照片（最大 10MB）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 61,
-          no: '5.5',
-          category: '（延續）> 人員(編輯)',
-          steps: '4. 可修改顯示用照片\n    - 最大檔案大小: 10MB',
-          expected: '編輯人員功能正常且能更新成功',
-        }),
         { type: '判定範圍', description: '規格只寫「最大檔案大小 10MB」，未寫超過時的行為；本測項以「超過 10MB 的檔案不應被接受（預覽不變或出現錯誤提示）」判定' },
       ],
     },
@@ -540,15 +485,6 @@ test.describe('PPL', () => {
 
   test(
     '[PPL-019] 編輯人員：人員列表呈現更新後資料',
-    {
-      annotation: csvAnnotations({
-        row: 61,
-        no: '5.5',
-        category: '（延續）> 人員(編輯)',
-        steps: '5. 在【人員】列表可以呈現更新後的人員資料',
-        expected: '編輯人員功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       const tok = token();
       const id = track(`e2e-u-${tok}`);

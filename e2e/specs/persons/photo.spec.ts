@@ -1,6 +1,5 @@
 import { test, expect, Page } from '../../helpers/test';
 import { readFileSync } from 'node:fs';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { TMP_DIR, writeFile } from '../../helpers/files';
 import { Kind, cleanupPersons, createPersonViaUI, fillPersonForm, gotoPersons, openAddPerson, searchPersons } from '../../helpers/persons';
 import { bodyRows } from '../../helpers/tables';
@@ -157,7 +156,6 @@ test.describe('註冊照片', () => {
     '[PPL-005] 新增人員：註冊照片（選擇/拍攝）顯示，限制 10MB、最小臉 200x200 px、含清楚正臉',
     {
       annotation: [
-        ...csvAnnotations({ row: 58, no: '5.2', category: '（延續）> 人員(新增)', steps: '3. 新增註冊照片透過選擇照片或拍攝照片進行新增，兩者皆可正確顯示照片\n   - 最大檔案大小: 10MB\n   - 最小臉部尺寸: 200x200 px\n   - 影像含清楚的正臉', expected: '1.新增人員功能正常且能建立成功' }),
         { type: '未驗證', description: '「拍攝照片」需要 webcam，無法自動化' },
       ],
     },
@@ -167,7 +165,6 @@ test.describe('註冊照片', () => {
     '[PPL-017] 編輯人員：修改人員照片或重新拍攝（10MB、最小臉 200x200 px、含清楚正臉）',
     {
       annotation: [
-        ...csvAnnotations({ row: 61, no: '5.5', category: '（延續）> 人員(編輯)', steps: '3. 可修改人員照片或重新拍攝照片\n   - 最大檔案大小: 10MB\n   - 最小臉部尺寸: 200x200 px\n   - 影像含清楚的正臉', expected: '編輯人員功能正常且能更新成功' }),
         { type: '未驗證', description: '「重新拍攝」需要 webcam，無法自動化' },
       ],
     },
@@ -177,7 +174,6 @@ test.describe('註冊照片', () => {
     '[VIS-005] 新增訪客：註冊照片（選擇/拍攝）、限制 10MB、最小臉 200x200 px、含清楚正臉',
     {
       annotation: [
-        ...csvAnnotations({ row: 63, no: '5.7', category: '（延續）> 訪客(新增)', steps: '3. 新增註冊照片透過選擇照片或拍攝照片進行新增，兩者皆可正確顯示照片\n   - 最大檔案大小: 10MB\n   - 最小臉部尺寸: 200x200 px\n   - 影像含清楚的正臉', expected: '1.新增人員功能正常且能建立成功' }),
         { type: '未驗證', description: '「拍攝照片」需要 webcam，無法自動化' },
       ],
     },
@@ -187,7 +183,6 @@ test.describe('註冊照片', () => {
     '[VIS-012] 編輯訪客：修改照片或重新拍攝',
     {
       annotation: [
-        ...csvAnnotations({ row: 65, no: '5.9', category: '（延續）> 訪客(編輯)', steps: '3. 可修改人員照片或重新拍攝照片\n   - 最大檔案大小: 10MB\n   - 最小臉部尺寸: 200x200 px\n   - 影像含清楚的正臉', expected: '編輯訪客功能正常且能更新成功' }),
         { type: '未驗證', description: '「重新拍攝」需要 webcam，無法自動化' },
       ],
     },

@@ -1,6 +1,5 @@
 import { test, expect, Page, Browser } from '../../helpers/test';
 import { resolve } from 'node:path';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { importViaUI } from '../../helpers/personsIo';
 
 // 來源 E2E-TEST-PLAN.md：VIS-018（訪客資料集匯入功能）。使用者提供資料集：PersonsList (4).zip（產品下載的範本，內含 John、Merry 兩筆範例與 3 張照片），
@@ -67,7 +66,6 @@ test(
   '[VIS-018] 訪客資料集匯入功能：匯入 PersonsList (4).zip',
   {
     annotation: [
-      ...csvAnnotations({ row: 66, no: '', category: '（延續）> 訪客(匯入)', steps: '（原始規格無對應步驟）', expected: '4.訪客資料集匯入功能正常' }),
       { type: '判定範圍', description: '規格沒有步驟與資料集定義；以使用者提供的 PersonsList (4).zip 匯入為訪客，檢查匯入摘要成功筆數、訪客資料欄位與照片是否與檔案一致；測完刪除這 2 位訪客' },
     ],
   },

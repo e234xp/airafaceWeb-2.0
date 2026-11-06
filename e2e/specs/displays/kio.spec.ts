@@ -1,7 +1,6 @@
 import { test, expect } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 
-// 來源 E2E-TEST-PLAN.md；模組 KIO（自助報到／即時影像模式，CSV 第 149~156 列：#10.5）。
+// 來源 E2E-TEST-PLAN.md；模組 KIO（自助報到／即時影像模式，#10.5）。
 // 本檔實作「適合自動化（Y）」的 1 項（KIO-010）；其餘維持 test.fixme（需實體平板、QR code、鏡頭翻轉等）。
 
 test.describe('KIO', () => {
@@ -9,7 +8,6 @@ test.describe('KIO', () => {
     '[KIO-010] 即時影像模式：使用 HTTP 開啟 video mode 應無法連線',
     {
       annotation: [
-        ...csvAnnotations({ row: 156, no: '', category: '（延續）> （空白）', steps: '〔依預期結果推導，使用者於 2026-10-07 同意〕以 HTTP 開啟 video mode（依預期結果推導）', expected: '1.使用http開啟video mode應無法連線' }),
         { type: '判定範圍', description: '以全新的瀏覽器環境（未登入）把 E2E_BASE_URL 的 https 改成 http 開啟即時影像看板，選擇攝影機後，不應出現即時影像／即時人員資料' },
       ],
     },

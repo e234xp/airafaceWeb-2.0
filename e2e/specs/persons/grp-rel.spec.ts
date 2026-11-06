@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { appGetSettings, appSetSettings, restoreDashboard, snapshotDashboard } from '../../helpers/dashboard';
 import { cleanupGroups, createGroupViaUI, deleteGroupViaUI, uniqueGroupName } from '../../helpers/groups';
 import { cleanupPersons, createPersonViaUI, gotoPersons, personRowTexts, searchPersons, uniquePersonId } from '../../helpers/persons';
@@ -21,9 +20,6 @@ test.afterEach(async ({ browser }) => {
 test.describe('GRP（刪除群組後檢查關聯）', () => {
   test(
     '[GRP-011] 刪除群組後檢查關聯：人員確實移除群組綁定',
-    {
-      annotation: csvAnnotations({ row: 72, no: '5.15', category: '（延續）> 刪除後，檢查關聯項目', steps: '1. 人員', expected: '相關人員確實移除群組綁定' }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const id = uniquePersonId('gr');
@@ -57,7 +53,6 @@ test.describe('GRP（刪除群組後檢查關聯）', () => {
       `[${b.id}] 刪除群組後檢查關聯：${b.name}`,
       {
         annotation: [
-          ...csvAnnotations({ row: 72, no: '5.15', category: '（延續）> 刪除後，檢查關聯項目', steps: b.stepText, expected: '相關人員確實移除群組綁定' }),
           { type: '判定範圍', description: `把測試群組設為${b.name}的顯示來源群組（displayGroup）後刪除群組，檢查${b.name}設定不再含該群組；看板設定先取快照、結束還原` },
         ],
       },

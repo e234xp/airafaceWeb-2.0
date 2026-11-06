@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cameraRow, cleanupCameras, fillCameraBasics, gotoCameras, nextBtn, openAddCamera, searchCameras, uniqueCameraName } from '../../helpers/cameras';
 
 // 來源 E2E-TEST-PLAN.md：CAM-017/018（辨識門檻值）、CAM-020/024/025（人臉合併設定）、SEC-008/010（保全模式使用的合併閾值，實際設定在攝影機）。
@@ -82,7 +81,6 @@ async function saveBothPaths(page: Page, name: string, apply: (p: Page) => Promi
 test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
   test(
     '[CAM-017] 辨識門檻值：高 = 0.5、中 = 0.3（預設）、低 = 0.1',
-    { annotation: csvAnnotations({ row: 79, no: '', category: '（延續）> 辨識門檻值', steps: 'face_detection_score 辨識門檻值調整:高 = 0.5, 中 = 0.3預設, 低 = 0.1', expected: '（原始規格無對應預期結果）' }) },
     async ({ page }) => {
       test.setTimeout(200000);
       await toThreshold(page, uniqueCameraName('thr'));
@@ -102,7 +100,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
     '[CAM-020] 人臉合併[人員]：啟用人員合併並設定合併時長，儲存後保留',
     {
       annotation: [
-        ...csvAnnotations({ row: 80, no: '', category: '（延續）> 人臉合併[人員]', steps: '1.啟用人員合併: 設定合併時長\n2.該秒數區間，辨識相同人員', expected: '1.人臉合併功能確認OK' }),
         { type: '判定範圍', description: '只驗設定（啟用、時長可設、儲存後重開保留）；「該秒數區間辨識相同人員會合併」需要受控的重複辨識事件，未驗證' },
       ],
     },
@@ -131,7 +128,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
     '[CAM-024] 人臉合併[陌生人]：啟用陌生人合併並設定合併時長，儲存後保留',
     {
       annotation: [
-        ...csvAnnotations({ row: 81, no: '', category: '（延續）> 人臉合併[陌生人]', steps: '1.啟用陌生人合併: 設定合併時長\n2.該秒數區間，辨識相同人員', expected: '1.人臉合併功能確認OK' }),
         { type: '判定範圍', description: '只驗設定；「該秒數區間辨識相同人員會合併」需要受控的重複辨識事件，未驗證' },
       ],
     },
@@ -155,7 +151,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
     '[CAM-025] 人臉合併[陌生人]：設定合併分數越高越難合併（分數可設定並保留）',
     {
       annotation: [
-        ...csvAnnotations({ row: 81, no: '', category: '（延續）> 人臉合併[陌生人]', steps: '3.設定合併分數越高越難合併', expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕\n3.設定合併分數越高越難合併' }),
         { type: '判定範圍', description: '只驗合併分數欄位：預設 0.6、可改、重開保留；「分數越高越難合併」的實際合併行為需要受控的重複辨識事件，未驗證' },
       ],
     },
@@ -184,7 +179,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
     '[SEC-010] 保全攝影機陌生人合併：陌生人合併閾值預設 0.6，可設定',
     {
       annotation: [
-        ...csvAnnotations({ row: 139, no: '', category: '（延續）> 攝影機陌生人合併', steps: '1.陌生人設定合併閾值(default:0.6)', expected: '攝影機陌生人合併成功' }),
         { type: '判定範圍', description: '合併閾值實際設定在攝影機的人臉合併步驟（合併分數）；驗預設 0.6 與可設定，「合併成功」的行為未驗證' },
       ],
     },

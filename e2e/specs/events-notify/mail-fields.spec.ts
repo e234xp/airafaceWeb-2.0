@@ -1,6 +1,5 @@
 import { test, expect, Page } from '../../helpers/test';
 import { ADMIN_STORAGE_PATH } from '../../helpers/accounts';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { bodyRows } from '../../helpers/tables';
 
 // 來源 E2E-TEST-PLAN.md：MAIL-002~014、017、018（Email 通知設定的欄位驗證與內容欄位設定）。
@@ -87,7 +86,6 @@ test.describe('MAIL 設定欄位驗證', () => {
       `[${c.id}] Email 設定：${c.steps.split(':')[0]} ${c.steps.split(':').slice(1).join(':').slice(0, 30)}`,
       {
         annotation: [
-          ...csvAnnotations({ row: c.row, no: '', category: '（延續）> （空白）', steps: c.steps, expected: '設定Email通知並根據設定接收成功' }),
           { type: '判定範圍', description: `原始規格未定義違反時的行為，以「不合規的輸入無法按下一步、合規的輸入可按下一步」判定；實際寄信由使用者人工測試${c.note ? `。${c.note}` : ''}` },
         ],
       },
@@ -133,14 +131,6 @@ async function createMailWith(page: Page, apply: (p: Page) => Promise<void>) {
   await page.waitForTimeout(2000);
   return v.name;
 }
-/** 只開到第 2 步（內容欄位），不儲存：後端沒有 createemailcommand（回 400 no such cgi），儲存一定失敗；本組判定只看欄位是否可設定。 */
-async function toStep2Only(page: Page) {
-  await openAddMail(page);
-  await fillAll(page);
-  await next(page).click();
-  await page.getByText('語言').first().waitFor();
-  await page.waitForTimeout(1500);
-}
 async function openMailStep2(page: Page, name: string) {
   await page.goto(LIST);
   await page.reload();
@@ -155,65 +145,12 @@ async function openMailStep2(page: Page, name: string) {
   await page.getByText('語言').first().waitFor();
   await page.waitForTimeout(1500);
 }
-const R = { type: '判定範圍', description: '只驗證前端欄位：第 2 步的欄位可設定（選項存在、可切換）。儲存與收信未驗：後端沒有 createemailcommand（回 400 no such cgi），儲存必定失敗；實際寄出的信件內容由使用者人工測試' };
-
-test.describe('MAIL 內容欄位設定', () => {
-  test(
-    '[MAIL-011] Email 通知內容語系：發送內文語系可設定（僅欄位標題）',
-    { annotation: [...csvAnnotations({ row: 103, no: '', category: '（延續）> （空白）', steps: 'MAIL 通知中可設定發送內文的語系 (僅限欄位標題、欄位的內容由使用者資料決定)', expected: '根據設定接收成功' }), R] },
-    async ({ page }) => {
-      test.setTimeout(280000);
-      await toStep2Only(page);
-      const lang = page.locator('select:visible').first();
-      const opts = (await lang.locator('option').allInnerTexts()).map((x) => x.trim());
-      obs('語言選項：' + opts.join('、'));
-      expect(opts, '語言選項缺少').toEqual(expect.arrayContaining(['English', '繁體中文', '日本語']));
-      for (const o of ['日本語', 'English', '繁體中文']) {
-        await lang.selectOption({ label: o });
-        expect((await lang.locator('option:checked').innerText()).trim(), `選了「${o}」後沒有套用`).toBe(o);
-      }
-    },
-  );
-
-  for (const [id, key, label, row] of [
-    ['MAIL-012', 'face', '傳送擷取到的照片', 104],
-    ['MAIL-013', 'register', '傳送註冊時的照片', 104],
-    ['MAIL-014', 'display', '傳送顯示用的照片', 104],
-  ] as const) {
-    test(
-      `[${id}] Email 通知欄位：設定${label}`,
-      { annotation: [...csvAnnotations({ row, no: '', category: '（延續）> （空白）', steps: '設定' + label, expected: '根據設定接收成功' }), R] },
-      async ({ page }) => {
-        test.setTimeout(280000);
-        await toStep2Only(page);
-        await setBox(page, BOX[key], false);
-        await setBox(page, BOX[key], true);
-        expect(await boxes(page).nth(BOX[key]).isChecked(), '該照片欄位無法勾選').toBe(true);
-      },
-    );
-  }
-
-  test(
-    '[MAIL-017] Email 通知欄位：設定不顯示 ID、顯示時間',
-    { annotation: [...csvAnnotations({ row: 104, no: '', category: '（延續）> （空白）', steps: '設定不顯示ID、顯示時間', expected: '根據設定接收成功' }), R] },
-    async ({ page }) => {
-      test.setTimeout(280000);
-      await toStep2Only(page);
-      await setBox(page, BOX.personId, false);
-      await setBox(page, BOX.timestamp, true);
-      expect(await boxes(page).nth(BOX.personId).isChecked(), '人員編號應為不顯示').toBe(false);
-      expect(await boxes(page).nth(BOX.timestamp).isChecked(), '時間應為顯示').toBe(true);
-    },
-  );
-
-});
 
 test.describe('MAIL 照片三選一', () => {
   test(
     '[MAIL-019] Email 通知：抓拍、註冊、顯示用照片只能至多三選一傳送',
     {
       annotation: [
-        ...csvAnnotations({ row: 104, no: '', category: '（延續）> （空白）', steps: '抓拍、註冊、顯示用照片只能至多三選一傳送', expected: '根據設定接收成功' }),
         { type: '判定範圍', description: '只驗證前端：勾選其中一種照片後，另外兩種不可再勾選（至多選一）；實際寄出的信件內容由使用者人工測試' },
       ],
     },

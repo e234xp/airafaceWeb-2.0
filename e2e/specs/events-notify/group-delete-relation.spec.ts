@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 
 // 來源 E2E-TEST-PLAN.md：GRP-012（刪除群組後檢查關聯項目：Email 通知，相關人員確實移除群組綁定）。
 // 寄信的設定在事件管理（eventhandle），所以這裡用事件代表「Email 通知」：
@@ -12,7 +11,6 @@ const root = `Array.from(document.querySelectorAll('*')).find((x) => x.__vue__).
 
 test(
   '[GRP-012] 刪除群組後檢查關聯：Email 通知',
-  { annotation: csvAnnotations({ row: 72, no: '5.15', category: '（延續）> 刪除後，檢查關聯項目', steps: '2. Email 通知', expected: '相關人員確實移除群組綁定' }) },
   async ({ page }) => {
     test.setTimeout(200000);
     await page.goto('/#/personsmanagement/groupmanagement');

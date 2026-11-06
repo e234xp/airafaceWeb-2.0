@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, uniqueDeviceGroupName } from '../../helpers/dgroups';
 import {
   EVT_TEST_HOST,
@@ -19,7 +18,7 @@ import {
 import { cleanupGroups, createGroupViaUI, uniqueGroupName } from '../../helpers/groups';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 EVT（CSV 第 93~96 列：#8.1 頁面、#8.2 新增、#8.3 編輯、#8.4 刪除）。
+// 來源 E2E-TEST-PLAN.md；模組 EVT（#8.1 頁面、#8.2 新增、#8.3 編輯、#8.4 刪除）。
 // 本檔實作「適合自動化（Y）」的 6 項（EVT-001、002、003、005、007、008）；EVT-004、006（實際觸發）維持 test.fixme。
 // 測試事件為 HTTP 命令（主機 192.0.2.50 為保留網段），綁定「空的測試人員群組＋空的測試影像設備群組」，不會被任何真實辨識觸發。
 // afterEach 先清事件（先關閉開關再刪除）、再清群組。既有事件不會被修改或刪除。
@@ -66,15 +65,6 @@ async function openEditOf(page: Page, name: string) {
 test.describe('EVT', () => {
   test(
     '[EVT-001] 事件頁面：顯示已設定事件、頁數、筆數、顯示欄位',
-    {
-      annotation: csvAnnotations({
-        row: 93,
-        no: '8.1',
-        category: '事件 > 頁面',
-        steps: '1.進入事件管理頁面，查看目前已設定事件、頁數、筆數、顯示欄位\n2.使用搜尋功能查看事件',
-        expected: '1.正確顯示所有的事件、頁數、筆數、顯示欄位',
-      }),
-    },
     async ({ page }) => {
       await gotoEvents(page);
       const headers = (await page.locator('.vxe-table--header-wrapper th').allInnerTexts()).map((s) => s.trim());
@@ -97,15 +87,6 @@ test.describe('EVT', () => {
 
   test(
     '[EVT-002] 事件頁面：搜尋文字功能',
-    {
-      annotation: csvAnnotations({
-        row: 93,
-        no: '8.1',
-        category: '事件 > 頁面',
-        steps: '2.使用搜尋功能查看事件',
-        expected: '2.搜尋文字功能正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(420000);
       // 規格沒有定義可搜尋哪些欄位；以「設定名稱」為準。
@@ -129,15 +110,6 @@ test.describe('EVT', () => {
 
   test(
     '[EVT-003] 新增事件：依事件填入資訊與排程後完成建立',
-    {
-      annotation: csvAnnotations({
-        row: 94,
-        no: '8.2',
-        category: '（延續）> 新增',
-        steps: '1. 依照事件，分別填入所需的資訊\n2. 選擇事件作動的排程 (如時段)\n3. 按下完成，結束設定',
-        expected: '新增事件功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
@@ -174,15 +146,6 @@ test.describe('EVT', () => {
 
   test(
     '[EVT-005] 編輯事件：名稱可編輯並更新成功',
-    {
-      annotation: csvAnnotations({
-        row: 95,
-        no: '8.3',
-        category: '（延續）> 編輯',
-        steps: '1. 名稱可以編輯是正確的',
-        expected: '編輯事件功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
@@ -204,15 +167,6 @@ test.describe('EVT', () => {
 
   test(
     '[EVT-007] 刪除事件：關閉事件可刪除（單一/多選）',
-    {
-      annotation: csvAnnotations({
-        row: 96,
-        no: '8.4',
-        category: '（延續）> 刪除',
-        steps: '勾選(單一、多選)事件刪除(正在被使用的不能刪除)',
-        expected: '1.關閉事件可刪除事件功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
@@ -254,13 +208,6 @@ test.describe('EVT', () => {
     '[EVT-008] 刪除事件：正在被使用的規則不能刪除',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 96,
-          no: '8.4',
-          category: '（延續）> 刪除',
-          steps: '勾選(單一、多選)事件刪除(正在被使用的不能刪除)',
-          expected: '2.正在被使用的規則不能刪除',
-        }),
         { type: '判定範圍', description: '「正在被使用」解讀為「啟用中（開關開啟）」的事件；以測試事件驗證，不對既有事件做刪除操作' },
       ],
     },

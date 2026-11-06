@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   cleanupTablets,
   createTabletViaUI,
@@ -15,10 +14,10 @@ import {
 import { bodyRows, readAllRows } from '../../helpers/tables';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, gotoDeviceGroups, searchDeviceGroups, dgRow, uniqueDeviceGroupName } from '../../helpers/dgroups';
 
-// 來源 E2E-TEST-PLAN.md；模組 TAB（CSV 第 82~85 列：【平板】頁面、#6.4 新增、#6.5 編輯／刪除）。
+// 來源 E2E-TEST-PLAN.md；模組 TAB（【平板】頁面、#6.4 新增、#6.5 編輯／刪除）。
 // 本檔實作「適合自動化（Y）」的 10 項中的 9 項（TAB-001、002、005、006、008、009、010、011、012）；TAB-013 需要其他模組資料，暫留 fixme。
-// 注意：CSV 的「平板」頁面步驟寫的是「設備群組列表／新增影像設備群組」，但實際頁面列的是平板（設備名稱／狀態／IP）。
-// 本檔以「頁面上實際的平板清單」套用 CSV 的清單、搜尋、新增、編輯、刪除邏輯，並在各項標註；是否為規格複製自攝影機的文字，請使用者確認。
+// 注意：規格的「平板」頁面步驟寫的是「設備群組列表／新增影像設備群組」，但實際頁面列的是平板（設備名稱／狀態／IP）。
+// 本檔以「頁面上實際的平板清單」套用規格的清單、搜尋、新增、編輯、刪除邏輯，並在各項標註；是否為規格複製自攝影機的文字，請使用者確認。
 // 測試平板以 e2e- 開頭（註冊 ID 同名，狀態為「停用」）；afterEach 以獨立 Admin 環境清理。既有平板（Tablet-21）不會被修改或刪除。
 
 const created: string[] = [];
@@ -36,7 +35,7 @@ test.afterEach(async ({ browser }) => {
 
 const SCOPE_NOTE = {
   type: '判定範圍',
-  description: 'CSV 寫「設備群組」，但平板頁面實際列出的是平板（設備名稱、設備狀態、IP 位址）；本項以頁面上的平板清單判定，待使用者確認',
+  description: '規格寫「設備群組」，但平板頁面實際列出的是平板（設備名稱、設備狀態、IP 位址）；本項以頁面上的平板清單判定，待使用者確認',
 };
 
 async function openEdit(page: Page, name: string) {
@@ -77,13 +76,6 @@ test.describe('TAB', () => {
     '[TAB-001] 平板頁面：設備群組列表、頁數、筆數、顯示欄位',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 82,
-          no: '',
-          category: '（延續）> 【平板】頁面',
-          steps: '1.顯示目前的設備群組列表\n5.可透過點擊切換上下頁的清單，或點選欲顯示的頁數',
-          expected: '2.正確顯示所有的清單、頁數、筆數、顯示欄位',
-        }),
         SCOPE_NOTE,
       ],
     },
@@ -121,13 +113,6 @@ test.describe('TAB', () => {
     '[TAB-002] 平板頁面：搜尋文字功能',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 82,
-          no: '',
-          category: '（延續）> 【平板】頁面',
-          steps: '1.顯示目前的設備群組列表',
-          expected: '3.搜尋文字功能正確',
-        }),
         SCOPE_NOTE,
       ],
     },
@@ -167,13 +152,6 @@ test.describe('TAB', () => {
     '[TAB-005] 平板頁面：新增影像設備群組',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 82,
-          no: '',
-          category: '（延續）> 【平板】頁面',
-          steps: '2.點選 新增 影像設備群組',
-          expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕2.點選 新增 影像設備群組',
-        }),
         { type: '判定範圍', description: '平板頁面的「新增」是新增平板，不是新增影像設備群組（群組在「設備群組」頁，見 DGRP）；本項以「按新增進入新增平板精靈並能建立成功」判定，待使用者確認' },
       ],
     },
@@ -196,13 +174,6 @@ test.describe('TAB', () => {
     '[TAB-006] 平板頁面：編輯群組與勾選刪除（單一/多項/全選）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 82,
-          no: '',
-          category: '（延續）> 【平板】頁面',
-          steps: '3.點選 編輯可以針對 群組 進行編輯或刪除\n4.勾選 方格 並點選 刪除，可以刪除單一或多項，也可勾選 全選，並刪除所有影像設備群組',
-          expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕同步驟',
-        }),
         SCOPE_NOTE,
         { type: '安全措施', description: '勾選刪除前先搜尋 e2e- 限縮清單，並確認被勾選的列全是 e2e- 開頭；「全選」見 TAB-012' },
       ],
@@ -236,15 +207,6 @@ test.describe('TAB', () => {
 
   test(
     '[TAB-009] 新增平板：可詳細設定臉部偵測的數值',
-    {
-      annotation: csvAnnotations({
-        row: 83,
-        no: '6.4',
-        category: '（延續）> 平板(新增)',
-        steps: '4. 可詳細設定臉部偵測的數值',
-        expected: '新增功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const name = track(uniqueTabletName('t'));
@@ -274,51 +236,30 @@ test.describe('TAB', () => {
     '[TAB-010] 新增平板：上方搜尋框快速尋找設備群組',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 83,
-          no: '6.4',
-          category: '（延續）> 平板(新增)',
-          steps: '6.點選並輸入上方搜尋框內容，可針對設備群組進行快速尋找',
-          expected: '新增功能正常且能建立成功',
-        }),
-        { type: '判定範圍', description: '清單沒有群組欄位；以「把測試平板加入某設備群組後，以該群組名稱搜尋應找得到該平板」判定。若環境沒有設備群組則標記未驗證' },
+        { type: '判定範圍', description: '清單沒有群組欄位；以「把測試平板加入某設備群組後，以該群組名稱搜尋應找得到該平板」判定；群組由腳本自己建立（e2e- 開頭）並於結束時清理，不依賴環境現有群組' },
       ],
     },
     async ({ page }) => {
       test.setTimeout(240000);
+      // 不依賴環境現有的群組：自己建一個設備群組（e2e- 開頭）、把測試平板加進去，再以該群組名稱搜尋
       const name = track(uniqueTabletName('g'));
-      await openAddTablet(page);
-      await fillTabletBasics(page, name);
-      const group = await pickFirstGroup(page);
-      await nextBtn(page).click();
-      await nextBtn(page).click();
-      await page.getByRole('button', { name: '完成' }).click();
+      const group = uniqueDeviceGroupName('t10');
+      deviceGroups.push(group);
+      await createTabletViaUI(page, name);
+      await createDeviceGroupViaUI(page, { name: group, devices: [name] });
       // 以名稱搜尋一定找得到
       await gotoTablets(page);
       await searchTablets(page, name);
       await expect(tabletRow(page, name)).toHaveCount(1);
-      if (!group) {
-        test.info().annotations.push({ type: '未驗證', description: '環境沒有設備群組，無法驗證以群組名稱搜尋' });
-        return;
-      }
       // 產品的搜尋在已有關鍵字時再搜尋不會更新清單（見 TAB-002），因此每次搜尋前先重新載入
       await gotoTablets(page);
       await searchTablets(page, group);
-      await expect(tabletRow(page, name), `以群組名稱「${group}」搜尋找不到屬於該群組的平板`).toHaveCount(1);
+      await expect(tabletRow(page, name), `以群組名稱「${group}」搜尋找不到屬於該群組的平板（平板清單的搜尋只比對名稱與 IP）`).toHaveCount(1);
     },
   );
 
   test(
     '[TAB-011] 編輯平板：修改設備名稱、群組等，列表呈現更新後資料',
-    {
-      annotation: csvAnnotations({
-        row: 84,
-        no: '6.5',
-        category: '（延續）> 平板(編輯)',
-        steps: '1. 點選 編輯 可以進入影像設備資料編輯頁面\n2. 可以修改設備名稱、群組等資訊\n3. 在【影像設備】列表可以呈現更新後的人員資料',
-        expected: '編輯功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const before = track(uniqueTabletName('e1'));
@@ -350,13 +291,6 @@ test.describe('TAB', () => {
     '[TAB-012] 刪除平板：勾選單一/多項/全選刪除，並可切換分頁',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 85,
-          no: '',
-          category: '（延續）> 平板(刪除)',
-          steps: '1.勾選 方格 並點選 刪除，可以刪除單一或多項，也可勾選 全選，並刪除所有影像設備\n2.可透過點擊切換上下頁的清單，或點選欲顯示的頁數',
-          expected: '刪除功能正常',
-        }),
         { type: '安全措施', description: '全選刪除只在搜尋 e2e- 限縮後進行，並確認被勾選的列全是 e2e- 開頭才按刪除' },
       ],
     },
@@ -409,7 +343,6 @@ test.describe('TAB', () => {
     '[TAB-013] 刪除平板：刪除時檢查關聯設定（攝影機、平板、規則與考勤設定）',
     {
       annotation: [
-        ...csvAnnotations({ row: 85, no: '', category: '（延續）> 平板(刪除)', steps: '3.刪除時，檢查關聯設定:攝影機、平板、規則與考勤設定', expected: '刪除功能正常' }),
         { type: '判定範圍', description: '只驗證「影像設備群組」這一項關聯：平板被刪除後，所屬群組的平板數量同步減少。規則（門禁規則）與考勤設定的關聯需要另外建立規則與考勤設定，本項未驗證（部分完成）' },
       ],
     },

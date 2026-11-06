@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { Kind, cleanupPersons, createPersonViaUI, formInput, gotoPersons, personRowTexts, searchPersons, uniquePersonId } from '../../helpers/persons';
 import { bodyRows } from '../../helpers/tables';
 
@@ -42,7 +41,6 @@ test.describe('G3-A 人員／訪客（人臉卡片）', () => {
     '[PPL-009] 新增人員：人臉/卡片可不輸入，且辨識資料正確',
     {
       annotation: [
-        ...csvAnnotations({ row: 58, no: '5.2', category: '（延續）> 人員(新增)', steps: '6.人臉/卡片 可不輸入', expected: '3.人臉/卡片辨識資料正確' }),
         { type: '未驗證', description: '「辨識資料正確」需要實際辨識：本環境的辨識事件只會辨識既有人員，無法讓 e2e 人員被辨識' },
       ],
     },
@@ -52,7 +50,6 @@ test.describe('G3-A 人員／訪客（人臉卡片）', () => {
     '[VIS-009] 新增訪客：人臉/卡片辨識資料正確',
     {
       annotation: [
-        ...csvAnnotations({ row: 63, no: '5.7', category: '（延續）> 訪客(新增)', steps: '1. 點選新增訪客功能，可以進入新增訪客頁面\n2. 填入編號(必填)與姓名(必填)與其他資訊\n3. 新增註冊照片透過選擇照片或拍攝照片進行新增', expected: '3.人臉/卡片辨識資料正確' }),
         { type: '未驗證', description: '「辨識資料正確」需要實際辨識：本環境的辨識事件只會辨識既有人員，無法讓 e2e 訪客被辨識。本項只驗證卡號可儲存並保留' },
       ],
     },

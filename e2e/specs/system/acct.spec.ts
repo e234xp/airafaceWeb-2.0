@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { shot } from '../../helpers/evidence';
 import {
   TEST_PASSWORD,
@@ -22,29 +21,9 @@ import {
 } from '../../helpers/accounts';
 import { logout } from '../../helpers/auth';
 
-// 來源 E2E-TEST-PLAN.md；模組 ACCT，共 9 個 Test ID（CSV 第 163 列 #11.2 帳號管理）。
+// 來源 E2E-TEST-PLAN.md；模組 ACCT，共 9 個 Test ID（#11.2 帳號管理）。
 // 以 Admin 共用登入狀態執行；需要其他權限時另開全新瀏覽器環境以測試帳號登入。
 // 測試帳號一律 e2e- 開頭並於測項結束清理，不操作既有帳號（Admin、user）。
-
-const CSV_STEPS_163 = `1.新增按鈕進行帳號、密碼、權限等設定
-2.可透過刪除按鈕對下方勾選帳號進行去除
-3.變更帳號密碼後登出並重新登入後，需輸入新的密碼 (舊的密碼失效)
-4. Poweruser可使用的系統設定:
-   - 一般設定
-   - 帳號管理 (僅能變更自己的密碼，不能新增/刪除其他帳號，不能自殺)
-   - 時間設置
-   - 網路設定
-   - 備份與還原
-5. User僅能使用 出勤 / 報表 頁面
-- 可到帳號管理變更自己的密碼，但不能自殺`;
-const CSV_EXPECTED_163 = `1.正確顯示已有的帳號清單、頁數、筆數、顯示欄位
-2.搜尋文字功能正確
-3.新增功能正常且能建立新帳號並登入使用
-4.編輯功能正常且按下儲存變更能更新密碼成功
-5.刪除功能正常`;
-
-const ann = (steps: string, expected: string) =>
-  csvAnnotations({ row: 163, no: '11.2', category: '帳號管理 > 帳號管理', steps, expected });
 
 const sidebarGroups = async (page: Page) =>
   (await page.locator('.c-sidebar-nav > .c-sidebar-nav-dropdown > .c-sidebar-nav-dropdown-toggle').allInnerTexts()).map(
@@ -77,7 +56,6 @@ test.describe("ACCT", () => {
     "[ACCT-001] 帳號管理：已有帳號清單、頁數、筆數、顯示欄位",
     {
       annotation: [
-        ...ann('〔依預期結果推導〕進入帳號管理頁，檢視已有帳號清單、頁數、筆數、顯示欄位', '1.正確顯示已有的帳號清單、頁數、筆數、顯示欄位'),
         { type: '判定範圍', description: '以後端 findaccount 回傳的帳號資料為基準，逐筆比對畫面的帳號、權限、備註、筆數、頁數；欄位表頭（帳號、密碼、權限、備註）經使用者確認無誤' },
       ],
     },
@@ -117,7 +95,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-002] 帳號管理：搜尋文字功能",
-    { annotation: ann('〔依預期結果推導〕於帳號管理頁輸入關鍵字搜尋', '2.搜尋文字功能正確') },
     async ({ page }) => {
       await gotoAccountManagement(page);
       // 有符合者：僅顯示符合關鍵字的帳號（不分大小寫）
@@ -133,7 +110,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-003] 帳號管理：新增帳號（帳號、密碼、權限）並可登入使用",
-    { annotation: ann('1.新增按鈕進行帳號、密碼、權限等設定', '3.新增功能正常且能建立新帳號並登入使用') },
     async ({ page, browser }) => {
       const name = uniqueAccountName('add');
       createdAccounts.push(name);
@@ -154,7 +130,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-004] 帳號管理：編輯並儲存變更更新密碼成功；登出重新登入需輸入新密碼（舊密碼失效）",
-    { annotation: ann('3.變更帳號密碼後登出並重新登入後，需輸入新的密碼 (舊的密碼失效)', '4.編輯功能正常且按下儲存變更能更新密碼成功') },
     async ({ page, browser }) => {
       await withAccounts(page, [{ tag: 'pwd', permission: 'User' }], async ([name]) => {
         const newPassword = `${TEST_PASSWORD}-new`;
@@ -176,7 +151,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-005] 帳號管理：刪除勾選帳號",
-    { annotation: ann('2.可透過刪除按鈕對下方勾選帳號進行去除', '5.刪除功能正常') },
     async ({ page }) => {
       const name = uniqueAccountName('del');
       createdAccounts.push(name);
@@ -199,10 +173,6 @@ test.describe("ACCT", () => {
     "[ACCT-006] Poweruser：可使用一般設定、時間設置、網路設定、備份與還原",
     {
       annotation: [
-        ...ann(
-          '4. Poweruser可使用的系統設定:\n   - 一般設定\n   - 時間設置\n   - 網路設定\n   - 備份與還原',
-          '4. Poweruser可使用的系統設定:\n   - 一般設定\n   - 時間設置\n   - 網路設定\n   - 備份與還原',
-        ),
         { type: '判定範圍', description: '時間設置、網路設定在側邊欄無入口，需使用者裁定（部分完成）' },
       ],
     },
@@ -239,12 +209,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-007] Poweruser：帳號管理僅能變更自己的密碼，不能新增/刪除其他帳號，不能自殺",
-    {
-      annotation: ann(
-        '4. Poweruser可使用的系統設定:\n   - 帳號管理 (僅能變更自己的密碼，不能新增/刪除其他帳號，不能自殺)',
-        '4. Poweruser可使用的系統設定:\n   - 帳號管理 (僅能變更自己的密碼，不能新增/刪除其他帳號，不能自殺)',
-      ),
-    },
     async ({ page, browser }) => {
       await withAccounts(
         page,
@@ -302,12 +266,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-008] User：僅能使用出勤/報表頁面",
-    {
-      annotation: ann(
-        '5. User僅能使用 出勤 / 報表 頁面\n- 可到帳號管理變更自己的密碼，但不能自殺',
-        '5. User僅能使用 出勤 / 報表 頁面\n- 可到帳號管理變更自己的密碼，但不能自殺',
-      ),
-    },
     async ({ page, browser }) => {
       await withAccounts(page, [{ tag: 'usr', permission: 'User' }], async ([name]) => {
         const ctx = await freshContext(browser);
@@ -332,12 +290,6 @@ test.describe("ACCT", () => {
 
   test(
     "[ACCT-009] User：可到帳號管理變更自己的密碼，但不能自殺",
-    {
-      annotation: ann(
-        '5. User僅能使用 出勤 / 報表 頁面\n- 可到帳號管理變更自己的密碼，但不能自殺',
-        '5. User僅能使用 出勤 / 報表 頁面\n- 可到帳號管理變更自己的密碼，但不能自殺',
-      ),
-    },
     async ({ page, browser }) => {
       await withAccounts(page, [{ tag: 'usr', permission: 'User' }], async ([name]) => {
         const ctx = await freshContext(browser);

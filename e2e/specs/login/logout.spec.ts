@@ -1,5 +1,4 @@
 import { test, expect } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { adminCredentials, fillCredentials, loginForm, logout, openLoginPage } from '../../helpers/auth';
 
 // 來源 E2E-TEST-PLAN.md；模組 LOGOUT，共 1 個 Test ID。
@@ -8,15 +7,6 @@ import { adminCredentials, fillCredentials, loginForm, logout, openLoginPage } f
 test.describe("LOGOUT", () => {
   test(
     "[LOGOUT-001] 登入後點擊右上角帳戶按下登出，成功登出並返回登入頁",
-    {
-      annotation: csvAnnotations({
-        row: 14,
-        no: '2.1',
-        category: '登出 > 登出',
-        steps: '登入系統點擊右上角帳戶按下登出',
-        expected: '成功登出，返回登入頁面',
-      }),
-    },
     async ({ page }) => {
       const { username, password } = adminCredentials();
       await openLoginPage(page);

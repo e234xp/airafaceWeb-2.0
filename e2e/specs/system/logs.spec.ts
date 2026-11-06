@@ -1,9 +1,8 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { shot } from '../../helpers/evidence';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 LOGS，共 2 個 Test ID（CSV 第 190 列 #11.8 系統日誌）。
+// 來源 E2E-TEST-PLAN.md；模組 LOGS，共 2 個 Test ID（#11.8 系統日誌）。
 // 僅讀取系統日誌，不產生任何資料。
 
 const localDate = (offsetDays: number) => {
@@ -28,13 +27,6 @@ test.describe("LOGS", () => {
     "[LOGS-001] 系統日誌：選擇查詢期間，正確顯示系統操作、頁數、筆數、顯示欄位",
     {
       annotation: [
-        ...csvAnnotations({
-          row: 190,
-          no: '11.8',
-          category: '系統日誌 > 系統日誌',
-          steps: '1.可選擇查詢的期間',
-          expected: '1.可根據選取的時間正確顯示所有的系統操作、頁數、筆數、顯示欄位',
-        }),
         { type: '判定範圍', description: '規格未列「顯示欄位」的名稱與時間顯示格式；時間欄的顯示格式有疑義，見 Results 備註與截圖（部分完成）' },
       ],
     },
@@ -68,15 +60,6 @@ test.describe("LOGS", () => {
 
   test(
     "[LOGS-002] 系統日誌：關鍵字（資訊欄）搜尋",
-    {
-      annotation: csvAnnotations({
-        row: 190,
-        no: '11.8',
-        category: '系統日誌 > 系統日誌',
-        steps: '2.可輸入關鍵字(資訊欄)進行搜尋',
-        expected: '2.可使用文字搜尋功能查詢資料',
-      }),
-    },
     async ({ page }) => {
       await openSystemLog(page);
       const before = await readAllRows(page, false);

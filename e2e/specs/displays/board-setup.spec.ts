@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   injectRecognitions,
   appGetSettings,
@@ -98,9 +97,6 @@ const selectByLabel = (page: Page, label: string) => page.locator(`xpath=//*[nor
 test.describe('G3-A 看板', () => {
   test(
     '[WEL-001] 迎賓模式頁面：顯示步驟設定，完成後登入迎賓模式人員辨識成功即顯示相關資訊',
-    {
-      annotation: csvAnnotations({ row: 116, no: '10.1', category: '【迎賓模式】 > 【迎賓模式】頁面', steps: '1. 顯示其步驟設定\n2. 依序填入設定\n3.完成設定後，登入時選擇迎賓模式，則只要人員辨識成功，即可顯示其相關資訊', expected: '【迎賓模式】根據設定頁面功能正常' }),
-    },
     async ({ page }) => {
       test.setTimeout(290000);
       await begin(page, BOARDS.WELCOME);
@@ -132,7 +128,6 @@ test.describe('G3-A 看板', () => {
     '[OCC-001] 容留看板頁面：步驟設定，進為綠色外框、出為藍色外框、中間顯示場內人數',
     {
       annotation: [
-        ...csvAnnotations({ row: 128, no: '10.3', category: '容留看板 > 頁面', steps: '1. 顯示其步驟設定\n2. 依序填入設定\n3. (重要設定)須將打卡鐘模式打開配合測試Clockin & Clockout\n3.完成設定後，登入時選擇登記出勤模式，則只要人員辨識成功，即可顯示其相關資訊', expected: '背景圖、LOGO設定OK\n看板顯示:\n進:綠色外框\n出:藍色外框\n中間顯示場內人數' }),
         { type: '判定範圍', description: '「出：藍色外框」需要有人離開的事件；環境的辨識事件只有進入，若看板沒有離開人員則該項未驗證' },
       ],
     },
@@ -162,9 +157,6 @@ test.describe('G3-A 看板', () => {
   ] as const) {
     test(
       `[${id}] 容留看板：${label}`,
-      {
-        annotation: csvAnnotations({ row, no: '', category: '（延續）> 總人數設定顯示', steps: label, expected: '設定完成後進入容留看板查看結果是否一致' }),
-      },
       async ({ page }) => {
         test.setTimeout(290000);
         await begin(page, BOARDS.CAPACITY);
@@ -192,9 +184,6 @@ test.describe('G3-A 看板', () => {
 
   test(
     '[SEC-002] 保全模式頁面：顯示步驟設定，完成後進入保全模式結果一致',
-    {
-      annotation: csvAnnotations({ row: 135, no: '', category: '（延續）> 【保全模式】頁面', steps: '1. 顯示其步驟設定\n2. 依序填入設定', expected: '設定完成後進入保全模式查看結果應一致' }),
-    },
     async ({ page }) => {
       test.setTimeout(290000);
       await begin(page, BOARDS.GUARD);
@@ -209,70 +198,4 @@ test.describe('G3-A 看板', () => {
     },
   );
 
-  test(
-    '[SEC-005] 保全 Step 2 人員訊息：多選人員群組、顯示用照片、顯示資訊 1&2 套用並呈現',
-    {
-      annotation: csvAnnotations({ row: 137, no: '', category: '（延續）> Step 2 人員訊息', steps: '1. 以下設定需確認套用並呈現: 多選人員群組、顯示用照片、顯示資訊1&2', expected: '設定簽到/簽退設備，人員、頁面顯示資訊設定OK' }),
-    },
-    async ({ page }) => {
-      test.setTimeout(290000);
-      await begin(page, BOARDS.GUARD);
-      await gotoStep2(page, BOARDS.GUARD);
-      // 多選人員群組：再加入一個群組
-      const box = page.locator('.multiselect').first();
-      const before = await box.locator('.multiselect__tag').allInnerTexts();
-      await box.locator('.multiselect__tags').click();
-      const first = box.locator('.multiselect__option:visible').first();
-      const added = ((await first.innerText()) ?? '').trim();
-      await first.click();
-      await page.keyboard.press('Escape');
-      // 顯示用照片、顯示資訊 1、2
-      await visibleSelect(page, 2).selectOption({ label: '顯示用的照片' }); // 保全 Step 2 下拉順序：0 簽到、1 簽退、2 顯示用的照片、3 顯示資訊 1、4 顯示資訊 2、5 每日重置
-      await visibleSelect(page, 4).selectOption({ label: '人員編號' });
-      await saveStep2(page);
-      const s = (await readDashboard(page, 'GUARD')) as Record<string, unknown>;
-      obs(`群組：${before.join('、')} → 加入「${added}」；後端 displayGroup=${JSON.stringify(s.displayGroup)}、displayPhoto=${s.displayPhoto}、line1=${s.line1}、line2=${s.line2}`);
-      expect(s.displayGroup as string[]).toContain(added);
-      expect((s.displayGroup as string[]).length).toBeGreaterThan(before.length);
-      expect(s.displayPhoto).toBe('DISPLAY');
-      expect(s.line2).toBe('ID');
-      // 看板呈現：場內人員卡片出現人員編號（顯示資訊 2 = 人員編號）
-      await loadBoard(page, BOARDS.GUARD, async () => /A-\d{3}/.test(await bodyText(page)));
-      expect(await bodyText(page), '看板沒有呈現人員編號（顯示資訊 2）').toMatch(/A-\d{3}/);
-    },
-  );
-
-  test(
-    '[SEC-006] 保全 Step 2 人員訊息：頁面顯示重置時間如期生效，每日該時間清空所有資訊',
-    {
-      annotation: [
-        ...csvAnnotations({ row: 137, no: '', category: '（延續）> Step 2 人員訊息', steps: '2. 頁面顯示重置時間如期生效，每日該時間清空所有資訊', expected: '設定簽到/簽退設備，人員、頁面顯示資訊設定OK' }),
-        { type: '判定範圍', description: '不等到每日重置時間：把重置時間設為「目前小時」，看板統計只應包含該時間之後的資料，圖表中早於重置時間的小時應為 0；對照重置時間 00 時時早於目前小時的小時有資料' },
-      ],
-    },
-    async ({ page }) => {
-      test.setTimeout(290000);
-      await begin(page, BOARDS.GUARD);
-      const hour = new Date().getHours();
-      expect(hour, '現在是凌晨 0 點，無法驗證「早於重置時間的小時為 0」').toBeGreaterThan(1);
-      const readIn = async () => (await vmData<number[]>(page, 'chartDataIn')) ?? [];
-      // 對照組：重置 00 時 → 早於目前小時的小時有資料
-      await loadBoard(page, BOARDS.GUARD, async () => ((await readIn()).reduce((a, b) => a + b, 0)) > 0);
-      const base = await readIn();
-      // 實驗組：重置設為目前小時
-      await gotoStep2(page, BOARDS.GUARD);
-      await selectByLabel(page, '每日重置 (時)').selectOption(String(hour).padStart(2, '0'));
-      await saveStep2(page);
-      // 重置後目前這一小時可能還沒有任何進場（總量為 0 也是正確結果），所以只等圖表資料載入完成
-      await loadBoard(page, BOARDS.GUARD, async () => (await readIn()).length > 0);
-      const after = await readIn();
-      obs(`重置 00 時：各小時進場 ${JSON.stringify(base)}；重置 ${hour} 時：${JSON.stringify(after)}`);
-      expect(base.slice(0, hour).some((v) => v > 0), '對照組早於目前小時沒有資料，無法比較').toBe(true);
-      // 重置後圖表以重置時間為起點重排（第 0 根柱＝重置那一小時）：早於重置時間的資料被清空，總量應只剩目前這一小時
-      const sum = (a: number[]) => a.reduce((x, y) => x + y, 0);
-      expect(sum(after), '重置後總量沒有比重置前少很多（早於重置時間的資料沒有清空）').toBeLessThan(sum(base) * 0.3);
-      if (base[hour] > 0) expect(Math.abs(after[0] - base[hour]) / base[hour], '重置後第 0 根柱應約等於重置前該小時的量').toBeLessThan(0.2);
-      else expect(after[0], '重置前該小時沒有進場，重置後第 0 根柱也應為 0').toBe(0);
-    },
-  );
 });

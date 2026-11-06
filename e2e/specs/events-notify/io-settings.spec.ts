@@ -1,6 +1,5 @@
 import { test, expect, Page } from '../../helpers/test';
 import { ADMIN_STORAGE_PATH } from '../../helpers/accounts';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, uniqueDeviceGroupName } from '../../helpers/dgroups';
 import { EVT_TEST_HOST, cleanupEvents, createEventViaUI, dragSchedule, eventRow, fillEventStep1, gotoEvents, openAddEvent, searchEvents, uniqueEventName } from '../../helpers/events';
 import { cleanupGroups, createGroupViaUI, uniqueGroupName } from '../../helpers/groups';
@@ -77,7 +76,6 @@ test.describe('IO / EVREL', () => {
     '[IO-002] I/O：指定 Brand/Model',
     {
       annotation: [
-        ...csvAnnotations({ row: 110, no: '', category: '（延續）> （空白）', steps: '指定Brand/Model', expected: 'syslog顯示設定狀態、連線狀態\nsyslog的格式，判斷連線與斷線會顯示於log中，斷線重連，不影響CPU' }),
         { type: '判定範圍', description: '只驗證前端可指定品牌與型號；syslog 與 CPU 需 SSH 主機，未驗證' },
       ],
     },
@@ -101,7 +99,6 @@ test.describe('IO / EVREL', () => {
     '[IO-003] I/O：連線 IP 不可為空且須符合格式、port 不可為空且須為合格數字',
     {
       annotation: [
-        ...csvAnnotations({ row: 110, no: '', category: '（延續）> （空白）', steps: '連線IP不可為空，須符合格式/port不可為空，須為合格數字', expected: 'syslog顯示設定狀態、連線狀態\nsyslog的格式，判斷連線與斷線會顯示於log中，斷線重連，不影響CPU' }),
         { type: '判定範圍', description: '原始規格未定義違反時的行為，以「違反時無法按下一步」判定；syslog 與 CPU 需 SSH 主機，未驗證' },
       ],
     },
@@ -138,9 +135,6 @@ test.describe('IO / EVREL', () => {
 
   test(
     '[IO-004] I/O：帳號密碼可為空',
-    {
-      annotation: csvAnnotations({ row: 110, no: '', category: '（延續）> （空白）', steps: '帳號密碼可為空', expected: 'syslog顯示設定狀態、連線狀態\nsyslog的格式，判斷連線與斷線會顯示於log中，斷線重連，不影響CPU' }),
-    },
     async ({ page }) => {
       test.setTimeout(200000);
       await openAddIo(page);
@@ -158,7 +152,6 @@ test.describe('IO / EVREL', () => {
     '[IO-006] I/O：指定觸發時間、選取日期範圍並可「+」加入特定日期',
     {
       annotation: [
-        ...csvAnnotations({ row: 111, no: '', category: '（延續）> （空白）', steps: '指定觸發時間，選取日期範圍"+"加入特定日期', expected: '（原始規格無對應預期結果）' }),
         { type: '判定範圍', description: '原始規格無預期結果：以事件設定的「排程」步驟驗證——可在週排程格子拖曳選取時間、在「指定日期範圍」選取起訖並按「+」加入清單、可移除；加入的設定儲存後保留' },
       ],
     },
@@ -218,7 +211,6 @@ test.describe('IO / EVREL', () => {
     '[EVREL-001] 事件設定關聯：一筆事件觸發一個通知，刪除不影響其他事件',
     {
       annotation: [
-        ...csvAnnotations({ row: 114, no: '9.7', category: '事件設定關聯 > 刪除時，同時刪除關聯', steps: '事件相互獨立', expected: '一筆事件觸發一個通知，刪除不影響其他事件' }),
         { type: '判定範圍', description: '驗證「刪除不影響其他事件」：建立兩筆事件，刪除其中一筆後，另一筆仍在列表、設定仍可開啟。「一筆事件觸發一個通知」需實際辨識與收訊，由使用者人工測試，未驗證' },
       ],
     },

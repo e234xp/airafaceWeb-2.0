@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { pagerTotal } from '../../helpers/attExport';
 import { TEST_IP, cameraRow, cleanupCameras, createCameraViaUI, fillCameraBasics, gotoCameras, openAddCamera, searchCameras, uniqueCameraName } from '../../helpers/cameras';
 import { cleanupTablets, createTabletViaUI, gotoTablets, openAddTablet, uniqueTabletName } from '../../helpers/tablets';
@@ -21,9 +20,6 @@ const usageText = async (page: Page) => ((await page.locator('body').innerText()
 test.describe('G3-A 影像設備', () => {
   test(
     '[CAM-001] 攝影機列表：清單、頁數、筆數、顯示欄位、授權數量與使用數量',
-    {
-      annotation: csvAnnotations({ row: 74, no: '6.1', category: '影像設備 > 攝影機(列表)', steps: '1.進入影像設備清單，顯示目前的影像設備列表\n5.可透過點擊切換上下頁的清單，或點選欲顯示的頁數\n6.顯示授權數量與使用數量', expected: '1.正確顯示所有的清單、頁數、筆數、顯示欄位' }),
-    },
     async ({ page }) => {
       test.setTimeout(180000);
       await gotoCameras(page);
@@ -71,7 +67,6 @@ test.describe('G3-A 影像設備', () => {
     '[CAM-003] 攝影機列表：顯示狀態（線上/斷線）與 IP 正確',
     {
       annotation: [
-        ...csvAnnotations({ row: 74, no: '6.1', category: '影像設備 > 攝影機(列表)', steps: '7.顯示影像設備狀態', expected: '3.攝影機顯示狀態正確(線上/斷線)、IP正確' }),
         { type: '判定範圍', description: '畫面狀態文字為「啟用／停用」（規格寫線上／斷線）。以兩台對照：e2e-nx-in 串流可連線（系統日誌有 frame received）應為啟用；新增一台不可達 IP 的測試攝影機應為停用；IP 欄位須與輸入一致' },
       ],
     },
@@ -109,7 +104,6 @@ test.describe('G3-A 影像設備', () => {
     '[CAM-004] 攝影機列表：影像來源 RTSP/RTP 確認',
     {
       annotation: [
-        ...csvAnnotations({ row: 74, no: '6.1', category: '影像設備 > 攝影機(列表)', steps: '1.進入影像設備清單，顯示目前的影像設備列表', expected: '4.影像來源:RTSP/RTP確認OK' }),
         { type: '判定範圍', description: '列表沒有「影像來源」欄位；以新增／編輯頁的「影像來源類型」選項含 RTSP 與 RTP，且既有攝影機（e2e-nx-in）顯示為 RTSP、連接資訊為對應的 rtsp:// 網址判定' },
       ],
     },
@@ -138,9 +132,6 @@ test.describe('G3-A 影像設備', () => {
 
   test(
     '[CAM-006] 新增攝影機：進入新增頁，IP 必填，按完成後列表呈現新設備',
-    {
-      annotation: csvAnnotations({ row: 75, no: '6.2', category: '（延續）> 攝影機(新增)', steps: '1. 點選新增影像設備功能，可以進入新增頁面\n2. 填入IP位置(必填)與其他資訊\n5. 按下完成後，在【影像設備】列表可以呈現新增後的設備資料', expected: '1.新增功能正常且能建立成功' }),
-    },
     async ({ page }) => {
       test.setTimeout(180000);
       const name = uniqueCameraName('ip');
@@ -172,7 +163,6 @@ test.describe('G3-A 影像設備', () => {
     '[TAB-003] 平板頁面：平板顯示狀態與 IP 正確',
     {
       annotation: [
-        ...csvAnnotations({ row: 82, no: '', category: '（延續）> 【平板】頁面', steps: '1.顯示目前的設備群組列表', expected: '4.平板顯示狀態正確、IP正確' }),
         { type: '判定範圍', description: '狀態文字為「啟用／停用」。本項驗證欄位、狀態值合法、IP 為合法 IPv4；「狀態是否與實際連線一致」需要實體平板開關機，未驗證' },
       ],
     },

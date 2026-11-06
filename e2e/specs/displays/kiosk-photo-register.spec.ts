@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync } from 'node:fs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const QRCode = require('qrcode');
 import { ADMIN_STORAGE_PATH } from '../../helpers/accounts';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupPersons, createPersonViaUI, uniquePersonId } from '../../helpers/persons';
 
 // 來源 E2E-TEST-PLAN.md：KIO-004、KIO-005（自助報到拍照註冊人臉）。
@@ -71,7 +70,6 @@ for (const [id, expected] of [
     `[${id}] 自助報到拍照註冊人臉：${id === 'KIO-004' ? '上傳人臉圖後點選 Face 訪客' : '人臉是否為拍照上傳照片'}`,
     {
       annotation: [
-        ...csvAnnotations({ row: 152, no: '', category: '（延續）> 拍照註冊人臉', steps: '上傳人臉圖', expected }),
         { type: '判定範圍', description: '規格措辭不明（「Face 訪客」「上傳」）。以產品實際流程判定：掃描訪客 QR → 拍照頁拍下人臉 → 確認頁 Next → 完成頁顯示該訪客；完成後該訪客的註冊照片已寫入且與拍下的照片一致。以頁面內 canvas 串流取代實體鏡頭' },
       ],
     },

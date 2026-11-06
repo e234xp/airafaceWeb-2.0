@@ -1,12 +1,11 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { shot } from '../../helpers/evidence';
 import { TEST_PASSWORD, ADMIN_STORAGE_PATH, cleanupAccounts, createAccountViaUI, expectLoginFails, expectLoginSucceeds, freshContext, loginAs, uniqueAccountName } from '../../helpers/accounts';
 import { requireEnv } from '../../helpers/env';
 import { adminCredentials, fillCredentials, loginForm, logout, openLoginPage } from '../../helpers/auth';
 
 // 來源 E2E-TEST-PLAN.md；模組 LOGIN，共 24 個 Test ID。
-// 實作時不得改動 Test ID 與標題前綴；assertion 只能依 Plan / CSV 的預期結果。
+// 實作時不得改動 Test ID 與標題前綴；assertion 只能依 Plan 的預期結果。
 // 注意：fixme 不等於「使用者同意跳過」，Results 狀態需依 E2E-TEST-RULE.md §5 另行判定。
 
 const LOGIN_CATEGORY = '登入畫面 > 登入';
@@ -27,15 +26,6 @@ async function login(page: Page, username: string, password: string) {
 test.describe("LOGIN", () => {
   test(
     "[LOGIN-001] IP 輸入開啟 airaFace 登入畫面",
-    {
-      annotation: csvAnnotations({
-        row: 4,
-        no: '1.1',
-        category: '登入畫面 > IP輸入',
-        steps: '開啟Chrome， 輸入airaFace2.1的IP address：192.168.10.XXX',
-        expected: '根據IP可開啟進入airaFace2登入畫面',
-      }),
-    },
     async ({ page }) => {
       // 步驟：以 .env.e2e.local 的 E2E_BASE_URL（airaFace IP）開啟網頁
       await page.goto('/');
@@ -47,15 +37,6 @@ test.describe("LOGIN", () => {
 
   test(
     "[LOGIN-002] 最高權限管理者以正確帳密登入系統設定模式",
-    {
-      annotation: csvAnnotations({
-        row: 5,
-        no: '1.2',
-        category: '登入畫面 > 使用者名稱/密碼',
-        steps: '1. 使用最高權限管理者登入系統設定模式，預設帳號為Admin / 密碼為〔已遮蔽〕',
-        expected: '輸入正確的的帳號密碼，可成功登入系統',
-      }),
-    },
     async ({ page }) => {
       const { username, password } = adminCredentials();
       await openLoginPage(page);
@@ -69,15 +50,6 @@ test.describe("LOGIN", () => {
 
   test(
     "[LOGIN-003] 開啟記住帳號密碼後登出，登入頁顯示上一次登入的帳密",
-    {
-      annotation: csvAnnotations({
-        row: 6,
-        no: '',
-        category: '登入畫面 > 使用者名稱/密碼（延續 1.2）',
-        steps: '2. 打開記住帳號密碼，登入後按Log out 按鈕登出，回到登入頁面查看帳號密碼',
-        expected: '登入頁面顯示上一次登入的帳號密碼',
-      }),
-    },
     async ({ page }) => {
       const { username, password } = adminCredentials();
       await openLoginPage(page);
@@ -94,15 +66,6 @@ test.describe("LOGIN", () => {
 
   test(
     "[LOGIN-004] 輸入錯誤的使用者名稱，跳出錯誤提示",
-    {
-      annotation: csvAnnotations({
-        row: 7,
-        no: '',
-        category: '登入畫面 > 使用者名稱/密碼（延續 1.2）',
-        steps: '3.輸入錯誤的使用者名稱',
-        expected: '跳出錯誤提示',
-      }),
-    },
     async ({ page }) => {
       const { password } = adminCredentials();
       await openLoginPage(page);
@@ -114,15 +77,6 @@ test.describe("LOGIN", () => {
 
   test(
     "[LOGIN-005] 輸入錯誤密碼，跳出錯誤提示",
-    {
-      annotation: csvAnnotations({
-        row: 8,
-        no: '',
-        category: '登入畫面 > 使用者名稱/密碼（延續 1.2）',
-        steps: '4.輸入錯誤密碼',
-        expected: '跳出錯誤提示',
-      }),
-    },
     async ({ page }) => {
       const { username } = adminCredentials();
       await openLoginPage(page);
@@ -132,7 +86,7 @@ test.describe("LOGIN", () => {
     },
   );
 
-  // ---- LOGIN-006 ~ 015 語言選擇（CSV 第 9 列）----
+  // ---- LOGIN-006 ~ 015 語言選擇----
   // 只自動判定預期 1、2：登入頁／系統文字確實隨所選語系改變。
   // 預期 3（不應出現其他語系文字）、4（不應跑版）、5（專有名詞縮寫大寫）無法由腳本判定，Results 記為「部分完成」。
   const languages: Array<{ id: string; label: string; code: string; script?: RegExp }> = [
@@ -171,13 +125,6 @@ test.describe("LOGIN", () => {
         `[${lang.id}] 語言選擇：${lang.label}`,
         {
           annotation: [
-            ...csvAnnotations({
-              row: 9,
-              no: '',
-              category: '登入畫面 > 語言選擇（延續 1.2）',
-              steps: LANG_STEPS,
-              expected: LANG_EXPECTED,
-            }),
             { type: '判定範圍', description: '僅自動判定預期 1、2；預期 3、4、5 需視覺／人工判定（部分完成）' },
           ],
         },
@@ -222,7 +169,7 @@ test.describe("LOGIN", () => {
     }
   });
 
-  // ---- LOGIN-016 ~ 021 系統模式選項（CSV 第 10 列）----
+  // ---- LOGIN-016 ~ 021 系統模式選項----
   const modes: Array<{ id: string; label: string; value: string; hash: RegExp }> = [
     { id: 'LOGIN-016', label: '系統設定模式', value: 'Setting', hash: /attendance\/persondailyattendancereport/i },
     { id: 'LOGIN-017', label: '迎賓看板', value: 'Welcome', hash: /welcomemode/i },
@@ -235,15 +182,6 @@ test.describe("LOGIN", () => {
   for (const m of modes) {
     test(
       `[${m.id}] 系統模式選項：${m.label}，登入後進入正確頁面`,
-      {
-        annotation: csvAnnotations({
-          row: 10,
-          no: '',
-          category: '登入畫面 > 系統模式選項（延續 1.2）',
-          steps: MODE_STEPS,
-          expected: '根據選擇看板進入正確的看板頁面',
-        }),
-      },
       async ({ page }) => {
         const { username, password } = adminCredentials();
         await openLoginPage(page);
@@ -258,13 +196,6 @@ test.describe("LOGIN", () => {
     "[LOGIN-022] 1920x1080 解析度下登入畫面無文字/操作項被截掉或跑版",
     {
       annotation: [
-        ...csvAnnotations({
-          row: 11,
-          no: '',
-          category: '登入畫面 > 登入畫面顯示（延續 1.2）',
-          steps: '調整螢幕解析度為:1920x1080 ，查看登入畫面',
-          expected: '登入畫面顯示OK，在 1920x1080 解析度下，需能正常顯示，沒有文字、操作項被截掉或跑版',
-        }),
         { type: '判定範圍', description: '僅自動判定操作項在視窗內完整可見、無水平捲動；「跑版」需視覺判定（部分完成）' },
       ],
     },
@@ -283,7 +214,7 @@ test.describe("LOGIN", () => {
     },
   );
 
-  // ---- LOGIN-023 / 024 忘記密碼（CSV 第 12 列）----
+  // ---- LOGIN-023 / 024 忘記密碼----
   // 以新建的測試帳號測試，不修改既有帳號。新密碼一律設為 Admin 目前的密碼：
   // 即使後端未依 username 判斷而誤重設到 Admin，Admin 密碼也不會被改變。
   const createdForgot: string[] = [];
@@ -317,14 +248,7 @@ test.describe("LOGIN", () => {
     "[LOGIN-023] 忘記密碼：Admin 帳號 + 授權碼 + 新密碼可成功變更密碼",
     {
       annotation: [
-        ...csvAnnotations({
-          row: 12,
-          no: '',
-          category: '登入畫面 > 忘記密碼（延續 1.2）',
-          steps: '1.點擊忘記密碼\n2.輸入Admin帳號、授權碼、新密碼',
-          expected: '1.忘記密碼僅Admin輸入可成功改新密碼',
-        }),
-        { type: '判定範圍', description: '以新建的 Admin 權限測試帳號測試（CSV「Admin 帳號」含義待使用者確認）' },
+        { type: '判定範圍', description: '以新建的 Admin 權限測試帳號測試（規格「Admin 帳號」含義待使用者確認）' },
       ],
     },
     async ({ page, browser }) => {
@@ -347,15 +271,6 @@ test.describe("LOGIN", () => {
 
   test(
     "[LOGIN-024] 忘記密碼：非 Admin 帳號 + 授權碼 + 新密碼出現警告訊息",
-    {
-      annotation: csvAnnotations({
-        row: 12,
-        no: '',
-        category: '登入畫面 > 忘記密碼（延續 1.2）',
-        steps: '1.點擊忘記密碼\n3.輸入非Admin帳號、授權碼、新密碼',
-        expected: '2.其他非Admin身分出現警告訊息',
-      }),
-    },
     async ({ page, browser }) => {
       const { password: adminPassword } = adminCredentials();
       const name = uniqueAccountName('usr');

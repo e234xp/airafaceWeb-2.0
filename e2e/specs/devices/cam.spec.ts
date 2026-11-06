@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   TEST_IP,
   cameraRow,
@@ -15,7 +14,7 @@ import {
 } from '../../helpers/cameras';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 CAM（CSV 第 74~78 列：#6.1 列表、#6.2 新增、#6.3 編輯／刪除、人臉擷取閾值）。
+// 來源 E2E-TEST-PLAN.md；模組 CAM（#6.1 列表、#6.2 新增、#6.3 編輯／刪除、人臉擷取閾值）。
 // 本檔實作「適合自動化（Y）」的 11 項；其餘維持 test.fixme（部分自動化／暫不測／需實體）。
 // 測試攝影機以 e2e- 開頭、IP 用保留網段 192.0.2.10（不會連到真實設備，狀態會顯示「停用」）；afterEach 以獨立 Admin 環境清理。
 // 既有攝影機（Camera-1~11）只做「開啟編輯頁、不儲存」的唯讀操作（ROI 需要真實影像）。
@@ -94,15 +93,6 @@ async function gotoRoiStepOfExisting(page: Page) {
 test.describe('CAM', () => {
   test(
     '[CAM-002] 攝影機列表：搜尋文字功能',
-    {
-      annotation: csvAnnotations({
-        row: 74,
-        no: '6.1',
-        category: '影像設備 > 攝影機(列表)',
-        steps: '2.點選並輸入上方搜尋框內容，可針對人員進行快速尋找',
-        expected: '2.搜尋文字功能正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(180000);
       const name = track(uniqueCameraName('s'));
@@ -132,13 +122,6 @@ test.describe('CAM', () => {
     '[CAM-005] 攝影機列表：編輯入口與勾選刪除（單一/多項/全選）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 74,
-          no: '6.1',
-          category: '影像設備 > 攝影機(列表)',
-          steps: '3.點選 編輯可以針對影像設備進行編輯或刪除\n4.勾選 方格 並點選 刪除，可以刪除單一或多項，也可勾選 全選，並刪除所有影像設備',
-          expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕同步驟',
-        }),
         { type: '安全措施', description: '「全選」前先搜尋 e2e- 限縮清單，並確認被勾選的列全是 e2e- 開頭才按刪除，避免刪到既有攝影機' },
       ],
     },
@@ -177,13 +160,6 @@ test.describe('CAM', () => {
     '[CAM-007] 新增攝影機：新增/移除 ROI，ROIs（辨識區域）功能',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 75,
-          no: '6.2',
-          category: '（延續）> 攝影機(新增)',
-          steps: '3. 新增ROI或移除ROI選項',
-          expected: '2.ROIs(辨識區域)確認功能OK',
-        }),
         { type: '判定範圍', description: 'ROI 需要真實影像：以既有 Camera-1 的編輯頁（不儲存）操作；ROI 畫在 canvas，以畫面色彩格狀摘要的差異判定「新增後畫面有變化、移除後恢復」' },
       ],
     },
@@ -214,13 +190,6 @@ test.describe('CAM', () => {
     '[CAM-008] 新增攝影機：ROI 可不設定，且至多 5 個',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 75,
-          no: '6.2',
-          category: '（延續）> 攝影機(新增)',
-          steps: '6.ROI 可不設定，且至多5個',
-          expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕6.ROI 可不設定，且至多5個',
-        }),
         { type: '判定範圍', description: '「至多 5 個」以「畫面只提供 5 組新增/移除、且 5 個 ROI 可同時存在」判定；ROI 內容以 canvas 差異判定' },
       ],
     },
@@ -254,15 +223,6 @@ test.describe('CAM', () => {
 
   test(
     '[CAM-009] 新增攝影機：可詳細設定臉部偵測的數值',
-    {
-      annotation: csvAnnotations({
-        row: 75,
-        no: '6.2',
-        category: '（延續）> 攝影機(新增)',
-        steps: '4. 可詳細設定臉部偵測的數值',
-        expected: '〔使用者確認 2026-10-07：以步驟原文作為預期結果〕4. 可詳細設定臉部偵測的數值',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const name = track(uniqueCameraName('t'));
@@ -296,15 +256,6 @@ test.describe('CAM', () => {
 
   test(
     '[CAM-011] 編輯攝影機：修改設備名稱、群組等，列表呈現更新後資料',
-    {
-      annotation: csvAnnotations({
-        row: 76,
-        no: '6.3',
-        category: '（延續）> 攝影機(編輯)',
-        steps: '1. 點選 編輯 可以進入影像設備資料編輯頁面\n2. 可以修改設備名稱、群組等資訊\n3. 在【影像設備】列表可以呈現更新後的資料',
-        expected: '編輯功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const before = track(uniqueCameraName('e1'));
@@ -344,13 +295,6 @@ test.describe('CAM', () => {
     '[CAM-012] 刪除攝影機：勾選單一/多項/全選刪除，並可切換分頁',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 77,
-          no: '',
-          category: '（延續）> 攝影機(刪除)',
-          steps: '1.勾選 方格 並點選 刪除，可以刪除單一或多項，也可勾選 全選，並刪除所有影像設備\n2.可透過點擊切換上下頁的清單，或點選欲顯示的頁數',
-          expected: '刪除功能正常',
-        }),
         { type: '安全措施', description: '全選刪除只在搜尋 e2e- 限縮後進行，並確認被勾選的列全是 e2e- 開頭才按刪除' },
       ],
     },
@@ -414,15 +358,6 @@ test.describe('CAM', () => {
   for (const d of defaults) {
     test(
       `[${d.id}] ${d.title}`,
-      {
-        annotation: csvAnnotations({
-          row: 78,
-          no: '',
-          category: '（延續）> 人臉擷取閾值',
-          steps: d.step,
-          expected: '辨識相關參數確認(最小人臉尺寸、門檻值、時間、防偽)OK',
-        }),
-      },
       async ({ page }) => {
         test.setTimeout(120000);
         await gotoThresholdStep(page, uniqueCameraName('df'));

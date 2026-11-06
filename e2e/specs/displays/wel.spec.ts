@@ -1,9 +1,8 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { injectRecognitions, appGetSettings, readDashboard, restoreDashboard, snapshotDashboard } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 
-// 來源 E2E-TEST-PLAN.md；模組 WEL（CSV 第 116~119 列：#10.1 迎賓看板設定 Step 1~3）。
+// 來源 E2E-TEST-PLAN.md；模組 WEL（#10.1 迎賓看板設定 Step 1~3）。
 // 本檔實作「適合自動化（Y）」的 7 項（WEL-002~008）；WEL-001、009、010 維持 test.fixme（部分自動化）。
 // 迎賓看板設定是全系統共用設定：每個測項開始前先取得 WELCOME 設定快照，結束（含失敗／逾時）一律以獨立 Admin 環境還原。
 // 驗證方式：介面操作 → 取產品後端回傳的設定（getdashboardsettings）→ 進入迎賓看板（/welcomemode）檢查畫面一致。
@@ -71,13 +70,6 @@ test.describe('WEL', () => {
     '[WEL-002] 迎賓 Step 1 公司信息：背景圖片、商標圖檔、公司名稱設定',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 117,
-          no: '',
-          category: '（延續）> Step 1 公司信息',
-          steps: '1. 選擇迎賓模式中的背景圖片、商標圖檔\n2. 輸入公司名稱\n3. 完成上述設定後，點選下一步',
-          expected: '背景圖、LOGO設定OK',
-        }),
         { type: '判定範圍', description: 'Step 1 畫面只有背景圖片、商標兩個選擇檔案，沒有「公司名稱」欄位（畫面上的 aira Corporation 是 Step 3 的副標題）；預期結果只要求「背景圖、LOGO設定OK」，故以背景圖與商標判定，公司名稱欄位缺漏列為觀察' },
       ],
     },
@@ -122,13 +114,6 @@ test.describe('WEL', () => {
     '[WEL-003] 迎賓 Step 2 數位看板：形象廣告照片與輪播間隔、標題、字體設定',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 118,
-          no: '',
-          category: '（延續）> Step 2 數位看板',
-          steps: '可設定形象廣告照片及輪播間隔時間，依序項目填入標題，選取字體等',
-          expected: '廣告輪播設定OK',
-        }),
         { type: '判定範圍', description: '以「廣告照片可上傳、輪巡時間可設定且儲存後保留」判定；Step 2 沒有標題與字體欄位（標題在 Step 3），列為觀察' },
       ],
     },
@@ -174,13 +159,6 @@ test.describe('WEL', () => {
     '[WEL-004] 迎賓 Step 3 人員信息：啟用人員訊息遮蔽（遮蔽人員編號及姓名）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 119,
-          no: '',
-          category: '（延續）> Step 3 人員信息',
-          steps: '1. 可啟用人員訊息遮蔽 啟用後可遮蔽人員編號及姓名',
-          expected: '1.人員、頁面顯示資訊設定OK\n2.確認進入迎賓看板與設定後的結果一致',
-        }),
         { type: '判定範圍', description: `${OPTION_NOTE}；畫面沒有獨立的「遮蔽」開關，也沒有遮蔽人員編號的選項（待使用者確認）。判定：選「部分姓名」後儲存、後端設定保留、看板姓名文字與完整姓名不同` },
       ],
     },
@@ -214,15 +192,6 @@ test.describe('WEL', () => {
 
   test(
     '[WEL-005] 迎賓 Step 3 人員信息：更改人員資訊欄位與照片（不顯示/註冊/抓拍/顯示照片）',
-    {
-      annotation: csvAnnotations({
-        row: 119,
-        no: '',
-        category: '（延續）> Step 3 人員信息',
-        steps: '2. 可更改人員資訊如人員編號、人員姓名、部門、職稱、群組名稱等，照片可以選擇不顯示、註冊照片、抓拍照片或顯示照片',
-        expected: '1.人員、頁面顯示資訊設定OK\n2.確認進入迎賓看板與設定後的結果一致',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await gotoStep3(page);
@@ -253,15 +222,6 @@ test.describe('WEL', () => {
 
   test(
     '[WEL-006] 迎賓 Step 3 人員信息：顯示屬性 1~4 指定 Attribute',
-    {
-      annotation: csvAnnotations({
-        row: 119,
-        no: '',
-        category: '（延續）> Step 3 人員信息',
-        steps: '3. 顯示屬性1~4可以指定哪些Attribute',
-        expected: '1.人員、頁面顯示資訊設定OK\n2.確認進入迎賓看板與設定後的結果一致',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await gotoStep3(page);
@@ -294,13 +254,6 @@ test.describe('WEL', () => {
     '[WEL-007] 迎賓 Step 3 人員信息：輪巡時間（秒）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 119,
-          no: '',
-          category: '（延續）> Step 3 人員信息',
-          steps: '4. 可設定輪巡時間(秒)',
-          expected: '1.人員、頁面顯示資訊設定OK\n2.確認進入迎賓看板與設定後的結果一致',
-        }),
         { type: '判定範圍', description: '輪巡的實際秒數需長時間觀察看板，本項以「選項可選、儲存後後端與設定頁保留」判定，未量測實際輪巡間隔' },
       ],
     },
@@ -324,15 +277,6 @@ test.describe('WEL', () => {
 
   test(
     '[WEL-008] 迎賓 Step 3 人員信息：顯示人數',
-    {
-      annotation: csvAnnotations({
-        row: 119,
-        no: '',
-        category: '（延續）> Step 3 人員信息',
-        steps: '5. 顯示人數',
-        expected: '1.人員、頁面顯示資訊設定OK\n2.確認進入迎賓看板與設定後的結果一致',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await gotoStep3(page);

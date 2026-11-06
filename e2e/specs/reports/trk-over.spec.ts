@@ -1,5 +1,4 @@
 import { Page, expect, test } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { shot } from '../../helpers/evidence';
 import { noPresenceMessage, openPresenceDetail, scanPresence, titleSeconds } from '../../helpers/presence';
 
@@ -25,7 +24,6 @@ test(
   '[TRK-008] 時間軸：不在辦公室超時為紅色（OUT→IN，長度 >= N 分鐘）',
   {
     annotation: [
-      ...csvAnnotations({ row: 53, no: '', category: '（延續）> 時間軸顯示', steps: '4.不在辦公室，超時:紅色，設定出去攝影機並維持出超過設定時間', expected: '4..OUT 超過設定時間顯示紅色' }),
       { type: '判定範圍', description: '用環境現有資料中離開總時間最長的人員；對 10／20／30／60 分鐘各門檻：離開區段長度 >= 門檻為紅色（超時）、否則為黃色' },
     ],
   },

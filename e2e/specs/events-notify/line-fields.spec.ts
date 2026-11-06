@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 
 // 來源 E2E-TEST-PLAN.md：LINE-002、003、004（LINE 通知內容欄位）。
 // 只驗證前端欄位：第 2 步的欄位可設定。儲存與收訊未驗：後端沒有 createlinecommand 等通知 API（find*command 回 400 no such cgi），儲存必定失敗；收訊由使用者人工測試。
@@ -36,7 +35,7 @@ async function toStep2(page: Page) {
 
 test(
   '[LINE-002] Line 通知內容語系：發送內文語系可設定（僅欄位標題）',
-  { annotation: [...csvAnnotations({ row: 99, no: '', category: '（延續）> 通知內容語系', steps: 'LINE 通知中可設定發送內文的語系 (僅限欄位標題、欄位的內容由使用者資料決定)', expected: '根據設定接收成功' }), R] },
+  { annotation: [R] },
   async ({ page }) => {
     test.setTimeout(200000);
     await toStep2(page);
@@ -53,7 +52,7 @@ test(
 
 test(
   '[LINE-003] Line 通知欄位：設定不顯示 ID、顯示時間',
-  { annotation: [...csvAnnotations({ row: 100, no: '', category: '（延續）> 送出的人員的欄位顯示應符合設定', steps: '通知內容依照選取之項目呈現；設定不顯示ID、顯示時間', expected: '根據設定接收成功' }), R] },
+  { annotation: [R] },
   async ({ page }) => {
     test.setTimeout(200000);
     await toStep2(page);

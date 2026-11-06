@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { cleanupCameras, createCameraViaUI, uniqueCameraName } from '../../helpers/cameras';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, uniqueDeviceGroupName } from '../../helpers/dgroups';
 import { cleanupTablets, createTabletViaUI, uniqueTabletName } from '../../helpers/tablets';
@@ -36,7 +35,6 @@ test(
   '[DGRP-003] 影像設備群組：攝影機跟平板可放在同群組',
   {
     annotation: [
-      ...csvAnnotations({ row: 90, no: '6.6', category: '（延續）> 影像設備群組(新增/編輯)', steps: '〔依預期結果推導，使用者於 2026-10-07 同意〕建立含攝影機與平板的影像設備群組（依預期結果推導）', expected: '1.攝影機跟平板可放在同群組' }),
       { type: '判定範圍', description: '建立 e2e- 測試攝影機與平板，放進同一個測試群組；以兩台設備的編輯頁都顯示該群組判定' },
     ],
   },

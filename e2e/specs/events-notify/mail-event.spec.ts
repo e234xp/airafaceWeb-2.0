@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { openAddEvent } from '../../helpers/events';
 
 // 來源 E2E-TEST-PLAN.md：MAIL-008（To 至少選 1 個 user group）。
@@ -15,7 +14,6 @@ test(
   '[MAIL-008] 事件設定：Email 通知 To 至少要有 1 個收件者',
   {
     annotation: [
-      ...csvAnnotations({ row: 102, no: '', category: '（延續）> 設定', steps: 'To: 至少選1 user group', expected: '設定Email通知並根據設定接收成功' }),
       { type: '判定範圍', description: '事件設定頁的「收件者 To」是自由輸入的 Email，不是選 user group；以「To 空白不能進入下一步、填入正確 Email 可以」判定「至少 1 個」；不儲存、不寄信' },
     ],
   },

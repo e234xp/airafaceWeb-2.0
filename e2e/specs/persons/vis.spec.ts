@@ -2,7 +2,6 @@ import { test, expect, Page } from '../../helpers/test';
 import JSZip from 'jszip';
 import * as ExcelJS from 'exceljs';
 import { existsSync, readFileSync } from 'node:fs';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { MB, TMP_DIR, makePng, writeFile } from '../../helpers/files';
 import {
   FormField,
@@ -19,7 +18,7 @@ import {
 import { buildImportFiles, downloadTemplate, editPersonViaUI, importViaUI } from '../../helpers/personsIo';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
-// 來源 E2E-TEST-PLAN.md；模組 VIS（CSV 第 62~66 列：#5.6 列表、#5.7 新增、#5.9 編輯、#5.10 匯入/匯出）。
+// 來源 E2E-TEST-PLAN.md；模組 VIS（#5.6 列表、#5.7 新增、#5.9 編輯、#5.10 匯入/匯出）。
 // 本檔實作「適合自動化（Y）」的 12 項；其餘維持 test.fixme（部分自動化／暫不測）。
 // 測試訪客編號一律 e2e- 開頭；afterEach 以獨立 Admin 環境清理。既有訪客不會被修改或刪除。
 
@@ -94,15 +93,6 @@ const totalOf = async (page: Page) => {
 test.describe('VIS', () => {
   test(
     '[VIS-001] 訪客列表：清單、每頁最多 10 筆、顯示欄位（含 QRCode）',
-    {
-      annotation: csvAnnotations({
-        row: 62,
-        no: '5.6',
-        category: '訪客 > 訪客(列表)',
-        steps: '1.進入訪客查看\n2.檢視訪客清單、顯示欄位(QRCode)、資料筆數、頁數',
-        expected: '1. 顯示所有人員的清單\n2. 每頁最多 10筆\n3. 顯示欄位: [選擇]、人員編號、人員姓名、部門、群組、註冊的照片、顯示用的照片、[編輯]、[刪除]、QRCode',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       await page.goto('/#/personsmanagement/visitormanagement');
@@ -134,15 +124,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-002] 訪客列表：搜尋（人員編號、姓名、部門、群組）',
-    {
-      annotation: csvAnnotations({
-        row: 62,
-        no: '5.6',
-        category: '訪客 > 訪客(列表)',
-        steps: '3.使用搜尋功能查詢',
-        expected: '4.在人員編號、人員姓名、部門、群組搜尋與包含輸入文字的項目',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(180000);
       const tok = token();
@@ -176,15 +157,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-003] 訪客列表：刪除訪客資料',
-    {
-      annotation: csvAnnotations({
-        row: 62,
-        no: '5.6',
-        category: '訪客 > 訪客(列表)',
-        steps: '4.刪除訪客資料',
-        expected: '5.刪除訪客資料功能正常',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const id = track(`e2e-vd-${token()}`);
@@ -206,15 +178,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-004] 新增訪客：進入新增頁，編號/姓名必填，不可設定為 Admin，錯誤訊息標示於欄位下方',
-    {
-      annotation: csvAnnotations({
-        row: 63,
-        no: '5.7',
-        category: '（延續）> 訪客(新增)',
-        steps: '1. 點選新增訪客功能，可以進入新增訪客頁面\n2. 填入編號(必填)與姓名(必填)與其他資訊',
-        expected: '1.新增人員功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       await openAddPerson(page, K);
       await expect(page).toHaveURL(/addvisitor/);
@@ -244,13 +207,6 @@ test.describe('VIS', () => {
     '[VIS-006] 新增訪客：顯示用照片（可非人臉、最大 10MB）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 63,
-          no: '5.7',
-          category: '（延續）> 訪客(新增)',
-          steps: '4. 顯示用照片可以不是人臉照',
-          expected: '1.新增人員功能正常且能建立成功',
-        }),
         { type: '判定範圍', description: '規格只寫「最大檔案大小 10MB」（Plan 步驟另列）；未寫超過時的行為，本測項以「超過 10MB 的檔案不應被接受」判定（同 PPL-006）' },
       ],
     },
@@ -277,15 +233,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-007] 新增訪客：按下註冊後於列表呈現新增資料',
-    {
-      annotation: csvAnnotations({
-        row: 63,
-        no: '5.7',
-        category: '（延續）> 訪客(新增)',
-        steps: '5. 按下註冊後，在列表可呈現新增後的訪客資料',
-        expected: '1.新增人員功能正常且能建立成功',
-      }),
-    },
     async ({ page }) => {
       const tok = token();
       const id = track(`e2e-vn-${tok}`);
@@ -302,15 +249,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-011] 編輯訪客：進入編輯頁，可修改姓名/部門/職稱，無法變更訪客編號，不可設為 Admin',
-    {
-      annotation: csvAnnotations({
-        row: 65,
-        no: '5.9',
-        category: '（延續）> 訪客(編輯)',
-        steps: '1. 點選 編輯 可以進入訪客資料編輯頁面\n2. 可修改訪客姓名、部門、職稱等資訊，無法變更訪客編號',
-        expected: '編輯訪客功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const tok = token();
@@ -349,13 +287,6 @@ test.describe('VIS', () => {
     '[VIS-013] 編輯訪客：修改顯示用照片',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 65,
-          no: '5.9',
-          category: '（延續）> 訪客(編輯)',
-          steps: '4. 可修改顯示用照片',
-          expected: '編輯訪客功能正常且能更新成功',
-        }),
         { type: '判定範圍', description: '本項納入「超過 10MB 不應被接受」的判定（同 PPL-018）' },
       ],
     },
@@ -385,15 +316,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-014] 編輯訪客：訪客列表呈現更新後資料',
-    {
-      annotation: csvAnnotations({
-        row: 65,
-        no: '5.9',
-        category: '（延續）> 訪客(編輯)',
-        steps: '5. 在【訪客】列表可以呈現更新後的人訪客資料',
-        expected: '編輯訪客功能正常且能更新成功',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(120000);
       const tok = token();
@@ -417,13 +339,6 @@ test.describe('VIS', () => {
     '[VIS-015] 訪客匯入：下載範本（內含 QRcode）',
     {
       annotation: [
-        ...csvAnnotations({
-          row: 66,
-          no: '5.10',
-          category: '（延續）> 訪客(匯入)',
-          steps: '1. 點選 下載範本，可以取得訪客資料Excel 範本，依照範本內的範例依序將訪客清單填入，若訪客有一個以上的部門或群組，將以「|」區隔；照片名稱需對應於訪客編號，而顯示照片檔案名稱為訪客編號後加上_D，以便系統分辨',
-          expected: '1.下載範本功能OK、內含QRcode',
-        }),
         { type: '判定範圍', description: '「內含 QRcode」解讀為壓縮檔內有 qrcode 資料夾與 QRcode 圖片；範例顯示照片檔名以「_D」判定（expect.soft）' },
       ],
     },
@@ -451,15 +366,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-016] 訪客匯入：依範本匯入 Excel 與照片，成功後於訪客列表呈現',
-    {
-      annotation: csvAnnotations({
-        row: 66,
-        no: '5.10',
-        category: '（延續）> 訪客(匯入)',
-        steps: '1. 點選 下載範本…\n2. 點選 匯入，將訪客資料Excel 以及照片匯入\n3. 點選 選擇檔案 上傳訪客資料Excel\n4. 點選 選擇檔案 上傳訪客照片\n5. 訪客匯入的結果成功後，可於【訪客】列表上呈',
-        expected: '2.根據範本格式匯入檔案功能OK',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const tok = token();
@@ -485,15 +391,6 @@ test.describe('VIS', () => {
 
   test(
     '[VIS-017] 訪客匯出：zip 含 excel、snapshot（id.jpg / id_D.jpg）、qrcode 資料夾（id.jpeg）',
-    {
-      annotation: csvAnnotations({
-        row: 66,
-        no: '5.10',
-        category: '（延續）> 訪客(匯入)',
-        steps: '6. 點選匯出後，會透過瀏覽器下載壓縮檔(zip)\n7. 壓縮檔案中包含一份 excel 為人員的資料，及snapshot 資料夾、內含註冊 (id.jpg)、顯示用 (id_D.jpg) 照片，qrcode 資料夾內含 qrcode 照片 (id.jpeg)',
-        expected: '3.匯出檔案規格內容正確',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(240000);
       const tok = token();

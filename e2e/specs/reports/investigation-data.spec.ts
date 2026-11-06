@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { INVESTIGATION, exportWithPhoto, narrowToFirstRow, openReportPage, pageRowTexts, searchButton, setRange, totalRecords } from '../../helpers/reports';
 import { bodyRows } from '../../helpers/tables';
 
@@ -18,15 +17,6 @@ async function pickGroup(page: Page, name: string) {
 test.describe('INV（G1）', () => {
   test(
     '[INV-001] 調查：依時間區間、類別、群組、關鍵字由近而遠列出符合紀錄',
-    {
-      annotation: csvAnnotations({
-        row: 45,
-        no: '4.3',
-        category: '調查 > 調查',
-        steps: '1. 根據指定時間區間、類別、群組、關鍵字、由近而遠列出符合的紀錄',
-        expected: '正確搜尋選定時間區間、條件調查的所有人員清單、頁數、筆數、顯示欄位',
-      }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await openReportPage(page, INVESTIGATION);
@@ -68,7 +58,6 @@ test.describe('INV（G1）', () => {
     '[INV-002] 調查：群組包含人員、訪客、陌生人',
     {
       annotation: [
-        ...csvAnnotations({ row: 45, no: '4.3', category: '調查 > 調查', steps: '2. 群組包含: 人員、訪客、陌生人', expected: '正確搜尋選定時間區間、條件調查的所有人員清單、頁數、筆數、顯示欄位' }),
         { type: '判定範圍', description: '解讀為：類別可選「人員、訪客、陌生人」三種，且群組選項含人員與訪客的預設群組（All Person、All Visitor）；陌生人沒有群組' },
       ],
     },
@@ -89,9 +78,6 @@ test.describe('INV（G1）', () => {
 
   test(
     '[INV-003] 調查：類別為陌生人時列出時間、分數、抓拍照片，其餘欄位為空',
-    {
-      annotation: csvAnnotations({ row: 45, no: '4.3', category: '調查 > 調查', steps: '3. 類別為陌生人時，應會列出 時間、分數、抓拍照片，其餘欄位為空', expected: '正確搜尋選定時間區間、條件調查的所有人員清單、頁數、筆數、顯示欄位' }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await openReportPage(page, INVESTIGATION);
@@ -124,7 +110,6 @@ test.describe('INV（G1）', () => {
       `[${id}] 調查匯出：${withPhoto ? '含照片' : '不含照片'}`,
       {
         annotation: [
-          ...csvAnnotations({ row: 47, no: '', category: '（延續）> 調查匯出', steps: withPhoto ? '1. 含照片 匯出壓縮檔中含照片 (在 snapshot 資料夾下)' : '2. 不含照片: 匯出壓縮檔中不包含照片及資料夾', expected: '根據設定匯出正確資料' }),
           { type: '判定範圍', description: '為避免大量下載照片，時間範圍縮到最新一筆所在的那一秒' },
         ],
       },
@@ -150,9 +135,6 @@ test.describe('INV（G1）', () => {
 
   test(
     '[INV-008] 調查 filter 搜尋：輸入人員關鍵字並檢查是否有關鍵字以外人員',
-    {
-      annotation: csvAnnotations({ row: 48, no: '', category: '（延續）> filter搜尋', steps: '1.輸入人員關鍵字\n2.檢查是否有關鍵字以外人員', expected: '1.輸入人員關鍵字 2.檢查是否有關鍵字以外人員\n〔使用者確認 2026-10-07〕搜尋結果僅含符合關鍵字者' }),
-    },
     async ({ page }) => {
       test.setTimeout(300000);
       await openReportPage(page, INVESTIGATION);

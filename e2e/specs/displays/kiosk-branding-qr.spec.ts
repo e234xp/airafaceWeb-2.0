@@ -3,7 +3,6 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const QRCode = require('qrcode');
 import { ADMIN_STORAGE_PATH } from '../../helpers/accounts';
-import { csvAnnotations } from '../../helpers/csvSource';
 import { appGetSettings, appSetSettings, boardHasImage } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 import { cleanupPersons, createPersonViaUI, uniquePersonId } from '../../helpers/persons';
@@ -103,9 +102,6 @@ const vm = <T>(page: Page, prop: string) =>
 test.describe('KIO 自助報到', () => {
   test(
     '[KIO-001] 自助報到：上傳商標、QR code 背景圖後，點選顯示框可翻轉鏡頭',
-    {
-      annotation: csvAnnotations({ row: 151, no: '10.5', category: '自助報到模式 > 可上傳QR code掃描背景圖', steps: '上傳商標、QR code背景圖', expected: '1.點選顯示框可翻轉鏡頭.' }),
-    },
     async ({ page }) => {
       test.setTimeout(290000);
       await snapshotAll(page);
@@ -165,7 +161,6 @@ test.describe('KIO 自助報到', () => {
       `[${id}] 自助報到：上傳商標、QR code 背景圖後，${id === 'KIO-002' ? '掃描 QRcode 會跳出人員' : '銜接拍照頁面'}`,
       {
         annotation: [
-          csvAnnotations({ row: 151, no: '10.5', category: '自助報到模式 > 可上傳QR code掃描背景圖', steps: '上傳商標、QR code背景圖', expected })[0],
           { type: '判定範圍', description: '以 Chromium 假攝影機播放含訪客 QR（{"uuid":…}）的影片取代實體鏡頭掃描；QR 背景圖／商標上傳見 KIO-001' },
         ],
       },

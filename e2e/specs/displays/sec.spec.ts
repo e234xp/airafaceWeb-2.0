@@ -1,5 +1,4 @@
 import { test, expect, Page } from '../../helpers/test';
-import { csvAnnotations } from '../../helpers/csvSource';
 import {
   boardHasImage,
   openDashboardSettings,
@@ -13,7 +12,7 @@ import {
 } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 
-// 來源 E2E-TEST-PLAN.md；模組 SEC＝保全模式（CSV 第 133~136 列：#10.4）。設定頁 /displays/modifyguardcontrolsetting，設定資料 key＝GUARD。
+// 來源 E2E-TEST-PLAN.md；模組 SEC＝保全模式（#10.4）。設定頁 /displays/modifyguardcontrolsetting，設定資料 key＝GUARD。
 // 本檔實作「適合自動化（Y）」的 2 項（SEC-003、004）；其餘維持 test.fixme。
 // 保全模式設定為全系統共用設定：每個測項前取得 GUARD 快照，結束（含失敗／逾時）以獨立 Admin 環境還原。
 
@@ -39,7 +38,6 @@ test.describe('SEC', () => {
     '[SEC-003] 保全模式頁面：進出設備來源設定不得重複（防呆）',
     {
       annotation: [
-        ...csvAnnotations({ row: 135, no: '', category: '（延續）> 【保全模式】頁面', steps: '3. (重要設定)進出設備來源設定完成，兩者不得重複(防呆)', expected: '設定完成後進入保全模式查看結果應一致' }),
         { type: '安全措施', description: '「簽到／簽退設備相同」的設定不會被送出：只讀取畫面上的防呆狀態（儲存鈕是否停用或出現錯誤訊息），發現可儲存時也不按儲存' },
       ],
     },
@@ -87,7 +85,6 @@ test.describe('SEC', () => {
     '[SEC-004] 保全 Step 1 公司訊息：背景圖預設黑底、logo 為白底 aira，可設定背景圖與 logo',
     {
       annotation: [
-        ...csvAnnotations({ row: 136, no: '', category: '（延續）> Step 1 公司訊息', steps: '背景圖預設為黑底，logo為白底aira，可設定 背景圖 跟 logo', expected: '背景圖、LOGO設定OK' }),
         { type: '判定範圍', description: '「預設為黑底／白底 aira」需要在從未自訂過的環境才能驗證，本環境的目前設定可能已自訂，故預設值只列為觀察（見 Results）；本項判定「可設定背景圖與 logo 並套用於看板」' },
       ],
     },
