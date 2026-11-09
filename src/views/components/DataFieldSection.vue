@@ -69,6 +69,9 @@ export default {
     },
   },
   emits: ['update:data'],
+  // 勾選「顯示 ID」（show_identity）時，要一併送給後端的欄位：影像來源 ID 與事件 ID。
+  // 這兩個欄位使用者看不到也不能單獨勾選，所以只在送出時由 show_identity 帶出，不會出現在欄位清單裡。
+  identityDerivedFields: ['source_id', 'role_id'],
   data() {
     return {
       selectedKeys: [],
@@ -105,7 +108,10 @@ export default {
         // 處理辨識資料
         if (this.selected.selectedFields && Array.isArray(this.selected.selectedFields)) {
           // 處理陣列格式的已選欄位，保持順序（包含所有欄位類型）
+          // 已儲存的設定裡會有帶出的 source_id、role_id；它們不是使用者勾選的項目，這裡略過，
+          // 否則重新開啟設定時，這兩個字串會被當成已選欄位顯示在清單裡。
           this.selected.selectedFields.forEach(field => {
+            if (this.$options.identityDerivedFields.includes(field)) return;
             this.selectedKeys.push(field);
           });
         } else {
@@ -198,6 +204,9 @@ export default {
         const eventArray = [];
         this.selectedKeys.forEach((key) => {
           eventArray.push(key);
+          // 勾了「顯示 ID」就緊接著帶出影像來源 ID 與事件 ID；沒勾就不帶（取消勾選時它們也跟著消失）。
+          // 放在 show_identity 後面，是為了讓信件裡這兩行排在它的位置。
+          if (key === 'show_identity') eventArray.push(...this.$options.identityDerivedFields);
         });
         if (eventArray.length > 0) {
           temp.selectedFields = eventArray;
