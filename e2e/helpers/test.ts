@@ -1,4 +1,5 @@
 import { test as base, expect } from '@playwright/test';
+import * as fs from 'fs';
 import { IS_MOCK, installMockFallback, resetMockUses, takeMockUses } from '../mock/fakeBackend';
 
 // 所有 spec 都從這裡匯入 test／expect。
@@ -14,7 +15,37 @@ export { expect, IS_MOCK };
 const INCLUDE_BOARDS = process.env.E2E_INCLUDE_BOARDS === 'true';
 const isBoardTest = (file: string, title: string) => /specs[\\/]displays[\\/]/.test(file) || /\[GRP-01[345]\]/.test(title);
 
-export const test = base.extend<{ _mockReport: void; _boardsPaused: void }, { _mockBrowser: void }>({
+// 停損只在「測全部」（E2E_RUN_MODE=full，npm run e2e / e2e:parallel）時套用，指定測項（e2e:case）永遠不卡，不分人或 AI。
+// 套用時只看「這一次執行」的紀錄（E2E_RUN_ID 相同）：同一個測項在這次執行內未通過，且嘗試次數或累計耗時達上限，
+// 就跳過它，不再繼續花時間。先前執行留下的次數不會影響這次（budget-reporter 換了新的執行就從 0 重算）。
+const FULL_RUN = process.env.E2E_RUN_MODE === 'full';
+const BUDGET_MAX_ATTEMPTS = Number(process.env.E2E_CASE_MAX_ATTEMPTS || 5);
+const BUDGET_MAX_MS = Number(process.env.E2E_CASE_STUCK_TIMEOUT_MINUTES || 5) * 60000;
+
+/** 這個測項在這次「測全部」執行內是否已超過停損；沒超過回傳 null，超過回傳要顯示的跳過原因。 */
+function budgetSkipReason(title: string): string | null {
+  const testId = /^\[([A-Z0-9]+-\d+)\]/.exec(title)?.[1];
+  if (!FULL_RUN || !testId) return null;
+  try {
+    const entry = JSON.parse(fs.readFileSync('e2e/reports/budget.json', 'utf8'))[testId];
+    if (entry && entry.runId === process.env.E2E_RUN_ID && !entry.passed && (entry.attempts >= BUDGET_MAX_ATTEMPTS || entry.totalMs >= BUDGET_MAX_MS)) {
+      return `停損：這次執行內已嘗試 ${entry.attempts}/${BUDGET_MAX_ATTEMPTS} 次、累計 ${(entry.totalMs / 60000).toFixed(1)}/${BUDGET_MAX_MS / 60000} 分鐘仍未通過`;
+    }
+  } catch {
+    // 讀不到記帳檔就當作沒超過
+  }
+  return null;
+}
+
+export const test = base.extend<{ _mockReport: void; _boardsPaused: void; _budgetStop: void }, { _mockBrowser: void }>({
+  _budgetStop: [
+    async ({}, use, testInfo) => {
+      const reason = budgetSkipReason(testInfo.title);
+      testInfo.skip(reason !== null, reason ?? '');
+      await use();
+    },
+    { auto: true },
+  ],
   _boardsPaused: [
     async ({}, use, testInfo) => {
       testInfo.skip(!INCLUDE_BOARDS && isBoardTest(testInfo.file, testInfo.title), '看板測項暫停（E2E_INCLUDE_BOARDS=true 可恢復）');

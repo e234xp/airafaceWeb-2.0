@@ -16,11 +16,12 @@ AiraFace 管理介面（airafaceWeb）的 Playwright 端對端測試。
 
 | 指令 | 用途 | 什麼時候用 |
 |---|---|---|
-| `npm run e2e` | Playwright 原生指令，一次跑全部測試 | CI；沒有停損記帳 |
+| `npm run e2e` | 等同 `npm run e2e:parallel`：依共用資料分組、組內序列、組間平行，一次跑全部測試（Playwright 原生指令被 `playwright.config.ts` 擋住，必須經過執行工具，停損記帳才會生效） | 要跑全部時 |
 | `npm run e2e:headed` | 同上，但開出瀏覽器視窗 | 要親眼看畫面除錯時 |
 | `npm run e2e:ui` | 開 Playwright 圖形介面，可逐步重播、看每一步畫面 | 查某個測項為什麼失敗 |
 | `npm run e2e:report` | 開啟 HTML 測試報告（`reports/html`） | 跑完後看結果 |
-| `npm run e2e:case -- <ID>...` | **跑單一或多個測項**，例：`npm run e2e:case -- CAM-007 CAM-008`。每個測項有停損：嘗試 5 次或累計 5 分鐘仍未通過就拒絕再跑（exit 3）。記帳存在 `reports/budget.json` | 開發或修腳本時的標準跑法；規則規定測項只能用它跑 |
+| `npm run e2e:case -- <ID>...` | **跑單一或多個測項**，例：`npm run e2e:case -- CAM-007 CAM-008`。**指定測項永遠不會被停損擋住**，不分人或 AI。記帳存在 `reports/budget.json`，以「每次執行」為單位從 0 計，不沿用先前執行的次數 | 開發或修腳本時的標準跑法；規則規定測項只能用它跑 |
+| `npm run e2e:case -- <ID> --headed` | 開出瀏覽器視窗看測項怎麼跑；同樣可加 `--debug`（逐步除錯）、`--ui`（圖形介面）、`--trace=on`（強制錄 trace） | 看畫面除錯、查哪一步慢 |
 | `npm run e2e:case -- --workers=1 <ID>` | 限制同時執行的 worker 數（預設約 8，會把開發伺服器壓垮） | 跑多個 ID 時伺服器出現連線被拒 |
 | `npm run e2e:case -- --reset <ID>` | 清除該項的嘗試次數記帳 | 環境錯誤造成失敗、或使用者同意加碼時 |
 | `npm run e2e:budget` | 列出每個測項的嘗試次數、累計耗時、是否通過（等同 `e2e:case -- --status`） | 想知道哪些測項快用完停損額度 |
@@ -30,7 +31,7 @@ AiraFace 管理介面（airafaceWeb）的 Playwright 端對端測試。
 | `npm run e2e:parallel -- -- -g "\[CAM-0"` | 「`--`」後面的參數原樣傳給 Playwright（例：只跑名稱符合的測項） | 挑特定測項平行跑 |
 | `npm run e2e:probe -- --route=<路由>` | 寫新測項前，把頁面或精靈的欄位、下拉選項、按鈕列出來，唯讀，輸出到 `reports/probe/<name>.md`。選項：`--add` 先按「新增」、`--fill` 填測試值、`--name=` 指定檔名 | 新增腳本前探查頁面，不用逐項試錯 |
 
-`e2e:case` 與 `e2e:parallel` 的停損、記帳、環境變數（`E2E_CASE_MAX_ATTEMPTS`、`E2E_CASE_STUCK_TIMEOUT_MINUTES`）由 `tools/run-case.cjs`、`tools/budget-reporter.cjs` 處理。
+`e2e:case` 與 `e2e:parallel` 的停損、記帳、環境變數（`E2E_CASE_MAX_ATTEMPTS`、`E2E_CASE_STUCK_TIMEOUT_MINUTES`）由 `tools/run-case.cjs`、`tools/budget-reporter.cjs` 處理。**停損只在「測全部」（`npm run e2e` / `e2e:parallel`）時套用**，不分人或 AI：這一次執行內，同一個測項未通過且嘗試次數（`E2E_CASE_MAX_ATTEMPTS`）或累計耗時（`E2E_CASE_STUCK_TIMEOUT_MINUTES`）達上限就跳過，邏輯在 `helpers/test.ts`。每次執行用 `E2E_RUN_ID` 區分，各次執行的次數互不影響。
 
 **登入狀態會過期（整批跑很久時）：** 後端 token 簽發後約 2 小時失效，而 setup 只登入一次、所有測項共用 `e2e/.auth/admin.json`。整批超過 2 小時，後面的測項會變成登入頁而整組失敗（2026-10-22 的整批就是這樣，報表組 26 項＋登入組 2 項）。所以 `e2e:parallel`／`e2e:no-boards` 在**每一組開始前**會檢查登入狀態檔，超過 30 分鐘就自動重新登入（`tools/auth-refresh.cjs`；多組同時需要時排隊，檔案先寫暫存檔再改名，不會被讀到一半）。限制：單一組本身若超過約 90 分鐘仍可能過期；直接用 `npm run e2e`（單一行程）整批跑超過 2 小時也不在保護範圍內。工具啟動時也會檢查 Node 版本（需 20.12 以上），不足時直接說明，不會丟出 `process.loadEnvFile is not a function`。
 

@@ -25,7 +25,8 @@ const pick = (own.find((a) => a.startsWith('--groups=')) || '').split('=')[1];
 const groups = pick ? pick.split(',') : ALL;
 const jobs = Number((own.find((a) => a.startsWith('--jobs=')) || '--jobs=3').split('=')[1]);
 const STAGGER_MS = 5000; // 同時啟動的各組之間錯開，避免一起建立／整理輸出資料夾而互相撞到
-const env = { ...process.env, E2E_PARALLEL: '1', E2E_VIA_RUNNER: '1' };
+// E2E_RUN_MODE=full：測全部，停損會套用（見 helpers/test.ts）；E2E_RUN_ID：這一次執行的識別，各組共用同一個
+const env = { ...process.env, E2E_PARALLEL: '1', E2E_VIA_RUNNER: '1', E2E_RUN_MODE: 'full', E2E_RUN_ID: new Date().toISOString() };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = {};

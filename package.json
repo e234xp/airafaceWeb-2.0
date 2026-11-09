@@ -9,7 +9,7 @@
     "deploy": "bash ./scripts/deploy.sh",
     "i18n2csv": "node ./scripts/i18n2csv.js",
     "csv2i18n": "node ./scripts/csv2i18n.js",
-    "e2e": "playwright test",
+    "e2e": "node e2e/tools/run-parallel.cjs",
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report e2e/reports/html",

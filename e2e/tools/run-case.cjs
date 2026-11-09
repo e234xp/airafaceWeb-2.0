@@ -1,10 +1,9 @@
 // 用法：node e2e/tools/run-case.cjs [--project=admin-session] <TestID|檔案>...
 //   例：node e2e/tools/run-case.cjs CAM-007 CAM-008
-//       node e2e/tools/run-case.cjs --status          列出各 Test ID 的嘗試次數與累計耗時
+//       node e2e/tools/run-case.cjs --status          列出各 Test ID 在最近一次執行的嘗試次數與累計耗時
 //       node e2e/tools/run-case.cjs --reset CAM-007   使用者同意加碼時，清除該項的記帳
-// 停損規則（E2E-TEST-RULE.md §7）：同一個 Test ID 未通過且「嘗試次數 >= E2E_CASE_MAX_ATTEMPTS」
-// 或「累計耗時 >= E2E_CASE_STUCK_TIMEOUT_MINUTES 分鐘」時，本工具拒絕再執行（exit 3）；
-// 必須在 Results 記錄卡點與建議、標 ⏱️，然後做下一項。
+// 指定測項（本工具）永遠不會被停損擋住，不分人或 AI；停損只在「測全部」（npm run e2e / e2e:parallel）時套用，
+// 見 helpers/test.ts。記帳以「每次執行」為單位，從 0 開始算（E2E_RUN_ID），不沿用先前執行留下的次數。
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 require('./auth-refresh.cjs').requireNode();
@@ -32,17 +31,11 @@ if (args[0] === '--reset') {
 const project = args.find((a) => a.startsWith('--project=')) || '--project=admin-session';
 const ids = args.filter((a) => /^[A-Z0-9]+-\d+$/.test(a));
 const files = args.filter((a) => !a.startsWith('--') && !/^[A-Z0-9]+-\d+$/.test(a));
-const blocked = ids.filter((id) => db[id] && !db[id].passed && (db[id].attempts >= MAX || db[id].totalMs >= CAP_MS));
-if (blocked.length) {
-  for (const id of blocked) {
-    const e = db[id];
-    console.error(`⏱️ ${id} 已達停損上限（次數 ${e.attempts}/${MAX}，累計 ${(e.totalMs / 60000).toFixed(1)}/${CAP_MS / 60000} 分）：不再執行。請在 Results 記錄卡在哪裡與建議、標 ⏱️，然後做下一項。`);
-  }
-  process.exit(3);
-}
 // 不經 shell，避免正規表示式的反斜線被吃掉
 const cli = require.resolve('@playwright/test/cli');
 const grep = ids.length ? ['-g', ids.map((i) => '\\[' + i + '\\]').join('|')] : [];
 const workers = args.filter((a) => /^--workers=\d+$/.test(a)); // 一次跑多項時可降低並行數，避免開發伺服器被壓垮
-const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,./e2e/tools/budget-reporter.cjs', ...workers, ...grep], { stdio: 'inherit', env: { ...process.env, E2E_VIA_RUNNER: '1' } });
+// 除錯用參數原樣傳給 Playwright：--headed 開出瀏覽器視窗、--debug 逐步除錯、--ui 圖形介面、--trace=on 強制錄 trace
+const passthrough = args.filter((a) => ['--headed', '--debug', '--ui'].includes(a) || /^--trace=[a-z-]+$/.test(a));
+const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,./e2e/tools/budget-reporter.cjs', ...workers, ...passthrough, ...grep], { stdio: 'inherit', env: { ...process.env, E2E_VIA_RUNNER: '1', E2E_RUN_MODE: 'case', E2E_RUN_ID: new Date().toISOString() } });
 process.exit(r.status ?? 1);
