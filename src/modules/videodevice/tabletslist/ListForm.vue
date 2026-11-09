@@ -159,6 +159,8 @@ export default {
         },
       ],
       value_allTableItems: [],
+      // 設備群組代號 → 名稱（搜尋框可用群組名稱找到屬於該群組的平板）
+      value_groupNames: {},
       value_tablePage: {
         currentPage: 1,
         pageSize: 5,
@@ -242,9 +244,23 @@ export default {
     async refreshTableItems() {
       const self = this;
       const tableItems = await self.onGetItems();
+      await self.loadGroupNames();
 
       self.value_allTableItems = self.value_allTableItems.concat(tableItems);
       self.value_dataItemsToShow = self.generateFilteredData(self.value_allTableItems, self.value_searchingFilter);
+    },
+    // 載入使用者建立的設備群組（代號長度 36，內建群組不納入，與編輯頁一致）；失敗時只是不能用群組名稱搜尋
+    async loadGroupNames() {
+      const { data, error } = await this.$globalFindVideoDeviceGroups('', 0, 3000);
+      if (error || !data || !data.result) return;
+      const names = {};
+      data.result.forEach((g) => {
+        if (g.uuid.length === 36) names[g.uuid] = g.name;
+      });
+      this.value_groupNames = names;
+    },
+    groupNamesOf(item) {
+      return (item.divice_groups || []).map((uuid) => this.value_groupNames[uuid]).filter(Boolean);
     },
     // 表格資料處理及搜尋
     generateFilteredData(sourceData, filter) {
@@ -266,14 +282,16 @@ export default {
         self.value_availableLicenseAmount,
       );
 
-      // 關鍵字搜尋  item.name裡面看有沒有找到filter ip_address
+      // 關鍵字搜尋：設備名稱、IP 位址、所屬設備群組名稱
+      const keyword = filter.toLowerCase();
       const filteredItems =
         filter.length === 0
           ? sourceData
           : sourceData.filter(
               (item) =>
-                item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
-                (item.ip_address || '').toLowerCase().indexOf(filter.toLowerCase()) > -1,
+                item.name.toLowerCase().indexOf(keyword) > -1 ||
+                (item.ip_address || '').toLowerCase().indexOf(keyword) > -1 ||
+                self.groupNamesOf(item).some((n) => n.toLowerCase().indexOf(keyword) > -1),
             );
       self.value_tablePage.totalResult = filteredItems.length;
 
