@@ -2,7 +2,7 @@ import { Page } from './test';
 
 // 進出紀錄（TRK）腳本共用：不寫死特定日期或人員，從後端 API 掃描環境現有的進出彙總，挑出符合條件的案例。
 // 需要頁面已登入且載入過 App（用 Vue root 呼叫 $globalQueryPresenceSummary）。
-export type PresenceCase = { day: string; name: string; personId: string; inSec: number; outSec: number };
+export type PresenceCase = { day: string; name: string; personId: string; uuid: string; inSec: number; outSec: number };
 export type PresenceScan = {
   /** 有兩位以上人員的一天（TRK-001 搜尋人員、列表僅有該人員） */
   multiDay: { day: string; names: string[] } | null;
@@ -10,6 +10,11 @@ export type PresenceScan = {
   withAway: PresenceCase | null;
   /** 離開總時間最長的人員（TRK-008 超時顏色需要夠長的離開區段） */
   longestAway: PresenceCase | null;
+  /**
+   * 有「不在辦公室」區段，而且人員資料庫裡還找得到這個人的案例。
+   * 進出彙總會保留已被刪除人員的紀錄；對這種人補例外紀錄，後端會因找不到人員而回 400（TRK-004 會需要「寫入」，所以要挑還在的人）。
+   */
+  withAwayExistingPerson: PresenceCase | null;
 };
 
 let cache: PresenceScan | null = null;
@@ -20,10 +25,15 @@ export async function scanPresence(page: Page, days = 120): Promise<PresenceScan
   await page.locator('.mx-datepicker input').first().waitFor();
   cache = await page.evaluate(async (n) => {
     const root = (Array.from(document.querySelectorAll('*')).find((x) => (x as unknown as { __vue__?: unknown }).__vue__) as unknown as {
-      __vue__: { $root: { $globalQueryPresenceSummary: (q: unknown) => Promise<{ data?: { result?: Array<{ name: string; person_id: string; in_total_seconds: number; out_total_seconds: number }> } }> } };
+      __vue__: {
+        $root: {
+          $globalQueryPresenceSummary: (q: unknown) => Promise<{ data?: { result?: Array<{ uuid: string; name: string; person_id: string; in_total_seconds: number; out_total_seconds: number }> } }>;
+          $globalFindPersonWithoutPhoto: (uuid: string, shift: number, sliceSize: number, keyword: string) => Promise<{ data?: { person_list?: unknown[] } }>;
+        };
+      };
     }).__vue__.$root;
     const now = Date.now();
-    const all: Array<{ day: string; name: string; personId: string; inSec: number; outSec: number }> = [];
+    const all: Array<{ day: string; name: string; personId: string; uuid: string; inSec: number; outSec: number }> = [];
     const perDay: Record<string, string[]> = {};
     for (let d = 0; d < n; d += 1) {
       const start = new Date(now - d * 86400000);
@@ -35,14 +45,24 @@ export async function scanPresence(page: Page, days = 120): Promise<PresenceScan
       if (!list.length) continue;
       const day = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}`;
       perDay[day] = list.map((x) => x.name);
-      for (const x of list) all.push({ day, name: x.name, personId: x.person_id, inSec: x.in_total_seconds, outSec: x.out_total_seconds });
+      for (const x of list) all.push({ day, name: x.name, personId: x.person_id, uuid: x.uuid, inSec: x.in_total_seconds, outSec: x.out_total_seconds });
     }
     const multi = Object.entries(perDay).find(([, names]) => new Set(names).size >= 2);
     const away = all.filter((x) => x.outSec > 0).sort((a, b) => b.outSec - a.outSec);
+    // 由離開時間長到短逐一查人員資料庫，取第一位還存在的人；最多查 30 位，避免環境裡已刪除的人很多時掃太久
+    let existing: (typeof all)[number] | null = null;
+    for (const candidate of away.slice(0, 30)) {
+      const found = await root.$globalFindPersonWithoutPhoto(candidate.uuid, 0, 1, '');
+      if (found.data && found.data.person_list && found.data.person_list.length > 0) {
+        existing = candidate;
+        break;
+      }
+    }
     return {
       multiDay: multi ? { day: multi[0], names: multi[1] } : null,
       withAway: away[0] || null,
       longestAway: away[0] || null,
+      withAwayExistingPerson: existing,
     };
   }, days);
   return cache!;

@@ -14,8 +14,14 @@ async function awayCase(page: Page): Promise<PresenceCase> {
   if (!s.withAway) throw new Error(noPresenceMessage('至少有一位人員有「不在辦公室」區段'));
   return s.withAway;
 }
-async function openDetail(page: Page): Promise<PresenceCase> {
-  const c = await awayCase(page);
+/** 需要「寫入」（補例外紀錄）的測項用：只挑人員資料庫裡還存在的人，已刪除人員的紀錄補不進去（後端回 400）。 */
+async function awayCaseExistingPerson(page: Page): Promise<PresenceCase> {
+  const s = await scanPresence(page);
+  if (!s.withAwayExistingPerson) throw new Error(noPresenceMessage('至少有一位「人員仍存在」且有「不在辦公室」區段的人員（已刪除人員的進出紀錄無法補例外紀錄）'));
+  return s.withAwayExistingPerson;
+}
+async function openDetail(page: Page, mustExistInDb = false): Promise<PresenceCase> {
+  const c = mustExistInDb ? await awayCaseExistingPerson(page) : await awayCase(page);
   await openPresenceDetail(page, c.day, c.name);
   test.info().annotations.push({ type: '使用的資料', description: `${c.day} ${c.name}（在辦公室 ${c.inSec}s、不在辦公室 ${c.outSec}s）` });
   return c;
@@ -150,18 +156,21 @@ test.describe('TRK 進出紀錄', () => {
 
   test('[TRK-004] 例外處理：增加 IN 記錄，時間軸重跑並更新', async ({ page }) => {
     test.setTimeout(300000);
-    await openDetail(page);
+    await openDetail(page, true); // 會補例外紀錄（寫入），所以要挑人員還在的案例
     const before = await segs(page);
     const awayBefore = before.filter((x) => x.cls.includes('seg-away'));
     expect(awayBefore.length).toBeGreaterThan(0);
-    // 在第一段離開區段「中間」補一筆 IN：不指定特定時間，取該區段起訖的中點
-    const target = awayBefore[0];
+    // 在最長的離開區段「中間」補一筆 IN：不指定特定時間，取該區段起訖的中點。
+    // 挑最長的，是因為太短的區段（例如 11 秒）在時間軸上只有不到 2 像素寬，用座標點擊會點到旁邊的區段，「例外處理」按鈕就不會啟用。
+    const target = awayBefore.reduce((longest, seg) => (titleSeconds(seg.title) > titleSeconds(longest.title) ? seg : longest));
+    const targetIndex = before.indexOf(target);
     const m = /(\d{2}):(\d{2}):(\d{2})\s*[—-]\s*(\d{2}):(\d{2}):(\d{2})/.exec(target.title)!;
     const startSec = Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3]);
     const mid = startSec + Math.floor(titleSeconds(target.title) / 2);
     const hhmmss = [Math.floor(mid / 3600), Math.floor((mid % 3600) / 60), mid % 60].map((x) => String(x).padStart(2, '0')).join(':');
-    await page.locator('.timeline-seg-away').first().click({ force: true });
-    await page.waitForTimeout(2000);
+    // 直接對該區段元素送出 click 事件（不依賴座標），選到之後「例外處理」按鈕會啟用
+    await page.locator('.timeline-seg').nth(targetIndex).dispatchEvent('click');
+    await expect(page.getByRole('button', { name: '例外處理' })).toBeEnabled({ timeout: 10000 });
     await page.getByRole('button', { name: '例外處理' }).click();
     const tm = page.locator('.modal .mx-datepicker input').first();
     await tm.click();
