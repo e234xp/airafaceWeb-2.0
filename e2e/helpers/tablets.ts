@@ -29,7 +29,7 @@ export async function searchTablets(page: Page, keyword: string) {
   await box.pressSequentially(keyword, { delay: 40 });
   await box.press('Enter');
   await box.press('Tab'); // 搜尋框為 v-model.lazy（change 事件才更新）；失焦一併觸發，與使用者手動操作相同
-  await page.waitForTimeout(2500);
+  // 不在這裡固定等待：清單何時更新沒有訊號可等，由呼叫端在「要驗證的地方」等結果出現（toHaveCount、expect.poll 或 waitFor，並設上限）
 }
 
 export const tabletRowTexts = async (page: Page) =>
@@ -63,13 +63,13 @@ export async function createTabletViaUI(page: Page, name: string) {
   // 第 2 步（門禁設定）載入需要數秒，載入完成前按「下一步」不會有作用（診斷：等 6 秒後再按即可儲存並出現「完成」）
   const done = page.getByRole('button', { name: '完成' });
   await nextBtn(page).click();
-  await page.waitForTimeout(6000);
+  await done.waitFor({ timeout: 6000 }).catch(() => undefined); // 最多等 6 秒，「完成」出現就立刻往下
   // 先前在同一個瀏覽器工作階段建立過攝影機後，第 2 步的「下一步」第一次按常無作用：每 3 秒重按，最多 60 秒，直到出現「完成」
   // 每一輪先看目前在哪個畫面再動作：已出現「完成」就收工；還在精靈就按「下一步」；兩個都不在（儲存很快、已回到列表）就不要硬按。
   for (let i = 0; i < 20; i += 1) {
     if (await done.isVisible()) break;
     if (await nextBtn(page).isVisible()) await nextBtn(page).click({ timeout: 10000 }).catch(() => undefined);
-    await page.waitForTimeout(3000);
+    await done.waitFor({ timeout: 3000 }).catch(() => undefined); // 每輪最多等 3 秒，「完成」出現就結束這一輪
   }
   if (await done.isVisible()) await done.click();
   await listReady(page);
@@ -80,7 +80,8 @@ export async function deleteTabletViaUI(page: Page, name: string) {
   await gotoTablets(page);
   await searchTablets(page, name);
   const row = tabletRow(page, name);
-  if ((await row.count()) === 0) return;
+  // 搜尋後清單要一點時間更新：最多等 5 秒看這台平板有沒有出現；沒出現就視為已不存在（例如測項內已刪掉），不用清
+  if (!(await row.first().waitFor({ timeout: 5000 }).then(() => true, () => false))) return;
   await row.first().getByRole('button', { name: '刪除' }).click();
   await page.locator('.el-message-box__btns .el-button--primary').click();
   await expect(tabletRow(page, name)).toHaveCount(0, { timeout: 15000 });

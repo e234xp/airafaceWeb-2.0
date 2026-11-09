@@ -126,23 +126,31 @@ test.describe('TAB', () => {
       const keepName = (keep as string).split(/\s+/)[0];
       const keepIp = /\d+\.\d+\.\d+\.\d+/.exec(keep as string)?.[0] ?? '';
       await searchTablets(page, keepName);
-      const rows2 = await readAllRows(page, false);
-      expect(rows2.length).toBeGreaterThan(0);
-      for (const r of rows2) expect(r.toLowerCase()).toContain(keepName.toLowerCase());
+      // 搜尋後清單要一點時間更新：等到「有結果且每一列都符合」，最多 10 秒
+      await expect
+        .poll(async () => {
+          const rows = await readAllRows(page, false);
+          return rows.length > 0 && rows.every((r) => r.toLowerCase().includes(keepName.toLowerCase()));
+        }, { timeout: 10000, message: `以名稱「${keepName}」搜尋後，清單應有結果且每一列都含該名稱` })
+        .toBe(true);
       if (keepIp) {
         await searchTablets(page, keepIp);
-        const rows3 = await readAllRows(page, false);
-        expect(rows3.length).toBeGreaterThan(0);
-        for (const r of rows3) expect(r).toContain(keepIp);
+        await expect
+          .poll(async () => {
+            const rows = await readAllRows(page, false);
+            return rows.length > 0 && rows.every((r) => r.includes(keepIp));
+          }, { timeout: 10000, message: `以 IP「${keepIp}」搜尋後，清單應有結果且每一列都含該 IP` })
+          .toBe(true);
       }
       await searchTablets(page, `e2e-no-such-${Date.now()}`);
-      expect(await tabletRowTexts(page)).toEqual([]);
+      await expect.poll(() => tabletRowTexts(page), { timeout: 10000, message: '搜尋不存在的關鍵字後，清單應清空' }).toEqual([]);
       // 2) 邊界觀察（不影響判定）：清單中有「沒有 IP」的平板（新增後尚未連線）時，搜尋是否仍正常
       const name = track(uniqueTabletName('s'));
       await createTabletViaUI(page, name);
       await gotoTablets(page);
       await searchTablets(page, `e2e-no-such-${Date.now()}`);
-      const edge = await tabletRowTexts(page);
+      // 只是觀察：等清單清空最多 10 秒，等不到就記錄目前仍顯示的列
+      const edge = await expect.poll(() => tabletRowTexts(page), { timeout: 10000 }).toEqual([]).then(() => [] as string[], () => tabletRowTexts(page));
       console.log('OBS', `清單含無 IP 平板時搜尋不存在的關鍵字：${edge.length === 0 ? '清單正確清空' : '清單沒有更新，仍顯示 ' + edge.join('、')}`);
       test.info().annotations.push({ type: '觀察', description: `清單含無 IP 的平板時搜尋不存在的關鍵字：${edge.length === 0 ? '清單正確清空' : '清單沒有更新（原始碼 ListForm.vue 的搜尋對 item.ip_address 直接呼叫 toLowerCase，沒有 IP 時會出錯）'}` });
     },
@@ -236,7 +244,7 @@ test.describe('TAB', () => {
     '[TAB-010] 新增平板：上方搜尋框快速尋找設備群組',
     {
       annotation: [
-        { type: '判定範圍', description: '清單沒有群組欄位；以「把測試平板加入某設備群組後，以該群組名稱搜尋應找得到該平板」判定；群組由腳本自己建立（e2e- 開頭）並於結束時清理，不依賴環境現有群組' },
+        { type: '判定範圍', description: '清單沒有群組欄位；以「把測試平板加入某設備群組後，以該群組名稱搜尋應找得到該平板」判定，並先確認搜尋會過濾清單（不相干的關鍵字搜尋後平板要消失），否則搜尋失效時也會誤判通過；群組由腳本自己建立（e2e- 開頭）並於結束時清理，不依賴環境現有群組' },
       ],
     },
     async ({ page }) => {
@@ -247,7 +255,14 @@ test.describe('TAB', () => {
       deviceGroups.push(group);
       await createTabletViaUI(page, name);
       await createDeviceGroupViaUI(page, { name: group, devices: [name] });
-      // 以名稱搜尋一定找得到
+      // 先確認「搜尋真的會過濾清單」：用一個不相干的關鍵字搜尋，這台平板必須消失。
+      // 沒有這一步的話，搜尋就算完全壞掉（例如搜尋時程式報錯、清單不更新），平板仍然顯示在畫面上，
+      // 後面「找得到」的檢查就會誤判為通過，分辨不出群組搜尋到底有沒有作用。
+      const unrelatedKeyword = `e2e-nomatch-${name.slice(-5)}`;
+      await gotoTablets(page);
+      await searchTablets(page, unrelatedKeyword);
+      await expect(tabletRow(page, name), `用不相干的關鍵字「${unrelatedKeyword}」搜尋後，平板仍然顯示：搜尋沒有過濾清單，無法判斷群組搜尋是否有效`).toHaveCount(0);
+      // 以名稱搜尋找得到
       await gotoTablets(page);
       await searchTablets(page, name);
       await expect(tabletRow(page, name)).toHaveCount(1);
@@ -322,6 +337,13 @@ test.describe('TAB', () => {
       await expect(tabletRow(page, names[2])).toHaveCount(1);
       await gotoTablets(page);
       await searchTablets(page, 'e2e-');
+      // 搜尋後等清單更新成「只剩 e2e- 開頭的平板」，最多 10 秒
+      await expect
+        .poll(async () => {
+          const rows = await tabletRowTexts(page);
+          return rows.length > 0 && rows.every((r) => r.startsWith('e2e-'));
+        }, { timeout: 10000, message: '以 e2e- 搜尋後，清單應有結果且只含測試平板' })
+        .toBe(true);
       const shown = await tabletRowTexts(page);
       expect(shown.length).toBeGreaterThanOrEqual(1);
       for (const r of shown) expect(r.startsWith('e2e-'), `清單含非測試平板：${r}`).toBe(true);
