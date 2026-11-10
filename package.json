@@ -13,6 +13,7 @@
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report e2e/reports/html",
+    "e2e:report:old": "node e2e/tools/open-report.cjs",
     "e2e:case": "node e2e/tools/run-case.cjs",
     "e2e:parallel": "node e2e/tools/run-parallel.cjs",
     "e2e:no-boards": "node e2e/tools/run-parallel.cjs --groups=people-events,system,devices,reports,login --jobs=1",

@@ -37,5 +37,13 @@ const grep = ids.length ? ['-g', ids.map((i) => '\\[' + i + '\\]').join('|')] : 
 const workers = args.filter((a) => /^--workers=\d+$/.test(a)); // 一次跑多項時可降低並行數，避免開發伺服器被壓垮
 // 除錯用參數原樣傳給 Playwright：--headed 開出瀏覽器視窗、--debug 逐步除錯、--ui 圖形介面、--trace=on 強制錄 trace
 const passthrough = args.filter((a) => ['--headed', '--debug', '--ui'].includes(a) || /^--trace=[a-z-]+$/.test(a));
-const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,./e2e/tools/budget-reporter.cjs', ...workers, ...passthrough, ...grep], { stdio: 'inherit', env: { ...process.env, E2E_VIA_RUNNER: '1', E2E_RUN_MODE: 'case', E2E_RUN_ID: new Date().toISOString() } });
+// HTML 報告輸出到 e2e/reports/html，跑完後壓成帶日期的 zip（e2e/reports/archive），下一次執行才不會把這次的報告蓋掉。
+// --ui、--debug 是互動除錯，不產生要留存的報告，所以不壓縮。
+const reportDir = 'e2e/reports/html';
+const startedAt = new Date();
+const r = spawnSync(process.execPath, [cli, 'test', ...files, project, '--reporter=list,html,./e2e/tools/budget-reporter.cjs', ...workers, ...passthrough, ...grep], {
+  stdio: 'inherit',
+  env: { ...process.env, E2E_VIA_RUNNER: '1', E2E_RUN_MODE: 'case', E2E_RUN_ID: startedAt.toISOString(), PLAYWRIGHT_HTML_OUTPUT_DIR: reportDir, PLAYWRIGHT_HTML_REPORT: reportDir, PLAYWRIGHT_HTML_OPEN: 'never' },
+});
+if (!passthrough.some((a) => a === '--ui' || a === '--debug')) require('./archive-report.cjs').archiveReports([reportDir], { startedAt });
 process.exit(r.status ?? 1);

@@ -30,7 +30,9 @@ const env = { ...process.env, E2E_PARALLEL: '1', E2E_VIA_RUNNER: '1', E2E_RUN_MO
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = {};
-const started = Date.now();
+const startedAt = new Date();
+const started = startedAt.getTime();
+const reportDirOf = (group) => `e2e/reports/html-${group}`;
 const counts = (text) => {
   const n = (re) => Number((new RegExp(`^\\s*(\\d+) ${re}`, 'm').exec(text) || [0, 0])[1]);
   return { passed: n('passed'), failed: n('failed'), skipped: n('skipped') };
@@ -39,7 +41,11 @@ const runOnce = (g) =>
   new Promise((resolve) => {
     const t0 = Date.now();
     let text = '';
-    const p = spawn(process.execPath, [cli, 'test', `--project=${g}`, '--workers=1', '--reporter=list,./e2e/tools/budget-reporter.cjs', `--output=e2e/reports/artifacts-${g}`, ...pass], { env });
+    // 每組的 HTML 報告各自一個資料夾（e2e/reports/html-<組名>），避免 6 組互相蓋掉；全部跑完後一起壓成一個 zip
+    const reportDir = reportDirOf(g);
+    const p = spawn(process.execPath, [cli, 'test', `--project=${g}`, '--workers=1', '--reporter=list,html,./e2e/tools/budget-reporter.cjs', `--output=e2e/reports/artifacts-${g}`, ...pass], {
+      env: { ...env, PLAYWRIGHT_HTML_OUTPUT_DIR: reportDir, PLAYWRIGHT_HTML_REPORT: reportDir, PLAYWRIGHT_HTML_OPEN: 'never' },
+    });
     const tag = (s) => s.toString().split('\n').filter((l) => l.trim()).map((l) => `[${g}] ${l}`).join('\n') + '\n';
     p.stdout.on('data', (d) => {
       text += d.toString();
@@ -86,5 +92,7 @@ const run = async (g, delayMs) => {
     const mark = r.notRun ? '⛔ 未執行（行程錯誤）' : r.failed > 0 || r.code !== 0 ? '❌ 有失敗' : '✅ 全部通過';
     console.log(`${mark}  ${g.padEnd(14)} 通過 ${r.passed}｜失敗 ${r.failed}｜跳過 ${r.skipped}｜${r.sec} 秒${r.retried ? '（曾自動重試）' : ''}`);
   }
+  // 這次有跑的組，各自的報告一起壓成一個 zip；沒被執行的組（報告比這次開始時間舊）會被略過
+  require('./archive-report.cjs').archiveReports(groups.map(reportDirOf), { startedAt });
   process.exit(Object.values(results).some((r) => r.code !== 0) ? 1 : 0);
 })();
