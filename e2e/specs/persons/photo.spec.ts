@@ -140,8 +140,15 @@ async function checkEdit(page: Page, kind: Kind, label: string) {
   const ok = await tryPick(page, FACE);
   test.info().annotations.push({ type: '觀察', description: `編輯：合格人臉照 ${ok.accepted ? '預覽已顯示' : '預覽未改變'}；提示：${ok.hints.join('｜') || '無'}` });
   expect(ok.accepted, `編輯時合格人臉照沒有被接受：${ok.hints.join('｜')}`).toBe(true);
+  // 後端即使收下人員資料（message 為 ok），也會用 feature 欄位回報照片被人臉引擎拒絕（"face not found"、"face too small"），
+  // 照片正常時 feature 是 "ok"。前端據此跳出「更新成功，但照片上傳失敗」，這個彈窗 3 秒後會自己消失。
+  // 所以直接檢查回應的 feature，不靠畫面上看到「註冊完成」就當作照片成功，也不用賭彈窗還在不在。
+  const modifyResponse = page.waitForResponse((response) => /\/airafacelite\/modify(person|visitor)$/.test(response.url()) && response.request().method() === 'POST');
   await page.getByRole('button', { name: '註冊' }).click();
+  const modifyResult = await (await modifyResponse).json();
+  expect(['face not found', 'face too small'], `編輯時合格人臉照被後端拒絕（feature：${modifyResult.feature}）`).not.toContain(modifyResult.feature);
   await expect(page.getByText('註冊完成')).toBeVisible();
+  await expect(page.getByText('照片上傳失敗')).toHaveCount(0);
   await page.getByRole('button', { name: '完成' }).click();
   await gotoPersons(page, kind);
   await searchPersons(page, id);
