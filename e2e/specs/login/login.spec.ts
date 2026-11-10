@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../../helpers/test';
 import { shot } from '../../helpers/evidence';
-import { TEST_PASSWORD, ADMIN_STORAGE_PATH, cleanupAccounts, createAccountViaUI, expectLoginFails, expectLoginSucceeds, freshContext, loginAs, uniqueAccountName } from '../../helpers/accounts';
+import { TEST_PASSWORD, ADMIN_STORAGE_PATH, cleanupAccounts, createAccountViaUI, expectLoginSucceeds, freshContext, loginAs, uniqueAccountName } from '../../helpers/accounts';
 import { requireEnv } from '../../helpers/env';
 import { adminCredentials, fillCredentials, loginForm, logout, openLoginPage } from '../../helpers/auth';
 
@@ -248,21 +248,22 @@ test.describe("LOGIN", () => {
     "[LOGIN-023] 忘記密碼：Admin 帳號 + 授權碼 + 新密碼可成功變更密碼",
     {
       annotation: [
-        { type: '判定範圍', description: '以新建的 Admin 權限測試帳號測試（規格「Admin 帳號」含義待使用者確認）' },
+        {
+          type: '判定範圍',
+          description:
+            '後端只允許「名稱是 Admin」的帳號重設密碼，不看權限（使用者 2026-11-10 確認；自建的 Admin 權限帳號會被擋）。以內建 Admin 帳號測試，新密碼設為它目前的密碼，所以密碼實際不變，不驗「舊密碼失效」',
+        },
       ],
     },
     async ({ page, browser }) => {
       const { password: adminPassword } = adminCredentials();
-      const name = uniqueAccountName('adm');
-      await createViaAdmin(browser, name, 'Admin');
-      await submitForgotPassword(page, name, requireEnv('E2E_LICENSE'), adminPassword);
+      // 新密碼用 Admin 目前的密碼：重設成功，但密碼沒有改變，測試中途失敗也不會把測試機的管理者鎖在外面
+      await submitForgotPassword(page, 'Admin', requireEnv('E2E_LICENSE'), adminPassword);
       await expect(page.locator('.swal2-icon.swal2-success')).toBeVisible();
-      // 預期：密碼已變更（新密碼可登入、舊密碼失效）
+      // 預期：重設後 Admin 仍可用該密碼登入
       const ctx = await freshContext(browser);
       try {
-        const p = await ctx.newPage();
-        await expectLoginFails(p, name, TEST_PASSWORD);
-        await expectLoginSucceeds(p, name, adminPassword);
+        await expectLoginSucceeds(await ctx.newPage(), 'Admin', adminPassword);
       } finally {
         await ctx.close();
       }
