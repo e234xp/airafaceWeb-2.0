@@ -33,15 +33,17 @@ function chunk(type: string, data: Buffer) {
 /**
  * 產生 RGB PNG。noise=false：純色（壓縮後很小）；noise=true：隨機雜訊且不壓縮（檔案大小約 = 寬×高×3），
  * 用來製作「超過 10MB」的檔案。
+ * @param color 純色時的顏色 [紅, 綠, 藍]（0～255）。要確認「畫面換成新圖」的測項請每次給不同顏色，
+ *   否則同一張圖上傳過一次後，下一次的「新圖」和「舊圖」一模一樣，無從判斷有沒有換。
  */
-export function makePng(width: number, height: number, noise = false): Buffer {
+export function makePng(width: number, height: number, noise = false, color: [number, number, number] = [40, 120, 200]): Buffer {
   const rowLen = 1 + width * 3;
   const raw = Buffer.alloc(rowLen * height);
   for (let y = 0; y < height; y += 1) {
     const off = y * rowLen;
     raw[off] = 0; // filter: None
     if (noise) randomBytes(width * 3).copy(raw, off + 1);
-    else for (let x = 0; x < width; x += 1) raw.set([40, 120, 200], off + 1 + x * 3);
+    else for (let x = 0; x < width; x += 1) raw.set(color, off + 1 + x * 3);
   }
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(width, 0);

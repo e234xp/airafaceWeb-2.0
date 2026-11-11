@@ -77,8 +77,10 @@ test.describe('WEL', () => {
       test.setTimeout(240000);
       await openSettings(page);
       const before = (await readDashboard(page, KEY)) as { background_image: string; logo: string };
-      const bg = writeFile(`${TMP_DIR}/wel-bg.png`, makePng(640, 360));
-      const logo = writeFile(`${TMP_DIR}/wel-logo.png`, makePng(120, 120));
+      // 每次用隨機顏色：固定顏色的圖成功上傳一次後，看板上存的就是同一張圖，下一次「換成新圖」的檢查必定失敗（2026-11-11 發生過）
+      const randomColor = (): [number, number, number] => [0, 0, 0].map(() => Math.floor(Math.random() * 256)) as [number, number, number];
+      const bg = writeFile(`${TMP_DIR}/wel-bg.png`, makePng(640, 360, false, randomColor()));
+      const logo = writeFile(`${TMP_DIR}/wel-logo.png`, makePng(120, 120, false, randomColor()));
       const files = page.locator('input[type=file]');
       expect(await files.count()).toBeGreaterThanOrEqual(2);
       await files.nth(0).setInputFiles(bg);
@@ -86,7 +88,8 @@ test.describe('WEL', () => {
       await page.waitForTimeout(1500);
       // 預覽：背景與商標已改成新圖
       const previewBg = await page.locator('[style*="background-image"]').first().getAttribute('style');
-      expect(previewBg ?? '').not.toContain(before.background_image.slice(0, 80));
+      // 比對整張舊圖：同尺寸 PNG 的 base64 開頭幾十個字元都是檔頭與尺寸，顏色不同也一樣，只比開頭會誤判成「沒換圖」
+      if (before.background_image) expect(previewBg ?? '').not.toContain(before.background_image);
       // 公司名稱欄位（觀察）：Step 1 沒有文字輸入框
       const textInputs = await page.locator('input[type=text]:visible').count();
       if (textInputs === 0) test.info().annotations.push({ type: '觀察', description: 'Step 1 沒有任何文字輸入框（無公司名稱欄位）' });
@@ -98,7 +101,8 @@ test.describe('WEL', () => {
       expect(w.background_image).not.toBe(before.background_image);
       expect(w.logo).not.toBe(before.logo);
       // 看板上任何元素以背景圖或圖片方式套用了新的背景圖（比對圖檔內容片段）
-      const needle = w.background_image.slice(30, 90);
+      // 取圖檔結尾當比對片段：結尾是像素資料與檢查碼，每張圖不同；開頭是檔頭，同尺寸的舊圖也會符合
+      const needle = w.background_image.slice(-60);
       const applied = () =>
         page.evaluate((n) => {
           const hit = (e: Element) => getComputedStyle(e).backgroundImage.includes(n) || (e instanceof HTMLImageElement && e.src.includes(n)) || getComputedStyle(e, '::before').backgroundImage.includes(n);
@@ -106,7 +110,7 @@ test.describe('WEL', () => {
         }, needle);
       await expect.poll(applied, { timeout: 15000, message: '看板背景沒有套用新圖' }).toBe(true);
       const boardLogo = await page.locator('.welcome-logo-img').first().getAttribute('src');
-      expect(boardLogo ?? '').toContain(w.logo.slice(0, 60));
+      expect(boardLogo ?? '').toContain(w.logo.slice(-60));
     },
   );
 
