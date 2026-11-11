@@ -1,6 +1,7 @@
 import { test, expect, Page } from '../../helpers/test';
 
-// 來源 E2E-TEST-PLAN.md；WEL-009、ATB-021、OCC-006（看板維持等比例 16:9）、SEC-001（保全模式不隨畫面尺寸改變）。
+// 來源 E2E-TEST-PLAN.md；WEL-009、ATB-021、OCC-006（看板維持等比例 16:9）。
+// SEC-001（保全模式不支援 RWD）已於 2026-11-11 移除：需求是「不需要做 RWD，但做了也不用改掉」，沒有可判定為失敗的情況。
 // 以調整瀏覽器視窗大小模擬「直接縮放瀏覽器」。全程只讀。
 
 const SIZES: Array<[number, number]> = [
@@ -13,15 +14,13 @@ const SIZES: Array<[number, number]> = [
 async function boardBox(page: Page) {
   return page.evaluate(() => {
     const el = document.querySelector('.ratio-content') as HTMLElement | null;
-    const logo = document.querySelector('.dashboard-attendance-logo, .welcome-logo') as HTMLElement | null;
     const r = el ? el.getBoundingClientRect() : null;
-    const l = logo ? logo.getBoundingClientRect() : null;
-    return { w: r ? r.width : 0, h: r ? r.height : 0, logoW: l ? l.width : 0 };
+    return { w: r ? r.width : 0, h: r ? r.height : 0 };
   });
 }
 
 async function measure(page: Page, route: string) {
-  const out: Array<{ size: string; w: number; h: number; ratio: number; logoW: number }> = [];
+  const out: Array<{ size: string; w: number; h: number; ratio: number }> = [];
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto(route);
   await page.reload();
@@ -31,7 +30,7 @@ async function measure(page: Page, route: string) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(1200);
     const b = await boardBox(page);
-    out.push({ size: `${w}x${h}`, w: Math.round(b.w), h: Math.round(b.h), ratio: b.h ? b.w / b.h : 0, logoW: Math.round(b.logoW) });
+    out.push({ size: `${w}x${h}`, w: Math.round(b.w), h: Math.round(b.h), ratio: b.h ? b.w / b.h : 0 });
   }
   return out;
 }
@@ -60,20 +59,4 @@ test.describe('看板 RWD', () => {
       },
     );
   }
-
-  test(
-    '[SEC-001] 保全模式 RWD：此版本不支援，不隨畫面尺寸改變而變',
-    {
-      annotation: [
-        { type: '判定範圍', description: '以「看板上固定尺寸元件（公司商標）的寬度在不同視窗大小下是否不變」判定' },
-      ],
-    },
-    async ({ page }) => {
-      test.setTimeout(180000);
-      const m = await measure(page, '/#/guardmode');
-      test.info().annotations.push({ type: '觀察', description: m.map((x) => `${x.size} → 容器 ${x.w}x${x.h}、商標寬 ${x.logoW}`).join('；') });
-      const logos = new Set(m.map((x) => x.logoW));
-      expect(logos.size, `商標寬度隨視窗大小改變：${m.map((x) => `${x.size}→${x.logoW}`).join('、')}`).toBe(1);
-    },
-  );
 });
