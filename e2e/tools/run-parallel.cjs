@@ -13,6 +13,7 @@
 const fs = require('fs');
 const { spawn } = require('child_process');
 const { requireNode, ensureFreshAuth } = require('./auth-refresh.cjs');
+const { backendOrigin, startBackendMonitor, describeMonitor } = require('./backend-monitor.cjs');
 requireNode();
 if (fs.existsSync('.env.e2e.local')) process.loadEnvFile('.env.e2e.local');
 const cli = require.resolve('@playwright/test/cli');
@@ -62,10 +63,10 @@ const startupCrash = (r) => r.code !== 0 && r.passed + r.failed + r.skipped === 
 const run = async (g, delayMs) => {
   if (delayMs) await sleep(delayMs);
   // 每組開始前確認登入狀態還新（整批跑很久時，後面的組不會拿到過期的 token）
-  const auth = await ensureFreshAuth({ env, label: `[${g}] ` });
+  const auth = await ensureFreshAuth({ env, label: `[${g}] `, outputDir: `e2e/reports/artifacts-setup-${g}` });
   if (auth !== 0) {
-    console.error(`[${g}] 登入（setup）失敗，這組不執行。`);
-    results[g] = { code: auth, sec: 0, passed: 0, failed: 0, skipped: 0, retried: false, notRun: true, text: '' };
+    console.error(`[${g}] 登入（setup）失敗，這組不執行。截圖在 e2e/reports/artifacts-setup-${g}`);
+    results[g] = { code: auth, sec: 0, passed: 0, failed: 0, skipped: 0, retried: false, notRun: true, notRunReason: '登入失敗', text: '' };
     return;
   }
   let r = await runOnce(g);
@@ -78,7 +79,23 @@ const run = async (g, delayMs) => {
   }
   results[g] = { ...r, retried, notRun: startupCrash(r) };
 };
+/** 這次執行中失敗的測項與記錄失敗的時間（從停損記帳 budget.json 取，只看這次的 E2E_RUN_ID）。讀不到就回傳空陣列。 */
+function failedTestsOfThisRun() {
+  try {
+    const budget = JSON.parse(fs.readFileSync('e2e/reports/budget.json', 'utf8'));
+    return Object.entries(budget)
+      .filter(([, entry]) => entry.runId === env.E2E_RUN_ID && !entry.passed && entry.history && entry.history.length)
+      .map(([id, entry]) => ({ id, atMs: Date.parse(entry.history[entry.history.length - 1].at) }));
+  } catch {
+    return [];
+  }
+}
 (async () => {
+  const monitorOrigin = backendOrigin(env);
+  // 前端和後端同一台時（直接測 14.21）不用另外監看前端；不同台時（本機開發伺服器）兩邊都看
+  const frontendUrl = env.E2E_BASE_URL && monitorOrigin && new URL(env.E2E_BASE_URL).origin !== monitorOrigin ? env.E2E_BASE_URL : null;
+  const monitor = monitorOrigin ? startBackendMonitor(monitorOrigin, { frontendUrl }) : null;
+  if (!monitor) console.log('（判斷不出後端位址，這次不監看後端；可設 E2E_BACKEND_URL 指定）');
   const queue = groups.map((g, i) => ({ g, delay: i < jobs ? i * STAGGER_MS : 0 }));
   await Promise.all(Array.from({ length: Math.min(jobs, queue.length) }, async () => {
     while (queue.length) {
@@ -89,10 +106,14 @@ const run = async (g, delayMs) => {
   console.log('\n===== 平行執行結果（總耗時 ' + Math.round((Date.now() - started) / 1000) + ' 秒）=====');
   for (const g of groups) {
     const r = results[g];
-    const mark = r.notRun ? '⛔ 未執行（行程錯誤）' : r.failed > 0 || r.code !== 0 ? '❌ 有失敗' : '✅ 全部通過';
+    const mark = r.notRun ? `⛔ 未執行（${r.notRunReason || '行程錯誤'}）` : r.failed > 0 || r.code !== 0 ? '❌ 有失敗' : '✅ 全部通過';
     console.log(`${mark}  ${g.padEnd(14)} 通過 ${r.passed}｜失敗 ${r.failed}｜跳過 ${r.skipped}｜${r.sec} 秒${r.retried ? '（曾自動重試）' : ''}`);
   }
-  // 這次有跑的組，各自的報告一起壓成一個 zip；沒被執行的組（報告比這次開始時間舊）會被略過
-  require('./archive-report.cjs').archiveReports(groups.map(reportDirOf), { startedAt });
+  if (monitor) console.log(`\n${describeMonitor(monitor.stop(), failedTestsOfThisRun())}`);
+  // 只有「完整測試」才存檔：全部 6 組都有跑。只挑幾組來跑（例如 --groups=login）不存檔，
+  // 否則封存資料夾會被零碎的小報告塞滿，把真正的完整報告擠掉（只留最新幾個）。
+  // 完整測試時各組的報告一起壓成一個 zip；沒被執行的組（報告比這次開始時間舊）會被略過
+  const isFullRun = ALL.every((g) => groups.includes(g));
+  if (isFullRun && !pass.some((a) => a === '--ui' || a === '--debug')) require('./archive-report.cjs').archiveReports(groups.map(reportDirOf), { startedAt });
   process.exit(Object.values(results).some((r) => r.code !== 0) ? 1 : 0);
 })();

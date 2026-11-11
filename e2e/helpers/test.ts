@@ -9,10 +9,10 @@ import { IS_MOCK, installMockFallback, resetMockUses, takeMockUses } from '../mo
 export * from '@playwright/test';
 export { expect, IS_MOCK };
 
-// 看板測項暫停（2026-10-27 決定）：預設跳過 specs/displays/ 全部測項與依賴看板設定的 GRP-013／014／015，
-// 報告會顯示「跳過」與原因。原因是 14.21 的 setdashboardsettings（儲存看板設定）要 20～100 秒，且部分項目需要持續的人員辨識事件。
-// 要恢復：.env.e2e.local 設 E2E_INCLUDE_BOARDS=true。
-const INCLUDE_BOARDS = process.env.E2E_INCLUDE_BOARDS === 'true';
+// 看板測項（specs/displays/ 全部測項與依賴看板設定的 GRP-013／014／015）預設一起跑，npm run e2e 不省略任何測項。
+// 2026-10-27 曾暫停過（14.21 的 setdashboardsettings 儲存看板設定要 20～100 秒，且部分項目需要持續的人員辨識事件），2026-11-10 決定恢復。
+// 真的要跳過看板時，明確設 E2E_INCLUDE_BOARDS=false（例如 .env.e2e.local），報告會顯示「跳過」與原因。
+const INCLUDE_BOARDS = process.env.E2E_INCLUDE_BOARDS !== 'false';
 const isBoardTest = (file: string, title: string) => /specs[\\/]displays[\\/]/.test(file) || /\[GRP-01[345]\]/.test(title);
 
 // 停損只在「測全部」（E2E_RUN_MODE=full，npm run e2e / e2e:parallel）時套用，指定測項（e2e:case）永遠不卡，不分人或 AI。
@@ -48,7 +48,7 @@ export const test = base.extend<{ _mockReport: void; _boardsPaused: void; _budge
   ],
   _boardsPaused: [
     async ({}, use, testInfo) => {
-      testInfo.skip(!INCLUDE_BOARDS && isBoardTest(testInfo.file, testInfo.title), '看板測項暫停（E2E_INCLUDE_BOARDS=true 可恢復）');
+      testInfo.skip(!INCLUDE_BOARDS && isBoardTest(testInfo.file, testInfo.title), '已設定 E2E_INCLUDE_BOARDS=false，跳過看板測項');
       await use();
     },
     { auto: true },
