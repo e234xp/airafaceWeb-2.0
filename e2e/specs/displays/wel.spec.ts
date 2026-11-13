@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../../helpers/test';
-import { injectRecognitions, appGetSettings, readDashboard, restoreDashboard, snapshotDashboard } from '../../helpers/dashboard';
-import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
+import { injectRecognitions, appGetSettings, readDashboard, restoreDashboard, snapshotDashboard, waitForDashboardSave } from '../../helpers/dashboard';
+import { TMP_DIR, makePng, randomColor, writeFile } from '../../helpers/files';
 
 // 來源 E2E-TEST-PLAN.md；模組 WEL（#10.1 迎賓看板設定 Step 1~3）。
 // 本檔實作「適合自動化（Y）」的 7 項（WEL-002~008）；WEL-001、009、010 維持 test.fixme（部分自動化）。
@@ -43,8 +43,11 @@ async function gotoStep3(page: Page) {
 
 /** 步驟 3 完成儲存（下一步 → 完成頁 → 完成）。 */
 async function saveFromStep3(page: Page) {
+  // 等後端真的存好再往下讀設定（見 waitForDashboardSave 的說明）
+  const saved = waitForDashboardSave(page);
   await next(page).click();
   await page.getByRole('button', { name: '完成' }).click();
+  await saved;
   await page.waitForTimeout(1500);
 }
 
@@ -74,11 +77,9 @@ test.describe('WEL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await openSettings(page);
       const before = (await readDashboard(page, KEY)) as { background_image: string; logo: string };
       // 每次用隨機顏色：固定顏色的圖成功上傳一次後，看板上存的就是同一張圖，下一次「換成新圖」的檢查必定失敗（2026-11-11 發生過）
-      const randomColor = (): [number, number, number] => [0, 0, 0].map(() => Math.floor(Math.random() * 256)) as [number, number, number];
       const bg = writeFile(`${TMP_DIR}/wel-bg.png`, makePng(640, 360, false, randomColor()));
       const logo = writeFile(`${TMP_DIR}/wel-logo.png`, makePng(120, 120, false, randomColor()));
       const files = page.locator('input[type=file]');
@@ -122,7 +123,6 @@ test.describe('WEL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await openSettings(page);
       const before = (await readDashboard(page, KEY)) as { advertising: unknown[]; advertisingDuration: number; enabledAdvertisingMode?: boolean };
       await next(page).click();
@@ -167,7 +167,6 @@ test.describe('WEL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await gotoStep3(page);
       const sel = step3Select(page, 1);
       const options = await sel.locator('option').evaluateAll((os) => os.map((o) => `${(o as HTMLOptionElement).value}|${o.textContent?.trim()}`));
@@ -197,7 +196,6 @@ test.describe('WEL', () => {
   test(
     '[WEL-005] 迎賓 Step 3 人員信息：更改人員資訊欄位與照片（不顯示/註冊/抓拍/顯示照片）',
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoStep3(page);
       const photoSel = step3Select(page, 0);
       const values = await photoSel.locator('option').evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
@@ -227,7 +225,6 @@ test.describe('WEL', () => {
   test(
     '[WEL-006] 迎賓 Step 3 人員信息：顯示屬性 1~4 指定 Attribute',
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoStep3(page);
       // 每個「顯示資訊 n」：選一個與目前不同的選項，儲存後後端設定含該值，看板對應文字不為空
       for (const idx of [1, 2, 3, 4]) {
@@ -262,7 +259,6 @@ test.describe('WEL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoStep3(page);
       const sel = step3Select(page, 6);
       const options = await sel.locator('option').evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
@@ -282,7 +278,6 @@ test.describe('WEL', () => {
   test(
     '[WEL-008] 迎賓 Step 3 人員信息：顯示人數',
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoStep3(page);
       const options = await step3Select(page, 5).locator('option').evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
       expect(options.length).toBeGreaterThan(1);

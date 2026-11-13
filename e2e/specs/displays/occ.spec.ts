@@ -11,7 +11,7 @@ import {
   snapshotDashboard,
   visibleSelect,
 } from '../../helpers/dashboard';
-import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
+import { TMP_DIR, makePng, randomColor, writeFile } from '../../helpers/files';
 
 // 來源 E2E-TEST-PLAN.md；模組 OCC＝容留看板（#10.3）。設定頁 /displays/modifycapacitycontrolsetting，設定資料 key＝CAPACITY。
 // 本檔實作「適合自動化（Y）」的 4 項（OCC-002~005）；其餘維持 test.fixme。
@@ -43,12 +43,11 @@ test.describe('OCC', () => {
   test(
     '[OCC-002] 容留看板：更改背景圖片、商標圖檔',
     async ({ page }) => {
-      test.setTimeout(240000);
       await openDashboardSettings(page, ROUTE);
       const before = (await readDashboard(page, KEY)) as { background_image: string; logo: string };
       const files = page.locator('input[type=file]');
-      await files.nth(0).setInputFiles(writeFile(`${TMP_DIR}/occ-bg.png`, makePng(640, 360)));
-      await files.nth(1).setInputFiles(writeFile(`${TMP_DIR}/occ-logo.png`, makePng(120, 120)));
+      await files.nth(0).setInputFiles(writeFile(`${TMP_DIR}/occ-bg.png`, makePng(640, 360, false, randomColor()))); // 每次不同顏色，才分得出「換成新圖」
+      await files.nth(1).setInputFiles(writeFile(`${TMP_DIR}/occ-logo.png`, makePng(120, 120, false, randomColor())));
       await page.waitForTimeout(1500);
       await settingsNext(page).click();
       await saveStep2(page);
@@ -57,8 +56,8 @@ test.describe('OCC', () => {
       expect(w.logo).not.toBe(before.logo);
       await page.goto('/#/capacitymode');
       await page.reload();
-      await expect.poll(() => boardHasImage(page, w.background_image.slice(30, 90)), { timeout: 20000, message: '容留看板沒有套用新背景圖' }).toBe(true);
-      await expect.poll(() => boardHasImage(page, w.logo.slice(30, 90)), { timeout: 5000, message: '容留看板沒有套用新商標' }).toBe(true);
+      await expect.poll(() => boardHasImage(page, w.background_image.slice(-60)), { timeout: 20000, message: '容留看板沒有套用新背景圖' }).toBe(true);
+      await expect.poll(() => boardHasImage(page, w.logo.slice(-60)), { timeout: 5000, message: '容留看板沒有套用新商標' }).toBe(true);
     },
   );
 
@@ -70,7 +69,6 @@ test.describe('OCC', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await gotoStep2(page);
       const sel = visibleSelect(page, INFO1);
       const partial = (await selectOptions(sel)).find((o) => o.label === '部分姓名');
@@ -99,7 +97,6 @@ test.describe('OCC', () => {
   test(
     '[OCC-005] 容留看板人員資訊：可選擇人員編號、姓名、部門、職稱、群組、不顯示、註冊照片',
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoStep2(page);
       const photoOpts = await selectOptions(visibleSelect(page, PHOTO));
       const info1Opts = await selectOptions(visibleSelect(page, INFO1));

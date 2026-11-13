@@ -12,11 +12,23 @@ export function uniqueEventName(tag: string) {
   return `e2e-${tag}-${Date.now().toString(36).slice(-5)}`;
 }
 
+/**
+ * 開啟事件管理列表，等到事件清單「和」人員／設備群組都載入完成。
+ * 新增頁、編輯頁的「套用群組」「影像設備群組」選項不是自己查的，是列表頁按「新增／編輯」時帶過去的；
+ * 而列表頁要等事件表格出來後才去查群組（EventControlManagement.vue 的 onFetchDataCallback）。
+ * 只等表格就按「新增」，碰上群組還沒回來，新增頁的兩個下拉選單會是空的（2026-11-13 完整測試 EVT-002 因此失敗）。
+ */
 export async function gotoEvents(page: Page) {
   await page.goto('/#/events/eventcontrolmanagement');
+  // 只接受重新整理之後送出的請求：goto 那一次載入送的請求可能在重新整理前後才回來，那份不算
+  const reloadAt = Date.now();
+  const groupsLoaded = ['/airafacelite/findgroup', '/airafacelite/findvideodevicegroup'].map((apiPath) =>
+    page.waitForResponse((r) => r.url().endsWith(apiPath) && r.request().timing().startTime >= reloadAt, { timeout: 30000 }),
+  );
   await page.reload();
   await page.getByRole('button', { name: '新增' }).first().waitFor();
   await listReady(page);
+  await Promise.all(groupsLoaded);
 }
 
 export const eventRow = (page: Page, name: string) => bodyRows(page).filter({ hasText: name });

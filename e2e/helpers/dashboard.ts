@@ -72,10 +72,21 @@ export async function openDashboardSettings(page: Page, route: string) {
   await page.waitForTimeout(1500);
 }
 
-/** 第 2 步（最後一個填寫步驟）儲存：按「儲存變更」後按「完成」。 */
+/**
+ * 開始等「儲存看板設定」（setdashboardsettings）的回應。要在按下會觸發儲存的按鈕「之前」呼叫，按完再 await。
+ * 為什麼需要：14.21 儲存看板設定要 20～100 秒，原本按完只固定等 1.5 秒，接著讀回設定常讀到舊值，
+ * 造成看板測項時好時壞（2026-11-11 WEL-003 設 20 讀回 15，重試才通過）。最多等 2 分鐘。
+ */
+export function waitForDashboardSave(page: Page) {
+  return page.waitForResponse((r) => r.url().endsWith('/airafacelite/setdashboardsettings') && r.request().method() === 'POST', { timeout: 120000 });
+}
+
+/** 第 2 步（最後一個填寫步驟）儲存：按「儲存變更」後按「完成」，並等後端真的存好。 */
 export async function saveStep2(page: Page) {
+  const saved = waitForDashboardSave(page);
   await page.getByRole('button', { name: '儲存變更' }).click();
   await page.getByRole('button', { name: '完成' }).click();
+  await saved;
   await page.waitForTimeout(1500);
 }
 

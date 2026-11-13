@@ -21,7 +21,6 @@ test.describe('G3-A 影像設備', () => {
   test(
     '[CAM-001] 攝影機列表：清單、頁數、筆數、顯示欄位、授權數量與使用數量',
     async ({ page }) => {
-      test.setTimeout(180000);
       await gotoCameras(page);
       await page.waitForTimeout(2500);
       const h = await headers(page);
@@ -55,7 +54,7 @@ test.describe('G3-A 影像設備', () => {
       // 授權數量與使用數量：使用 = 攝影機總數 + 平板總數
       const m = await usageText(page);
       expect(m.length, `畫面沒有「正在使用 N 個影像設備 … 授權 (共 M 個)」文字`).toBeGreaterThan(0);
-      await gotoTablets(page).catch(async () => {});
+      await gotoTablets(page);
       const tabTotal = await pagerTotal(page);
       test.info().annotations.push({ type: '觀察', description: `攝影機 ${total}、平板 ${tabTotal}；畫面顯示使用 ${m[1]}／授權 ${m[2]}` });
       expect(Number(m[1]), '使用數量不等於攝影機＋平板總數').toBe(total + tabTotal);
@@ -71,7 +70,6 @@ test.describe('G3-A 影像設備', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       const bad = uniqueCameraName('st');
       cameras.push(bad);
       await createCameraViaUI(page, bad);
@@ -108,7 +106,6 @@ test.describe('G3-A 影像設備', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(180000);
       await openAddCamera(page);
       const select = page.locator('select:visible').first();
       const opts = (await select.locator('option').allInnerTexts()).map((s) => s.trim());
@@ -133,7 +130,6 @@ test.describe('G3-A 影像設備', () => {
   test(
     '[CAM-006] 新增攝影機：進入新增頁，IP 必填，按完成後列表呈現新設備',
     async ({ page }) => {
-      test.setTimeout(180000);
       const name = uniqueCameraName('ip');
       cameras.push(name);
       await openAddCamera(page);

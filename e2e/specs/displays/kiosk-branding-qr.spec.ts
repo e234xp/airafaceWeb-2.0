@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const QRCode = require('qrcode');
 import { ADMIN_STORAGE_PATH } from '../../helpers/accounts';
-import { appGetSettings, appSetSettings, boardHasImage } from '../../helpers/dashboard';
+import { appGetSettings, appSetSettings, boardHasImage, waitForDashboardSave } from '../../helpers/dashboard';
 import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
 import { cleanupPersons, createPersonViaUI, uniquePersonId } from '../../helpers/persons';
 
@@ -103,7 +103,6 @@ test.describe('KIO 自助報到', () => {
   test(
     '[KIO-001] 自助報到：上傳商標、QR code 背景圖後，點選顯示框可翻轉鏡頭',
     async ({ page }) => {
-      test.setTimeout(290000);
       await snapshotAll(page);
       // 上傳 QR code 掃描背景圖與商標
       await page.goto(SETTINGS_ROUTE);
@@ -115,6 +114,7 @@ test.describe('KIO 自助報到', () => {
       await page.waitForTimeout(1500);
       const done = page.getByRole('button', { name: '完成' });
       const save = page.getByRole('button', { name: '儲存變更' });
+      const saved = waitForDashboardSave(page); // 等後端真的存好再讀回設定（見 waitForDashboardSave 的說明）
       for (let i = 0; i < 8; i += 1) {
         await page.locator('button').filter({ hasText: /^\s*(下一步|儲存變更|完成)\s*$/ }).first().waitFor();
         if (await done.isVisible()) break;
@@ -127,6 +127,7 @@ test.describe('KIO 自助報到', () => {
         await page.waitForTimeout(1500);
       }
       await done.click();
+      await saved;
       await page.waitForTimeout(1500);
       const s = ((await appGetSettings(page)).SELFCHECKIN ?? {}) as Record<string, string>;
       obs(`儲存後 SELFCHECKIN：logo 長度 ${String(s.logo ?? '').length}、step1Background 長度 ${String(s.step1Background ?? '').length}`);
@@ -165,7 +166,6 @@ test.describe('KIO 自助報到', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(290000);
         await snapshotAll(page);
         const v = await makeVisitor(page);
         const qr = await makeQrMjpeg(page, JSON.stringify({ uuid: v.uuid }));

@@ -11,7 +11,7 @@ import {
   tabletRowTexts,
   uniqueTabletName,
 } from '../../helpers/tablets';
-import { bodyRows, readAllRows } from '../../helpers/tables';
+import { bodyRows, readAllRows, withoutLiveStatus } from '../../helpers/tables';
 import { cleanupDeviceGroups, createDeviceGroupViaUI, gotoDeviceGroups, searchDeviceGroups, dgRow, uniqueDeviceGroupName } from '../../helpers/dgroups';
 
 // 來源 E2E-TEST-PLAN.md；模組 TAB（【平板】頁面、#6.4 新增、#6.5 編輯／刪除）。
@@ -80,7 +80,6 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoTablets(page);
       const existing = await pagerTotal(page);
       const pageSize = Math.max(1, await bodyRows(page).count());
@@ -117,7 +116,6 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(180000);
       // 1) 只有既有平板（皆有 IP）時：依名稱、IP、不存在的關鍵字搜尋，結果只含符合者
       // 不寫死環境裡的特定平板：取清單中第一台既有（非 e2e-）平板的名稱與 IP 來搜尋
       await gotoTablets(page);
@@ -164,7 +162,6 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       const name = track(uniqueTabletName('a'));
       await openAddTablet(page);
       await expect(nextBtn(page)).toBeEnabled();
@@ -187,9 +184,8 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoTablets(page);
-      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有平板，測完必須原封不動
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus); // 既有平板，測完必須原封不動
       expect(keepBefore.length, '環境中沒有既有平板可供比對').toBeGreaterThan(0);
       const names = ['b1', 'b2', 'b3'].map((t) => track(uniqueTabletName(t)));
       for (const n of names) await createTabletViaUI(page, n);
@@ -208,7 +204,7 @@ test.describe('TAB', () => {
       // 只檢查自己建立的三台（不看整個 e2e- 清單，避免被其他測試或上次中斷的殘留影響）
       for (const n of names) await expect(tabletRow(page, n)).toHaveCount(0, { timeout: 20000 });
       await gotoTablets(page);
-      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-'));
+      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus);
       expect(keepAfter, '既有平板在刪除測試平板後應原封不動').toEqual(keepBefore);
     },
   );
@@ -216,7 +212,6 @@ test.describe('TAB', () => {
   test(
     '[TAB-009] 新增平板：可詳細設定臉部偵測的數值',
     async ({ page }) => {
-      test.setTimeout(240000);
       const name = track(uniqueTabletName('t'));
       await openAddTablet(page);
       await fillTabletBasics(page, name);
@@ -248,7 +243,6 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       // 不依賴環境現有的群組：自己建一個設備群組（e2e- 開頭）、把測試平板加進去，再以該群組名稱搜尋
       const name = track(uniqueTabletName('g'));
       const group = uniqueDeviceGroupName('t10');
@@ -276,7 +270,6 @@ test.describe('TAB', () => {
   test(
     '[TAB-011] 編輯平板：修改設備名稱、群組等，列表呈現更新後資料',
     async ({ page }) => {
-      test.setTimeout(240000);
       const before = track(uniqueTabletName('e1'));
       const after = track(uniqueTabletName('e2'));
       await createTabletViaUI(page, before);
@@ -310,9 +303,8 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoTablets(page);
-      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有平板，測完必須原封不動
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus); // 既有平板，測完必須原封不動
       expect(keepBefore.length, '環境中沒有既有平板可供比對').toBeGreaterThan(0);
       const names = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6'].map((t) => track(uniqueTabletName(t)));
       for (const n of names) await createTabletViaUI(page, n);
@@ -355,7 +347,7 @@ test.describe('TAB', () => {
       await page.locator('.el-message-box__btns .el-button--primary').click();
       await expect(tabletRow(page, 'e2e-')).toHaveCount(0, { timeout: 30000 });
       await gotoTablets(page);
-      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-'));
+      const keepAfter = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus);
       expect(keepAfter, '既有平板在刪除測試平板後應原封不動').toEqual(keepBefore);
     },
   );
@@ -369,7 +361,6 @@ test.describe('TAB', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       const tablet = track(uniqueTabletName('r'));
       await createTabletViaUI(page, tablet);
       const group = uniqueDeviceGroupName('tr');

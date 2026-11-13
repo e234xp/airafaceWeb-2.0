@@ -10,7 +10,7 @@ import {
   snapshotDashboard,
   visibleSelect,
 } from '../../helpers/dashboard';
-import { TMP_DIR, makePng, writeFile } from '../../helpers/files';
+import { TMP_DIR, makePng, randomColor, writeFile } from '../../helpers/files';
 
 // 來源 E2E-TEST-PLAN.md；模組 SEC＝保全模式（#10.4）。設定頁 /displays/modifyguardcontrolsetting，設定資料 key＝GUARD。
 // 本檔實作「適合自動化（Y）」的 2 項（SEC-003、004）；其餘維持 test.fixme。
@@ -89,7 +89,6 @@ test.describe('SEC', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await openDashboardSettings(page, ROUTE);
       const before = (await readDashboard(page, KEY)) as { background_image: string; logo: string };
       test.info().annotations.push({
@@ -97,8 +96,8 @@ test.describe('SEC', () => {
         description: `設定前背景圖長度 ${String(before.background_image ?? '').length}、logo 長度 ${String(before.logo ?? '').length}（皆為內建預設與否無法由此判定）`,
       });
       const files = page.locator('input[type=file]');
-      await files.nth(0).setInputFiles(writeFile(`${TMP_DIR}/sec-bg.png`, makePng(640, 360)));
-      await files.nth(1).setInputFiles(writeFile(`${TMP_DIR}/sec-logo.png`, makePng(120, 120)));
+      await files.nth(0).setInputFiles(writeFile(`${TMP_DIR}/sec-bg.png`, makePng(640, 360, false, randomColor()))); // 每次不同顏色，才分得出「換成新圖」
+      await files.nth(1).setInputFiles(writeFile(`${TMP_DIR}/sec-logo.png`, makePng(120, 120, false, randomColor())));
       await page.waitForTimeout(1500);
       await settingsNext(page).click();
       await page.getByText('識別簽到的設備').first().waitFor();
@@ -108,8 +107,8 @@ test.describe('SEC', () => {
       expect(w.logo).not.toBe(before.logo);
       await page.goto('/#/guardmode');
       await page.reload();
-      await expect.poll(() => boardHasImage(page, w.background_image.slice(30, 90)), { timeout: 20000, message: '保全看板沒有套用新背景圖' }).toBe(true);
-      await expect.poll(() => boardHasImage(page, w.logo.slice(30, 90)), { timeout: 5000, message: '保全看板沒有套用新商標' }).toBe(true);
+      await expect.poll(() => boardHasImage(page, w.background_image.slice(-60)), { timeout: 20000, message: '保全看板沒有套用新背景圖' }).toBe(true);
+      await expect.poll(() => boardHasImage(page, w.logo.slice(-60)), { timeout: 5000, message: '保全看板沒有套用新商標' }).toBe(true);
     },
   );
 

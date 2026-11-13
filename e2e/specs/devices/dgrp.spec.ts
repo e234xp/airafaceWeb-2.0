@@ -1,5 +1,5 @@
 import { test, expect, Page } from '../../helpers/test';
-import { cleanupCameras, createCameraViaUI, openAddCamera, uniqueCameraName } from '../../helpers/cameras';
+import { cleanupCameras, createCameraViaUI, gotoCameras, openAddCamera, uniqueCameraName } from '../../helpers/cameras';
 import {
   DG_PREFIX,
   cleanupDeviceGroups,
@@ -11,7 +11,7 @@ import {
   uniqueDeviceGroupName,
   addDevicesInStep2,
 } from '../../helpers/dgroups';
-import { openAddTablet } from '../../helpers/tablets';
+import { gotoTablets, openAddTablet } from '../../helpers/tablets';
 import { bodyRows, readAllRows } from '../../helpers/tables';
 
 // 來源 E2E-TEST-PLAN.md；模組 DGRP（#6.6 影像設備群組新增／編輯、刪除）。
@@ -55,7 +55,6 @@ test.describe('DGRP', () => {
   test(
     '[DGRP-001] 影像設備群組：新增群組成功',
     async ({ page }) => {
-      test.setTimeout(240000);
       const cam = trackC(uniqueCameraName('dg'));
       await createCameraViaUI(page, cam);
       const name = trackG(uniqueDeviceGroupName('a'));
@@ -71,7 +70,6 @@ test.describe('DGRP', () => {
   test(
     '[DGRP-002] 影像設備群組：編輯群組（名稱、群組等），列表呈現更新後資料',
     async ({ page }) => {
-      test.setTimeout(240000);
       const cam = trackC(uniqueCameraName('dg'));
       await createCameraViaUI(page, cam);
       const before = trackG(uniqueDeviceGroupName('e1'));
@@ -103,7 +101,6 @@ test.describe('DGRP', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       // 攝影機：可留空（不選群組建立成功），且下拉選項不含預設群組
       const cam = trackC(uniqueCameraName('dn'));
       await createCameraViaUI(page, cam);
@@ -123,7 +120,6 @@ test.describe('DGRP', () => {
   test(
     '[DGRP-005] 影像設備群組：清單顯示與搜尋文字功能',
     async ({ page }) => {
-      test.setTimeout(300000);
       const name = trackG(uniqueDeviceGroupName('s'));
       await createDeviceGroupViaUI(page, { name });
       await gotoDeviceGroups(page);
@@ -137,17 +133,11 @@ test.describe('DGRP', () => {
       // 預設群組的設備數量與攝影機／平板列表的總數一致
       const allCams = all.find((r) => r.startsWith('All Cameras')) ?? '';
       const allTabs = all.find((r) => r.startsWith('All Tablets')) ?? '';
-      await page.goto('/#/videodevice/cameralist');
-      await page.reload();
-      await page.locator('.vxe-pager').waitFor();
-      const camPager = (await page.locator('.vxe-pager').innerText()).replace(/\s+/g, ' ');
-      const camTotal = Number(camPager.slice(camPager.indexOf('共')).replace(/[^0-9]/g, ''));
+      // 清單頁一出現就讀分頁會讀到資料回來前的「共 0 項記錄」（2026-11-13 完整測試失敗過），
+      // 所以等清單 API 回來、畫面筆數對上後才拿總數
+      const camTotal = await gotoCameras(page);
       expect(allCams.split(' ')[2]).toBe(String(camTotal));
-      await page.goto('/#/videodevice/tabletslist');
-      await page.reload();
-      await page.locator('.vxe-pager').waitFor();
-      const tabPager = (await page.locator('.vxe-pager').innerText()).replace(/\s+/g, ' ');
-      const tabTotal = Number(tabPager.slice(tabPager.indexOf('共')).replace(/[^0-9]/g, ''));
+      const tabTotal = await gotoTablets(page);
       expect(allTabs.split(' ')[3]).toBe(String(tabTotal));
       // 搜尋：名稱關鍵字，結果每一列都含關鍵字
       await gotoDeviceGroups(page);
@@ -170,7 +160,6 @@ test.describe('DGRP', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       const cam = trackC(uniqueCameraName('db'));
       await createCameraViaUI(page, cam);
       const names = ['d1', 'd2', 'd3'].map((t) => trackG(uniqueDeviceGroupName(t)));
@@ -223,7 +212,6 @@ test.describe('DGRP', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       await gotoDeviceGroups(page);
       // 單列：預設群組的「刪除」按鈕為停用（只讀狀態，不點擊）
       for (const n of ['All Cameras', 'All Tablets']) {

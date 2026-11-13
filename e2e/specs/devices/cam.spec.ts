@@ -12,7 +12,7 @@ import {
   searchCameras,
   uniqueCameraName,
 } from '../../helpers/cameras';
-import { bodyRows, readAllRows } from '../../helpers/tables';
+import { bodyRows, readAllRows, withoutLiveStatus } from '../../helpers/tables';
 
 // 來源 E2E-TEST-PLAN.md；模組 CAM（#6.1 列表、#6.2 新增、#6.3 編輯／刪除、人臉擷取閾值）。
 // 本檔實作「適合自動化（Y）」的 11 項；其餘維持 test.fixme（部分自動化／暫不測／需實體）。
@@ -94,7 +94,6 @@ test.describe('CAM', () => {
   test(
     '[CAM-002] 攝影機列表：搜尋文字功能',
     async ({ page }) => {
-      test.setTimeout(180000);
       const name = track(uniqueCameraName('s'));
       await createCameraViaUI(page, name);
       // 以名稱搜尋：結果每一列都含關鍵字，且包含該攝影機
@@ -126,9 +125,8 @@ test.describe('CAM', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       await gotoCameras(page);
-      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')); // 既有攝影機，測完必須原封不動（不指定特定名稱）
+      const keepBefore = (await readAllRows(page, false)).filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus); // 既有攝影機，測完必須原封不動（不指定特定名稱）
       const names = ['a1', 'a2', 'a3'].map((t) => track(uniqueCameraName(t)));
       for (const n of names) await createCameraViaUI(page, n);
       // 編輯入口：按「編輯」進入該攝影機的編輯頁，名稱欄位為該攝影機名稱
@@ -152,7 +150,7 @@ test.describe('CAM', () => {
       await gotoCameras(page);
       const rowsAfter = await readAllRows(page, false);
       for (const n of names) expect(rowsAfter.some((r) => r.startsWith(n)), `重新載入後 ${n} 仍在清單`).toBe(false);
-      expect(rowsAfter.filter((r) => !r.startsWith('e2e-')), '既有攝影機在刪除測試攝影機後應原封不動').toEqual(keepBefore);
+      expect(rowsAfter.filter((r) => !r.startsWith('e2e-')).map(withoutLiveStatus), '既有攝影機在刪除測試攝影機後應原封不動').toEqual(keepBefore);
     },
   );
 
@@ -164,7 +162,6 @@ test.describe('CAM', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(180000);
       await gotoRoiStepOfExisting(page);
       const base1 = await roiShot(page);
       await page.waitForTimeout(3000);
@@ -194,7 +191,6 @@ test.describe('CAM', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       // 可不設定：建立攝影機時不碰 ROI 即可成功
       const name = track(uniqueCameraName('r'));
       await createCameraViaUI(page, name);
@@ -224,7 +220,6 @@ test.describe('CAM', () => {
   test(
     '[CAM-009] 新增攝影機：可詳細設定臉部偵測的數值',
     async ({ page }) => {
-      test.setTimeout(240000);
       const name = track(uniqueCameraName('t'));
       await gotoThresholdStep(page, name);
       const f = thresholdFields(page);
@@ -257,7 +252,6 @@ test.describe('CAM', () => {
   test(
     '[CAM-011] 編輯攝影機：修改設備名稱、群組等，列表呈現更新後資料',
     async ({ page }) => {
-      test.setTimeout(240000);
       const before = track(uniqueCameraName('e1'));
       const after = track(uniqueCameraName('e2'));
       await createCameraViaUI(page, before);
@@ -299,7 +293,6 @@ test.describe('CAM', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       const names = ['d1', 'd2', 'd3'].map((t) => track(uniqueCameraName(t)));
       for (const n of names) await createCameraViaUI(page, n);
       // 分頁：每頁最多 5 筆，切到第 2 頁後內容不同；點頁碼與上下頁皆可
@@ -359,7 +352,6 @@ test.describe('CAM', () => {
     test(
       `[${d.id}] ${d.title}`,
       async ({ page }) => {
-        test.setTimeout(120000);
         await gotoThresholdStep(page, uniqueCameraName('df'));
         await d.check(page);
         await backBtn(page).click(); // 不建立攝影機，離開精靈

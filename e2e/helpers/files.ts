@@ -36,6 +36,11 @@ function chunk(type: string, data: Buffer) {
  * @param color 純色時的顏色 [紅, 綠, 藍]（0～255）。要確認「畫面換成新圖」的測項請每次給不同顏色，
  *   否則同一張圖上傳過一次後，下一次的「新圖」和「舊圖」一模一樣，無從判斷有沒有換。
  */
+/** 隨機的 [紅, 綠, 藍]，給 makePng 產生「每次都不同」的測試圖用。 */
+export function randomColor(): [number, number, number] {
+  return [0, 0, 0].map(() => Math.floor(Math.random() * 256)) as [number, number, number];
+}
+
 export function makePng(width: number, height: number, noise = false, color: [number, number, number] = [40, 120, 200]): Buffer {
   const rowLen = 1 + width * 3;
   const raw = Buffer.alloc(rowLen * height);

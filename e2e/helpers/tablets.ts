@@ -1,6 +1,6 @@
 import { Browser, Page, expect } from '@playwright/test';
 import { ADMIN_STORAGE_PATH } from './accounts';
-import { bodyRows, listReady } from './tables';
+import { bodyRows, listReady, openListByApi } from './tables';
 
 // 平板頁 helper。測試平板一律以 e2e- 開頭，註冊 ID 也用 e2e- 字串（不會對應到真實平板，狀態為「停用」），測項結束時清理。
 // 絕不操作既有平板（Tablet-21）。
@@ -12,10 +12,7 @@ export function uniqueTabletName(tag: string) {
 }
 
 export async function gotoTablets(page: Page) {
-  await page.goto('/#/videodevice/tabletslist');
-  await page.reload();
-  await page.getByRole('button', { name: '新增' }).first().waitFor();
-  await listReady(page);
+  return openListByApi(page, '/#/videodevice/tabletslist', '/airafacelite/findtablet');
 }
 
 export const tabletRow = (page: Page, name: string) => bodyRows(page).filter({ hasText: name });

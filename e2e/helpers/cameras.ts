@@ -1,6 +1,6 @@
 import { Browser, Page, expect } from '@playwright/test';
 import { ADMIN_STORAGE_PATH } from './accounts';
-import { bodyRows, listReady } from './tables';
+import { bodyRows, listReady, openListByApi } from './tables';
 
 // 攝影機頁 helper。測試攝影機一律以 e2e- 開頭，IP 使用文件保留網段 192.0.2.x（不會連到真實設備），測項結束時清理。
 // 絕不操作既有攝影機（Camera-1~11）。清單每頁 5 筆。
@@ -13,10 +13,7 @@ export function uniqueCameraName(tag: string) {
 }
 
 export async function gotoCameras(page: Page) {
-  await page.goto('/#/videodevice/cameralist');
-  await page.reload();
-  await page.getByRole('button', { name: '新增' }).first().waitFor();
-  await listReady(page);
+  return openListByApi(page, '/#/videodevice/cameralist', '/airafacelite/findcamera');
 }
 
 export const cameraRow = (page: Page, name: string) => bodyRows(page).filter({ hasText: name });
