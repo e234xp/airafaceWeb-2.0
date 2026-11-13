@@ -7,6 +7,9 @@ import { ADMIN_STORAGE_PATH } from '../helpers/accounts';
 // 登入一次，儲存 Admin 登入狀態（cookie / localStorage）供其他模組共用。
 // 檔案含 token，已列入 .gitignore（e2e/.auth/）。
 setup('Admin 登入並儲存登入狀態', async ({ page }) => {
+  // 這一步沒有測項 ID，不在 helpers/timeouts.ts 的表裡。下面兩個等待各最多 90 秒（開發伺服器冷啟動時登入可能要數十秒），
+  // 用預設的 90 秒上限會在第二個等待之前就逾時，所以給 3 分鐘。
+  setup.setTimeout(180000);
   const { username, password } = adminCredentials();
   await openLoginPage(page);
   // 固定介面語言為繁體中文（規格為中文），避免各測項語言不一致。

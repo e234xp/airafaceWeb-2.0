@@ -49,7 +49,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-001] 群組列表：清單、頁數、筆數、每頁最多 10 筆、顯示欄位',
     async ({ page }) => {
-      test.setTimeout(120000);
       await gotoGroups(page);
       const headers = (await page.locator('.vxe-table--header-wrapper th').allInnerTexts()).map((s) => s.replace(/\s+/g, '').trim());
       // 規格欄位（依序）：群組名稱、人員數量、訪客數量、備註、建立時間
@@ -97,7 +96,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-003] 群組列表：群組名稱、建立時間搜尋與包含輸入文字的項目',
     async ({ page }) => {
-      test.setTimeout(120000);
       const name = trackGroup(uniqueGroupName('s'));
       await createGroupViaUI(page, { name, remarks: 'e2e備註' });
       // 群組名稱：結果每一列都含關鍵字，且包含該群組
@@ -122,7 +120,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-004] 群組列表：刪除群組資料',
     async ({ page }) => {
-      test.setTimeout(120000);
       const name = trackGroup(uniqueGroupName('d'));
       await createGroupViaUI(page, { name });
       await searchGroups(page, name);
@@ -144,7 +141,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-005] 新增群組：群組名稱必填、備註，新增後顯示於列表',
     async ({ page }) => {
-      test.setTimeout(120000);
       await openCreateGroup(page);
       const inputs = page.locator('input[type=text]:visible');
       // 名稱必填：空白時錯誤訊息標示於欄位下方，無法下一步
@@ -183,7 +179,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-006] 新增群組：自人員或訪客列表選擇人員加入此群組',
     async ({ page }) => {
-      test.setTimeout(240000);
       const pid = await newPerson(page, 'person', 'gp');
       const vid = await newPerson(page, 'visitor', 'gv');
       const name = trackGroup(uniqueGroupName('m'));
@@ -204,7 +199,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-007] 編輯群組：修改備註、隸屬人員，確認後於群組頁面看到更新資料',
     async ({ page }) => {
-      test.setTimeout(240000);
       const p1 = await newPerson(page, 'person', 'ge1');
       const p2 = await newPerson(page, 'person', 'ge2');
       const name = trackGroup(uniqueGroupName('e'));
@@ -232,7 +226,6 @@ test.describe('GRP', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       const names = ['b1', 'b2', 'b3'].map((t) => trackGroup(uniqueGroupName(t)));
       for (const n of names) await createGroupViaUI(page, { name: n });
       await gotoGroups(page);
@@ -268,7 +261,6 @@ test.describe('GRP', () => {
   test(
     '[GRP-009] 刪除群組：單一項目右方刪除按鈕刪除',
     async ({ page }) => {
-      test.setTimeout(120000);
       const a = trackGroup(uniqueGroupName('r1'));
       const b = trackGroup(uniqueGroupName('r2'));
       await createGroupViaUI(page, { name: a });

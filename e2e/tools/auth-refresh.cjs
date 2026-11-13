@@ -60,7 +60,7 @@ function ensureFreshAuth({ env = process.env, force = false, label = '', outputD
           age === Infinity ? '登入狀態檔不存在' : originChanged ? `登入狀態檔是 ${have || '未知網址'} 的，這次要用 ${want}` : `登入狀態檔已 ${Math.round(age / 60000)} 分鐘`;
         console.log(`${label}${why}，重新登入（後端 token 約 2 小時失效）`);
         const cli = require.resolve('@playwright/test/cli');
-        const p = spawn(process.execPath, [cli, 'test', '--project=setup', '--reporter=line', ...(outputDir ? [`--output=${outputDir}`] : [])], { stdio: 'inherit', env: { ...env, E2E_VIA_RUNNER: '1' } });
+        const p = spawn(process.execPath, [cli, 'test', '--project=setup', '--reporter=line', ...(outputDir ? [`--output=${outputDir}`] : [])], { stdio: 'inherit', env });
         p.on('close', (code) => resolve(code ?? 1));
       }),
   );

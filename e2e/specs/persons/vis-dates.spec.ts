@@ -20,7 +20,6 @@ const V = {
 };
 
 test('[VIS-008] 新增訪客：生效/失效日期符合現況', async ({ page }: { page: Page }) => {
-  test.setTimeout(240000);
   await gotoPersons(page, 'visitor');
   const img = readFileSync(PHOTO, 'utf8').trim();
   const res = await page.evaluate(

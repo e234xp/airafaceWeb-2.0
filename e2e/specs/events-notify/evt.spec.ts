@@ -88,7 +88,6 @@ test.describe('EVT', () => {
   test(
     '[EVT-002] 事件頁面：搜尋文字功能',
     async ({ page }) => {
-      test.setTimeout(420000);
       // 規格沒有定義可搜尋哪些欄位；以「設定名稱」為準。
       // 不依賴環境裡既有的事件名稱：先自己建立名稱含 test、http、smtp 的事件，再搜尋（事件在 afterEach 清除）
       const { pg, dg } = await makeScope(page);
@@ -111,7 +110,6 @@ test.describe('EVT', () => {
   test(
     '[EVT-003] 新增事件：依事件填入資訊與排程後完成建立',
     async ({ page }) => {
-      test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
       const name = trackE(uniqueEventName('a'));
       await openAddEvent(page);
@@ -147,7 +145,6 @@ test.describe('EVT', () => {
   test(
     '[EVT-005] 編輯事件：名稱可編輯並更新成功',
     async ({ page }) => {
-      test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
       const before = trackE(uniqueEventName('e1'));
       const after = trackE(uniqueEventName('e2'));
@@ -168,7 +165,6 @@ test.describe('EVT', () => {
   test(
     '[EVT-007] 刪除事件：關閉事件可刪除（單一/多選）',
     async ({ page }) => {
-      test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
       // 既有（非 e2e-）事件，測完必須原封不動；不寫死環境裡的特定事件名稱
       await gotoEvents(page);
@@ -212,7 +208,6 @@ test.describe('EVT', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(300000);
       const { pg, dg } = await makeScope(page);
       const name = trackE(uniqueEventName('u'));
       await createEventViaUI(page, name, pg, dg);

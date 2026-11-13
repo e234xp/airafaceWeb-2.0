@@ -90,7 +90,6 @@ test.describe('MAIL 設定欄位驗證', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(240000);
         await openAddMail(page);
         const bad = await probeField(page, c.field, c.bad);
         const good = await probeField(page, c.field, c.good);
@@ -155,7 +154,6 @@ test.describe('MAIL 照片三選一', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
       await openAddMail(page);
       await fillAll(page);
       await next(page).click();

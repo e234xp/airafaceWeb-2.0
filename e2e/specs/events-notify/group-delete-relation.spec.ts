@@ -12,7 +12,6 @@ const root = `Array.from(document.querySelectorAll('*')).find((x) => x.__vue__).
 test(
   '[GRP-012] 刪除群組後檢查關聯：Email 通知',
   async ({ page }) => {
-    test.setTimeout(200000);
     await page.goto('/#/personsmanagement/groupmanagement');
     await page.reload();
     await page.waitForTimeout(3500);

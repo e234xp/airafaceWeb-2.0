@@ -94,7 +94,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-001] 訪客列表：清單、每頁最多 10 筆、顯示欄位（含 QRCode）',
     async ({ page }) => {
-      test.setTimeout(240000);
       await page.goto('/#/personsmanagement/visitormanagement');
       await page.reload();
       await page.getByRole('button', { name: '新增' }).first().waitFor();
@@ -125,7 +124,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-002] 訪客列表：搜尋（人員編號、姓名、部門、群組）',
     async ({ page }) => {
-      test.setTimeout(180000);
       const tok = token();
       const id = track(`e2e-vs-${tok}`);
       const name = `e2e訪客姓名${tok}`;
@@ -158,7 +156,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-003] 訪客列表：刪除訪客資料',
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-vd-${token()}`);
       await createPersonViaUI(page, { id, name: 'e2e-刪除訪客' }, K);
       await searchPersons(page, id);
@@ -211,7 +208,6 @@ test.describe('VIS', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-vp-${token()}`);
       await openAddPerson(page, K);
       await fillPersonForm(page, { id, name: 'e2e-訪客顯示照片' });
@@ -250,7 +246,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-011] 編輯訪客：進入編輯頁，可修改姓名/部門/職稱，無法變更訪客編號，不可設為 Admin',
     async ({ page }) => {
-      test.setTimeout(120000);
       const tok = token();
       const id = track(`e2e-ve-${tok}`);
       await createPersonViaUI(page, { id, name: `e2e訪客前${tok}`, department: `e2e部門前${tok}`, title: `e2e職稱前${tok}` }, K);
@@ -291,7 +286,6 @@ test.describe('VIS', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-vf-${token()}`);
       await createPersonViaUI(page, { id, name: 'e2e-訪客改顯示照片' }, K);
       await searchPersons(page, id);
@@ -317,7 +311,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-014] 編輯訪客：訪客列表呈現更新後資料',
     async ({ page }) => {
-      test.setTimeout(120000);
       const tok = token();
       const id = track(`e2e-vu-${tok}`);
       await createPersonViaUI(page, { id, name: `e2e訪客更新前${tok}`, department: `e2e部門前${tok}` }, K);
@@ -367,7 +360,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-016] 訪客匯入：依範本匯入 Excel 與照片，成功後於訪客列表呈現',
     async ({ page }) => {
-      test.setTimeout(240000);
       const tok = token();
       const people = [1, 2].map((i) => ({ id: track(`e2e-vi${i}-${tok}`), name: `e2e訪客匯入${i}${tok}`, department: `e2e部門${tok}` }));
       if (!faceBuffer) noFaceNote();
@@ -392,7 +384,6 @@ test.describe('VIS', () => {
   test(
     '[VIS-017] 訪客匯出：zip 含 excel、snapshot（id.jpg / id_D.jpg）、qrcode 資料夾（id.jpeg）',
     async ({ page }) => {
-      test.setTimeout(240000);
       const tok = token();
       const people = [1, 2].map((i) => ({ id: track(`e2e-vx${i}-${tok}`), name: `e2e訪客匯出${i}${tok}`, department: `e2e部門${tok}` }));
       if (!faceBuffer) noFaceNote();

@@ -3,12 +3,6 @@ import { existsSync } from 'node:fs';
 
 if (existsSync('.env.e2e.local')) process.loadEnvFile('.env.e2e.local');
 
-// 停損記帳防護（E2E-TEST-RULE.md §7）：直接執行 `npx playwright test` 時若用 --reporter 覆蓋，budget-reporter 不會執行，次數與耗時就不會被記帳，停損形同虛設。
-// 因此除了 --list 以外，一律要經 npm run e2e:case／e2e:parallel（會設 E2E_VIA_RUNNER=1）。確需直接執行時設 E2E_ALLOW_DIRECT=1，並自行記錄。
-if (!process.env.E2E_VIA_RUNNER && !process.env.E2E_ALLOW_DIRECT && !process.argv.includes('--list') && process.argv.includes('test')) {
-  throw new Error('請改用 npm run e2e:case -- <Test ID> 或 npm run e2e:parallel（停損計時才會生效）；確需直接執行請設 E2E_ALLOW_DIRECT=1。');
-}
-
 export const ADMIN_STORAGE = 'e2e/.auth/admin.json';
 
 // 平行執行（E2E_PARALLEL=1，由 e2e/tools/run-parallel.cjs 啟動）：依「共用狀態」分成幾組，每組內部序列（workers=1）、組與組之間平行。
@@ -27,17 +21,20 @@ const groupProjects = [
 export default defineConfig({
   testDir: './e2e',
   outputDir: './e2e/reports/artifacts',
-  // 單一測項的硬性上限 = E2E_CASE_STUCK_TIMEOUT_MINUTES（預設 5 分鐘）；測項內的 test.setTimeout 不得超過此值（見 E2E-TEST-RULE.md §7）
-  timeout: Number(process.env.E2E_CASE_STUCK_TIMEOUT_MINUTES || 5) * 60000,
-  retries: 0,
-  reporter: [['list'], ['html', { outputFolder: './e2e/reports/html', open: 'never' }], ['./e2e/tools/budget-reporter.cjs']],
+  // 單一測項的時間上限預設 90 秒：近三次完整測試裡，211 項中有 138 項通過時都在 60 秒內（×1.5 仍在 90 秒內）。
+  // 比較慢的 73 項在 helpers/timeouts.ts 個別設定，由 helpers/test.ts 依測項 ID 套用。
+  timeout: 90000,
+  // 完整測試（run-parallel.cjs 會設 E2E_PARALLEL=1）失敗時自動重試 1 次，吸收測試機偶爾變慢造成的失敗；
+  // 重試才通過的測項在報告裡標為 flaky，不會被當成正常通過而藏起來。單項執行不重試，失敗就直接看到原因。
+  retries: PARALLEL ? 1 : 0,
+  reporter: [['list'], ['html', { outputFolder: './e2e/reports/html', open: 'never' }]],
   use: {
     viewport: {
     width: 1920,
     height: 1080,
     },
     baseURL: process.env.E2E_BASE_URL,
-    // 單一動作（點擊、輸入、導覽）最多等 30 秒：腳本寫錯時盡快失敗，不要把整個測項的 5 分鐘停損額度耗在一個卡住的動作上
+    // 單一動作（點擊、輸入、導覽）最多等 30 秒：腳本寫錯或畫面卡住時盡快失敗，不要把整個測項的時間上限耗在一個動作上
     actionTimeout: 30000,
     navigationTimeout: 30000,
     // 測試機使用自簽憑證；僅為讓瀏覽器能連線，不屬於驗收條件，Results 需註明。

@@ -7,7 +7,8 @@
 //   node e2e/tools/run-parallel.cjs --jobs=2                 同時最多 2 組
 //   node e2e/tools/run-parallel.cjs -- -g "\[CAM-0"          「--」後面的參數原樣傳給 playwright
 // 注意：先單獨登入一次（setup），各組共用登入狀態；各組使用各自的 artifacts 資料夾，避免 trace／video 互相覆蓋。
-// 停損記帳（budget.json）仍由 budget-reporter 寫入（已加鎖）；需要停損控管的單項重跑請用 npm run e2e:case。
+// 時間上限與重試用 Playwright 原生設定（playwright.config.ts 的 timeout／retries、helpers/timeouts.ts）；完整測試失敗會自動重試 1 次，
+// 重試才通過的測項在摘要另外列為「不穩定」，不會被當成正常通過。
 // 各組啟動會錯開幾秒；若某組一啟動就因行程錯誤結束（沒跑任何測項），會自動重試一次，並在摘要標示「未執行」，
 // 不會跟「有測項失敗」混在一起。
 const fs = require('fs');
@@ -21,22 +22,30 @@ const args = process.argv.slice(2);
 const dd = args.indexOf('--');
 const pass = dd >= 0 ? args.slice(dd + 1) : [];
 const own = dd >= 0 ? args.slice(0, dd) : args;
-const ALL = ['boards', 'people-events', 'system', 'devices', 'reports', 'login']; // 預估耗時由長到短
+// 依預估耗時由長到短排；people-events（約 48 分）排第一，與它衝突的 boards（約 29 分）就在它之後接著跑
+const ALL = ['people-events', 'boards', 'system', 'devices', 'reports', 'login'];
+// 不能同時跑的組：GRP-013～015（people-events）會新增／刪除群組，又會備份、修改、還原看板設定；
+// 與 boards 組同時跑時，兩邊會互相蓋掉看板設定（2026-11-11 GRP-013 還原迎賓看板，蓋掉 WEL-002 剛存的新背景）。
+// 這兩組不論怎麼拆都會碰到對方的共用資料，所以改成一組跑完另一組才開始。
+const CONFLICTS = [['boards', 'people-events']];
+const conflictsWith = (group, running) => CONFLICTS.some((pair) => pair.includes(group) && pair.some((other) => other !== group && running.has(other)));
 const pick = (own.find((a) => a.startsWith('--groups=')) || '').split('=')[1];
 const groups = pick ? pick.split(',') : ALL;
 const jobs = Number((own.find((a) => a.startsWith('--jobs=')) || '--jobs=3').split('=')[1]);
 const STAGGER_MS = 5000; // 同時啟動的各組之間錯開，避免一起建立／整理輸出資料夾而互相撞到
-// E2E_RUN_MODE=full：測全部，停損會套用（見 helpers/test.ts）；E2E_RUN_ID：這一次執行的識別，各組共用同一個
-const env = { ...process.env, E2E_PARALLEL: '1', E2E_VIA_RUNNER: '1', E2E_RUN_MODE: 'full', E2E_RUN_ID: new Date().toISOString() };
+// E2E_PARALLEL=1：playwright.config.ts 依此切換成分組的 projects，並開啟失敗重試 1 次
+const env = { ...process.env, E2E_PARALLEL: '1' };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = {};
 const startedAt = new Date();
 const started = startedAt.getTime();
 const reportDirOf = (group) => `e2e/reports/html-${group}`;
+// 各組另外輸出一份 Playwright 原生的 JSON 結果，用來取得每個失敗測項的失敗時間（給環境監看比對）與重試才通過的測項
+const jsonOf = (group) => `e2e/reports/results-${group}.json`;
 const counts = (text) => {
   const n = (re) => Number((new RegExp(`^\\s*(\\d+) ${re}`, 'm').exec(text) || [0, 0])[1]);
-  return { passed: n('passed'), failed: n('failed'), skipped: n('skipped') };
+  return { passed: n('passed'), failed: n('failed'), skipped: n('skipped'), flaky: n('flaky') };
 };
 const runOnce = (g) =>
   new Promise((resolve) => {
@@ -44,8 +53,9 @@ const runOnce = (g) =>
     let text = '';
     // 每組的 HTML 報告各自一個資料夾（e2e/reports/html-<組名>），避免 6 組互相蓋掉；全部跑完後一起壓成一個 zip
     const reportDir = reportDirOf(g);
-    const p = spawn(process.execPath, [cli, 'test', `--project=${g}`, '--workers=1', '--reporter=list,html,./e2e/tools/budget-reporter.cjs', `--output=e2e/reports/artifacts-${g}`, ...pass], {
-      env: { ...env, PLAYWRIGHT_HTML_OUTPUT_DIR: reportDir, PLAYWRIGHT_HTML_REPORT: reportDir, PLAYWRIGHT_HTML_OPEN: 'never' },
+    fs.rmSync(jsonOf(g), { force: true }); // 避免這組沒跑成時讀到上一次留下的結果
+    const p = spawn(process.execPath, [cli, 'test', `--project=${g}`, '--workers=1', '--reporter=list,html,json', `--output=e2e/reports/artifacts-${g}`, ...pass], {
+      env: { ...env, PLAYWRIGHT_HTML_OUTPUT_DIR: reportDir, PLAYWRIGHT_HTML_REPORT: reportDir, PLAYWRIGHT_HTML_OPEN: 'never', PLAYWRIGHT_JSON_OUTPUT_NAME: jsonOf(g) },
     });
     const tag = (s) => s.toString().split('\n').filter((l) => l.trim()).map((l) => `[${g}] ${l}`).join('\n') + '\n';
     p.stdout.on('data', (d) => {
@@ -79,16 +89,32 @@ const run = async (g, delayMs) => {
   }
   results[g] = { ...r, retried, notRun: startupCrash(r) };
 };
-/** 這次執行中失敗的測項與記錄失敗的時間（從停損記帳 budget.json 取，只看這次的 E2E_RUN_ID）。讀不到就回傳空陣列。 */
-function failedTestsOfThisRun() {
-  try {
-    const budget = JSON.parse(fs.readFileSync('e2e/reports/budget.json', 'utf8'));
-    return Object.entries(budget)
-      .filter(([, entry]) => entry.runId === env.E2E_RUN_ID && !entry.passed && entry.history && entry.history.length)
-      .map(([id, entry]) => ({ id, atMs: Date.parse(entry.history[entry.history.length - 1].at) }));
-  } catch {
-    return [];
+/**
+ * 讀各組的 Playwright JSON 結果，整理出這次的失敗測項與不穩定（重試才通過）的測項。
+ * @returns { failed: [{ id, atMs }], flaky: [id] }；atMs 是最後一次嘗試結束的時間。讀不到結果檔的組會略過。
+ */
+function outcomesOfThisRun() {
+  const failed = [];
+  const flaky = [];
+  const idOf = (title) => (/\[([A-Z0-9]+-\d+)\]/.exec(title) || [])[1] || title;
+  const walk = (suite) => {
+    for (const spec of suite.specs || []) {
+      for (const run of spec.tests || []) {
+        const last = (run.results || [])[run.results.length - 1];
+        if (run.status === 'unexpected' && last) failed.push({ id: idOf(spec.title), atMs: Date.parse(last.startTime) + last.duration });
+        if (run.status === 'flaky') flaky.push(idOf(spec.title));
+      }
+    }
+    for (const child of suite.suites || []) walk(child);
+  };
+  for (const g of groups) {
+    try {
+      for (const suite of JSON.parse(fs.readFileSync(jsonOf(g), 'utf8')).suites || []) walk(suite);
+    } catch {
+      // 這組沒跑或沒有產生結果檔
+    }
   }
+  return { failed, flaky };
 }
 (async () => {
   const monitorOrigin = backendOrigin(env);
@@ -97,19 +123,30 @@ function failedTestsOfThisRun() {
   const monitor = monitorOrigin ? startBackendMonitor(monitorOrigin, { frontendUrl }) : null;
   if (!monitor) console.log('（判斷不出後端位址，這次不監看後端；可設 E2E_BACKEND_URL 指定）');
   const queue = groups.map((g, i) => ({ g, delay: i < jobs ? i * STAGGER_MS : 0 }));
+  const running = new Set();
   await Promise.all(Array.from({ length: Math.min(jobs, queue.length) }, async () => {
     while (queue.length) {
-      const { g, delay } = queue.shift();
+      // 挑第一個「沒有和正在跑的組衝突」的組；全部都衝突就等一下，等衝突的組跑完
+      const index = queue.findIndex((item) => !conflictsWith(item.g, running));
+      if (index < 0) {
+        await sleep(2000);
+        continue;
+      }
+      const { g, delay } = queue.splice(index, 1)[0];
+      running.add(g);
       await run(g, delay);
+      running.delete(g);
     }
   }));
   console.log('\n===== 平行執行結果（總耗時 ' + Math.round((Date.now() - started) / 1000) + ' 秒）=====');
   for (const g of groups) {
     const r = results[g];
     const mark = r.notRun ? `⛔ 未執行（${r.notRunReason || '行程錯誤'}）` : r.failed > 0 || r.code !== 0 ? '❌ 有失敗' : '✅ 全部通過';
-    console.log(`${mark}  ${g.padEnd(14)} 通過 ${r.passed}｜失敗 ${r.failed}｜跳過 ${r.skipped}｜${r.sec} 秒${r.retried ? '（曾自動重試）' : ''}`);
+    console.log(`${mark}  ${g.padEnd(14)} 通過 ${r.passed}｜失敗 ${r.failed}｜不穩定 ${r.flaky || 0}｜跳過 ${r.skipped}｜${r.sec} 秒${r.retried ? '（行程啟動失敗，曾重新啟動）' : ''}`);
   }
-  if (monitor) console.log(`\n${describeMonitor(monitor.stop(), failedTestsOfThisRun())}`);
+  const outcomes = outcomesOfThisRun();
+  if (outcomes.flaky.length) console.log(`\n⚠️ 不穩定（第一次失敗、重試才通過）${outcomes.flaky.length} 項：${outcomes.flaky.join(' ')}`);
+  if (monitor) console.log(`\n${describeMonitor(monitor.stop(), outcomes.failed)}`);
   // 只有「完整測試」才存檔：全部 6 組都有跑。只挑幾組來跑（例如 --groups=login）不存檔，
   // 否則封存資料夾會被零碎的小報告塞滿，把真正的完整報告擠掉（只留最新幾個）。
   // 完整測試時各組的報告一起壓成一個 zip；沒被執行的組（報告比這次開始時間舊）會被略過

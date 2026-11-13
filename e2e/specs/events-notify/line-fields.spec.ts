@@ -37,7 +37,6 @@ test(
   '[LINE-002] Line 通知內容語系：發送內文語系可設定（僅欄位標題）',
   { annotation: [R] },
   async ({ page }) => {
-    test.setTimeout(200000);
     await toStep2(page);
     const lang = page.locator('select:visible').first();
     const opts = (await lang.locator('option').allInnerTexts()).map((x) => x.trim());
@@ -54,7 +53,6 @@ test(
   '[LINE-003] Line 通知欄位：設定不顯示 ID、顯示時間',
   { annotation: [R] },
   async ({ page }) => {
-    test.setTimeout(200000);
     await toStep2(page);
     await setBox(page, BOX.personId, false);
     await setBox(page, BOX.timestamp, true);

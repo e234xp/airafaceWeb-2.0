@@ -28,7 +28,6 @@ test(
     ],
   },
   async ({ page }) => {
-    test.setTimeout(300000);
     const s = await scanPresence(page);
     if (!s.longestAway || s.longestAway.outSec < 600) throw new Error(noPresenceMessage('至少有一位人員的離開總時間 >= 10 分鐘'));
     const c = s.longestAway;

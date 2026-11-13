@@ -80,7 +80,6 @@ test.describe('IO / EVREL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(200000);
       await openAddIo(page);
       const brand = page.locator('select:visible').nth(0);
       const model = page.locator('select:visible').nth(1);
@@ -103,7 +102,6 @@ test.describe('IO / EVREL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(250000);
       await openAddIo(page);
       const name = `e2e-io-${Date.now().toString(36).slice(-5)}`;
       const bad: Array<[string, { ip?: string; port?: string }]> = [
@@ -136,7 +134,6 @@ test.describe('IO / EVREL', () => {
   test(
     '[IO-004] I/O：帳號密碼可為空',
     async ({ page }) => {
-      test.setTimeout(200000);
       await openAddIo(page);
       await fillIo(page, `e2e-io-${Date.now().toString(36).slice(-5)}`, { user: '', pass: '' });
       await page.waitForTimeout(600);
@@ -156,7 +153,6 @@ test.describe('IO / EVREL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(290000);
       const pg = uniqueGroupName('sc');
       const dg = uniqueDeviceGroupName('sc');
       pgs.push(pg);
@@ -215,7 +211,6 @@ test.describe('IO / EVREL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(290000);
       const pg = uniqueGroupName('er');
       const dg = uniqueDeviceGroupName('er');
       pgs.push(pg);

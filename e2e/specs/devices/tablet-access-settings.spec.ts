@@ -45,7 +45,6 @@ test.describe('TAB 門禁設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(290000);
       const name = uniqueTabletName('2f');
       created.push(name);
       await createTabletViaUI(page, name);
@@ -68,7 +67,6 @@ test.describe('TAB 門禁設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(290000);
       const name = uniqueTabletName('cf');
       created.push(name);
       await createTabletViaUI(page, name);

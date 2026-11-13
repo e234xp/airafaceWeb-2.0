@@ -21,7 +21,6 @@ test.describe('GRP（刪除群組後檢查關聯）', () => {
   test(
     '[GRP-011] 刪除群組後檢查關聯：人員確實移除群組綁定',
     async ({ page }) => {
-      test.setTimeout(240000);
       const id = uniquePersonId('gr');
       persons.push(id);
       const gname = uniqueGroupName('rel');
@@ -57,7 +56,6 @@ test.describe('GRP（刪除群組後檢查關聯）', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(240000);
         const gname = uniqueGroupName('bd');
         groups.push(gname);
         await createGroupViaUI(page, { name: gname });

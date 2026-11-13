@@ -16,24 +16,22 @@ AiraFace 管理介面（airafaceWeb）的 Playwright 端對端測試。
 
 | 指令 | 用途 | 什麼時候用 |
 |---|---|---|
-| `npm run e2e` | 等同 `npm run e2e:parallel`：依共用資料分組、組內序列、組間平行，一次跑全部測試（Playwright 原生指令被 `playwright.config.ts` 擋住，必須經過執行工具，停損記帳才會生效） | 要跑全部時 |
-| `npm run e2e:headed` | 同上，但開出瀏覽器視窗 | 要親眼看畫面除錯時 |
+| `npm run e2e` | 等同 `npm run e2e:parallel`：依共用資料分組、組內序列、組間平行，一次跑全部測試；失敗的測項會自動重試 1 次，重試才通過的列為「不穩定」 | 要跑全部時 |
+| `npm run e2e:headed` | 直接用 Playwright 跑全部測試（不分組），並開出瀏覽器視窗 | 要親眼看畫面除錯時 |
 | `npm run e2e:ui` | 開 Playwright 圖形介面，可逐步重播、看每一步畫面 | 查某個測項為什麼失敗 |
 | `npm run e2e:report` | 開啟最近一次單項執行（`e2e:case`）的 HTML 測試報告（`reports/html`） | 跑完後看結果 |
 | `npm run e2e:report:old` | 列出歷次報告的壓縮檔，選一個解壓並開啟；`-- 2` 直接開第 2 新的。整批執行的壓縮檔裡有好幾組報告，選完後再選要看哪一組 | 要看以前某次的結果（每次執行的報告會被下一次蓋掉，所以才另外存壓縮檔） |
-| `npm run e2e:case -- <ID>...` | **跑單一或多個測項**，例：`npm run e2e:case -- CAM-007 CAM-008`。**指定測項永遠不會被停損擋住**，不分人或 AI。記帳存在 `reports/budget.json`，以「每次執行」為單位從 0 計，不沿用先前執行的次數 | 開發或修腳本時的標準跑法；規則規定測項只能用它跑 |
+| `npm run e2e:case -- <ID>...` | **跑單一或多個測項**，例：`npm run e2e:case -- CAM-007 CAM-008`。單項執行不重試，失敗就直接看到原因 | 開發或修腳本時的標準跑法 |
 | `npm run e2e:case -- <ID> --headed` | 開出瀏覽器視窗看測項怎麼跑；同樣可加 `--debug`（逐步除錯）、`--ui`（圖形介面）、`--trace=on`（強制錄 trace） | 看畫面除錯、查哪一步慢 |
 | `npm run e2e:case -- --workers=1 <ID>` | 限制同時執行的 worker 數（預設約 8，會把開發伺服器壓垮） | 跑多個 ID 時伺服器出現連線被拒 |
-| `npm run e2e:case -- --reset <ID>` | 清除該項的嘗試次數記帳 | 環境錯誤造成失敗、或使用者同意加碼時 |
-| `npm run e2e:budget` | 列出每個測項的嘗試次數、累計耗時、是否通過（等同 `e2e:case -- --status`） | 想知道哪些測項快用完停損額度 |
-| `npm run e2e:parallel` | 依共用資料把測項分成 6 組，組內序列、組間平行（預設同時 3 組，各組啟動錯開 5 秒；某組一啟動就當掉會自動重試一次，摘要會分開列出各組通過／失敗／跳過，啟動失敗標「未執行」）。分組：`boards`（各種看板）、`people-events`（人員、訪客、群組、事件、通知）、`system`（帳號、診斷、日誌、授權等）、`devices`（攝影機、平板、設備群組）、`reports`（調查、報表、進出紀錄）、`login`（登入登出） | 回歸測試，要確認整體狀態時 |
+| `npm run e2e:parallel` | 依共用資料把測項分成 6 組，組內序列、組間平行（預設同時 3 組，各組啟動錯開 5 秒；`boards` 與 `people-events` 不同時跑，因為 GRP-013～015 會改看板設定，同時跑會互相蓋掉，所以完整測試約 77 分鐘；某組一啟動就當掉會自動重試一次，摘要會分開列出各組通過／失敗／不穩定／跳過，啟動失敗標「未執行」，並附上環境監看結果）。分組：`boards`（各種看板）、`people-events`（人員、訪客、群組、事件、通知）、`system`（帳號、診斷、日誌、授權等）、`devices`（攝影機、平板、設備群組）、`reports`（調查、報表、進出紀錄）、`login`（登入登出） | 回歸測試，要確認整體狀態時 |
 | `npm run e2e:parallel -- --groups=boards,devices --jobs=2` | 只跑指定分組、限制同時組數 | 只想回歸某幾組 |
 | `npm run e2e:parallel -- -- -g "\[CAM-0"` | 「`--`」後面的參數原樣傳給 Playwright（例：只跑名稱符合的測項） | 挑特定測項平行跑 |
 | `npm run e2e:probe -- --route=<路由>` | 寫新測項前，把頁面或精靈的欄位、下拉選項、按鈕列出來，唯讀，輸出到 `reports/probe/<name>.md`。選項：`--add` 先按「新增」、`--fill` 填測試值、`--name=` 指定檔名 | 新增腳本前探查頁面，不用逐項試錯 |
 
-`e2e:case` 與 `e2e:parallel` 的停損、記帳、環境變數（`E2E_CASE_MAX_ATTEMPTS`、`E2E_CASE_STUCK_TIMEOUT_MINUTES`）由 `tools/run-case.cjs`、`tools/budget-reporter.cjs` 處理。**停損只在「測全部」（`npm run e2e` / `e2e:parallel`）時套用**，不分人或 AI：這一次執行內，同一個測項未通過且嘗試次數（`E2E_CASE_MAX_ATTEMPTS`）或累計耗時（`E2E_CASE_STUCK_TIMEOUT_MINUTES`）達上限就跳過，邏輯在 `helpers/test.ts`。每次執行用 `E2E_RUN_ID` 區分，各次執行的次數互不影響。
+**時間上限與重試（Playwright 原生設定）：** 每個測項預設最多 90 秒（`playwright.config.ts` 的 `timeout`），比較慢的測項在 `helpers/timeouts.ts` 依測項 ID 個別設定，由 `helpers/test.ts` 用 `testInfo.setTimeout()` 套用。表裡的數字是近三次完整測試「通過時最長花的時間 × 1.5，進位到 30 秒」。完整測試（`npm run e2e`）失敗會自動重試 1 次（`retries`），單項執行不重試。不要在測項裡另外寫 `test.setTimeout`，要調整就改 `helpers/timeouts.ts`。（2026-11-11 起取代原本自製的停損記帳 `budget-reporter.cjs`）
 
-**報告自動存檔：** 只有完整測試（`npm run e2e`、`e2e:parallel`，也就是 6 組全部都有跑）結束後，會把這次的 HTML 報告壓成 `reports/archive/<日期時間>.zip`，只留最新 5 個（`reports/` 不進版控）。單項（`e2e:case`）和只挑幾組的 `--groups=` 不存檔，報告只在 `reports/html`，下一次會被蓋掉。整批是每組各一份（`reports/html-<組名>`）（`reports/html-<組名>`），一起壓進同一個 zip，沒有合併成一份，要一組一組開。壓縮由 `tools/archive-report.cjs` 處理、開啟由 `tools/open-report.cjs` 處理。`--ui`、`--debug` 不存檔。Windows 的壓縮與解壓用系統的 `System32\tar.exe`（在 Git Bash 直接叫 `tar` 會抓到不支援 zip 的 GNU 版）。
+**報告自動存檔：** 只有完整測試（`npm run e2e`、`e2e:parallel`，也就是 6 組全部都有跑）結束後，會把這次的 HTML 報告壓成 `reports/archive/<日期時間>.zip`，只留最新 5 個（`reports/` 不進版控）。單項（`e2e:case`）和只挑幾組的 `--groups=` 不存檔，報告只在 `reports/html`，下一次會被蓋掉。整批是每組各一份（`reports/html-<組名>`），一起壓進同一個 zip，沒有合併成一份，要一組一組開。壓縮由 `tools/archive-report.cjs` 處理、開啟由 `tools/open-report.cjs` 處理。`--ui`、`--debug` 不存檔。Windows 的壓縮與解壓用系統的 `System32\tar.exe`（在 Git Bash 直接叫 `tar` 會抓到不支援 zip 的 GNU 版）。
 
 **登入狀態會過期（整批跑很久時）：** 後端 token 簽發後約 2 小時失效，而 setup 只登入一次、所有測項共用 `e2e/.auth/admin.json`。整批超過 2 小時，後面的測項會變成登入頁而整組失敗（2026-10-22 的整批就是這樣，報表組 26 項＋登入組 2 項）。所以 `e2e:parallel` 在**每一組開始前**會檢查登入狀態檔，超過 30 分鐘就自動重新登入（`tools/auth-refresh.cjs`；多組同時需要時排隊，檔案先寫暫存檔再改名，不會被讀到一半）。限制：單一組本身若超過約 90 分鐘仍可能過期；直接用 `npm run e2e`（單一行程）整批跑超過 2 小時也不在保護範圍內。工具啟動時也會檢查 Node 版本（需 20.12 以上），不足時直接說明，不會丟出 `process.loadEnvFile is not a function`。
 
@@ -53,9 +51,9 @@ node e2e/tools/add-note.cjs <notes.json>   # 批次在備註欄尾端追加一�
 | `helpers/` | 腳本共用函式（登入、人員、攝影機、看板模擬辨識等） |
 | `setup/auth.setup.ts` | 登入一次，各分組共用登入狀態 |
 | `fixtures/` | 測試用檔案（人臉照片等），說明見 `fixtures/README.md` |
-| `tools/` | 執行、記帳、報告用的命令列工具；多數是一次性的輔助腳本，只有上表與上節列出的是常用的 |
+| `tools/` | 執行、報告用的命令列工具；多數是一次性的輔助腳本，只有上表與上節列出的是常用的 |
 | `plan-ids.json` | 從 Plan 自動產生的 Test ID 清單（Coverage Audit 用） |
-| `reports/` | 報告、trace、錄影、`budget.json`；`reports/tmp` 為暫存，不進版控 |
+| `reports/` | 報告、trace、錄影、各組的原生 JSON 結果（`results-<組名>.json`）；`reports/tmp` 為暫存，不進版控 |
 
 ## 範圍規則
 

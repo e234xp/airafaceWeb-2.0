@@ -16,8 +16,7 @@
     "e2e:report:old": "node e2e/tools/open-report.cjs",
     "e2e:case": "node e2e/tools/run-case.cjs",
     "e2e:parallel": "node e2e/tools/run-parallel.cjs",
-    "e2e:probe": "node e2e/tools/probe-page.cjs",
-    "e2e:budget": "node e2e/tools/run-case.cjs --status"
+    "e2e:probe": "node e2e/tools/probe-page.cjs"
   },
   "dependencies": {
     "@coreui/coreui": "^3.4.0",

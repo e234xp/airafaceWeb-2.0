@@ -39,7 +39,6 @@ test(
     ],
   },
   async ({ page }) => {
-    test.setTimeout(280000);
     // 攝影機與平板的設備名稱不可重複（後端：Name existed. type: tablet），兩邊用不同標籤
     const cam = uniqueCameraName('dg3c');
     cameras.push(cam);

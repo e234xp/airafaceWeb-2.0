@@ -80,7 +80,6 @@ const addIds = (kind: Kind) => {
 };
 
 async function checkAdd(page: Page, kind: Kind, label: string) {
-  test.setTimeout(280000);
   const note = (type: string, description: string) => test.info().annotations.push({ type, description });
   // 1) 合格照片：預覽顯示、註冊成功、列表顯示註冊照片
   const id = addIds(kind);
@@ -124,7 +123,6 @@ async function checkRejections(page: Page, kind: Kind, label: string, openForm: 
 }
 
 async function checkEdit(page: Page, kind: Kind, label: string) {
-  test.setTimeout(280000);
   const id = addIds(kind);
   await createPersonViaUI(page, { id, name: `e2e改註冊照片${label}` }, kind);
   await searchPersons(page, id);

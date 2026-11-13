@@ -134,7 +134,6 @@ test.describe('PPL', () => {
   test(
     '[PPL-003] 人員列表：刪除人員資料',
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-d-${token()}`);
       await createPersonViaUI(page, { id, name: 'e2e-刪除測試' });
       await searchPersons(page, id);
@@ -191,7 +190,6 @@ test.describe('PPL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-dp-${token()}`);
       await openAddPerson(page);
       await fillPersonForm(page, { id, name: 'e2e-顯示照片' });
@@ -314,7 +312,6 @@ test.describe('PPL', () => {
   test(
     '[PPL-012] 人員批次匯入/出：依範本匯入 Excel 與照片，成功後顯示於人員列表',
     async ({ page }) => {
-      test.setTimeout(240000);
       const tok = token();
       const people = [1, 2].map((i) => ({ id: track(`e2e-i${i}-${tok}`), name: `e2e匯入${i}${tok}`, department: `e2e部門${tok}`, title: `e2e職稱${i}` }));
       if (!faceBuffer) noFaceNote();
@@ -340,7 +337,6 @@ test.describe('PPL', () => {
   test(
     '[PPL-013] 人員批次匯入/出：匯出（zip 含 excel、snapshot 資料夾 id.jpg / id_D.jpg）',
     async ({ page }) => {
-      test.setTimeout(240000);
       const tok = token();
       const people = [1, 2].map((i) => ({ id: track(`e2e-x${i}-${tok}`), name: `e2e匯出${i}${tok}`, department: `e2e部門${tok}` }));
       if (!faceBuffer) noFaceNote();
@@ -385,7 +381,6 @@ test.describe('PPL', () => {
   test(
     '[PPL-014] 人員批次匯入/出：匯入包含不同語言（中、日、泰、法、西）的文件',
     async ({ page }) => {
-      test.setTimeout(240000);
       const tok = token();
       const langs = [
         { tag: 'zh', name: '王小明', department: '研發部' },
@@ -458,7 +453,6 @@ test.describe('PPL', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(120000);
       const id = track(`e2e-ep-${token()}`);
       await createPersonViaUI(page, { id, name: 'e2e-改顯示照片' });
       await searchPersons(page, id);

@@ -18,7 +18,6 @@ test(
     ],
   },
   async ({ page }) => {
-    test.setTimeout(180000);
     await openAddEvent(page);
     await page.locator('input[type=text]:visible').nth(0).fill('e2e-mail008-不儲存');
     const sel = page.locator('select:visible').first();

@@ -30,7 +30,7 @@ function normalizePath(filePath) {
  */
 function listScriptTests() {
   const result = spawnSync(process.execPath, [require.resolve('@playwright/test/cli'), 'test', '--list', '--reporter=json'], {
-    env: { ...process.env, E2E_ALLOW_DIRECT: '1', E2E_INCLUDE_BOARDS: 'true' },
+    env: { ...process.env, E2E_INCLUDE_BOARDS: 'true' },
     maxBuffer: 256 * 1024 * 1024,
     encoding: 'utf8',
   });

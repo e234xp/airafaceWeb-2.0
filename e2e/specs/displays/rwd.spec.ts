@@ -50,7 +50,6 @@ test.describe('看板 RWD', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(180000);
         const m = await measure(page, b.route);
         test.info().annotations.push({ type: '觀察', description: m.map((x) => `${x.size} → ${x.w}x${x.h}（比例 ${x.ratio.toFixed(2)}）`).join('；') });
         for (const x of m) {

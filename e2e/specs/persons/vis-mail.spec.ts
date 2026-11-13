@@ -47,7 +47,6 @@ test.describe('VIS 通知信', () => {
   let sent: Mail[] = [];
 
   test('[VIS-019] 訪客通知信：針對選取訪客寄送 Email 夾帶 QR 照片', async ({ page }) => {
-    test.setTimeout(240000);
     expect(TO, '缺 E2E_SMTP_TO').not.toBe('');
     await gotoPersons(page, 'visitor');
     expect(await createVisitors(page)).toEqual(['ok', 'ok']);

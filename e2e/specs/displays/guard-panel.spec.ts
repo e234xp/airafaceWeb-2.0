@@ -55,7 +55,6 @@ test.describe('SEC 保全看板面板', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(290000);
       await loadGuard(page);
       await page.getByText('展開').nth(1).click();
       await expect(page.locator('.grid-7-6').first()).toBeVisible();
@@ -93,7 +92,6 @@ test.describe('SEC 保全看板面板', () => {
   test(
     '[SEC-021] 保全 Step 3 面板操作：陌生人顯示抓拍照片',
     async ({ page }) => {
-      test.setTimeout(290000);
       await loadGuard(page);
       const cards = strangerCards(page);
       const n = await cards.count();
@@ -120,7 +118,6 @@ test.describe('SEC 保全看板面板', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(295000);
         const types = id === 'SEC-022' ? ['陌生人'] : ['陌生人', '訪客', '員工'];
         await loadGuard(page);
         const done: Array<{ ts: number; remark: string; type: string }> = [];

@@ -47,7 +47,6 @@ const inOfficeMinutes = (text: string) => {
 
 test.describe('TRK 進出紀錄', () => {
   test('[TRK-001] 進出紀錄列表：搜尋人員，列表僅有該人員', async ({ page }) => {
-    test.setTimeout(240000);
     const s = await scanPresence(page);
     if (!s.multiDay) throw new Error(noPresenceMessage('某一天有兩位以上人員的進出彙總'));
     const person = s.multiDay.names[0];
@@ -67,7 +66,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-002] 影像設備管理：設定群組 IN/OUT 後，事件顯示的設備名稱與方向和設定相同', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     await page.locator('.timeline-seg-away').first().click({ force: true });
     await page.waitForTimeout(2500);
@@ -86,7 +84,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-003] 詳細資料頁：時間篩選（不在 10/20/30/60 分鐘以上、自訂起訖時間）', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     const selects = page.locator('select');
     const awaySel = selects.nth(2);
@@ -113,7 +110,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-005] 時間軸：非上班為灰色（早於當天第一筆 IN、晚於最後一筆）', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     const s = await segs(page);
     const first = s[0];
@@ -129,7 +125,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-006] 時間軸：在辦公室為綠色（IN→OUT）', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     const ins = (await segs(page)).filter((x) => x.cls.includes('seg-in'));
     expect(ins.length, '在辦公室段數').toBeGreaterThan(0);
@@ -141,7 +136,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-007] 時間軸：不在辦公室為黃色（OUT→IN）', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     const aw = (await segs(page)).filter((x) => x.cls.includes('seg-away'));
     expect(aw.length, '不在辦公室段數').toBeGreaterThan(0);
@@ -155,7 +149,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-004] 例外處理：增加 IN 記錄，時間軸重跑並更新', async ({ page }) => {
-    test.setTimeout(300000);
     await openDetail(page, true); // 會補例外紀錄（寫入），所以要挑人員還在的案例
     const before = await segs(page);
     const awayBefore = before.filter((x) => x.cls.includes('seg-away'));
@@ -200,7 +193,6 @@ test.describe('TRK 進出紀錄', () => {
   });
 
   test('[TRK-009] 進出紀錄匯出', async ({ page }) => {
-    test.setTimeout(180000);
     const s = await scanPresence(page);
     await openPresenceList(page, (s.withAway || s.multiDay || { day: new Date().toISOString().slice(0, 10) }).day);
     await page.getByRole('button', { name: '匯出為 Excel' }).click();
@@ -215,7 +207,6 @@ test.describe('TRK 進出紀錄', () => {
 
   // 使用者 2026-10-15：TRK-010 先前卡在後端算不完（Invalid parameter: start_time），改用有資料的日期測試
   test('[TRK-010] 查看詳細：時間軸列出進出時間與長度', async ({ page }) => {
-    test.setTimeout(240000);
     await openDetail(page);
     const s = await segs(page);
     expect(s.length, '時間軸段數').toBeGreaterThan(0);

@@ -82,7 +82,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
   test(
     '[CAM-017] 辨識門檻值：高 = 0.5、中 = 0.3（預設）、低 = 0.1',
     async ({ page }) => {
-      test.setTimeout(200000);
       await toThreshold(page, uniqueCameraName('thr'));
       const sel = page.locator('select:visible').nth(1);
       const opts = await sel.locator('option').evaluateAll((os) => os.map((o) => `${(o as HTMLOptionElement).text.trim()}=${(o as HTMLOptionElement).value}`));
@@ -104,7 +103,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(280000);
       const name = uniqueCameraName('mg');
       created.push(name);
       await toMerge(page, name);
@@ -132,7 +130,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(280000);
       const name = uniqueCameraName('mg');
       created.push(name);
       await toMerge(page, name);
@@ -155,7 +152,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(280000);
       const name = uniqueCameraName('mg');
       created.push(name);
       await toMerge(page, name);
@@ -183,7 +179,6 @@ test.describe('CAM/SEC 辨識門檻與人臉合併設定', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(200000);
       await toMerge(page, uniqueCameraName('mg'));
       await expect(mergeTxt(page, 1)).toHaveValue('0.6');
     },

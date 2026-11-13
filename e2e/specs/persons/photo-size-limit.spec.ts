@@ -71,7 +71,6 @@ test(
     ],
   },
   async ({ page }) => {
-    test.setTimeout(290000);
     await page.goto('/#/personsmanagement/personmanagement');
     await page.reload();
     await page.waitForTimeout(2500);

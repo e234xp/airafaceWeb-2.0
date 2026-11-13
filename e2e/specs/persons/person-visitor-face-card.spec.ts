@@ -20,7 +20,6 @@ async function openEdit(page: Page, kind: Kind, id: string) {
 }
 
 async function run(page: Page, kind: Kind, label: string) {
-  test.setTimeout(240000);
   // 1) 不輸入人臉與卡片：可建立，列表有資料，註冊照片為預設空白圖
   const idPlain = uniquePersonId('np');
   created.push({ id: idPlain, kind });

@@ -74,7 +74,6 @@ for (const [id, expected] of [
       ],
     },
     async ({ page, browser }) => {
-      test.setTimeout(290000);
       const vid = uniquePersonId('kf');
       visitors.push(vid);
       await createPersonViaUI(page, { id: vid, name: 'e2e自助拍照' }, 'visitor');

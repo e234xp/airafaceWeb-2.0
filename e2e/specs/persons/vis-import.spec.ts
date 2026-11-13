@@ -70,7 +70,6 @@ test(
     ],
   },
   async ({ page }) => {
-    test.setTimeout(280000);
     await page.goto('/#/personsmanagement/visitormanagement');
     await page.reload();
     await page.waitForTimeout(4000);
