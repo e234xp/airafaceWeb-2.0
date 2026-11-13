@@ -1,5 +1,6 @@
 import { test, expect, Page } from '../../helpers/test';
 import { bodyRows } from '../../helpers/tables';
+import { showLatestDay } from '../../helpers/reports';
 
 // 報表頁 helper。人員報表資料量大（約 150 萬筆），查詢一律先縮小時間範圍。
 async function openReport(page: Page, route: string) {
@@ -38,8 +39,8 @@ test.describe("RPT", () => {
   test(
     "[RPT-002] 人員報表：搜尋文字功能",
     async ({ page }) => {
-      test.setTimeout(120000);
       await openReport(page, '/#/reports/personreport');
+      await showLatestDay(page, 'person'); // 頁面預設只查今天，剛過午夜時今天還沒有資料
       // 為避免對約 150 萬筆資料做全量搜尋造成後端負載，先把時間範圍縮到「最新一筆所在的那一分鐘」
       await narrowToFirstRowMinute(page);
       // 關鍵字取該分鐘內第一筆的人員編號；搜尋結果（第 1 頁）每一列都應含關鍵字
@@ -69,7 +70,6 @@ test.describe("RPT", () => {
   test(
     "[RPT-008] 訪客報表：訪客編號、訪客姓名、群組搜尋與包含輸入文字的項目",
     async ({ page }) => {
-      test.setTimeout(120000);
       await openReport(page, '/#/reports/visitorreport');
       // 訪客報表預設範圍沒有資料時，改查較長的區間
       const range = page.locator('.mx-datepicker input').first();

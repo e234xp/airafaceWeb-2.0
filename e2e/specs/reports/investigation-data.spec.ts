@@ -18,8 +18,7 @@ test.describe('INV（G1）', () => {
   test(
     '[INV-001] 調查：依時間區間、類別、群組、關鍵字由近而遠列出符合紀錄',
     async ({ page }) => {
-      test.setTimeout(300000);
-      await openReportPage(page, INVESTIGATION);
+      await openReportPage(page, INVESTIGATION, 'person');
       const { day, hhmm } = await narrowToFirstRow(page);
       // 欄位
       const headers = (await page.locator('.vxe-table--header-wrapper th').allInnerTexts()).map((s) => s.trim()).filter(Boolean);
@@ -62,8 +61,7 @@ test.describe('INV（G1）', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
-      await openReportPage(page, INVESTIGATION);
+      await openReportPage(page, INVESTIGATION, 'person');
       await bodyRows(page).first().waitFor({ timeout: 60000 });
       const cats = (await categorySelect(page).locator('option').allInnerTexts()).map((s) => s.trim());
       for (const c of ['人員', '訪客', '陌生人']) expect(cats, `類別選項：${cats.join('、')}`).toContain(c);
@@ -79,13 +77,12 @@ test.describe('INV（G1）', () => {
   test(
     '[INV-003] 調查：類別為陌生人時列出時間、分數、抓拍照片，其餘欄位為空',
     async ({ page }) => {
-      test.setTimeout(300000);
-      await openReportPage(page, INVESTIGATION);
-      await bodyRows(page).first().waitFor({ timeout: 60000 });
+      // 範圍已設成最近有陌生人紀錄的那天，所以選「陌生人」後查不到就是畫面的問題，不是環境缺資料
+      const day = await openReportPage(page, INVESTIGATION, 'stranger');
       await categorySelect(page).selectOption({ label: '陌生人' });
       await searchButton(page).click();
       await page.waitForTimeout(4000);
-      if ((await bodyRows(page).count()) === 0) throw new Error('受阻：預設時間範圍內沒有任何陌生人紀錄，無法驗證（需要先有陌生人辨識資料）');
+      expect(await bodyRows(page).count(), `${day} 有陌生人紀錄，但類別選「陌生人」搜尋後沒有列出任何紀錄`).toBeGreaterThan(0);
       const headers = (await page.locator('.vxe-table--header-wrapper th').allInnerTexts()).map((s) => s.trim());
       const col = (name: string) => headers.indexOf(name) + 1; // td:nth-child 為 1 起算
       const rows = bodyRows(page);
@@ -114,8 +111,7 @@ test.describe('INV（G1）', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(300000);
-        await openReportPage(page, INVESTIGATION);
+        await openReportPage(page, INVESTIGATION, 'person');
         await narrowToFirstRow(page, 'second');
         const file = await exportWithPhoto(page, withPhoto);
         test.info().annotations.push({ type: '觀察', description: `下載 ${file.name}；${file.isZip ? '壓縮檔內容：' + file.entries.join('、') : '非壓縮檔'}` });
@@ -136,8 +132,7 @@ test.describe('INV（G1）', () => {
   test(
     '[INV-008] 調查 filter 搜尋：輸入人員關鍵字並檢查是否有關鍵字以外人員',
     async ({ page }) => {
-      test.setTimeout(300000);
-      await openReportPage(page, INVESTIGATION);
+      await openReportPage(page, INVESTIGATION, 'person');
       await narrowToFirstRow(page);
       const first = (await pageRowTexts(page))[0];
       const keyword = first.split(' ')[4]; // 人員姓名

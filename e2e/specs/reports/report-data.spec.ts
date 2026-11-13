@@ -35,8 +35,7 @@ test.describe('RPT（G1）', () => {
       ],
     },
     async ({ page }) => {
-      test.setTimeout(240000);
-      await openReportPage(page, PERSON_REPORT);
+      await openReportPage(page, PERSON_REPORT, 'person');
       const { day, hhmm } = await narrowToFirstRow(page);
       const headers = (await page.locator('.vxe-table--header-wrapper th').allInnerTexts()).map((s) => s.trim()).filter(Boolean);
       for (const h of PERSON_HEADERS) expect(headers, `表頭：${headers.join('、')}`).toContain(h);
@@ -67,8 +66,7 @@ test.describe('RPT（G1）', () => {
         ],
       },
       async ({ page }) => {
-        test.setTimeout(300000);
-        await openReportPage(page, PERSON_REPORT);
+        await openReportPage(page, PERSON_REPORT, 'person');
         await narrowToFirstRow(page, 'second');
         const total = await totalRecords(page);
         const file = await exportWithPhoto(page, withPhoto);
@@ -89,8 +87,7 @@ test.describe('RPT（G1）', () => {
   }
 
   const keywordTest = async (page: Page, pick: 'id' | 'name') => {
-    test.setTimeout(240000);
-    await openReportPage(page, PERSON_REPORT);
+    await openReportPage(page, PERSON_REPORT, 'person');
     await narrowToFirstRow(page);
     const first = (await pageRowTexts(page))[0];
     // 列文字：時間(日 時) 來源 編號 姓名 ...；編號為第 4 個詞、姓名為第 5 個詞
@@ -105,7 +102,7 @@ test.describe('RPT（G1）', () => {
     expect(rows.length).toBeGreaterThan(0);
     for (const r of rows) expect(r.toLowerCase(), `關鍵字「${keyword}」搜尋結果含不相符的列`).toContain(keyword.toLowerCase());
     // 重新載入後搜尋不存在的關鍵字：無結果（避免「已有關鍵字再搜尋不更新」的干擾）
-    await openReportPage(page, PERSON_REPORT);
+    await openReportPage(page, PERSON_REPORT, 'person');
     await narrowToFirstRow(page);
     const box2 = page.getByPlaceholder('搜尋').first();
     await box2.fill('e2e-no-such-keyword-zzz');
@@ -136,7 +133,6 @@ test.describe('RPT（G1）', () => {
     test(
       `[${id}] ${title}`,
       async ({ page }) => {
-        test.setTimeout(120000);
         await requireVisitorData(page);
         await expect(searchButton(page)).toBeVisible();
       },
