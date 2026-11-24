@@ -1,0 +1,458 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人員註冊照片處理方式</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* 版面：單欄說明文件，表格與示意圖交錯；示意圖寬版可橫向捲動 */
+:root {
+  --bg: #f4f7f9;
+  --surface: #ffffff;
+  --fg: #1a2530;
+  --muted: #586776;
+  --line: #d6dfe6;
+  --accent: #0d7682;
+  --accent-soft: #e0f1f2;
+  --ok: #1d8049;
+  --ok-soft: #e3f3e9;
+  --bad: #be3a2f;
+  --bad-soft: #fbe9e7;
+  --warn: #9a6200;
+  --warn-soft: #fbf0d9;
+  --photo: #dfe7ee;
+  --skin: #e9c3a5;
+  --hair: #3b2f29;
+  --shirt: #5f7b96;
+  --eye: #2a2a2a;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12181e; --surface: #1a232b; --fg: #e4ebf0; --muted: #97a6b3; --line: #2e3a45;
+    --accent: #4fc1cc; --accent-soft: #163a3f;
+    --ok: #5cc98a; --ok-soft: #173426; --bad: #f08075; --bad-soft: #3d1e1b; --warn: #e6b45c; --warn-soft: #3a2e14;
+    --photo: #2b3743; --skin: #d9b396; --hair: #5a4a40; --shirt: #6f8ca8; --eye: #222;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12181e; --surface: #1a232b; --fg: #e4ebf0; --muted: #97a6b3; --line: #2e3a45;
+  --accent: #4fc1cc; --accent-soft: #163a3f;
+  --ok: #5cc98a; --ok-soft: #173426; --bad: #f08075; --bad-soft: #3d1e1b; --warn: #e6b45c; --warn-soft: #3a2e14;
+  --photo: #2b3743; --skin: #d9b396; --hair: #5a4a40; --shirt: #6f8ca8; --eye: #222;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 920px; margin: 0 auto; padding-block: 48px 72px; display: flex; flex-direction: column; gap: 56px; }
+header { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
+h1 { font-size: 34px; line-height: 1.3; margin: 0; text-wrap: balance; }
+h2 { font-size: 24px; line-height: 1.4; margin: 0; text-wrap: balance; }
+h3 { font-size: 18px; margin: 0; }
+p { margin: 0; max-width: 40em; }
+.lead { font-size: 18px; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 20px; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: .92em; }
+.muted { color: var(--muted); }
+
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+thead th { background: var(--accent-soft); font-weight: 700; font-size: 14px; white-space: nowrap; }
+tbody th { font-weight: 500; color: var(--muted); white-space: nowrap; }
+.msg { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+.msg.bad { background: var(--bad-soft); color: var(--bad); }
+.msg.warn { background: var(--warn-soft); color: var(--warn); }
+.yes { color: var(--ok); font-weight: 700; }
+.no { color: var(--bad); font-weight: 700; }
+.hl { background: var(--warn-soft); }
+
+figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.fig-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; }
+.fig-box svg { display: block; width: 100%; height: auto; min-width: 600px; color: var(--fg); }
+figcaption { font-size: 14px; color: var(--muted); }
+svg text { font-family: var(--font-body); fill: currentColor; }
+svg .pbg { fill: var(--photo); }
+svg .sk { fill: var(--skin); }
+svg .hr { fill: var(--hair); }
+svg .sh { fill: var(--shirt); }
+svg .ey { fill: var(--eye); }
+svg .mo { fill: none; stroke: #8a4b3a; stroke-width: 3; stroke-linecap: round; }
+svg .frame { fill: none; stroke: var(--line); stroke-width: 2; }
+svg .facebox { fill: none; stroke: var(--ok); stroke-width: 3; stroke-dasharray: 7 5; }
+svg .facebox.badbox { stroke: var(--bad); }
+svg .cropbox { fill: none; stroke: var(--accent); stroke-width: 3.5; }
+svg .arrow { stroke: var(--muted); stroke-width: 2.5; fill: none; }
+svg .arrowhead { fill: var(--muted); }
+svg .t-ok { fill: var(--ok); font-weight: 700; }
+svg .t-bad { fill: var(--bad); font-weight: 700; }
+svg .t-acc { fill: var(--accent); font-weight: 700; }
+svg .t-mut { fill: var(--muted); }
+svg .black { fill: #000; }
+svg .t-onblack { fill: #bbb; }
+svg .node { fill: var(--surface); stroke: var(--fg); stroke-width: 1.5; }
+svg .node.check { fill: var(--accent-soft); stroke: var(--accent); }
+svg .node.badn { fill: var(--bad-soft); stroke: var(--bad); }
+svg .node.warnn { fill: var(--warn-soft); stroke: var(--warn); }
+svg .node.okn { fill: var(--ok-soft); stroke: var(--ok); }
+svg .t-warn { fill: var(--warn); font-weight: 700; }
+
+.callout { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; }
+.callout strong { color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card .tag { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+@media (max-width: 520px) {
+  h1 { font-size: 27px; }
+  main { padding-block: 28px 48px; gap: 44px; }
+}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">FAE 說明文件 · 人員管理</div>
+    <h1>人員註冊照片處理方式</h1>
+    <p class="lead">在網頁上新增或修改人員時，使用者選的照片或用電腦鏡頭拍的照片，會先在網頁上做檢查和整理，然後才送到伺服器。這份文件說明網頁做了哪些事，以及客戶遇到錯誤訊息時可以怎麼處理。</p>
+  </header>
+
+  <!-- 1 -->
+  <section>
+    <h2>人員有兩張照片</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>照片</th><th>畫面上的名稱</th><th>用途</th><th>會檢查人臉嗎</th></tr></thead>
+        <tbody>
+          <tr><td><strong>註冊照</strong></td><td>「註冊時的照片」</td><td>給系統做人臉辨識用。系統從這張照片取出臉部特徵，之後設備比對都靠它。</td><td class="yes">會</td></tr>
+          <tr><td><strong>顯示照</strong></td><td>「顯示用的照片」</td><td>只用來顯示，例如人員列表的大頭照。跟辨識無關。</td><td class="no">不會</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>註冊照有兩種來源：<strong>選擇照片</strong>（從電腦挑一個圖檔）和<strong>拍攝照片</strong>（用電腦鏡頭當場拍）。這兩種來源的處理方式不同，下面分開說明。</p>
+  </section>
+
+  <!-- 2 flow -->
+  <section>
+    <h2>整體流程：照片會被檢查兩次</h2>
+    <p>第一次在網頁上檢查（瀏覽器），第二次在伺服器上檢查。兩次失敗的結果不一樣，要分清楚是哪一關沒過。</p>
+    <figure>
+      <div class="fig-box">
+        <svg viewBox="0 0 880 270" role="img" aria-label="流程圖：選照片或拍照，網頁先找臉並檢查大小，不合格就不採用照片；合格後整理照片送到伺服器，伺服器取不到特徵時人員已建立但照片失敗。">
+          <defs>
+            <marker id="ah-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+          </defs>
+          <!-- row of steps -->
+          <rect x="10" y="40" width="130" height="64" rx="8" class="node"/>
+          <text x="75" y="68" text-anchor="middle" font-size="14" font-weight="700">選擇照片</text>
+          <text x="75" y="88" text-anchor="middle" font-size="13" class="t-mut">或 拍攝照片</text>
+
+          <rect x="180" y="40" width="150" height="64" rx="8" class="node check"/>
+          <text x="255" y="62" text-anchor="middle" font-size="12" class="t-acc">第 1 關・網頁</text>
+          <text x="255" y="84" text-anchor="middle" font-size="14" font-weight="700">找臉、量大小</text>
+
+          <rect x="370" y="40" width="130" height="64" rx="8" class="node"/>
+          <text x="435" y="68" text-anchor="middle" font-size="14" font-weight="700">整理照片</text>
+          <text x="435" y="88" text-anchor="middle" font-size="13" class="t-mut">裁切 / 轉格式</text>
+
+          <rect x="540" y="40" width="150" height="64" rx="8" class="node check"/>
+          <text x="615" y="62" text-anchor="middle" font-size="12" class="t-acc">第 2 關・伺服器</text>
+          <text x="615" y="84" text-anchor="middle" font-size="14" font-weight="700">取出臉部特徵</text>
+
+          <rect x="730" y="40" width="140" height="64" rx="8" class="node okn"/>
+          <text x="800" y="78" text-anchor="middle" font-size="14" font-weight="700" class="t-ok">註冊完成</text>
+
+          <line x1="140" y1="72" x2="176" y2="72" class="arrow" marker-end="url(#ah-flow)"/>
+          <line x1="330" y1="72" x2="366" y2="72" class="arrow" marker-end="url(#ah-flow)"/>
+          <text x="348" y="62" text-anchor="middle" font-size="11" class="t-ok">合格</text>
+          <line x1="500" y1="72" x2="536" y2="72" class="arrow" marker-end="url(#ah-flow)"/>
+          <text x="518" y="62" text-anchor="middle" font-size="11" class="t-mut">按下一步</text>
+          <line x1="690" y1="72" x2="726" y2="72" class="arrow" marker-end="url(#ah-flow)"/>
+          <text x="708" y="62" text-anchor="middle" font-size="11" class="t-ok">成功</text>
+
+          <!-- fail branches -->
+          <line x1="255" y1="104" x2="255" y2="146" class="arrow" marker-end="url(#ah-flow)"/>
+          <text x="263" y="130" font-size="11" class="t-bad">不合格</text>
+          <rect x="150" y="150" width="210" height="104" rx="8" class="node badn"/>
+          <text x="255" y="176" text-anchor="middle" font-size="13" class="t-bad">跳出錯誤，照片不採用</text>
+          <text x="255" y="200" text-anchor="middle" font-size="12">人員還沒建立</text>
+          <text x="255" y="222" text-anchor="middle" font-size="12">換一張照片就好</text>
+
+          <line x1="615" y1="104" x2="615" y2="146" class="arrow" marker-end="url(#ah-flow)"/>
+          <text x="623" y="130" font-size="11" class="t-warn">取不到</text>
+          <rect x="510" y="150" width="210" height="104" rx="8" class="node warnn"/>
+          <text x="615" y="176" text-anchor="middle" font-size="13" class="t-warn">註冊成功，但照片上傳失敗</text>
+          <text x="615" y="200" text-anchor="middle" font-size="12">人員已經建立了</text>
+          <text x="615" y="222" text-anchor="middle" font-size="12">要修改人員、重新上傳照片</text>
+        </svg>
+      </div>
+      <figcaption>第 1 關沒過，人員不會被建立，換照片即可；第 2 關沒過，人員已經建立，但沒有可用的臉部特徵，設備辨識不到這個人。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 3 compare -->
+  <section>
+    <h2>三種照片的處理比較</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>註冊照・選擇照片</th><th>註冊照・拍攝照片</th><th>顯示照</th></tr></thead>
+        <tbody>
+          <tr><th>會不會找臉</th><td class="yes">會</td><td class="yes">會</td><td class="no">不會</td></tr>
+          <tr><th>臉的最小尺寸</th><td><span class="num">200 × 200</span> 像素</td><td><span class="num">200 × 200</span> 像素</td><td class="muted">不檢查</td></tr>
+          <tr class="hl"><th>會不會裁切</th><td><strong>不裁切</strong>，整張送出</td><td><strong>裁切</strong>，只留頭部的正方形</td><td>縮成正方形，比例不合補黑邊</td></tr>
+          <tr><th>送出的尺寸</th><td>跟原圖一樣</td><td>依臉的大小而定（臉越大越大）</td><td>固定 <span class="num">200 × 200</span></td></tr>
+          <tr><th>照片格式</th><td colspan="3">一律轉成 JPEG（最高畫質）</td></tr>
+          <tr><th>其他</th><td>檔案大小沒有限制</td><td>照片會左右相反（像照鏡子）</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4 upload example -->
+  <section>
+    <h2>範例一：註冊照・選擇照片</h2>
+    <p>網頁找到臉、確認臉夠大之後，<strong>送出的還是整張原圖</strong>。綠色框只是用來檢查，不會拿來裁切。</p>
+    <figure>
+      <div class="fig-box">
+        <svg viewBox="0 0 780 300" role="img" aria-label="選擇照片範例：左邊原始照片中標出找到的臉，右邊送出的是同一張完整照片，沒有裁切。">
+          <defs>
+            <g id="person-u">
+              <ellipse cx="160" cy="135" rx="58" ry="68" class="hr"/>
+              <path d="M70 320 L75 235 Q85 205 160 208 Q235 205 245 235 L250 320 Z" class="sh"/>
+              <rect x="145" y="190" width="30" height="25" class="sk"/>
+              <ellipse cx="160" cy="150" rx="46" ry="56" class="sk"/>
+              <circle cx="143" cy="145" r="4" class="ey"/><circle cx="177" cy="145" r="4" class="ey"/>
+              <path d="M147 175 Q160 184 173 175" class="mo"/>
+            </g>
+            <marker id="ah-u" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+          </defs>
+          <text x="180" y="22" text-anchor="middle" font-size="14" font-weight="700">使用者選的照片</text>
+          <svg x="20" y="36" width="320" height="240" viewBox="0 0 320 240">
+            <rect width="320" height="240" class="pbg"/>
+            <use href="#person-u"/>
+            <rect x="110" y="100" width="100" height="100" class="facebox"/>
+            <text x="216" y="114" font-size="13" class="t-ok">找到的臉 ✓</text>
+          </svg>
+          <rect x="20" y="36" width="320" height="240" class="frame"/>
+          <line x1="360" y1="156" x2="420" y2="156" class="arrow" marker-end="url(#ah-u)"/>
+          <text x="390" y="144" text-anchor="middle" font-size="12" class="t-mut">整張送出</text>
+          <text x="600" y="22" text-anchor="middle" font-size="14" font-weight="700">送到伺服器的照片</text>
+          <svg x="440" y="36" width="320" height="240" viewBox="0 0 320 240">
+            <rect width="320" height="240" class="pbg"/>
+            <use href="#person-u"/>
+          </svg>
+          <rect x="440" y="36" width="320" height="240" class="frame"/>
+          <text x="600" y="294" text-anchor="middle" font-size="12" class="t-mut">尺寸與內容跟原圖相同，只是轉存成 JPEG</text>
+        </svg>
+      </div>
+      <figcaption>照片裡如果有很多背景或其他人，也會一起送出。建議使用者先選只有一個人、臉在中間的照片。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 5 webcam example -->
+  <section>
+    <h2>範例二：註冊照・拍攝照片</h2>
+    <p>用電腦鏡頭拍的畫面是 <span class="num">640 × 480</span>。網頁找到臉後，會以臉為中心框出一個<strong>邊長為臉的 2 倍</strong>的正方形，臉上方多留一些空間給頭髮，只把這個正方形送出。</p>
+    <figure>
+      <div class="fig-box">
+        <svg viewBox="0 0 780 300" role="img" aria-label="拍攝照片範例：左邊鏡頭畫面中，綠色虛線是臉，藍綠色實線是裁切範圍；右邊送出的只有裁切後的頭部正方形。">
+          <defs>
+            <g id="person-w">
+              <ellipse cx="160" cy="135" rx="58" ry="68" class="hr"/>
+              <path d="M70 320 L75 235 Q85 205 160 208 Q235 205 245 235 L250 320 Z" class="sh"/>
+              <rect x="145" y="190" width="30" height="25" class="sk"/>
+              <ellipse cx="160" cy="150" rx="46" ry="56" class="sk"/>
+              <circle cx="143" cy="145" r="4" class="ey"/><circle cx="177" cy="145" r="4" class="ey"/>
+              <path d="M147 175 Q160 184 173 175" class="mo"/>
+            </g>
+            <marker id="ah-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+          </defs>
+          <text x="180" y="22" text-anchor="middle" font-size="14" font-weight="700">鏡頭拍到的畫面（640 × 480）</text>
+          <svg x="20" y="36" width="320" height="240" viewBox="0 0 320 240">
+            <rect width="320" height="240" class="pbg"/>
+            <use href="#person-w"/>
+            <rect x="60" y="17" width="200" height="200" class="cropbox"/>
+            <rect x="110" y="100" width="100" height="100" class="facebox"/>
+            <text x="264" y="32" font-size="12" class="t-acc">裁切範圍</text>
+            <text x="264" y="48" font-size="12" class="t-acc">（臉的 2 倍）</text>
+            <text x="214" y="196" font-size="12" class="t-ok">臉</text>
+          </svg>
+          <rect x="20" y="36" width="320" height="240" class="frame"/>
+          <line x1="360" y1="156" x2="460" y2="156" class="arrow" marker-end="url(#ah-w)"/>
+          <text x="410" y="144" text-anchor="middle" font-size="12" class="t-mut">只留框內</text>
+          <text x="580" y="22" text-anchor="middle" font-size="14" font-weight="700">送到伺服器的照片</text>
+          <svg x="480" y="56" width="200" height="200" viewBox="60 17 200 200">
+            <rect x="0" y="0" width="320" height="240" class="pbg"/>
+            <use href="#person-w"/>
+          </svg>
+          <rect x="480" y="56" width="200" height="200" class="cropbox"/>
+          <text x="580" y="282" text-anchor="middle" font-size="12" class="t-mut">頭部正方形（此例約 400 × 400）</text>
+        </svg>
+      </div>
+      <figcaption>網頁上的預覽是把同一個範圍縮成 200 × 200 顯示，送出的照片保留裁切後的原尺寸。拍出來的照片會左右相反，跟照鏡子一樣，這是正常的。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 6 size rule -->
+  <section>
+    <h2>「臉要 200 × 200 像素」是什麼意思</h2>
+    <p>指的是<strong>臉在照片裡佔的大小</strong>，不是照片本身的大小。一張很大的照片，如果人站得很遠，臉還是可能太小。</p>
+    <figure>
+      <div class="fig-box">
+        <svg viewBox="0 0 780 310" role="img" aria-label="臉的大小比較：左邊人站太遠，臉寬約 120 像素，不合格；右邊靠近鏡頭，臉寬約 260 像素，合格。">
+          <defs>
+            <g id="person-s">
+              <ellipse cx="160" cy="135" rx="58" ry="68" class="hr"/>
+              <path d="M70 320 L75 235 Q85 205 160 208 Q235 205 245 235 L250 320 Z" class="sh"/>
+              <rect x="145" y="190" width="30" height="25" class="sk"/>
+              <ellipse cx="160" cy="150" rx="46" ry="56" class="sk"/>
+              <circle cx="143" cy="145" r="4" class="ey"/><circle cx="177" cy="145" r="4" class="ey"/>
+              <path d="M147 175 Q160 184 173 175" class="mo"/>
+            </g>
+          </defs>
+          <text x="180" y="22" text-anchor="middle" font-size="14" font-weight="700">離鏡頭太遠</text>
+          <svg x="20" y="36" width="320" height="240" viewBox="0 0 320 240">
+            <rect width="320" height="240" class="pbg"/>
+            <use href="#person-s" transform="translate(64 50) scale(0.6)"/>
+            <rect x="130" y="110" width="60" height="60" class="facebox badbox"/>
+          </svg>
+          <rect x="20" y="36" width="320" height="240" class="frame"/>
+          <text x="180" y="300" text-anchor="middle" font-size="13" class="t-bad">臉寬約 120 像素 ✗ 太小</text>
+
+          <text x="600" y="22" text-anchor="middle" font-size="14" font-weight="700">靠近鏡頭</text>
+          <svg x="440" y="36" width="320" height="240" viewBox="0 0 320 240">
+            <rect width="320" height="240" class="pbg"/>
+            <use href="#person-s" transform="translate(-48 -45) scale(1.3)"/>
+            <rect x="95" y="85" width="130" height="130" class="facebox"/>
+          </svg>
+          <rect x="440" y="36" width="320" height="240" class="frame"/>
+          <text x="600" y="300" text-anchor="middle" font-size="13" class="t-ok">臉寬約 260 像素 ✓ 合格</text>
+        </svg>
+      </div>
+      <figcaption>兩張都是 640 × 480 的鏡頭畫面。左邊的臉太小，網頁會跳出「未能辨識臉部細節。請移近鏡頭或上傳更清晰的照片。」</figcaption>
+    </figure>
+    <div class="cards">
+      <div class="card">
+        <div class="tag">用電腦鏡頭拍</div>
+        <p>畫面只有 <span class="num">640 × 480</span>，臉要佔畫面<strong>寬度約三分之一以上</strong>才會過。請人員靠近鏡頭，臉大約填滿中間那一塊。</p>
+      </div>
+      <div class="card">
+        <div class="tag">用手機或相機的照片</div>
+        <p>這類照片解析度高，通常很容易達到。只要人不是站得很遠、照片沒有被縮小過就好。</p>
+      </div>
+      <div class="card">
+        <div class="tag">從其他系統匯出的小圖</div>
+        <p>例如只有 <span class="num">150 × 150</span> 的大頭照，整張都比 200 小，一定不會過。請客戶提供原始照片。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 display photo -->
+  <section>
+    <h2>範例三：顯示照</h2>
+    <p>顯示照不檢查人臉，網頁只把它縮成 <span class="num">200 × 200</span> 的正方形。照片不是正方形時，整張圖會完整縮進去、置中，多出來的地方補黑邊，不會裁掉任何部分。</p>
+    <figure>
+      <div class="fig-box">
+        <svg viewBox="0 0 780 290" role="img" aria-label="顯示照範例：左邊橫向照片縮成右邊 200×200 的正方形，上下補黑邊。">
+          <defs>
+            <g id="person-d">
+              <ellipse cx="160" cy="135" rx="58" ry="68" class="hr"/>
+              <path d="M70 320 L75 235 Q85 205 160 208 Q235 205 245 235 L250 320 Z" class="sh"/>
+              <rect x="145" y="190" width="30" height="25" class="sk"/>
+              <ellipse cx="160" cy="150" rx="46" ry="56" class="sk"/>
+              <circle cx="143" cy="145" r="4" class="ey"/><circle cx="177" cy="145" r="4" class="ey"/>
+              <path d="M147 175 Q160 184 173 175" class="mo"/>
+            </g>
+            <marker id="ah-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+          </defs>
+          <text x="180" y="22" text-anchor="middle" font-size="14" font-weight="700">使用者選的橫向照片</text>
+          <svg x="20" y="60" width="320" height="192" viewBox="0 0 320 192">
+            <rect width="320" height="192" class="pbg"/>
+            <use href="#person-d" transform="translate(0 -48)"/>
+          </svg>
+          <rect x="20" y="60" width="320" height="192" class="frame"/>
+          <line x1="360" y1="156" x2="460" y2="156" class="arrow" marker-end="url(#ah-d)"/>
+          <text x="410" y="144" text-anchor="middle" font-size="12" class="t-mut">縮成正方形</text>
+          <text x="580" y="22" text-anchor="middle" font-size="14" font-weight="700">送出的顯示照（200 × 200）</text>
+          <rect x="480" y="56" width="200" height="200" class="black"/>
+          <svg x="480" y="56" width="200" height="200" viewBox="0 0 320 192" preserveAspectRatio="xMidYMid meet">
+            <rect width="320" height="192" class="pbg"/>
+            <use href="#person-d" transform="translate(0 -48)"/>
+          </svg>
+          <text x="580" y="82" text-anchor="middle" font-size="12" class="t-onblack">黑邊</text>
+          <text x="580" y="242" text-anchor="middle" font-size="12" class="t-onblack">黑邊</text>
+          <rect x="480" y="56" width="200" height="200" class="frame"/>
+        </svg>
+      </div>
+      <figcaption>想要沒有黑邊的顯示照，請客戶先把照片裁成正方形再上傳。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 8 messages -->
+  <section>
+    <h2>錯誤訊息對照表</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>畫面上的訊息</th><th>什麼時候出現</th><th>人員建立了嗎</th><th>建議處理</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="msg bad">未偵測到人臉。</span></td>
+            <td>第 1 關：網頁在照片裡找不到臉</td>
+            <td class="muted">還沒</td>
+            <td>換一張正臉、光線充足、臉沒被遮住的照片</td>
+          </tr>
+          <tr>
+            <td><span class="msg bad">未能辨識臉部細節。請移近鏡頭或上傳更清晰的照片。</span></td>
+            <td>第 1 關：有找到臉，但臉小於 200 × 200 像素</td>
+            <td class="muted">還沒</td>
+            <td>拍照時靠近鏡頭；選檔時改用解析度較高的原始照片</td>
+          </tr>
+          <tr>
+            <td><span class="msg warn">註冊成功，但照片上傳失敗</span><br><span class="muted">（修改人員時為「更新成功，但照片上傳失敗」）</span></td>
+            <td>第 2 關：伺服器取不到臉部特徵。下方會再附一句原因：<br>・系統無法辨識人臉，請上傳含正臉的照片。<br>・臉部範圍過小，請上傳清晰的照片。</td>
+            <td class="yes">已建立</td>
+            <td>到人員列表修改這個人，重新上傳一張更清楚的正臉照。沒處理的話，設備辨識不到這個人</td>
+          </tr>
+          <tr>
+            <td><span class="msg bad">註冊失敗</span></td>
+            <td>伺服器沒有接受這筆資料（例如網路中斷）</td>
+            <td class="no">沒有</td>
+            <td>確認網路與伺服器狀態後再試一次</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 9 FAQ -->
+  <section>
+    <h2>客戶常見問題</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>客戶說</th><th>原因</th><th>建議回覆</th></tr></thead>
+        <tbody>
+          <tr><td>照片明明有臉，卻說未偵測到人臉</td><td>側臉、低頭、背光、太暗、戴帽子或口罩，網頁都可能找不到臉</td><td>請改用正面、光線均勻、五官清楚的照片</td></tr>
+          <tr><td>網頁那關過了，伺服器卻說照片上傳失敗</td><td>網頁和伺服器用的是不同的人臉判斷方式，網頁那關過了，不代表伺服器一定取得到特徵</td><td>重新上傳一張更清楚、臉更大的正臉照</td></tr>
+          <tr><td>拍照後照片左右相反</td><td>鏡頭畫面設定成像照鏡子一樣</td><td>正常現象，不需處理</td></tr>
+          <tr><td>顯示照上下或左右有黑邊</td><td>照片不是正方形，縮小時補了黑邊</td><td>先把照片裁成正方形再上傳</td></tr>
+          <tr><td>去背的 PNG 照片，背景變成黑色</td><td>照片會轉成 JPEG，JPEG 沒有透明，透明處會變黑</td><td>改用有背景色的照片，或先在電腦上把背景填成白色</td></tr>
+          <tr><td>選檔的照片和拍照的照片，在伺服器上看起來構圖不一樣</td><td>選檔送整張原圖，拍照只送頭部正方形</td><td>這是目前的設計，不是錯誤</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>一句話給客戶</strong>
+      <p>註冊照請用「一個人、正面、光線充足、臉夠大」的照片。用電腦鏡頭拍時，請人員靠近，讓臉佔畫面約三分之一以上。</p>
+    </div>
+  </section>
+
+  <footer>依 airafaceWeb 2.1.7 人員註冊表單的程式行為整理，2026-11-24。示意圖為簡化繪製，尺寸比例僅供參考。</footer>
+</main>
